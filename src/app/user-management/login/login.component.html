@@ -1,0 +1,137 @@
+<div class="login-page">
+    <mat-card class="mat-elevation-z12" [ngClass]="{'is-phone-portrait': isPhonePortrait}">
+        <mat-card-title style="text-align:center;">Sisäänkirjautuminen</mat-card-title>
+        <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
+          <mat-tab label="Kirjaudu">
+              <mat-card-content>
+                <form action="">
+                  <mat-form-field>
+                    <input
+                      matInput
+                      placeholder="Sähköposti"
+                      required
+                      name="email"
+                      ngModel
+                      #email="ngModel">
+                      <mat-error *ngIf="email.invalid">Sähköposti tarvitaan</mat-error>
+                    <mat-icon matSuffix>email</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input
+                      matInput
+                      placeholder="Salasana"
+                      type="password"
+                      required
+                      minlength="8"
+                      name="password"
+                      ngModel
+                      #password="ngModel">
+                      <mat-error
+                        *ngIf="password.errors && password.errors?.['required']">
+                        Salasana tarvitaan.
+                      </mat-error>
+                      <mat-error
+                        *ngIf="password.value.length < 8">>
+                        Salasanan pitää olla vähintään 8 merkkiä pitkä.
+                      </mat-error>
+                    <mat-icon matSuffix>lock</mat-icon>
+                  </mat-form-field>
+                  <mat-checkbox>Muista minut</mat-checkbox>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="login-button"
+                    (click)="login();">
+                    Kirjaudu sisään
+                  </button>
+    
+                  <button
+                    mat-raised-button
+                    class="login-button">
+                    Kirjaudu Google-tilillä
+                  </button>
+                </form>
+              </mat-card-content>
+          </mat-tab>
+          <mat-tab label="Rekisteröidy">
+            <mat-card-content>
+              <form action="">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Käyttäjätunnus"
+                    required
+                    name="username"
+                    ngModel
+                    #username="ngModel">
+                  <mat-icon matSuffix>perm_identity</mat-icon>
+                  <mat-error
+                    *ngIf="username.invalid">
+                    Salasana tarvitaan.
+                  </mat-error>
+    
+                </mat-form-field>
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Sähköposti"
+                    required
+                    name="email"
+                    ngModel
+                    #email="ngModel">
+                    <mat-error *ngIf="email.invalid">Sähköposti tarvitaan</mat-error>
+                  <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Salasana"
+                    type="password"
+                    required
+                    minlength="8"
+                    name="password"
+                    ngModel
+                    #password="ngModel">
+                    <mat-error
+                   *ngIf="password.value.length < 8">
+                    Salasanan pitää olla vähintään 8 merkkiä pitkä.
+                  </mat-error>
+                    <mat-error
+                      *ngIf="password.errors && password.errors?.['required']">
+                      Salasana tarvitaan.
+                    </mat-error>
+                  <mat-icon matSuffix>lock</mat-icon>
+    
+                </mat-form-field>
+                <mat-form-field>
+                    <input
+                    matInput
+                    placeholder="Salasana uudelleen"
+                    type="password"
+                    required
+                    minlength="8"
+                    name="repassword"
+                    ngModel
+                    #repassword="ngModel">
+                    <mat-error
+                      *ngIf="repassword.errors && repassword.errors?.['required']">
+                      Ole hyvä ja kirjoita salasana uudelleen.
+                    </mat-error>
+                    <mat-error
+                    *ngIf="password.value !== repassword.value">
+                    Salasanat eivät täsmää.
+                  </mat-error>
+                  <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="login-button">
+                  Rekisteröidy
+                </button>
+              </form>
+            </mat-card-content>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card>
+    </div>
