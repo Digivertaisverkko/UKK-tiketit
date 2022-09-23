@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { FormsModule } from '@angular/forms';
-import { CoreModule } from '../core/core.module';
 
+import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
@@ -13,7 +13,7 @@ import { LoginComponent } from './login/login.component';
   ],
   imports: [
     CommonModule,
-    CoreModule,
+    SharedModule,
     FormsModule,
     UserManagementRoutingModule
   ]
