@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 
@@ -8,11 +9,13 @@ import { MaterialModule } from '../shared/material.module';
   declarations: [],
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     FormsModule,
     MaterialModule
   ],
   exports: [
     CommonModule,
+    BrowserAnimationsModule,
     FormsModule,
     MaterialModule
   ]

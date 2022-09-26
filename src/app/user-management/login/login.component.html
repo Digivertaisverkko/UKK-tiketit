@@ -28,11 +28,7 @@
                       #password="ngModel">
                       <mat-error
                         *ngIf="password.errors && password.errors?.['required']">
-                        Salasana tarvitaan.
-                      </mat-error>
-                      <mat-error
-                        *ngIf="password.value.length < 8">>
-                        Salasanan pitää olla vähintään 8 merkkiä pitkä.
+                        Vähintään 8 merkkiä pitkä salasana tarvitaan.
                       </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
                   </mat-form-field>
@@ -44,7 +40,13 @@
                     (click)="login();">
                     Kirjaudu sisään
                   </button>
-    
+                  
+                  <div class="line-container">
+                    <div class="line"><mat-divider></mat-divider></div>
+                    <div class="divider-text mat-typography">Tai</div>
+                    <div class="line"><mat-divider></mat-divider></div>
+                  </div>
+
                   <button
                     mat-raised-button
                     class="login-button">
@@ -53,6 +55,7 @@
                 </form>
               </mat-card-content>
           </mat-tab>
+
           <mat-tab label="Rekisteröidy">
             <mat-card-content>
               <form action="">
@@ -67,7 +70,7 @@
                   <mat-icon matSuffix>perm_identity</mat-icon>
                   <mat-error
                     *ngIf="username.invalid">
-                    Salasana tarvitaan.
+                    Käyttäjätunnus tarvitaan.
                   </mat-error>
     
                 </mat-form-field>
@@ -93,12 +96,8 @@
                     ngModel
                     #password="ngModel">
                     <mat-error
-                   *ngIf="password.value.length < 8">
-                    Salasanan pitää olla vähintään 8 merkkiä pitkä.
-                  </mat-error>
-                    <mat-error
                       *ngIf="password.errors && password.errors?.['required']">
-                      Salasana tarvitaan.
+                      Vähintään 8 merkkiä pitkä salasana tarvitaan.
                     </mat-error>
                   <mat-icon matSuffix>lock</mat-icon>
     
@@ -123,12 +122,14 @@
                   </mat-error>
                   <mat-icon matSuffix>lock</mat-icon>
                 </mat-form-field>
+
                 <button
                   mat-raised-button
                   color="primary"
                   class="login-button">
                   Rekisteröidy
                 </button>
+
               </form>
             </mat-card-content>
           </mat-tab>
