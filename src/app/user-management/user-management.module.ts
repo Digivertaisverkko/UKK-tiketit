@@ -6,11 +6,13 @@ import { UserManagementRoutingModule } from './user-management-routing.module';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule }  from '@angular/material/divider';
+import { TestComponent } from './test/test.component';
 
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    TestComponent,
   ],
   imports: [
     MatDividerModule,
