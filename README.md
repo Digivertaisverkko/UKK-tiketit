@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Asennus
 
-Kloonaa ja asenna npm:llä riippuvuudet (projektihakemistossa): npm install
+Asenna Angular, kloonaa tämä repo ja asenna npm:llä riippuvuudet (projektihakemistossa): npm install
 
 ## Development server
 
