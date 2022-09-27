@@ -1,3 +1,7 @@
+/* This file is to declare components, directives, and pipes when those
+ * items will be re-used and referenced by the components declared in other
+ * feature modules. */
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
