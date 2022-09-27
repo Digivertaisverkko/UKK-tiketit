@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  public email: string;
   public password: string;
   public repassword: string;
   isPhonePortrait = false;
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     public router: Router,
     private responsive: BreakpointObserver
   ) {
+    this.email = '';
     this.password  = '';
     this.repassword = '';
   }

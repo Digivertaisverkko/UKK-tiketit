@@ -11,9 +11,9 @@
                       placeholder="Sähköposti"
                       required
                       name="email"
-                      ngModel
-                      #email="ngModel">
-                      <mat-error *ngIf="email.invalid">Sähköposti tarvitaan</mat-error>
+                      [(ngModel)]="email"
+                      >
+                      <mat-error *ngIf="email.length === 0">Sähköposti tarvitaan</mat-error>
                     <mat-icon matSuffix>email</mat-icon>
                   </mat-form-field>
                   <mat-form-field>
@@ -24,10 +24,9 @@
                       required
                       minlength="8"
                       name="password"
-                      ngModel
-                      #password="ngModel">
-                      <mat-error
-                        *ngIf="password.errors && password.errors?.['required']">
+                      [(ngModel)]="password"
+                      >
+                      <mat-error *ngIf="password.length < 8">
                         Vähintään 8 merkkiä pitkä salasana tarvitaan.
                       </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
