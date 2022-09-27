@@ -30,7 +30,8 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-## Devaus
+## Hyödyllisiä linkkejä
 
-Hyödyllinen linkki: [Angular - Angular coding style
+* [Angular - Angular coding style
 guide](https://angular.io/guide/styleguide#overall-structural-guidelines)
+* [Angular Material UI component library](https://material.angular.io/)
