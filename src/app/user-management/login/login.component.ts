@@ -12,12 +12,17 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  public password: string;
+  public repassword: string;
   isPhonePortrait = false;
 
   constructor(
     public router: Router,
     private responsive: BreakpointObserver
-  ) { }
+  ) {
+    this.password  = '';
+    this.repassword = '';
+  }
 
   ngOnInit(): void {
   
