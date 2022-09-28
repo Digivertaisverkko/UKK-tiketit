@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   public email: string;
   public password: string;
   public repassword: string;
+  public loginMethod: string;
   isPhonePortrait = false;
 
   constructor(
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
     this.email = '';
     this.password  = '';
     this.repassword = '';
+    this.loginMethod = '';
   }
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.loginMethod = 'own';
     this.router.navigateByUrl('/test/testing');
   }
 
