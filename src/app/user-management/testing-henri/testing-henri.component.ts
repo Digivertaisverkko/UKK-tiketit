@@ -11,7 +11,7 @@ export class TestingHenriComponent implements OnInit {
   baseUrl: string;
 
   constructor(private httpTest: HttpTestingService) {
-    this.baseUrl='localhost:3000';
+    this.baseUrl='http://localhost:3000';
   }
 
   ngOnInit(): void {
