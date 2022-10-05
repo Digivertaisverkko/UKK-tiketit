@@ -4,6 +4,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,17 +16,16 @@ export class LoginComponent implements OnInit {
   public email: string;
   public password: string;
   public repassword: string;
-  public loginMethod: string;
   isPhonePortrait = false;
 
   constructor(
     public router: Router,
-    private responsive: BreakpointObserver
+    private responsive: BreakpointObserver,
+    private authService: AuthService
   ) {
     this.email = '';
     this.password  = '';
     this.repassword = '';
-    this.loginMethod = '';
   }
 
   ngOnInit(): void {
@@ -36,12 +36,16 @@ export class LoginComponent implements OnInit {
       if (result.matches) {
         this.isPhonePortrait = true;
       }
-    });
+    });  
   
+    this.authService.requestLogin('own');
   }
 
   login() {
-    this.loginMethod = 'own';
+    console.log('Not implemented yet.')
+  }
+
+  loginWithoutAuth() {
     this.router.navigateByUrl('/test/testing');
   }
 

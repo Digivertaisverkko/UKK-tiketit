@@ -9,6 +9,7 @@ import { MatDividerModule }  from '@angular/material/divider';
 import { RegisterComponent } from './register/register.component';
 import { TestingHenriComponent } from './testing-henri/testing-henri.component';
 
+import { AuthService } from 'src/app/core/auth.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,9 @@ import { TestingHenriComponent } from './testing-henri/testing-henri.component';
     MatTabsModule,
     SharedModule,
     UserManagementRoutingModule
+  ],
+  providers: [
+    AuthService
   ]
 })
 

@@ -9,9 +9,11 @@ import { HttpTestingService } from './http-testing.service';
 export class TestingHenriComponent implements OnInit {
 
   baseUrl: string;
+  response: string;
 
   constructor(private httpTest: HttpTestingService) {
     this.baseUrl='http://localhost:3000';
+    this.response = '';
   }
 
   ngOnInit(): void {
@@ -19,7 +21,11 @@ export class TestingHenriComponent implements OnInit {
 
   makeTest() {
     console.log('Button pressed.');
-    console.log(this.httpTest.getResponse(this.baseUrl + '/api').subscribe());
+    let response: string;
+    this.httpTest.getStringResponse(this.baseUrl + '/api').subscribe(
+      (data: string) => 
+        this.response = data
+    );
   }
 
 }

@@ -13,8 +13,8 @@ export class HttpTestingService {
 
   }
 
-  public getResponse(url: string) {
-    return this.http.get(url)
+  public getStringResponse(url: string) {
+    return this.http.get(url, { responseType: 'text' } )
     .pipe(catchError(this.handleError));
   }
 
