@@ -37,8 +37,7 @@ export class LoginComponent implements OnInit {
         this.isPhonePortrait = true;
       }
     });  
-  
-    this.authService.requestLogin('own');
+
   }
 
   login() {

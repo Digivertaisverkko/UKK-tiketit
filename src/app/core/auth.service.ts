@@ -6,8 +6,9 @@ import { environment } from 'src/environments/environment';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as CryptoJS from "crypto-js";
 import cryptoRandomString from 'crypto-random-string';
+import { CoreModule } from './core.module';
 
-export interface LoginRequestResponse {
+export interface AskLoginResponse {
   'login-url': string;
 }
 
@@ -22,6 +23,7 @@ export class AuthService {
   private codeChallengeMethod: string;
   private responseType: string;
   private state: string;
+  private isUserAuthenticated: boolean;
 
   constructor(private http: HttpClient) {
     this.codeVerifier = '';
@@ -29,6 +31,12 @@ export class AuthService {
     this.codeChallengeMethod = 'S256';
     this.responseType = 'code';
     this.state = '';
+    this.isUserAuthenticated = false;
+  }
+
+  // Testaustarkoitukseen
+  public getIsUserAuthenticated(): boolean {
+    return this.isUserAuthenticated; 
   }
   
   private getCodeChallenge(codeVerifier: string): string {
@@ -38,7 +46,7 @@ export class AuthService {
   }
 
   // Login type can atm be one of following: 'own'.
-  requestLogin(loginType: string) {
+  askLogin(loginType: string) {
 
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
     // this.codeVerifier = this.getRandomString(128);
@@ -65,7 +73,7 @@ export class AuthService {
     
     console.dir(httpOptions);
 
-    this.postLoginRequest(httpOptions).subscribe(response => {
+    this.postAskLogin(httpOptions).subscribe(response => {
       console.log('Got response: ');
       console.dir(response);
       let loginUrl = JSON.stringify(response);
@@ -79,7 +87,7 @@ export class AuthService {
     });
   }
 
-  isValidHttpUrl(testString: string) {
+  private isValidHttpUrl(testString: string) {
     let url;  
     try {
       url = new URL(testString);
@@ -89,7 +97,7 @@ export class AuthService {
     return url.protocol === "http:" || url.protocol === "https:";
   }
 
-  postLoginRequest(httpOptions: object): Observable<any> {
+  private postAskLogin(httpOptions: object): Observable<any> {
     return this.http.post(environment.ownLoginUrl, null, httpOptions)
       .pipe(
         catchError(this.handleError)

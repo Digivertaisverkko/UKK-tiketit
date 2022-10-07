@@ -4,6 +4,7 @@
 
 let apiBaseUrl = 'http://localhost:3000/api';
 
+// authentication here is for testing purposes only.
 export const environment = {
   production: false,
   clientID: 'angularApp',
@@ -11,7 +12,7 @@ export const environment = {
   ownTokenUrl: apiBaseUrl + '/authtoken'
 }
 
-// ownLoginUrl: apiBaseUrl + '/echoheaders/',
+// ownLoginUrl: apiBaseUrl + '/login',
 
 
 /*
