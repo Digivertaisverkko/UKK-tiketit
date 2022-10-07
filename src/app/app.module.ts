@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { UserManagementModule } from './user-management/user-management.module';
-import { TestingModule } from './testing/testing.module';
+import { FrontModule } from './front/front.module';
 
 import { AppComponent } from './app.component';
 
@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
     CoreModule,
     SharedModule,
     UserManagementModule,
-    TestingModule
+    FrontModule
   ],
   providers: [],
   bootstrap: [AppComponent]
