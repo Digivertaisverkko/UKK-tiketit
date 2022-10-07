@@ -6,7 +6,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
-// lazy-loading example: '/users/login' would first load user-management module where login is.
+// lazy-loading example:
 // { path: 'users', loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule) },
 
 @NgModule({

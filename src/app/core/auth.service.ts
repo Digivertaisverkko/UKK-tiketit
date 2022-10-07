@@ -1,21 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as CryptoJS from "crypto-js";
 import cryptoRandomString from 'crypto-random-string';
-import { NgStyle } from '@angular/common';
 
 export interface LoginRequestResponse {
   'login-url': string;
 }
-
-export interface LoginRequestBody {
-  'login-type': string;
-  'code-challenge': string;  
-};
 
 @Injectable({
   providedIn: 'root'
@@ -36,14 +30,14 @@ export class AuthService {
     this.responseType = 'code';
     this.state = '';
   }
-
-  getCodeChallenge(codeVerifier: string): string {
+  
+  private getCodeChallenge(codeVerifier: string): string {
     let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
     let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
     return codeChallenge;
   }
 
-  // Login type can atm be one of following: 'own'
+  // Login type can atm be one of following: 'own'.
   requestLogin(loginType: string) {
 
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
@@ -62,20 +56,41 @@ export class AuthService {
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
 
-    const loginRequestBody = {
-      'login-type': 'own',
-      'code-challenge': this.codeChallenge  
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'login-type': 'own',
+        'code-challenge': this.codeChallenge
+      })
     };
+    
+    console.dir(httpOptions);
 
-    console.log('login request body: ' + JSON.stringify(loginRequestBody));
-
-    this.postLoginRequest(loginRequestBody).subscribe(response =>
-      console.log('Got response: ' + JSON.stringify(response))
-    );
+    this.postLoginRequest(httpOptions).subscribe(response => {
+      console.log('Got response: ');
+      console.dir(response);
+      let loginUrl = JSON.stringify(response);
+      console.log(' Response as string: ' + loginUrl);
+      if (this.isValidHttpUrl(response)) {
+        console.log('It seems valid url.');
+      } else {
+        console.log("It's not valid url.");
+      }
+      
+    });
   }
 
-  postLoginRequest(loginRequestBody: LoginRequestBody): Observable<LoginRequestResponse> {
-    return this.http.post<LoginRequestResponse>(environment.ownLoginUrl, loginRequestBody)
+  isValidHttpUrl(testString: string) {
+    let url;  
+    try {
+      url = new URL(testString);
+    } catch (_) {
+      return false;  
+    }
+    return url.protocol === "http:" || url.protocol === "https:";
+  }
+
+  postLoginRequest(httpOptions: object): Observable<any> {
+    return this.http.post(environment.ownLoginUrl, null, httpOptions)
       .pipe(
         catchError(this.handleError)
       )
@@ -92,17 +107,6 @@ export class AuthService {
     }
     // Return an observable with error message.
     return throwError(() => new Error("Unable to continue authentication."));
-  }
-    
- // Yksinkertaisempi tapa.
-  private getRandomString(length: number) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
   }
 
 }
