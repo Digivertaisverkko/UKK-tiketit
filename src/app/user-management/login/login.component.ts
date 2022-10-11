@@ -17,22 +17,23 @@ export class LoginComponent implements OnInit {
   public password: string;
   public repassword: string;
   isPhonePortrait = false;
+  private loginID: string;
 
   constructor(
-    private router: Router,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private responsive: BreakpointObserver,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.email = '';
     this.password  = '';
     this.repassword = '';
+    this.loginID = '';
   }
 
   ngOnInit(): void {
   
-    this.responsive.observe(Breakpoints.HandsetPortrait)
-    .subscribe(result => {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       this.isPhonePortrait = false; 
       if (result.matches) {
         this.isPhonePortrait = true;
@@ -42,6 +43,13 @@ export class LoginComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       console.log('LoginComponent:');
       console.dir(params);
+      if (params['loginid'].length > 0) {
+        this.loginID = params['loginid'];
+        console.log('loginComponent: set loginID: ' + this.loginID);
+      } else {
+        console.log('Error: insufficient response from server. Aborting authentication.');
+      }
+      
     })
 
   }
