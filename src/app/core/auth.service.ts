@@ -43,7 +43,8 @@ export class AuthService {
     return codeChallenge;
   }
 
-  // Login type can atm be one of following: 'own'.
+  /* Send first request in authorized code flow asking for login.
+     Login type can atm be one of following: 'own'. */
   askLogin(loginType: string) {
 
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
@@ -61,6 +62,8 @@ export class AuthService {
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
 
+    let url: string = environment.ownAskLoginUrl;
+
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': loginType,
@@ -69,7 +72,7 @@ export class AuthService {
     };
     
    // console.dir(httpOptions);
-   return this.sendAskLogin(httpOptions)
+   return this.postRequest(url, httpOptions);
 
     /* this.askLogin$ = this.postAskLogin(httpOptions).subscribe((subscriber) => {
       subscriber['login-url'];
@@ -79,6 +82,7 @@ export class AuthService {
     //   data['login-url'];
     // });
 
+    // For URL validation.
     .then(serverResponse => {
       const possibleUrl = serverResponse['login-url'];
       if (loginType == 'own' && this.isValidHttpUrl(possibleUrl)) {
@@ -86,9 +90,15 @@ export class AuthService {
       }) */
   }
 
-  private async sendAskLogin(httpOptions: object): Promise<any> {
+  // Login type can atm be one of following: 'own'.
+  login(loginType: string) {
+
+  }
+
+  // Send a POST request.
+  private async postRequest(url: string, httpOptions: object): Promise<any> {
     try {
-      const response: any = await firstValueFrom(this.http.post(environment.ownAskLoginUrl, null, httpOptions));
+      const response: any = await firstValueFrom(this.http.post(url, null, httpOptions));
       // console.log('sendAskLogin Response: '+ response);
       // console.log(typeof url);
       return response;
@@ -123,6 +133,7 @@ export class AuthService {
     }
   }
 
+  // Test if a string is valid URL.
   private isValidHttpUrl(testString: string) {
     let url;  
     try {
@@ -133,6 +144,7 @@ export class AuthService {
     return url.protocol === "http:" || url.protocol === "https:";
   }
 
+  // Handle an error.
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. 

@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
         this.router.navigateByUrl('/front', { replaceUrl: true });
       } else {
         this.authService.askLogin('own').then(response => {
-          console.log('AppComponent: url: ' + response['login-url']);
+          console.log('AppComponent: got url from server: ' + response['login-url']);
           this.router.navigateByUrl(response['login-url']);
         })
           .catch (error => {
