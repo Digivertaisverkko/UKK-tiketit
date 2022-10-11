@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
@@ -19,7 +19,8 @@ export class LoginComponent implements OnInit {
   isPhonePortrait = false;
 
   constructor(
-    public router: Router,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private responsive: BreakpointObserver,
     private authService: AuthService
   ) {
@@ -37,6 +38,11 @@ export class LoginComponent implements OnInit {
         this.isPhonePortrait = true;
       }
     });
+
+    this.activatedRoute.queryParams.subscribe(params => {
+      console.log('LoginComponent:');
+      console.dir(params);
+    })
 
   }
 
