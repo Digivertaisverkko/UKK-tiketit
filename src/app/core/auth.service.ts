@@ -54,7 +54,7 @@ export class AuthService {
     console.log('Response type: ' + this.responseType);
     console.log('Code Verifier: ' + this.codeVerifier);
     console.log('Code challenge : ' + this.codeChallenge);
-    console.log('Server kogin url: ' + environment.ownLoginUrl);
+    console.log('Server login url: ' + environment.ownAskLoginUrl);
     console.log('State: ' + this.oAuthState); */
     
     // Jos haluaa storageen tallentaa:
@@ -78,7 +78,7 @@ export class AuthService {
     //  return this.postAskLogin(httpOptions).subscribe((data) => {
     //   data['login-url'];
     // });
-    
+
     .then(serverResponse => {
       const possibleUrl = serverResponse['login-url'];
       if (loginType == 'own' && this.isValidHttpUrl(possibleUrl)) {
@@ -88,7 +88,7 @@ export class AuthService {
 
   private async sendAskLogin(httpOptions: object): Promise<any> {
     try {
-      const response: any = await firstValueFrom(this.http.post(environment.ownLoginUrl, null, httpOptions));
+      const response: any = await firstValueFrom(this.http.post(environment.ownAskLoginUrl, null, httpOptions));
       // console.log('sendAskLogin Response: '+ response);
       // console.log(typeof url);
       return response;
@@ -98,12 +98,12 @@ export class AuthService {
   }
 
   /*  private postAskLogin(httpOptions: object): Observable<any> {
-      return this.http.post<LoginResponse>(environment.ownLoginUrl, null, httpOptions)
+      return this.http.post<LoginResponse>(environment.ownAskLoginUrl, null, httpOptions)
   } */
 
   // If using obersvables.
   public sendAskLoginObservable(httpOptions: object): Observable<any> {
-    return this.http.post<LoginResponse>(environment.ownLoginUrl, null, httpOptions)  
+    return this.http.post<LoginResponse>(environment.ownAskLoginUrl, null, httpOptions)  
     .pipe(tap(
         {
           next: (data: any) => data['login-url'],

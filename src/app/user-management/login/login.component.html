@@ -12,6 +12,7 @@
                       required
                       name="email"
                       [(ngModel)]="email"
+                      ng-change="validateEmail()"
                       >
                       <mat-error *ngIf="email.length === 0">Sähköposti tarvitaan</mat-error>
                     <mat-icon matSuffix>email</mat-icon>
@@ -34,6 +35,7 @@
                   <mat-checkbox>Muista minut</mat-checkbox>
                   <button
                     mat-raised-button
+                    [disabled]="email.length < 3 || password.length < 8"
                     color="primary"
                     class="login-button"
                     (click)="login();">
