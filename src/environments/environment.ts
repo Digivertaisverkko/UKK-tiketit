@@ -8,12 +8,12 @@ let apiBaseUrl = 'http://localhost:3000/api';
 export const environment = {
   production: false,
   clientID: 'angularApp',
-  ownLoginUrl: apiBaseUrl + '/echoheaders/',
+  ownLoginUrl: apiBaseUrl + '/login',
   ownTokenUrl: apiBaseUrl + '/authtoken'
 }
 
-// ownLoginUrl: apiBaseUrl + '/login',
-
+// 
+//   ownLoginUrl: apiBaseUrl + '/echoheaders/',
 
 /*
  * For easier debugging in development mode, you can import the following file

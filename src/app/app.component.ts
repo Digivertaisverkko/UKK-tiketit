@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './core/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,14 +12,24 @@ export class AppComponent implements OnInit {
   title = 'tikettisysteemi';
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.getIsUserAuthenticated() == false) {
-      console.log('AppComponent: not authenticated');
-      this.authService.askLogin('own');
-    }
-  }  
+    this.authService.authState$.subscribe(isUserLoggedIn => {
+      if (isUserLoggedIn == true) {
+        this.router.navigateByUrl('/front', { replaceUrl: true });
+      } else {
+        this.authService.askLogin('own').then(response => {
+          console.log('AppComponent: url: ' + response['login-url']);
+          this.router.navigateByUrl(response['login-url']);
+        })
+          .catch (error => {
+            console.log('Error: Route for login not found.');
+          })
+      }
+    });
+  }
 
 }

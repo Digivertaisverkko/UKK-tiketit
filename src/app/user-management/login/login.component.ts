@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
       if (result.matches) {
         this.isPhonePortrait = true;
       }
-    });  
+    });
 
   }
 
