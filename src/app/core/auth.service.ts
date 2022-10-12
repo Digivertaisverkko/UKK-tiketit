@@ -23,7 +23,7 @@ export class AuthService {
   private responseType: string;
   private oAuthState: string;
   public authState$ = new BehaviorSubject(false);
-  private askLogin$: BehaviorSubject<any>;
+  // private askLogin$: BehaviorSubject<any>;
 
   constructor(
       private http: HttpClient,
@@ -34,8 +34,10 @@ export class AuthService {
     this.codeChallengeMethod = 'S256';
     this.responseType = 'code';
     this.oAuthState = '';
-    this.askLogin$ = new BehaviorSubject(null);
   }
+
+  // observable-toteutusta varten.
+  // this.askLogin$ = new BehaviorSubject(null);
   
   private getCodeChallenge(codeVerifier: string): string {
     let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
@@ -51,12 +53,12 @@ export class AuthService {
     this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
 
-    /* 
+    console.log('authService (before asking login');
     console.log('Response type: ' + this.responseType);
     console.log('Code Verifier: ' + this.codeVerifier);
     console.log('Code challenge : ' + this.codeChallenge);
     console.log('Server login url: ' + environment.ownAskLoginUrl);
-    console.log('State: ' + this.oAuthState); */
+    console.log('oAuthState: ' + this.oAuthState);
     
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
@@ -90,9 +92,19 @@ export class AuthService {
       }) */
   }
 
-  // Login type can atm be one of following: 'own'.
-  login(loginType: string) {
-
+  /* Send second request in authorized code flow for login. */
+  login(email: string, password: string, loginID: string) {
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'ktunnus': email,
+        'salasana': password,
+        'login-id': loginID
+      })
+    }
+    let url: string;
+    // url = environment.ownLoginUrl;
+    url = '/api/echoheaders/';
+    return this.postRequest(url, httpOptions);
   }
 
   // Send a POST request.
@@ -111,9 +123,9 @@ export class AuthService {
       return this.http.post<LoginResponse>(environment.ownAskLoginUrl, null, httpOptions)
   } */
 
-  // If using obersvables.
-  public sendAskLoginObservable(httpOptions: object): Observable<any> {
-    return this.http.post<LoginResponse>(environment.ownAskLoginUrl, null, httpOptions)  
+  // observable-yritystä.
+  public postRequestObservable(url: string, httpOptions: object): Observable<any> {
+    return this.http.post<LoginResponse>(url, null, httpOptions)  
     .pipe(tap(
         {
           next: (data: any) => data['login-url'],
@@ -122,6 +134,7 @@ export class AuthService {
       ))
   }
 
+  // Pring logs when asking for login.
   private printAskLoginLog(response: any, loginUrl: string) {
     console.log('Got response: ');
     console.dir(response);
