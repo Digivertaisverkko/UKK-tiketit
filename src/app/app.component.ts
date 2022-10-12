@@ -20,16 +20,17 @@ export class AppComponent implements OnInit {
       if (isUserLoggedIn == true) {
         this.router.navigateByUrl('/front', { replaceUrl: true });
       } else {
-        this.authService.askLogin('own').then(response => {
-          console.log('AppComponent: got url from server: ' + response['login-url']);
-          this.router.navigateByUrl(response['login-url']);
+        this.authService.sendAskLoginRequest('own').then((response: string) => {
+          console.log('AppComponent: got url from server: ' + response);
+          if (response !== 'error') {
+            this.router.navigateByUrl(response);
+          }
         })
           .catch (error => {
-            console.log('Error: Route for login not found.');
-          })
+            console.log('Error: Route for login not found: ' + error);
+        })
       }
     });
-
-  } // ngOnInit
+  }
 
 }

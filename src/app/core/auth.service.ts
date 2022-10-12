@@ -9,7 +9,16 @@ import cryptoRandomString from 'crypto-random-string';
 import { Router } from '@angular/router';
 import { LoginComponent } from '../user-management/login/login.component';
 
-export interface LoginResponse { 'login-url': string; }
+export interface LoginResponse {
+  success: boolean,
+  'login-code': string
+ }
+
+ export interface AuthRequestResponse {
+  success: boolean,
+  'login-code': string
+ }
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,64 +26,61 @@ export interface LoginResponse { 'login-url': string; }
 
 export class AuthService {
 
-  private codeVerifier: string;
-  private codeChallenge: string;
-  private codeChallengeMethod: string;
-  private responseType: string;
-  private oAuthState: string;
-  public authState$ = new BehaviorSubject(false);
+  public authState$ = new BehaviorSubject<boolean>(false);
+  private codeVerifier: string = '';
+  private codeChallenge: string = '';
+  private codeChallengeMethod: string = 'S256';
+  private responseType: string = 'code';
+  private oAuthState: string = '';
+  private loginCode: string = '';
+  private sessionID: string ='';
   // private askLogin$: BehaviorSubject<any>;
 
   constructor(
       private http: HttpClient,
       private router: Router
     ) {
-    this.codeVerifier = '';
-    this.codeChallenge = '';
-    this.codeChallengeMethod = 'S256';
-    this.responseType = 'code';
-    this.oAuthState = '';
   }
 
   // observable-toteutusta varten.
   // this.askLogin$ = new BehaviorSubject(null);
-  
-  private getCodeChallenge(codeVerifier: string): string {
-    let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
-    let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-    return codeChallenge;
-  }
 
   /* Send first request in authorized code flow asking for login.
      Login type can atm be one of following: 'own'. */
-  askLogin(loginType: string) {
-
+  public async sendAskLoginRequest(loginType: string) {
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
     this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
-
-    console.log('authService (before asking login');
-    console.log('Response type: ' + this.responseType);
-    console.log('Code Verifier: ' + this.codeVerifier);
-    console.log('Code challenge : ' + this.codeChallenge);
-    console.log('Server login url: ' + environment.ownAskLoginUrl);
-    console.log('oAuthState: ' + this.oAuthState);
-    
+    // console.log('authService (before asking login):');
+    // console.log('Response type: ' + this.responseType);
+    // console.log('Code Verifier: ' + this.codeVerifier);
+    // console.log('Code challenge : ' + this.codeChallenge);
+    // console.log('Server login url: ' + environment.ownAskLoginUrl);
+    // console.log('oAuthState: ' + this.oAuthState);
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
-
     let url: string = environment.ownAskLoginUrl;
-
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': loginType,
         'code-challenge': this.codeChallenge
       })
     };
-    
    // console.dir(httpOptions);
-   return this.postRequest(url, httpOptions);
+   let response: any;
+   try {
+      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, httpOptions));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    const loginUrl: string = response['login-url'];
+    console.log('loginurl : ' +loginUrl);
+   if (loginUrl.length == 0) {
+    console.error("Server didn't retrieve login url.");
+    return 'error';
+   }
+   return loginUrl;
 
     /* this.askLogin$ = this.postAskLogin(httpOptions).subscribe((subscriber) => {
       subscriber['login-url'];
@@ -92,8 +98,8 @@ export class AuthService {
       }) */
   }
 
-  /* Send second request in authorized code flow for login. */
-  login(email: string, password: string, loginID: string) {
+  /* Send 2nd request in authorized code flow for login. */
+  public async sendLoginRequest(email: string, password: string, loginID: string) {
     const httpOptions =  {
       headers: new HttpHeaders({
         'ktunnus': email,
@@ -101,18 +107,56 @@ export class AuthService {
         'login-id': loginID
       })
     }
-    let url: string;
-    // url = environment.ownLoginUrl;
-    url = '/api/echoheaders/';
-    return this.postRequest(url, httpOptions);
+    const url = environment.ownLoginUrl;
+    // url = '/api/echoheaders/';
+    let response: any;
+    try {
+       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    console.log('sendLoginRequest: Got response:');
+    console.dir(response);
+    if (response.success == true) {
+      console.log(' login-code: ' + response['login-code']);
+      this.loginCode = response['login-code'];
+      this.sendAuthRequest(this.codeVerifier, this.loginCode);
+    } else {
+      console.error("Login attempt failed : " + response.error);
+    }
   }
 
-  // Send a POST request.
-  private async postRequest(url: string, httpOptions: object): Promise<any> {
+  private async sendAuthRequest(codeVerifier: string, LoginCode: string) {
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'code-verifier': codeVerifier,
+        'login-code': LoginCode,
+      })
+    }
+    const url = environment.ownTokenUrl;
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
+      console.log('sendAuthRequest: got response: ');
+      console.dir(response);
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response.success == true) {
+      console.log('sendAuthRequest: Got Session ID: ' + response['session-id']);
+      this.sessionID = response['session-id'];
+      this.authState$.next(true);
+      console.log('Authorization success.');
+    } else {
+      console.error('Authorization failed with error: ' + response.error);
+    }
+  }
+
+  // Send any POST request. tuskin tarvitsee erikseen, koska error handling handling tapahtuu
+  // jo omassa metodissaan.
+  private async postRequest(url: string, httpOptions: object, method?: string ): Promise<any> {
     try {
       const response: any = await firstValueFrom(this.http.post(url, null, httpOptions));
-      // console.log('sendAskLogin Response: '+ response);
-      // console.log(typeof url);
       return response;
     } catch (error: any) {
       this.handleError(error);
@@ -144,6 +188,12 @@ export class AuthService {
     } else {
       console.log("It's not valid url.");
     }
+  }
+
+  private getCodeChallenge(codeVerifier: string): string {
+    let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
+    let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    return codeChallenge;
   }
 
   // Test if a string is valid URL.

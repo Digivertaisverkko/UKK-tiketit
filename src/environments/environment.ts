@@ -10,7 +10,7 @@ export const environment = {
   clientID: 'angularApp',
   ownAskLoginUrl: apiBaseUrl + '/login',
   ownTokenUrl: apiBaseUrl + '/authtoken',
-  ownLoginUrl: apiBaseUrl + '/login',
+  ownLoginUrl: apiBaseUrl + '/omalogin',
 }
 
 // 

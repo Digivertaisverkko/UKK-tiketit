@@ -60,8 +60,8 @@ export class LoginComponent implements OnInit {
     console.log('login id: ' + this.loginID);
     let isEmailValid = this.validateEmail(this.email);
     console.log('email validation: ' + isEmailValid);
-    this.authService.login(this.email, this.password, this.loginID).then(response => {
-      console.log('Got login response: ');
+    this.authService.sendLoginRequest(this.email, this.password, this.loginID).then(response => {
+      console.log('loginComponent: Got login response: ');
       console.dir(response);
     });
     

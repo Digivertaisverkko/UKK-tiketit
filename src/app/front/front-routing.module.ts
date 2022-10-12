@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FrontPageComponent } from './front-page/front-page.component';
 
 const routes: Routes = [
-  { path: 'testing', component: FrontPageComponent }
+  { path: 'front', component: FrontPageComponent }
 ];
 
 @NgModule({
