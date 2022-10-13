@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
+import { ForwardRefHandling } from '@angular/compiler';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +19,23 @@ export class LoginComponent implements OnInit {
   private loginID: string = '';
   public password: string = '';
   public serverErrorMessage: string = '';
+  messageSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private responsive: BreakpointObserver,
-    private router: Router,
+    private router: Router
   ) {
+    this.messageSubscription = this.authService.getMessages().subscribe(message => {
+      if (message) {
+        console.log('Got message ' + message);
+        this.serverErrorMessage = message;
+      } else {
+        // Poista viestit, jos saadaan tyhjä viesti.
+        this.serverErrorMessage = '';
+      }
+    });
   }
 
   ngOnInit(): void {

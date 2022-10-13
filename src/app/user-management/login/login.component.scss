@@ -35,18 +35,24 @@
     width: 30%;
   }
 
+  .error-card {
+    margin-left: 10%;
+    margin-right: 30%;
+    background-color:#ffe6e6;
+  }
+
 mat-card.is-phone-portrait {
     margin: 0;
     border-radius: 0px;
     width: 94%;
 }
 
-  mat-form-field, mat-checkbox {
+  mat-form-field, mat-checkbox, mat-error {
     width: 80%;
     display: block;
     margin: auto;
   }
-  mat-card-content {
+  mat-card-content, mat-error {
     margin-top: 20px;
   }
   

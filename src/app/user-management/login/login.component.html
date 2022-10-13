@@ -27,13 +27,19 @@
                       name="password"
                       [(ngModel)]="password"
                     >
-                    <mat-error *ngIf="password.length < 8">
-                      Vähintään 8 merkkiä pitkä salasana tarvitaan.
+                    <mat-error *ngIf="password.length < 3">
+                      Vähintään 3 merkkiä pitkä salasana tarvitaan.
                     </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
+
                   </mat-form-field>
                   <mat-checkbox>Muista minut</mat-checkbox>
-                  <mat-error *ngIf="serverErrorMessage.length > 0"></mat-error>
+
+                  <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
+                    <mat-card-title>Virhe</mat-card-title>
+                    <mat-card-content>{{serverErrorMessage}}</mat-card-content>
+                  </mat-card>
+
                   <button
                     mat-raised-button
                     [disabled]="email.length < 3 || password.length < 8"
@@ -45,7 +51,7 @@
                   
                   <div class="line-container">
                     <div class="line"><mat-divider></mat-divider></div>
-                    <div class="divider-text mat-typography">Tai</div>
+                    <div class="divider-text mat-typography">tai</div>
                     <div class="line"><mat-divider></mat-divider></div>
                   </div>
 

@@ -26,10 +26,12 @@ export interface LoginResponse {
 
 export class AuthService {
 
+  // Onko käyttäjä kirjautuneena.
   public authState$ = new BehaviorSubject<boolean>(false);
+  private errorMessages$ = new BehaviorSubject<any>(null);
+  
   private codeVerifier: string = '';
   private codeChallenge: string = '';
-  private errorMessages$ = new BehaviorSubject<any>(null);
   private loginCode: string = '';
   private sessionID: string ='';
 
@@ -44,8 +46,6 @@ export class AuthService {
     ) {
   }
 
-  /* Send first request in authorized code flow asking for login.
-     Login type can atm be one of following: 'own'. */
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
@@ -79,6 +79,7 @@ export class AuthService {
    }
    return loginUrl;
   }
+
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
   public async sendLoginRequest(email: string, password: string, loginID: string) {
     const httpOptions =  {
@@ -137,7 +138,8 @@ export class AuthService {
       this.authState$.next(true);
       console.log('Authorization success.');
     } else {
-      console.error('Authorization failed with error: ' + response.error);
+      console.error(response.error);
+      this.sendErrorMessage(response.error);
     }
   }
 
@@ -151,6 +153,19 @@ export class AuthService {
     } else {
       console.log("It's not valid url.");
     }
+  }
+
+  getMessages(): Observable<any> {
+    return this.errorMessages$.asObservable();
+  }
+
+  // Lähetä virheviesti näkymään.
+  sendErrorMessage(message: string) {
+    this.errorMessages$.next(message);
+  }
+
+  clearMessages(): void {
+    this.errorMessages$.next('');
   }
 
   private getCodeChallenge(codeVerifier: string): string {
@@ -181,6 +196,7 @@ export class AuthService {
         `Backend returned code ${error.status}, body was: `, error.error);
     }
     // Return an observable with error message.
+    this.sendErrorMessage("`Backend returned code ${error.status}, body was: `, error.error");
     return throwError(() => new Error("Unable to continue authentication."));
   }
 
