@@ -26,13 +26,14 @@
                       minlength="8"
                       name="password"
                       [(ngModel)]="password"
-                      >
-                      <mat-error *ngIf="password.length < 8">
-                        Vähintään 8 merkkiä pitkä salasana tarvitaan.
-                      </mat-error>
+                    >
+                    <mat-error *ngIf="password.length < 8">
+                      Vähintään 8 merkkiä pitkä salasana tarvitaan.
+                    </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
                   </mat-form-field>
                   <mat-checkbox>Muista minut</mat-checkbox>
+                  <mat-error *ngIf="hasServerError"></mat-error>
                   <button
                     mat-raised-button
                     [disabled]="email.length < 3 || password.length < 8"

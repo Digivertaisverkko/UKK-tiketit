@@ -16,9 +16,9 @@ export interface LoginResponse {
 
  export interface AuthRequestResponse {
   success: boolean,
-  'login-code': string
+  error: string,
+  'session-id': string
  }
-
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +29,13 @@ export class AuthService {
   public authState$ = new BehaviorSubject<boolean>(false);
   private codeVerifier: string = '';
   private codeChallenge: string = '';
-  private codeChallengeMethod: string = 'S256';
-  private responseType: string = 'code';
-  private oAuthState: string = '';
   private loginCode: string = '';
   private sessionID: string ='';
-  // private askLogin$: BehaviorSubject<any>;
+
+  // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
+  private oAuthState: string = '';
+  private codeChallengeMethod: string = 'S256';
+  private responseType: string = 'code';
 
   constructor(
       private http: HttpClient,
@@ -42,21 +43,14 @@ export class AuthService {
     ) {
   }
 
-  // observable-toteutusta varten.
-  // this.askLogin$ = new BehaviorSubject(null);
-
   /* Send first request in authorized code flow asking for login.
      Login type can atm be one of following: 'own'. */
+  /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
+     loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
     this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
-    // console.log('authService (before asking login):');
-    // console.log('Response type: ' + this.responseType);
-    // console.log('Code Verifier: ' + this.codeVerifier);
-    // console.log('Code challenge : ' + this.codeChallenge);
-    // console.log('Server login url: ' + environment.ownAskLoginUrl);
-    // console.log('oAuthState: ' + this.oAuthState);
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
@@ -81,24 +75,8 @@ export class AuthService {
     return 'error';
    }
    return loginUrl;
-
-    /* this.askLogin$ = this.postAskLogin(httpOptions).subscribe((subscriber) => {
-      subscriber['login-url'];
-    });
-
-    //  return this.postAskLogin(httpOptions).subscribe((data) => {
-    //   data['login-url'];
-    // });
-
-    // For URL validation.
-    .then(serverResponse => {
-      const possibleUrl = serverResponse['login-url'];
-      if (loginType == 'own' && this.isValidHttpUrl(possibleUrl)) {
-      } 
-      }) */
   }
-
-  /* Send 2nd request in authorized code flow for login. */
+  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
   public async sendLoginRequest(email: string, password: string, loginID: string) {
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -108,7 +86,6 @@ export class AuthService {
       })
     }
     const url = environment.ownLoginUrl;
-    // url = '/api/echoheaders/';
     let response: any;
     try {
        response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
@@ -126,6 +103,7 @@ export class AuthService {
     }
   }
 
+  /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
   private async sendAuthRequest(codeVerifier: string, LoginCode: string) {
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -152,33 +130,7 @@ export class AuthService {
     }
   }
 
-  // Send any POST request. tuskin tarvitsee erikseen, koska error handling handling tapahtuu
-  // jo omassa metodissaan.
-  private async postRequest(url: string, httpOptions: object, method?: string ): Promise<any> {
-    try {
-      const response: any = await firstValueFrom(this.http.post(url, null, httpOptions));
-      return response;
-    } catch (error: any) {
-      this.handleError(error);
-    }
-  }
-
-  /*  private postAskLogin(httpOptions: object): Observable<any> {
-      return this.http.post<LoginResponse>(environment.ownAskLoginUrl, null, httpOptions)
-  } */
-
-  // observable-yritystä.
-  public postRequestObservable(url: string, httpOptions: object): Observable<any> {
-    return this.http.post<LoginResponse>(url, null, httpOptions)  
-    .pipe(tap(
-        {
-          next: (data: any) => data['login-url'],
-          error: (error: any) => this.handleError(error)
-        }
-      ))
-  }
-
-  // Pring logs when asking for login.
+  // Näytä sendAskLoginRequest:n lyyttyviä logeja.
   private printAskLoginLog(response: any, loginUrl: string) {
     console.log('Got response: ');
     console.dir(response);
@@ -196,9 +148,9 @@ export class AuthService {
     return codeChallenge;
   }
 
-  // Test if a string is valid URL.
+  // Vastaako string URL:n muotoa.
   private isValidHttpUrl(testString: string) {
-    let url;  
+    let url: URL;  
     try {
       url = new URL(testString);
     } catch (_) {
@@ -207,7 +159,7 @@ export class AuthService {
     return url.protocol === "http:" || url.protocol === "https:";
   }
 
-  // Handle an error.
+  // Virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. 
@@ -221,4 +173,13 @@ export class AuthService {
     return throwError(() => new Error("Unable to continue authentication."));
   }
 
+  // Show logs before login.
+  private logBeforeLogin() {
+    console.log('authService (before asking login):');
+    console.log('Response type: ' + this.responseType);
+    console.log('Code Verifier: ' + this.codeVerifier);
+    console.log('Code challenge : ' + this.codeChallenge);
+    console.log('Server login url: ' + environment.ownAskLoginUrl);
+    console.log('oAuthState: ' + this.oAuthState);
+  }
 }

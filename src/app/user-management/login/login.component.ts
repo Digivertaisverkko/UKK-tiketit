@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Breakpoints } from '@angular/cdk/layout';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-login',
@@ -13,15 +13,17 @@ export class LoginComponent implements OnInit {
 
   public email: string = '';
   public isEmailValid: boolean = false;
-  public password: string = '';
-  isPhonePortrait = false;
+  public isPhonePortrait = false;
   private loginID: string = '';
+  public password: string = '';
+  public hasServerError: boolean = false;
+  public serverErrorMessage: string = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private responsive: BreakpointObserver,
     private authService: AuthService,
+    private responsive: BreakpointObserver,
+    private router: Router,
   ) {
   }
 
@@ -32,7 +34,6 @@ export class LoginComponent implements OnInit {
         this.isPhonePortrait = true;
       }
     });
-
     this.setLoginID();
   }
 
@@ -48,9 +49,9 @@ export class LoginComponent implements OnInit {
         console.log('loginComponent: set loginID: ' + this.loginID);
       },
       error: (error) => {
-          console.error(error);
-        }
-      });
+        console.error(error);
+      }
+    });
   }
 
   public login(): void {
