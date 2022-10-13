@@ -29,6 +29,7 @@ export class AuthService {
   public authState$ = new BehaviorSubject<boolean>(false);
   private codeVerifier: string = '';
   private codeChallenge: string = '';
+  private errorMessages$ = new BehaviorSubject<any>(null);
   private loginCode: string = '';
   private sessionID: string ='';
 
@@ -113,6 +114,14 @@ export class AuthService {
         'login-code': LoginCode,
       })
     }
+    /* kun backend-päivitetty.
+     {
+      headers: new HttpHeaders({
+        'code-verifier': codeVerifier,
+        'login-code': LoginCode,
+        'login-type': own
+      })
+    } */
     const url = environment.ownTokenUrl;
     let response: any;
     try {
