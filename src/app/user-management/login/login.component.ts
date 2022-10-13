@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   public isPhonePortrait = false;
   private loginID: string = '';
   public password: string = '';
-  public serverErrorMessage: string = '';
+  public serviceErrorMessages: string = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -25,6 +25,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
   ) {
   }
+
+  // release -branch
 
   ngOnInit(): void {
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
