@@ -33,7 +33,7 @@
                     <mat-icon matSuffix>lock</mat-icon>
                   </mat-form-field>
                   <mat-checkbox>Muista minut</mat-checkbox>
-                  <mat-error *ngIf="hasServerError"></mat-error>
+                  <mat-error *ngIf="serverErrorMessage.length > 0"></mat-error>
                   <button
                     mat-raised-button
                     [disabled]="email.length < 3 || password.length < 8"

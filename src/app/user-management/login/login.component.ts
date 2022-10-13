@@ -16,7 +16,6 @@ export class LoginComponent implements OnInit {
   public isPhonePortrait = false;
   private loginID: string = '';
   public password: string = '';
-  public hasServerError: boolean = false;
   public serverErrorMessage: string = '';
 
   constructor(

@@ -61,13 +61,15 @@ export class AuthService {
         'code-challenge': this.codeChallenge
       })
     };
-   // console.dir(httpOptions);
+
    let response: any;
+
    try {
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, httpOptions));
     } catch (error: any) {
       this.handleError(error);
     }
+
     const loginUrl: string = response['login-url'];
     console.log('loginurl : ' +loginUrl);
    if (loginUrl.length == 0) {
