@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   public isPhonePortrait = false;
   private loginID: string = '';
   public password: string = '';
+  public readonly passwordMinLength: number = 3;
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
 

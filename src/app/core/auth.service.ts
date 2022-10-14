@@ -28,7 +28,7 @@ export interface LoginResponse {
 export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
-  public authState$ = new BehaviorSubject<boolean>(false);
+  public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private errorMessages$ = new BehaviorSubject<any>(null);
   
   private codeVerifier: string = '';
@@ -136,7 +136,7 @@ export class AuthService {
     if (response.success == true) {
       console.log('sendAuthRequest: Got Session ID: ' + response['session-id']);
       this.sessionID = response['session-id'];
-      this.authState$.next(true);
+      this.isUserLoggedIn$.next(true);
       console.log('Authorization success.');
     } else {
       console.error(response.error);

@@ -29,8 +29,8 @@
                       name="password"
                       [(ngModel)]="password"
                     >
-                    <mat-error *ngIf="password.length < 3">
-                      Vähintään 3 merkkiä pitkä salasana tarvitaan.
+                    <mat-error *ngIf="password.length < passwordMinLength">
+                      Vähintään {{passwordMinLength}} merkkiä pitkä salasana tarvitaan.
                     </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
                   </mat-form-field>
@@ -44,7 +44,7 @@
 
                   <button
                     mat-raised-button
-                    [disabled]="email.length < 3 || password.length < 8"
+                    [disabled]="email.length < 3 || password.length < passwordMinLength"
                     color="primary"
                     (click)="login();">
                     Kirjaudu sisään

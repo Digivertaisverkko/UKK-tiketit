@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.authState$.subscribe(isUserLoggedIn => {
+    this.authService.isUserLoggedIn$.subscribe(isUserLoggedIn => {
       if (isUserLoggedIn == true) {
         this.router.navigateByUrl('/front', { replaceUrl: true });
       } else {
