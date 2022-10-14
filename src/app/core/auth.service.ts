@@ -24,6 +24,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 
+// Tämä service käsittelee käyttäjäautentikointia.
 export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
@@ -44,6 +45,9 @@ export class AuthService {
       private http: HttpClient,
       private router: Router
     ) {
+
+      this.errorMessages$.next('Tämä on error message.');
+
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.

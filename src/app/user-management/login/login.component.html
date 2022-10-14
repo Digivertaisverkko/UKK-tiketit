@@ -5,6 +5,7 @@
           <mat-tab label="Kirjaudu">
               <mat-card-content>
                 <form action="">
+
                   <mat-form-field>
                     <input
                       matInput
@@ -13,10 +14,11 @@
                       name="email"
                       [(ngModel)]="email"
                       ng-change="validateEmail()"
-                      >
-                      <mat-error *ngIf="email.length === 0">Sähköposti tarvitaan</mat-error>
+                    >
+                    <mat-error *ngIf="email.length === 0">Sähköposti tarvitaan</mat-error>
                     <mat-icon matSuffix>email</mat-icon>
                   </mat-form-field>
+
                   <mat-form-field>
                     <input
                       matInput
@@ -31,8 +33,8 @@
                       Vähintään 3 merkkiä pitkä salasana tarvitaan.
                     </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
-
                   </mat-form-field>
+
                   <mat-checkbox>Muista minut</mat-checkbox>
 
                   <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
@@ -44,23 +46,20 @@
                     mat-raised-button
                     [disabled]="email.length < 3 || password.length < 8"
                     color="primary"
-                    class="login-button"
                     (click)="login();">
                     Kirjaudu sisään
                   </button>
                   
                   <div class="line-container">
-                    <div class="line"><mat-divider></mat-divider></div>
-                    <div class="divider-text mat-typography">tai</div>
-                    <div class="line"><mat-divider></mat-divider></div>
+                    <mat-divider></mat-divider>
+                    <div class="mat-typography">tai</div>
+                    <mat-divider></mat-divider>
                   </div>
 
-                  <button
-                    mat-raised-button
-                    (click)="loginWithoutAuth();"
-                    class="login-button">
+                  <button mat-raised-button (click)="loginWithoutAuth()">
                     Sisään kirjautumatta
                   </button>
+
                 </form>
               </mat-card-content>
           </mat-tab>
