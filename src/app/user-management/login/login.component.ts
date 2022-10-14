@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -11,7 +11,7 @@ import { ForwardRefHandling } from '@angular/compiler';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   public email: string = '';
   public isEmailValid: boolean = false;
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     private responsive: BreakpointObserver,
     private router: Router
   ) {
-    this.messageSubscription = this.authService.getMessages().subscribe(message => {
+    this.messageSubscription = this.authService.onErrorMessages().subscribe(message => {
       if (message) {
         console.log('Got message ' + message);
         this.serverErrorMessage = message;
@@ -67,15 +67,19 @@ export class LoginComponent implements OnInit {
   }
 
   public login(): void {
+    this.isEmailValid = this.validateEmail(this.email);
+    console.log('email validation: ' + this.isEmailValid);
+    console.log(typeof this.isEmailValid);
+    // Lisää ensin custom ErrorStateMatcher
+    // if (this.isEmailValid === false) return;
     console.log('LoginComponent: login request info:');
     console.log('email ' + this.email);
     console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
-    let isEmailValid = this.validateEmail(this.email);
-    console.log('email validation: ' + isEmailValid);
-    this.authService.sendLoginRequest(this.email, this.password, this.loginID).then(response => {
-      console.log('loginComponent: Got login response: ');
-      console.dir(response);
+    this.authService.sendLoginRequest(this.email, this.password, this.loginID)
+      .then(response => {
+        console.log('loginComponent: Got login response: ');
+        console.dir(response);
     });
     
   }
@@ -96,6 +100,10 @@ export class LoginComponent implements OnInit {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
     return ( validationString == null ) ? false : true;
+  }
+
+  ngOnDestroy(): void {
+    this.messageSubscription.unsubscribe;
   }
 
 }

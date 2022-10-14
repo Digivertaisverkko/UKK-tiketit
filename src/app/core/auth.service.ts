@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, firstValueFrom, tap } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom, tap } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 // import { LocalStorageModule } from 'angular-2-local-storage';
@@ -28,8 +28,8 @@ export interface LoginResponse {
 export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
-  public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
-  private errorMessages$ = new BehaviorSubject<any>(null);
+  private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private errorMessages$ = new Subject<any>();
   
   private codeVerifier: string = '';
   private codeChallenge: string = '';
@@ -97,14 +97,17 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    console.log('sendLoginRequest: Got response:');
-    console.dir(response);
+    console.log('sendLoginRequest: Got response: ' + JSON.stringify(response));
     if (response.success == true) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
-      console.error("Login attempt failed : " + response.error);
+      console.error("Login authorization not succesful.");
+      this.sendErrorMessage("(ei virheviestä)");
+      // Ei ole error messageja tälle (vielä) api:ssa
+      // console.error("Login attempt failed : " + response.error);
+      // this.sendErrorMessage(response.error);
     }
   }
 
@@ -156,7 +159,11 @@ export class AuthService {
     }
   }
 
-  getMessages(): Observable<any> {
+  onIsUserLoggedIn(): Observable<any> {
+    return this.isUserLoggedIn$.asObservable();
+  }
+
+  onErrorMessages(): Observable<any> {
     return this.errorMessages$.asObservable();
   }
 
@@ -196,8 +203,13 @@ export class AuthService {
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
     }
-    // Return an observable with error message.
-    this.sendErrorMessage("`Backend returned code ${error.status}, body was: `, error.error");
+    let message = "Yhteydenotto palvelimeen ei onnistunut.";
+    if (error !== undefined) {
+      if (error.error.length > 0 ) {
+        message += "Virhe: " + error.error;
+      }
+    }
+    this.sendErrorMessage(message);
     return throwError(() => new Error("Unable to continue authentication."));
   }
 

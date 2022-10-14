@@ -15,7 +15,7 @@
                       [(ngModel)]="email"
                       ng-change="validateEmail()"
                     >
-                    <mat-error *ngIf="email.length === 0">Sähköposti tarvitaan</mat-error>
+                    <mat-error>Sähköposti tarvitaan</mat-error>
                     <mat-icon matSuffix>email</mat-icon>
                   </mat-form-field>
 
@@ -29,7 +29,7 @@
                       name="password"
                       [(ngModel)]="password"
                     >
-                    <mat-error *ngIf="password.length < passwordMinLength">
+                    <mat-error>
                       Vähintään {{passwordMinLength}} merkkiä pitkä salasana tarvitaan.
                     </mat-error>
                     <mat-icon matSuffix>lock</mat-icon>
@@ -38,8 +38,8 @@
                   <mat-checkbox>Muista minut</mat-checkbox>
 
                   <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
-                    <mat-card-title>Virhe</mat-card-title>
-                    <mat-card-content>{{serverErrorMessage}}</mat-card-content>
+                    <mat-card-title>Kirjautuminen ei onnistunut</mat-card-title>
+                    <mat-card-content>Vastaus palvelimelta: {{serverErrorMessage}}</mat-card-content>
                   </mat-card>
 
                   <button

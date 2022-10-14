@@ -16,18 +16,19 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.isUserLoggedIn$.subscribe(isUserLoggedIn => {
-      if (isUserLoggedIn == true) {
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      if (response == true) {
         this.router.navigateByUrl('/front', { replaceUrl: true });
       } else {
+        /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee
+           Ei siirrytä suoraan /login, koska url sisältää loginid:n. */
         this.authService.sendAskLoginRequest('own').then((response: string) => {
           console.log('AppComponent: got url from server: ' + response);
           if (response !== 'error') {
             this.router.navigateByUrl(response);
           }
-        })
-          .catch (error => {
-            console.log('Error: Route for login not found: ' + error);
+        }).catch (error => {
+          console.log('Error: Route for login not found: ' + error);
         })
       }
     });

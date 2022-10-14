@@ -23,7 +23,7 @@
       width: unset;
       margin: 1em 10% 1em 10%;
       mat-card-title {
-        font-size: large;
+        font-size: medium;
       }
     }
   }
@@ -31,6 +31,16 @@
     margin: 0;
     border-radius: 0px;
     width: 94%;
+  }
+}
+
+.custom-error {
+  display: block;
+  color: #f44336;
+  line-height: 1.125;
+  font: {
+    size: 75%;
+    weight: 400;
   }
 }
 
