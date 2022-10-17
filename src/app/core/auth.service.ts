@@ -3,7 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
 import { environment } from 'src/environments/environment';
 // import { LocalStorageModule } from 'angular-2-local-storage';
-import * as CryptoJS from "crypto-js";
+// import * as CryptoJS from "crypto-js";
+import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 
 export interface LoginResponse {
@@ -46,8 +47,10 @@ export class AuthService {
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
-    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
+    // this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
+    this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
+    this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
+    // this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
@@ -94,6 +97,8 @@ export class AuthService {
     const url = environment.ownLoginUrl;
     let response: any;
     try {
+      console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
+      console.log(httpOptions.headers);
        response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
        console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
@@ -184,12 +189,24 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  private getCodeChallenge(codeVerifier: string): string {
-    let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
+  // private getCodeChallenge(codeVerifier: string): string {
+    // let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
     // let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-    let codeChallenge = codeVerifierHash;
-    return codeChallenge;
-  }
+    // return shajs('sha256').update({stringToBeHashed}).digest('hex')
+
+      // const encoder = new TextEncoder();
+      // const data = encoder.encode(codeVerifier);
+      // return window.crypto.subtle.digest('SHA-256', data).then(array => {
+      //   return this.base64UrlEncode(array);
+      // });
+  // }
+
+  // base64UrlEncode(array) {
+  //   return btoa(String.fromCharCode.apply(null, new Uint8Array(array)))
+  //       .replace(/\+/g, '-')
+  //       .replace(/\//g, '_')
+  //       .replace(/=+$/, '');
+  // }
 
   // Vastaako string URL:n muotoa.
   private isValidHttpUrl(testString: string) {
