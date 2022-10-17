@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom, tap } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
 import { environment } from 'src/environments/environment';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as CryptoJS from "crypto-js";
 import cryptoRandomString from 'crypto-random-string';
-import { Router } from '@angular/router';
-import { LoginComponent } from '../user-management/login/login.component';
 
 export interface LoginResponse {
   success: boolean,
@@ -42,8 +39,7 @@ export class AuthService {
   private responseType: string = 'code';
 
   constructor(
-      private http: HttpClient,
-      private router: Router
+      private http: HttpClient
     ) {
   }
 
@@ -64,10 +60,14 @@ export class AuthService {
       })
     };
 
+    console.log(httpOptions);
+
    let response: any;
 
    try {
-      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, httpOptions));
+      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      console.log('authService: saatiin vastaus: ' + response);
+      console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -95,6 +95,7 @@ export class AuthService {
     try {
        response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
     } catch (error: any) {
+      console.log(' virhe lähetyksessä');
       this.handleError(error);
     }
     console.log('sendLoginRequest: Got response: ' + JSON.stringify(response));
