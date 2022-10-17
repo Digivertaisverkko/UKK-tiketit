@@ -52,6 +52,7 @@ export class AuthService {
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
+    this.logBeforeLogin();
     let url: string = environment.ownAskLoginUrl;
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -60,14 +61,14 @@ export class AuthService {
       })
     };
 
-    console.log(httpOptions);
+   // console.log(httpOptions);
 
    let response: any;
 
    try {
+      console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus: ' + response);
-      console.dir(response);
+      console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -94,6 +95,7 @@ export class AuthService {
     let response: any;
     try {
        response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
+       console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       console.log(' virhe lähetyksessä');
       this.handleError(error);
@@ -105,6 +107,7 @@ export class AuthService {
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
       console.error("Login authorization not succesful.");
+      if (response)
       this.sendErrorMessage("(ei virheviestä)");
       // Ei ole error messageja tälle (vielä) api:ssa
       // console.error("Login attempt failed : " + response.error);
@@ -164,6 +167,10 @@ export class AuthService {
     return this.isUserLoggedIn$.asObservable();
   }
 
+  unsubscribeIsUserLoggedin(): void {
+    this.isUserLoggedIn$.unsubscribe;
+  }
+
   onErrorMessages(): Observable<any> {
     return this.errorMessages$.asObservable();
   }
@@ -179,7 +186,8 @@ export class AuthService {
 
   private getCodeChallenge(codeVerifier: string): string {
     let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
-    let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    // let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    let codeChallenge = codeVerifierHash;
     return codeChallenge;
   }
 

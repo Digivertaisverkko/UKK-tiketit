@@ -50,15 +50,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private setLoginID() {
+    console.log('--- ajetaan setLoginID ---');
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
-        console.log('LoginComponent:');
-        console.dir(params);
+        // console.log('LoginComponent:');
+        // console.dir(params);
         if (params['loginid'] == '') {
           console.error('No loginID found in URL. Aborting authentication.');
         };
         this.loginID = params['loginid'];
-        console.log('loginComponent: set loginID: ' + this.loginID);
+        console.log('loginComponent: asetettiin loginID: ' + this.loginID);
+
       },
       error: (error) => {
         console.error(error);
