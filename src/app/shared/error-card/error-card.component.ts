@@ -8,8 +8,8 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 })
 export class ErrorCardComponent implements OnInit {
 
-  @Input() title: string = "Virheilmoitus";
-  @Input() message: string = '';
+  @Input() title: string = 'Virhe';
+  @Input() message: string = 'Ei virheviestä';
   @Input() styles: object = {};
 
   constructor() { }
