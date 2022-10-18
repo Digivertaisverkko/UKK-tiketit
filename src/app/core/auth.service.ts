@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
 import { environment } from 'src/environments/environment';
-// import * as isValidHttpUrl from '../utils/isValidHttpUrl.util';
+import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 // import { LocalStorageModule } from 'angular-2-local-storage';
-// import * as CryptoJS from "crypto-js";
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 
@@ -34,6 +33,8 @@ export class AuthService {
   private codeChallenge: string = '';
   private loginCode: string = '';
   private sessionID: string ='';
+  private sessionIDexpires = new Date();
+  private account: string = '';
 
   // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
   private oAuthState: string = '';
@@ -122,18 +123,11 @@ export class AuthService {
   private async sendAuthRequest(codeVerifier: string, loginCode: string) {
     const httpOptions =  {
       headers: new HttpHeaders({
+        'login-type': 'own',
         'code-verifier': codeVerifier,
         'login-code': loginCode,
       })
     }
-    /* kun backend-päivitetty.
-     {
-      headers: new HttpHeaders({
-        'code-verifier': codeVerifier,
-        'login-code': LoginCode,
-        'login-type': own
-      })
-    } */
     const url = environment.ownTokenUrl;
     let response: any;
     try {
@@ -141,15 +135,27 @@ export class AuthService {
       console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
       console.log('sendAuthRequest: got response: ');
-      console.dir(response);
+      console.log(JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
     if (response.success == true) {
-      console.log('sendAuthRequest: Got Session ID: ' + response['session-id']);
-      this.sessionID = response['session-id'];
+
+      // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
+      console.log('Vastaus alla:');
+      console.dir(JSON.stringify(response));
+
+      // let sessionID = response['login-id'];
+
+      console.log('vastauksen sisältöä: ');
+      let loginIDobject = response['login-id'][0];
+      this.sessionID = (loginIDobject['sessionid']);
+      this.sessionIDexpires = (loginIDobject['vanhenee']);
+      this.account = (loginIDobject['tili']);
+      
+
       this.isUserLoggedIn$.next(true);
-      console.log('Authorization success.');
+      // console.log('Authorization success.');
     } else {
       console.error(response.error);
       this.sendErrorMessage(response.error);
@@ -161,7 +167,7 @@ export class AuthService {
     console.log('Got response: ');
     console.dir(response);
     console.log('Response as string: ' + loginUrl);
-    if (this.isValidHttpUrl(loginUrl)) {
+    if (isValidHttpUrl(loginUrl)) {
       console.log('It seems valid url.');
     } else {
       console.log("It's not valid url.");
