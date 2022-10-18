@@ -113,6 +113,7 @@ export class AuthService {
       console.error("Login authorization not succesful.");
       if (response)
       this.sendErrorMessage("(ei virheviestä)");
+
       // Ei ole error messageja tälle (vielä) api:ssa
       // console.error("Login attempt failed : " + response.error);
       // this.sendErrorMessage(response.error);
@@ -136,6 +137,7 @@ export class AuthService {
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
       console.log('sendAuthRequest: got response: ');
       console.log(JSON.stringify(response));
+      console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -239,6 +241,9 @@ export class AuthService {
     if (error !== undefined) {
       if (error.error.length > 0 ) {
         message += "Virhe: " + error.error;
+      }
+      if (error.status !== undefined ) {
+        message += "Tilakoodi: " + error.status;
       }
     }
     this.sendErrorMessage(message);
