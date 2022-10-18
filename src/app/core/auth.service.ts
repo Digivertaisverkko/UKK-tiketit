@@ -105,7 +105,6 @@ export class AuthService {
       console.log(' virhe lähetyksessä');
       this.handleError(error);
     }
-    console.log('sendLoginRequest: Got response: ' + JSON.stringify(response));
     if (response.success == true) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
