@@ -37,10 +37,17 @@
 
                   <mat-checkbox>Muista minut</mat-checkbox>
 
-                  <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
+                  <app-error-card class="error-card" *ngIf="serverErrorMessage.length > 0"
+                    title="Kirjautuminen ei onnistunut"
+                    message="Vastaus palvelimelta: {{serverErrorMessage}}"
+                    [styles]="{ 'margin': '0 10% -10px 10%' }"
+                    >
+                  </app-error-card>
+
+                  <!-- <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
                     <mat-card-title>Kirjautuminen ei onnistunut</mat-card-title>
                     <mat-card-content>Vastaus palvelimelta: {{serverErrorMessage}}</mat-card-content>
-                  </mat-card>
+                  </mat-card> -->
 
                   <button
                     mat-raised-button

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-error-card',
@@ -7,6 +7,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorCardComponent implements OnInit {
+
+  @Input() title: string = "Virheilmoitus";
+  @Input() message: string = '';
+  @Input() styles: any = {};
 
   constructor() { }
 
