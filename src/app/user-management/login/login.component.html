@@ -37,10 +37,11 @@
 
                   <mat-checkbox>Muista minut</mat-checkbox>
 
-                  <app-error-card class="error-card" *ngIf="serverErrorMessage.length > 0"
+                  <!-- Custom-komponentti shared-moduulista. -->
+                  <app-error-card *ngIf="serverErrorMessage.length > 0"
                     title="Kirjautuminen ei onnistunut"
                     message="Vastaus palvelimelta: {{serverErrorMessage}}"
-                    [styles]="{ 'margin': '0 10% -10px 10%' }"
+                    [styles]="{ 'margin': '1em 10% 1em 10%' }"
                     >
                   </app-error-card>
 

@@ -10,7 +10,7 @@ export class ErrorCardComponent implements OnInit {
 
   @Input() title: string = "Virheilmoitus";
   @Input() message: string = '';
-  @Input() styles: any = {};
+  @Input() styles: object = {};
 
   constructor() { }
 
