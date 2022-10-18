@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
 import { environment } from 'src/environments/environment';
+// import * as isValidHttpUrl from '../utils/isValidHttpUrl.util';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 // import * as CryptoJS from "crypto-js";
 import * as shajs from 'sha.js';
@@ -65,9 +66,7 @@ export class AuthService {
     };
 
    // console.log(httpOptions);
-
    let response: any;
-
    try {
       console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
@@ -75,7 +74,6 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-
     const loginUrl: string = response['login-url'];
     console.log('loginurl : ' +loginUrl);
    if (loginUrl.length == 0) {
@@ -108,6 +106,7 @@ export class AuthService {
     if (response.success == true) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
+      console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
       console.error("Login authorization not succesful.");
@@ -120,11 +119,11 @@ export class AuthService {
   }
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
-  private async sendAuthRequest(codeVerifier: string, LoginCode: string) {
+  private async sendAuthRequest(codeVerifier: string, loginCode: string) {
     const httpOptions =  {
       headers: new HttpHeaders({
         'code-verifier': codeVerifier,
-        'login-code': LoginCode,
+        'login-code': loginCode,
       })
     }
     /* kun backend-päivitetty.
@@ -138,6 +137,8 @@ export class AuthService {
     const url = environment.ownTokenUrl;
     let response: any;
     try {
+      console.log('Lähetetään auth-request headereilla: ');
+      console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
       console.log('sendAuthRequest: got response: ');
       console.dir(response);
@@ -207,16 +208,16 @@ export class AuthService {
   //       .replace(/=+$/, '');
   // }
 
-  // Vastaako string URL:n muotoa.
-  private isValidHttpUrl(testString: string) {
-    let url: URL;  
-    try {
-      url = new URL(testString);
-    } catch (_) {
-      return false;  
+    // Onko string muodoltaan HTTP URL.
+    isValidHttpUrl(testString: string): boolean {
+      let url: URL;  
+      try {
+        url = new URL(testString);
+      } catch (_) {
+        return false;  
+      }
+      return url.protocol === "http:" || url.protocol === "https:";
     }
-    return url.protocol === "http:" || url.protocol === "https:";
-  }
 
   // Virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
