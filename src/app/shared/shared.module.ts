@@ -10,9 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
 
+import { HeaderComponent } from './header/header.component';
+
 @NgModule({
   declarations: [
-    ErrorCardComponent
+    ErrorCardComponent,
+    HeaderComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +28,8 @@ import { ErrorCardComponent } from './error-card/error-card.component';
     BrowserAnimationsModule,
     FormsModule,
     MaterialModule,
-    ErrorCardComponent
+    ErrorCardComponent,
+    HeaderComponent
   ]
 })
 export class SharedModule { }
