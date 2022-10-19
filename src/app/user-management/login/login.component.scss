@@ -17,15 +17,15 @@
     margin: 10% auto;
     min-width: 320px;
     width: 30%;
-    .error-card {
-      background-color:#ffe6e6;
-      min-width: unset;
-      width: unset;
-      margin: 1em 10% 1em 10%;
-      mat-card-title {
-        font-size: medium;
-      }
-    }
+    // .error-card {
+    //   background-color:#ffe6e6;
+    //   min-width: unset;
+    //   width: unset;
+    //   margin: 1em 10% 1em 10%;
+    //   mat-card-title {
+    //     font-size: medium;
+    //   }
+    // }
   }
   mat-card.is-phone-portrait {
     margin: 0;

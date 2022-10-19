@@ -8,9 +8,15 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
+import { ErrorCardComponent } from './error-card/error-card.component';
+
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ErrorCardComponent,
+    HeaderComponent
+  ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
@@ -21,7 +27,9 @@ import { MaterialModule } from '../shared/material.module';
     CommonModule,
     BrowserAnimationsModule,
     FormsModule,
-    MaterialModule
+    MaterialModule,
+    ErrorCardComponent,
+    HeaderComponent
   ]
 })
 export class SharedModule { }

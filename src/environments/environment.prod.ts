@@ -1,4 +1,8 @@
-let apiBaseUrl = 'http://localhost:3000/api';
+/* Nämä asetukset ovat voimassa käännettäessä production buildina.
+   esim. ng build --configuration production.
+*/
+
+let apiBaseUrl = 'https://dvv-tiketti-backend.azurewebsites.net';
 
 export const environment = {
   production: true,

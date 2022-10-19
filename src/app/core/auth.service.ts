@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom, tap } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 // import { LocalStorageModule } from 'angular-2-local-storage';
-import * as CryptoJS from "crypto-js";
+import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
-import { Router } from '@angular/router';
-import { LoginComponent } from '../user-management/login/login.component';
 
 export interface LoginResponse {
   success: boolean,
@@ -35,6 +33,8 @@ export class AuthService {
   private codeChallenge: string = '';
   private loginCode: string = '';
   private sessionID: string ='';
+  private sessionIDexpires = new Date();
+  private account: string = '';
 
   // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
   private oAuthState: string = '';
@@ -42,20 +42,22 @@ export class AuthService {
   private responseType: string = 'code';
 
   constructor(
-      private http: HttpClient,
-      private router: Router
+      private http: HttpClient
     ) {
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
-    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
+    // this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
+    this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
+    this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
+    // this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
+    this.logBeforeLogin();
     let url: string = environment.ownAskLoginUrl;
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -64,14 +66,15 @@ export class AuthService {
       })
     };
 
+   // console.log(httpOptions);
    let response: any;
-
    try {
-      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, httpOptions));
+      console.log('Lähetetään 1. kutsu');
+      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-
     const loginUrl: string = response['login-url'];
     console.log('loginurl : ' +loginUrl);
    if (loginUrl.length == 0) {
@@ -93,18 +96,24 @@ export class AuthService {
     const url = environment.ownLoginUrl;
     let response: any;
     try {
+      console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
+      console.log(httpOptions.headers);
        response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
+       console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
+      console.log(' virhe lähetyksessä');
       this.handleError(error);
     }
-    console.log('sendLoginRequest: Got response: ' + JSON.stringify(response));
     if (response.success == true) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
+      console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
       console.error("Login authorization not succesful.");
+      if (response)
       this.sendErrorMessage("(ei virheviestä)");
+
       // Ei ole error messageja tälle (vielä) api:ssa
       // console.error("Login attempt failed : " + response.error);
       // this.sendErrorMessage(response.error);
@@ -112,35 +121,43 @@ export class AuthService {
   }
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
-  private async sendAuthRequest(codeVerifier: string, LoginCode: string) {
+  private async sendAuthRequest(codeVerifier: string, loginCode: string) {
     const httpOptions =  {
       headers: new HttpHeaders({
+        'login-type': 'own',
         'code-verifier': codeVerifier,
-        'login-code': LoginCode,
+        'login-code': loginCode,
       })
     }
-    /* kun backend-päivitetty.
-     {
-      headers: new HttpHeaders({
-        'code-verifier': codeVerifier,
-        'login-code': LoginCode,
-        'login-type': own
-      })
-    } */
     const url = environment.ownTokenUrl;
     let response: any;
     try {
+      console.log('Lähetetään auth-request headereilla: ');
+      console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
       console.log('sendAuthRequest: got response: ');
+      console.log(JSON.stringify(response));
       console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
     if (response.success == true) {
-      console.log('sendAuthRequest: Got Session ID: ' + response['session-id']);
-      this.sessionID = response['session-id'];
+
+      // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
+      console.log('Vastaus alla:');
+      console.dir(JSON.stringify(response));
+
+      // let sessionID = response['login-id'];
+
+      console.log('vastauksen sisältöä: ');
+      let loginIDobject = response['login-id'][0];
+      this.sessionID = (loginIDobject['sessionid']);
+      this.sessionIDexpires = (loginIDobject['vanhenee']);
+      this.account = (loginIDobject['tili']);
+      
+
       this.isUserLoggedIn$.next(true);
-      console.log('Authorization success.');
+      // console.log('Authorization success.');
     } else {
       console.error(response.error);
       this.sendErrorMessage(response.error);
@@ -152,7 +169,7 @@ export class AuthService {
     console.log('Got response: ');
     console.dir(response);
     console.log('Response as string: ' + loginUrl);
-    if (this.isValidHttpUrl(loginUrl)) {
+    if (isValidHttpUrl(loginUrl)) {
       console.log('It seems valid url.');
     } else {
       console.log("It's not valid url.");
@@ -161,6 +178,10 @@ export class AuthService {
 
   onIsUserLoggedIn(): Observable<any> {
     return this.isUserLoggedIn$.asObservable();
+  }
+
+  unsubscribeIsUserLoggedin(): void {
+    this.isUserLoggedIn$.unsubscribe;
   }
 
   onErrorMessages(): Observable<any> {
@@ -176,22 +197,35 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  private getCodeChallenge(codeVerifier: string): string {
-    let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
-    let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-    return codeChallenge;
-  }
+  // private getCodeChallenge(codeVerifier: string): string {
+    // let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
+    // let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    // return shajs('sha256').update({stringToBeHashed}).digest('hex')
 
-  // Vastaako string URL:n muotoa.
-  private isValidHttpUrl(testString: string) {
-    let url: URL;  
-    try {
-      url = new URL(testString);
-    } catch (_) {
-      return false;  
+      // const encoder = new TextEncoder();
+      // const data = encoder.encode(codeVerifier);
+      // return window.crypto.subtle.digest('SHA-256', data).then(array => {
+      //   return this.base64UrlEncode(array);
+      // });
+  // }
+
+  // base64UrlEncode(array) {
+  //   return btoa(String.fromCharCode.apply(null, new Uint8Array(array)))
+  //       .replace(/\+/g, '-')
+  //       .replace(/\//g, '_')
+  //       .replace(/=+$/, '');
+  // }
+
+    // Onko string muodoltaan HTTP URL.
+    isValidHttpUrl(testString: string): boolean {
+      let url: URL;  
+      try {
+        url = new URL(testString);
+      } catch (_) {
+        return false;  
+      }
+      return url.protocol === "http:" || url.protocol === "https:";
     }
-    return url.protocol === "http:" || url.protocol === "https:";
-  }
 
   // Virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
@@ -207,6 +241,9 @@ export class AuthService {
     if (error !== undefined) {
       if (error.error.length > 0 ) {
         message += "Virhe: " + error.error;
+      }
+      if (error.status !== undefined ) {
+        message += "Tilakoodi: " + error.status;
       }
     }
     this.sendErrorMessage(message);

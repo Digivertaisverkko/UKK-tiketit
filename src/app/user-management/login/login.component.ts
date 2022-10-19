@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
-import { ForwardRefHandling } from '@angular/compiler';
+// import { ForwardRefHandling } from '@angular/compiler';
 
 @Component({
   selector: 'app-login',
@@ -52,15 +52,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private setLoginID() {
+    console.log('--- ajetaan setLoginID ---');
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
-        console.log('LoginComponent:');
-        console.dir(params);
+        // console.log('LoginComponent:');
+        // console.dir(params);
         if (params['loginid'] == '') {
           console.error('No loginID found in URL. Aborting authentication.');
         };
         this.loginID = params['loginid'];
-        console.log('loginComponent: set loginID: ' + this.loginID);
+        console.log('loginComponent: asetettiin loginID: ' + this.loginID);
+
       },
       error: (error) => {
         console.error(error);
@@ -78,11 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('email ' + this.email);
     console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
-    this.authService.sendLoginRequest(this.email, this.password, this.loginID)
-      .then(response => {
-        console.log('loginComponent: Got login response: ');
-        console.dir(response);
-    });
+    this.authService.sendLoginRequest(this.email, this.password, this.loginID);
     
   }
 

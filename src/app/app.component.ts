@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { Router } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'tikettisysteemi';
 
   constructor(
@@ -16,7 +16,14 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initializeApp();
+  }
+
+  public initializeApp() {
+    console.log('--- App.component Initialize ajettu ---');
     this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.log('nIsUserLoggedI saatiin dataa: ' + response);
+      console.log('Tsekataan, onko kirjautunut');
       if (response == true) {
         this.router.navigateByUrl('/front', { replaceUrl: true });
       } else {
@@ -32,6 +39,10 @@ export class AppComponent implements OnInit {
         })
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.authService.unsubscribeIsUserLoggedin();
   }
 
 }
