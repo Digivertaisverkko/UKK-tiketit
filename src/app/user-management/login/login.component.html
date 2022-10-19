@@ -1,8 +1,9 @@
 
 <app-header>
-    <!-- <button mat-icon-button class="searcg-icon" aria-label="Search">
+  <span class="spacer"></span>
+    <button mat-icon-button class="search-icon" aria-label="Search">
       <mat-icon>search</mat-icon>
-  </button> -->
+  </button>
 </app-header>
 
 <div class="login-page">
@@ -60,6 +61,7 @@
                   <button
                     mat-raised-button
                     [disabled]="email.length < 3 || password.length < passwordMinLength"
+                    class="login-button"
                     color="primary"
                     (click)="login();">
                     Kirjaudu sisään
@@ -71,7 +73,9 @@
                     <mat-divider></mat-divider>
                   </div>
 
-                  <button mat-raised-button (click)="loginWithoutAuth()">
+                  <button mat-raised-button (click)="loginWithoutAuth()"
+                    class="login-button"
+                  >
                     Sisään kirjautumatta
                   </button>
 
