@@ -1,91 +1,60 @@
-
-<app-header>
-  <span class="spacer"></span>
-    <button mat-icon-button class="search-icon" aria-label="Search">
-      <mat-icon>search</mat-icon>
-  </button>
-</app-header>
-
 <div class="login-page">
-    <mat-card class="mat-elevation-z12" [ngClass]="{'is-phone-portrait': isPhonePortrait}">
-        <mat-card-title style="text-align:center;">Sisäänkirjautuminen</mat-card-title>
-        <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
-          <mat-tab label="Kirjaudu">
-              <mat-card-content>
-                <form action="">
+  <mat-card class="mat-elevation-z12" [ngClass]="{'is-phone-portrait': isPhonePortrait}">
+    <mat-card-title style="text-align:center;">Sisäänkirjautuminen</mat-card-title>
+    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
+      <mat-tab label="Kirjaudu">
+        <mat-card-content>
+          <form action="">
 
-                  <mat-form-field>
-                    <input
-                      matInput
-                      placeholder="Sähköposti"
-                      required
-                      name="email"
-                      [(ngModel)]="email"
-                      ng-change="validateEmail()"
-                    >
-                    <mat-error>Sähköposti tarvitaan</mat-error>
-                    <mat-icon matSuffix>email</mat-icon>
-                  </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Sähköposti" required name="email" [(ngModel)]="email"
+                ng-change="validateEmail()">
+              <mat-error>Sähköposti tarvitaan</mat-error>
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
 
-                  <mat-form-field>
-                    <input
-                      matInput
-                      placeholder="Salasana"
-                      type="password"
-                      required
-                      minlength="8"
-                      name="password"
-                      [(ngModel)]="password"
-                    >
-                    <mat-error>
-                      Vähintään {{passwordMinLength}} merkkiä pitkä salasana tarvitaan.
-                    </mat-error>
-                    <mat-icon matSuffix>lock</mat-icon>
-                  </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Salasana" type="password" required minlength="8" name="password"
+                [(ngModel)]="password">
+              <mat-error>
+                Vähintään {{passwordMinLength}} merkkiä pitkä salasana tarvitaan.
+              </mat-error>
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
 
-                  <mat-checkbox>Muista minut</mat-checkbox>
+            <mat-checkbox>Muista minut</mat-checkbox>
 
-                  <!-- Custom-komponentti shared-moduulista. -->
-                  <app-error-card *ngIf="serverErrorMessage.length > 0"
-                    title="Kirjautuminen ei onnistunut"
-                    message="Vastaus palvelimelta: {{serverErrorMessage}}"
-                    [styles]="{ 'margin': '1em 10% 1em 10%' }"
-                    >
-                  </app-error-card>
+            <!-- Custom-komponentti shared-moduulista. -->
+            <app-error-card *ngIf="serverErrorMessage.length > 0" title="Kirjautuminen ei onnistunut"
+              message="Vastaus palvelimelta: {{serverErrorMessage}}" [styles]="{ 'margin': '1em 10% 1em 10%' }">
+            </app-error-card>
 
-                  <!-- <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
+            <!-- <mat-card class="error-card" *ngIf="serverErrorMessage.length > 0">
                     <mat-card-title>Kirjautuminen ei onnistunut</mat-card-title>
                     <mat-card-content>Vastaus palvelimelta: {{serverErrorMessage}}</mat-card-content>
                   </mat-card> -->
 
-                  <button
-                    mat-raised-button
-                    [disabled]="email.length < 3 || password.length < passwordMinLength"
-                    class="login-button"
-                    color="primary"
-                    (click)="login();">
-                    Kirjaudu sisään
-                  </button>
-                  
-                  <div class="line-container">
-                    <mat-divider></mat-divider>
-                    <div class="mat-typography">tai</div>
-                    <mat-divider></mat-divider>
-                  </div>
+            <button mat-raised-button [disabled]="email.length < 3 || password.length < passwordMinLength"
+              class="login-button" color="primary" (click)="login();">
+              Kirjaudu sisään
+            </button>
 
-                  <button mat-raised-button (click)="loginWithoutAuth()"
-                    class="login-button"
-                  >
-                    Sisään kirjautumatta
-                  </button>
+            <div class="line-container">
+              <mat-divider></mat-divider>
+              <div class="mat-typography">tai</div>
+              <mat-divider></mat-divider>
+            </div>
 
-                </form>
-              </mat-card-content>
-          </mat-tab>
-          <mat-tab label="Rekisteröidy">
-            <app-register></app-register>
-          </mat-tab>
+            <button mat-raised-button (click)="loginWithoutAuth()" class="login-button">
+              Sisään kirjautumatta
+            </button>
 
-        </mat-tab-group>
-      </mat-card>
-    </div>
+          </form>
+        </mat-card-content>
+      </mat-tab>
+      <mat-tab label="Rekisteröidy">
+        <app-register></app-register>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

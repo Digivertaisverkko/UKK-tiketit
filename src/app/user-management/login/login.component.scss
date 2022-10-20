@@ -7,7 +7,7 @@
   height: 100%;
   overflow: hidden;
   background: {
-    color: #303F9F;
+    color: #cccccc;
     position: center;
     repeat: no-repeat;
     size: cover;
@@ -15,6 +15,7 @@
   mat-card {
     border-radius: 8px;
     margin: 10% auto;
+    max-width: 500px;
     min-width: 320px;
     width: 30%;
     // .error-card {
