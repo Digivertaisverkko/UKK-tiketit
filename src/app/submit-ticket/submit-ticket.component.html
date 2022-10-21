@@ -1,0 +1,58 @@
+  <div class="tikettiForm">
+    <div class="newticket">
+      <mat-card class="testi">
+      <mat-card-header>Testi</mat-card-header>
+      <mat-card-content>
+        <form>
+          <mat-form-field appearance="fill">
+              <mat-label>Otsikko</mat-label>
+              <input 
+                matInput
+                placeholder=""
+                required>
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>Tehtävä</mat-label>
+              <mat-select
+                [(value)]="tehtava"
+                required>
+                <mat-option value="t1">Tehtävä 1</mat-option>
+                <mat-option value="t2">Tehtävä 2</mat-option>
+                <mat-option value="t3">Tehtävä 3</mat-option>
+                <mat-option value="t4">Tehtävä 4</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>Ongelman tyyppi</mat-label>
+              <mat-select
+              [(value)]="ongelma"
+              required>
+                <mat-option value="o1">Ongelma 1</mat-option>
+                <mat-option value="o2">Ongelma 2</mat-option>
+                <mat-option value="o3">Ongelma 3</mat-option>
+                <mat-option value="o4">Ongelma 4</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill"
+              style="width: 100%;">
+              <mat-label>Viesti</mat-label>
+              <textarea 
+                matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="3"
+                cdkAutosizeMaxRows="8"
+                required
+                ></textarea>
+            </mat-form-field>
+            <br>
+            <button
+              mat-raised-button
+              color="primary">Submit</button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
