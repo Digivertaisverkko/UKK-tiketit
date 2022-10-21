@@ -1,0 +1,48 @@
+#footer {
+    // border: {
+    //     style: dashed;
+    //     color: black;
+    //     width: 2px;
+    // }
+    margin-top: auto;
+    width: 100%;
+    margin: 0px;
+
+    #up-row {
+
+        // overflow: hidden;
+        text-align: center;
+        
+        padding: 3em 1em;
+
+    }
+
+    #bottom-row {
+        // border: {
+        //     style: dashed;
+        //     color: red;
+        //     width: 2px;
+        // }
+        // overflow: hidden;
+        padding: 1em 1em;
+        margin: 0;
+        // position: fixed;
+        // text-align: center;
+    }
+
+    .col {
+
+        width: 33%;
+        padding: 2em 1em 1em 1em;
+        img {
+            display: block;
+            
+            width: 100px;
+            padding-top: 2em;
+            padding-bottom: 2em;
+            margin: 1em auto 2em auto;
+
+        }
+    }
+
+}

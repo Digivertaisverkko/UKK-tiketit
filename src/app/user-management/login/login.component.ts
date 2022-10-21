@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public loginWithoutAuth(): void {
-    this.router.navigateByUrl('/test/testing');
+    this.router.navigateByUrl('/front');
   }
 
   private getIsEmailValid(): boolean {

@@ -46,6 +46,14 @@ export class AuthService {
     ) {
   }
 
+  public getSessionID(): string {
+    if (this.sessionID == undefined) {
+      console.log('Error: no session id set.');
+      return('Error');
+    }
+    return this.sessionID;
+  }
+
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
