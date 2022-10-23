@@ -9,10 +9,9 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
   public email: string = '';
   public isEmailValid: boolean = false;
   public isPhonePortrait = false;
@@ -28,20 +27,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     private responsive: BreakpointObserver,
     private router: Router
   ) {
-    this.messageSubscription = this.authService.onErrorMessages().subscribe(message => {
-      if (message) {
-        console.log('Got message ' + message);
-        this.serverErrorMessage = message;
-      } else {
-        // Poista viestit, jos saadaan tyhjä viesti.
-        this.serverErrorMessage = '';
-      }
-    });
+    this.messageSubscription = this.authService
+      .onErrorMessages()
+      .subscribe((message) => {
+        if (message) {
+          console.log('Got message ' + message);
+          this.serverErrorMessage = message;
+        } else {
+          // Poista viestit, jos saadaan tyhjä viesti.
+          this.serverErrorMessage = '';
+        }
+      });
   }
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      this.isPhonePortrait = false; 
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
+      this.isPhonePortrait = false;
       if (result.matches) {
         this.isPhonePortrait = true;
       }
@@ -57,14 +58,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         // console.dir(params);
         if (params['loginid'] == '') {
           console.error('No loginID found in URL. Aborting authentication.');
-        };
+        }
         this.loginID = params['loginid'];
         console.log('loginComponent: asetettiin loginID: ' + this.loginID);
-
       },
       error: (error) => {
         console.error(error);
-      }
+      },
     });
   }
 
@@ -79,10 +79,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID);
-    
   }
 
   public loginWithoutAuth(): void {
+    this.authService.setSessionID('123456789');
     this.router.navigateByUrl('/front');
   }
 
@@ -95,13 +95,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     let validationString = new String(email)
       .toLowerCase()
       .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-    return ( validationString == null ) ? false : true;
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+    return validationString == null ? false : true;
   }
 
   ngOnDestroy(): void {
     this.messageSubscription.unsubscribe;
   }
-
 }
