@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { HttpTestingService } from '../user-management/testing-henri/http-testing.service';
+import { HttpTestingService } from 'src/app/user-management/testing-henri/http-testing.service'; 
 
 @Component({
   selector: 'app-submit-ticket',

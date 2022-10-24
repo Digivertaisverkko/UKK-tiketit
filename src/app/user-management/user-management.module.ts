@@ -8,14 +8,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule }  from '@angular/material/divider';
 import { RegisterComponent } from './register/register.component';
 import { TestingHenriComponent } from './testing-henri/testing-henri.component';
-import { SubmitTicketComponent } from '../submit-ticket/submit-ticket.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     RegisterComponent,
     TestingHenriComponent,
-    SubmitTicketComponent,
   ],
   imports: [
     MatDividerModule,
