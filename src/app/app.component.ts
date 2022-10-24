@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { Router } from '@angular/router';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -9,13 +11,21 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'tikettisysteemi';
+  public isPhonePortrait = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private responsive: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
+      this.isPhonePortrait = false;
+      if (result.matches) {
+        this.isPhonePortrait = true;
+      }
+    });
     this.initializeApp();
   }
 

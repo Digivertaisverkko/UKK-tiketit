@@ -9,7 +9,8 @@
 
   // padding: 0;
   width: 100%;
-  min-height: calc(100vh - 2 * 64px);
+
+  // min-height: calc(100vh - 2 * 64px);
 
   overflow: hidden;
 
@@ -21,7 +22,7 @@
   }
   mat-card {
     border-radius: 8px;
-    margin: 10% auto;
+    margin: 7% auto;
     max-width: 500px;
     min-width: 320px;
     width: 30%;
@@ -33,9 +34,6 @@
     width: 94%;
   }
 
-  .is-phone-portrait {
-    min-height: calc(100vh - 144px);
-  }
 }
 
 .custom-error {

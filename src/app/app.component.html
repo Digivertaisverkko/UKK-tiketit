@@ -6,10 +6,9 @@
         </button>
     </app-header>
 
+    <div id="content" [ngClass]="{'is-phone-portrait': isPhonePortrait}">
+        <router-outlet></router-outlet>
+    </div>
 
-    <div id="content">
-        <router-outlet style="min-height: calc(100vh - 2 * 64px);"></router-outlet>
-    <div>
-
-    <!-- <app-footer></app-footer> -->
+    <app-footer></app-footer>
 
