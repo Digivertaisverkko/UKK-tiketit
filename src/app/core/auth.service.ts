@@ -56,6 +56,7 @@ export class AuthService {
 
   public setSessionID(sessionID: string): void {
     this.sessionID = sessionID;
+    this.isUserLoggedIn$.next(true);
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
