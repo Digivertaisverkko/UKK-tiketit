@@ -50,6 +50,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.setLoginID();
   }
 
+  public login(): void {
+    this.isEmailValid = this.validateEmail(this.email);
+    console.log('email validation: ' + this.isEmailValid);
+    console.log(typeof this.isEmailValid);
+    // Lisää ensin custom ErrorStateMatcher
+    // if (this.isEmailValid === false) return;
+    console.log('LoginComponent: login request info:');
+    console.log('email ' + this.email);
+    console.log('password ' + this.password);
+    console.log('login id: ' + this.loginID);
+    this.authService.sendLoginRequest(this.email, this.password, this.loginID);
+  }
+
+  public loginWithoutAuth(): void {
+    this.authService.saveSessionStatus('123456789')
+    this.router.navigateByUrl('/front');
+  }
+  
   private setLoginID() {
     console.log('--- ajetaan setLoginID ---');
     this.activatedRoute.queryParams.subscribe({
@@ -66,24 +84,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         console.error(error);
       },
     });
-  }
-
-  public login(): void {
-    this.isEmailValid = this.validateEmail(this.email);
-    console.log('email validation: ' + this.isEmailValid);
-    console.log(typeof this.isEmailValid);
-    // Lisää ensin custom ErrorStateMatcher
-    // if (this.isEmailValid === false) return;
-    console.log('LoginComponent: login request info:');
-    console.log('email ' + this.email);
-    console.log('password ' + this.password);
-    console.log('login id: ' + this.loginID);
-    this.authService.sendLoginRequest(this.email, this.password, this.loginID);
-  }
-
-  public loginWithoutAuth(): void {
-    this.authService.setSessionID('123456789');
-    this.router.navigateByUrl('/front');
   }
 
   private getIsEmailValid(): boolean {

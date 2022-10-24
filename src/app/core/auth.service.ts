@@ -26,15 +26,12 @@ export interface LoginResponse {
 export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
-  private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  // private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private errorMessages$ = new Subject<any>();
   
   private codeVerifier: string = '';
   private codeChallenge: string = '';
   private loginCode: string = '';
-  private sessionID: string ='';
-  private sessionIDexpires = new Date();
-  private account: string = '';
 
   // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
   private oAuthState: string = '';
@@ -46,17 +43,33 @@ export class AuthService {
     ) {
   }
 
-  public getSessionID(): string {
-    if (this.sessionID == undefined) {
-      console.log('Error: no session id set.');
-      return('Error');
-    }
-    return this.sessionID;
+  // public getSessionID(): string {
+  //   if (this.sessionID == undefined) {
+  //     console.log('Error: no session id set.');
+  //     return('Error');
+  //   }
+  //   return this.sessionID;
+  // }
+
+  // public setSessionID(sessionID: string): void {
+  //   this.sessionID = sessionID;
+  //   this.isUserLoggedIn$.next(true);
+  // }
+
+  // public onIsUserLoggedIn(): Observable<any> {
+  //   return this.isUserLoggedIn$.asObservable();
+  // }
+
+  // public unsubscribeIsUserLoggedin(): void {
+  //   this.isUserLoggedIn$.unsubscribe;
+  // }
+
+  public onErrorMessages(): Observable<any> {
+    return this.errorMessages$.asObservable();
   }
 
-  public setSessionID(sessionID: string): void {
-    this.sessionID = sessionID;
-    this.isUserLoggedIn$.next(true);
+  public clearMessages(): void {
+    this.errorMessages$.next('');
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
@@ -157,27 +170,28 @@ export class AuthService {
     if (response.success == true) {
 
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
-      console.log('Vastaus alla:');
-      console.dir(JSON.stringify(response));
+      console.log('Vastaus: ' + JSON.stringify(response));
 
       // let sessionID = response['login-id'];
 
       console.log('vastauksen sisältöä: ');
-      let loginIDobject = response['login-id'][0];
-      this.sessionID = (loginIDobject['sessionid']);
-      this.sessionIDexpires = (loginIDobject['vanhenee']);
-      this.account = (loginIDobject['tili']);
-      
+      // let loginIDobject = response['login-id'][0];
+      let sessionID = response['sessionid'];
 
-      this.isUserLoggedIn$.next(true);
-      // console.log('Authorization success.');
+
+      console.log('Authorization success.');
     } else {
       console.error(response.error);
       this.sendErrorMessage(response.error);
     }
   }
 
-  // Näytä sendAskLoginRequest:n lyyttyviä logeja.
+  public saveSessionStatus(sessionID: string) {
+    // this.isUserLoggedIn$.next(true);
+    window.sessionStorage.setItem('SESSION_ID', sessionID);
+  }
+
+  // Näytä sendAskLoginRequest:n liittyviä logeja.
   private printAskLoginLog(response: any, loginUrl: string) {
     console.log('Got response: ');
     console.dir(response);
@@ -189,26 +203,12 @@ export class AuthService {
     }
   }
 
-  onIsUserLoggedIn(): Observable<any> {
-    return this.isUserLoggedIn$.asObservable();
-  }
-
-  unsubscribeIsUserLoggedin(): void {
-    this.isUserLoggedIn$.unsubscribe;
-  }
-
-  onErrorMessages(): Observable<any> {
-    return this.errorMessages$.asObservable();
-  }
-
   // Lähetä virheviesti näkymään.
-  sendErrorMessage(message: string) {
+  private sendErrorMessage(message: string) {
     this.errorMessages$.next(message);
   }
 
-  clearMessages(): void {
-    this.errorMessages$.next('');
-  }
+
 
   // private getCodeChallenge(codeVerifier: string): string {
     // let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
