@@ -54,6 +54,10 @@ export class AuthService {
     return this.sessionID;
   }
 
+  public setSessionID(sessionID: string): void {
+    this.sessionID = sessionID;
+  }
+
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {

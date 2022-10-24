@@ -1,16 +1,15 @@
 .login-page {
 
-  min-height: 87vh;
-
 //   border: {
 //     style: solid;
 //     color: green;
 //     width: 2px;
 // }
+  // flex-grow: 5;
 
-  margin: 0;
-  padding: 0;
+  // padding: 0;
   width: 100%;
+  min-height: calc(100vh - 2 * 64px);
 
   overflow: hidden;
 
@@ -19,6 +18,7 @@
     position: center;
     repeat: no-repeat;
     size: cover;
+
   }
   mat-card {
     border-radius: 8px;
@@ -26,20 +26,16 @@
     max-width: 500px;
     min-width: 320px;
     width: 30%;
-    // .error-card {
-    //   background-color:#ffe6e6;
-    //   min-width: unset;
-    //   width: unset;
-    //   margin: 1em 10% 1em 10%;
-    //   mat-card-title {
-    //     font-size: medium;
-    //   }
-    // }
   }
   mat-card.is-phone-portrait {
     margin-top: 0;
+    margin-bottom: 0;
     border-radius: 0px;
     width: 94%;
+  }
+
+  .is-phone-portrait {
+    min-height: calc(100vh - 144px);
   }
 }
 

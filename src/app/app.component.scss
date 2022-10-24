@@ -1,15 +1,13 @@
-#view {
-    display: flex;
-    min-height: 100%;
-    flex-direction: column;
-    justify-content: flex-start;
-}
+// #view {
+    // display: flex;
+    // min-height: 100%;
+    // flex-direction: column;
+    // justify-content: flex-start;
+//     min-height: calc( 100vh - 64px);
+// }
 
 #content {
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    flex-grow: 1;
-    min-height: 87vh;
+    min-height: calc(100vh - 2 * 64px);
 }
 
 .spacer {
