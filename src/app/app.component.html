@@ -1,14 +1,12 @@
-
-    <app-header>
-        <span class="spacer"></span>
-        <!-- <button mat-icon-button class="search-icon" aria-label="Search">
+<app-header>
+  <span class="spacer"></span>
+  <!-- <button mat-icon-button class="search-icon" aria-label="Search">
         <mat-icon>search</mat-icon>
         </button> -->
-    </app-header>
+</app-header>
 
-    <div id="content" [ngClass]="{'is-phone-portrait': isPhonePortrait}">
-        <router-outlet></router-outlet>
-    </div>
+<div id="content" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }">
+  <router-outlet></router-outlet>
+</div>
 
-    <app-footer></app-footer>
-
+<app-footer></app-footer>

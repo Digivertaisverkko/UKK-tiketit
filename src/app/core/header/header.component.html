@@ -1,15 +1,20 @@
 <mat-toolbar color="primary">
-    <!--
+  <!--
     Jos tulee tarve menulle.
     <button mat-icon-button class="menu-icon" aria-label="Navigation menu">
         <mat-icon>menu</mat-icon>
     </button> -->
-    <span>UKK Tiketit</span>
-    <span class="spacer"></span>
+  <span>UKK Tiketit</span>
+  <span class="spacer"></span>
 
-    <!-- Näkymät voivat asettaa alle sisältöä. -->
-    <ng-content></ng-content>
-    <button mat-icon-button class="material-symbols-outlined" *ngIf="isUserLoggedIn | async" aria-label="Tili">
-        <mat-icon>account_circle</mat-icon>
-    </button>
+  <!-- Näkymät voivat asettaa alle sisältöä. -->
+  <ng-content></ng-content>
+  <button
+    mat-icon-button
+    class="material-symbols-outlined"
+    *ngIf="isUserLoggedIn | async"
+    aria-label="Tili"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
 </mat-toolbar>

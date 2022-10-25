@@ -1,76 +1,65 @@
+<mat-card-content>
+  <form action="">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Käyttäjätunnus"
+        required
+        name="username"
+        [(ngModel)]="username"
+      />
+      <mat-icon matSuffix>perm_identity</mat-icon>
+      <mat-error *ngIf="username.length === 0">
+        Käyttäjätunnus tarvitaan.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Sähköposti"
+        required
+        name="email"
+        [(ngModel)]="email"
+      />
+      <mat-error *ngIf="email.length === 0"> Sähköposti tarvitaan </mat-error>
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Salasana"
+        type="password"
+        required
+        minlength="8"
+        name="newPassword"
+        [(ngModel)]="newPassword"
+      />
+      <mat-error *ngIf="newPassword.length < 8">
+        Vähintään 8 merkkiä pitkä salasana tarvitaan.
+      </mat-error>
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Salasana uudelleen"
+        type="password"
+        required
+        minlength="8"
+        name="repassword"
+        [(ngModel)]="repassword"
+      />
+      <mat-error *ngIf="repassword.length === 0">
+        Ole hyvä ja kirjoita salasana uudelleen.
+      </mat-error>
+      <mat-error *ngIf="newPassword !== repassword">
+        Salasanat eivät täsmää.
+      </mat-error>
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
 
-    <mat-card-content>
-      <form action="">
-        <mat-form-field>
-          <input
-            matInput
-            placeholder="Käyttäjätunnus"
-            required
-            name="username"
-            [(ngModel)]="username"
-          >
-          <mat-icon matSuffix>perm_identity</mat-icon>
-          <mat-error
-            *ngIf="username.length === 0">
-            Käyttäjätunnus tarvitaan.
-          </mat-error>
-
-        </mat-form-field>
-        <mat-form-field>
-          <input
-            matInput
-            placeholder="Sähköposti"
-            required
-            name="email"
-            [(ngModel)]="email"
-          >
-            <mat-error *ngIf="email.length === 0">
-              Sähköposti tarvitaan
-            </mat-error>
-          <mat-icon matSuffix>email</mat-icon>
-        </mat-form-field>
-        <mat-form-field>
-          <input
-            matInput
-            placeholder="Salasana"
-            type="password"
-            required
-            minlength="8"
-            name="newPassword"
-            [(ngModel)]="newPassword"
-            >
-            <mat-error *ngIf="newPassword.length < 8">
-                Vähintään 8 merkkiä pitkä salasana tarvitaan.
-              </mat-error>
-          <mat-icon matSuffix>lock</mat-icon>
-
-        </mat-form-field>
-        <mat-form-field>
-            <input
-            matInput
-            placeholder="Salasana uudelleen"
-            type="password"
-            required
-            minlength="8"
-            name="repassword"
-            [(ngModel)]="repassword"
-            >
-            <mat-error *ngIf="repassword.length === 0">
-              Ole hyvä ja kirjoita salasana uudelleen.
-            </mat-error>
-            <mat-error *ngIf="newPassword !== repassword">
-            Salasanat eivät täsmää.
-          </mat-error>
-          <mat-icon matSuffix>lock</mat-icon>
-        </mat-form-field>
-
-        <button
-          mat-raised-button
-          color="primary"
-          class="login-button">
-          Rekisteröidy
-        </button>
-
-      </form>
-    </mat-card-content>
-
+    <button mat-raised-button color="primary" class="login-button">
+      Rekisteröidy
+    </button>
+  </form>
+</mat-card-content>
