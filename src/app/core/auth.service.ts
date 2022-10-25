@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom, fromEvent  } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 // import { LocalStorageModule } from 'angular-2-local-storage';
@@ -29,7 +29,7 @@ export class AuthService {
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private errorMessages$ = new Subject<any>();
-  
+
   private codeVerifier: string = '';
   private codeChallenge: string = '';
   private loginCode: string = '';
@@ -71,11 +71,16 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
+  public logOut(): void {
+    this.isUserLoggedIn$.next(false);
+    window.sessionStorage.clear();
+  }
+
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
-    // this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
+    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
+    // this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
     this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
     // this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
@@ -224,11 +229,11 @@ export class AuthService {
 
     // Onko string muodoltaan HTTP URL.
     isValidHttpUrl(testString: string): boolean {
-      let url: URL;  
+      let url: URL;
       try {
         url = new URL(testString);
       } catch (_) {
-        return false;  
+        return false;
       }
       return url.protocol === "http:" || url.protocol === "https:";
     }
@@ -236,7 +241,7 @@ export class AuthService {
   // Virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      // A client-side or network error occurred. 
+      // A client-side or network error occurred.
       console.error('An error occurred:', error.error);
     } else {
       // The backend returned an unsuccessful response code.

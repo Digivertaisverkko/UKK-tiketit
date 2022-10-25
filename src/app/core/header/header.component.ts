@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Subscription } from 'rxjs';
-// import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+// import { Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 // import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -15,10 +15,12 @@ export class HeaderComponent {
   // public isUserLoggedIn: boolean = false;
   public isUserLoggedIn: Observable<boolean>;
   // public message$ = new Subject<any>();
- 
+
   //constructor(location: Location, router: Router) {
-  
-  constructor(private authService: AuthService) {
+
+  constructor(private authService: AuthService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
     this.isUserLoggedIn = this.authService.onIsUserLoggedIn();
     // this.loggedInSubscription = this.authService.onIsUserLoggedIn().subscribe(loggedInState =>
     //   this.isUserLoggedIn = loggedInState
@@ -33,7 +35,11 @@ export class HeaderComponent {
     //     this.isAccountMenuShown = true;
     //   }
     // });
+  }
 
+  public logOut() {
+    this.authService.logOut();
+    this.router.navigateByUrl('/login');
   }
 
 }

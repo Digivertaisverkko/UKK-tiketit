@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public readonly passwordMinLength: number = 3;
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
+  private authSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -40,6 +41,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.serverErrorMessage = '';
         }
       });
+      this.authSubscription = this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
+        if (isLoggedIn === true) {
+          this.router.navigateByUrl('/front');
+        }
+      })
   }
 
   ngOnInit(): void {
@@ -70,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.isUserLoggedIn$.next(true);
     this.router.navigateByUrl('/front');
   }
-  
+
   private setLoginID() {
     console.log('--- ajetaan setLoginID ---');
     this.activatedRoute.queryParams.subscribe({

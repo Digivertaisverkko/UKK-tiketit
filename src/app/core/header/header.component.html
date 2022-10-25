@@ -13,8 +13,14 @@
     mat-icon-button
     class="material-symbols-outlined"
     *ngIf="isUserLoggedIn | async"
+    [matMenuTriggerFor]="accountMenu"
     aria-label="Tili"
   >
     <mat-icon>account_circle</mat-icon>
   </button>
 </mat-toolbar>
+
+<mat-menu #accountMenu="matMenu">
+  <button mat-menu-item (click)="logOut()">Kirjaudu ulos</button>
+  <button mat-menu-item>Tee jotain muuta</button>
+</mat-menu>
