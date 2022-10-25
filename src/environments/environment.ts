@@ -3,14 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 // Backendin api:n URL-osoite.
-let apiBaseUrl = 'http://localhost:3000/api';
+
+const baseUrl = 'http://localhost:3000/api';
 
 export const environment = {
   production: false,
   clientID: 'angularApp',
-  ownAskLoginUrl: apiBaseUrl + '/login',
-  ownTokenUrl: apiBaseUrl + '/authtoken',
-  ownLoginUrl: apiBaseUrl + '/omalogin',
+  productName: 'UKK-Tiketit',
+  apiBaseUrl: baseUrl,
+  ownAskLoginUrl: baseUrl + '/login',
+  ownTokenUrl: baseUrl + '/authtoken',
+  ownLoginUrl: baseUrl + '/omalogin'
 }
 
 // 
