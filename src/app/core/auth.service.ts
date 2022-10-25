@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom, fromEvent  } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 // import { LocalStorageModule } from 'angular-2-local-storage';
@@ -26,7 +26,8 @@ export interface LoginResponse {
 export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
-  // private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
+  public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private errorMessages$ = new Subject<any>();
   
   private codeVerifier: string = '';
@@ -38,9 +39,7 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  constructor(
-      private http: HttpClient
-    ) {
+  constructor(private http: HttpClient) {
   }
 
   // public getSessionID(): string {
@@ -56,13 +55,13 @@ export class AuthService {
   //   this.isUserLoggedIn$.next(true);
   // }
 
-  // public onIsUserLoggedIn(): Observable<any> {
-  //   return this.isUserLoggedIn$.asObservable();
-  // }
+  public onIsUserLoggedIn(): Observable<any> {
+    return this.isUserLoggedIn$.asObservable();
+  }
 
-  // public unsubscribeIsUserLoggedin(): void {
-  //   this.isUserLoggedIn$.unsubscribe;
-  // }
+  public unsubscribeIsUserLoggedin(): void {
+    this.isUserLoggedIn$.unsubscribe;
+  }
 
   public onErrorMessages(): Observable<any> {
     return this.errorMessages$.asObservable();
@@ -168,17 +167,13 @@ export class AuthService {
       this.handleError(error);
     }
     if (response.success == true) {
-
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
       console.log('Vastaus: ' + JSON.stringify(response));
-
       // let sessionID = response['login-id'];
-
       console.log('vastauksen sisältöä: ');
       // let loginIDobject = response['login-id'][0];
       let sessionID = response['sessionid'];
-
-
+      this.saveSessionStatus(sessionID);
       console.log('Authorization success.');
     } else {
       console.error(response.error);
@@ -187,7 +182,7 @@ export class AuthService {
   }
 
   public saveSessionStatus(sessionID: string) {
-    // this.isUserLoggedIn$.next(true);
+    this.isUserLoggedIn$.next(true);
     window.sessionStorage.setItem('SESSION_ID', sessionID);
   }
 
@@ -207,8 +202,6 @@ export class AuthService {
   private sendErrorMessage(message: string) {
     this.errorMessages$.next(message);
   }
-
-
 
   // private getCodeChallenge(codeVerifier: string): string {
     // let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);

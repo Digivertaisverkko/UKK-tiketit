@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
+// import { environment } from 'src/environments/environment';
 // import { ForwardRefHandling } from '@angular/compiler';
 
 @Component({
@@ -12,6 +13,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  // title = environment.productName + "- Kirjautuminen";
   public email: string = '';
   public isEmailValid: boolean = false;
   public isPhonePortrait = false;
@@ -64,7 +66,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public loginWithoutAuth(): void {
-    this.authService.saveSessionStatus('123456789')
+    this.authService.saveSessionStatus('123456789');
+    this.authService.isUserLoggedIn$.next(true);
     this.router.navigateByUrl('/front');
   }
   

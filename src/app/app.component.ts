@@ -3,6 +3,7 @@ import { AuthService } from './core/auth.service';
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Breakpoints } from '@angular/cdk/layout';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,6 @@ import { Breakpoints } from '@angular/cdk/layout';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'tikettisysteemi';
   public isPhonePortrait = false;
 
   constructor(
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
   public initializeApp() {
     console.log('--- App.component Initialize ajettu ---');
     console.log('session id: ' + window.sessionStorage.getItem('SESSION_ID'));
+    // Katsotaan, onko käyttäjä kirjautuneena.
     if (window.sessionStorage.getItem('SESSION_ID') == null) {
       console.log('ei ole kirjautunut');
       /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee
@@ -45,7 +46,9 @@ export class AppComponent implements OnInit, OnDestroy {
         console.log('Error: Route for login not found: ' + error);
       })
       this.router.navigateByUrl('/login', { replaceUrl: true });
-    } 
+    } else {
+      this.authService.isUserLoggedIn$.next(true);
+    }
   }
 
   // public initializeApp-old() {
