@@ -1,10 +1,9 @@
 .login-page {
-
-//   border: {
-//     style: solid;
-//     color: green;
-//     width: 2px;
-// }
+  //   border: {
+  //     style: solid;
+  //     color: green;
+  //     width: 2px;
+  // }
   // flex-grow: 5;
 
   // padding: 0;
@@ -18,7 +17,6 @@
     position: center;
     repeat: no-repeat;
     size: cover;
-
   }
   mat-card {
     border-radius: 8px;
@@ -33,7 +31,6 @@
     border-radius: 0px;
     width: 94%;
   }
-
 }
 
 .custom-error {
@@ -51,13 +48,14 @@
   flex: 1 1 auto;
 }
 
-mat-form-field, mat-checkbox {
+mat-form-field,
+mat-checkbox {
   width: 80%;
   display: block;
   margin: auto;
 }
 
-mat-card-content  {
+mat-card-content {
   margin-top: 20px;
 }
 
