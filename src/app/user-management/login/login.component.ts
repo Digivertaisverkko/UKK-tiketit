@@ -22,7 +22,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public readonly passwordMinLength: number = 3;
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
-  private authSubscription: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.serverErrorMessage = '';
         }
       });
-      this.authSubscription = this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
+      this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
         if (isLoggedIn === true) {
           this.router.navigateByUrl('/front');
         }

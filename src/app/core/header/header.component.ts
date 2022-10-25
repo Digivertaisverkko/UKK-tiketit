@@ -39,7 +39,13 @@ export class HeaderComponent {
 
   public logOut() {
     this.authService.logOut();
-    this.router.navigateByUrl('/login');
+    this.authService.sendAskLoginRequest('own').then((response: string) => {
+      if (response !== 'error') {
+        this.router.navigateByUrl(response);
+      }
+    }).catch (error => {
+      console.log('Error: Route for login not found: ' + error);
+    })
   }
 
 }
