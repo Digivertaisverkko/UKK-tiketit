@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +12,7 @@ import { AuthService } from '../auth.service';
 })
 export class HeaderComponent {
   public isUserLoggedIn: Observable<boolean>;
+  public productName: string = environment.productName;
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
