@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
       this.isPhonePortrait = false;
       if (result.matches) {
         this.isPhonePortrait = true;
-        console.log('phone portrait');
       }
     });
     this.initializeApp();

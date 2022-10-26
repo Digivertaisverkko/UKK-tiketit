@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { PrivacyModalComponent } from './privacy-modal/privacy-modal.component';
+
 
 @Component({
   selector: 'app-footer',
@@ -8,6 +11,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class FooterComponent {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
+
+  public openPrivacyModal() {
+    const privacyModal = this.dialog.open(PrivacyModalComponent);
+    privacyModal.afterClosed().subscribe(response => {
+      console.log({ response });
+    })
+  }
 
 }

@@ -8,22 +8,27 @@ import { MaterialModule } from '../shared/material.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { AuthService } from './auth.service';
 
 import { HeaderComponent } from '../core/header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    PrivacyModalComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
     MaterialModule,
     MatMenuModule,
-    RouterModule
+    RouterModule,
+    MatDialogModule
   ],
   providers: [
     AuthService
