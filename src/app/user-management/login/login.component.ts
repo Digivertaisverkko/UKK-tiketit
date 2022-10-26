@@ -63,9 +63,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log(typeof this.isEmailValid);
     // Lisää ensin custom ErrorStateMatcher
     // if (this.isEmailValid === false) return;
-    console.log('LoginComponent: login request info:');
-    console.log('email ' + this.email);
-    console.log('password ' + this.password);
+    // console.log('LoginComponent: login request info:');
+    // console.log('email ' + this.email);
+    // console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID);
   }
@@ -77,11 +77,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private setLoginID() {
-    console.log('--- ajetaan setLoginID ---');
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
-        // console.log('LoginComponent:');
-        // console.dir(params);
         if (params['loginid'] == '') {
           console.error('No loginID found in URL. Aborting authentication.');
         }
@@ -90,8 +87,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
-      },
+      }
     });
+    console.log('setloginid done');
   }
 
   private getIsEmailValid(): boolean {
@@ -109,6 +107,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe;
+    this.messageSubscription.unsubscribe();
   }
 }

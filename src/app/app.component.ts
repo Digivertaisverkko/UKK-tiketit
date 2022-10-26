@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
       this.isPhonePortrait = false;
       if (result.matches) {
         this.isPhonePortrait = true;
+        console.log('phone portrait');
       }
     });
     this.initializeApp();
@@ -44,7 +45,7 @@ export class AppComponent implements OnInit {
       }).catch (error => {
         console.log('Error: Route for login not found: ' + error);
       })
-      this.router.navigateByUrl('/login', { replaceUrl: true });
+      this.router.navigateByUrl('login', { replaceUrl: true });
     } else {
       this.authService.isUserLoggedIn$.next(true);
     }

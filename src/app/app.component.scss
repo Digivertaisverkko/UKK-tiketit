@@ -1,23 +1,19 @@
-// #view {
-// display: flex;
-// min-height: 100%;
-// flex-direction: column;
-// justify-content: flex-start;
-//     min-height: calc( 100vh - 64px);
-// }
+$header-height: 64px;
 
 #content {
-  min-height: calc(100vh - 128px);
+  min-height: calc(100vh - $header-height - 182px);
+
+  // Vain alapalkilla
+  // min-height: calc(100vh - 128px);
 }
 
 #content.is-phone-portrait {
-  min-height: calc(100vh - 112px);
+  min-height: calc(100vh - $header-height - 166px);
+
+  // Vain alapalkilla
+  // min-height: calc(100vh - 112px);
 }
 
 .spacer {
   flex: 1 1 auto;
 }
-
-// router-outlet > div {
-//     min-height: calc(100vh - 2 * 64px);
-// }

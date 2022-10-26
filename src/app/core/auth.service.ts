@@ -95,18 +95,17 @@ export class AuthService {
         'code-challenge': this.codeChallenge
       })
     };
-
    // console.log(httpOptions);
    let response: any;
    try {
       console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
+      // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-    const loginUrl: string = response['login-url'];
-    console.log('loginurl : ' +loginUrl);
+    const loginUrl = response['login-url'];
+    // console.log('loginurl : ' +loginUrl);
    if (loginUrl.length == 0) {
     console.error("Server didn't retrieve login url.");
     return 'error';
