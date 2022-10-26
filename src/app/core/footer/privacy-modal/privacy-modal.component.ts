@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -7,7 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./privacy-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PrivacyModalComponent implements OnInit {
+export class PrivacyModalComponent {
 
   constructor(
     public modalRef: MatDialogRef<PrivacyModalComponent>
@@ -15,9 +15,6 @@ export class PrivacyModalComponent implements OnInit {
 
   closeModal() {
     this.modalRef.close();
-  }
-
-  ngOnInit(): void {
   }
 
 }
