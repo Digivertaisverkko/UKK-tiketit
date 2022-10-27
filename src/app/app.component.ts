@@ -1,48 +1,53 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { Router } from '@angular/router';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'tikettisysteemi';
+export class AppComponent implements OnInit {
+  public isPhonePortrait = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private responsive: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
+      this.isPhonePortrait = false;
+      if (result.matches) {
+        this.isPhonePortrait = true;
+      }
+    });
     this.initializeApp();
   }
 
   public initializeApp() {
     console.log('--- App.component Initialize ajettu ---');
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('nIsUserLoggedI saatiin dataa: ' + response);
-      console.log('Tsekataan, onko kirjautunut');
-      if (response == true) {
-        this.router.navigateByUrl('/front', { replaceUrl: true });
-      } else {
-        /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee
-           Ei siirrytä suoraan /login, koska url sisältää loginid:n. */
-        this.authService.sendAskLoginRequest('own').then((response: string) => {
-          console.log('AppComponent: got url from server: ' + response);
-          if (response !== 'error') {
-            this.router.navigateByUrl(response);
-          }
-        }).catch (error => {
-          console.log('Error: Route for login not found: ' + error);
-        })
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.authService.unsubscribeIsUserLoggedin();
+    console.log('session id: ' + window.sessionStorage.getItem('SESSION_ID'));
+    // Katsotaan, onko käyttäjä kirjautuneena.
+    if (window.sessionStorage.getItem('SESSION_ID') == null) {
+      console.log('ei ole kirjautunut');
+      /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee
+         Ei siirrytä suoraan /login, koska url sisältää loginid:n. */
+      this.authService.sendAskLoginRequest('own').then((response: string) => {
+        console.log('AppComponent: got url from server: ' + response);
+        if (response !== 'error') {
+          this.router.navigateByUrl(response);
+        }
+      }).catch (error => {
+        console.log('Error: Route for login not found: ' + error);
+      })
+      this.router.navigateByUrl('login', { replaceUrl: true });
+    } else {
+      this.authService.isUserLoggedIn$.next(true);
+    }
   }
 
 }

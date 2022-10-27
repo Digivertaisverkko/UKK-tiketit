@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom  } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 // import { LocalStorageModule } from 'angular-2-local-storage';
@@ -26,31 +26,61 @@ export interface LoginResponse {
 export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
-  private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
+  public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private errorMessages$ = new Subject<any>();
-  
+
   private codeVerifier: string = '';
   private codeChallenge: string = '';
   private loginCode: string = '';
-  private sessionID: string ='';
-  private sessionIDexpires = new Date();
-  private account: string = '';
 
   // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
   private oAuthState: string = '';
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  constructor(
-      private http: HttpClient
-    ) {
+  constructor(private http: HttpClient) {
+  }
+
+  // public getSessionID(): string {
+  //   if (this.sessionID == undefined) {
+  //     console.log('Error: no session id set.');
+  //     return('Error');
+  //   }
+  //   return this.sessionID;
+  // }
+
+  // public setSessionID(sessionID: string): void {
+  //   this.sessionID = sessionID;
+  //   this.isUserLoggedIn$.next(true);
+  // }
+
+  public onIsUserLoggedIn(): Observable<any> {
+    return this.isUserLoggedIn$.asObservable();
+  }
+
+  public unsubscribeIsUserLoggedin(): void {
+    this.isUserLoggedIn$.unsubscribe;
+  }
+
+  public onErrorMessages(): Observable<any> {
+    return this.errorMessages$.asObservable();
+  }
+
+  public clearMessages(): void {
+    this.errorMessages$.next('');
+  }
+
+  public logOut(): void {
+    this.isUserLoggedIn$.next(false);
+    window.sessionStorage.clear();
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
-    // this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
+    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
+    // this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
     this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
     // this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
@@ -65,18 +95,17 @@ export class AuthService {
         'code-challenge': this.codeChallenge
       })
     };
-
    // console.log(httpOptions);
    let response: any;
    try {
       console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
+      // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-    const loginUrl: string = response['login-url'];
-    console.log('loginurl : ' +loginUrl);
+    const loginUrl = response['login-url'];
+    // console.log('loginurl : ' +loginUrl);
    if (loginUrl.length == 0) {
     console.error("Server didn't retrieve login url.");
     return 'error';
@@ -142,29 +171,26 @@ export class AuthService {
       this.handleError(error);
     }
     if (response.success == true) {
-
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
-      console.log('Vastaus alla:');
-      console.dir(JSON.stringify(response));
-
+      console.log('Vastaus: ' + JSON.stringify(response));
       // let sessionID = response['login-id'];
-
       console.log('vastauksen sisältöä: ');
-      let loginIDobject = response['login-id'][0];
-      this.sessionID = (loginIDobject['sessionid']);
-      this.sessionIDexpires = (loginIDobject['vanhenee']);
-      this.account = (loginIDobject['tili']);
-      
-
-      this.isUserLoggedIn$.next(true);
-      // console.log('Authorization success.');
+      // let loginIDobject = response['login-id'][0];
+      let sessionID = response['sessionid'];
+      this.saveSessionStatus(sessionID);
+      console.log('Authorization success.');
     } else {
       console.error(response.error);
       this.sendErrorMessage(response.error);
     }
   }
 
-  // Näytä sendAskLoginRequest:n lyyttyviä logeja.
+  public saveSessionStatus(sessionID: string) {
+    this.isUserLoggedIn$.next(true);
+    window.sessionStorage.setItem('SESSION_ID', sessionID);
+  }
+
+  // Näytä sendAskLoginRequest:n liittyviä logeja.
   private printAskLoginLog(response: any, loginUrl: string) {
     console.log('Got response: ');
     console.dir(response);
@@ -176,25 +202,9 @@ export class AuthService {
     }
   }
 
-  onIsUserLoggedIn(): Observable<any> {
-    return this.isUserLoggedIn$.asObservable();
-  }
-
-  unsubscribeIsUserLoggedin(): void {
-    this.isUserLoggedIn$.unsubscribe;
-  }
-
-  onErrorMessages(): Observable<any> {
-    return this.errorMessages$.asObservable();
-  }
-
   // Lähetä virheviesti näkymään.
-  sendErrorMessage(message: string) {
+  private sendErrorMessage(message: string) {
     this.errorMessages$.next(message);
-  }
-
-  clearMessages(): void {
-    this.errorMessages$.next('');
   }
 
   // private getCodeChallenge(codeVerifier: string): string {
@@ -218,11 +228,11 @@ export class AuthService {
 
     // Onko string muodoltaan HTTP URL.
     isValidHttpUrl(testString: string): boolean {
-      let url: URL;  
+      let url: URL;
       try {
         url = new URL(testString);
       } catch (_) {
-        return false;  
+        return false;
       }
       return url.protocol === "http:" || url.protocol === "https:";
     }
@@ -230,7 +240,7 @@ export class AuthService {
   // Virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      // A client-side or network error occurred. 
+      // A client-side or network error occurred.
       console.error('An error occurred:', error.error);
     } else {
       // The backend returned an unsuccessful response code.

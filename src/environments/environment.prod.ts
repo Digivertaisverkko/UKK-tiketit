@@ -2,12 +2,14 @@
    esim. ng build --configuration production.
 */
 
-let apiBaseUrl = 'https://dvv-tiketti-backend.azurewebsites.net';
+const baseUrl ='https://dvv-tiketti-backend.azurewebsites.net';
 
 export const environment = {
   production: true,
   clientID: 'angularApp',
-  ownAskLoginUrl: apiBaseUrl + '/login',
-  ownTokenUrl: apiBaseUrl + '/authtoken',
-  ownLoginUrl: apiBaseUrl + '/omalogin',
+  productName: 'UKK-Tiketit',
+  apiBaseUrl: baseUrl,
+  ownAskLoginUrl: baseUrl + '/login',
+  ownTokenUrl: baseUrl + '/authtoken',
+  ownLoginUrl: baseUrl + '/omalogin',
 };

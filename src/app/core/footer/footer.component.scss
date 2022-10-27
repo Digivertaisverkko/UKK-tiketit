@@ -1,0 +1,93 @@
+$debug: false;
+
+#footer {
+  // border: {
+  //     style: dashed;
+  //     color: black;
+  //     width: 2px;
+  // }
+  margin: 0;
+  width: 100%;
+
+  #up-row {
+    // padding: 3em;
+    height: 118px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #column-container {
+
+    @if $debug {
+      border: {
+        style: dashed;
+        color: red;
+        width: 1px;
+      }
+    }
+
+    display: flex;
+    justify-content: space-evenly;
+
+    height: 118px;
+    max-width: 1100px;
+    min-width: 380px;
+    width: 100%;
+    margin: auto;
+  }
+
+  .col {
+
+    @if $debug {
+      border: {
+        style: dashed;
+        color: gray;
+        width: 1px;
+      }
+    }
+    width: 33%;
+    height: 118px;
+    // padding: 2em 1em 1em 1em;
+
+    img {
+      display: block;
+      max-height: 100px;
+      // padding-top: 1em;
+      // padding-bottom: 1em;
+      margin: auto;
+
+      @if $debug {
+        border: {
+          style: dashed;
+          color: green;
+          width: 1px;
+        }
+      }
+    }
+  }
+
+  #bottom-row {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    font-size: 14px;
+    // Tool-bar -määrittelyissä on:
+    // flex-direction: row;
+    // align-items: center;
+    // white-space: nowrap;
+    // height: 64px;
+    // font-size: 20px;
+    // border: {
+    //     style: dashed;
+    //     color: red;
+    //     width: 2px;
+    // }
+    margin: 0;
+  }
+
+  #eu-pic {
+    margin-top: 7px;
+  }
+
+
+}
