@@ -1,61 +1,104 @@
-<div id="content">
+<h1 mat-dialog-title>Tikettijärjestelmän tietosuojaseloste</h1>
 
-  <h1>Yksityisyystiedot</h1>
-<p>
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget facilisis
-  felis. Donec eget elit pellentesque, vestibulum orci sed, faucibus metus.
-  Vivamus a lacus dignissim, dapibus purus sit amet, porttitor erat. Morbi
-  tincidunt sollicitudin massa, at placerat est fermentum at. Nulla sagittis
-  semper lacus eget consequat. Nam et lectus at urna condimentum pellentesque id
-  sed lacus. Etiam maximus sem ipsum, vel pulvinar diam sodales non. Sed
-  eleifend nisl at nunc pellentesque, ut vulputate augue commodo. Donec dictum
-  efficitur dapibus.
-</p>
+<mat-dialog-content>
+  <p>
+    Tämä on Tikettijärjestelmän EU:n yleisen tietosuoja-asetuksen (GDPR) ja tietosuojalain (1050/2018) mukainen
+    tietosuojaseloste.
+  </p>
+  <h2>1.	Rekisterinpitäjä</h2>
+  <p>
+    Digivertaisverkko, Oulun yliopisto<br>
+    PL 8000, 90014 Oulun yliopisto
+  </p>
+  <h2>2.	Yhteyshenkilö rekisteriä koskevissa asioissa</h2>
+  <p>
+    Digivertaisverkko hankkeen projektipäällikkö, Helena Tokkonen.<br>
+    Yhteydenotot sähköpostiosoite: helena.tokkonen at oulu.fi.
+  </p>
+  <h2>3.	Rekisterin nimi</h2>
+  <p>Digivertaisverkko hankkeen Tikettijärjestelmä</p>
+  <h2>4.	Tietosuojavastaavan yhteystiedot</h2>
+  <p>DPO at oulu.fi</p>
+  <h2>5.	Henkilötietojen käsittelyn tarkoitus ja käsittelyn oikeusperuste</h2>
+  <p>
+    Henkilötietojen käsittely perustuu EU:n tietosuoja-asetuksen artikla 6 kohdan 1 perusteella seuraavasti: <i>yleistä
+    etua koskea tehtävä / rekisterinpitäjälle kuuluvan julkisen vallan käyttö</i> (GDPR, 6.1 artiklan e kohta)
+  </p>
+  <h2>6.	Kerättävät henkilötiedot, niiden käsittely ja käyttötarve</h2>
+  <h3>6.1.	Henkilötiedot</h3>
+  <ul>
+    <li>Henkilön nimi</li>
+    <li>Sähköpostiosoite</li>
+    <li>Opiskeluoikeuteen liittyvät tiedot</li>
+    <li>Koulutusohjelmaan ja koulutusalaan liittyvät tiedot</li>
+    <li>Kursseihin liittyvät tiedot</li>
+    <li>Käyttäjien itsensä tallentamat tietosisällöt järjestelmään ja niiden mahdollinen kommentointi</li>
+    <li>Työntekijöiden tiedot ja heidän sisäiset organisaatiotiedot</li>
+  </ul>
+  <h3>6.2.	Henkilötietojen käyttötarve</h3>
+  <p>
+    Järjestelmässä olevien tietojen käsittelyn tarkoituksena on tarjota opiskelijoille helppokäyttöinen tapa kirjata
+    tukipyyntö ja seurata oman tukipyynnön tilaa. Henkilön tallentamia laite ja ongelma/ratkaisu tietoja voidaan
+    käyttää apuna ratkaisemaan yleisiä ongelmia.
+  </p>
+  <h3>6.3.	Henkilötietojen käsittely</h3>
+  <ul>
+    <li>Tietoja ei käytetä profilointiin. Käsittelyssä ei tehdä päätöksiä automatisoidusti.</li>
+    <li>
+      Tallennettuja tietoja säilytetään Tikettijärjestelmässä yhden (1) vuoden kurssin päättymisen jälkeen tai niin
+      kauan, kunnes henkilö poistaa tietonsa tai pyytää niitä poistettavaksi.
+    </li>
+    <li>
+      Evästeitä käytetään ainoastaan sellaisiin toimenpiteisiin, jotka ovat välttämättömiä käyttäjän pyytämän palvelun
+      käyttämiseen.
+    </li>
+  </ul>
+  <h3>6.4.	Henkilötietojen säännönmukaiset tietolähteet</h3>
+  <ul>
+    <li>
+      Opetushenkilökunnan ja opiskelijoiden tiedot siirretään automaattisesti järjestelmän käyttöön LTI-protokollan
+      välityksellä sitä tukevista järjestelmistä.
+    </li>
+    <li>Opetushenkilökunta ja opiskelijat voivat luoda itse omat tunnuksensa järjestelmään vapaaehtoisesti.</li>
+  </ul>
+  <h3>6.5.	Arkaluonteisten henkilötietojen käsittely ja suojaaminen</h3>
+  <p>
+    Tikettijärjestelmässä ei käsitellä sinänsä arkaluonteisia henkilötietoja. Mikäli tällaista tietoa sisältyy
+    käyttäjien tuottamaan aineistoon, aineisto poistetaan järjestelmästä seitsemän (7) päivän kuluessa poistopyynnön
+    vastaanottamisesta.
+  </p>
+  <h2>7.	Tietojen siirto EU:n tai ETA:n ulkopuolelle</h2>
+  <p>Tietoja ei siirry EU:n ja ETA:n ulkopuolelle.</p>
+  <h2>8.	Rekisterin suojauksen periaatteet</h2>
+  <p>
+    Järjestelmän käytössä noudatetaan Oulun yliopiston tietosuojaperiaatteita. Käyttöoikeudet on määritelty opettajille
+    sekä opiskelijoille.
+  </p>
+  <p>
+    Palvelu toimii ympäristössä, joka on suojattu palomuurilla ja SSL suojauksella. Palveluun otetaan yhteys suojatulla
+    verkkoyhteydellä. Tietokannat ja niiden varmuuskopiot sijaitsevat lukituissa tiloissa ja tietoihin pääsevät käsiksi
+    vain palveluntarjoajan nimetyt henkilöt.
+  </p>
+  <h2>9.	Rekisteröidyn oikeudet</h2>
+  <p>
+    Rekisteröidyllä on oikeus tarkastaa, mitä häntä koskevia tietoja henkilörekisteriin on tallennettu.
+    Tietosuoja-asetuksen mukaan rekisteröidyllä on oikeus:
+  </p>
+  <ul>
+    <li>saada tietoa henkilötietojensa käsittelystä</li>
+    <li>saada pääsy tietoihin</li>
+    <li>oikaista tietoja</li>
+    <li>rajoittaa tietojen käsittelyä</li>
+    <li>vastustaa tietojen käsittelyä</li>
+    <li>olla joutumatta automaattisen päätöksenteon kohteeksi.</li>
+  </ul>
+  <p>
+    Tarkastuspyynnöt osoitetaan sähköpostitse: helena.tokkonen at oulu.fi<br>
+    Rekisteröidyllä on myös oikeus tehdä henkilötietojesi käsittelystä valitus valvontaviranomaiselle, yhteystiedot:
+    <a href="http://www.tietosuoja.fi/yhteystiedot" target="_blank">http://www.tietosuoja.fi/yhteystiedot</a>.
+  </p>
+</mat-dialog-content>
 
-<p>
-  Nam et lorem venenatis, consectetur sem in, scelerisque magna. Vivamus tempor
-  tortor id porta egestas. Vivamus ut leo id eros vehicula suscipit. Etiam eu
-  euismod lectus. Aenean viverra nulla non interdum viverra. Aliquam sodales sem
-  eget sodales condimentum. Phasellus sit amet vestibulum urna. Fusce vitae
-  faucibus dui, ac varius magna. Morbi sodales tortor quis lacinia gravida. In
-  diam dolor, semper ut vestibulum non, pharetra ac sem.
-</p>
-
-<p>
-  Nam sit amet gravida lacus, at tempor massa. Class aptent taciti sociosqu ad
-  litora torquent per conubia nostra, per inceptos himenaeos. Praesent vitae
-  arcu mauris. Nulla facilisi. Nulla sit amet lectus quam. Nulla hendrerit
-  ornare faucibus. Mauris ligula augue, tempor sit amet rutrum eu, semper vitae
-  turpis.
-</p>
-
-<p>
-  Ut venenatis gravida diam, interdum convallis nisi porttitor vitae. Aenean
-  efficitur dui non euismod volutpat. Duis vehicula erat et velit placerat
-  lobortis. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-  per inceptos himenaeos. Sed id hendrerit est. Aliquam in odio ultrices,
-  tincidunt tellus vitae, tempor quam. Donec dapibus, nisi id hendrerit aliquam,
-  leo purus malesuada elit, vitae ullamcorper massa orci eu enim. Vivamus eget
-  urna ut ipsum porta porttitor. Fusce ultricies sem nibh, nec rhoncus nisl
-  vestibulum nec. Curabitur mattis eros quis dolor rutrum tempus. Sed eu ligula
-  vitae nunc tempus scelerisque eu sit amet orci. Ut in luctus nulla. Sed ut
-  vehicula erat. Fusce lorem neque, tempus at metus id, placerat feugiat sapien.
-  Sed blandit fermentum nibh, aliquet aliquam enim luctus ultrices.
-</p>
-
-<p>
-  Duis ornare neque ut blandit luctus. Cras rutrum, lacus sed hendrerit euismod,
-  lacus ex condimentum sem, a aliquam justo dui a risus. Aliquam luctus pulvinar
-  diam blandit iaculis. Sed fermentum ac massa quis elementum. Aenean id lectus
-  ac arcu placerat euismod. In egestas accumsan elit id tempor. Nunc sit amet
-  fermentum nunc. Duis porta augue eu feugiat maximus. Aliquam rutrum venenatis
-  lorem. Nunc volutpat tincidunt arcu rhoncus posuere. Etiam varius luctus
-  augue, et volutpat tortor fringilla quis. Nunc vulputate vestibulum luctus.
-</p>
-
-</div>
-
-
-<div  mat-dialog-actions align="end">
+<mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="closeModal()">Sulje</button>
-</div>
+</mat-dialog-actions>
