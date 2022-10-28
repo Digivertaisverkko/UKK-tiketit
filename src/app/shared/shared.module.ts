@@ -4,12 +4,10 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
-
 
 @NgModule({
   declarations: [

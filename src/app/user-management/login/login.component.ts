@@ -13,7 +13,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  // title = environment.productName + "- Kirjautuminen";
   public email: string = '';
   public isEmailValid: boolean = false;
   public isPhonePortrait = false;

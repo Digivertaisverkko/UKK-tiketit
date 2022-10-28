@@ -1,13 +1,19 @@
 <div class="login-page">
   <mat-card class="mat-elevation-z12">
     <mat-card-title style="text-align: center"
-      >Tämä testisivu toimii!</mat-card-title
+      >Testisivu</mat-card-title
     >
     <mat-card-content>
       <mat-card-content> Vastaus: {{ response }} </mat-card-content>
 
-      <button (click)="makeTest()" class="test-button" mat-raised-button>
-        Testaa get.
+      <button (click)="getCourseName()" class="test-button" mat-raised-button>
+        Hae kurssin 1 nimi
+      </button>
+      <button (click)="getQuestions()" class="test-button" mat-raised-button>
+        Hae omat kysymykset.
+      </button>
+      <button (click)="getCourses()" class="test-button" mat-raised-button>
+        Hae kurssit
       </button>
     </mat-card-content>
   </mat-card>

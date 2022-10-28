@@ -1,31 +1,70 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpTestingService } from './http-testing.service';
+import { TicketServiceService } from 'src/app/ticket-list/ticket.service';
+import { Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+export interface Question {
+  id: string;
+  title: string;
+  date: string;
+  state: number;
+  excercise: string;
+}
 
 @Component({
   selector: 'app-testing-henri',
   templateUrl: './testing-henri.component.html',
-  styleUrls: ['../login/login.component.scss', 'testing-henri.component.scss']
+  styleUrls: ['../login/login.component.scss', 'testing-henri.component.scss'],
 })
-export class TestingHenriComponent implements OnInit {
-
-  baseUrl: string;
+export class TestingHenriComponent {
   response: string;
 
-  constructor(private httpTest: HttpTestingService) {
-    this.baseUrl='http://localhost:3000';
+  public ticketMessage: string = '';
+  public ticketMessageSubscription: Subscription;
+
+  constructor(
+    private httpTest: HttpTestingService,
+    private ticket: TicketServiceService
+  ) {
     this.response = '';
+    this.ticketMessageSubscription = this.ticket.onMessages().subscribe(message => {
+      this.ticketMessage = message;
+    });
   }
 
-  ngOnInit(): void {
+  public async getCourseName() {
+    this.ticket.getCourseName('1').then(response => {
+      console.log(typeof response);
+      console.log(response);
+      console.log('Kurssin nimi: ' + response);
+    });
   }
 
-  makeTest() {
-    console.log('Button pressed.');
-    let response: string;
-    this.httpTest.getStringResponse(this.baseUrl + '/api').subscribe(
-      (data: string) => 
-        this.response = data
-    );
+  public async getCourses() {
+    this.ticket.getCourses().then(response => {
+      console.log(typeof response);
+      console.log(response);
+      console.log('toisen kurssin nimi: ' + response[1].nimi);
+    });
+  }
+
+  public async getQuestions() {
+    this.ticket.getQuestions('1').then(response => {
+      console.log(response);
+      console.log(typeof response);
+      console.log('otsikko: ' + response[0].otsikko);
+    });
+  }
+
+  public async makeTest() {
+    let response: any;
+    this.httpTest
+      .getStringResponse(environment.apiBaseUrl + '/api/kurssi/1/omat')
+      .subscribe((data) => {
+        console.log(data);
+        console.log(typeof data);
+      });
   }
 
 }
