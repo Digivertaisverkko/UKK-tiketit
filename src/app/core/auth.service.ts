@@ -71,7 +71,25 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  public logOut(): void {
+  public async logOut(): Promise<any> {
+
+    const sessionID = window.sessionStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      throw new Error('Session ID not found.');
+    }
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'session-id': sessionID
+      })
+    }
+    let response: any;
+    let url = environment.apiBaseUrl + '/kirjaudu-ulos';
+    try {
+      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
+    } catch (error: any) {
+      this.handleError(error);
+    }
     this.isUserLoggedIn$.next(false);
     window.sessionStorage.clear();
   }
