@@ -6,6 +6,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
+import { state } from '@angular/animations';
 
 export interface Question {
   id: string;
@@ -15,6 +16,7 @@ export interface Question {
   tehtävä: string;
 }
 
+// Ulkotunnus lähtee pois.
 export interface Course {
   id: string;
   nimi: string;
@@ -24,6 +26,13 @@ export interface Course {
 export interface CourseName {
   'kurssi-nimi': string;
 }
+
+export interface Ticket {
+    'otsikko': string;
+    'viesti': string;
+    'aloittaja-id': number;
+    'tila': string;
+  }
 
 @Injectable({
   providedIn: 'root',
@@ -122,6 +131,42 @@ export class TicketServiceService {
       throw new Error('Request denied. Error message: ' + response.error);
     }
     return response;
+  }
+
+  public async getTicketInfo(ticketID: string): Promise<Ticket> {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    let url = environment.apiBaseUrl + '/ticket/' + ticketID;
+    try {
+      response = await firstValueFrom<Ticket>(
+        this.http.get<any>(url, httpOptions)
+      );
+      console.log(
+        'Got from "' + url + '" response: ' + JSON.stringify(response)
+      );
+      console.log(typeof response);
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response.success == false) {
+      throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
+    }
+    return response;    
+  }
+
+  public getTicketState(stateNumber: number): string {
+    let state: string = '';
+    switch (stateNumber) {
+      case 0: state = "Virhetila"; break;
+      case 1: state = "Lähetty"; break;
+      case 2: state = "Luettu"; break;
+      case 3: state = "Lisätietoa pyydetty"; break;
+      case 4: state = "Kommentoitu"; break;
+      case 5: state = "Ratkaistu"; break;
+      case 6: state = "Arkistoitu"; break;
+      default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
+    }
+    return state;
   }
 
   private getHttpOptions(): object {
