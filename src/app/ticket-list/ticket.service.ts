@@ -171,11 +171,11 @@ export class TicketServiceService {
     }
     ticket = response;
     response = await this.getAdditionalFields(ticketID, httpOptions);
-      if (response !== undefined) {
-      // let additionalFields: AdditionalField[] = response;
-      // if (additionalFields.length > 0) {
-        ticket.kentat = response;
-      // }
+    if (response !== undefined) {
+    // let additionalFields: AdditionalField[] = response;
+    // if (additionalFields.length > 0) {
+      ticket.kentat = response;
+    // }
     };
 
     return response;
