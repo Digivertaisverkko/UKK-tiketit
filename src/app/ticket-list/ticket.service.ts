@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import { state } from '@angular/animations';
+import { getMatFormFieldMissingControlError } from '@angular/material/form-field';
 
 export interface Question {
   id: string;
@@ -28,11 +29,27 @@ export interface CourseName {
 }
 
 export interface Ticket {
-    'otsikko': string;
-    'viesti': string;
-    'aloittaja-id': number;
-    'tila': string;
-  }
+  otsikko: string;
+  viesti: string;
+  'aloittaja-id': number;
+  tila: string;
+  kentat?: [{
+    nimi: string;
+    arvo: string;
+  }];
+}
+
+export interface AdditionalField {
+  nimi: string;
+  arvo: string;
+}
+
+// export interface Ticket extends TicketBody {
+//   kentat: [{
+//     nimi: string;
+//     arvo: string;
+//   }];
+// }
 
 @Injectable({
   providedIn: 'root',
@@ -117,8 +134,8 @@ export class TicketServiceService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/omat';
     try {
-      response = await firstValueFrom<Question[]>(
-        this.http.get<any>(url, httpOptions)
+      response = await firstValueFrom(
+        this.http.get<Question[]>(url, httpOptions)
       );
       console.log(
         'Got from "' + url + '" response: ' + JSON.stringify(response)
@@ -136,9 +153,39 @@ export class TicketServiceService {
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
     const httpOptions = this.getHttpOptions();
     let response: any;
+    let ticket: Ticket;
     let url = environment.apiBaseUrl + '/ticket/' + ticketID;
     try {
-      response = await firstValueFrom<Ticket>(
+      response = await firstValueFrom(
+        this.http.get<Ticket>(url, httpOptions)
+      );
+      console.log(
+        'Got from "' + url + '" response: ' + JSON.stringify(response)
+      );
+      console.log(typeof response);
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response.success == false) {
+      throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
+    }
+    ticket = response;
+    response = await this.getAdditionalFields(ticketID, httpOptions);
+      if (response !== undefined) {
+      // let additionalFields: AdditionalField[] = response;
+      // if (additionalFields.length > 0) {
+        ticket.kentat = response;
+      // }
+    };
+
+    return response;
+  }
+
+  private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<AdditionalField[]> {
+    let response: any;
+    let url = environment.apiBaseUrl + '/' + ticketID + '/kentat';
+    try {
+      response = await firstValueFrom<AdditionalField[]>(
         this.http.get<any>(url, httpOptions)
       );
       console.log(
@@ -151,7 +198,7 @@ export class TicketServiceService {
     if (response.success == false) {
       throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
     }
-    return response;    
+    return response;
   }
 
   public getTicketState(stateNumber: number): string {
