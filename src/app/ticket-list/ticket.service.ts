@@ -17,7 +17,6 @@ export interface Question {
   tehtävä: string;
 }
 
-// Ulkotunnus lähtee pois.
 export interface Course {
   id: string;
   nimi: string;
@@ -29,7 +28,7 @@ export interface Comment {
   viesti: string; 
 }
 
-// Kentät ja kommentit ovat valinnaisia, koska ne haetaan omilla kutsuillaan.
+// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess aomilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
   viesti: string;
@@ -75,11 +74,7 @@ export class TicketServiceService {
     }
     console.log('session id on: ' + sessionID);
     console.log(typeof sessionID);
-    let httpOptions = {
-      headers: new HttpHeaders({
-        'session-id': sessionID
-      })
-    };
+    const httpOptions = this.getHttpOptions();
     console.log('httpOptions: ' + JSON.stringify(httpOptions))
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID;
@@ -96,8 +91,7 @@ export class TicketServiceService {
       this.handleError(error);
     }
     this.checkErrors(response);
-    const courseName = response['nimi'];
-    return courseName;
+    return response['nimi'];
   }
 
   // Palauta lista käyttäjän kursseista.
@@ -133,6 +127,21 @@ export class TicketServiceService {
     }
     this.checkErrors(response);
     return response;
+  }
+
+  public getTicketState(stateNumber: number): string {
+    let state: string = '';
+    switch (stateNumber) {
+      case 0: state = "Virhetila"; break;
+      case 1: state = "Lähetty"; break;
+      case 2: state = "Luettu"; break;
+      case 3: state = "Lisätietoa pyydetty"; break;
+      case 4: state = "Kommentoitu"; break;
+      case 5: state = "Ratkaistu"; break;
+      case 6: state = "Arkistoitu"; break;
+      default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
+    }
+    return state;
   }
 
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
@@ -174,13 +183,13 @@ export class TicketServiceService {
     this.checkErrors(response);
     let comments: Comment[];
     comments = this.arrangeComments(response);
-    return comments;
+    return comments
   }
 
   // Järjestä kommentit vanhimmasta uusimpaan.
   private arrangeComments(comments: Comment[]): Comment[] {
     const commentsWithDate = comments.map(comment => {
-      return {...comment, aikaleima: new Date(comment.aikaleima) };
+      return { ...comment, aikaleima: new Date(comment.aikaleima) }
     });
     const commentsAscending = commentsWithDate.sort(
       (commentA, commentB) => commentA.aikaleima.getTime() - commentB.aikaleima.getTime(),
@@ -207,21 +216,6 @@ export class TicketServiceService {
     }
     this.checkErrors(response);
     return response;
-  }
-
-  public getTicketState(stateNumber: number): string {
-    let state: string = '';
-    switch (stateNumber) {
-      case 0: state = "Virhetila"; break;
-      case 1: state = "Lähetty"; break;
-      case 2: state = "Luettu"; break;
-      case 3: state = "Lisätietoa pyydetty"; break;
-      case 4: state = "Kommentoitu"; break;
-      case 5: state = "Ratkaistu"; break;
-      case 6: state = "Arkistoitu"; break;
-      default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
-    }
-    return state;
   }
 
   private getHttpOptions(): object {
