@@ -12,7 +12,7 @@ import { getMatFormFieldMissingControlError } from '@angular/material/form-field
 export interface Question {
   id: string;
   otsikko: string;
-  pvm: string;
+  pvm: Date;
   tila: number;
   tehtävä: string;
 }
@@ -26,7 +26,7 @@ export interface Course {
 
 export interface Comment {
   'kirjoittaja-id': string;
-  pvm: string;
+  aikaleima: Date;
   tila: number;
   teksti: string; 
 }
@@ -199,7 +199,24 @@ export class TicketServiceService {
     } else if (response?.success == false) {
       throw new Error('Request to ' + url + ' unsuccesfulll. Error message: ' + response.error.virheilmoitus);
     }
-    return response;
+    let comments: Comment[];
+    comments = this.arrangeComments(response);
+    return comments;
+  }
+
+  private arrangeComments(comments: Comment[]): Comment[] {
+    const commentsWithDate = comments.map(comment => {
+      return {...comment, aikaleima: new Date(comment.aikaleima) };
+    });
+    const commentsAscending = commentsWithDate.sort(
+      (commentA, commentB) => commentA.aikaleima.getTime() - commentB.aikaleima.getTime(),
+    );
+    // const commentsDescending = commentsWithDate.sort(
+    //   (commentA, commentB) => commentB.aikaleima.getTime() - commentA.aikaleima.getTime(),
+    // );
+    console.log('Kommentit järjestyksessä:');
+    console.dir(commentsAscending);
+    return commentsAscending;
   }
 
   private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<AdditionalField[]> {
