@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ListingComponent } from './ticket-list/listing/listing.component';
 
 const routes: Routes = [
-
+  { path: 'ListingComponent', component: ListingComponent }
 ];
 
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }

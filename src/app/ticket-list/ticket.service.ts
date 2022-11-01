@@ -102,7 +102,7 @@ export class TicketServiceService {
     if (response.success == false) {
       throw new Error('Request denied. Error message: ' + response.error);
     }
-    const courseName = response[0].nimi;
+    const courseName = response['nimi'];
 ;    return courseName;
   }
 
@@ -145,7 +145,10 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == false) {
+  if (response == undefined) {
+    throw new Error('Vastausta palvelimelta ei saatu.');
+  }
+    if (response?.success == false) {
       throw new Error('Request denied. Error message: ' + response.error);
     }
     return response;
@@ -239,7 +242,7 @@ export class TicketServiceService {
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
-        `Backend returned code ${error.status}, body was: `,
+        `Palvelin palautti koodin ${error.status}, viestin runko: `,
         error.error
       );
     }
