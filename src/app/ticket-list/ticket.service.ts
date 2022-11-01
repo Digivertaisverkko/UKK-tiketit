@@ -102,7 +102,8 @@ export class TicketServiceService {
     if (response.success == false) {
       throw new Error('Request denied. Error message: ' + response.error);
     }
-    return response;
+    const courseName = response[0].nimi;
+;    return courseName;
   }
 
   // Palauta lista käyttäjän kursseista.
@@ -154,7 +155,7 @@ export class TicketServiceService {
     const httpOptions = this.getHttpOptions();
     let response: any;
     let ticket: Ticket;
-    let url = environment.apiBaseUrl + '/ticket/' + ticketID;
+    let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(
         this.http.get<Ticket>(url, httpOptions)
@@ -169,7 +170,7 @@ export class TicketServiceService {
     if (response.success == false) {
       throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
     }
-    ticket = response;
+    ticket = response[0];
     response = await this.getAdditionalFields(ticketID, httpOptions);
     if (response !== undefined) {
     // let additionalFields: AdditionalField[] = response;
@@ -177,13 +178,12 @@ export class TicketServiceService {
       ticket.kentat = response;
     // }
     };
-
-    return response;
+    return ticket;
   }
 
   private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<AdditionalField[]> {
     let response: any;
-    let url = environment.apiBaseUrl + '/' + ticketID + '/kentat';
+    let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
       response = await firstValueFrom<AdditionalField[]>(
         this.http.get<any>(url, httpOptions)

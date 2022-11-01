@@ -33,8 +33,8 @@ export class TestingHenriComponent {
     });
   }
 
-  public async getCourseName() {
-    this.ticket.getCourseName('1').then(response => {
+  public async getCourseName(courseID: string) {
+    this.ticket.getCourseName(courseID).then(response => {
       console.log(typeof response);
       console.log(response);
       console.log('Kurssin nimi: ' + response);
@@ -54,6 +54,13 @@ export class TestingHenriComponent {
       console.log(response);
       console.log(typeof response);
       console.log('otsikko: ' + response[0].otsikko);
+    });
+  }
+
+  public async getTicketInfo(ticketID: string) {
+    this.ticket.getTicketInfo(ticketID).then(response => {
+      console.dir(response);
+      console.log(typeof response);
     });
   }
 
