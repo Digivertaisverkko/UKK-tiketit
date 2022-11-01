@@ -24,8 +24,11 @@ export interface Course {
   ulkotunnus: number;
 }
 
-export interface CourseName {
-  'kurssi-nimi': string;
+export interface Comment {
+  'kirjoittaja-id': string;
+  pvm: string;
+  tila: number;
+  teksti: string; 
 }
 
 export interface Ticket {
@@ -37,19 +40,21 @@ export interface Ticket {
     nimi: string;
     arvo: string;
   }];
+  kommentit?: [Comment];
 }
+    
+//     {
+//     'kirjoittaja-id': string;
+//     pvm: string;
+//     tila: number;
+//     teksti: string; 
+//   }]
+// }
 
 export interface AdditionalField {
   nimi: string;
   arvo: string;
 }
-
-// export interface Ticket extends TicketBody {
-//   kentat: [{
-//     nimi: string;
-//     arvo: string;
-//   }];
-// }
 
 @Injectable({
   providedIn: 'root',
@@ -90,7 +95,7 @@ export class TicketServiceService {
     console.dir(httpOptions);
     try {
       response = await firstValueFrom(
-        this.http.get<CourseName[]>(url, httpOptions)
+        this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions)
       );
       console.log(
         'Got from "' + url + '" response: ' + JSON.stringify(response)
@@ -113,12 +118,8 @@ export class TicketServiceService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
-      response = await firstValueFrom<Course[]>(
-        this.http.get<any>(url, httpOptions)
-      );
-      console.log(
-        'Got from "' + url + '" response: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom<Course[]>(this.http.get<any>(url, httpOptions));
+      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
       console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
@@ -138,16 +139,14 @@ export class TicketServiceService {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
       );
-      console.log(
-        'Got from "' + url + '" response: ' + JSON.stringify(response)
-      );
+      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
       console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
     }
-  if (response == undefined) {
-    throw new Error('Vastausta palvelimelta ei saatu.');
-  }
+    if (response == undefined) {
+      throw new Error('Vastausta palvelimelta ei saatu.');
+    }
     if (response?.success == false) {
       throw new Error('Request denied. Error message: ' + response.error);
     }
@@ -163,25 +162,44 @@ export class TicketServiceService {
       response = await firstValueFrom(
         this.http.get<Ticket>(url, httpOptions)
       );
-      console.log(
-        'Got from "' + url + '" response: ' + JSON.stringify(response)
-      );
+      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
       console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == false) {
+    if (response == undefined) {
+      throw new Error('Vastausta palvelimelta ei saatu.');
+    };
+    if (response?.success == false) {
       throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
     }
     ticket = response[0];
     response = await this.getAdditionalFields(ticketID, httpOptions);
-    if (response !== undefined) {
-    // let additionalFields: AdditionalField[] = response;
-    // if (additionalFields.length > 0) {
-      ticket.kentat = response;
-    // }
-    };
-    return ticket;
+    ticket.kentat = response;
+
+    response = await this.getComments(ticketID, httpOptions);
+    ticket.kommentit = response;
+    return ticket
+  }
+
+  private async getComments(ticketID: string, httpOptions: object): Promise<Comment[]> {
+    let response: any;
+    let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
+    try {
+      response = await firstValueFrom<Comment[]>(
+        this.http.get<any>(url, httpOptions)
+      );
+      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
+      console.log(typeof response);
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response == undefined ) {
+      throw new Error("Error. Didn't get response from server.");
+    } else if (response?.success == false) {
+      throw new Error('Request to ' + url + ' unsuccesfulll. Error message: ' + response.error.virheilmoitus);
+    }
+    return response;
   }
 
   private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<AdditionalField[]> {
@@ -191,14 +209,14 @@ export class TicketServiceService {
       response = await firstValueFrom<AdditionalField[]>(
         this.http.get<any>(url, httpOptions)
       );
-      console.log(
-        'Got from "' + url + '" response: ' + JSON.stringify(response)
-      );
+      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
       console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == false) {
+    if (response == undefined ) {
+      throw new Error("Error. Didn't get response from server.");
+    } else if (response.success == false) {
       throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
     }
     return response;
