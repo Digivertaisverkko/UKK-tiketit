@@ -21,16 +21,15 @@ export interface Question {
 export interface Course {
   id: string;
   nimi: string;
-  ulkotunnus: number;
 }
 
 export interface Comment {
-  'kirjoittaja-id': string;
   aikaleima: Date;
-  tila: number;
-  teksti: string; 
+  lahettaja: string;
+  viesti: string; 
 }
 
+// Kentät ja kommentit ovat valinnaisia, koska ne haetaan omilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
   viesti: string;
@@ -42,14 +41,6 @@ export interface Ticket {
   }];
   kommentit?: [Comment];
 }
-    
-//     {
-//     'kirjoittaja-id': string;
-//     pvm: string;
-//     tila: number;
-//     teksti: string; 
-//   }]
-// }
 
 export interface AdditionalField {
   nimi: string;
@@ -104,11 +95,9 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == false) {
-      throw new Error('Request denied. Error message: ' + response.error);
-    }
+    this.checkErrors(response);
     const courseName = response['nimi'];
-;    return courseName;
+    return courseName;
   }
 
   // Palauta lista käyttäjän kursseista.
@@ -124,9 +113,7 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == false) {
-      throw new Error('Request denied. Error message: ' + response.error);
-    }
+    this.checkErrors(response);
     return response;
   }
 
@@ -144,12 +131,7 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response == undefined) {
-      throw new Error('Vastausta palvelimelta ei saatu.');
-    }
-    if (response?.success == false) {
-      throw new Error('Request denied. Error message: ' + response.error);
-    }
+    this.checkErrors(response);
     return response;
   }
 
@@ -167,12 +149,7 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response == undefined) {
-      throw new Error('Vastausta palvelimelta ei saatu.');
-    };
-    if (response?.success == false) {
-      throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
-    }
+    this.checkErrors(response);
     ticket = response[0];
     response = await this.getAdditionalFields(ticketID, httpOptions);
     ticket.kentat = response;
@@ -194,16 +171,13 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response == undefined ) {
-      throw new Error("Error. Didn't get response from server.");
-    } else if (response?.success == false) {
-      throw new Error('Request to ' + url + ' unsuccesfulll. Error message: ' + response.error.virheilmoitus);
-    }
+    this.checkErrors(response);
     let comments: Comment[];
     comments = this.arrangeComments(response);
     return comments;
   }
 
+  // Järjestä kommentit vanhimmasta uusimpaan.
   private arrangeComments(comments: Comment[]): Comment[] {
     const commentsWithDate = comments.map(comment => {
       return {...comment, aikaleima: new Date(comment.aikaleima) };
@@ -231,11 +205,7 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response == undefined ) {
-      throw new Error("Error. Didn't get response from server.");
-    } else if (response.success == false) {
-      throw new Error('Request to ' + url + ' denied. Error message: ' + response.error);
-    }
+    this.checkErrors(response);
     return response;
   }
 
@@ -269,7 +239,7 @@ export class TicketServiceService {
     return options;
   }
 
-  // Virheidenkäsittely
+  // HTTP-kutsujen virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
@@ -277,7 +247,7 @@ export class TicketServiceService {
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
-        `Palvelin palautti koodin ${error.status}, viestin runko: `,
+        `Got error with status ${error.status} and message: `,
         error.error
       );
     }
@@ -294,6 +264,21 @@ export class TicketServiceService {
     return throwError(
       () => new Error('Unable to get user questions from server.')
     );
+  }
+
+  // Palvelimelta saatujen vastauksien virheenkäsittely.
+  private checkErrors(response: any) {
+    if (response == undefined) {
+      throw new Error('Error: no response from server.');
+    }
+    if (response.success !== undefined && response.success == 'false') {
+      let errorInfo: string = '';
+      if (response.error !== undefined) {
+        const error = response.error;
+        errorInfo = "Error code: ' + error.tunnus + ', error message: ' + error.virheilmoitus";
+      }
+      throw new Error('Request to server failed.' + errorInfo);
+    }
   }
 
   // Lähetä virheviesti näkymään.
