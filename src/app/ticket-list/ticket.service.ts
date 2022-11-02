@@ -25,7 +25,7 @@ export interface Course {
 export interface Comment {
   aikaleima: Date;
   lahettaja: string;
-  viesti: string; 
+  viesti: string;
 }
 
 // Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess aomilla kutsuillaan.
@@ -144,6 +144,7 @@ export class TicketServiceService {
     return state;
   }
 
+  // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -159,7 +160,7 @@ export class TicketServiceService {
       this.handleError(error);
     }
     this.checkErrors(response);
-    ticket = response[0];
+    ticket = response;
     response = await this.getAdditionalFields(ticketID, httpOptions);
     ticket.kentat = response;
 
