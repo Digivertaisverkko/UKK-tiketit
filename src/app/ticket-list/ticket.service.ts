@@ -28,17 +28,26 @@ export interface Comment {
   viesti: string;
 }
 
-// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess aomilla kutsuillaan.
+// Field = Kenttä
+export interface Field {
+  nimi: string;
+  arvo: string;
+}
+
+// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
   viesti: string;
   'aloittaja-id': number;
   tila: string;
-  kentat?: [{
-    nimi: string;
-    arvo: string;
-  }];
-  kommentit?: [Comment];
+  kentat?: Array<Field>;
+  kommentit?: Array<Comment>;
+}
+
+export interface NewTicket {
+  otsikko: string;
+  viesti: string;
+  kentat?: Array<Field>;
 }
 
 export interface AdditionalField {
@@ -56,26 +65,49 @@ export class TicketServiceService {
 
   constructor(private http: HttpClient) {}
 
-  // Ota vastaan viestejä tästä servicestä (subscribe).
+  // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
   public onMessages(): Observable<any> {
     return this.messages$.asObservable();
   }
 
-  // Älä ota vastaan viestejä tästä servicestä.
+  // Lopeta viestien vastaanottaminen tästä servicestä.
   public unsubscribeMessage(): void {
     this.messages$.unsubscribe;
   }
 
+  // Lisää uusi tiketti.
+  public async addTicket(courseID: string, newTicket: NewTicket) {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
+    const body = newTicket;
+    console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
+    url + '"');
+    try {
+      response = await firstValueFrom(
+        this.http.post<NewTicket>(url, body, httpOptions)
+      );
+      console.log(
+        'saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    let message: string = '';
+    if (response.success == undefined) {
+      this.sendMessage('Tiketin lisäyksen onnistumisesta ei saatu vahvistusta.');
+    } else {
+      if (response.success == 'true') {
+        this.sendMessage('Tiketti lisättiin onnistuneesti');
+      } else if (response.success == 'false') {
+        this.sendMessage('Tiketin lisääminen epäonnistui');
+      }
+    }
+  }
+
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
-    let sessionID = window.sessionStorage.getItem('SESSION_ID');
-    if (sessionID == undefined) {
-      throw new Error('No session id set.');
-    }
-    console.log('session id on: ' + sessionID);
-    console.log(typeof sessionID);
     const httpOptions = this.getHttpOptions();
-    console.log('httpOptions: ' + JSON.stringify(httpOptions))
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID;
     console.dir(httpOptions);
@@ -111,7 +143,7 @@ export class TicketServiceService {
     return response;
   }
 
-  // Palauta lista käyttäjän tekemistä kysymyksistä.
+  // Palauta lista omista kysymyksistä.
   public async getQuestions(courseID: string): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -154,8 +186,8 @@ export class TicketServiceService {
       response = await firstValueFrom(
         this.http.get<Ticket>(url, httpOptions)
       );
-      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
-      console.log(typeof response);
+      console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response));
+      console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -163,13 +195,14 @@ export class TicketServiceService {
     ticket = response;
     response = await this.getAdditionalFields(ticketID, httpOptions);
     ticket.kentat = response;
-
     response = await this.getComments(ticketID, httpOptions);
+
     ticket.kommentit = response;
     return ticket
   }
 
-  private async getComments(ticketID: string, httpOptions: object): Promise<Comment[]> {
+  // Palauta listan tiketin kommenteista.
+  private async getComments(ticketID: string, httpOptions: object): Promise<Comment[]>{
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
     try {
@@ -181,7 +214,8 @@ export class TicketServiceService {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // if (Object.keys(response).length === 0) {
+    // }
     let comments: Comment[];
     comments = this.arrangeComments(response);
     return comments
@@ -230,7 +264,6 @@ export class TicketServiceService {
         'session-id': sessionID
       })
     };
-    console.log(' Palautetaan: ' + JSON.stringify(options));
     return options;
   }
 
@@ -263,21 +296,27 @@ export class TicketServiceService {
 
   // Palvelimelta saatujen vastauksien virheenkäsittely.
   private checkErrors(response: any) {
+    var message: string = '';
     if (response == undefined) {
-      throw new Error('Error: no response from server.');
+      message = 'Virhe: ei vastausta palvelimelta.';
+      this.sendMessage(message);
+      throw new Error(message);
     }
     if (response.success !== undefined && response.success == 'false') {
       let errorInfo: string = '';
       if (response.error !== undefined) {
         const error = response.error;
-        errorInfo = "Error code: ' + error.tunnus + ', error message: ' + error.virheilmoitus";
+        errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
       }
-      throw new Error('Request to server failed.' + errorInfo);
+      message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
+      this.sendMessage(message);
+      throw new Error(message);
     }
   }
 
   // Lähetä virheviesti näkymään.
   private sendMessage(message: string) {
+    console.log('ticketService: ' + message);
     this.messages$.next(message);
   }
 }

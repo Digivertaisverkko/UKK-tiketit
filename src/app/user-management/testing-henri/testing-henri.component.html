@@ -4,7 +4,8 @@
       >Testisivu</mat-card-title
     >
     <mat-card-content>
-      <mat-card-content> Vastaus: {{ response }} </mat-card-content>
+      <!-- <mat-card-content> Vastaus: {{ response }} </mat-card-content> -->
+      <mat-card-content>Vastauksen tulevat consoleen</mat-card-content>
 
       <button (click)="getCourseName('1')" class="test-button" mat-raised-button>
         Hae kurssin 1 nimi
@@ -15,8 +16,11 @@
       <button (click)="getCourses()" class="test-button" mat-raised-button>
         Hae kurssit
       </button>
-      <button (click)="getTicketInfo('1')" class="test-button" mat-raised-button>
+      <button (click)="getTicketInfo('3')" class="test-button" mat-raised-button>
         Hae yhden tiketin tiedot
+      </button>
+      <button (click)="addTicket()" class="test-button" mat-raised-button>
+        Lisää uusi tiketti
       </button>
     </mat-card-content>
   </mat-card>

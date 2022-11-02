@@ -12,6 +12,18 @@ export interface Question {
   excercise: string;
 }
 
+export interface NewTicket {
+  otsikko: string;
+  viesti: string;
+  kentat?: Array<Kentta>;
+}
+
+export interface Kentta {
+  nimi: string;
+  arvo: string;
+}
+
+
 @Component({
   selector: 'app-testing-henri',
   templateUrl: './testing-henri.component.html',
@@ -31,6 +43,19 @@ export class TestingHenriComponent {
     this.ticketMessageSubscription = this.ticket.onMessages().subscribe(message => {
       this.ticketMessage = message;
     });
+
+  }
+
+  public async addTicket() {
+    const newTicket: NewTicket = {
+      otsikko: 'Uusi tiketti',
+      viesti: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nisl dui, pulvinar mollis dapibus non, maximus sit amet tellus. Suspendisse finibus magna a tortor venenatis, faucibus consequat neque dignissim. Fusce luctus condimentum nulla, sit amet dapibus tellus interdum et. Integer consequat metus a nisi egestas, nec efficitur neque porta.',
+      kentat: [
+        { nimi: 'Tehtävä', arvo: 'Testitehtävä'},
+        { nimi: 'Ongelman tyyppi', arvo: 'Testiongelma'}
+      ]
+    }
+    this.ticket.addTicket('1', newTicket);
   }
 
   public async getCourseName(courseID: string) {
