@@ -34,6 +34,7 @@ export class TestingHenriComponent {
 
   public ticketMessage: string = '';
   public ticketMessageSubscription: Subscription;
+  public ticketID: string = '1';
 
   constructor(
     private httpTest: HttpTestingService,
@@ -75,15 +76,14 @@ export class TestingHenriComponent {
   }
 
   public async getQuestions() {
+    // 1-kurssista haetaan.
     this.ticket.getQuestions('1').then(response => {
       console.log(response);
-      console.log(typeof response);
-      console.log('otsikko: ' + response[0].otsikko);
     });
   }
 
-  public async getTicketInfo(ticketID: string) {
-    this.ticket.getTicketInfo(ticketID).then(response => {
+  public async getTicketInfo() {
+    this.ticket.getTicketInfo(this.ticketID).then(response => {
       console.dir(response);
       console.log(typeof response);
     });

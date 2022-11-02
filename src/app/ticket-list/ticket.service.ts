@@ -237,6 +237,7 @@ export class TicketServiceService {
     return commentsAscending;
   }
 
+  // Hae lisäkentät
   private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<AdditionalField[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
@@ -253,6 +254,7 @@ export class TicketServiceService {
     return response;
   }
 
+  // Palauta HttpOptions, johon on asetetttu session-id headeriin.
   private getHttpOptions(): object {
     let sessionID = window.sessionStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {

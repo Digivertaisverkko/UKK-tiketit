@@ -16,9 +16,10 @@
       <button (click)="getCourses()" class="test-button" mat-raised-button>
         Hae kurssit
       </button>
-      <button (click)="getTicketInfo('3')" class="test-button" mat-raised-button>
+      <button (click)="getTicketInfo()" class="test-button" mat-raised-button>
         Hae yhden tiketin tiedot
       </button>
+      <input placeholder="id" required name="ticketID" [(ngModel)]="ticketID" >
       <button (click)="addTicket()" class="test-button" mat-raised-button>
         Lisää uusi tiketti
       </button>
