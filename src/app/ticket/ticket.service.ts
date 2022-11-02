@@ -6,13 +6,6 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
-import { state } from '@angular/animations';
-import { getMatFormFieldMissingControlError } from '@angular/material/form-field';
-
-export interface Course {
-  id: string;
-  nimi: string;
-}
 
 export interface Comment {
   aikaleima: Date;
@@ -20,9 +13,14 @@ export interface Comment {
   viesti: string;
 }
 
-// Field = Kenttä
-export interface Field {
+export interface Course {
+  id: string;
   nimi: string;
+}
+
+// Field = Tiketin lisäkenttä
+export interface Field {
+  id: string;
   arvo: string;
 }
 
@@ -34,6 +32,20 @@ export interface Question {
 }
 
 // Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
+export interface FieldInfo {
+  id: string
+  otsikko: string
+  pakollinen: boolean
+  esitaytettava: boolean
+}
+
+export interface NewTicket {
+  otsikko: string;
+  viesti: string;
+  kentat?: Array<Field>;
+}
+
+// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
   'aloittaja-id': number;
@@ -50,12 +62,6 @@ enum Tila {
   "Kommentoitu",
   "Ratkaistu",
   "Arkistoitu"
-}
-
-export interface NewTicket {
-  otsikko: string;
-  viesti: string;
-  kentat?: Array<Field>;
 }
 
 @Injectable({
@@ -76,6 +82,27 @@ export class TicketService {
   // Lopeta viestien vastaanottaminen tästä servicestä.
   public unsubscribeMessage(): void {
     this.messages$.unsubscribe;
+  }
+
+  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
+  public async getTicketFieldInfo(courseID: string): Promise<FieldInfo[]> {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
+    console.dir(httpOptions);
+    try {
+      response = await firstValueFrom(
+        this.http.get<FieldInfo[]>(url, httpOptions)
+      );
+      console.log(
+        'Got from "' + url + '" response: ' + JSON.stringify(response)
+      );
+      console.log(typeof response);
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    this.checkErrors(response);
+    return response;
   }
 
   // Lisää uusi tiketti.
@@ -195,8 +222,7 @@ export class TicketService {
     }
     this.checkErrors(response);
     ticket = response;
-    // const numbericTila = ticket.tila;
-    response = await this.getAdditionalFields(ticketID, httpOptions);
+    response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;
     response = await this.getComments(ticketID, httpOptions);
 
@@ -241,7 +267,7 @@ export class TicketService {
   }
 
   // Hae lisäkentät
-  private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<Field[]> {
+  private async getFields(ticketID: string, httpOptions: object): Promise<Field[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {

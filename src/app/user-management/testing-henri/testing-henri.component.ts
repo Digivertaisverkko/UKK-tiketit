@@ -15,11 +15,11 @@ export interface Question {
 export interface NewTicket {
   otsikko: string;
   viesti: string;
-  kentat?: Array<Kentta>;
+  kentat?: Array<Field>;
 }
 
-export interface Kentta {
-  nimi: string;
+export interface Field {
+  id: string;
   arvo: string;
 }
 
@@ -47,13 +47,21 @@ export class TestingHenriComponent {
 
   }
 
+  public async getFieldInfo() {
+    // 1-kurssista haetaan.
+    this.ticket.getTicketFieldInfo('1').then(response => {
+      console.log(response);
+    });
+  }
+
   public async addTicket() {
+    // TODO: oikeat id-arvot.
     const newTicket: NewTicket = {
-      otsikko: 'Uusi tiketti',
-      viesti: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nisl dui, pulvinar mollis dapibus non, maximus sit amet tellus. Suspendisse finibus magna a tortor venenatis, faucibus consequat neque dignissim. Fusce luctus condimentum nulla, sit amet dapibus tellus interdum et. Integer consequat metus a nisi egestas, nec efficitur neque porta.',
+      otsikko: 'Testitiketti',
+      viesti: 'Testiviesti',
       kentat: [
-        { nimi: 'Tehtävä', arvo: 'Testitehtävä'},
-        { nimi: 'Ongelman tyyppi', arvo: 'Testiongelma'}
+        { id: '1', arvo: 'Tehtävän numero'},
+        { id: '2', arvo: 'Ongelmatyypin kuvaus'}
       ]
     }
     this.ticket.addTicket('1', newTicket);
