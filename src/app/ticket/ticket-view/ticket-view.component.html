@@ -96,4 +96,19 @@
       </p>
     </mat-card-content>
   </mat-card>
+
+  <h2>Jatka keskustelua</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Viesti</mat-label>
+    <textarea matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="5"
+              cdkAutosizeMaxRows="10"
+              required></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary">Lähetä</button>
+
 </div>
