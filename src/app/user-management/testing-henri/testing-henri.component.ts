@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpTestingService } from './http-testing.service';
-import { TicketServiceService } from 'src/app/ticket-list/ticket.service';
+import { TicketService } from 'src/app/ticket/ticket.service';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -38,7 +38,7 @@ export class TestingHenriComponent {
 
   constructor(
     private httpTest: HttpTestingService,
-    private ticket: TicketServiceService
+    private ticket: TicketService
   ) {
     this.response = '';
     this.ticketMessageSubscription = this.ticket.onMessages().subscribe(message => {

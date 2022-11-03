@@ -55,7 +55,7 @@ export interface NewTicket {
 })
 
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
-export class TicketServiceService {
+export class TicketService {
   private messages$ = new Subject<string>();
 
   constructor(private http: HttpClient) {}
