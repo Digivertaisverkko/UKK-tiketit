@@ -124,7 +124,6 @@ export class TicketService {
   // Palauta lista käyttäjän kursseista.
   public async getCourses(): Promise<Course[]> {
     const httpOptions = this.getHttpOptions();
-    console.log(JSON.stringify(httpOptions));
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
@@ -249,7 +248,7 @@ export class TicketService {
     return response;
   }
 
-  // Palauta HttpOptions, johon on asetetttu session-id headeriin.
+  // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
     let sessionID = window.sessionStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {

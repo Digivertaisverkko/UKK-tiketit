@@ -1,16 +1,24 @@
 import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
-import { SharedModule } from 'src/app/shared/shared.module';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, Sort} from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { Ticket, TicketService } from '../ticket.service';
 
 export interface PeriodicElement {
   name: string;
   position: number;
   weight: number;
   symbol: string;
+}
+
+export interface Question {
+  id: string;
+  otsikko: string;
+  pvm: Date;
+  tila: number;
+  tehtävä: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
@@ -31,18 +39,28 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss']
 })
-export class ListingComponent implements AfterViewInit {
+export class ListingComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  public questions: Question[] = [];
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
 
-  constructor(private _liveAnnouncer: LiveAnnouncer) {}
+  constructor(private _liveAnnouncer: LiveAnnouncer,
+    private ticket: TicketService) {
+      this.ticket.getQuestions('1').then( response => {
+        this.questions = response;
+      });
+    }
 
   @ViewChild(MatSort)
   sort!: MatSort;
+
+  ngOnInit() {
+
+  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
