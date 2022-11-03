@@ -4,11 +4,6 @@ import { ListingComponent } from './ticket/listing/listing.component';
 import { TestingHenriComponent } from './user-management/testing-henri/testing-henri.component';
 
 const routes: Routes = [
-<<<<<<< HEAD
-=======
-  { path: 'ListingComponent', component: ListingComponent },
-  { path: 'test', component: TestingHenriComponent }
->>>>>>> 8dc345cac5237609bbabbf83124ee252e2e6c998
 ];
 
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }

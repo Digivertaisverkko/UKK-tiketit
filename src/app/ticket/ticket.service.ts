@@ -37,7 +37,7 @@ export interface Question {
 export interface Ticket {
   otsikko: string;
   'aloittaja-id': number;
-  tila: Tila;
+  tila: string;
   kentat?: Array<Field>;
   kommentit: Array<Comment>;
 }
@@ -195,9 +195,7 @@ export class TicketService {
     }
     this.checkErrors(response);
     ticket = response;
-    const numbericTila = ticket.tila;
-    // ticket.tila = Tila.numbericTila;
-    // ticket.tila = this.getTicketState(ticket.tila);
+    // const numbericTila = ticket.tila;
     response = await this.getAdditionalFields(ticketID, httpOptions);
     ticket.kentat = response;
     response = await this.getComments(ticketID, httpOptions);
