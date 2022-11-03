@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TicketService } from '../ticket.service';
+import { TicketService, Ticket } from '../ticket.service';
 
 @Component({
   selector: 'app-ticket-view',
@@ -7,10 +7,24 @@ import { TicketService } from '../ticket.service';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit {
+  ticket: Ticket;
+  isLoaded: boolean;
 
-  constructor() {}
+  constructor(private ticketService: TicketService) {
+    this.ticket = {} as Ticket;
+    this.isLoaded = false;
+  }
 
   ngOnInit(): void {
+    this.getTicketInfo();
+  }
+
+  public ticketID: string = '1';
+
+  public async getTicketInfo() {
+    await this.ticketService.getTicketInfo(this.ticketID).then(response => {this.ticket = response});
+    console.log('kjeh' + this.ticket);
+    this.isLoaded = true;
   }
 
 }

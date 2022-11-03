@@ -41,7 +41,7 @@ export interface Ticket {
   'aloittaja-id': number;
   tila: string;
   kentat?: Array<Field>;
-  kommentit?: Array<Comment>;
+  kommentit: Array<Comment>;
 }
 
 export interface NewTicket {

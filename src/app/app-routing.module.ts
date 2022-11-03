@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListingComponent } from './ticket/listing/listing.component';
+import { TestingHenriComponent } from './user-management/testing-henri/testing-henri.component';
 
 const routes: Routes = [
-  { path: 'ListingComponent', component: ListingComponent }
+  { path: 'ListingComponent', component: ListingComponent },
+  { path: 'test', component: TestingHenriComponent }
 ];
 
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }
