@@ -39,7 +39,7 @@ export interface Ticket {
   'aloittaja-id': number;
   tila: Tila;
   kentat?: Array<Field>;
-  kommentit?: Array<Comment>;
+  kommentit: Array<Comment>;
 }
 
 enum Tila {
