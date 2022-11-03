@@ -9,14 +9,6 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import { state } from '@angular/animations';
 import { getMatFormFieldMissingControlError } from '@angular/material/form-field';
 
-export interface Question {
-  id: string;
-  otsikko: string;
-  pvm: Date;
-  tila: number;
-  tehtävä: string;
-}
-
 export interface Course {
   id: string;
   nimi: string;
@@ -34,6 +26,14 @@ export interface Field {
   arvo: string;
 }
 
+export interface Question {
+  id: string;
+  otsikko: string;
+  pvm: Date;
+  tila: number;
+  tehtävä: string;
+}
+
 // Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
@@ -48,11 +48,6 @@ export interface NewTicket {
   otsikko: string;
   viesti: string;
   kentat?: Array<Field>;
-}
-
-export interface AdditionalField {
-  nimi: string;
-  arvo: string;
 }
 
 @Injectable({
@@ -238,11 +233,11 @@ export class TicketServiceService {
   }
 
   // Hae lisäkentät
-  private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<AdditionalField[]> {
+  private async getAdditionalFields(ticketID: string, httpOptions: object): Promise<Field[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
-      response = await firstValueFrom<AdditionalField[]>(
+      response = await firstValueFrom<Field[]>(
         this.http.get<any>(url, httpOptions)
       );
       console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
