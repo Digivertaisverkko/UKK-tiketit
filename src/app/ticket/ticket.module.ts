@@ -8,6 +8,8 @@ import { TicketViewComponent } from './ticket-view/ticket-view.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { MatSortModule } from '@angular/material/sort';
 
+import { MatCardModule } from '@angular/material/card';
+
 @NgModule({
   declarations: [
     SubmitTicketComponent,
@@ -17,7 +19,8 @@ import { MatSortModule } from '@angular/material/sort';
     CommonModule,
     MatSortModule,
     TicketRoutingModule,
-    SharedModule
+    SharedModule,
+    MatCardModule
   ]
 })
 export class TicketModule { }

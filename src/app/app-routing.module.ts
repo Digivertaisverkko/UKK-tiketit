@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListingComponent } from './ticket/listing/listing.component';
 
 const routes: Routes = [
-  { path: 'ListingComponent', component: ListingComponent }
 ];
 
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }

@@ -4,21 +4,13 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Ticket, TicketService } from '../ticket.service';
+import { TicketService } from '../ticket.service';
 
 export interface PeriodicElement {
   name: string;
   position: number;
   weight: number;
   symbol: string;
-}
-
-export interface Question {
-  id: string;
-  otsikko: string;
-  pvm: Date;
-  tila: number;
-  tehtävä: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
@@ -34,6 +26,13 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
 ];
 
+export interface Question {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittaja: number;
+}
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -41,9 +40,11 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ListingComponent implements AfterViewInit, OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
-  public questions: Question[] = [];
+  displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittaja'];
+  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
+//   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  dataSource = new MatTableDataSource<Question>();
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
@@ -51,7 +52,10 @@ export class ListingComponent implements AfterViewInit, OnInit {
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private ticket: TicketService) {
       this.ticket.getQuestions('1').then( response => {
-        this.questions = response;
+        // this.dataSource = new MatTableDataSource(response);
+        this.dataSource = new MatTableDataSource<Question>(response);
+        console.log('Saatiin vastaus (alla):');
+        console.dir(response);
       });
     }
 

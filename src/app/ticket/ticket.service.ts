@@ -27,21 +27,29 @@ export interface Field {
 }
 
 export interface Question {
-  id: string;
+  id: number;
   otsikko: string;
-  pvm: Date;
-  tila: number;
-  tehtävä: string;
+  aikaleima: string;
+  aloittaja: number;
 }
 
 // Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
-  viesti: string;
   'aloittaja-id': number;
-  tila: string;
+  tila: Tila;
   kentat?: Array<Field>;
   kommentit?: Array<Comment>;
+}
+
+enum Tila {
+  "Virhetila",
+  "Lähetty",
+  "Luettu",
+  "Lisätietoa pyydetty",
+  "Kommentoitu",
+  "Ratkaistu",
+  "Arkistoitu"
 }
 
 export interface NewTicket {
@@ -187,6 +195,9 @@ export class TicketService {
     }
     this.checkErrors(response);
     ticket = response;
+    const numbericTila = ticket.tila;
+    // ticket.tila = Tila.numbericTila;
+    // ticket.tila = this.getTicketState(ticket.tila);
     response = await this.getAdditionalFields(ticketID, httpOptions);
     ticket.kentat = response;
     response = await this.getComments(ticketID, httpOptions);
