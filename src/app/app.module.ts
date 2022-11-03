@@ -10,6 +10,7 @@ import { SubmitModule } from './submit-ticket/submit.module';
 
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket-list/listing/listing.component';
+import { TicketModule } from './ticket/ticket.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ListingComponent } from './ticket-list/listing/listing.component';
     SharedModule,
     UserManagementModule,
     FrontModule,
-    SubmitModule
+    SubmitModule,
+    TicketModule
   ],
   providers: [],
   bootstrap: [AppComponent],

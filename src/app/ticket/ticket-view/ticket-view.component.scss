@@ -1,0 +1,13 @@
+.ticket-view {
+  min-width: 320px;
+  margin: auto;
+  padding: 10px;
+  background-color: white;
+
+  mat-card {
+    border-radius: 8px;
+    margin: 10px auto;
+    border-color: black;
+  }
+
+}
