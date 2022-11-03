@@ -5,7 +5,8 @@
         </button> -->
 </app-header>
 
-<div id="content" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }">
+<div id="content" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
+  class="mat-sidenav-container">
   <router-outlet></router-outlet>
 </div>
 
