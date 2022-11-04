@@ -23,8 +23,11 @@ export class HeaderComponent {
 
   public logOut() {
     this.authService.logOut();
-    this.authService.sendAskLoginRequest('own').then((response: string) => {
-      if (response !== 'error') {
+    this.authService.sendAskLoginRequest('own').then((response: any) => {
+      console.log(' header: saatiin vastaus: ' + JSON.stringify(response));
+      if (response.success !== 'error') {
+        console.log('Saatin vastaus 1. kutsuun: ' + response);
+        // const loginUrl = response['login-url'];
         this.router.navigateByUrl(response);
       }
     }).catch (error => {

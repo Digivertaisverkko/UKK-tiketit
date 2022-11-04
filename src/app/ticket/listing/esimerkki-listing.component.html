@@ -1,15 +1,19 @@
-<div style="font-size: 25px; padding-top: 5%;">Opettajille lähettämäsi kysymykset ja niiden vastaukset</div>
-<br>
 
-<div>
+  <mat-card>
+
+<!-- <div style="font-size: 25px; padding-top: 5%;">Opettajille lähettämäsi kysymykset ja niiden vastaukset</div> -->
+<mat-card-title><h1>Opettajille lähettämäsi kysymykset ja niiden vastaukset</h1></mat-card-title>
+<!-- <br> -->
+
+<p>
     <button mat-raised-button color="primary">Uusi Kysymys</button>
-</div>
+</p>
 
-<br>
-    <div style="font-size: 25px;">Omat Kysymykset</div>
-<br>
+<!-- <br>
+    <h2>Omat Kysymykset</h2>
+<br> -->
 
-<table mat-table [dataSource]="dataSource"
+<table mat-table [dataSource]="dataSource" matSort
     class="mat-elevation-z8">
 
   <!-- Position Column -->
@@ -47,3 +51,5 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+</mat-card>

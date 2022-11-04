@@ -1,0 +1,22 @@
+
+button {
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+table {
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td {
+    cursor: pointer;
+}
+
+td.mat-cell {
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: left;
+}

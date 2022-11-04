@@ -1,0 +1,54 @@
+<div class="ticket-view">
+  <h1>{{ ticket.otsikko }}</h1>
+  <p>
+    <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">Tehtävä {{ ticket.kentat[0].arvo }} </span>
+    🞄
+    <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span>
+  </p>
+
+  <mat-card class="question">
+    <mat-card-header>
+      <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja}}>
+      <mat-card-title>
+        {{ ticket.aloittaja.nimi }}
+        <span *ngIf="ticket.aloittaja.asema === 'opettaja'"> 🞄 Opettaja</span>
+      </mat-card-title>
+      <mat-card-subtitle>{{ ticket.aikaleima | date: 'short' }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{ ticket.viesti }}</p>
+      <h2>{{ tila[ticket.tila] }}</h2>
+    </mat-card-content>
+  </mat-card>
+
+  <h2>Kommentit</h2>
+
+  <mat-card class="answer" *ngFor="let comment of ticket.kommentit">
+    <mat-card-header>
+      <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja}}>
+      <mat-card-title>{{ comment.lahettaja }}</mat-card-title>
+      <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{ comment.viesti }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <h2>Jatka keskustelua</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Viesti</mat-label>
+    <textarea matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="5"
+              cdkAutosizeMaxRows="10"
+              required></textarea>
+  </mat-form-field>
+
+  <div class="ticket-view-buttons">
+    <button mat-raised-button color="primary">Lähetä</button>
+    <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a>
+  </div>
+
+</div>

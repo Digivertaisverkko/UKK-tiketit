@@ -1,0 +1,21 @@
+.ticket-view {
+  min-width: 320px;
+  margin: auto;
+  padding: 10px;
+
+  mat-card {
+    border-radius: 8px;
+    margin: 10px auto;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .ticket-view-buttons {
+    a, button {
+      margin-right: 8px;
+    }
+  }
+
+}

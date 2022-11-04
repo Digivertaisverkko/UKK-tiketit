@@ -6,7 +6,7 @@ import { TestingHenriComponent } from './testing-henri/testing-henri.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
-  { path: 'testing-henri', component: TestingHenriComponent }
+  { path: 'test', component: TestingHenriComponent }
 ];
 
 // { path: '', component: AppComponent }

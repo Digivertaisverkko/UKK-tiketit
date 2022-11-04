@@ -10,13 +10,13 @@ import cryptoRandomString from 'crypto-random-string';
 export interface LoginResponse {
   success: boolean,
   'login-code': string
- }
+}
 
- export interface AuthRequestResponse {
+export interface AuthRequestResponse {
   success: boolean,
   error: string,
   'session-id': string
- }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +71,25 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  public logOut(): void {
+  public async logOut(): Promise<any> {
+
+    const sessionID = window.sessionStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      throw new Error('Session ID not found.');
+    }
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'session-id': sessionID
+      })
+    }
+    let response: any;
+    let url = environment.apiBaseUrl + '/kirjaudu-ulos';
+    try {
+      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
+    } catch (error: any) {
+      this.handleError(error);
+    }
     this.isUserLoggedIn$.next(false);
     window.sessionStorage.clear();
   }
@@ -95,9 +113,9 @@ export class AuthService {
         'code-challenge': this.codeChallenge
       })
     };
-   // console.log(httpOptions);
-   let response: any;
-   try {
+    // console.log(httpOptions);
+    let response: any;
+    try {
       console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
       // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
@@ -105,12 +123,12 @@ export class AuthService {
       this.handleError(error);
     }
     const loginUrl = response['login-url'];
-    // console.log('loginurl : ' +loginUrl);
-   if (loginUrl.length == 0) {
+    console.log('loginurl : ' +loginUrl);
+    if (loginUrl.length == 0) {
     console.error("Server didn't retrieve login url.");
     return 'error';
-   }
-   return loginUrl;
+    }
+    return loginUrl;
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
@@ -127,10 +145,9 @@ export class AuthService {
     try {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       console.log(httpOptions.headers);
-       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-       console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
+      response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
+      console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
-      console.log(' virhe lähetyksessä');
       this.handleError(error);
     }
     if (response.success == true) {
@@ -175,8 +192,9 @@ export class AuthService {
       console.log('Vastaus: ' + JSON.stringify(response));
       // let sessionID = response['login-id'];
       console.log('vastauksen sisältöä: ');
-      // let loginIDobject = response['login-id'][0];
-      let sessionID = response['sessionid'];
+
+      let sessionID = response['session-id'];
+      console.log(' -- session ID on ' + sessionID);
       this.saveSessionStatus(sessionID);
       console.log('Authorization success.');
     } else {
@@ -188,6 +206,7 @@ export class AuthService {
   public saveSessionStatus(sessionID: string) {
     this.isUserLoggedIn$.next(true);
     window.sessionStorage.setItem('SESSION_ID', sessionID);
+    console.log('tallennettiin sessionid: ' + sessionID);
   }
 
   // Näytä sendAskLoginRequest:n liittyviä logeja.

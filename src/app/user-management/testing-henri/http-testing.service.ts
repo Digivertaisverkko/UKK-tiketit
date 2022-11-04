@@ -29,7 +29,7 @@ export class HttpTestingService {
         `Backend returned code ${error.status}, body was: `, error.error);
     }
     // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Guru meditation error.'));
+    return throwError(() => new Error('HTTP request failed.'));
   }
 
 }
