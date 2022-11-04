@@ -48,12 +48,12 @@ export interface NewTicket {
 // Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
 export interface Ticket {
   otsikko: string;
-  'aloittaja-id': number;
+  aloittaja: number;
   tila: number;
   kentat?: Array<Field>;
   viesti: string;
   aikaleima: Date;
-  kommentit: Array<Comment>;
+  kommentit?: Array<Comment>;
 }
 
 export enum Tila {
@@ -234,7 +234,6 @@ export class TicketService {
 
     console.log('Lopullinen tiketti alla:');
     console.log(response);
-    console.log('Kommenttien lukumäärä: ' + ticket.kommentit.length);
     return ticket
   }
 
