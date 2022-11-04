@@ -9,7 +9,12 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 
 export interface Comment {
   aikaleima: Date;
-  lahettaja: string;
+  lahettaja: { 
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
   viesti: string;
 }
 
