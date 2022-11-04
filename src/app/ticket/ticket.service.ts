@@ -345,7 +345,7 @@ export class TicketService {
       this.sendMessage(message);
       throw new Error(message);
     }
-    if (response.success !== undefined && response.success == 'false') {
+    if (response.error !== undefined && response.error.success == 'false') {
       let errorInfo: string = '';
       if (response.error !== undefined) {
         const error = response.error;

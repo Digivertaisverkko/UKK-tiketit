@@ -105,7 +105,7 @@ export class AuthService {
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
-    this.logBeforeLogin();
+    // this.logBeforeLogin();
     let url: string = environment.ownAskLoginUrl;
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -116,18 +116,28 @@ export class AuthService {
     // console.log(httpOptions);
     let response: any;
     try {
-      console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
+      console.log('authService: saatiin vastaus POST pyyntöön URL:iin ' + url + ' :' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-    const loginUrl = response['login-url'];
-    console.log('loginurl : ' +loginUrl);
-    if (loginUrl.length == 0) {
-    console.error("Server didn't retrieve login url.");
-    return 'error';
+    var message: string = '';
+    if (response == undefined) {
+      message = 'Virhe: ei vastausta palvelimelta.';
+      this.sendErrorMessage(message);
+      return new Error(message);
     }
+    if (response.error !== undefined && response.error.success == 'false') {
+      let errorInfo: string = '';
+      const error = response.error;
+      errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
+      message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
+      this.sendErrorMessage(message);
+      return new Error(message);
+    }
+    // this.checkErrors(response);
+    const loginUrl = response['login-url'];
+    console.log('authService.sendAskLoginRequest: URL on ' +loginUrl);
     return loginUrl;
   }
 
@@ -146,17 +156,17 @@ export class AuthService {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       console.log(httpOptions.headers);
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
+      console.log('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
     if (response.success == true) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
-      console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
+      console.log('lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
-      console.error("Login authorization not succesful.");
+      console.error("Kirjautuminen epäonnistunui.");
       if (response)
       this.sendErrorMessage("(ei virheviestä)");
 
@@ -178,12 +188,8 @@ export class AuthService {
     const url = environment.ownTokenUrl;
     let response: any;
     try {
-      console.log('Lähetetään auth-request headereilla: ');
-      console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
-      console.log('sendAuthRequest: got response: ');
-      console.log(JSON.stringify(response));
-      console.dir(response);
+      console.log('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -256,7 +262,7 @@ export class AuthService {
       return url.protocol === "http:" || url.protocol === "https:";
     }
 
-  // Virheidenkäsittely
+  // HTTP kutsujen virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
@@ -278,6 +284,26 @@ export class AuthService {
     this.sendErrorMessage(message);
     return throwError(() => new Error("Unable to continue authentication."));
   }
+
+    // Palvelimelta saatujen vastauksien virheenkäsittely.
+    private checkErrors(response: any) {
+      var message: string = '';
+      if (response == undefined) {
+        message = 'Virhe: ei vastausta palvelimelta.';
+        this.sendErrorMessage(message);
+        throw new Error(message);
+      }
+      if (response.error !== undefined && response.error.success == 'false') {
+        let errorInfo: string = '';
+        if (response.error !== undefined) {
+          const error = response.error;
+          errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
+        }
+        message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
+        this.sendErrorMessage(message);
+        throw new Error(message);
+      }
+    }
 
   // Show logs before login.
   private logBeforeLogin() {
