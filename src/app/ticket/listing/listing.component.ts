@@ -71,5 +71,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
     console.log('Koitetaan routea: '+ url);
     this.router.navigateByUrl(url);
   }
-
+  
+  goSendTicket() {
+    this.router.navigateByUrl('submit');
+  }
 }
