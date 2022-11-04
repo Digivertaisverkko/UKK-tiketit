@@ -1,4 +1,4 @@
-<div *ngIf="isLoaded" class="ticket-view">
+<div class="ticket-view">
   <h1>{{ ticket.otsikko }}</h1>
   <p>Kotitehtävä 2 🞄 Epäselvä tehtävänanto</p>
 
@@ -10,7 +10,7 @@
     </mat-card-header>
     <mat-card-content>
       <p>{{ ticket.kommentit[0].viesti }}</p>
-      <h2>{{ ticket.tila }}</h2>
+      <h2>{{ getTila(ticket.tila) }}</h2>
     </mat-card-content>
   </mat-card>
 

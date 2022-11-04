@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TicketService, Ticket } from '../ticket.service';
+import { TicketService, Ticket, Tila } from '../ticket.service';
 
 @Component({
   selector: 'app-ticket-view',
@@ -8,23 +8,19 @@ import { TicketService, Ticket } from '../ticket.service';
 })
 export class TicketViewComponent implements OnInit {
   ticket: Ticket;
-  isLoaded: boolean;
 
   constructor(private ticketService: TicketService) {
     this.ticket = {} as Ticket;
-    this.isLoaded = false;
   }
 
   ngOnInit(): void {
-    this.getTicketInfo();
+    this.ticketService.getTicketInfo(this.ticketID).then(response => {this.ticket = response});
   }
 
-  public ticketID: string = '1';
+  public ticketID: string = '3';
 
-  public async getTicketInfo() {
-    await this.ticketService.getTicketInfo(this.ticketID).then(response => {this.ticket = response});
-    console.log('kjeh' + this.ticket);
-    this.isLoaded = true;
+  public getTila(tilaNum: number): string {
+    return Tila[tilaNum];
   }
 
 }
