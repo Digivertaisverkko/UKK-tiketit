@@ -8,7 +8,7 @@ import { ListingComponent } from './listing/listing.component';
 const routes: Routes = [
   { path: 'ticket-view', component: TicketViewComponent },
   { path: 'submit', component: SubmitTicketComponent},
-  { path: 'list-ticket', component: ListingComponent }
+  { path: 'list-tickets', component: ListingComponent }
 ];
 
 @NgModule({
