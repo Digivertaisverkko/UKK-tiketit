@@ -21,6 +21,10 @@ export class HeaderComponent {
 
   }
 
+  public goToFrontPage() {
+    this.router.navigateByUrl('/list-tickets');
+  }
+
   public logOut() {
     this.authService.logOut();
     this.authService.sendAskLoginRequest('own').then((response: any) => {
