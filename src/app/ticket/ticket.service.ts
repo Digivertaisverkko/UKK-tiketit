@@ -51,6 +51,7 @@ export interface Ticket {
   'aloittaja-id': number;
   tila: number;
   kentat?: Array<Field>;
+  viesti: string;
   kommentit: Array<Comment>;
 }
 
@@ -209,24 +210,29 @@ export class TicketService {
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
     const httpOptions = this.getHttpOptions();
     let response: any;
-    let ticket: Ticket;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(
         this.http.get<Ticket>(url, httpOptions)
       );
-      console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response));
+      console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response) + ' . Vastaus myös alla.');
       console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
     this.checkErrors(response);
-    ticket = response;
+    let ticket: Ticket = response;
     response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;
-    response = await this.getComments(ticketID, httpOptions);
-
+    response  = await this.getComments(ticketID, httpOptions);
+    // Tiketin viestin sisältö on palautuksen ensimmäinen kommentti.
+    ticket.viesti = response[0].viesti;
+    response.shift();
     ticket.kommentit = response;
+
+    console.log('Lopullinen tiketti alla:');
+    console.log(response);
+    console.log('Kommenttien lukumäärä: ' + ticket.kommentit.length);
     return ticket
   }
 
@@ -239,7 +245,7 @@ export class TicketService {
         this.http.get<any>(url, httpOptions)
       );
       console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
-      console.log(typeof response);
+      console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }

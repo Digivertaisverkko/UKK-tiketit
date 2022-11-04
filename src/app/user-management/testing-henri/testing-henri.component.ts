@@ -94,7 +94,6 @@ export class TestingHenriComponent {
   public async getTicketInfo() {
     this.ticket.getTicketInfo(this.ticketID).then(response => {
       console.dir(response);
-      console.log(typeof response);
       console.log('Tiketin tila: ' + Tila[response.tila]);
     });
   }
