@@ -52,6 +52,7 @@ export interface Ticket {
   tila: number;
   kentat?: Array<Field>;
   viesti: string;
+  aikaleima: Date;
   kommentit: Array<Comment>;
 }
 
@@ -227,6 +228,7 @@ export class TicketService {
     response  = await this.getComments(ticketID, httpOptions);
     // Tiketin viestin sisältö on palautuksen ensimmäinen kommentti.
     ticket.viesti = response[0].viesti;
+    ticket.aikaleima = response[0].aikaleima;
     response.shift();
     ticket.kommentit = response;
 

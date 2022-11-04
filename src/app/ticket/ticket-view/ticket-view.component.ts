@@ -18,6 +18,6 @@ export class TicketViewComponent implements OnInit {
     this.ticketService.getTicketInfo(this.ticketID).then(response => {this.ticket = response});
   }
 
-  public ticketID: string = '3';
+  public ticketID: string = '1';
 
 }
