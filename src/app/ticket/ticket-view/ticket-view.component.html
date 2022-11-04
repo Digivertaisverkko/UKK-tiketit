@@ -1,6 +1,10 @@
 <div class="ticket-view">
   <h1>{{ ticket.otsikko }}</h1>
-  <p>Kotitehtävä 2 🞄 Epäselvä tehtävänanto</p>
+  <p>
+    <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">Tehtävä {{ ticket.kentat[0].arvo }} </span>
+    🞄
+    <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span>
+  </p>
 
   <mat-card class="question">
     <mat-card-header>
