@@ -52,6 +52,7 @@ export interface Ticket {
   aikaleima: string;
   aloittaja: {
     id: number;
+    nimi: string;
     sposti: string;
     asema: string;
   }

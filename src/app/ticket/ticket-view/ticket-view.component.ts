@@ -15,7 +15,7 @@ export class TicketViewComponent implements OnInit {
     private ticketService: TicketService,
     private route: ActivatedRoute
     ) {
-    this.ticket = {} as Ticket;
+      this.ticket = {} as Ticket;
   }
 
   ngOnInit(): void {

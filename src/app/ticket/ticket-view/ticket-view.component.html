@@ -9,7 +9,10 @@
   <mat-card class="question">
     <mat-card-header>
       <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja}}>
-      <mat-card-title>{{ ticket.aloittaja }}</mat-card-title>
+      <mat-card-title>
+        {{ ticket.aloittaja.nimi }}
+        <span *ngIf="ticket.aloittaja.asema === 'opettaja'"> 🞄 Opettaja</span>
+      </mat-card-title>
       <mat-card-subtitle>{{ ticket.aikaleima | date: 'short' }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
