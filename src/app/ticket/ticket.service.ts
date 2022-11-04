@@ -47,13 +47,18 @@ export interface NewTicket {
 
 // Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
 export interface Ticket {
+  id: number;
   otsikko: string;
-  aloittaja: number;
+  aikaleima: string;
+  aloittaja: {
+    id: number;
+    sposti: string;
+    asema: string;
+  }
   tila: number;
   kentat?: Array<Field>;
   viesti: string;
-  aikaleima: Date;
-  kommentit?: Array<Comment>;
+  kommentit: Array<Comment>;
 }
 
 export enum Tila {
@@ -228,12 +233,11 @@ export class TicketService {
     response  = await this.getComments(ticketID, httpOptions);
     // Tiketin viestin sisältö on palautuksen ensimmäinen kommentti.
     ticket.viesti = response[0].viesti;
-    ticket.aikaleima = response[0].aikaleima;
     response.shift();
     ticket.kommentit = response;
 
     console.log('Lopullinen tiketti alla:');
-    console.log(response);
+    console.log(ticket);
     return ticket
   }
 
