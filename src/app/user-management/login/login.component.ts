@@ -81,11 +81,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
         if (params['loginid'] === undefined) {
-          console.log('loginComponent: Ei löydetty (vielä) loginid:ä.');
+          console.log('loginComponent: Ei löydetty (vielä) URL:sta loginid:ä.');
           // throw new Error('loginComponent: Ei ole palvelimelta saatua login ID:ä, kirjautumista ei voida jatkaa.');
         } else {
           this.loginID = params['loginid'];
-          console.log('loginComponent: asetettiin loginID: ' + this.loginID + '. Valmiina kirjautumiseen');
+          console.log('loginComponent: asetettiin loginID: ' + this.loginID + '. Valmiina kirjautumiseen.');
         }
       },
       error: (error) => {
