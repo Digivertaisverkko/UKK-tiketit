@@ -49,12 +49,12 @@ export interface NewTicket {
 export interface Ticket {
   otsikko: string;
   'aloittaja-id': number;
-  tila: string;
+  tila: number;
   kentat?: Array<Field>;
   kommentit: Array<Comment>;
 }
 
-enum Tila {
+export enum Tila {
   "Virhetila",
   "Lähetty",
   "Luettu",
