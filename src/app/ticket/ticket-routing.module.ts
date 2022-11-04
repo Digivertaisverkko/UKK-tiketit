@@ -6,7 +6,7 @@ import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { ListingComponent } from './listing/listing.component';
 
 const routes: Routes = [
-  { path: 'ticket-view', component: TicketViewComponent },
+  { path: 'ticket-view/:id', component: TicketViewComponent },
   { path: 'submit', component: SubmitTicketComponent},
   { path: 'list-tickets', component: ListingComponent }
 ];
