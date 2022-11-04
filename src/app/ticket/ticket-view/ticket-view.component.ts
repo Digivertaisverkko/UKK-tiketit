@@ -8,6 +8,7 @@ import { TicketService, Ticket, Tila } from '../ticket.service';
 })
 export class TicketViewComponent implements OnInit {
   ticket: Ticket;
+  tila: typeof Tila = Tila;
 
   constructor(private ticketService: TicketService) {
     this.ticket = {} as Ticket;
@@ -18,9 +19,5 @@ export class TicketViewComponent implements OnInit {
   }
 
   public ticketID: string = '3';
-
-  public getTila(tilaNum: number): string {
-    return Tila[tilaNum];
-  }
 
 }
