@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
       this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
         if (isLoggedIn === true) {
-          this.router.navigateByUrl('/front');
+          this.router.navigateByUrl('/list-tickets');
         }
       })
   }
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public loginWithoutAuth(): void {
     this.authService.saveSessionStatus('123456789');
     this.authService.isUserLoggedIn$.next(true);
-    this.router.navigateByUrl('/front');
+    this.router.navigateByUrl('/list-tickets');
   }
 
   private setLoginID() {

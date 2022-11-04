@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { TicketService } from '../ticket.service';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 export interface Question {
   id: number;
@@ -21,14 +23,17 @@ export interface Question {
 export class ListingComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittaja'];
+ ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
 
   dataSource = new MatTableDataSource<Question>();
+  userID = '3';
   // dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
 
   constructor(private _liveAnnouncer: LiveAnnouncer,
+    private router: Router,
     private ticket: TicketService) {
       this.ticket.getQuestions('1').then( response => {
         // this.dataSource = new MatTableDataSource(response);
@@ -59,6 +64,12 @@ export class ListingComponent implements AfterViewInit, OnInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  goTicketView(ticketID: number) {
+    let url: string = '/ticket-view/' + ticketID;
+    console.log('Koitetaan routea: '+ url);
+    this.router.navigateByUrl(url);
   }
 
 }
