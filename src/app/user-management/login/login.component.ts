@@ -73,6 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public loginWithoutAuth(): void {
     this.authService.saveSessionStatus('123456789');
+    console.log('Tehdään satunnainen session id. Huom. palvelin-kutsut eivät tule toimimaan.');
     this.authService.isUserLoggedIn$.next(true);
     this.router.navigateByUrl('/list-tickets');
   }
