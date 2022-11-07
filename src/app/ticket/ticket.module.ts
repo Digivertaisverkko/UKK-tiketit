@@ -10,10 +10,13 @@ import { MatSortModule } from '@angular/material/sort';
 
 import { MatCardModule } from '@angular/material/card';
 
+import { EsimerkkiListingComponent } from './listing/esimerkki-listing.component';
+
 @NgModule({
   declarations: [
     SubmitTicketComponent,
-    TicketViewComponent
+    TicketViewComponent,
+    EsimerkkiListingComponent
   ],
   imports: [
     CommonModule,
