@@ -9,7 +9,12 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 
 export interface Comment {
   aikaleima: Date;
-  lahettaja: string;
+  lahettaja: { 
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
   viesti: string;
 }
 
@@ -92,6 +97,39 @@ export class TicketService {
     this.messages$.unsubscribe;
   }
 
+  // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
+  public async addComment(ticketID: string, message: string): Promise<boolean> {
+    if (isNaN(Number(ticketID))) {
+      throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
+    }
+    const httpOptions = this.getHttpOptions();
+    const body: object =  {
+      viesti: message
+    }
+    let response: any;
+    console.log('message: ' + body);
+    let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
+    console.dir(httpOptions);
+    try {
+      response = await firstValueFrom(
+        this.http.post<object>(url, body, httpOptions)
+      );
+      console.log(
+        'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    this.checkErrors(response);
+    if (response.success !== undefined && response.success == true) {
+      this.sendMessage('Kommentin lisääminen tikettiin onnistui.');
+      return true;
+    } else {
+      this.sendMessage('Kommentin lisääminen tikettiin epäonnistui.');
+      return false;
+    }
+  }
+
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string): Promise<FieldInfo[]> {
     const httpOptions = this.getHttpOptions();
@@ -103,7 +141,7 @@ export class TicketService {
         this.http.get<FieldInfo[]>(url, httpOptions)
       );
       console.log(
-        'Got from "' + url + '" response: ' + JSON.stringify(response)
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
       console.log(typeof response);
     } catch (error: any) {
@@ -154,7 +192,7 @@ export class TicketService {
         this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions)
       );
       console.log(
-        'Got from "' + url + '" response: ' + JSON.stringify(response)
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
       console.log(typeof response);
     } catch (error: any) {
@@ -171,8 +209,9 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/kurssit';
     try {
       response = await firstValueFrom<Course[]>(this.http.get<any>(url, httpOptions));
-      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
-      console.log(typeof response);
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -189,8 +228,9 @@ export class TicketService {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
       );
-      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
-      console.log(typeof response);
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -198,20 +238,21 @@ export class TicketService {
     return response;
   }
 
-  public getTicketState(stateNumber: number): string {
-    let state: string = '';
-    switch (stateNumber) {
-      case 0: state = "Virhetila"; break;
-      case 1: state = "Lähetty"; break;
-      case 2: state = "Luettu"; break;
-      case 3: state = "Lisätietoa pyydetty"; break;
-      case 4: state = "Kommentoitu"; break;
-      case 5: state = "Ratkaistu"; break;
-      case 6: state = "Arkistoitu"; break;
-      default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
-    }
-    return state;
-  }
+  // Ei tarvita: käytä Tila: enum tämän sijaan.
+  // public getTicketState(stateNumber: number): string {
+  //   let state: string = '';
+  //   switch (stateNumber) {
+  //     case 0: state = "Virhetila"; break;
+  //     case 1: state = "Lähetty"; break;
+  //     case 2: state = "Luettu"; break;
+  //     case 3: state = "Lisätietoa pyydetty"; break;
+  //     case 4: state = "Kommentoitu"; break;
+  //     case 5: state = "Ratkaistu"; break;
+  //     case 6: state = "Arkistoitu"; break;
+  //     default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
+  //   }
+  //   return state;
+  // }
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
@@ -286,8 +327,9 @@ export class TicketService {
       response = await firstValueFrom<Field[]>(
         this.http.get<any>(url, httpOptions)
       );
-      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
-      console.log(typeof response);
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -314,11 +356,11 @@ export class TicketService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
-      console.error('An error occurred:', error.error);
+      console.error('Virhe tapahtui:', error.error);
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
-        `Got error with status ${error.status} and message: `,
+        `Saatiin virhe tilakoodilla ${error.status} ja viestillä: `,
         error.error
       );
     }
@@ -333,7 +375,7 @@ export class TicketService {
     }
     this.sendMessage(message);
     return throwError(
-      () => new Error('Unable to get user questions from server.')
+      () => new Error(message)
     );
   }
 
@@ -345,7 +387,7 @@ export class TicketService {
       this.sendMessage(message);
       throw new Error(message);
     }
-    if (response.success !== undefined && response.success == 'false') {
+    if (response.error !== undefined && response.error.success == false) {
       let errorInfo: string = '';
       if (response.error !== undefined) {
         const error = response.error;
