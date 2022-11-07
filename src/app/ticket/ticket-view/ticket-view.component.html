@@ -25,8 +25,11 @@
 
   <mat-card class="answer" *ngFor="let comment of ticket.kommentit">
     <mat-card-header>
-      <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja}}>
-      <mat-card-title>{{ comment.lahettaja }}</mat-card-title>
+      <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
+      <mat-card-title>
+        {{ comment.lahettaja.nimi }}
+        <span *ngIf="comment.lahettaja.asema === 'opettaja'"> 🞄 Opettaja</span>
+      </mat-card-title>
       <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
