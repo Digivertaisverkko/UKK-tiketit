@@ -2,7 +2,7 @@
    esim. ng build --configuration production.
 */
 
-const baseUrl ='https://dvv-tiketti-backend.azurewebsites.net';
+const baseUrl ='https://dvv-tiketti-backend.azurewebsites.net/api';
 
 export const environment = {
   production: true,
