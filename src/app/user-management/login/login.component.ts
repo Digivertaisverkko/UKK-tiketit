@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .onErrorMessages()
       .subscribe((message) => {
         if (message) {
-          console.log('Got message ' + message);
           this.serverErrorMessage = message;
         } else {
           // Poista viestit, jos saadaan tyhjä viesti.

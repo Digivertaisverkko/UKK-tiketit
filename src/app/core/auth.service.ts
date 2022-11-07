@@ -117,7 +117,6 @@ export class AuthService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus POST pyyntöön URL:iin ' + url + ' :' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -136,9 +135,16 @@ export class AuthService {
       return new Error(message);
     }
     // this.checkErrors(response);
-    const loginUrl = response['login-url'];
-    console.log('authService.sendAskLoginRequest: URL on ' +loginUrl);
+    if (response['login-url'] !== undefined) {
+      const loginUrl = response['login-url'];
+      console.log('authService: saatiin vastaus POST pyyntöön URL:iin ' + url + ' :' + JSON.stringify(response), 'green');
+      this.colorTrace('Yhteydenotto palvelimeen onnistui.', 'green');
     return loginUrl;
+    } else {
+      let message = 'Yhteydenotto palvelimeen ei onnistunut.';
+      this.sendErrorMessage(message);
+      throw new Error(message);
+    }
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
@@ -156,7 +162,7 @@ export class AuthService {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       console.log(httpOptions.headers);
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
+      this.colorTrace('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response), 'green');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -175,6 +181,10 @@ export class AuthService {
       // this.sendErrorMessage(response.error);
     }
   }
+
+  private colorTrace(msg: string, color: string) {
+    console.log("%c" + msg, "color:" + color + ";font-weight:bold;");
+}
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
   private async sendAuthRequest(codeVerifier: string, loginCode: string) {
@@ -266,11 +276,11 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
-      console.error('An error occurred:', error.error);
+      console.error('Virhe tapahtui:', error.error);
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
+        `Palvelin palautti virhetilan ${error.status}, viesti oli: `, error.error);
     }
     let message = "Yhteydenotto palvelimeen ei onnistunut.";
     if (error !== undefined) {
@@ -282,7 +292,7 @@ export class AuthService {
       }
     }
     this.sendErrorMessage(message);
-    return throwError(() => new Error("Unable to continue authentication."));
+    return throwError(() => new Error(message));
   }
 
     // Palvelimelta saatujen vastauksien virheenkäsittely.
