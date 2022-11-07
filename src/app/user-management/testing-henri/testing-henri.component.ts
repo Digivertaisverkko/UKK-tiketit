@@ -98,6 +98,10 @@ export class TestingHenriComponent {
     });
   }
 
+  public async addComment() {
+    this.ticket.addComment('6', "Tämä on toinen kommentti");
+  }
+
   public async makeTest() {
     let response: any;
     this.httpTest
