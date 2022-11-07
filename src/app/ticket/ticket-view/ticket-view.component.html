@@ -41,7 +41,9 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Viesti</mat-label>
-    <textarea matInput
+    <textarea name="commentText"
+              [(ngModel)]="commentText"
+              matInput
               cdkTextareaAutosize
               #autosize="cdkTextareaAutosize"
               cdkAutosizeMinRows="5"
@@ -50,7 +52,10 @@
   </mat-form-field>
 
   <div class="ticket-view-buttons">
-    <button mat-raised-button color="primary">Lähetä</button>
+    <button
+      mat-raised-button color="primary"
+      [disabled]="commentText.length < 1"
+      (click)="sendComment()">Lähetä</button>
     <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a>
   </div>
 

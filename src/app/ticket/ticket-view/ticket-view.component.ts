@@ -10,6 +10,7 @@ import { TicketService, Ticket, Tila } from '../ticket.service';
 export class TicketViewComponent implements OnInit {
   ticket: Ticket;
   tila: typeof Tila = Tila;
+  commentText: string = '';
 
   constructor(
     private ticketService: TicketService,
@@ -23,5 +24,9 @@ export class TicketViewComponent implements OnInit {
   }
 
   public ticketID: string = String(this.route.snapshot.paramMap.get('id'));
+
+  public sendComment(): void {
+    this.ticketService.addComment(this.ticketID, this.commentText);
+  }
 
 }
