@@ -8,7 +8,7 @@
 
   <mat-card class="question">
     <mat-card-header>
-      <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja}}>
+      <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja.nimi}}>
       <mat-card-title>
         {{ ticket.aloittaja.nimi }}
         <span *ngIf="ticket.aloittaja.asema === 'opettaja'"> 🞄 Opettaja</span>
