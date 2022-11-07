@@ -33,7 +33,12 @@ export interface Question {
   id: number;
   otsikko: string;
   aikaleima: string;
-  aloittaja: number;
+  aloittaja: {
+    id: number,
+    nimi: string;
+    sposti: string;
+    asema: string;
+  };
 }
 
 // Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
@@ -399,7 +404,7 @@ export class TicketService {
     }
   }
 
-  // Lähetä virheviesti näkymään.
+  // Lähetä virheviesti komponenttiin ja consoleen.
   private sendMessage(message: string) {
     console.log('ticketService: ' + message);
     this.messages$.next(message);
