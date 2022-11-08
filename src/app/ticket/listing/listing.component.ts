@@ -35,12 +35,17 @@ export interface Sortable {
 
 // ]
 
+const emptyData: Array<Sortable> = [
+  { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
+]
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss']
 })
 export class ListingComponent implements AfterViewInit, OnInit {
+  // dataSource:any = [{}];
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
   displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittajanNimi'];
@@ -57,22 +62,23 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private ticket: TicketService) {
     this.ticket.getQuestions(this.courseID).then(response => {
 
-      this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => ({
-        id: id,
-        otsikko: otsikko,
-        aikaleima: aikaleima,
-        aloittajanNimi: aloittaja.nimi
-      }
+      this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => (
+        {
+          id: id,
+          otsikko: otsikko,
+          aikaleima: aikaleima,
+          aloittajanNimi: aloittaja.nimi
+        }
       )))
 
 
-        // console.log('Saatiin vastaus (alla):');
-        // console.dir(SortableData);
-      }).then( response =>
-        console.dir(this.dataSource)
-      );
-      // this.dataSource = new MatTableDataSource(DATA);
-    }
+      // console.log('Saatiin vastaus (alla):');
+      // console.dir(SortableData);
+    }).then(response =>
+      console.dir(this.dataSource)
+    );
+    // this.dataSource = new MatTableDataSource(DATA);
+  }
 
   @ViewChild(MatSort)
   sort!: MatSort;

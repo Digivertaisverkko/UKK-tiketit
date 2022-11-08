@@ -15,8 +15,14 @@ td {
     cursor: pointer;
 }
 
-td.mat-cell {
+td.mat-cell, .mat-header-cell {
     padding-left: 1em;
     padding-right: 1em;
     text-align: left;
 }
+
+// .mat-header-cell {
+//     padding-left: 1em;
+//     padding-right: 1em;
+//     text-align: left;
+// }

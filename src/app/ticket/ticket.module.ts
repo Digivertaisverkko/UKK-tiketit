@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -11,6 +11,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 
 import { EsimerkkiListingComponent } from './listing/esimerkki-listing.component';
+import localeFi from '@angular/common/locales/fi';
+registerLocaleData(localeFi);
 
 @NgModule({
   declarations: [
@@ -24,6 +26,9 @@ import { EsimerkkiListingComponent } from './listing/esimerkki-listing.component
     TicketRoutingModule,
     SharedModule,
     MatCardModule
+  ],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'fi-FI'}
   ]
 })
 export class TicketModule { }
