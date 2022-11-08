@@ -16,7 +16,7 @@ import { EsimerkkiListingComponent } from './listing/esimerkki-listing.component
   declarations: [
     SubmitTicketComponent,
     TicketViewComponent,
-    EsimerkkiListingComponent
+    EsimerkkiListingComponent 
   ],
   imports: [
     CommonModule,

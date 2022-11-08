@@ -41,8 +41,9 @@ export interface Sortable {
   styleUrls: ['./listing.component.scss']
 })
 export class ListingComponent implements AfterViewInit, OnInit {
-  dataSource = new MatTableDataSource<Question>();
-  displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittaja.nimi'];
+  dataSource = {} as MatTableDataSource<Sortable>;
+  // dataSource = new MatTableDataSource<Sortable>();
+  displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittajanNimi'];
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   userID = '3';
   courseID: string = '1';
@@ -54,17 +55,22 @@ export class ListingComponent implements AfterViewInit, OnInit {
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private router: Router,
     private ticket: TicketService) {
-      this.ticket.getQuestions(this.courseID).then( response => {
+    this.ticket.getQuestions(this.courseID).then(response => {
 
-        // let sortableData = response.map(x => {
-        //   x.aloittajaNimi = x.aloittaja.nimi;
-        // })
-        // this.dataSource = new MatTableDataSource(response);
+      this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => ({
+        id: id,
+        otsikko: otsikko,
+        aikaleima: aikaleima,
+        aloittajanNimi: aloittaja.nimi
+      }
+      )))
 
-        this.dataSource = new MatTableDataSource<Question>(response);
-        console.log('Saatiin vastaus (alla):');
-        console.dir(response);
-      });
+
+        // console.log('Saatiin vastaus (alla):');
+        // console.dir(SortableData);
+      }).then( response =>
+        console.dir(this.dataSource)
+      );
       // this.dataSource = new MatTableDataSource(DATA);
     }
 
