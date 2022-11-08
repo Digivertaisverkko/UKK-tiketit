@@ -11,6 +11,7 @@ export class TicketViewComponent implements OnInit {
   ticket: Ticket;
   tila: typeof Tila = Tila;
   commentText: string = '';
+  isLoaded: boolean = false;
 
   constructor(
     private ticketService: TicketService,
@@ -21,7 +22,11 @@ export class TicketViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ticketService.getTicketInfo(this.ticketID).then(response => {this.ticket = response});
+    this.ticketService.getTicketInfo(this.ticketID)
+      .then(response => {
+        this.ticket = response;
+        this.isLoaded = true;
+      });
   }
 
   public ticketID: string = String(this.route.snapshot.paramMap.get('id'));

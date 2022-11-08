@@ -1,4 +1,6 @@
-<div class="ticket-view">
+<mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+
+<div class="ticket-view" *ngIf="isLoaded">
   <h1>{{ ticket.otsikko }}</h1>
   <p>
     <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">Tehtävä {{ ticket.kentat[0].arvo }} </span>
