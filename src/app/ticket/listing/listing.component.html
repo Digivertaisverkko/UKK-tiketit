@@ -1,13 +1,11 @@
 
   <mat-card>
 
-    <!-- <div style="font-size: 25px; padding-top: 5%;">Opettajille lähettämäsi kysymykset ja niiden vastaukset</div> -->
+
     <mat-card-title><h1>Opettajille lähettämäsi kysymykset</h1></mat-card-title>
-    <!-- <br> -->
     
-    <p>
-        <button mat-raised-button color="primary" (click)="goSendTicket()">Uusi Kysymys</button>
-    </p>
+    <mat-card-content>
+    <p><button mat-raised-button color="primary" (click)="goSendTicket()">Uusi Kysymys</button></p>
     
     <!-- <br>
         <h2>Omat Kysymykset</h2>
@@ -27,7 +25,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä aikaleiman mukaan">
           Päivämäärä
         </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'short' }}</td>
+        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'short': '+0200' }}</td>
       </ng-container>
     
        <ng-container matColumnDef="aloittajanNimi">
@@ -41,4 +39,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     
+  </mat-card-content>
+
     </mat-card>

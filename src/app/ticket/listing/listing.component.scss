@@ -2,17 +2,27 @@
 button {
     margin-top: 2em;
     margin-bottom: 1em;
+    margin-left: 1em;
 }
 
 table {
     width: 100%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 td {
     cursor: pointer;
+}
+
+mat-card {
+    border-width: 1px;
+    border-color: green;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    mat-card-title {
+        padding-left: 0.5em;
+    }
 }
 
 td.mat-cell, .mat-header-cell {

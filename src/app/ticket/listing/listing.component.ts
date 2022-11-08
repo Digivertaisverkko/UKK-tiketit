@@ -27,14 +27,6 @@ export interface Sortable {
   aloittajanNimi: string
 }
 
-
-// const DATA = [
-// { id: 3, otsikko: "”Index out of bounds”?", aikaleima: "2022-10-18T07:07:07.693Z", aloittaja: 3},
-// { id: 6, otsikko: "”} Expected”?", aikaleima: "2022-10-21T07:07:07.847Z", aloittaja: 2 },
-// { id: 7, otsikko: "Uusi tiketti", aikaleima: "2022-11-02T07:49:12.382Z", aloittaja: 1 }
-
-// ]
-
 const emptyData: Array<Sortable> = [
   { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
 ]
