@@ -228,7 +228,7 @@ export class TicketService {
   public async getQuestions(courseID: string): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/omat';
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/kaikki';
     try {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
