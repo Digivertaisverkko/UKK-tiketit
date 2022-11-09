@@ -58,7 +58,7 @@ export class TestingHenriComponent {
   public async addTicket() {
     // TODO: oikeat id-arvot.
     const newTicket: NewTicket = {
-      otsikko: 'Testitiketti',
+      otsikko: 'Saan testejä ajaessa virheviestin, joka valittaa "Cannot run program: Permission denied"',
       viesti: 'Testiviesti',
       kentat: [
         { id: '1', arvo: 'Tehtävän numero'},
