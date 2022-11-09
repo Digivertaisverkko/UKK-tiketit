@@ -18,6 +18,13 @@ export interface AuthRequestResponse {
   'session-id': string
 }
 
+export interface User {
+  id: number,
+  nimi: string,
+  sposti: string,
+  asema: 'opettaja' | 'oppilas' | 'admin'
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,17 +78,32 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  public async logOut(): Promise<any> {
+  // Hae omat tiedot.
+  public async getMyUserInfo(courseID: string): Promise<User> {
+    if (isNaN(Number(courseID))) {
+      throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
+    }
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
+    try {
+      response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    this.checkErrors(response);
+    return response;
+  }
 
+  public async logOut(): Promise<any> {
     const sessionID = window.sessionStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
       throw new Error('Session ID not found.');
     }
-    const httpOptions =  {
-      headers: new HttpHeaders({
-        'session-id': sessionID
-      })
-    }
+    const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kirjaudu-ulos';
     try {
@@ -103,7 +125,7 @@ export class AuthService {
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
-    // this.logBeforeLogin();
+    //this.logBeforeLogin();
     let url: string = environment.ownAskLoginUrl;
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -120,18 +142,12 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-
-    // this.checkErrors(response);
-    if (response['login-url'] !== undefined) {
-      const loginUrl = response['login-url'];
-      console.log('authService: saatiin vastaus POST pyyntöön URL:iin ' + url + ' :' + JSON.stringify(response), 'green');
-      this.colorTrace('Yhteydenotto palvelimeen onnistui.', 'green');
-      return loginUrl;
-    } else {
-      let message = 'Yhteydenotto palvelimeen ei onnistunut.';
-      this.sendErrorMessage(message);
-      throw new Error(message);
+    if (response['login-url'] == undefined) {
+      throw new Error("Palvelin ei palauttanut login URL:a.");
     }
+    const loginUrl = response['login-url'];
+    console.log('loginurl : ' +loginUrl);
+    return loginUrl;
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
@@ -149,7 +165,7 @@ export class AuthService {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       console.log(httpOptions.headers);
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-      this.colorTrace('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response), 'green');
+      console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -168,10 +184,6 @@ export class AuthService {
       // this.sendErrorMessage(response.error);
     }
   }
-
-  private colorTrace(msg: string, color: string) {
-    console.log("%c" + msg, "color:" + color + ";font-weight:bold;");
-}
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
   private async sendAuthRequest(codeVerifier: string, loginCode: string) {
@@ -214,6 +226,22 @@ export class AuthService {
     this.isUserLoggedIn$.next(true);
     window.sessionStorage.setItem('SESSION_ID', sessionID);
     console.log('tallennettiin sessionid: ' + sessionID);
+  }
+
+
+  // Palauta HttpOptions, johon on asetettu session-id headeriin.
+  private getHttpOptions(): object {
+    let sessionID = window.sessionStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      throw new Error('No session id set.');
+    }
+    console.log('session id on: ' + sessionID);
+    let options = {
+      headers: new HttpHeaders({
+        'session-id': sessionID
+      })
+    };
+    return options;
   }
 
   // Näytä sendAskLoginRequest:n liittyviä logeja.
@@ -267,11 +295,11 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
-      console.error('Virhe tapahtui:', error.error);
+      console.error('An error occurred:', error.error);
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
-        `Palvelin palautti virhetilan ${error.status}, viesti oli: `, error.error);
+        `Backend returned code ${error.status}, body was: `, error.error);
     }
     let message = "Yhteydenotto palvelimeen ei onnistunut.";
     if (error !== undefined) {
@@ -283,8 +311,28 @@ export class AuthService {
       }
     }
     this.sendErrorMessage(message);
-    return throwError(() => new Error(message));
+    return throwError(() => new Error("Unable to continue authentication."));
   }
+
+    // Palvelimelta saatujen vastauksien virheenkäsittely.
+    private checkErrors(response: any) {
+      var message: string = '';
+      if (response == undefined) {
+        message = 'Virhe: ei vastausta palvelimelta.';
+        this.sendErrorMessage(message);
+        throw new Error(message);
+      }
+      if (response.error !== undefined && response.error.success == false) {
+        let errorInfo: string = '';
+        if (response.error !== undefined) {
+          const error = response.error;
+          errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
+        }
+        message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
+        this.sendErrorMessage(message);
+        throw new Error(message);
+      }
+    }
 
   // Show logs before login.
   private logBeforeLogin() {
@@ -295,4 +343,5 @@ export class AuthService {
     console.log('Server login url: ' + environment.ownAskLoginUrl);
     console.log('oAuthState: ' + this.oAuthState);
   }
+
 }
