@@ -52,31 +52,31 @@ export class ListingComponent implements AfterViewInit, OnInit {
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private router: Router,
     private ticket: TicketService) {
-    this.ticket.getQuestions(this.courseID).then(response => {
-
-      this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => (
-        {
-          id: id,
-          otsikko: otsikko,
-          aikaleima: aikaleima,
-          aloittajanNimi: aloittaja.nimi
-        }
-      )))
-
-
-      // console.log('Saatiin vastaus (alla):');
-      // console.dir(SortableData);
-    }).then(response =>
-      console.dir(this.dataSource)
-    );
-    // this.dataSource = new MatTableDataSource(DATA);
   }
 
   @ViewChild(MatSort)
   sort!: MatSort;
 
   ngOnInit() {
+    this.updateView();
+  }
 
+  private updateView() {
+  this.ticket.getQuestions(this.courseID).then(response => {
+    this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => (
+      {
+        id: id,
+        otsikko: otsikko,
+        aikaleima: aikaleima,
+        aloittajanNimi: aloittaja.nimi
+      }
+    )))
+    // console.log('Saatiin vastaus (alla):');
+    // console.dir(SortableData);
+  }).then(response =>
+    console.dir(this.dataSource)
+  );
+  // this.dataSource = new MatTableDataSource(DATA);
   }
 
   ngAfterViewInit() {
@@ -100,7 +100,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     console.log('Koitetaan routea: '+ url);
     this.router.navigateByUrl(url);
   }
-  
+
   goSendTicket() {
     this.router.navigateByUrl('submit');
   }
