@@ -14,11 +14,14 @@ import { EsimerkkiListingComponent } from './listing/esimerkki-listing.component
 import localeFi from '@angular/common/locales/fi';
 registerLocaleData(localeFi);
 
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomPaginator } from './functions/CustomPaginator';
+
 @NgModule({
   declarations: [
     SubmitTicketComponent,
     TicketViewComponent,
-    EsimerkkiListingComponent 
+    EsimerkkiListingComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,8 @@ registerLocaleData(localeFi);
     MatCardModule
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'fi-FI'}
+    { provide: LOCALE_ID, useValue: 'fi-FI'},
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() }
   ]
 })
 export class TicketModule { }

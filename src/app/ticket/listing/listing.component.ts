@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { TicketService } from '../ticket.service';
 import { Router } from '@angular/router';
@@ -44,6 +44,13 @@ export class ListingComponent implements AfterViewInit, OnInit {
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   userID = '3';
   courseID: string = '1';
+  public tableLength: number = 0;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+
   // dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
@@ -52,10 +59,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private router: Router,
     private ticket: TicketService) {
-  }
 
-  @ViewChild(MatSort)
-  sort!: MatSort;
+  }
 
   ngOnInit() {
     this.updateView();
@@ -63,6 +68,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   private updateView() {
   this.ticket.getQuestions(this.courseID).then(response => {
+    this.tableLength = response.length;
     this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => (
       {
         id: id,
@@ -81,6 +87,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   announceSortChange(sortState: Sort) {
