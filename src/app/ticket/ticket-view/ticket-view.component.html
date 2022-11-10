@@ -40,7 +40,7 @@
 
   <mat-card-content>
 
-    <mat-card class="answer" *ngFor="let comment of commentObs | async">
+    <mat-card class="answer" *ngFor="let comment of ticket.kommentit">
       <mat-card-header>
         <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
         <mat-card-title>
@@ -53,8 +53,6 @@
         <p>{{ comment.viesti }}</p>
       </mat-card-content>
     </mat-card>
-
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
 
     <mat-divider></mat-divider>
 
