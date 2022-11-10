@@ -2,7 +2,7 @@ import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { TicketService } from '../ticket.service';
 import { Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   // dataSource:any = [{}];
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
-  displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittajanNimi'];
+  displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   userID = '3';
   courseID: string = '1';
@@ -104,7 +104,6 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   goTicketView(ticketID: number) {
     let url: string = '/ticket-view/' + ticketID;
-    console.log('Koitetaan routea: '+ url);
     this.router.navigateByUrl(url);
   }
 
