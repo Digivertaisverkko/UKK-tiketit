@@ -156,7 +156,7 @@ export class TicketService {
     return response;
   }
 
-  // Lisää uusi tiketti.
+  // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
   public async addTicket(courseID: string, newTicket: NewTicket): Promise<boolean> {
     const httpOptions = this.getHttpOptions();
     let response: any;
