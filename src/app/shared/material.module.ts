@@ -17,6 +17,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const materialModules = [
   MatInputModule,
@@ -32,7 +33,8 @@ const materialModules = [
   MatSortModule,
   MatPaginatorModule,
   MatProgressBarModule,
-  MatDividerModule
+  MatDividerModule,
+  MatSnackBarModule
 ];
 
 @NgModule({
