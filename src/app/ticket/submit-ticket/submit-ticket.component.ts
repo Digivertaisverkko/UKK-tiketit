@@ -1,37 +1,38 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { HttpTestingService } from 'src/app/user-management/testing-henri/http-testing.service'; 
+import { Router } from '@angular/router';
+import { NewTicket, TicketService } from '../ticket.service';
 
 @Component({
   selector: 'app-submit-ticket',
   templateUrl: './submit-ticket.component.html',
   styleUrls: ['./submit-ticket.component.scss']
 })
-export class SubmitTicketComponent implements OnInit{
+export class SubmitTicketComponent implements OnInit {
+  titleText: string = '';
+  assignmentText: string = '';
+  problemText: string = '';
+  messageText: string = '';
 
-  baseUrl: string;
-  response: string;
+  newTicket: NewTicket = {} as NewTicket;
 
-  tehtava = '';
-  ongelma = '';
   display: FormControl = new FormControl("", Validators.required);
 
-  constructor(private httpTest: HttpTestingService) {
-    this.baseUrl='http://localhost:3000';
-    this.response = '';
-    
+  constructor(
+    private router: Router,
+    private ticketService: TicketService) {
   }
 
   ngOnInit(): void {
   }
 
-  makeTest() {
-    console.log('Button pressed.');
-    let response: string;
-    this.httpTest.getStringResponse(this.baseUrl + '/api').subscribe(
-      (data: string) => 
-        this.response = data
-    );
+  public sendTicket(): void {
+    this.newTicket.otsikko = this.titleText;
+    this.newTicket.viesti = this.messageText;
+    this.newTicket.kentat = [{id: 1, arvo: this.assignmentText}, {id: 2, arvo: this.problemText}];
+    console.log(this.newTicket);
+    this.ticketService.addTicket('1', this.newTicket)
+      .then(() => { this.router.navigateByUrl('/list-tickets') });
   }
 
 }

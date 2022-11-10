@@ -9,7 +9,7 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 
 export interface Comment {
   aikaleima: Date;
-  lahettaja: { 
+  lahettaja: {
     id: number;
     nimi: string;
     sposti: string;
@@ -25,7 +25,7 @@ export interface Course {
 
 // Field = Tiketin lisäkenttä
 export interface Field {
-  id: string;
+  id: number;
   arvo: string;
 }
 
