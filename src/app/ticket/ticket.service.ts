@@ -157,7 +157,7 @@ export class TicketService {
   }
 
   // Lisää uusi tiketti.
-  public async addTicket(courseID: string, newTicket: NewTicket) {
+  public async addTicket(courseID: string, newTicket: NewTicket): Promise<boolean> {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
@@ -177,11 +177,14 @@ export class TicketService {
     let message: string = '';
     if (response.success == undefined) {
       this.sendMessage('Tiketin lisäyksen onnistumisesta ei saatu vahvistusta.');
+      return false; 
     } else {
-      if (response.success == 'true') {
+      if (response.success == true) {
         this.sendMessage('Tiketti lisättiin onnistuneesti');
-      } else if (response.success == 'false') {
+        return true;
+      } else {
         this.sendMessage('Tiketin lisääminen epäonnistui');
+        return false;
       }
     }
   }
@@ -224,11 +227,19 @@ export class TicketService {
     return response;
   }
 
-  // Palauta lista omista kysymyksistä.
-  public async getQuestions(courseID: string): Promise<Question[]> {
+  /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
+  Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
+  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */ 
+  public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
+    let target: string;
+    if (onlyOwn !== undefined && onlyOwn == true) {
+      target = 'omat';
+    } else {
+      target = 'kaikki';
+    }
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/kaikki';
     try {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
