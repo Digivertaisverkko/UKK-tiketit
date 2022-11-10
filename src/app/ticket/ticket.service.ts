@@ -162,9 +162,9 @@ export class TicketService {
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
-    console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
-    url + '"');
     try {
+      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
+      url + '"');
       response = await firstValueFrom(
         this.http.post<NewTicket>(url, body, httpOptions)
       );

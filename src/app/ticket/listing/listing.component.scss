@@ -6,13 +6,9 @@ button {
     margin-left: 1em;
 }
 
-table {
-    width: 100%;
-}
+table { width: 100%; }
 
-td {
-    cursor: pointer;
-}
+td { cursor: pointer; }
 
 .mat-row:hover .mat-cell{
     // background-color: mat-color($primary);
