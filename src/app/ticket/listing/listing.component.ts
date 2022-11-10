@@ -110,8 +110,4 @@ export class ListingComponent implements AfterViewInit, OnInit {
   goSendTicket() {
     this.router.navigateByUrl('submit');
   }
-
-  goSendTicket() {
-    this.router.navigateByUrl('submit');
-  }
 }

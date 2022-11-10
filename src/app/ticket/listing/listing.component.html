@@ -3,19 +3,9 @@
 
     <mat-card-title>Opettajille lähettämäsi kysymykset</mat-card-title>
     
-<<<<<<< HEAD
-    <p>
-        <button mat-raised-button color="primary" (click)="goSendTicket()">Uusi Kysymys</button>
-    </p>
-    
-    <!-- <br>
-        <h2>Omat Kysymykset</h2>
-    <br> -->
-=======
     <mat-card-content>
     <p><button mat-raised-button color="primary" (click)="goSendTicket()">Uusi Kysymys</button></p>
 
->>>>>>> main
     
     <table mat-table [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc" class="mat-elevation-z1">
     
@@ -31,7 +21,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header id="timeStampHeader" sortActionDescription="Järjestä aikaleiman mukaan">
           Päivämäärä
         </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'short' }}</td>
+        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{ element.aikaleima | date: 'short' }}</td>
       </ng-container>
     
       <ng-container matColumnDef="aloittajanNimi">
