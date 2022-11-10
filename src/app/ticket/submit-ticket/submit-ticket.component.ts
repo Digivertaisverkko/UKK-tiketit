@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { NewTicket, TicketService } from '../ticket.service';
 
 @Component({
@@ -8,22 +9,27 @@ import { NewTicket, TicketService } from '../ticket.service';
   templateUrl: './submit-ticket.component.html',
   styleUrls: ['./submit-ticket.component.scss']
 })
-export class SubmitTicketComponent implements OnInit {
+export class SubmitTicketComponent implements OnDestroy {
   titleText: string = '';
   assignmentText: string = '';
   problemText: string = '';
   messageText: string = '';
-
   newTicket: NewTicket = {} as NewTicket;
 
-  display: FormControl = new FormControl("", Validators.required);
+  messageSubscription: Subscription;
+  message: string = '';
 
   constructor(
     private router: Router,
-    private ticketService: TicketService) {
+    private ticketService: TicketService,
+    private _snackBar: MatSnackBar
+    ) {
+      this.messageSubscription = this.ticketService.onMessages().subscribe(
+        (message) => { this._snackBar.open(message, 'OK') });
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    this.messageSubscription.unsubscribe();
   }
 
   public sendTicket(): void {
