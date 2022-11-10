@@ -1,8 +1,9 @@
 $header-height: 64px;
 
-#content {
+main {
+  margin: 0 auto;
+  max-width: 800px;
   min-height: calc(100vh - $header-height - 182px);
-
   // Vain alapalkilla
   // min-height: calc(100vh - 128px);
 }

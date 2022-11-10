@@ -9,7 +9,7 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 
 export interface Comment {
   aikaleima: Date;
-  lahettaja: { 
+  lahettaja: {
     id: number;
     nimi: string;
     sposti: string;
@@ -25,7 +25,7 @@ export interface Course {
 
 // Field = Tiketin lisäkenttä
 export interface Field {
-  id: string;
+  id: number;
   arvo: string;
 }
 
@@ -33,7 +33,12 @@ export interface Question {
   id: number;
   otsikko: string;
   aikaleima: string;
-  aloittaja: number;
+  aloittaja: {
+    id: number,
+    nimi: string;
+    sposti: string;
+    asema: string;
+  };
 }
 
 // Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
@@ -151,15 +156,15 @@ export class TicketService {
     return response;
   }
 
-  // Lisää uusi tiketti.
-  public async addTicket(courseID: string, newTicket: NewTicket) {
+  // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
+  public async addTicket(courseID: string, newTicket: NewTicket): Promise<boolean> {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
-    console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
-    url + '"');
     try {
+      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
+      url + '"');
       response = await firstValueFrom(
         this.http.post<NewTicket>(url, body, httpOptions)
       );
@@ -172,11 +177,14 @@ export class TicketService {
     let message: string = '';
     if (response.success == undefined) {
       this.sendMessage('Tiketin lisäyksen onnistumisesta ei saatu vahvistusta.');
+      return false; 
     } else {
-      if (response.success == 'true') {
+      if (response.success == true) {
         this.sendMessage('Tiketti lisättiin onnistuneesti');
-      } else if (response.success == 'false') {
+        return true;
+      } else {
         this.sendMessage('Tiketin lisääminen epäonnistui');
+        return false;
       }
     }
   }
@@ -219,11 +227,19 @@ export class TicketService {
     return response;
   }
 
-  // Palauta lista omista kysymyksistä.
-  public async getQuestions(courseID: string): Promise<Question[]> {
+  /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
+  Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
+  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */ 
+  public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
+    let target: string;
+    if (onlyOwn !== undefined && onlyOwn == true) {
+      target = 'omat';
+    } else {
+      target = 'kaikki';
+    }
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/omat';
     try {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
@@ -238,20 +254,21 @@ export class TicketService {
     return response;
   }
 
-  public getTicketState(stateNumber: number): string {
-    let state: string = '';
-    switch (stateNumber) {
-      case 0: state = "Virhetila"; break;
-      case 1: state = "Lähetty"; break;
-      case 2: state = "Luettu"; break;
-      case 3: state = "Lisätietoa pyydetty"; break;
-      case 4: state = "Kommentoitu"; break;
-      case 5: state = "Ratkaistu"; break;
-      case 6: state = "Arkistoitu"; break;
-      default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
-    }
-    return state;
-  }
+  // Ei tarvita: käytä Tila: enum tämän sijaan.
+  // public getTicketState(stateNumber: number): string {
+  //   let state: string = '';
+  //   switch (stateNumber) {
+  //     case 0: state = "Virhetila"; break;
+  //     case 1: state = "Lähetty"; break;
+  //     case 2: state = "Luettu"; break;
+  //     case 3: state = "Lisätietoa pyydetty"; break;
+  //     case 4: state = "Kommentoitu"; break;
+  //     case 5: state = "Ratkaistu"; break;
+  //     case 6: state = "Arkistoitu"; break;
+  //     default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
+  //   }
+  //   return state;
+  // }
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
@@ -329,6 +346,9 @@ export class TicketService {
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -398,7 +418,7 @@ export class TicketService {
     }
   }
 
-  // Lähetä virheviesti näkymään.
+  // Lähetä virheviesti komponenttiin ja consoleen.
   private sendMessage(message: string) {
     console.log('ticketService: ' + message);
     this.messages$.next(message);

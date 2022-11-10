@@ -5,9 +5,9 @@
         </button> -->
 </app-header>
 
-<div id="content" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
+<main [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
   class="mat-sidenav-container">
   <router-outlet></router-outlet>
-</div>
+</main>
 
 <app-footer></app-footer>

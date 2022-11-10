@@ -26,12 +26,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
 ];
 
-// @Component({
-//   selector: 'app-listing',
-//   templateUrl: './listing.component.html',
-//   styleUrls: ['./listing.component.scss']
-// })
-export class ListingComponent implements AfterViewInit, OnInit {
+@Component({
+  selector: 'app-listing',
+  templateUrl: './esimerkki-listing.component.html',
+  styleUrls: ['./listing.component.scss']
+})
+export class EsimerkkiListingComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);

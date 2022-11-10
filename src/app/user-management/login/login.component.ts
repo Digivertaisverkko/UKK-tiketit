@@ -94,6 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
+  // TODO: ota käyttöön, kun tunnukset ovat emaileja.
   private getIsEmailValid(): boolean {
     console.log(this.isEmailValid);
     return this.isEmailValid;

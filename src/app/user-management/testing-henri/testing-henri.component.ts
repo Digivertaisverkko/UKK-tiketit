@@ -20,7 +20,7 @@ export interface NewTicket {
 }
 
 export interface Field {
-  id: string;
+  id: number;
   arvo: string;
 }
 
@@ -58,11 +58,11 @@ export class TestingHenriComponent {
   public async addTicket() {
     // TODO: oikeat id-arvot.
     const newTicket: NewTicket = {
-      otsikko: 'Testitiketti',
+      otsikko: 'Saan testejä ajaessa virheviestin, joka valittaa "Cannot run program: Permission denied"',
       viesti: 'Testiviesti',
       kentat: [
-        { id: '1', arvo: 'Tehtävän numero'},
-        { id: '2', arvo: 'Ongelmatyypin kuvaus'}
+        { id: 1, arvo: 'Tehtävän numero'},
+        { id: 2, arvo: 'Ongelmatyypin kuvaus'}
       ]
     }
     this.ticket.addTicket('1', newTicket);

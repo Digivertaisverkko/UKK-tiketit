@@ -1,22 +1,37 @@
+@import '/variables.scss';
 
 button {
     margin-top: 2em;
     margin-bottom: 1em;
+    margin-left: 1em;
 }
 
-table {
-    width: 100%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+table { width: 100%; }
+
+td { cursor: pointer; }
+
+.mat-row:hover .mat-cell{
+    // background-color: mat-color($primary);
+    background-color: $hover;
+    // color: white;
 }
 
-td {
-    cursor: pointer;
+mat-card {
+    margin: 1em auto;
+
+    mat-card-title {
+        padding-left: 0.5em;
+    }
 }
 
-td.mat-cell {
+td.mat-cell, .mat-header-cell {
     padding-left: 1em;
     padding-right: 1em;
     text-align: left;
 }
+
+// .mat-header-cell {
+//     padding-left: 1em;
+//     padding-right: 1em;
+//     text-align: left;
+// }

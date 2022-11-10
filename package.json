@@ -40,6 +40,7 @@
     "@angular-eslint/template-parser": "14.1.2",
     "@angular/cli": "~14.2.6",
     "@angular/compiler-cli": "^14.2.6",
+    "@angular/localize": "^14.2.6",
     "@types/jasmine": "~4.0.0",
     "@types/mysql": "^2.15.21",
     "@types/sha.js": "^2.4.0",

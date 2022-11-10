@@ -12,8 +12,24 @@ export interface Question {
   id: number;
   otsikko: string;
   aikaleima: string;
-  aloittaja: number;
+  aloittaja: {
+    id: number,
+    nimi: string;
+    sposti: string;
+    asema: string;
+  };
 }
+
+export interface Sortable {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittajanNimi: string
+}
+
+const emptyData: Array<Sortable> = [
+  { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
+]
 
 @Component({
   selector: 'app-listing',
@@ -21,12 +37,20 @@ export interface Question {
   styleUrls: ['./listing.component.scss']
 })
 export class ListingComponent implements AfterViewInit, OnInit {
-
-  displayedColumns: string[] = ['otsikko', 'aikaleima', 'aloittaja'];
- ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-
-  dataSource = new MatTableDataSource<Question>();
+  // dataSource:any = [{}];
+  dataSource = {} as MatTableDataSource<Sortable>;
+  // dataSource = new MatTableDataSource<Sortable>();
+  displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
+  ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   userID = '3';
+  courseID: string = '1';
+  public tableLength: number = 0;
+
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+
   // dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
@@ -35,23 +59,35 @@ export class ListingComponent implements AfterViewInit, OnInit {
   constructor(private _liveAnnouncer: LiveAnnouncer,
     private router: Router,
     private ticket: TicketService) {
-      this.ticket.getQuestions('1').then( response => {
-        // this.dataSource = new MatTableDataSource(response);
-        this.dataSource = new MatTableDataSource<Question>(response);
-        console.log('Saatiin vastaus (alla):');
-        console.dir(response);
-      });
-    }
 
-  @ViewChild(MatSort)
-  sort!: MatSort;
+  }
 
   ngOnInit() {
+    this.updateView();
+  }
 
+  private updateView() {
+  this.ticket.getQuestions(this.courseID).then(response => {
+    this.tableLength = response.length;
+    this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => (
+      {
+        id: id,
+        otsikko: otsikko,
+        aikaleima: aikaleima,
+        aloittajanNimi: aloittaja.nimi
+      }
+    )))
+    // console.log('Saatiin vastaus (alla):');
+    // console.dir(SortableData);
+  }).then(response =>
+    console.dir(this.dataSource)
+  );
+  // this.dataSource = new MatTableDataSource(DATA);
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   announceSortChange(sortState: Sort) {
@@ -68,10 +104,13 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   goTicketView(ticketID: number) {
     let url: string = '/ticket-view/' + ticketID;
-    console.log('Koitetaan routea: '+ url);
     this.router.navigateByUrl(url);
   }
   
+  goSendTicket() {
+    this.router.navigateByUrl('submit');
+  }
+
   goSendTicket() {
     this.router.navigateByUrl('submit');
   }

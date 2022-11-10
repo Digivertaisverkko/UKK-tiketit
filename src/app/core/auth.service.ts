@@ -18,6 +18,13 @@ export interface AuthRequestResponse {
   'session-id': string
 }
 
+export interface User {
+  id: number,
+  nimi: string,
+  sposti: string,
+  asema: 'opettaja' | 'oppilas' | 'admin'
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,17 +78,32 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  public async logOut(): Promise<any> {
+  // Hae omat tiedot.
+  public async getMyUserInfo(courseID: string): Promise<User> {
+    if (isNaN(Number(courseID))) {
+      throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
+    }
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
+    try {
+      response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    this.checkErrors(response);
+    return response;
+  }
 
+  public async logOut(): Promise<any> {
     const sessionID = window.sessionStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
       throw new Error('Session ID not found.');
     }
-    const httpOptions =  {
-      headers: new HttpHeaders({
-        'session-id': sessionID
-      })
-    }
+    const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kirjaudu-ulos';
     try {
@@ -98,9 +120,7 @@ export class AuthService {
      loginType voi olla atm: 'own' */
   public async sendAskLoginRequest(loginType: string) {
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    // this.codeVerifier = 'SYduHQlnkNXd5m66KzsQIX7gJMr5AbW2ryjCnqezJKf87pbTZXhRB1kl1Fw3SAlf2XlXLtqbCI58pNCqjxpTrJbuoKusjoijeBBSZ9BFAm3Ppepc5y2Ca604qJhjw3I1';
     this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
-    // this.codeChallenge = this.getCodeChallenge(this.codeVerifier);
     this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
@@ -225,6 +245,22 @@ export class AuthService {
     console.log('tallennettiin sessionid: ' + sessionID);
   }
 
+
+  // Palauta HttpOptions, johon on asetettu session-id headeriin.
+  private getHttpOptions(): object {
+    let sessionID = window.sessionStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      throw new Error('No session id set.');
+    }
+    console.log('session id on: ' + sessionID);
+    let options = {
+      headers: new HttpHeaders({
+        'session-id': sessionID
+      })
+    };
+    return options;
+  }
+
   // Näytä sendAskLoginRequest:n liittyviä logeja.
   private printAskLoginLog(response: any, loginUrl: string) {
     console.log('Got response: ');
@@ -303,7 +339,7 @@ export class AuthService {
         this.sendErrorMessage(message);
         throw new Error(message);
       }
-      if (response.error !== undefined && response.error.success == 'false') {
+      if (response.error !== undefined && response.error.success == false) {
         let errorInfo: string = '';
         if (response.error !== undefined) {
           const error = response.error;
@@ -324,4 +360,5 @@ export class AuthService {
     console.log('Server login url: ' + environment.ownAskLoginUrl);
     console.log('oAuthState: ' + this.oAuthState);
   }
+
 }
