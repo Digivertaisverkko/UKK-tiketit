@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -38,12 +38,13 @@ const emptyData: Array<Sortable> = [
 })
 export class ListingComponent implements AfterViewInit, OnInit {
   // dataSource:any = [{}];
+  public courseID: string = '1';
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
   displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  userID = '3';
-  courseID: string = '1';
+  public isPhonePortrait = false;
+  public maxTicketTitleLength = 100;
   public tableLength: number = 0;
 
   @ViewChild(MatSort)
@@ -56,13 +57,23 @@ export class ListingComponent implements AfterViewInit, OnInit {
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
 
-  constructor(private _liveAnnouncer: LiveAnnouncer,
+  constructor(
+    private _liveAnnouncer: LiveAnnouncer,
+    private responsive: BreakpointObserver,
     private router: Router,
     private ticket: TicketService) {
 
   }
 
   ngOnInit() {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
+      this.isPhonePortrait = false;
+      this.maxTicketTitleLength = 100;
+      if (result.matches) {
+        this.maxTicketTitleLength = 35;
+        this.isPhonePortrait = true;
+      }
+    });
     this.updateView();
   }
 

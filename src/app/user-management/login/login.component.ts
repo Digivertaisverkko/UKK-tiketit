@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 // import { ForwardRefHandling } from '@angular/compiler';
@@ -18,7 +17,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isPhonePortrait = false;
   private loginID: string = '';
   public password: string = '';
-  public readonly passwordMinLength: number = 3;
+  public readonly passwordMinLength: number = 8;
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
 
@@ -46,7 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       this.isPhonePortrait = false;
       if (result.matches) {
         this.isPhonePortrait = true;
@@ -70,6 +69,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public loginWithoutAuth(): void {
     this.authService.saveSessionStatus('123456789');
+    console.log('Varoitus: Tämä on testaukseen. Ilman kirjautumista kutsut palvelimelle eivät toimi. ')
     this.authService.isUserLoggedIn$.next(true);
     this.router.navigateByUrl('/list-tickets');
   }
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
         if (params['loginid'] == '') {
-          console.error('No loginID found in URL. Aborting authentication.');
+          console.error('Ei login id:ä URL:ssa, ei pystytä kirjautumaan.');
         }
         this.loginID = params['loginid'];
         console.log('loginComponent: asetettiin loginID: ' + this.loginID);
