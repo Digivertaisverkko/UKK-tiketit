@@ -1,5 +1,9 @@
+@import '/variables.scss';
+
 mat-card {
-  background-color: #ffe6e6;
+  // background-color: #ffe6e6;
+  color: $errorFG;
+  background-color: $errorBG;
   min-width: unset;
   width: unset;
   mat-card-title {
