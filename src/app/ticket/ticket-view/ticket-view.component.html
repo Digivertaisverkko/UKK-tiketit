@@ -23,7 +23,7 @@
         <mat-card-subtitle>{{ ticket.aikaleima | date: 'short' }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <p>{{ ticket.viesti }}</p>
+        <p class="message" [innerHTML]=ticket.viesti></p>
         <h2>{{ tila[ticket.tila] }}</h2>
       </mat-card-content>
     </mat-card>
@@ -50,7 +50,7 @@
         <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <p>{{ comment.viesti }}</p>
+        <p class="message" [innerHTML]=comment.viesti></p>
       </mat-card-content>
     </mat-card>
 
