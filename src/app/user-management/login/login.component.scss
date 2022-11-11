@@ -19,6 +19,7 @@
     size: cover;
   }
   mat-card {
+    mat-card-title { text-align: center; }
     border-radius: 8px;
     margin: 7% auto;
     max-width: 500px;

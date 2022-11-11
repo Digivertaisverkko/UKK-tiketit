@@ -11,18 +11,21 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  public isUserLoggedIn: Observable<boolean>;
+  public isUserLoggedIn$: Observable<boolean>;
+  public isUserLoggedIn: Boolean = false;
   public productName: string = environment.productName;
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private router: Router) {
-    this.isUserLoggedIn = this.authService.onIsUserLoggedIn();
+    this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
 
   }
 
   public goToFrontPage() {
-    this.router.navigateByUrl('/list-tickets');
+    if (this.authService.getIsUserLoggedIn() == true) {
+      this.router.navigateByUrl('/list-tickets');
+    }
   }
 
   public logOut() {

@@ -62,18 +62,22 @@ export class AuthService {
   //   this.isUserLoggedIn$.next(true);
   // }
 
+  // Ala seuraamaan, onko käyttäjä kirjautuneena.
   public onIsUserLoggedIn(): Observable<any> {
     return this.isUserLoggedIn$.asObservable();
   }
 
+  // Lopeta kirjautumisen seuraaminen.
   public unsubscribeIsUserLoggedin(): void {
     this.isUserLoggedIn$.unsubscribe;
   }
 
+  // Ala seuraamaan virheviestejä.
   public onErrorMessages(): Observable<any> {
     return this.errorMessages$.asObservable();
   }
 
+  // Tyhjennä viestit.
   public clearMessages(): void {
     this.errorMessages$.next('');
   }
@@ -125,8 +129,8 @@ export class AuthService {
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
-    // this.logBeforeLogin();
-    let url: string = environment.ownAskLoginUrl;
+    //this.logBeforeLogin();
+    let url: string = environment.apiBaseUrl + '/login';
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': loginType,
@@ -176,7 +180,7 @@ export class AuthService {
         'login-id': loginID
       })
     }
-    const url = environment.ownLoginUrl;
+    const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
@@ -186,7 +190,8 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == true) {
+    this.checkErrors(response);
+    if (response.success == true && response['login-code'] !== undefined) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
       console.log('lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
@@ -215,7 +220,7 @@ export class AuthService {
         'login-code': loginCode,
       })
     }
-    const url = environment.ownTokenUrl;
+    const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
@@ -236,6 +241,16 @@ export class AuthService {
     } else {
       console.error(response.error);
       this.sendErrorMessage(response.error);
+    }
+  }
+
+  // Onko käyttäjät kirjautunut.
+  public getIsUserLoggedIn(): Boolean {
+    const sessionID = window.sessionStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      return false
+    } else {
+      return true
     }
   }
 
@@ -339,25 +354,22 @@ export class AuthService {
         this.sendErrorMessage(message);
         throw new Error(message);
       }
-      if (response.error !== undefined && response.error.success == false) {
+      if (response.error !== undefined) {
         let errorInfo: string = '';
-        if (response.error !== undefined) {
-          const error = response.error;
-          errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
-        }
+        const error = response.error;
+        errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
         message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
         this.sendErrorMessage(message);
         throw new Error(message);
       }
     }
 
-  // Show logs before login.
+  // Näytä client-side login tietoja ennen kirjautumisyritystä.
   private logBeforeLogin() {
     console.log('authService (before asking login):');
     console.log('Response type: ' + this.responseType);
     console.log('Code Verifier: ' + this.codeVerifier);
     console.log('Code challenge : ' + this.codeChallenge);
-    console.log('Server login url: ' + environment.ownAskLoginUrl);
     console.log('oAuthState: ' + this.oAuthState);
   }
 
