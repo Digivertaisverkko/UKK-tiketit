@@ -5,18 +5,16 @@
         <mat-icon>menu</mat-icon>
     </button> -->
 
-  <span id="headerTitle" (click)="goToFrontPage()">{{productName}}</span>
+  <span id="headerTitle" (click)="goToFrontPage()"
+    [ngStyle]="{ 'cursor': (isUserLoggedIn$ | async) ? 'pointer' : 'unset' }">
+    {{productName}}
+  </span>
   <span class="spacer"></span>
 
   <!-- Näkymät voivat asettaa alle sisältöä. -->
   <ng-content></ng-content>
-  <button
-    mat-icon-button
-    class="material-symbols-outlined"
-    *ngIf="isUserLoggedIn | async"
-    [matMenuTriggerFor]="accountMenu"
-    aria-label="Tili"
-  >
+  <button mat-icon-button class="material-symbols-outlined" *ngIf="isUserLoggedIn$ | async"
+    [matMenuTriggerFor]="accountMenu" aria-label="Tili">
     <mat-icon>account_circle</mat-icon>
   </button>
 </mat-toolbar>

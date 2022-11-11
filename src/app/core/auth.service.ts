@@ -62,18 +62,22 @@ export class AuthService {
   //   this.isUserLoggedIn$.next(true);
   // }
 
+  // Ala seuraamaan, onko käyttäjä kirjautuneena.
   public onIsUserLoggedIn(): Observable<any> {
     return this.isUserLoggedIn$.asObservable();
   }
 
+  // Lopeta kirjautumisen seuraaminen.
   public unsubscribeIsUserLoggedin(): void {
     this.isUserLoggedIn$.unsubscribe;
   }
 
+  // Ala seuraamaan virheviestejä.
   public onErrorMessages(): Observable<any> {
     return this.errorMessages$.asObservable();
   }
 
+  // Tyhjennä viestit.
   public clearMessages(): void {
     this.errorMessages$.next('');
   }
@@ -220,6 +224,16 @@ export class AuthService {
     } else {
       console.error(response.error);
       this.sendErrorMessage(response.error);
+    }
+  }
+
+  // Onko käyttäjät kirjautunut.
+  public getIsUserLoggedIn(): Boolean {
+    const sessionID = window.sessionStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      return false
+    } else {
+      return true
     }
   }
 
