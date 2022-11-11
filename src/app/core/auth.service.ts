@@ -323,12 +323,10 @@ export class AuthService {
         this.sendErrorMessage(message);
         throw new Error(message);
       }
-      if (response.error !== undefined && response.error.success == false) {
+      if (response.error !== undefined) {
         let errorInfo: string = '';
-        if (response.error !== undefined) {
-          const error = response.error;
-          errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
-        }
+        const error = response.error;
+        errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
         message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
         this.sendErrorMessage(message);
         throw new Error(message);
