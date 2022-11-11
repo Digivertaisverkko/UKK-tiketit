@@ -296,11 +296,13 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
-      console.error('An error occurred:', error.error);
+         console.error('Virhe tapahtui:', error.error);
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
+        `Saatiin virhe tilakoodilla ${error.status} ja viestillä: `,
+        error.error
+      );
     }
     let message = "Yhteydenotto palvelimeen ei onnistunut.";
     if (error !== undefined) {

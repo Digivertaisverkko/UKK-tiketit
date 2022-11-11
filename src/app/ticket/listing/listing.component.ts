@@ -31,6 +31,11 @@ const emptyData: Array<Sortable> = [
   { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
 ]
 
+export interface ColumnDefinition {
+  def: string;
+  showMobile: boolean;
+}
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -42,6 +47,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
   displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
+  public columnDefinitions: ColumnDefinition[]; 
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait = false;
   public maxTicketTitleLength = 100;
@@ -61,8 +67,13 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private _liveAnnouncer: LiveAnnouncer,
     private responsive: BreakpointObserver,
     private router: Router,
-    private ticket: TicketService) {
-
+    private ticket: TicketService)
+  {
+    this.columnDefinitions = [
+      { def: 'otsikko', showMobile: true },
+      { def: 'aikaleima', showMobile: true },
+      { def: 'aloittajanNimi', showMobile: false } 
+    ]
   }
 
   ngOnInit() {
@@ -75,6 +86,12 @@ export class ListingComponent implements AfterViewInit, OnInit {
       }
     });
     this.updateView();
+  }
+
+  public getDisplayedColumn(): string[] {
+    return this.columnDefinitions
+    .filter(cd => !this.isPhonePortrait || cd.showMobile)
+      .map(cd => cd.def);
   }
 
   private updateView() {
