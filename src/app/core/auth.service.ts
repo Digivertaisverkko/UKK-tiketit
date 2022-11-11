@@ -126,7 +126,7 @@ export class AuthService {
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
     //this.logBeforeLogin();
-    let url: string = environment.ownAskLoginUrl;
+    let url: string = environment.apiBaseUrl + '/login';
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': loginType,
@@ -159,7 +159,7 @@ export class AuthService {
         'login-id': loginID
       })
     }
-    const url = environment.ownLoginUrl;
+    const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
@@ -169,7 +169,8 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response.success == true) {
+    this.checkErrors(response);
+    if (response.success == true && response['login-code'] !== undefined) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
       console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
@@ -194,7 +195,7 @@ export class AuthService {
         'login-code': loginCode,
       })
     }
-    const url = environment.ownTokenUrl;
+    const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
       console.log('Lähetetään auth-request headereilla: ');
@@ -334,13 +335,12 @@ export class AuthService {
       }
     }
 
-  // Show logs before login.
+  // Näytä client-side login tietoja ennen kirjautumisyritystä.
   private logBeforeLogin() {
     console.log('authService (before asking login):');
     console.log('Response type: ' + this.responseType);
     console.log('Code Verifier: ' + this.codeVerifier);
     console.log('Code challenge : ' + this.codeChallenge);
-    console.log('Server login url: ' + environment.ownAskLoginUrl);
     console.log('oAuthState: ' + this.oAuthState);
   }
 
