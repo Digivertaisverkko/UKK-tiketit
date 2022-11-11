@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
 export interface Question {
+  tila: number;
   id: number;
   otsikko: string;
   aikaleima: string;
@@ -21,15 +22,26 @@ export interface Question {
 }
 
 export interface Sortable {
+  tila: string;
   id: number;
   otsikko: string;
   aikaleima: string;
   aloittajanNimi: string
 }
 
-const emptyData: Array<Sortable> = [
-  { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
-]
+export enum Tila {
+  "Virhetila",
+  "Lähetty",
+  "Luettu",
+  "Lisätietoa pyydetty",
+  "Kommentoitu",
+  "Ratkaistu",
+  "Arkistoitu"
+}
+
+// const emptyData: Array<Sortable> = [
+//   { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
+// ]
 
 export interface ColumnDefinition {
   def: string;
@@ -70,6 +82,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private ticket: TicketService)
   {
     this.columnDefinitions = [
+      { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false } 
@@ -97,8 +110,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
   private updateView() {
   this.ticket.getQuestions(this.courseID).then(response => {
     this.tableLength = response.length;
-    this.dataSource = new MatTableDataSource(response.map(({ id, otsikko, aikaleima, aloittaja }) => (
+    this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
       {
+        tila: Tila[tila],
         id: id,
         otsikko: otsikko,
         aikaleima: aikaleima,

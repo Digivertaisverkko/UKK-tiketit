@@ -30,6 +30,7 @@ export interface Field {
 }
 
 export interface Question {
+  tila: number;
   id: number;
   otsikko: string;
   aikaleima: string;
