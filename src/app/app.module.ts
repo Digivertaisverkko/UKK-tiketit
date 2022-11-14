@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { UserManagementModule } from './user-management/user-management.module';
-import { FrontModule } from './front/front.module';
 
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
@@ -22,7 +21,6 @@ import { TicketModule } from './ticket/ticket.module';
     CoreModule,
     SharedModule,
     UserManagementModule,
-    FrontModule,
     TicketModule
   ],
   providers: [],
