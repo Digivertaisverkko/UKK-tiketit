@@ -105,6 +105,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     });
     this.routeSubscription = this.route.queryParams.subscribe(params => {
       if (params['courseID'] !== undefined) {
+        // FIXME: alustavasti tehdään oletus, että kurssi on 1 kunnes on submit-viewiin lisätty.
         this.courseID = 1;
       } else {}
         this.courseID = params['courseID'];
@@ -121,7 +122,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   private updateView() {
   this.ticket.getQuestions(this.courseID).then(response => {
-    response =[];
+    // Testaamiseen:
+    // response =[];
     this.tableLength = response.length;
     if (response.length === 0) {
       this.showNoQuestions = true;
