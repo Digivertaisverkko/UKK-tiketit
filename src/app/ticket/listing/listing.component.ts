@@ -107,8 +107,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
       if (params['courseID'] !== undefined) {
         // FIXME: alustavasti tehdään oletus, että kurssi on 1 kunnes on submit-viewiin lisätty.
         this.courseID = 1;
+      } else {
+        this.courseID = params['courseID'];
       }
-      this.courseID = params['courseID'];
       console.log('course ID: ' + this.courseID)
       this.updateView();
     })
