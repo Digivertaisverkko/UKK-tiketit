@@ -75,7 +75,7 @@ export interface Ticket {
 
 export enum Tila {
   "Virhetila",
-  "Lähetty",
+  "Lähetetty",
   "Luettu",
   "Lisätietoa pyydetty",
   "Kommentoitu",
