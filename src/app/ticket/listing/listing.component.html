@@ -6,8 +6,8 @@
 
     <p><button mat-raised-button color="primary" (click)="goSendTicket()">Uusi kysymys</button></p>
 
-    <table mat-table [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
-      class="mat-elevation-z1" *ngIf="tableLength > 0">
+    <table mat-table *ngIf="!showNoQuestions" [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
+      class="mat-elevation-z1">
 
       <ng-container matColumnDef="tila">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan">
