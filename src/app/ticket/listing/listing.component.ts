@@ -1,13 +1,14 @@
-import { Component, AfterViewInit, ViewChild, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { TicketService } from '../ticket.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
+
+import { environment } from 'src/environments/environment';
+import { TicketService } from '../ticket.service';
 
 export interface Question {
   tila: number;
@@ -62,7 +63,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   public columnDefinitions: ColumnDefinition[]; 
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  public isPhonePortrait = false;
+  public isPhonePortrait: boolean = false;
+  public showNoQuestions: boolean = false;
   public maxTicketTitleLength = 100;
   private routeSubscription: Subscription | null = null;
   public tableLength: number = 0;
@@ -103,10 +105,11 @@ export class ListingComponent implements AfterViewInit, OnInit {
     });
     this.routeSubscription = this.route.queryParams.subscribe(params => {
       if (params['courseID'] !== undefined) {
+        this.courseID = 1;
+      } else {}
         this.courseID = params['courseID'];
         console.log('course ID: ' + this.courseID)
         this.updateView();
-      }
     })
   }
 
@@ -118,7 +121,13 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   private updateView() {
   this.ticket.getQuestions(this.courseID).then(response => {
+    response =[];
     this.tableLength = response.length;
+    if (response.length === 0) {
+      this.showNoQuestions = true;
+    } else {
+      this.showNoQuestions = false; 
+    }
     this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
       {
         tila: Tila[tila],

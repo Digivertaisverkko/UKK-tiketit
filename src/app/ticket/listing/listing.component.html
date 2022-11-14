@@ -1,13 +1,14 @@
 <mat-card>
 
-  <mat-card-title>Opettajille lähettämäsi kysymykset</mat-card-title>
+  <mat-card-title>Opettajalle lähettämäsi kysymykset</mat-card-title>
 
   <mat-card-content>
-    <p><button mat-raised-button color="primary" (click)="goSendTicket()">Uusi Kysymys</button></p>
+
+    <p><button mat-raised-button color="primary" (click)="goSendTicket()">Uusi kysymys</button></p>
 
 
     <table mat-table [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
-      class="mat-elevation-z1">
+      class="mat-elevation-z1" *ngIf="tableLength > 0">
 
       <ng-container matColumnDef="tila">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan">
@@ -53,5 +54,9 @@
     </mat-paginator>
 
   </mat-card-content>
+
+  <mat-card id="noQuestionsMessage">
+    <p *ngIf="showNoQuestions === true" >Et ole lähettänyt vielä yhtään kysymystä.</p>
+  </mat-card>
 
 </mat-card>

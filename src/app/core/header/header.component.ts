@@ -24,7 +24,7 @@ export class HeaderComponent {
 
   public goToFrontPage() {
     if (this.authService.getIsUserLoggedIn() == true) {
-      this.router.navigateByUrl('/list-tickets');
+      this.router.navigateByUrl('/list-tickets?courseID=1');
     }
   }
 
@@ -32,11 +32,9 @@ export class HeaderComponent {
     this.authService.logOut();
     this.authService.sendAskLoginRequest('own').then((response: any) => {
       console.log(' header: saatiin vastaus: ' + JSON.stringify(response));
-      if (response.success !== 'error') {
         console.log('Saatin vastaus 1. kutsuun: ' + response);
         // const loginUrl = response['login-url'];
         this.router.navigateByUrl(response);
-      }
     }).catch (error => {
       console.log('Error: Route for login not found: ' + error);
     })
