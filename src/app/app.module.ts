@@ -25,7 +25,6 @@ import { TicketModule } from './ticket/ticket.module';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  exports: [
-  ]
+  exports: []
 })
 export class AppModule { }

@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  public courseID: number = 1;
   public email: string = '';
   public isEmailValid: boolean = false;
   public isPhonePortrait = false;
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
       this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
         if (isLoggedIn === true) {
-          this.router.navigateByUrl('/list-tickets');
+          this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
         }
       })
   }
@@ -71,7 +72,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.saveSessionStatus('123456789');
     console.log('Varoitus: Tämä on testaukseen. Ilman kirjautumista kutsut palvelimelle eivät toimi. ')
     this.authService.isUserLoggedIn$.next(true);
-    this.router.navigateByUrl('/list-tickets');
+    this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
   }
 
   private setLoginID() {

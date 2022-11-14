@@ -86,7 +86,7 @@ export class TestingHenriComponent {
 
   public async getQuestions() {
     // 1-kurssista haetaan.
-    this.ticket.getQuestions('1').then(response => {
+    this.ticket.getQuestions(1).then(response => {
       console.log(response);
     });
   }

@@ -38,12 +38,11 @@ export class AppComponent implements OnInit {
          Ei siirrytä suoraan /login, koska url sisältää loginid:n. */
       this.authService.sendAskLoginRequest('own').then((response: string) => {
         console.log('AppComponent: got url from server: ' + response);
-        if (response !== 'error') {
-          this.router.navigateByUrl(response);
-        }
+        this.router.navigateByUrl(response);
       }).catch (error => {
-        console.log('Error: Route for login not found: ' + error);
+        throw new Error (error);
       })
+      // Ei saatu login id:ä, mutta näytetään kirjautumisruutu.
       this.router.navigateByUrl('login', { replaceUrl: true });
     } else {
       this.authService.isUserLoggedIn$.next(true);

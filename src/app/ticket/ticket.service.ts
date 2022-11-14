@@ -231,7 +231,7 @@ export class TicketService {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */ 
-  public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<Question[]> {
+  public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
     let target: string;
     if (onlyOwn !== undefined && onlyOwn == true) {
@@ -239,7 +239,7 @@ export class TicketService {
     } else {
       target = 'kaikki';
     }
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
+    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
       response = await firstValueFrom(

@@ -5,8 +5,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { TicketService } from '../ticket.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 
 export interface Question {
   tila: number;
@@ -31,7 +32,7 @@ export interface Sortable {
 
 export enum Tila {
   "Virhetila",
-  "Lähetty",
+  "Lähetetty",
   "Luettu",
   "Lisätietoa pyydetty",
   "Kommentoitu",
@@ -54,8 +55,8 @@ export interface ColumnDefinition {
   styleUrls: ['./listing.component.scss']
 })
 export class ListingComponent implements AfterViewInit, OnInit {
+  private courseID = 0;
   // dataSource:any = [{}];
-  public courseID: string = '1';
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
   displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
@@ -63,6 +64,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait = false;
   public maxTicketTitleLength = 100;
+  private routeSubscription: Subscription | null = null;
   public tableLength: number = 0;
 
   @ViewChild(MatSort)
@@ -79,6 +81,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private _liveAnnouncer: LiveAnnouncer,
     private responsive: BreakpointObserver,
     private router: Router,
+    private route: ActivatedRoute,
     private ticket: TicketService)
   {
     this.columnDefinitions = [
@@ -98,7 +101,13 @@ export class ListingComponent implements AfterViewInit, OnInit {
         this.isPhonePortrait = true;
       }
     });
-    this.updateView();
+    this.routeSubscription = this.route.queryParams.subscribe(params => {
+      if (params['courseID'] !== undefined) {
+        this.courseID = params['courseID'];
+        console.log('course ID: ' + this.courseID)
+        this.updateView();
+      }
+    })
   }
 
   public getDisplayedColumn(): string[] {
