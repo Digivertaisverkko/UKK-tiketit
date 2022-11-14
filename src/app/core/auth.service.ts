@@ -156,6 +156,8 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
+
+    this.checkErrors(response);
     if (response['login-url'] == undefined) {
       throw new Error("Palvelin ei palauttanut login URL:a.");
     }
@@ -320,7 +322,7 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
-         console.error('Virhe tapahtui:', error.error);
+      console.error('Virhe tapahtui:', error.error);
     } else {
       // The backend returned an unsuccessful response code.
       console.error(

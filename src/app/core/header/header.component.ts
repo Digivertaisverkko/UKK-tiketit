@@ -39,9 +39,7 @@ export class HeaderComponent implements OnInit {
   public logOut() {
     this.authService.logOut();
     this.authService.sendAskLoginRequest('own').then((response: any) => {
-      console.log(' header: saatiin vastaus: ' + JSON.stringify(response));
-        console.log('Saatin vastaus 1. kutsuun: ' + response);
-        // const loginUrl = response['login-url'];
+      console.log(' headerComponent: saatiin vastaus: ' + JSON.stringify(response));
         this.router.navigateByUrl(response);
     }).catch (error => {
       console.log('Error: Route for login not found: ' + error);
