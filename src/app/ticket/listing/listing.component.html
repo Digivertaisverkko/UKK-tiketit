@@ -48,7 +48,7 @@
       <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 15, 20]" *ngIf="tableLength > 5" showFirstLastButtons
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" *ngIf="tableLength > 10" showFirstLastButtons
       aria-label="Valitse kysymysten sivu">
     </mat-paginator>
 

@@ -60,7 +60,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   // dataSource:any = [{}];
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
-  displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
+  // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   public columnDefinitions: ColumnDefinition[]; 
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
@@ -125,7 +125,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     // Testaamiseen:
     // response =[];
     this.tableLength = response.length;
-    if (response.length === 0) {
+    if (this.tableLength === 0) {
       this.showNoQuestions = true;
     } else {
       this.showNoQuestions = false; 
