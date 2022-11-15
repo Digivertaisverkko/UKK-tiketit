@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService } from '../ticket.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 
 export interface Question {
   tila: number;
@@ -65,6 +66,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
   public showNoQuestions: boolean = false;
+  public header: string = '';
   public maxTicketTitleLength = 100;
   private routeSubscription: Subscription | null = null;
   public tableLength: number = 0;
@@ -84,7 +86,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private responsive: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
-    private ticket: TicketService)
+    private ticket: TicketService,
+    private authService: AuthService)
   {
 
     this.columnDefinitions = [
@@ -109,17 +112,27 @@ export class ListingComponent implements AfterViewInit, OnInit {
     });
     this.routeSubscription = this.route.queryParams.subscribe(params => {
       if (params['courseID'] == undefined) {
-        // FIXME: alustavasti tehdään oletus, että kurssi on 1 kunnes on submit-viewiin lisätty.
-        // this.courseID = 1;
-        console.error(' Course ID on undefined.');
+        console.error(' Course ID:ä ei löydetty');
       } else {
-        this.courseID = params['courseID'];
-        // this.courseID = String(this.route.snapshot.paramMap.get('courseID'));
+        this.courseID = params['courseID'];;
         this.ticket.setActiveCourse(this.courseID);
+        if (this.courseID !== null) { 
+          this.authService.getMyUserInfo(this.courseID).then(response => {
+            const userRole: string = response.asema;
+            console.log('Käyttäjän asema: ' + userRole);
+            if (userRole == "opettaja" || userRole == "admin" ) {
+              this.header = "Kurssilla esitetyt kysymykset";
+            } else if (userRole == "oppilas") {
+              this.header = "Opettajalle lähettämäsi kysymykset"
+            } else {
+              console.error('Käyttäjän asemaa kurssilla ei löydetty.')
+            }
+          });
+        }
       }
       console.log('löydettiin kurssi id: ' + this.courseID)
     })
-          this.updateView();
+    this.updateView();
   }
 
   public getDisplayedColumn(): string[] {
