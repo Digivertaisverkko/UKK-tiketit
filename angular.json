@@ -7,7 +7,10 @@
       "i18n": {
         "sourceLocale": "fi-FI",
         "locales": {
-          "en": "src/locale/messages.en.xlf"
+          "en": {
+            "translation": "src/locale/messages.en.xlf",
+            "baseHref": "en"
+          }
         }
       },
       "projectType": "application",
@@ -23,7 +26,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": [ "fi" ],
             "outputPath": "dist/tikettisysteemi",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -68,6 +70,9 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "en": {
+              "localize": [ "en" ]
             }
           },
           "defaultConfiguration": "production"
