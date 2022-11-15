@@ -35,6 +35,7 @@ export class AuthService {
   // Onko käyttäjä kirjautuneena.
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private userRole$ = new BehaviorSubject<string>('');
   private errorMessages$ = new Subject<any>();
 
   private codeVerifier: string = '';
@@ -80,6 +81,14 @@ export class AuthService {
   // Tyhjennä viestit.
   public clearMessages(): void {
     this.errorMessages$.next('');
+  }
+
+  public onGetUserRole(): Observable<any> {
+    return this.userRole$.asObservable();
+  }
+
+  public setUserRole(asema: 'opettaja' | 'oppilas' | 'admin') {
+    this.userRole$.next(asema)
   }
 
   // Hae omat tiedot.

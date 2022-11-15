@@ -114,7 +114,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
       if (params['courseID'] == undefined) {
         console.error(' Course ID:ä ei löydetty');
       } else {
-        this.courseID = params['courseID'];;
+        this.courseID = params['courseID'];
         this.ticket.setActiveCourse(this.courseID);
         if (this.courseID !== null) { 
           this.authService.getMyUserInfo(this.courseID).then(response => {
@@ -122,8 +122,10 @@ export class ListingComponent implements AfterViewInit, OnInit {
             console.log('Käyttäjän asema: ' + userRole);
             if (userRole == "opettaja" || userRole == "admin" ) {
               this.header = "Kurssilla esitetyt kysymykset";
+              this.authService.setUserRole(userRole);
             } else if (userRole == "oppilas") {
               this.header = "Opettajalle lähettämäsi kysymykset"
+              this.authService.setUserRole(userRole);
             } else {
               console.error('Käyttäjän asemaa kurssilla ei löydetty.')
             }

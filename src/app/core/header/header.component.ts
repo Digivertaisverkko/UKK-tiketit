@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -15,13 +16,17 @@ export class HeaderComponent {
   public isUserLoggedIn$: Observable<boolean>;
   public isUserLoggedIn: Boolean = false;
   public productName: string = environment.productName;
+  private userRoleSub: Subscription;
+  public userRole: string = '';
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private ticketService: TicketService) {
     this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
-
+    this.userRoleSub = this.authService.onGetUserRole().subscribe(newRole => {
+      this.userRole = newRole.charAt(0).toUpperCase() + newRole.slice(1);
+    });
   }
 
   public goToFrontPage() {
