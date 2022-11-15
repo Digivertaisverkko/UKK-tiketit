@@ -1,22 +1,19 @@
-import { Component } from '@angular/core';
-// import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { environment } from 'src/environments/environment';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   public isUserLoggedIn$: Observable<boolean>;
   public isUserLoggedIn: Boolean = false;
   public productName: string = environment.productName;
-  private userRoleSub: Subscription;
   public userRole: string = '';
 
   constructor(private authService: AuthService,
@@ -24,7 +21,10 @@ export class HeaderComponent {
     private router: Router,
     private ticketService: TicketService) {
     this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
-    this.userRoleSub = this.authService.onGetUserRole().subscribe(newRole => {
+  }
+
+  ngOnInit(): void {
+    this.authService.onGetUserRole().subscribe(newRole => {
       this.userRole = newRole.charAt(0).toUpperCase() + newRole.slice(1);
     });
   }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-FI" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="7207917558009733941" datatype="html">
+        <source>Sisäänkirjautuminen</source>
+        <target>Login</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4238248835939806330" datatype="html">
+        <source>Kirjaudu</source>
+        <target>Login</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        </trans-unit>
+            <trans-unit id="5992445212733936722" datatype="html">
+        <source>Sähköposti</source>
+        <target>Email</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1130485592381438483" datatype="html">
+        <source>Sähköposti tarvitaan</source>
+        <target>Email is needed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+       <trans-unit id="2161828490909117540" datatype="html">
+        <source>Salasana</source>
+        <target>Passoword</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6796435772607655631" datatype="html">
+        <source> Vähintään <x id="INTERPOLATION" equiv-text="{{ passwordMinLength }}"/> merkkiä pitkä salasana tarvitaan. </source>
+        <target> Atleast <x id="INTERPOLATION" equiv-text="{{ passwordMinLength }}"/> characters long password is needed.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">37,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="57971603066627931" datatype="html">
+        <source>Muista minut</source>
+        <target>Remember me</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2798603018986647679" datatype="html">
+        <source> Kirjaudu sisään </source>
+        <target> Login </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">69,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2450764913826775317" datatype="html">
+        <source>tai</source>
+        <target>or</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3291134697864191172" datatype="html">
+        <source> Sisään kirjautumatta (!) </source>
+        <target> Login without auth (!) </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">85,87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1796029465997792691" datatype="html">
+        <source>Rekisteröidy</source>
+        <target>Register</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user-management/login/login.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

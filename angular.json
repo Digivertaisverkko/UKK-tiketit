@@ -4,6 +4,12 @@
   "newProjectRoot": "projects",
   "projects": {
     "tikettisysteemi": {
+      "i18n": {
+        "sourceLocale": "fi-FI",
+        "locales": {
+          "en": "src/locale/messages.en.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,6 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": [ "fi" ],
             "outputPath": "dist/tikettisysteemi",
             "index": "src/index.html",
             "main": "src/main.ts",
