@@ -56,7 +56,7 @@ export interface ColumnDefinition {
   styleUrls: ['./listing.component.scss']
 })
 export class ListingComponent implements AfterViewInit, OnInit {
-  private courseID = 0;
+  private courseID: string | null = '';
   // dataSource:any = [{}];
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
@@ -86,6 +86,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private route: ActivatedRoute,
     private ticket: TicketService)
   {
+
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
@@ -95,6 +96,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+  if (this.route.snapshot.paramMap.get('courseID') !== null) {
+
+  };
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       this.isPhonePortrait = false;
       this.maxTicketTitleLength = 100;
@@ -104,15 +108,18 @@ export class ListingComponent implements AfterViewInit, OnInit {
       }
     });
     this.routeSubscription = this.route.queryParams.subscribe(params => {
-      if (params['courseID'] !== undefined) {
+      if (params['courseID'] == undefined) {
         // FIXME: alustavasti tehdään oletus, että kurssi on 1 kunnes on submit-viewiin lisätty.
-        this.courseID = 1;
+        // this.courseID = 1;
+        console.error(' Course ID on undefined.');
       } else {
         this.courseID = params['courseID'];
+        // this.courseID = String(this.route.snapshot.paramMap.get('courseID'));
+        this.ticket.setActiveCourse(this.courseID);
       }
-      console.log('course ID: ' + this.courseID)
-      this.updateView();
+      console.log('löydettiin kurssi id: ' + this.courseID)
     })
+          this.updateView();
   }
 
   public getDisplayedColumn(): string[] {
@@ -122,7 +129,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   }
 
   private updateView() {
-  this.ticket.getQuestions(this.courseID).then(response => {
+  this.ticket.getQuestions(Number(this.courseID)).then(response => {
     // Testaamiseen:
     // response =[];
     this.tableLength = response.length;

@@ -70,7 +70,8 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a>
+    <a mat-raised-button (click)="goBack()">Tikettilistaan</a>
+    <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
     <button
       mat-raised-button color="primary"
       [disabled]="commentText.length < 1"

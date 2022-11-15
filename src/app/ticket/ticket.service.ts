@@ -103,6 +103,23 @@ export class TicketService {
     this.messages$.unsubscribe;
   }
 
+  public setActiveCourse(courseID: string | null) {
+    if (courseID !== null) {
+      window.sessionStorage.setItem('COURSE_ID', courseID);
+    }
+  }
+
+  public getActiveCourse(): string {
+    if (window.sessionStorage.getItem('COURSE_ID') === null) {
+      throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+    }
+    let  courseID = window.sessionStorage.getItem('COURSE_ID');
+    if (courseID === null) {
+      courseID = '0';
+    }
+    return courseID;
+  }
+
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
   public async addComment(ticketID: string, message: string): Promise<boolean> {
     if (isNaN(Number(ticketID))) {

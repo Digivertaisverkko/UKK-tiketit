@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Ticket, Tila } from '../ticket.service';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit, OnDestroy {
+  public courseID: string;
   ticket: Ticket;
   tila: typeof Tila;
   commentText: string;
@@ -23,8 +24,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   constructor(
     private ticketService: TicketService,
     private route: ActivatedRoute,
+    private router: Router,
     private _snackBar: MatSnackBar
     ) {
+      this.courseID = this.ticketService.getActiveCourse();
       this.ticket = {} as Ticket;
       this.tila = Tila;
       this.commentText = '';
@@ -40,6 +43,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.ticket = response;
         this.isLoaded = true;
       });
+  }
+
+  public goBack(): void {
+    this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
   }
 
   ngOnDestroy(): void {
