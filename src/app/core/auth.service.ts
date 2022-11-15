@@ -87,7 +87,7 @@ export class AuthService {
     return this.userRole$.asObservable();
   }
 
-  public setUserRole(asema: 'opettaja' | 'oppilas' | 'admin') {
+  public setUserRole(asema: 'opettaja' | 'oppilas' | 'admin' | '') {
     this.userRole$.next(asema)
   }
 
@@ -127,6 +127,7 @@ export class AuthService {
     }
     this.isUserLoggedIn$.next(false);
     window.sessionStorage.clear();
+    this.setUserRole('');
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
