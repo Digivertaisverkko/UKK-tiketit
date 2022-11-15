@@ -12,6 +12,7 @@ $debug: false;
   #up-row {
     // padding: 3em;
     height: 118px;
+    padding-top: 7px;
     padding-left: 0;
     padding-right: 0;
   }
@@ -30,7 +31,7 @@ $debug: false;
     justify-content: space-evenly;
 
     height: 118px;
-    max-width: 1100px;
+    max-width: 900px;
     min-width: 380px;
     width: 100%;
     margin: auto;
