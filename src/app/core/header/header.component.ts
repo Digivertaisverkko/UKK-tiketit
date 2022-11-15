@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
+import { TicketService } from 'src/app/ticket/ticket.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,14 +18,16 @@ export class HeaderComponent {
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private ticketService: TicketService) {
     this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
 
   }
 
   public goToFrontPage() {
     if (this.authService.getIsUserLoggedIn() == true) {
-      this.router.navigateByUrl('/list-tickets?courseID=1');
+      const courseID = this.ticketService.getActiveCourse();
+      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
     }
   }
 
