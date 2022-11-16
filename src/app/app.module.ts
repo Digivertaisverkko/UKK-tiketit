@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -9,6 +9,7 @@ import { UserManagementModule } from './user-management/user-management.module';
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
 import { TicketModule } from './ticket/ticket.module';
+import { initializeLanguage, initializeSupportedLocales } from "./app.initializers";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,10 @@ import { TicketModule } from './ticket/ticket.module';
     UserManagementModule,
     TicketModule
   ],
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: () => initializeLanguage, multi: true },
+    { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
+  ],
   bootstrap: [AppComponent],
   exports: []
 })

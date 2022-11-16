@@ -13,6 +13,7 @@
 
   <!-- Näkymät voivat asettaa alle sisältöä. -->
   <ng-content></ng-content>
+  <!-- <span style="margin-right: 2em;">{{language}}</span> -->
   <div id="userRole">{{userRole}}</div>
   <button mat-icon-button class="material-symbols-outlined" *ngIf="isUserLoggedIn$ | async"
     [matMenuTriggerFor]="accountMenu" aria-label="Tili">
@@ -21,6 +22,9 @@
 </mat-toolbar>
 
 <mat-menu #accountMenu="matMenu">
-  <button mat-menu-item (click)="logOut()">Kirjaudu ulos</button>
-  <button mat-menu-item>Tee jotain muuta</button>
-</mat-menu>
+  <button mat-menu-item (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
+    i18n="@@Vaihda_kieli_englanniksi">Vaihda kieli englanniksi</button>
+  <button mat-menu-item (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
+    i18n="@@Vaihda_kieli_suomeksi">Vaihda kieli suomeksi</button>
+  <button mat-menu-item (click)="logOut()" i18n="@@Kirjaudu_ulos">Kirjaudu ulos</button>
+  </mat-menu>

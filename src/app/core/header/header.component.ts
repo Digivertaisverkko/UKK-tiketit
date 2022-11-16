@@ -16,11 +16,25 @@ export class HeaderComponent implements OnInit {
   public productName: string = environment.productName;
   public userRole: string = '';
 
+  get language(): string {
+    return this._language;
+  }
+
+  set language(value: string) {
+    if (value !== this._language) {
+      localStorage.setItem('language', value);
+      window.location.reload();
+    }
+  }
+  private _language!: string;
+
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private ticketService: TicketService) {
+    private ticketService: TicketService)
+    {
     this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
+    this._language = localStorage.getItem('language') ?? 'fi-FI';
   }
 
   ngOnInit(): void {
@@ -28,6 +42,11 @@ export class HeaderComponent implements OnInit {
       this.userRole = newRole.charAt(0).toUpperCase() + newRole.slice(1);
     });
   }
+
+  public changeLanguage(language: 'en-US' | 'fi-FI') {
+    this.language = language;
+  }
+
 
   public goToFrontPage() {
     if (this.authService.getIsUserLoggedIn() == true) {

@@ -31,8 +31,12 @@ import { CustomPaginator } from './functions/CustomPaginator';
     MatCardModule
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'fi-FI'},
     { provide: MatPaginatorIntl, useValue: CustomPaginator() }
   ]
 })
+
+// providers: [
+//   { provide: LOCALE_ID, useValue: 'fi-FI'},
+//   { provide: MatPaginatorIntl, useValue: CustomPaginator() }
+// ]
 export class TicketModule { }

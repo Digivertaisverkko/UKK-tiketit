@@ -1,0 +1,9 @@
+{
+  "locale": "en-US",
+  "translations": {
+    "sisäänkirjautuminen": "Login",
+    "Kirjaudu_ulos": "Logout",
+    "Vaihda_kieli_englanniksi": "Change language to english",
+    "Vaihda_kieli_suomeksi": "Change language to finnish"
+  }
+}

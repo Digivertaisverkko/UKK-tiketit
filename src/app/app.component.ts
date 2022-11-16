@@ -34,15 +34,17 @@ export class AppComponent implements OnInit {
     // Katsotaan, onko käyttäjä kirjautuneena.
     if (window.sessionStorage.getItem('SESSION_ID') == null) {
       console.log('ei ole kirjautunut');
-      /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee
-         Ei siirrytä suoraan /login, koska url sisältää loginid:n. */
+      /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee kirjautumisruudussa
+        jonkin muun tavan. Ei siirrytä suoraan /login, koska palvelimelta saatava
+        URL sisältää login id:n. */
       this.authService.sendAskLoginRequest('own').then((response: string) => {
         console.log('AppComponent: got url from server: ' + response);
-        this.router.navigateByUrl(response);
+        if (response !== undefined) {
+          this.router.navigateByUrl(response);
+        }
       }).catch (error => {
-        throw new Error (error);
+        console.log('Error: Route for login not found: ' + error);
       })
-      // Ei saatu login id:ä, mutta näytetään kirjautumisruutu.
       this.router.navigateByUrl('login', { replaceUrl: true });
     } else {
       this.authService.isUserLoggedIn$.next(true);
