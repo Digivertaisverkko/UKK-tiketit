@@ -119,13 +119,18 @@ export class ListingComponent implements AfterViewInit, OnInit {
         this.ticket.setActiveCourse(this.courseID);
         if (this.courseID !== null) { 
           this.authService.getMyUserInfo(this.courseID).then(response => {
-            const userRole: string = response.asema;
+            let userRole: string = response.asema;
             // console.log('Käyttäjän asema: ' + userRole);
-            if (userRole == "opettaja" || userRole == "admin" ) {
-              this.header = "Kurssilla esitetyt kysymykset";
+            if (userRole == "opettaja" ) {
+              this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+              userRole = $localize`:@@Opettaja:Opettaja`;
+              this.authService.setUserRole(userRole);
+            } else if (userRole == "admin") {
+              this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
               this.authService.setUserRole(userRole);
             } else if (userRole == "oppilas") {
-              this.header = "Opettajalle lähettämäsi kysymykset"
+              this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`;
+              userRole = $localize`:@@Oppilas:Oppilas`;
               this.authService.setUserRole(userRole);
             } else {
               console.error('Käyttäjän asemaa kurssilla ei löydetty.')

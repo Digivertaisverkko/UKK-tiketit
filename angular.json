@@ -5,7 +5,7 @@
   "projects": {
     "tikettisysteemi": {
       "i18n": {
-        "sourceLocale": "fi-FI",
+        "sourceLocale": "fi",
         "locales": {
           "en": {
             "translation": "src/locale/messages.en.xlf",

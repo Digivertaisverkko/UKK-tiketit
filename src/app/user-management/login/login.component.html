@@ -3,48 +3,50 @@
     class="mat-elevation-z12"
     [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
   >
-    <mat-card-title i18n>Sisäänkirjautuminen</mat-card-title
+    <mat-card-title i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</mat-card-title
     >
     <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
-      <mat-tab i18n-label label="Kirjaudu">
+      <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu">
         <mat-card-content>
           <form action="">
             <mat-form-field>
               <input
                 matInput
-                i18n-placeholder placeholder="Sähköposti"
+                i18n-placeholder="@@Sähköposti" placeholder="Sähköposti"
                 required
                 name="email"
                 [(ngModel)]="email"
                 ng-change="validateEmail()"
               />
-              <mat-error i18n>Sähköposti tarvitaan</mat-error>
+              <mat-error i18n="@@Sähköposti tarvitaan">Sähköposti tarvitaan</mat-error>
               <mat-icon matSuffix>email</mat-icon>
             </mat-form-field>
 
             <mat-form-field>
               <input
                 matInput
-                i18n-placeholder placeholder="Salasana"
+                i18n-placeholder="@@Salasana" placeholder="Salasana"
                 type="password"
                 required
                 minlength="8"
                 name="password"
                 [(ngModel)]="password"
               />
-              <mat-error i18n>
+              <mat-error i18n="@@(Viesti salasanan pituudesta">
                 Vähintään {{ passwordMinLength }} merkkiä pitkä salasana
                 tarvitaan.
               </mat-error>
               <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
 
-            <mat-checkbox i18n>Muista minut</mat-checkbox>
+            <mat-checkbox i18n="@@Muista minut">Muista minut</mat-checkbox>
 
             <!-- Custom-komponentti shared-moduulista. -->
             <app-error-card
               *ngIf="serverErrorMessage.length > 0"
+              i18n-title="@@Kirjautuminen ei onnistunut"
               title="Kirjautuminen ei onnistunut"
+              i18n-message="@@Vastaus palvelimelta: {{ serverErrorMessage }}"
               message="Vastaus palvelimelta: {{ serverErrorMessage }}"
               [styles]="{ margin: '1em 10% 1em 10%' }"
             >
@@ -63,14 +65,14 @@
               class="login-button"
               color="primary"
               (click)="login()"
-              i18n
+              i18n="@@Kirjaudu sisään"
             >
               Kirjaudu sisään
             </button>
 
             <div class="line-container">
               <mat-divider></mat-divider>
-              <div class="mat-typography" i18n>tai</div>
+              <div class="mat-typography" i18n="@@tai">tai</div>
               <mat-divider></mat-divider>
             </div>
 
@@ -79,7 +81,7 @@
               (click)="loginWithoutAuth()"
               class="login-button"
               style="color: gray"
-              i18n
+              i18n="@@Sisään kirjautumatta"
             >
               Sisään kirjautumatta (!)
             </button>
@@ -87,7 +89,7 @@
         </mat-card-content>
 
       </mat-tab>
-      <mat-tab i18n-label label="Rekisteröidy">
+      <mat-tab i18n-label="@@Rekisteröidy" label="Rekisteröidy">
         <app-register></app-register>
       </mat-tab>
     </mat-tab-group>

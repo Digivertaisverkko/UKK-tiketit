@@ -87,7 +87,7 @@ export class AuthService {
     return this.userRole$.asObservable();
   }
 
-  public setUserRole(asema: 'opettaja' | 'oppilas' | 'admin' | '') {
+  public setUserRole(asema: string | '') {
     this.userRole$.next(asema)
   }
 
