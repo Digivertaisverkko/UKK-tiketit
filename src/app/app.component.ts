@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       this.isPhonePortrait = false;
       if (result.matches) {
         this.isPhonePortrait = true;
@@ -39,12 +39,11 @@ export class AppComponent implements OnInit {
         URL sisältää login id:n. */
       this.authService.sendAskLoginRequest('own').then((response: string) => {
         console.log('AppComponent: got url from server: ' + response);
-        if (response !== undefined) {
-          this.router.navigateByUrl(response);
-        }
+        this.router.navigateByUrl(response);
       }).catch (error => {
-        console.log('Error: Route for login not found: ' + error);
+        throw new Error (error);
       })
+      // Ei saatu login id:ä, mutta näytetään kirjautumisruutu.
       this.router.navigateByUrl('login', { replaceUrl: true });
     } else {
       this.authService.isUserLoggedIn$.next(true);

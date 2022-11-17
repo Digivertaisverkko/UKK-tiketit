@@ -1,7 +1,27 @@
 #userRole {
-  margin-right: 5px;
+  
 }
 
-.spacer {
-  flex: 1 1 auto;
+.spacer { flex: 1 1 auto; }
+
+.flag {
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  width: 1.33333333em;
+  cursor: pointer;
+  line-height: 1em;
+  margin-right: 6px;
+  margin-left: 15px;
+}
+.flag:before { content: '\00a0'; }
+
+.flag-fi {
+  background-image: url(../../../assets/flag-icons/fi.svg);
+}
+
+.flag-en {
+  background-image: url(../../../assets/flag-icons/gb.svg);
 }
