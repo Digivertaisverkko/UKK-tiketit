@@ -5,6 +5,7 @@ import localeFi from '@angular/common/locales/fi';
 export const initializeLanguage = (): Promise<void> | void => {
   const language = getLanguage();
   if (language && language !== 'fi-FI') {
+    // Pitää olla tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
       .then((response) => response.json())
       .then((response) => {
@@ -22,17 +23,19 @@ function getLanguage(): string {
   console.log(' localStoragen kieli: ' + language);
 
   if (language == null || language == undefined) {
-    language = navigator.language;
-    console.log('navigator.language -kieli: ' + language);
+    language = 'fi-FI';
+    // Jos haluaa käyttää selaimen kieltä.
+    // language = navigator.language;
+    // console.log('navigator.language -kieli: ' + language);
   }
 
   // if (language === undefined || language === null ) {
   //   const browserLanguages: string[] | undefined = getBrowserLocales();
   //   console.log('Saatiin kielet: ' + browserLanguages);
 
-  if (language !== 'fi-FI') {
-    language = 'en-US';
-  }
+  // if (language !== 'fi-FI') {
+    // language = 'en-US';
+  // }
   console.log('valittiin kieli: ' + language);
   return language;
 }
