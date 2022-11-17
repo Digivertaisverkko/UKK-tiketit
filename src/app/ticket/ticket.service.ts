@@ -69,6 +69,7 @@ export interface Ticket {
   }
   tila: number;
   kentat?: Array<Field>;
+  kurssi: number;
   viesti: string;
   kommentit: Array<Comment>;
 }

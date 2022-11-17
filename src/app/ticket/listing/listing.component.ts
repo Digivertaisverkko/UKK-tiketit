@@ -115,11 +115,12 @@ export class ListingComponent implements AfterViewInit, OnInit {
         console.error(' Course ID:ä ei löydetty');
       } else {
         this.courseID = params['courseID'];
+        // Jotta header tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
         this.ticket.setActiveCourse(this.courseID);
         if (this.courseID !== null) { 
           this.authService.getMyUserInfo(this.courseID).then(response => {
             const userRole: string = response.asema;
-            console.log('Käyttäjän asema: ' + userRole);
+            // console.log('Käyttäjän asema: ' + userRole);
             if (userRole == "opettaja" || userRole == "admin" ) {
               this.header = "Kurssilla esitetyt kysymykset";
               this.authService.setUserRole(userRole);
