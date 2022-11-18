@@ -8,21 +8,9 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { TicketService } from '../ticket.service';
+import { TicketService, Tila, State, Question } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-
-export interface Question {
-  tila: number;
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: {
-    id: number,
-    nimi: string;
-    sposti: string;
-    asema: string;
-  };
-}
+// import { Statement } from '@angular/compiler';
 
 export interface Sortable {
   tila: string;
@@ -30,16 +18,6 @@ export interface Sortable {
   otsikko: string;
   aikaleima: string;
   aloittajanNimi: string
-}
-
-export enum Tila {
-  "Virhetila",
-  "Lähetetty",
-  "Luettu",
-  "Lisätietoa pyydetty",
-  "Kommentoitu",
-  "Ratkaistu",
-  "Arkistoitu"
 }
 
 // const emptyData: Array<Sortable> = [
@@ -58,7 +36,7 @@ export interface ColumnDefinition {
 })
 export class ListingComponent implements AfterViewInit, OnInit {
   private courseID: string | null = '';
-  // dataSource:any = [{}];
+  // dataSource:any = [];
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
@@ -159,9 +137,11 @@ export class ListingComponent implements AfterViewInit, OnInit {
     } else {
       this.showNoQuestions = false; 
     }
+    
+    const lang = localStorage.getItem('language')?.substring(0,2);
     this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
       {
-        tila: Tila[tila],
+        tila: lang == 'en' ? State[tila] : Tila[tila],
         id: id,
         otsikko: otsikko,
         aikaleima: aikaleima,

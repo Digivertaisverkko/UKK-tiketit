@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TicketService, Ticket, Tila } from '../ticket.service';
+import { TicketService, Ticket, Tila, State } from '../ticket.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TicketViewComponent implements OnInit, OnDestroy {
   ticket: Ticket;
-  tila: typeof Tila;
+  tila: typeof Tila | typeof State;
   commentText: string;
   isLoaded: boolean;
   ticketID: string;
@@ -27,7 +27,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar
     ) {
       this.ticket = {} as Ticket;
-      this.tila = Tila;
+      const lang = localStorage.getItem('language')?.substring(0,2);
+      this. tila = lang == 'en' ? State : Tila;
       this.commentText = '';
       this.isLoaded = false;
       this.ticketID = String(this.route.snapshot.paramMap.get('id'));

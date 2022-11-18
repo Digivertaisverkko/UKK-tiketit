@@ -84,15 +84,15 @@ export enum Tila {
   "Arkistoitu"
 }
 
-// export enum Tila {
-//   $localize`Virhetila`,
-//   $localize`:@@Lähetetty:Lähetetty`,
-//   $localize`:@@Luettu:Luetty`,
-//   $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`,
-//   $localize`:@@Kommentoitu:Kommentoitu`,
-//   $localize`:@@Ratkaistu:Ratkaistu`,
-//   $localize`:@@Arkistoitu:Arkistoitu`
-// }
+export enum State {
+  "Error state",
+  "Sent",
+  "Read",
+  "More info needed",
+  "Commented",
+  "Resolved",
+  "Archived"
+}
 
 @Injectable({
   providedIn: 'root',
