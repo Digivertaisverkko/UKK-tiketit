@@ -141,7 +141,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     const lang = localStorage.getItem('language')?.substring(0,2);
     this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
       {
-        tila: lang == 'en' ? State[tila] : Tila[tila],
+        tila: this.ticket.getTicketState(tila),
         id: id,
         otsikko: otsikko,
         aikaleima: aikaleima,
