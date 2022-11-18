@@ -4,10 +4,10 @@ import localeFi from '@angular/common/locales/fi';
 
 export const initializeLanguage = (): Promise<void> | void => {
   const language = getLanguage();
-  document.documentElement.lang = language;//language;
-  registerLocaleData(localeFi, 'fi-FI');
+  document.documentElement.lang = language;
+  // registerLocaleData(localeFi, 'fi-FI');
   if (language && language !== 'fi-FI') {
-    // Pitää olla tässä hakemistossa.
+    // Pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
       .then((response) => response.json())
       .then((response) => {
