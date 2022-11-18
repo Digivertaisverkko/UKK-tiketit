@@ -6,6 +6,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
+import '@angular/localize/init';
 
 export interface Comment {
   aikaleima: Date;
@@ -130,6 +131,24 @@ export class TicketService {
     }
     return courseID;
   }
+
+  // Muuta tiketin tilan numeerinen arvo sanalliseksi.
+public getTicketState(numericalState: number): string {
+  if (numericalState < 0 || numericalState > 6 ) {
+    throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla 0-6.');
+  }
+  let verbal: string = '';
+  switch (numericalState) {
+      case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
+      case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
+      case 2: verbal = $localize `:@@:Luettu`; break;
+      case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+      case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
+      case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
+      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`; break;
+  }
+  return verbal;
+}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
   public async addComment(ticketID: string, message: string): Promise<boolean> {
