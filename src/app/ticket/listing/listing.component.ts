@@ -77,6 +77,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    
   if (this.route.snapshot.paramMap.get('courseID') !== null) {
 
   };
