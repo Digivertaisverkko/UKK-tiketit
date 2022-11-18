@@ -132,7 +132,7 @@ export class TicketService {
     return courseID;
   }
 
-  // Muuta tiketin tilan numeerinen arvo sanalliseksi.
+  // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
 public getTicketState(numericalState: number): string {
   if (numericalState < 0 || numericalState > 6 ) {
     throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla 0-6.');
