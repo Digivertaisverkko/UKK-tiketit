@@ -1,13 +1,13 @@
 <mat-card class="submit-ticket-card">
 
   <mat-card-header>
-    <mat-card-title>Uusi tiketti</mat-card-title>
+    <mat-card-title i18n="@@Uusi tiketti">Uusi tiketti</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
 
     <mat-form-field appearance="fill">
-      <mat-label>Otsikko</mat-label>
+      <mat-label i18n="@@Otsikko">Otsikko</mat-label>
       <input
         name="titleText"
         [(ngModel)]="titleText"
@@ -17,7 +17,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Tehtävä</mat-label>
+      <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
       <input
         name="assignmentText"
         [(ngModel)]="assignmentText"
@@ -27,7 +27,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Ongelman tyyppi</mat-label>
+      <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
       <input
         name="problemText"
         [(ngModel)]="problemText"
@@ -37,7 +37,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Viesti</mat-label>
+      <mat-label i18n="@@Viesti">Viesti</mat-label>
       <textarea
         name="messageText"
         [(ngModel)]="messageText"
@@ -51,11 +51,12 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a>
+    <a mat-raised-button routerLink="/list-tickets" i18n="@@Tikettilistaan">Tikettilistaan</a>
     <button
       mat-raised-button color="primary"
       [disabled]="titleText.length < 1 || assignmentText.length < 1 || problemText.length < 1 || messageText.length < 1"
-      (click)="sendTicket()">
+      (click)="sendTicket()"
+      i18n="@@Lähetä">
       Lähetä
     </button>
   </mat-card-actions>
