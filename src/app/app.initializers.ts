@@ -4,6 +4,8 @@ import localeFi from '@angular/common/locales/fi';
 
 export const initializeLanguage = (): Promise<void> | void => {
   const language = getLanguage();
+  document.documentElement.lang = language;//language;
+  registerLocaleData(localeFi, 'fi-FI');
   if (language && language !== 'fi-FI') {
     // Pitää olla tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
@@ -40,12 +42,11 @@ function getLanguage(): string {
   return language;
 }
 
-export const initializeSupportedLocales = () => {
-  registerLocaleData(localeFi, 'fi-FI');
-  const language = getLanguage();
-  document.documentElement.lang = language;
-  return language;
-};
+// export const initializeSupportedLocales = () => {
+  // registerLocaleData(localeFi, 'fi-FI');
+  // const language = getLanguage();
+  // return language;
+// };
 
 function getBrowserLocales(options = {}): string[] | undefined {
   const defaultOptions = {

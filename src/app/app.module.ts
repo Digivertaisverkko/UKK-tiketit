@@ -9,7 +9,7 @@ import { UserManagementModule } from './user-management/user-management.module';
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
 import { TicketModule } from './ticket/ticket.module';
-import { initializeLanguage, initializeSupportedLocales } from "./app.initializers";
+import { initializeLanguage  } from "./app.initializers";
 
 @NgModule({
   declarations: [
@@ -26,9 +26,10 @@ import { initializeLanguage, initializeSupportedLocales } from "./app.initialize
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: () => initializeLanguage, multi: true },
-    { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
   ],
   bootstrap: [AppComponent],
   exports: []
 })
 export class AppModule { }
+
+//  { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
