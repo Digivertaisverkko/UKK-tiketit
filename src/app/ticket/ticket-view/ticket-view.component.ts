@@ -12,7 +12,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TicketViewComponent implements OnInit, OnDestroy {
   ticket: Ticket;
-  tila: typeof Tila | typeof State;
+  tila: string;
+  // tila: typeof Tila | typeof State;
   commentText: string;
   isLoaded: boolean;
   ticketID: string;
@@ -28,7 +29,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     ) {
       this.ticket = {} as Ticket;
       const lang = localStorage.getItem('language')?.substring(0,2);
-      this. tila = lang == 'en' ? State : Tila;
+      this.tila = '';
       this.commentText = '';
       this.isLoaded = false;
       this.ticketID = String(this.route.snapshot.paramMap.get('id'));
@@ -41,6 +42,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       .then(response => {
         this.ticket = response;
         this.isLoaded = true;
+        this.tila = this.ticketService.getTicketState(this.ticket.tila);
       });
   }
 
