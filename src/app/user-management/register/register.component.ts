@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
   public username: string;
   public newPassword: string;
   public repassword: string;
+  public minPasswordLength: number = 8;
 
   constructor() {
     this.email = '';
