@@ -44,7 +44,7 @@ export class SubmitTicketComponent implements OnDestroy {
     this.newTicket.kentat = [{id: 1, arvo: this.assignmentText}, {id: 2, arvo: this.problemText}];
     console.log(this.newTicket);
     this.ticketService.addTicket('1', this.newTicket)
-      .then(() => { this.router.navigateByUrl('/list-tickets') });
+      .then(() => { this.goBack()});
   }
 
 }
