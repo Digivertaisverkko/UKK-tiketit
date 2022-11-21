@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TicketService, Ticket, Tila, State } from '../ticket.service';
+import { TicketService, Ticket } from '../ticket.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
