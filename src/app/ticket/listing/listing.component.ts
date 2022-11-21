@@ -114,12 +114,12 @@ export class ListingComponent implements AfterViewInit, OnInit {
       } else if (userRole == "admin") {
         this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
         this.authService.setUserRole(userRole);
-      } else if (userRole == "oppilas") {
+      } else if (userRole == "opiskelija") {
         this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`;
-        userRole = $localize`:@@Oppilas:Oppilas`;
+        userRole = $localize`:@@Opiskelija:Opiskelija`;
         this.authService.setUserRole(userRole);
       } else {
-        console.error('Käyttäjän asemaa kurssilla ei löydetty.')
+        console.error('Käyttäjän asemaa kurssilla ei löydetty.');
       }
     });
   }
