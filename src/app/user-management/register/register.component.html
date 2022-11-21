@@ -64,6 +64,7 @@
 
     <button mat-raised-button color="primary" class="login-button" i18n="@@Luo tili"
     [disabled]="email.length < 3 || newPassword.length < minPasswordLength || newPassword !== repassword"
+    (click)="register()"
     >
       Luo tili
     </button>
