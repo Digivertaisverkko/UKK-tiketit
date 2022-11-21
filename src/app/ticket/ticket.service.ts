@@ -175,10 +175,10 @@ public getTicketState(numericalState: number): string {
     }
     this.checkErrors(response);
     if (response.success !== undefined && response.success == true) {
-      this.sendMessage('Kommentin lisääminen tikettiin onnistui.');
+      this.sendMessage($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`)
       return true;
     } else {
-      this.sendMessage('Kommentin lisääminen tikettiin epäonnistui.');
+      this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
       return false;
     }
   }
@@ -224,14 +224,14 @@ public getTicketState(numericalState: number): string {
     }
     let message: string = '';
     if (response.success == undefined) {
-      this.sendMessage('Tiketin lisäyksen onnistumisesta ei saatu vahvistusta.');
+      this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)  
       return false; 
     } else {
       if (response.success == true) {
-        this.sendMessage('Tiketti lisättiin onnistuneesti');
+        this.sendMessage($localize `:@@Kysymys lisättiin onnistuneesti:Kysymys lisättiin onnistuneesti`);
         return true;
       } else {
-        this.sendMessage('Tiketin lisääminen epäonnistui');
+        this.sendMessage($localize `:@@Kysymys lisääminen epäonnistui:Kysymys lisääminen epäonnistui`);
         return false;
       }
     }
@@ -341,9 +341,8 @@ public getTicketState(numericalState: number): string {
     ticket.viesti = response[0].viesti;
     response.shift();
     ticket.kommentit = response;
-
-    console.log('Lopullinen tiketti alla:');
-    console.log(ticket);
+    // console.log('Lopullinen tiketti alla:');
+    // console.log(ticket);
     return ticket
   }
 
@@ -378,8 +377,8 @@ public getTicketState(numericalState: number): string {
     // const commentsDescending = commentsWithDate.sort(
     //   (commentA, commentB) => commentB.aikaleima.getTime() - commentA.aikaleima.getTime(),
     // );
-    console.log('Kommentit järjestyksessä:');
-    console.dir(commentsAscending);
+    // console.log('Kommentit järjestyksessä:');
+    // console.dir(commentsAscending);
     return commentsAscending;
   }
 
@@ -428,13 +427,13 @@ public getTicketState(numericalState: number): string {
         error.error
       );
     }
-    let message = 'Yhteydenotto palvelimeen ei onnistunut.';
+    let message = `:@@Yhteydenotto palvelimeen ei onnistunut.:Yhteydenotto palvelimeen ei onnistunut.`;
     if (error !== undefined) {
       if (error.error.length > 0) {
-        message += 'Virhe: ' + error.error;
+        message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
       }
       if (error.status !== undefined) {
-        message += 'Tilakoodi: ' + error.status;
+        message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
       }
     }
     this.sendMessage(message);
@@ -447,7 +446,7 @@ public getTicketState(numericalState: number): string {
   private checkErrors(response: any) {
     var message: string = '';
     if (response == undefined) {
-      message = 'Virhe: ei vastausta palvelimelta.';
+      message = `:@@Ei vastausta palvelimelta.:ei vastausta palvelimelta.`;
       this.sendMessage(message);
       throw new Error(message);
     }
@@ -455,9 +454,9 @@ public getTicketState(numericalState: number): string {
       let errorInfo: string = '';
       if (response.error !== undefined) {
         const error = response.error;
-        errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
+        errorInfo = `:@@Tilakoodi:Tilakoodi` + ': ' + error.tunnus + ', ' + `:@@Virheilmoitus:Virheilmoitus` + ': ' + error.virheilmoitus;
       }
-      message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
+      message = `:@@Yhteydenotto palvelimeen ei onnistunut.:Yhteydenotto palvelimeen ei onnistunut.`+ ': ' + errorInfo;
       this.sendMessage(message);
       throw new Error(message);
     }

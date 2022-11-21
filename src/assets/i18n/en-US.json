@@ -48,6 +48,16 @@
     "Lisätietoa pyydetty": "More info needed",
     "Kommentoitu": "Commented",
     "Ratkaistu": "Resolved",
-    "Arkistoitu": "Archived"
+    "Arkistoitu": "Archived",
+    "Kommentin lisääminen": "Adding a comment to a question was successful.",
+    "Kommentin lisääminen epäonistui": "Adding a comment to a question failed.",
+    "Kysymyksen lisäämisestä ei vahvistusta": "No confirmation of the success of adding the question was received.",
+    "Kysymys lisättiin onnistuneesti": "The question was added successfully",
+    "Kysymys lisääminen epäonnistui": "Adding a question failed",
+    "Yhteydenotto palvelimeen ei onnistunut.": "The connection to the server failed.",
+    "Ei vastausta palvelimelta.": "No response from the server.",
+    "Virhe": "Error",
+    "Tilakoodi": "Status code"
+
   }
 }
