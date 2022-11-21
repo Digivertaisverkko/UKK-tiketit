@@ -25,6 +25,11 @@ export interface User {
   asema: 'opettaja' | 'oppilas' | 'admin'
 }
 
+export interface GenericResponse {
+  success: boolean,
+  error: object
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -89,6 +94,32 @@ export class AuthService {
 
   public setUserRole(asema: string | '') {
     this.userRole$.next(asema)
+  }
+
+  // Rekisteröi 
+  public async addUser(email: string, password: string): Promise<boolean> {
+    const body = {
+      'ktunnus': email,
+      'salasana': password
+    };
+    const url = environment.apiBaseUrl + '/luotili';
+    let response: any;
+    try {
+      console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
+      console.dir(body);
+      response = await firstValueFrom(this.http.post<GenericResponse>(url, body));
+      console.log('authService: saatiin vastaus POST-kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    this.checkErrors(response);
+    if (response.success == true) {
+      this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@onnistui:onnistui` + '.');
+      return true;
+    } else {
+      this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@ei onnistunut:ei onnistunut` + '.');
+      return false;
+    }
   }
 
   // Hae omat tiedot.
@@ -191,14 +222,6 @@ export class AuthService {
       this.loginCode = response['login-code'];
       console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
-    } else {
-      console.error("Login authorization not succesful.");
-      if (response)
-      this.sendErrorMessage("(ei virheviestä)");
-
-      // Ei ole error messageja tälle (vielä) api:ssa
-      // console.error("Login attempt failed : " + response.error);
-      // this.sendErrorMessage(response.error);
     }
   }
 

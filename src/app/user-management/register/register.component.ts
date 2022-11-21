@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { AuthService } from 'src/app/core/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
@@ -6,22 +9,31 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './register.component.html',
   styleUrls: ['../login/login.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   public email: string;
-  public username: string;
   public newPassword: string;
   public repassword: string;
   public minPasswordLength: number = 8;
+  public messageSub: Subscription;
 
-  constructor() {
+  constructor(private auth: AuthService,
+    private _snackBar: MatSnackBar)
+  {
     this.email = '';
-    this.username = '';
     this.newPassword  = '';
     this.repassword = '';
+    this.messageSub = this.auth.onErrorMessages().subscribe(message => {
+      this._snackBar.open(message, 'OK')
+    })
   }
 
-  ngOnInit(): void {
+  register() {
+    this.auth.addUser(this.email, this.newPassword).then(isSuccesful => {
+      if (isSuccesful) {
+        // ohjaa login tabiin.
+      }
+    });
   }
 
 }

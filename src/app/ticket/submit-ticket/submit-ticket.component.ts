@@ -10,6 +10,7 @@ import { NewTicket, TicketService } from '../ticket.service';
   styleUrls: ['./submit-ticket.component.scss']
 })
 export class SubmitTicketComponent implements OnDestroy {
+  // max pituus: 255.
   titleText: string = '';
   assignmentText: string = '';
   problemText: string = '';

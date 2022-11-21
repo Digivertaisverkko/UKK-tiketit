@@ -31,13 +31,14 @@
     "Sähköposti tarvitaan": "Email is needed",
     "Salasana": "Password",
     "(Viesti salasanan pituudesta": " atleast {$INTERPOLATION} characters long password is needed. ",
+    "Kirjoita salasana uudelleen": "Please re-enter the password",
     "Muista minut": "Remember me",
     "Kirjautuminen ei onnistunut": "Login failed",
     "Vastaus palvelimelta: {{ serverErrorMessage }}": "Response from server: {$INTERPOLATION}",
     "Kirjaudu sisään": " Sign in ",
     "tai": "or",
     "Sisään kirjautumatta": " Login without auth (!) ",
-    "Rekisteröidy": "Register",
+    "Luo tili": "Luo tili",
     "Käyttäjätunnus": "Username",
     "Käyttäjätunnus tarvitaan.": " Username required. ",
     "Salasanan pituus": "A password at least {$INTERPOLATION} characters long is required. ",
@@ -59,6 +60,9 @@
     "Ei vastausta palvelimelta.": "No response from the server.",
     "Virhe": "Error",
     "Tilakoodi": "Status code",
-    "Virheilmoitus": "Error message"
+    "Virheilmoitus": "Error message",
+    "Käyttäjän rekisteröinti": "User registration",
+    "onnistui": "succesful",
+    "ei onnistunut": "failed"
   }
 }

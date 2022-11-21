@@ -6,8 +6,6 @@ import { Subscription } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 // import { ForwardRefHandling } from '@angular/compiler';
 
-import { LOCALE_ID } from '@angular/core';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -23,6 +21,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public readonly passwordMinLength: number = 8;
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
+  public tabIndex: number = 0;
+
 
   public lang: string | null = localStorage.getItem('language');
 

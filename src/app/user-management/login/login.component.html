@@ -3,9 +3,8 @@
     class="mat-elevation-z12"
     [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
   >
-    <mat-card-title i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</mat-card-title
-    >
-    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs">
+    <mat-card-title i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</mat-card-title>
+    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" [(selectedIndex)]="tabIndex">
       <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu">
         <mat-card-content>
           <form action="">
@@ -89,11 +88,10 @@
         </mat-card-content>
 
       </mat-tab>
-      <mat-tab i18n-label="@@Rekisteröidy" label="Rekisteröidy">
+      <mat-tab i18n-label="@@Luo tili" label="Luo tili">
         <app-register></app-register>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
 
-  <!-- <img src="../../../assets/1920x1080_black_screen.jpg"> -->
 </div>
