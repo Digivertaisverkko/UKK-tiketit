@@ -28,6 +28,12 @@ export class SubmitTicketComponent implements OnDestroy {
         (message) => { this._snackBar.open(message, 'OK') });
   }
 
+  goBack() {
+    let url:string = '/list-tickets?courseID=' + this.ticketService.getActiveCourse();
+    console.log('submit-ticket: url: ' + url);
+    this.router.navigateByUrl(url);
+  }
+
   ngOnDestroy(): void {
     this.messageSubscription.unsubscribe();
   }

@@ -94,7 +94,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
         console.error(' Course ID:ä ei löydetty');
       } else {
         this.courseID = params['courseID'];
-        // Jotta header tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
+        // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
         this.ticket.setActiveCourse(this.courseID);
         if (this.courseID !== null) { 
           this.authService.getMyUserInfo(this.courseID).then(response => {

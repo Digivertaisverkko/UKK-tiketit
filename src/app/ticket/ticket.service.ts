@@ -292,9 +292,9 @@ public getTicketState(numericalState: number): string {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
       );
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      // console.log(
+      //   'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      // );
     } catch (error: any) {
       this.handleError(error);
     }
