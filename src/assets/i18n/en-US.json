@@ -57,7 +57,7 @@
     "Yhteydenotto palvelimeen ei onnistunut.": "The connection to the server failed.",
     "Ei vastausta palvelimelta.": "No response from the server.",
     "Virhe": "Error",
-    "Tilakoodi": "Status code"
-
+    "Tilakoodi": "Status code",
+    "Virheilmoitus": "Error message"
   }
 }
