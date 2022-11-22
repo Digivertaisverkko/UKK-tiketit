@@ -96,17 +96,19 @@ export class AuthService {
     this.userRole$.next(asema)
   }
 
-  // Rekisteröi 
+  // Luo käyttäjätili
   public async addUser(email: string, password: string): Promise<boolean> {
+    // ktunnus on sama kuin sposti.
     const body = {
       'ktunnus': email,
-      'salasana': password
+      'salasana': password,
+      'sposti': email
     };
     const url = environment.apiBaseUrl + '/luotili';
     let response: any;
     try {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
-      console.dir(body);
+      // console.dir(httpOptions);
       response = await firstValueFrom(this.http.post<GenericResponse>(url, body));
       console.log('authService: saatiin vastaus POST-kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
     } catch (error: any) {
