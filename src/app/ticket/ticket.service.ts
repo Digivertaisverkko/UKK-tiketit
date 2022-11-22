@@ -414,35 +414,39 @@ public getTicketState(numericalState: number): string {
       this.sendMessage(message);
       throw new Error(message);
     }
-    if (response.error !== undefined ) {
-      switch (response.error.tunnus) {
-        case 1000:
-          message = $localize `:@@Et ole kirjautunut:Et ole kirjautunut`+ '.';
-          break;
-        case 1001: 
-          message = $localize `:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä`+ '.';
-          break;
-        case 1002:
-          message = $localize `:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana`+ '.';
-          break;
-        case 1003:
-          message = $localize `:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin`+ '.';
-          break;
-        case 1010:
-          message = $localize `:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa`+ '.';
-          break;
-        case 2000:
-          // Ei löytynyt: ei virhettä.
-          break;
-        case 3000:
-        case 3004:
-          throw new Error(response.error);
-        default:
-          throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
-      }
-      if (message.length > 0) {
-        this.sendMessage(message);
-      }
+    if (response.error == undefined) {
+      return
+    }
+    switch (response.error.tunnus) {
+      case 1000:
+        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        break;
+      case 1001:
+        message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
+        break;
+      case 1002:
+        message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
+        break;
+      case 1003:
+        message = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.';
+        break;
+      case 1010:
+        message = $localize`:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa` + '.';
+        break;
+      case 2000:
+        // Ei löytynyt: ei virhettä.
+        break;
+      case 3000:
+      case 3004:
+        throw new Error(response.error);
+      default:
+        throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
+    }
+    if (message.length > 0) {
+      this.sendMessage(message);
+    }
+    if (response.error.tunnus !== 2000) {
+      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + response.error);
     }
   }
 

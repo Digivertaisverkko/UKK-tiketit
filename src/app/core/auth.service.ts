@@ -248,6 +248,7 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
+    this.checkErrors(response);
     if (response.success == true) {
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
       console.log('Vastaus: ' + JSON.stringify(response));
@@ -260,7 +261,6 @@ export class AuthService {
       console.log('Authorization success.');
     } else {
       console.error(response.error);
-      this.sendErrorMessage(response.error);
     }
   }
 
@@ -369,45 +369,49 @@ export class AuthService {
     );
   }
 
-    // Palvelimelta saatujen vastauksien virheenkäsittely.
-    private checkErrors(response: any) {
-      var message: string = '';
-      if (response == undefined) {
-        message = '';
-        this.sendErrorMessage(message);
-        throw new Error(message);
-      }
-      if (response.error !== undefined ) {
-        switch (response.error.tunnus) {
-          case 1000:
-            message = $localize `:@@Et ole kirjautunut:Et ole kirjautunut`+ '.';
-            break;
-          case 1001: 
-            message = $localize `:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä`+ '.';
-            break;
-          case 1002:
-            message = $localize `:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana`+ '.';
-            break;
-          case 1003:
-            message = $localize `:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin`+ '.';
-            break;
-          case 1010:
-            message = $localize `:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa`+ '.';
-            break;
-          case 2000:
-            // Ei löytynyt: ei virhettä.
-            break;
-          case 3000:
-          case 3004:
-            throw new Error(response.error);
-          default:
-            throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
-        }
-        if (message.length > 0) {
-          this.sendErrorMessage(message);
-        }
-      }
+  // Palvelimelta saatujen vastauksien virheenkäsittely.
+  private checkErrors(response: any) {
+    var message: string = '';
+    if (response == undefined) {
+      message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
+      this.sendErrorMessage(message);
+      throw new Error(message);
     }
+    if (response.error == undefined) {
+      return
+    }
+    switch (response.error.tunnus) {
+      case 1000:
+        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        break;
+      case 1001:
+        message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
+        break;
+      case 1002:
+        message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
+        break;
+      case 1003:
+        message = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.';
+        break;
+      case 1010:
+        message = $localize`:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa` + '.';
+        break;
+      case 2000:
+        // Ei löytynyt: ei virhettä.
+        break;
+      case 3000:
+      case 3004:
+        throw new Error(response.error);
+      default:
+        throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
+    }
+    if (message.length > 0) {
+      this.sendErrorMessage(message);
+    }
+    if (response.error.tunnus !== 2000) {
+      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + response.error);
+    }
+  }
 
   // Näytä client-side login tietoja ennen kirjautumisyritystä.
   private logBeforeLogin() {
