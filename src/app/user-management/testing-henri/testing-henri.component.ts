@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpTestingService } from './http-testing.service';
-import { Ticket, TicketService, Tila } from 'src/app/ticket/ticket.service';
+import { TicketService } from 'src/app/ticket/ticket.service';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TitleCasePipe } from '@angular/common';
@@ -93,8 +93,7 @@ export class TestingHenriComponent {
 
   public async getTicketInfo() {
     this.ticket.getTicketInfo(this.ticketID).then(response => {
-      console.dir(response);
-      console.log('Tiketin tila: ' + Tila[response.tila]);
+
     });
   }
 
