@@ -20,6 +20,11 @@ export interface Course {
   nimi: string;
 }
 
+export interface Error {
+  tunnus: number;
+  virheilmoitus: string;
+}
+
 // Field = Tiketin lisäkenttä
 export interface Field {
   id: number;
@@ -69,26 +74,6 @@ export interface Ticket {
   kurssi: number;
   viesti: string;
   kommentit: Array<Comment>;
-}
-
-export enum Tila {
-  "Virhetila",
-  "Lähetetty",
-  "Luettu",
-  "Lisätietoa pyydetty",
-  "Kommentoitu",
-  "Ratkaistu",
-  "Arkistoitu"
-}
-
-export enum State {
-  "Error state",
-  "Sent",
-  "Read",
-  "More info needed",
-  "Commented",
-  "Resolved",
-  "Archived"
 }
 
 @Injectable({
@@ -298,22 +283,6 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
-  // Ei tarvita: käytä Tila: enum tämän sijaan.
-  // public getTicketState(stateNumber: number): string {
-  //   let state: string = '';
-  //   switch (stateNumber) {
-  //     case 0: state = "Virhetila"; break;
-  //     case 1: state = "Lähetty"; break;
-  //     case 2: state = "Luettu"; break;
-  //     case 3: state = "Lisätietoa pyydetty"; break;
-  //     case 4: state = "Kommentoitu"; break;
-  //     case 5: state = "Ratkaistu"; break;
-  //     case 6: state = "Arkistoitu"; break;
-  //     default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
-  //   }
-  //   return state;
-  // }
-
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
     const httpOptions = this.getHttpOptions();
@@ -423,7 +392,7 @@ public getTicketState(numericalState: number): string {
         error.error
       );
     }
-    let message = `:@@Yhteydenotto palvelimeen ei onnistunut.:Yhteydenotto palvelimeen ei onnistunut.`;
+    let message: string = '';
     if (error !== undefined) {
       if (error.error.length > 0) {
         message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
@@ -432,29 +401,48 @@ public getTicketState(numericalState: number): string {
         message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
       }
     }
-    this.sendMessage(message);
     return throwError(
       () => new Error(message)
     );
   }
 
-  // Palvelimelta saatujen vastauksien virheenkäsittely.
+  // Testataan, onko palvelimelta saatu viesti virheilmoitus ja käsitellään se.
   private checkErrors(response: any) {
     var message: string = '';
     if (response == undefined) {
-      message = `:@@Ei vastausta palvelimelta.:ei vastausta palvelimelta.`;
+      message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
       this.sendMessage(message);
       throw new Error(message);
     }
-    if (response.error !== undefined && response.error.success == false) {
-      let errorInfo: string = '';
-      if (response.error !== undefined) {
-        const error = response.error;
-        errorInfo = `:@@Tilakoodi:Tilakoodi` + ': ' + error.tunnus + ', ' + `:@@Virheilmoitus:Virheilmoitus` + ': ' + error.virheilmoitus;
+    if (response.error !== undefined ) {
+      switch (response.error.tunnus) {
+        case 1000:
+          message = $localize `:@@Et ole kirjautunut:Et ole kirjautunut`+ '.';
+          break;
+        case 1001: 
+          message = $localize `:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä`+ '.';
+          break;
+        case 1002:
+          message = $localize `:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana`+ '.';
+          break;
+        case 1003:
+          message = $localize `:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin`+ '.';
+          break;
+        case 1010:
+          message = $localize `:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa`+ '.';
+          break;
+        case 2000:
+          // Ei löytynyt: ei virhettä.
+          break;
+        case 3000:
+        case 3004:
+          throw new Error(response.error);
+        default:
+          throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
       }
-      message = `:@@Yhteydenotto palvelimeen ei onnistunut.:Yhteydenotto palvelimeen ei onnistunut.`+ ': ' + errorInfo;
-      this.sendMessage(message);
-      throw new Error(message);
+      if (message.length > 0) {
+        this.sendMessage(message);
+      }
     }
   }
 

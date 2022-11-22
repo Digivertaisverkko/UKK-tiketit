@@ -88,9 +88,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
       }
     });
     this.routeSubscription = this.route.queryParams.subscribe(params => {
-      if (params['courseID'] == undefined) {
-        console.error(' Course ID:ä ei löydetty');
-      } else {
+      if (params['courseID'] !== undefined) {
         this.courseID = params['courseID'];
         // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
         this.ticket.setActiveCourse(this.courseID);
@@ -98,28 +96,31 @@ export class ListingComponent implements AfterViewInit, OnInit {
           this.showHeader(this.courseID);
         }
       }
-      console.log('löydettiin kurssi id: ' + this.courseID)
+      // console.log('löydettiin kurssi id: ' + this.courseID)
     })
     this.updateView();
   }
 
+  // Näytä otsikko riippuen käyttäjän roolista.
   private showHeader(courseID: string) {
     this.authService.getMyUserInfo(courseID).then(response => {
-      let userRole: string = response.asema;
-      // console.log('Käyttäjän asema: ' + userRole);
-      if (userRole == "opettaja") {
-        this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
-        userRole = $localize`:@@Opettaja:Opettaja`;
-        this.authService.setUserRole(userRole);
-      } else if (userRole == "admin") {
-        this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
-        this.authService.setUserRole(userRole);
-      } else if (userRole == "opiskelija") {
-        this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`;
-        userRole = $localize`:@@Opiskelija:Opiskelija`;
-        this.authService.setUserRole(userRole);
-      } else {
-        console.error('Käyttäjän asemaa kurssilla ei löydetty.');
+      if (response.asema !== undefined) {
+        let userRole:string = response.asema;
+        // console.log('Käyttäjän asema: ' + userRole);
+        if (userRole == "opettaja") {
+          this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+          userRole = $localize`:@@Opettaja:Opettaja`;
+          this.authService.setUserRole(userRole);
+        } else if (userRole == "admin") {
+          this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+          this.authService.setUserRole(userRole);
+        } else if (userRole == "opiskelija") {
+          this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`;
+          userRole = $localize`:@@Opiskelija:Opiskelija`;
+          this.authService.setUserRole(userRole);
+        } else {
+          console.error('Käyttäjän asemaa kurssilla ei löydetty.');
+        }
       }
     });
   }
@@ -132,15 +133,15 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   private updateView() {
   this.ticket.getQuestions(Number(this.courseID)).then(response => {
-    // Testaamiseen:
-    // response =[];
+    this.isLoaded = true;
+    if (response.length > 0 ) {
+
     this.tableLength = response.length;
     if (this.tableLength === 0) {
       this.showNoQuestions = true;
     } else {
       this.showNoQuestions = false; 
     }
-    const lang = localStorage.getItem('language')?.substring(0,2);
     this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
       {
         tila: this.ticket.getTicketState(tila),
@@ -150,9 +151,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
         aloittajanNimi: aloittaja.nimi
       }
     )))
-    this.isLoaded = true;
     // console.log('Saatiin vastaus (alla):');
     // console.dir(SortableData);
+    }
   }).then(response =>
     console.dir(this.dataSource)
   );

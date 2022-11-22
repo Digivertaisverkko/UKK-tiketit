@@ -343,7 +343,7 @@ export class AuthService {
       return url.protocol === "http:" || url.protocol === "https:";
     }
 
-  // Virheidenkäsittely
+// HTTP-kutsujen virheidenkäsittely
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred.
@@ -355,34 +355,57 @@ export class AuthService {
         error.error
       );
     }
-    let message = "Yhteydenotto palvelimeen ei onnistunut.";
+    let message: string = '';
     if (error !== undefined) {
       if (error.error.length > 0 ) {
-        message += "Virhe: " + error.error;
+        message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
       }
       if (error.status !== undefined ) {
-        message += "Tilakoodi: " + error.status;
+        message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
       }
     }
-    this.sendErrorMessage(message);
-    return throwError(() => new Error("Unable to continue authentication."));
+    return throwError(
+      () => new Error(message)
+    );
   }
 
     // Palvelimelta saatujen vastauksien virheenkäsittely.
     private checkErrors(response: any) {
       var message: string = '';
       if (response == undefined) {
-        message = 'Virhe: ei vastausta palvelimelta.';
+        message = '';
         this.sendErrorMessage(message);
         throw new Error(message);
       }
-      if (response.error !== undefined) {
-        let errorInfo: string = '';
-        const error = response.error;
-        errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
-        message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
-        this.sendErrorMessage(message);
-        throw new Error(message);
+      if (response.error !== undefined ) {
+        switch (response.error.tunnus) {
+          case 1000:
+            message = $localize `:@@Et ole kirjautunut:Et ole kirjautunut`+ '.';
+            break;
+          case 1001: 
+            message = $localize `:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä`+ '.';
+            break;
+          case 1002:
+            message = $localize `:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana`+ '.';
+            break;
+          case 1003:
+            message = $localize `:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin`+ '.';
+            break;
+          case 1010:
+            message = $localize `:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa`+ '.';
+            break;
+          case 2000:
+            // Ei löytynyt: ei virhettä.
+            break;
+          case 3000:
+          case 3004:
+            throw new Error(response.error);
+          default:
+            throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
+        }
+        if (message.length > 0) {
+          this.sendErrorMessage(message);
+        }
       }
     }
 
