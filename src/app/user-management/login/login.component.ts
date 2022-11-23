@@ -82,11 +82,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   private setLoginID() {
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
-        if (params['loginid'] == '') {
-          console.error('Ei login id:ä URL:ssa, ei pystytä kirjautumaan.');
-        }
-        this.loginID = params['loginid'];
+        if (params['loginid'] !== undefined) {
+          this.loginID = params['loginid'];
         console.log('loginComponent: asetettiin loginID: ' + this.loginID);
+        }
       },
       error: (error) => {
         console.error(error);

@@ -10,10 +10,10 @@ export const environment = {
   production: false,
   clientID: 'angularApp',
   productName: 'UKK-Tiketit',
-  apiBaseUrl: baseUrl,
+  apiBaseUrl: baseUrl
 }
 
-// 
+//
 //   ownLoginUrl: apiBaseUrl + '/echoheaders/',
 
 /*
