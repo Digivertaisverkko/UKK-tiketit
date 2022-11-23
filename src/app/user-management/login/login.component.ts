@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       next: (params) => {
         if (params['loginid'] !== undefined) {
           this.loginID = params['loginid'];
-        console.log('loginComponent: asetettiin loginID: ' + this.loginID);
+          // console.log('loginComponent: asetettiin loginID: ' + this.loginID);
         }
       },
       error: (error) => {
