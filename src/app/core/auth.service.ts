@@ -409,7 +409,7 @@ export class AuthService {
       this.sendErrorMessage(message);
     }
     if (response.error.tunnus !== 2000) {
-      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + response.error);
+      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + response.error.virheilmoitus);
     }
   }
 

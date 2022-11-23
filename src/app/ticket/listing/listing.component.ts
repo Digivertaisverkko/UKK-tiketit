@@ -133,7 +133,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
           console.error('Käyttäjän asemaa kurssilla ei löydetty.');
         }
       }
-    });
+    }).catch(error =>
+      console.error('listingComponent: Saatiin virhe haettaessa käyttäjän asemaa: ' + error.message));
   }
 
   public getDisplayedColumn(): string[] {
@@ -169,6 +170,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     console.dir(this.dataSource)
   ).catch( ()=> {
     this.isLoaded = true;
+    console.log('catched');
   }
     );
   // this.dataSource = new MatTableDataSource(DATA);
