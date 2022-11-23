@@ -60,6 +60,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.setLoginID();
   }
 
+  // Uuden tilin luonnin jälkeen.
+  public makeTabActive(event: any) {
+    this.tabIndex = 0;
+  }
+
   public login(): void {
     this.isEmailValid = this.validateEmail(this.email);
     console.log('email validation: ' + this.isEmailValid);

@@ -3,6 +3,8 @@ import { AuthService } from 'src/app/core/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
+import { Output, EventEmitter} from '@angular/core';
+
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
   selector: 'app-register',
@@ -10,6 +12,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['../login/login.component.scss']
 })
 export class RegisterComponent {
+
+  @Output() event = new EventEmitter<boolean>();
 
   public email: string;
   public newPassword: string;
@@ -34,10 +38,14 @@ export class RegisterComponent {
     })
   }
 
+  changeActiveTab() {
+    this.event.emit(true);
+  }
+
   register() {
     this.auth.addUser(this.email, this.newPassword).then(isSuccesful => {
       if (isSuccesful) {
-        // ohjaa login tabiin.
+        this.event.emit(true);
       }
     }).catch (error => {
       console.error(error.message);

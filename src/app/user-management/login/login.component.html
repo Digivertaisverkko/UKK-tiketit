@@ -87,7 +87,7 @@
 
       </mat-tab>
       <mat-tab i18n-label="@@Luo tili" label="Luo tili">
-        <app-register></app-register>
+        <app-register (event)="makeTabActive($event)"></app-register>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
