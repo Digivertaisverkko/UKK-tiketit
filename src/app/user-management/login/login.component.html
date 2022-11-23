@@ -31,9 +31,8 @@
                 name="password"
                 [(ngModel)]="password"
               />
-              <mat-error i18n="@@(Viesti salasanan pituudesta">
-                Vähintään {{ passwordMinLength }} merkkiä pitkä salasana
-                tarvitaan.
+              <mat-error i18n="@@Salasana tarvitaan">
+                Salasana tarvitaan.
               </mat-error>
               <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
@@ -45,8 +44,7 @@
               *ngIf="serverErrorMessage.length > 0"
               i18n-title="@@Kirjautuminen ei onnistunut"
               title="Kirjautuminen ei onnistunut"
-              i18n-message="@@Vastaus palvelimelta: {{ serverErrorMessage }}"
-              message="Vastaus palvelimelta: {{ serverErrorMessage }}"
+              message="{{ serverErrorMessage }}"
               [styles]="{ margin: '1em 10% 1em 10%' }"
             >
             </app-error-card>
