@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import '@angular/localize/init';
+import { truncate } from '../utils/truncate';
 
 export interface Comment {
   aikaleima: Date;
@@ -205,8 +206,8 @@ public getTicketState(numericalState: number): string {
     }
     let message: string = '';
     if (response.success == undefined) {
-      this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)  
-      return false; 
+      this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
+      return false;
     } else {
       if (response.success == true) {
         this.sendMessage($localize `:@@Kysymys lisättiin onnistuneesti:Kysymys lisättiin onnistuneesti`);
@@ -258,7 +259,7 @@ public getTicketState(numericalState: number): string {
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
-  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */ 
+  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
     let target: string;
@@ -434,7 +435,7 @@ public getTicketState(numericalState: number): string {
         message = $localize`:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa` + '.';
         break;
       case 2000:
-        // Ei löytynyt: ei virhettä.
+        // Haettavaa tietoa ei löytynyt, mutta ei käsitellä virheenä.
         break;
       case 3000:
       case 3004:
@@ -446,7 +447,7 @@ public getTicketState(numericalState: number): string {
       this.sendMessage(message);
     }
     if (response.error.tunnus !== 2000) {
-      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + response.error);
+      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + truncate(response.error, 250, true));
     }
   }
 

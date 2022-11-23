@@ -166,11 +166,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
     // console.log('Saatiin vastaus (alla):');
     // console.dir(SortableData);
     }
-  }).then(response =>
-    console.dir(this.dataSource)
-  ).catch( ()=> {
+  }).catch( error => {
     this.isLoaded = true;
-    console.log('catched');
+    console.error(error.message);
   }
     );
   // this.dataSource = new MatTableDataSource(DATA);

@@ -31,8 +31,8 @@
                 name="password"
                 [(ngModel)]="password"
               />
-              <mat-error i18n="@@Salasana tarvitaan">
-                Salasana tarvitaan.
+              <mat-error i18n="@@Salasanan pituus">
+                Vähintään {{passwordMinLength}} pitkä salasana tarvitaan.
               </mat-error>
               <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>

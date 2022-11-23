@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.serverErrorMessage = '';
         }
       });
+
       this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
         if (isLoggedIn === true) {
           this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
@@ -69,7 +70,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     // console.log('email ' + this.email);
     // console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
-    this.authService.sendLoginRequest(this.email, this.password, this.loginID);
+    this.authService.sendLoginRequest(this.email, this.password, this.loginID)
+      .catch( error => {
+    console.error(error.message)});
   }
 
   public loginWithoutAuth(): void {

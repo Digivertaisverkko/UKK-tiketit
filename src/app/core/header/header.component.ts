@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit {
       console.log(' headerComponent: saatiin vastaus: ' + JSON.stringify(response));
         this.router.navigateByUrl(response);
     }).catch (error => {
-      console.log('Error: Route for login not found: ' + error);
+      console.error('headerComponent: Virhe uloskirjautuessa: ' + error);
     })
   }
 

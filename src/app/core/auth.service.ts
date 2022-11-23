@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
+import { truncate } from '../utils/truncate';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
@@ -352,7 +353,7 @@ export class AuthService {
       // The backend returned an unsuccessful response code.
       console.error(
         `Saatiin virhe tilakoodilla ${error.status} ja viestillä: `,
-        error.error
+        truncate(error.error, 250, true)
       );
     }
     let message: string = '';
@@ -403,13 +404,13 @@ export class AuthService {
       case 3004:
         throw new Error(response.error);
       default:
-        throw new Error('Tuntematon tilakoodi: ' + JSON.stringify(response.error));
+        throw new Error('Tuntematon virhetunnus: ' + JSON.stringify(response.error));
     }
     if (message.length > 0) {
       this.sendErrorMessage(message);
     }
     if (response.error.tunnus !== 2000) {
-      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + response.error.virheilmoitus);
+      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + truncate(response.error.virheilmoitus, 250, true));
     }
   }
 

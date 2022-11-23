@@ -39,6 +39,8 @@ export class RegisterComponent {
       if (isSuccesful) {
         // ohjaa login tabiin.
       }
+    }).catch (error => {
+      console.error(error.message);
     });
   }
 
