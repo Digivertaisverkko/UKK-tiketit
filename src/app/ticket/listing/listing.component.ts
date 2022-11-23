@@ -40,7 +40,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   dataSource = {} as MatTableDataSource<Sortable>;
   // dataSource = new MatTableDataSource<Sortable>();
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
-  public columnDefinitions: ColumnDefinition[]; 
+  public columnDefinitions: ColumnDefinition[];
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
   public showNoQuestions: boolean = true;
@@ -49,6 +49,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
   public maxTicketTitleLength = 100;
   private routeSubscription: Subscription | null = null;
   public tableLength: number = 0;
+  public ticketMessageSub: Subscription;
+  public ticketServiceMessage: string = '';
 
   @ViewChild(MatSort)
   sort!: MatSort;
@@ -68,12 +70,21 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private ticket: TicketService,
     private authService: AuthService)
   {
+    this.ticketMessageSub = this.ticket.onMessages()
+    .subscribe((message) => {
+      if (message) {
+        this.ticketServiceMessage = message;
+      } else {
+        // Poista viestit, jos saadaan tyhjä viesti.
+        this.ticketServiceMessage = '';
+      }
+    });
 
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: true },
-      { def: 'aloittajanNimi', showMobile: false } 
+      { def: 'aloittajanNimi', showMobile: false }
     ]
   }
 
@@ -140,7 +151,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
     if (this.tableLength === 0) {
       this.showNoQuestions = true;
     } else {
-      this.showNoQuestions = false; 
+      this.showNoQuestions = false;
     }
     this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
       {
@@ -156,7 +167,10 @@ export class ListingComponent implements AfterViewInit, OnInit {
     }
   }).then(response =>
     console.dir(this.dataSource)
-  );
+  ).catch( ()=> {
+    this.isLoaded = true;
+  }
+    );
   // this.dataSource = new MatTableDataSource(DATA);
   }
 

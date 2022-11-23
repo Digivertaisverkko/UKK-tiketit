@@ -63,4 +63,13 @@
     <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
   </mat-card>
 
+  <app-error-card
+    *ngIf="ticketServiceMessage.length > 0"
+    i18n-title="@@Virhe"
+    title="Virhe"
+    message="{{ ticketServiceMessage }}"
+    [styles]="{ margin: '1em 20% 1em 20%' }"
+  >
+  </app-error-card>
+
 </mat-card>

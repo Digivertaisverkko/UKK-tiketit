@@ -42,7 +42,7 @@
     "Luo tili": "Luo tili",
     "Käyttäjätunnus": "Username",
     "Käyttäjätunnus tarvitaan.": " Username required. ",
-    "Salasanan pituus": "A password at least {$INTERPOLATION} characters long is required. ",
+    "Salasanan pituus": "A least {$INTERPOLATION} characters long password is required. ",
     "salasana uudelleen": " Please enter your password again. ",
     "Salasanat eivät täsmää.": " Passwords do not match. ",
     "Virhetila": "Error state",
