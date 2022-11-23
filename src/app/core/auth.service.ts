@@ -124,7 +124,7 @@ export class AuthService {
     }
   }
 
-  // Hae omat tiedot.
+  // Hae omat kurssikohtaiset tiedot.
   public async getMyUserInfo(courseID: string): Promise<User> {
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
@@ -144,6 +144,7 @@ export class AuthService {
     return response;
   }
 
+  // Suorita uloskirjautuminen.
   public async logOut(): Promise<any> {
     const sessionID = window.sessionStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
@@ -185,17 +186,16 @@ export class AuthService {
     try {
       console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
+      console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-
     this.checkErrors(response);
     if (response['login-url'] == undefined) {
-      throw new Error("Palvelin ei palauttanut login URL:a.");
+      throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
     }
     const loginUrl = response['login-url'];
-    console.log('loginurl : ' +loginUrl);
+    // console.log('loginurl : ' +loginUrl);
     return loginUrl;
   }
 
@@ -403,7 +403,7 @@ export class AuthService {
       case 3004:
         throw new Error(response.error);
       default:
-        throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
+        throw new Error('Tuntematon tilakoodi: ' + JSON.stringify(response.error));
     }
     if (message.length > 0) {
       this.sendErrorMessage(message);
