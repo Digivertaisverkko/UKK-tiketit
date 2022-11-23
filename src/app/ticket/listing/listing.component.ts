@@ -32,7 +32,7 @@ export interface ColumnDefinition {
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
-  styleUrls: ['./listing.component.scss']
+  styleUrls: ['./listing.component.scss'],
 })
 export class ListingComponent implements AfterViewInit, OnInit {
   private courseID: string | null = '';
@@ -68,10 +68,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private ticket: TicketService,
-    private authService: AuthService)
-  {
-    this.ticketMessageSub = this.ticket.onMessages()
-    .subscribe((message) => {
+    private authService: AuthService
+  ) {
+    this.ticketMessageSub = this.ticket.onMessages().subscribe((message) => {
       if (message) {
         this.ticketServiceMessage = message;
       } else {
@@ -84,13 +83,13 @@ export class ListingComponent implements AfterViewInit, OnInit {
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: true },
-      { def: 'aloittajanNimi', showMobile: false }
-    ]
+      { def: 'aloittajanNimi', showMobile: false },
+    ];
   }
 
   ngOnInit() {
     // if (this.route.snapshot.paramMap.get('courseID') !== null) {};
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
       this.isPhonePortrait = false;
       this.maxTicketTitleLength = 100;
       if (result.matches) {
@@ -98,7 +97,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
         this.isPhonePortrait = true;
       }
     });
-    this.routeSubscription = this.route.queryParams.subscribe(params => {
+    this.routeSubscription = this.route.queryParams.subscribe((params) => {
       if (params['courseID'] !== undefined) {
         this.courseID = params['courseID'];
         // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
@@ -108,70 +107,78 @@ export class ListingComponent implements AfterViewInit, OnInit {
         }
       }
       // console.log('löydettiin kurssi id: ' + this.courseID)
-    })
+    });
     this.updateView();
   }
 
   // Näytä otsikko riippuen käyttäjän roolista.
   private showHeader(courseID: string) {
-    this.authService.getMyUserInfo(courseID).then(response => {
-      if (response.asema !== undefined) {
-        let userRole:string = response.asema;
-        // console.log('Käyttäjän asema: ' + userRole);
-        if (userRole == "opettaja") {
-          this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
-          userRole = $localize`:@@Opettaja:Opettaja`;
-          this.authService.setUserRole(userRole);
-        } else if (userRole == "admin") {
-          this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
-          this.authService.setUserRole(userRole);
-        } else if (userRole == "opiskelija") {
-          this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`;
-          userRole = $localize`:@@Opiskelija:Opiskelija`;
-          this.authService.setUserRole(userRole);
-        } else {
-          console.error('Käyttäjän asemaa kurssilla ei löydetty.');
+    this.authService
+      .getMyUserInfo(courseID)
+      .then((response) => {
+        if (response.asema !== undefined) {
+          let userRole: string = response.asema;
+          // console.log('Käyttäjän asema: ' + userRole);
+          if (userRole == 'opettaja') {
+            this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+            userRole = $localize`:@@Opettaja:Opettaja`;
+            this.authService.setUserRole(userRole);
+          } else if (userRole == 'admin') {
+            this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+            this.authService.setUserRole(userRole);
+          } else if (userRole == 'opiskelija') {
+            this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`;
+            userRole = $localize`:@@Opiskelija:Opiskelija`;
+            this.authService.setUserRole(userRole);
+          } else {
+            console.error('Käyttäjän asemaa kurssilla ei löydetty.');
+          }
         }
-      }
-    }).catch(error =>
-      console.error('listingComponent: Saatiin virhe haettaessa käyttäjän asemaa: ' + error.message));
+      })
+      .catch((error) =>
+        console.error(
+          'listingComponent: Saatiin virhe haettaessa käyttäjän asemaa: ' +
+            error.message
+        )
+      );
   }
 
   public getDisplayedColumn(): string[] {
     return this.columnDefinitions
-    .filter(cd => !this.isPhonePortrait || cd.showMobile)
-      .map(cd => cd.def);
+      .filter((cd) => !this.isPhonePortrait || cd.showMobile)
+      .map((cd) => cd.def);
   }
 
   private updateView() {
-  this.ticket.getQuestions(Number(this.courseID)).then(response => {
-    this.isLoaded = true;
-    if (response.length > 0 ) {
-
-    this.tableLength = response.length;
-    if (this.tableLength === 0) {
-      this.showNoQuestions = true;
-    } else {
-      this.showNoQuestions = false;
-    }
-    this.dataSource = new MatTableDataSource(response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
-      {
-        tila: this.ticket.getTicketState(tila),
-        id: id,
-        otsikko: otsikko,
-        aikaleima: aikaleima,
-        aloittajanNimi: aloittaja.nimi
-      }
-    )))
-    // console.log('Saatiin vastaus (alla):');
-    // console.dir(SortableData);
-    }
-  }).catch( error => {
-    this.isLoaded = true;
-    console.error(error.message);
-  }
-    );
-  // this.dataSource = new MatTableDataSource(DATA);
+    this.ticket
+      .getQuestions(Number(this.courseID))
+      .then((response) => {
+        if (response.length > 0) {
+          this.tableLength = response.length;
+          if (this.tableLength === 0) {
+            this.showNoQuestions = true;
+          } else {
+            this.showNoQuestions = false;
+          }
+          this.dataSource = new MatTableDataSource(
+            response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
+              tila: this.ticket.getTicketState(tila),
+              id: id,
+              otsikko: otsikko,
+              aikaleima: aikaleima,
+              aloittajanNimi: aloittaja.nimi,
+            }))
+          );
+          // console.log('Saatiin vastaus (alla):');
+          // console.dir(SortableData);
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
+      })
+      .finally(() => {
+        this.isLoaded = true;
+      });
   }
 
   ngAfterViewInit() {
