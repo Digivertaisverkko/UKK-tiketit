@@ -15,7 +15,8 @@ export class RegisterComponent {
   public newPassword: string;
   public repassword: string;
   public minPasswordLength: number = 8;
-  // public messageSub: Subscription;
+  public messageSub: Subscription;
+  public serverMessage: string = '';
 
   constructor(private auth: AuthService,
     private _snackBar: MatSnackBar)
@@ -23,9 +24,14 @@ export class RegisterComponent {
     this.email = '';
     this.newPassword  = '';
     this.repassword = '';
-    // this.messageSub = this.auth.onErrorMessages().subscribe(message => {
-    //   this._snackBar.open(message, 'OK')
-    // })
+    this.messageSub = this.auth.onErrorMessages().subscribe(message => {
+      if (message) {
+        this.serverMessage = message;
+      } else {
+        // Poista viestit, jos saadaan tyhjä viesti.
+        this.serverMessage = '';
+      }
+    })
   }
 
   register() {
