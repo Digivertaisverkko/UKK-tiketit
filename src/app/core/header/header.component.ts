@@ -57,9 +57,6 @@ export class HeaderComponent implements OnInit {
           role = $localize`:@@Admin:Järjestelmävalvoja`;
           break;
         }
-        default: {
-          console.error('headerComponent: ei tunnistettu käyttäjän asemaa: ' + role);
-        }
       }
       if (role.length > 0) {
         this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
