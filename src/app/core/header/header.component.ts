@@ -38,9 +38,33 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.onGetUserRole().subscribe(newRole => {
-      this.userRole = newRole.charAt(0).toUpperCase() + newRole.slice(1);
-    });
+    this.updateUserRole();
+  }
+
+  updateUserRole() {
+    this.authService.onGetUserRole().subscribe(response => {
+      let role: string = '';
+      switch (response) {
+        case 'opiskelija': {
+          role = $localize`:@@Opiskelija:Opiskelija`;
+          break;
+        }
+        case 'opettaja': {
+          role = $localize`:@@Opettaja:Opettaja`;
+          break;
+        }
+        case 'admin': {
+          role = $localize`:@@Admin:Järjestelmävalvoja`;
+          break;
+        }
+        default: {
+          console.error('headerComponent: ei tunnistettu käyttäjän asemaa: ' + role);
+        }
+      }
+      if (role.length > 0) {
+        this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
+      }
+    })
   }
 
   public changeLanguage(language: 'en-US' | 'fi-FI') {

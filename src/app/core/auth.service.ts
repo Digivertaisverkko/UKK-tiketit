@@ -93,8 +93,27 @@ export class AuthService {
     return this.userRole$.asObservable();
   }
 
+  public initialize() {
+    if (window.sessionStorage.getItem('USER_ROLE') !== null) {
+      const userRole = window.sessionStorage.getItem('USER_ROLE');
+      switch (userRole) {
+        case "opettaja":
+        case "opiskelija":
+        case "admin": {
+          this.userRole$.next(userRole);
+          console.log('havaittiin user role ' + userRole);
+        }
+      }
+    }
+    if (window.sessionStorage.getItem('SESSION_ID') !== null) {
+      this.isUserLoggedIn$.next(true);
+    }
+  }
+
   public setUserRole(asema: string | '') {
-    this.userRole$.next(asema)
+    window.sessionStorage.setItem('USER_ROLE', asema);
+    this.userRole$.next(asema);
+    console.log('asetettiin user role ' + asema);
   }
 
   // Luo käyttäjätili

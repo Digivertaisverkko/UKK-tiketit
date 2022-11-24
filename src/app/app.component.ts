@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
     // console.log('--- App.component Initialize ajettu ---');
     // console.log('session id: ' + window.sessionStorage.getItem('SESSION_ID'));
     // Katsotaan, onko käyttäjä jo kirjautuneena.
+    this.authService.initialize();
     if (window.sessionStorage.getItem('SESSION_ID') == null) {
       // console.log('ei ole kirjautunut');
       /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee kirjautumisruudussa
@@ -41,12 +42,10 @@ export class AppComponent implements OnInit {
         //console.log('AppComponent: got url from server: ' + response);
         this.router.navigateByUrl(response);
       }).catch (error => {
-        throw new Error (error);
+        console.error(error.message);
       })
       // Ei saatu login id:ä, mutta näytetään kirjautumisruutu.
       this.router.navigateByUrl('login', { replaceUrl: true });
-    } else {
-      this.authService.isUserLoggedIn$.next(true);
     }
   }
 
