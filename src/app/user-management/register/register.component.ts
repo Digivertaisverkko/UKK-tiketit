@@ -45,11 +45,19 @@ export class RegisterComponent {
   register() {
     this.auth.addUser(this.email, this.newPassword).then(isSuccesful => {
       if (isSuccesful) {
+        this.clearScreen();
         this.event.emit(true);
       }
     }).catch (error => {
       console.error(error.message);
     });
+  }
+
+  private clearScreen() {
+    this.email = '';
+    this.newPassword  = '';
+    this.repassword = '';
+    this.auth.clearMessages();
   }
 
 }
