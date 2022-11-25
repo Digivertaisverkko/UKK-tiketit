@@ -42,10 +42,14 @@ export class SubmitTicketComponent implements OnDestroy {
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
     this.newTicket.viesti = this.messageText;
-    this.newTicket.kentat = [{id: 1, arvo: this.assignmentText}, {id: 2, arvo: this.problemText}];
+    this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
     console.log(this.newTicket);
     this.ticketService.addTicket('1', this.newTicket)
-      .then(() => { this.goBack()});
+      .then(() => {
+        this.goBack()
+      }).catch( error => {
+        console.error(error.message);
+      });
   }
 
 }
