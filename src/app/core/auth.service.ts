@@ -117,9 +117,6 @@ export class AuthService {
   }
 
   public setUserName(name: string) {
-    if (name.length == 0) {
-      return
-    }
     window.sessionStorage.setItem('USER_NAME', name);
     this.userName$.next(name);
   }
@@ -188,10 +185,9 @@ export class AuthService {
       this.handleError(error);
     } finally {
       this.isUserLoggedIn$.next(false);
-      this.userName$.next('');
-      this.userRole$.next('');
-      window.sessionStorage.clear();
+      this.setUserName('');
       this.setUserRole('');
+      window.sessionStorage.clear();
     }
   }
 
