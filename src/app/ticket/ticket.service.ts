@@ -117,7 +117,7 @@ export class TicketService {
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
 public getTicketState(numericalState: number): string {
   if (numericalState < 0 || numericalState > 6 ) {
-    throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla 0-6.');
+    throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
   }
   let verbal: string = '';
   switch (numericalState) {
@@ -127,7 +127,7 @@ public getTicketState(numericalState: number): string {
       case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
       case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
       case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
-      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`; break;
+      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`
   }
   return verbal;
 }

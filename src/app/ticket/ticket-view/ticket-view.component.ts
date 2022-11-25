@@ -69,8 +69,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       })
       .then(() => { this.commentText = '' })
       .catch(error => {
-        console.log('napattiin virhe');
-        console.dir(error);
+        //console.log('napattiin virhe');
+        //console.dir(error);
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
         console.log(JSON.stringify(error));
       });
