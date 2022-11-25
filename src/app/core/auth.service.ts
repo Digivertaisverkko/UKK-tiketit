@@ -56,19 +56,6 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
-  // public getSessionID(): string {
-  //   if (this.sessionID == undefined) {
-  //     console.log('Error: no session id set.');
-  //     return('Error');
-  //   }
-  //   return this.sessionID;
-  // }
-
-  // public setSessionID(sessionID: string): void {
-  //   this.sessionID = sessionID;
-  //   this.isUserLoggedIn$.next(true);
-  // }
-
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
   public onIsUserLoggedIn(): Observable<any> {
     return this.isUserLoggedIn$.asObservable();
@@ -93,6 +80,8 @@ export class AuthService {
     return this.userRole$.asObservable();
   }
 
+  // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin
+  // aloitettu. 
   public initialize() {
     if (window.sessionStorage.getItem('USER_ROLE') !== null) {
       const userRole = window.sessionStorage.getItem('USER_ROLE');
@@ -106,14 +95,14 @@ export class AuthService {
       }
     }
     if (window.sessionStorage.getItem('SESSION_ID') !== null) {
-      this.isUserLoggedIn$.next(true);
-    }
+      const isUserLoggedIn: string | null = window.sessionStorage.getItem('SESSION_ID');
+        this.isUserLoggedIn$.next(true);
+    } 
   }
 
   public setUserRole(asema: string | '') {
     window.sessionStorage.setItem('USER_ROLE', asema);
     this.userRole$.next(asema);
-    console.log('asetettiin user role ' + asema);
   }
 
   // Luo käyttäjätili
