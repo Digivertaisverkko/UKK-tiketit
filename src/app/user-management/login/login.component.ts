@@ -76,6 +76,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     // console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID)
+      .then(response => {
+      
+      })
       .catch( error => {
     console.error(error.message)});
   }

@@ -186,10 +186,13 @@ export class AuthService {
       console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
+    } finally {
+      this.isUserLoggedIn$.next(false);
+      this.userName$.next('');
+      this.userRole$.next('');
+      window.sessionStorage.clear();
+      this.setUserRole('');
     }
-    this.isUserLoggedIn$.next(false);
-    window.sessionStorage.clear();
-    this.setUserRole('');
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.

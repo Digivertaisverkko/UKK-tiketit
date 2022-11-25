@@ -54,9 +54,11 @@ export class HeaderComponent implements OnInit {
 
   updateUserName() {
     this.authService.onGetUserName().subscribe(response => {
-      if (response.length > 0 ) {
-        this.userName = response.charAt(0).toUpperCase() + response.slice(1);
-      }
+        if (response.length > 0 ) {
+          this.userName = response.charAt(0).toUpperCase() + response.slice(1) + ',';
+        } else {
+          this.userName = '';
+        }
     })
   }
 
@@ -77,9 +79,7 @@ export class HeaderComponent implements OnInit {
           break;
         }
       }
-      if (role.length > 0) {
         this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
-      }
     })
   }
 
