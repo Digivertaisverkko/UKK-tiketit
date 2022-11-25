@@ -118,6 +118,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
       .then((response) => {
         if (response.asema !== undefined) {
           let userRole: string = response.asema;
+          if (response?.nimi.length > 0) {
+            this.authService.setUserName(response.nimi);
+          }
           // console.log('Käyttäjän asema: ' + userRole);
           if (userRole == 'opettaja') {
             this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
@@ -131,6 +134,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
           } else {
             console.error('Käyttäjän asemaa kurssilla ei löydetty.');
           }
+
         }
       })
       .catch((error) =>

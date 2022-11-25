@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -13,8 +14,10 @@ import { environment } from 'src/environments/environment';
 export class HeaderComponent implements OnInit {
   public isUserLoggedIn$: Observable<boolean>;
   public isUserLoggedIn: Boolean = false;
+  public isPhonePortrait = false;
   public productName: string = environment.productName;
   public userRole: string = '';
+  public userName: string = '';
 
   get language(): string {
     return this._language;
@@ -30,6 +33,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
+    private responsive: BreakpointObserver,
     private router: Router,
     private ticketService: TicketService)
     {
@@ -38,7 +42,22 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
+      this.isPhonePortrait = false;
+      if (result.matches) {
+        this.isPhonePortrait = true;
+      }
+    });
     this.updateUserRole();
+    this.updateUserName();
+  }
+
+  updateUserName() {
+    this.authService.onGetUserName().subscribe(response => {
+      if (response.length > 0 ) {
+        this.userName = response.charAt(0).toUpperCase() + response.slice(1);
+      }
+    })
   }
 
   updateUserRole() {

@@ -42,6 +42,7 @@ export class AuthService {
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private userRole$ = new BehaviorSubject<string>('');
+  private userName$ = new BehaviorSubject<string>('');
   private errorMessages$ = new Subject<any>();
 
   private codeVerifier: string = '';
@@ -80,6 +81,10 @@ export class AuthService {
     return this.userRole$.asObservable();
   }
 
+  public onGetUserName(): Observable<any> {
+    return this.userName$.asObservable();
+  }
+
   // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin
   // aloitettu. 
   public initialize() {
@@ -90,19 +95,33 @@ export class AuthService {
         case "opiskelija":
         case "admin": {
           this.userRole$.next(userRole);
-          console.log('havaittiin user role ' + userRole);
+          // console.log('havaittiin user role ' + userRole);
         }
       }
     }
     if (window.sessionStorage.getItem('SESSION_ID') !== null) {
       const isUserLoggedIn: string | null = window.sessionStorage.getItem('SESSION_ID');
         this.isUserLoggedIn$.next(true);
-    } 
+    }
+    if (window.sessionStorage.getItem('USER_NAME') !== null) {
+      const userName: string | null = window.sessionStorage.getItem('USER_NAME');
+      if (userName !== null && userName.length > 0 ) {
+        this.userName$.next(userName);
+      }
+    }
   }
 
-  public setUserRole(asema: string | '') {
+  public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
     window.sessionStorage.setItem('USER_ROLE', asema);
     this.userRole$.next(asema);
+  }
+
+  public setUserName(name: string) {
+    if (name.length == 0) {
+      return
+    }
+    window.sessionStorage.setItem('USER_NAME', name);
+    this.userName$.next(name);
   }
 
   // Luo käyttäjätili
@@ -294,9 +313,9 @@ export class AuthService {
   private getHttpOptions(): object {
     let sessionID = window.sessionStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
-      throw new Error('No session id set.');
+      throw new Error('Session ID:ä ei ole asetettu. Kutsut palvelimeen eivät toimi.');
     }
-    console.log('session id on: ' + sessionID);
+    // console.log('session id on: ' + sessionID);
     let options = {
       headers: new HttpHeaders({
         'session-id': sessionID

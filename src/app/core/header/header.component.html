@@ -20,6 +20,8 @@
 <button mat-button (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
   i18n="@@Vaihda_kieli_suomeksi">Vaihda kieli suomeksi</button> -->
 
+  <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }">{{userName}},</div>
+
   <div id="userRole">{{userRole}}</div>
 
   <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
