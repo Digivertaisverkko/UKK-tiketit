@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit, OnDestroy {
+  errorMessage: string = '';
   ticket: Ticket;
   tila: string;
   // tila: typeof Tila | typeof State;
@@ -56,8 +57,24 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public sendComment(): void {
     this.ticketService.addComment(this.ticketID, this.commentText)
-      .then(() => { this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response }) })
-      .then(() => { this.commentText = '' });
+      .then((response) => { 
+        if (response?.success == true) {
+          this.errorMessage = '';
+          this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+          this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
+        } else {
+          this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`
+          console.log(response);
+        }
+      })
+      .then(() => { this.commentText = '' })
+      .catch(error => {
+        console.log('napattiin virhe');
+        console.dir(error);
+        this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+        console.log(JSON.stringify(error));
+      });
   }
+
 
 }

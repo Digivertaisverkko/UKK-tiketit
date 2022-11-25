@@ -133,7 +133,7 @@ public getTicketState(numericalState: number): string {
 }
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string): Promise<boolean> {
+  public async addComment(ticketID: string, message: string): Promise<any> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
@@ -142,10 +142,10 @@ public getTicketState(numericalState: number): string {
       viesti: message
     }
     let response: any;
-    console.log('message: ' + body);
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
     console.dir(httpOptions);
     try {
+      console.log('addComment: lähetetään bodyssa: ' + JSON.stringify(body) + ' URL:iin ' + url);
       response = await firstValueFrom(
         this.http.post<object>(url, body, httpOptions)
       );
@@ -153,16 +153,19 @@ public getTicketState(numericalState: number): string {
         'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
     } catch (error: any) {
+      console.log('service: napattiin: ' + JSON.stringify(error));
       this.handleError(error);
+     //  this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
     }
-    this.checkErrors(response);
-    if (response.success !== undefined && response.success == true) {
-      this.sendMessage($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`)
-      return true;
-    } else {
-      this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
-      return false;
-    }
+    return response;
+    // this.checkErrors(response);
+    // if (response.success !== undefined && response.success == true) {
+    //   this.sendMessage($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`)
+    //   return true;
+    // } else {
+    //   this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
+    //   return false;
+    // }
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
@@ -187,7 +190,7 @@ public getTicketState(numericalState: number): string {
   }
 
   // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
-  public async addTicket(courseID: string, newTicket: NewTicket): Promise<boolean> {
+  public async addTicket(courseID: string, newTicket: NewTicket) {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
@@ -205,18 +208,21 @@ public getTicketState(numericalState: number): string {
       this.handleError(error);
     }
     let message: string = '';
-    if (response.success == undefined) {
-      this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
-      return false;
-    } else {
-      if (response.success == true) {
-        this.sendMessage($localize `:@@Kysymys lisättiin onnistuneesti:Kysymys lisättiin onnistuneesti`);
-        return true;
-      } else {
-        this.sendMessage($localize `:@@Kysymys lisääminen epäonnistui:Kysymys lisääminen epäonnistui`);
-        return false;
-      }
-    }
+
+    // this.checkErrors(response);
+
+    // if (response.success == undefined) {
+    //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
+    //   return false;
+    // } else {
+    //   if (response.success == true) {
+    //     this.sendMessage($localize `:@@Kysymys lisättiin onnistuneesti:Kysymys lisättiin onnistuneesti`);
+    //     return true;
+    //   } else {
+    //     this.sendMessage($localize `:@@Kysymys lisääminen epäonnistui:Kysymys lisääminen epäonnistui`);
+    //     return false;
+    //   }
+    // }
   }
 
   // Palauta kurssin nimi.
@@ -407,18 +413,20 @@ public getTicketState(numericalState: number): string {
     );
   }
 
-  // Testataan, onko palvelimelta saatu viesti virheilmoitus ja käsitellään se.
+  // Käsitellään mahdollisesti palvelimelta saatu virheilmoitus.
   private checkErrors(response: any) {
     var message: string = '';
-    if (response == undefined) {
-      message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
-      this.sendMessage(message);
-      throw new Error(message);
-    }
-    if (response.error == undefined) {
+    // if (response == undefined) {
+    //   message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
+    //   this.sendMessage(message);
+    //   throw new Error(message);
+    // }
+    if (response?.error == undefined) {
       return
     }
-    switch (response.error.tunnus) {
+    const error = response.error;
+    console.log('error : ' + JSON.stringify(error));
+    switch (error.tunnus) {
       case 1000:
         message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
         break;
@@ -439,15 +447,15 @@ public getTicketState(numericalState: number): string {
         break;
       case 3000:
       case 3004:
-        throw new Error(response.error);
+        // Jokin meni vikaan.
       default:
-        throw new Error('Tuntematon tilakoodi. ' + JSON.stringify(response.error));
+        throw new Error('Tuntematon tilakoodi: ' + JSON.stringify(error.tunnus) + ' Viesti: ' + error.virheilmoitus);
     }
     if (message.length > 0) {
       this.sendMessage(message);
     }
-    if (response.error.tunnus !== 2000) {
-      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + truncate(response.error, 250, true));
+    if (error.tunnus !== 2000) {
+      const newError = Error('Virhe: tunnus: ' + error.tunnus + ', viesti: ' + truncate(error.virheilmoitus, 250, true));
     }
   }
 
