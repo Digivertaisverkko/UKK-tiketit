@@ -51,7 +51,7 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <a mat-raised-button (click)="goBack()"   i18n="@@Kysymyslistaan">Kysymyslistaan</a>
+    <a mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</a>
     <button
       mat-raised-button color="primary"
       [disabled]="titleText.length < 1 || assignmentText.length < 1 || problemText.length < 1 || messageText.length < 1"
