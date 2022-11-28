@@ -266,7 +266,7 @@ public getTicketState(numericalState: number): string {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     return response['nimi'];
   }
 

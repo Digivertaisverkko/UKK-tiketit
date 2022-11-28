@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TicketService, FAQ } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { throwDialogContentAlreadyAttachedError } from '@angular/cdk/dialog';
 
 export interface Sortable {
   tila: string;
