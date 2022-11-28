@@ -10,21 +10,23 @@ table { width: 100%; }
 
 td { cursor: pointer; }
 
-.mat-row:hover .mat-cell{
+.mat-mdc-row:hover .mat-mdc-cell{
     // background-color: mat-color($primary);
     background-color: $hoverBG;
     // color: white;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
     margin: 1em auto;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-title {
         padding-left: 0.5em;
     }
 }
 
-td.mat-cell, .mat-header-cell {
+td.mat-mdc-cell, .mat-mdc-header-cell {
     padding-left: 1em;
     padding-right: 1em;
     text-align: left;

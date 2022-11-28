@@ -18,7 +18,10 @@
     repeat: no-repeat;
     size: cover;
   }
+  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
+    /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-title { text-align: center; }
     border-radius: 8px;
     margin: 7% auto;
@@ -26,6 +29,7 @@
     min-width: 320px;
     width: 30%;
   }
+  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card.is-phone-portrait {
     margin-top: 0;
     margin-bottom: 0;
@@ -49,6 +53,7 @@
   flex: 1 1 auto;
 }
 
+/*   TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 mat-form-field,
 mat-checkbox {
   width: 80%;
@@ -56,6 +61,7 @@ mat-checkbox {
   margin: auto;
 }
 
+/*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-content {
   margin-top: 20px;
 }

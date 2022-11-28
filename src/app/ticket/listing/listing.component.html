@@ -1,6 +1,6 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card>
+<mat-card appearance="outlined">
 
   <mat-card-title>{{header}}</mat-card-title>
 
@@ -63,7 +63,7 @@
 
   </mat-card-content>
 
-  <mat-card id="noQuestionsMessage" *ngIf="showNoQuestions && isLoaded">
+  <mat-card appearance="outlined" id="noQuestionsMessage" *ngIf="showNoQuestions && isLoaded">
     <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
   </mat-card>
 
