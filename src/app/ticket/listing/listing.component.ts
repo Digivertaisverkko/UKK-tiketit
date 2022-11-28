@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TicketService, FAQ } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
+import { throwDialogContentAlreadyAttachedError } from '@angular/cdk/dialog';
 
 export interface Sortable {
   tila: string;
@@ -42,6 +43,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ = [] as ColumnDefinition[];
+  public courseName: string = '';
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
   public showNoQuestions: boolean = true;
@@ -113,12 +115,23 @@ export class ListingComponent implements AfterViewInit, OnInit {
         // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
         this.ticket.setActiveCourse(this.courseID);
         if (this.courseID !== null) {
+          this.showCourseName(this.courseID);
           this.showHeader(this.courseID);
         }
       }
       // console.log('löydettiin kurssi id: ' + this.courseID)
     });
     this.updateView();
+  }
+
+  private showCourseName(courseID: string) {
+    this.ticket.getCourseName(courseID).then( courseName => {
+      if (courseName.length > 0 ) {
+        this.courseName = courseName;
+      }
+    }).catch( () => {
+      this.courseName = '';
+    })
   }
 
   // Näytä otsikko riippuen käyttäjän roolista.

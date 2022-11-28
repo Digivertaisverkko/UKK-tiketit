@@ -9,6 +9,7 @@
     <!-- <table mat-table *ngIf="!showNoFAQ"  class="mat-elevation-z1" [dataSource]="dataSourceFAQ"> -->
     <!-- </table> -->
 
+    <h3 *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h3>
 
     <p><button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button></p>
 
