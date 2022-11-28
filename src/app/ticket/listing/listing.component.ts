@@ -8,9 +8,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { TicketService } from '../ticket.service';
+import { TicketService, FAQ } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-// import { Statement } from '@angular/compiler';
 
 export interface Sortable {
   tila: string;
@@ -38,12 +37,15 @@ export class ListingComponent implements AfterViewInit, OnInit {
   private courseID: string | null = '';
   // dataSource:any = [];
   dataSource = {} as MatTableDataSource<Sortable>;
+  dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // dataSource = new MatTableDataSource<Sortable>();
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   public columnDefinitions: ColumnDefinition[];
+  public columnDefinitionsFAQ = [] as ColumnDefinition[];
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
   public showNoQuestions: boolean = true;
+  public showNoFAQ: boolean = true;
   public isLoaded: boolean = false;
   public header: string = '';
   public maxTicketTitleLength = 100;
@@ -85,6 +87,14 @@ export class ListingComponent implements AfterViewInit, OnInit {
       { def: 'aikaleima', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false },
     ];
+
+    this.columnDefinitionsFAQ = [
+      { def: 'nimi', showMobile: true },
+      { def: 'pvm', showMobile: false },
+      { def: 'tyyppi', showMobile: true },
+      { def: 'tehtava', showMobile: false },
+    ];
+
   }
 
   ngOnInit() {

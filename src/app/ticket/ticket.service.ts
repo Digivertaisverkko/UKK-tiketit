@@ -59,6 +59,15 @@ export interface NewTicket {
   kentat?: Array<Field>;
 }
 
+// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi.
+export interface FAQ {
+  // id: number;
+  nimi: string;
+  pvm: string;
+  tyyppi: string;
+  tehtava: string;
+}
+
 // Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
 export interface Ticket {
   id: number;
@@ -113,6 +122,21 @@ export class TicketService {
     }
     return courseID;
   }
+
+public async getFAQ(courseID: number): Promise<FAQ[]> {
+  const httpOptions = this.getHttpOptions();
+  let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+  let response: any;
+  try {
+    response = await firstValueFrom(this.http.get<FAQ[]>(url, httpOptions));
+    console.log(
+      'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+    );
+  } catch (error: any) {
+    this.handleError(error);
+  }
+  return response;
+}
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
 public getTicketState(numericalState: number): string {

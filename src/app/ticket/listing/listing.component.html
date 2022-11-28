@@ -6,6 +6,10 @@
 
   <mat-card-content>
 
+    <!-- <table mat-table *ngIf="!showNoFAQ"  class="mat-elevation-z1" [dataSource]="dataSourceFAQ"> -->
+    <!-- </table> -->
+
+
     <p><button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button></p>
 
     <table mat-table *ngIf="!showNoQuestions" [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
