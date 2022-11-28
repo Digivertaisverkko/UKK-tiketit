@@ -43,6 +43,7 @@ export class AuthService {
   public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private userRole$ = new BehaviorSubject<string>('');
   private userName$ = new BehaviorSubject<string>('');
+  private userEmail$ = new BehaviorSubject<string>('');
   private errorMessages$ = new Subject<any>();
 
   private codeVerifier: string = '';
@@ -109,6 +110,12 @@ export class AuthService {
         this.userName$.next(userName);
       }
     }
+    if (window.sessionStorage.getItem('EMAIL') !== null) {
+      const userEmail: string | null = window.sessionStorage.getItem('EMAIL');
+      if (userEmail !== null && userEmail.length > 0 ) {
+        this.userEmail$.next(userEmail);
+      }
+    }
   }
 
   public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
@@ -166,6 +173,12 @@ export class AuthService {
       this.handleError(error);
     }
     this.checkErrors(response);
+    
+    if (response?.sposti > 0 ) {  
+      window.sessionStorage.setItem('EMAIL', response.sposti);
+      this.userEmail$.next(response.sposti);
+    }
+    
     return response;
   }
 
