@@ -8,10 +8,12 @@
     "Tila": " State ",
     "Järjestä otsikon mukaan": "Sort by title",
     "Otsikko": " Title ",
-    "Järjestä aikaleiman mukaan": "Sort by date",
+    "Järjestä aikaleiman mukaan": "Sort by time stamp",
     "Päivämäärä": " Date ",
     "Järjestä aloittajan mukaan": "Sort by initiator",
     "Aloittaja": " Initiator ",
+    "Järjestä päivämäärän mukaan": "Sort by date",
+    "Järjestä tyypin mukaan": "Sort by type",
     "Et ole lähettänyt vielä yhtään kysymystä": "You haven't sent any questions.",
     "Kurssilla esitetyt kysymykset": "Questions asked during the course",
     "Opettaja": "Teacher",
@@ -73,6 +75,8 @@
     "Virheilmoitus": "Error message",
     "Käyttäjän rekisteröinti": "User registration",
     "onnistui": "succesful",
-    "ei onnistunut": "failed"
+    "ei onnistunut": "failed",
+    "Usein kysytyt kysymykset": "Frequently asked questions",
+    "Tyyppi": "Type"
   }
 }
