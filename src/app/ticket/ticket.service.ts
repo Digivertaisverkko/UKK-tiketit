@@ -158,13 +158,23 @@ public getTicketState(numericalState: number): string {
 }
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string): Promise<any> {
+  public async addComment(ticketID: string, message: string, tila?: number): Promise<any> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
+    if (tila !== undefined) {
+      if (tila  < 0 || tila > 6) {
+        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      }
+    }
     const httpOptions = this.getHttpOptions();
-    const body: object =  {
-      viesti: message
+    interface newComment {
+      viesti: string;
+      tila?: number;
+    }
+    let body: newComment = { viesti: message }
+    if (tila !== undefined) {
+      body.tila = tila;
     }
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
