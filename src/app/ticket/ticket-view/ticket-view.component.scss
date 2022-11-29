@@ -10,10 +10,32 @@
     margin-top: 1em;
   }
 
+  mat-radio-group {
+    // margin-left: 0.5em;
+    mat-radio-button {
+      margin-right: 2em;
+    }
+  }
+
+  .mdc-form-field>label {
+    padding-left: 0;
+  }
+
   .message { white-space: pre-wrap;}
 
   #backButton {
     margin-right: 0.5em;
+    max-width: 10em;
+  }
+
+  #sendButton {
+    margin-right: 0.5em;
+    min-width: 8em;
+  }
+
+  .spacer {
+    display:block;
+    flex: 1 1 auto;
   }
 
 }

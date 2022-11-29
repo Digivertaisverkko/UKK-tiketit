@@ -2,10 +2,16 @@
 
 <mat-card appearance="outlined" class="ticket-view-card" *ngIf="isLoaded">
 
+<mat-card-content>
+  <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+</mat-card-content>
+
+
   <mat-card-header>
+
     <mat-card-title>{{ ticket.otsikko }}</mat-card-title>
     <mat-card-subtitle>
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">Tehtävä {{ ticket.kentat[0].arvo }} </span>
+      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
       🞄
       <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span>
     </mat-card-subtitle>
@@ -78,16 +84,28 @@
 >
 </app-error-card>
 
-  <mat-card-actions align="end">
-    <a mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</a>
+
+<mat-card-actions>
+
+<mat-radio-group align="start">
+  <mat-radio-button value="4" checked i18n="@@Kommentti">Kommentti</mat-radio-button>
+  <mat-radio-button value="3" i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
+  <mat-radio-button value="5" i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
+</mat-radio-group>
+
+<div class="spacer"></div>
+
     <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
-    <button
+    <button 
+      id="sendButton"
       mat-raised-button color="primary"
       [disabled]="commentText.length < 1"
       (click)="sendComment()"
       i18n="@@Lähetä">
       Lähetä
     </button>
+
+    
   </mat-card-actions>
 
 </mat-card>
