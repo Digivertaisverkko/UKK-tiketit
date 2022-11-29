@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, FAQ } from '../ticket.service';
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 
 export interface Sortable {
   tila: string;
@@ -41,17 +41,19 @@ export class ListingComponent implements AfterViewInit, OnInit {
   // dataSource = new MatTableDataSource<Sortable>();
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   public columnDefinitions: ColumnDefinition[];
-  public columnDefinitionsFAQ = [] as ColumnDefinition[];
+  public columnDefinitionsFAQ: ColumnDefinition[];
   public courseName: string = '';
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
   public showNoQuestions: boolean = true;
   public showNoFAQ: boolean = true;
+  public FAQisLoaded: boolean = false;
   public isLoaded: boolean = false;
   public header: string = '';
   public maxTicketTitleLength = 100;
   private routeSubscription: Subscription | null = null;
-  public tableLength: number = 0;
+  public numberOfFAQ: number = 0;
+  public numberOfQuestions: number = 0;
   public ticketMessageSub: Subscription;
   public ticketServiceMessage: string = '';
 
@@ -59,8 +61,6 @@ export class ListingComponent implements AfterViewInit, OnInit {
   sort!: MatSort;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-
-  // dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
@@ -120,7 +120,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
       }
       // console.log('löydettiin kurssi id: ' + this.courseID)
     });
-    this.updateView();
+    this.showFAQ();
+    this.showQuestions();
   }
 
   private showCourseName(courseID: string) {
@@ -167,19 +168,56 @@ export class ListingComponent implements AfterViewInit, OnInit {
       );
   }
 
+  public getDisplayedColumnFAQ(): string[] {
+    return this.columnDefinitionsFAQ
+      .filter((cd) => !this.isPhonePortrait || cd.showMobile)
+      .map((cd) => cd.def);
+  }
+
   public getDisplayedColumn(): string[] {
     return this.columnDefinitions
       .filter((cd) => !this.isPhonePortrait || cd.showMobile)
       .map((cd) => cd.def);
   }
 
-  private updateView() {
+  private showFAQ() {
+    this.ticket
+      .getFAQ(Number(this.courseID))
+      .then((response) => {
+        if (response.length > 0) {
+          this.numberOfFAQ = response.length;
+          if (this.numberOfFAQ === 0) {
+            this.showNoFAQ = true;
+          } else {
+            this.showNoFAQ = false;
+          }
+          this.dataSourceFAQ = new MatTableDataSource(
+            response.map(({ nimi, pvm, tyyppi, tehtava }) => ({
+              nimi: nimi,
+              pvm: pvm,
+              tyyppi: tyyppi,
+              tehtava: tehtava
+            }))
+          );
+          // console.log('Saatiin vastaus (alla):');
+          // console.dir(SortableData);
+        }
+      })
+      .catch((error) => {
+        console.error(error.message);
+      })
+      .finally(() => {
+        this.FAQisLoaded = true;
+      });
+  }
+
+  private showQuestions() {
     this.ticket
       .getQuestions(Number(this.courseID))
       .then((response) => {
         if (response.length > 0) {
-          this.tableLength = response.length;
-          if (this.tableLength === 0) {
+          this.numberOfQuestions = response.length;
+          if (this.numberOfQuestions === 0) {
             this.showNoQuestions = true;
           } else {
             this.showNoQuestions = false;

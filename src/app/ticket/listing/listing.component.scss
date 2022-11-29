@@ -1,13 +1,21 @@
 @import '/variables.scss';
+#firstTitle {
+    margin-bottom: 1em;
+}
 
-#courseName {
+#secondTitle {
+    // margin-top: 1.5em;
+}
+
+h3 {
     margin-top: 1em;
+    padding-left: 1em;
 }
 
 button {
-    margin-top: 2em;
-    margin-bottom: 1em;
-    margin-left: 1em;
+    // margin-top: 1em;
+    margin-bottom: 0.5em;
+    // margin-left: 1em;
 }
 
 table { width: 100%; }
@@ -26,7 +34,7 @@ mat-card {
     margin: 1em auto;
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-title {
-        padding-left: 0.5em;
+        // padding-left: 0.5em;
     }
 }
 
