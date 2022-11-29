@@ -84,10 +84,11 @@
 >
 </app-error-card>
 
+<!-- <p>{{newCommentState}}</p> -->
 
 <mat-card-actions>
 
-<mat-radio-group align="start">
+<mat-radio-group align="start" [(ngModel)]="newCommentState">
   <mat-radio-button value="4" checked i18n="@@Kommentti">Kommentti</mat-radio-button>
   <mat-radio-button value="3" i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
   <mat-radio-button value="5" i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>

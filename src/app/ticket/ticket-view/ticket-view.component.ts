@@ -14,6 +14,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   errorMessage: string = '';
   ticket: Ticket;
   tila: string;
+  public newCommentState: 3 | 4 | 5 = 4;
   // tila: typeof Tila | typeof State;
   commentText: string;
   isLoaded: boolean;
@@ -29,7 +30,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar
     ) {
       this.ticket = {} as Ticket;
-      const lang = localStorage.getItem('language')?.substring(0,2);
       this.tila = '';
       this.commentText = '';
       this.isLoaded = false;
@@ -56,7 +56,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public sendComment(): void {
-    this.ticketService.addComment(this.ticketID, this.commentText)
+    this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
       .then((response) => { 
         if (response?.success == true) {
           this.errorMessage = '';
