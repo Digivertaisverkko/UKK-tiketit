@@ -23,7 +23,7 @@
           Otsikko
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.nimi }}
+          {{ (element.nimi.length > maxItemTitleLength)? (element.nimi | slice:0:maxItemTitleLength) + '...':(element.nimi) }}
         </td>
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
       </ng-container>
@@ -93,7 +93,7 @@
           Otsikko
         </th>
         <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
-          {{ (element.otsikko.length > maxTicketTitleLength)? (element.otsikko | slice:0:maxTicketTitleLength) + '...':(element.otsikko) }}
+          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
         </td>
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
       </ng-container>

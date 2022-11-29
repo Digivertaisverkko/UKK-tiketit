@@ -50,7 +50,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   public FAQisLoaded: boolean = false;
   public isLoaded: boolean = false;
   public header: string = '';
-  public maxTicketTitleLength = 100;
+  public maxItemTitleLength = 100;
   private routeSubscription: Subscription | null = null;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
@@ -102,9 +102,9 @@ export class ListingComponent implements AfterViewInit, OnInit {
     // if (this.route.snapshot.paramMap.get('courseID') !== null) {};
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
       this.isPhonePortrait = false;
-      this.maxTicketTitleLength = 100;
+      this.maxItemTitleLength = 100;
       if (result.matches) {
-        this.maxTicketTitleLength = 35;
+        this.maxItemTitleLength = 35;
         this.isPhonePortrait = true;
       }
     });
