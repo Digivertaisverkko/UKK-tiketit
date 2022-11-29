@@ -44,11 +44,11 @@ td.mat-mdc-cell, .mat-mdc-header-cell {
     text-align: left;
 }
 
-#noQuestionsMessage {
+.noItemsMessage {
     text-align: center;
     padding-top: 3em;
-    padding-bottom: 3em;
-    margin: 5em 1em;
+    padding-bottom: 2.5em;
+    margin: 1em 1em;
 }
 
 // .mat-header-cell {

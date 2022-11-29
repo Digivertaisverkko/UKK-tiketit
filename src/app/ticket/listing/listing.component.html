@@ -5,10 +5,15 @@
     <!-- FAQ -->
 
     <mat-card-header>
-      <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle" >Usein kysytyt kysymykset</mat-card-title>
+      <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle"
+        >Usein kysytyt kysymykset</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
+
+      <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
+        <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
+      </mat-card>
 
     <table mat-table *ngIf="!showNoFAQ" class="mat-elevation-z1" [dataSource]="dataSourceFAQ" matSort matSortActive="nimi" matSortDirection="desc">
 
@@ -119,7 +124,7 @@
 
   </mat-card-content>
 
-  <mat-card appearance="outlined" id="noQuestionsMessage" *ngIf="showNoQuestions && isLoaded">
+  <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
     <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
   </mat-card>
 

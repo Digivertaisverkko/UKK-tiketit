@@ -204,7 +204,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
         }
       })
       .catch((error) => {
-        console.error(error.message);
+        
       })
       .finally(() => {
         this.FAQisLoaded = true;
