@@ -59,9 +59,9 @@ export interface NewTicket {
   kentat?: Array<Field>;
 }
 
-// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi.
+// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
+// id: number;
 export interface FAQ {
-  // id: number;
   nimi: string;
   pvm: string;
   tyyppi: string;
@@ -123,6 +123,7 @@ export class TicketService {
     return courseID;
   }
 
+// Hae kurssin UKK-kysymykset. 
 public async getFAQ(courseID: number): Promise<FAQ[]> {
   const httpOptions = this.getHttpOptions();
   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
