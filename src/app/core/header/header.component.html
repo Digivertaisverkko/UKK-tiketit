@@ -9,6 +9,7 @@
     [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
     {{productName}}
   </span>
+
   <span class="spacer"></span>
 
   <!-- Näkymät voivat asettaa alle sisältöä. -->
@@ -20,7 +21,13 @@
 <button mat-button (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
   i18n="@@Vaihda_kieli_suomeksi">Vaihda kieli suomeksi</button> -->
 
-  <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }">{{userName}}</div>
+  <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }" *ngIf="userName.length > 0">{{userName}}</div>
+
+  <!-- <div id="userEmail" *ngIf="userName.length === 0" >
+     {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}</div> -->
+
+   <div id="userEmail" *ngIf="userName.length === 0" >{{userEmail}}
+    </div>
 
   <div id="userRole">{{userRole}}</div>
 

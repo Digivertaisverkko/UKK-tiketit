@@ -16,8 +16,10 @@ export class HeaderComponent implements OnInit {
   public isUserLoggedIn: Boolean = false;
   public isPhonePortrait = false;
   public productName: string = environment.productName;
+  public maxUserLength = 10;
   public userRole: string = '';
   public userName: string = '';
+  public userEmail: string = '';
 
   get language(): string {
     return this._language;
@@ -50,6 +52,7 @@ export class HeaderComponent implements OnInit {
     });
     this.updateUserRole();
     this.updateUserName();
+    this.updateUserEmail();
   }
 
   updateUserName() {
@@ -58,6 +61,16 @@ export class HeaderComponent implements OnInit {
           this.userName = response.charAt(0).toUpperCase() + response.slice(1) + ',';
         } else {
           this.userName = '';
+        }
+    })
+  }
+
+  updateUserEmail() {
+    this.authService.onGetUserEmail().subscribe(response => {
+        if (response.length > 0 ) {
+          this.userEmail = response + ', ';
+        } else {
+          this.userEmail = '';
         }
     })
   }

@@ -139,11 +139,14 @@ export class ListingComponent implements AfterViewInit, OnInit {
     this.authService
       .getMyUserInfo(courseID)
       .then((response) => {
+        if (response?.sposti.length > 0) {
+          this.authService.setUserEmail(response.sposti);
+        }
+        if (response?.nimi.length > 0) {
+          this.authService.setUserName(response.nimi);
+        }
         if (response.asema !== undefined) {
           let userRole: string = response.asema;
-          if (response?.nimi.length > 0) {
-            this.authService.setUserName(response.nimi);
-          }
           // console.log('Käyttäjän asema: ' + userRole);
           if (userRole == 'opettaja') {
             this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;

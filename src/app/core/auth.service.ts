@@ -86,6 +86,10 @@ export class AuthService {
     return this.userName$.asObservable();
   }
 
+  public onGetUserEmail(): Observable<any> {
+    return this.userEmail$.asObservable();
+  }
+
   // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin
   // aloitettu. 
   public initialize() {
@@ -126,6 +130,11 @@ export class AuthService {
   public setUserName(name: string) {
     window.sessionStorage.setItem('USER_NAME', name);
     this.userName$.next(name);
+  }
+
+  public setUserEmail(email: string) {
+    window.sessionStorage.setItem('USER_EMAIL', email);
+    this.userEmail$.next(email);
   }
 
   // Luo käyttäjätili
