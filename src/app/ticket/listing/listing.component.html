@@ -5,8 +5,9 @@
     <!-- FAQ -->
 
     <mat-card-header>
-      <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle"
-        >Usein kysytyt kysymykset</mat-card-title>
+      <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle">
+        Usein kysytyt kysymykset
+      </mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -38,7 +39,7 @@
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
       </ng-container>
 
-      <ng-container matColumnDef="pvm" i18n-sortActionDescription="@@Järjestä otsikon mukaan">
+      <ng-container matColumnDef="pvm" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
         <th mat-header-cell *matHeaderCellDef mat-sort-header
           sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
           Päivämäärä
@@ -99,7 +100,7 @@
       </ng-container>
 
       <ng-container matColumnDef="aikaleima">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header id="timeStampHeader"
+        <th mat-header-cell *matHeaderCellDef mat-sort-header
           sortActionDescription="Järjestä aikaleiman mukaan" i18n-sortActionDescription="@@Järjestä aikaleiman mukaan" i18n="@@Päivämäärä">
           Päivämäärä
         </th>
