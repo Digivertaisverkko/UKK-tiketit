@@ -23,6 +23,9 @@ table { width: 100%;
   .mat-cell { padding-right: 1em; }
 }
 
+[hidden] {
+  display: none !important;
+}
 
 .mat-mdc-row:hover .mat-mdc-cell{
     // background-color: mat-color($primary);
