@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   public isUserLoggedIn: Boolean = false;
   public isPhonePortrait = false;
   public productName: string = environment.productName;
-  public maxUserLength = 10;
+  public readonly maxUserLength = 40;
   public userRole: string = '';
   public userName: string = '';
   public userEmail: string = '';
