@@ -5,6 +5,16 @@
     margin: 0 auto 1em;
   }
 
+  #ticketActionsWrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    mat-radio-button {
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+  }
+
   mat-form-field {
     width: 100%;
     margin-top: 1em;
@@ -29,12 +39,12 @@
   }
 
   #sendButton {
-    margin-right: 0.5em;
+    max-height: 35px;
     min-width: 8em;
   }
 
   .spacer {
-    display:block;
+    display: block;
     flex: 1 1 auto;
   }
 
