@@ -123,7 +123,7 @@ export class TicketService {
     return courseID;
   }
 
-// Hae kurssin UKK-kysymykset. 
+// Hae kurssin UKK-kysymykset.
 public async getFAQ(courseID: number): Promise<FAQ[]> {
   const httpOptions = this.getHttpOptions();
   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
@@ -148,7 +148,7 @@ public getTicketState(numericalState: number): string {
   switch (numericalState) {
       case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
       case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
-      case 2: verbal = $localize `:@@:Luettu`; break;
+      case 2: verbal = $localize `:@@Luettu:Luettu`; break;
       case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
       case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
       case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
