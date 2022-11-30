@@ -38,6 +38,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   // dataSource:any = [];
   dataSource = {} as MatTableDataSource<Sortable>;
   dataSourceFAQ = {} as MatTableDataSource<FAQ>;
+  // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // dataSource = new MatTableDataSource<Sortable>();
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   public columnDefinitions: ColumnDefinition[];
@@ -57,8 +58,7 @@ export class ListingComponent implements AfterViewInit, OnInit {
   public ticketMessageSub: Subscription;
   public ticketServiceMessage: string = '';
 
-  @ViewChild(MatSort)
-  sort!: MatSort;
+  @ViewChild(MatSort) sort = new MatSort();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 
@@ -122,6 +122,65 @@ export class ListingComponent implements AfterViewInit, OnInit {
     });
     this.showFAQ();
     this.showQuestions();
+    // this.showLocalQuestions();
+  }
+
+  private showLocalQuestions() {
+    this.dataSource = new MatTableDataSource(
+      [{"tila":"Arkistoitu","id":1,"otsikko":"Kotitehtävä ei käänny","aikaleima":"2022-11-09T11:27:47.191Z","aloittajanNimi":"Joni Rajala"},{"tila":"Arkistoitu","id":2,"otsikko":"Miten char* ja char eroaa toisistaan?","aikaleima":"2022-11-14T11:27:47.239Z","aloittajanNimi":"Joni Rajala"},{"tila":"Luettu","id":3,"otsikko":"”Index out of bounds”?","aikaleima":"2022-11-15T11:27:47.285Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Kommentoitu","id":4,"otsikko":"Ohjelma tulostaa numeroita kirjainten sijasta!","aikaleima":"2022-11-16T11:27:47.330Z","aloittajanNimi":"Joni Rajala"},{"tila":"Ratkaistu","id":5,"otsikko":"Tehtävänannossa ollut linkki ei vie mihinkään","aikaleima":"2022-11-17T11:27:47.375Z","aloittajanNimi":"Joni Rajala"},{"tila":"Kommentoitu","id":6,"otsikko":"”} Expected”?","aikaleima":"2022-11-18T11:27:47.422Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Kommentoitu","id":7,"otsikko":"Tiketin otsikko","aikaleima":"2022-11-25T08:36:17.664Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Luettu","id":8,"otsikko":"Tiketin otsikko","aikaleima":"2022-11-25T08:36:17.864Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lisätietoa pyydetty","id":9,"otsikko":"Kysymyksen otsikko","aikaleima":"2022-11-25T10:38:30.667Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Ratkaistu","id":10,"otsikko":"toinen kysymys","aikaleima":"2022-11-25T10:39:05.981Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lähetetty","id":11,"otsikko":"title","aikaleima":"2022-11-25T10:39:22.568Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lähetetty","id":12,"otsikko":"kysymys","aikaleima":"2022-11-25T10:41:19.455Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Luettu","id":13,"otsikko":"Kävin ohjelmoinnin jälkeen omatoimisesti dynossa ja lukemat olivat enemmän / vähemmän kuin piti?!","aikaleima":"2022-11-29T08:35:10.763Z","aloittajanNimi":"Henri Kaustinen"}]
+    )
+    this.numberOfQuestions = this.dataSource.data.length;
+    this.showNoQuestions = false;
+    this.isLoaded = true;
+
+  }
+
+  getLocalData() {
+    return [{"tila":"Arkistoitu","id":1,"otsikko":"Kotitehtävä ei käänny","aikaleima":"2022-11-09T11:27:47.191Z","aloittajanNimi":"Joni Rajala"},{"tila":"Arkistoitu","id":2,"otsikko":"Miten char* ja char eroaa toisistaan?","aikaleima":"2022-11-14T11:27:47.239Z","aloittajanNimi":"Joni Rajala"},{"tila":"Luettu","id":3,"otsikko":"”Index out of bounds”?","aikaleima":"2022-11-15T11:27:47.285Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Kommentoitu","id":4,"otsikko":"Ohjelma tulostaa numeroita kirjainten sijasta!","aikaleima":"2022-11-16T11:27:47.330Z","aloittajanNimi":"Joni Rajala"},{"tila":"Ratkaistu","id":5,"otsikko":"Tehtävänannossa ollut linkki ei vie mihinkään","aikaleima":"2022-11-17T11:27:47.375Z","aloittajanNimi":"Joni Rajala"},{"tila":"Kommentoitu","id":6,"otsikko":"”} Expected”?","aikaleima":"2022-11-18T11:27:47.422Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Kommentoitu","id":7,"otsikko":"Tiketin otsikko","aikaleima":"2022-11-25T08:36:17.664Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Luettu","id":8,"otsikko":"Tiketin otsikko","aikaleima":"2022-11-25T08:36:17.864Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lisätietoa pyydetty","id":9,"otsikko":"Kysymyksen otsikko","aikaleima":"2022-11-25T10:38:30.667Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Ratkaistu","id":10,"otsikko":"toinen kysymys","aikaleima":"2022-11-25T10:39:05.981Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lähetetty","id":11,"otsikko":"title","aikaleima":"2022-11-25T10:39:22.568Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lähetetty","id":12,"otsikko":"kysymys","aikaleima":"2022-11-25T10:41:19.455Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Luettu","id":13,"otsikko":"Kävin ohjelmoinnin jälkeen omatoimisesti dynossa ja lukemat olivat enemmän / vähemmän kuin piti?!","aikaleima":"2022-11-29T08:35:10.763Z","aloittajanNimi":"Henri Kaustinen"}]
+  }
+
+  private showQuestions() {
+    this.ticket
+      .getQuestions(Number(this.courseID))
+      .then((response) => {
+        console.log('response: ');
+        console.dir(response);
+        if (response.length > 0) {
+          let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
+            tila: this.ticket.getTicketState(tila),
+            id: id,
+            otsikko: otsikko,
+            aikaleima: aikaleima,
+            aloittajanNimi: aloittaja.nimi
+          }));
+
+          // tableData = [{"tila":"Arkistoitu","id":1,"otsikko":"Kotitehtävä ei käänny","aikaleima":"2022-11-09T11:27:47.191Z","aloittajanNimi":"Joni Rajala"},{"tila":"Arkistoitu","id":2,"otsikko":"Miten char* ja char eroaa toisistaan?","aikaleima":"2022-11-14T11:27:47.239Z","aloittajanNimi":"Joni Rajala"},{"tila":"Luettu","id":3,"otsikko":"”Index out of bounds”?","aikaleima":"2022-11-15T11:27:47.285Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Kommentoitu","id":4,"otsikko":"Ohjelma tulostaa numeroita kirjainten sijasta!","aikaleima":"2022-11-16T11:27:47.330Z","aloittajanNimi":"Joni Rajala"},{"tila":"Ratkaistu","id":5,"otsikko":"Tehtävänannossa ollut linkki ei vie mihinkään","aikaleima":"2022-11-17T11:27:47.375Z","aloittajanNimi":"Joni Rajala"},{"tila":"Kommentoitu","id":6,"otsikko":"”} Expected”?","aikaleima":"2022-11-18T11:27:47.422Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Kommentoitu","id":7,"otsikko":"Tiketin otsikko","aikaleima":"2022-11-25T08:36:17.664Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Luettu","id":8,"otsikko":"Tiketin otsikko","aikaleima":"2022-11-25T08:36:17.864Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lisätietoa pyydetty","id":9,"otsikko":"Kysymyksen otsikko","aikaleima":"2022-11-25T10:38:30.667Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Ratkaistu","id":10,"otsikko":"toinen kysymys","aikaleima":"2022-11-25T10:39:05.981Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lähetetty","id":11,"otsikko":"title","aikaleima":"2022-11-25T10:39:22.568Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Lähetetty","id":12,"otsikko":"kysymys","aikaleima":"2022-11-25T10:41:19.455Z","aloittajanNimi":"Henri Kaustinen"},{"tila":"Luettu","id":13,"otsikko":"Kävin ohjelmoinnin jälkeen omatoimisesti dynossa ja lukemat olivat enemmän / vähemmän kuin piti?!","aikaleima":"2022-11-29T08:35:10.763Z","aloittajanNimi":"Henri Kaustinen"}]
+
+          console.log('Tabledata alla:');
+          console.log(JSON.stringify(tableData));
+
+          if (tableData !== null ) {
+            this.dataSource = new MatTableDataSource(tableData);
+          }
+          console.log('MatTableDataSource alla:');
+          console.dir(this.dataSource);
+          this.numberOfQuestions = tableData.length;
+          // console.log('Saatiin vastaus (alla):');
+          // console.dir(SortableData);
+        }
+        console.dir(this.dataSource);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      })
+      .finally(() => {
+        if (this.numberOfQuestions === 0) {
+          this.showNoQuestions = true;
+        } else {
+          this.showNoQuestions = false;
+        }
+        this.isLoaded = true;
+      });
   }
 
   private showCourseName(courseID: string) {
@@ -207,42 +266,10 @@ export class ListingComponent implements AfterViewInit, OnInit {
         }
       })
       .catch((error) => {
-      
+
       })
       .finally(() => {
         this.FAQisLoaded = true;
-      });
-  }
-
-  private showQuestions() {
-    this.ticket
-      .getQuestions(Number(this.courseID))
-      .then((response) => {
-        if (response.length > 0) {
-          this.numberOfQuestions = response.length;
-          if (this.numberOfQuestions === 0) {
-            this.showNoQuestions = true;
-          } else {
-            this.showNoQuestions = false;
-          }
-          this.dataSource = new MatTableDataSource(
-            response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
-              tila: this.ticket.getTicketState(tila),
-              id: id,
-              otsikko: otsikko,
-              aikaleima: aikaleima,
-              aloittajanNimi: aloittaja.nimi,
-            }))
-          );
-          // console.log('Saatiin vastaus (alla):');
-          // console.dir(SortableData);
-        }
-      })
-      .catch((error) => {
-        console.error(error.message);
-      })
-      .finally(() => {
-        this.isLoaded = true;
       });
   }
 

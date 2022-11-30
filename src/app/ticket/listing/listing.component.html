@@ -76,7 +76,7 @@
 
     <!-- <div *ngIf="!showNoQuestions"> -->
 
-    <table mat-table [hidden]="!dataSource.data.length" [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
+    <table mat-table *ngIf="!showNoQuestions" [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
       class="mat-elevation-z1">
 
       <ng-container matColumnDef="tila">
