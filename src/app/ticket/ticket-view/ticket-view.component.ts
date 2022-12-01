@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Ticket } from '../ticket.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/core/auth.service';
 
 
 @Component({
@@ -22,8 +23,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   messageSubscription: Subscription;
   message: string = '';
+  public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
 
   constructor(
+    private auth: AuthService,
     private ticketService: TicketService,
     private route: ActivatedRoute,
     private router: Router,
@@ -39,6 +42,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.trackUserRole();
     this.ticketService.getTicketInfo(this.ticketID)
       .then(response => {
         this.ticket = response;
@@ -54,6 +58,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.messageSubscription.unsubscribe();
   }
+
+  private trackUserRole() {
+    this.auth.onGetUserRole().subscribe(response => {
+      console.log('saatiin rooli: ' + response);
+      this.userRole = response;
+    })
+  }
+
 
   public sendComment(): void {
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)

@@ -73,7 +73,7 @@ export class AuthService {
     return this.errorMessages$.asObservable();
   }
 
-  // Tyhjennä viestit.
+  // Tyhjennä viestit
   public clearMessages(): void {
     this.errorMessages$.next('');
   }

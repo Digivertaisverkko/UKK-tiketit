@@ -5,87 +5,6 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
 
-export interface Comment {
-  aikaleima: Date;
-  lahettaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
-  viesti: string;
-}
-
-export interface Course {
-  id: string;
-  nimi: string;
-}
-
-export interface Error {
-  tunnus: number;
-  virheilmoitus: string;
-}
-
-// Field = Tiketin lisäkenttä
-export interface Field {
-  id: number;
-  arvo: string;
-}
-
-export interface Question {
-  tila: number;
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: {
-    id: number,
-    nimi: string;
-    sposti: string;
-    asema: string;
-  };
-}
-
-// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
-export interface FieldInfo {
-  id: string
-  otsikko: string
-  pakollinen: boolean
-  esitaytettava: boolean
-}
-
-export interface NewTicket {
-  otsikko: string;
-  viesti: string;
-  kentat?: Array<Field>;
-}
-
-// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
-// id: number;
-export interface FAQ {
-  nimi: string;
-  pvm: string;
-  tyyppi: string;
-  tehtava: string;
-}
-
-// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
-export interface Ticket {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
-  tila: number;
-  kentat?: Array<Field>;
-  kurssi: number;
-  viesti: string;
-  kommentit: Array<Comment>;
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -499,4 +418,85 @@ public getTicketState(numericalState: number): string {
     console.log('ticketService: ' + message);
     this.messages$.next(message);
   }
+}
+
+export interface Comment {
+  aikaleima: Date;
+  lahettaja: {
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
+  viesti: string;
+}
+
+export interface Course {
+  id: string;
+  nimi: string;
+}
+
+export interface Error {
+  tunnus: number;
+  virheilmoitus: string;
+}
+
+// Field = Tiketin lisäkenttä
+export interface Field {
+  id: number;
+  arvo: string;
+}
+
+export interface Question {
+  tila: number;
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittaja: {
+    id: number,
+    nimi: string;
+    sposti: string;
+    asema: string;
+  };
+}
+
+// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
+export interface FieldInfo {
+  id: string
+  otsikko: string
+  pakollinen: boolean
+  esitaytettava: boolean
+}
+
+export interface NewTicket {
+  otsikko: string;
+  viesti: string;
+  kentat?: Array<Field>;
+}
+
+// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
+// id: number;
+export interface FAQ {
+  nimi: string;
+  pvm: string;
+  tyyppi: string;
+  tehtava: string;
+}
+
+// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
+export interface Ticket {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittaja: {
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
+  tila: number;
+  kentat?: Array<Field>;
+  kurssi: number;
+  viesti: string;
+  kommentit: Array<Comment>;
 }
