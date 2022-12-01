@@ -296,8 +296,10 @@ export class ListingComponent implements AfterViewInit, OnInit {
     this.router.navigateByUrl(url);
   }
 
-  goFaqView(ticketID: number) {
-    let url: string = '/faq-view/' + ticketID;
+  goFaqView(faqID: number) {
+    // FIXME: kun backendiltä voi hakea UKK:n tiedot, niin käytä parametria alla olevan sijaan.
+    faqID = 3;
+    let url: string = '/faq-view/' + faqID;
     this.router.navigateByUrl(url);
   }
 

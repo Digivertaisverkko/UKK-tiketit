@@ -1,11 +1,41 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
 <mat-card appearance="outlined" class="faq-view-card">
 
     <mat-card-content>
-      <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+        <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
     </mat-card-content>
 
+    <mat-card-content>
 
-<p>faq-view works!</p>
+        <mat-card appearance="outlined" class="faq-view-card">
+            <mat-card-header>
+                <mat-card-title class="faqTitle">{{faq.otsikko}}</mat-card-title>
+
+                <mat-card-subtitle>
+                    <span *ngIf="faq.kentat !== undefined && faq.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
+                        faq.kentat[0].arvo }} </span>
+                    🞄
+                    <span *ngIf="faq.kentat !== undefined && faq.kentat[1] !== null"> {{ faq.kentat[1].arvo }}</span>
+                </mat-card-subtitle>
+                <mat-card-subtitle>
+                    <span>{{ faq.aikaleima | date: 'short' }}</span>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="messageContent">
+                <p class="message" [innerHTML]=faq.viesti></p>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="faq-view-card">
+            <mat-card-header>
+                <mat-card-title>Vastaus</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="messageContent">
+            <p class="message">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sodales convallis purus. Etiam dui eros, vestibulum tincidunt lacus sed, pharetra luctus Leo. Sed nisl mauris, sodales cursus nisi a, mollis varius metus. Pellentesque enim mi, rhoncus eu tellus vitae, gravida porttitor ligula. Pellentesque efficitur vitae lectus pellentesque convallis. Sed et ultricies libero, in vulputate ipsum. Etiam aliquam dignissim sollicitudin. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis aliquet molestie est, a blandit mauris. Phasellus cursus libero molestie tincidunt mattis. Curabitur eu fermentum metus, suscipit commodo urna. Nulla facilisi. Nam nec efficitur odio, in consectetur felis.</p>
+        </mat-card-content>
+        </mat-card>
+    </mat-card-content>
 
 </mat-card>

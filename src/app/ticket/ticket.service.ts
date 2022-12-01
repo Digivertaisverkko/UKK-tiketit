@@ -244,24 +244,6 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
-  public async getFaqInfo(faqID: number): Promise<FAQ> {
-    const httpOptions = this.getHttpOptions();
-    let response: any;
-    let url = environment.apiBaseUrl + '/tiketti/' + faqID;
-    try {
-      response = await firstValueFrom(
-        this.http.get<FAQ>(url, httpOptions)
-      );
-      console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response) + ' . Vastaus myös alla.');
-      console.dir(response);
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    let faq: FAQ = response;
-    // console.log('Lopullinen tiketti alla:');
-    // console.log(ticket);
-    return faq
-  }
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
@@ -502,6 +484,7 @@ export interface FAQ {
   tyyppi: string;
   tehtava: string;
 }
+
 
 // Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
 export interface Ticket {
