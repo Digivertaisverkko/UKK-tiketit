@@ -16,7 +16,8 @@
         <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
       </mat-card>
 
-    <table mat-table *ngIf="!showNoFAQ" class="mat-elevation-z1" [dataSource]="dataSourceFAQ" matSort matSortActive="nimi" matSortDirection="desc">
+      <!-- *ngIf="!showNoFAQ" -->
+    <table mat-table  class="mat-elevation-z1" [dataSource]="dataSourceFAQ" matSort #sortFaq="matSort" matSortActive="nimi" matSortDirection="desc">
 
       <ng-container matColumnDef="nimi">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
@@ -76,7 +77,7 @@
 
     <!-- <div *ngIf="!showNoQuestions"> -->
 
-    <table mat-table *ngIf="!showNoQuestions" [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc" #sortQuestions="matSort"
       class="mat-elevation-z1">
 
       <ng-container matColumnDef="tila">
