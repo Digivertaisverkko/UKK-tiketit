@@ -23,7 +23,7 @@
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
           Otsikko
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
           {{ (element.nimi.length > maxItemTitleLength)? (element.nimi | slice:0:maxItemTitleLength) + '...':(element.nimi) }}
         </td>
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
@@ -33,7 +33,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
           Tyyppi
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
           {{ element.tyyppi }}
         </td>
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
@@ -44,7 +44,7 @@
           sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
           Päivämäärä
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.pvm }}</td>
+        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.pvm }}</td>
       </ng-container>
 
       <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
@@ -52,7 +52,7 @@
           sortActionDescription="Järjestä tyypin mukaan" i18n="@@Tehtävä">
           Tehtävä
         </th>
-        <td mat-cell *matCellDef="let element"> {{element.tehtava}}</td>
+        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>

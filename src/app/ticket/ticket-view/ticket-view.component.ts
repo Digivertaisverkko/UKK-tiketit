@@ -75,7 +75,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
           this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
         } else {
-          this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`
+          this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
           console.log(response);
         }
       })

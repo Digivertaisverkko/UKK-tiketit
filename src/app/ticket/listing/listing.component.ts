@@ -254,7 +254,8 @@ export class ListingComponent implements AfterViewInit, OnInit {
             this.showNoFAQ = false;
           }
           this.dataSourceFAQ = new MatTableDataSource(
-            response.map(({ nimi, pvm, tyyppi, tehtava }) => ({
+            response.map(({ id, nimi, pvm, tyyppi, tehtava }) => ({
+              id: id,
               nimi: nimi,
               pvm: pvm,
               tyyppi: tyyppi,
@@ -292,6 +293,11 @@ export class ListingComponent implements AfterViewInit, OnInit {
 
   goTicketView(ticketID: number) {
     let url: string = '/ticket-view/' + ticketID;
+    this.router.navigateByUrl(url);
+  }
+
+  goFaqView(ticketID: number) {
+    let url: string = '/faq-view/' + ticketID;
     this.router.navigateByUrl(url);
   }
 
