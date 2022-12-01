@@ -73,8 +73,6 @@
                 cdkAutosizeMaxRows="10"></textarea>
     </mat-form-field>
 
-  </mat-card-content>
-
   <app-error-card
   *ngIf="errorMessage.length > 0"
   i18n-title="@@Virhe"
@@ -86,7 +84,7 @@
 
 <!-- <p>{{newCommentState}}</p> -->
 
-<mat-card-actions>
+<div id="ticketActionsWrapper">
 
 <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
   <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
@@ -96,17 +94,18 @@
 
 <div class="spacer"></div>
 
-    <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
-    <button 
-      id="sendButton"
-      mat-raised-button color="primary"
-      [disabled]="commentText.length < 1"
-      (click)="sendComment()"
-      i18n="@@Lähetä">
-      Lähetä
-    </button>
+  <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
+  <button
+    id="sendButton"
+    mat-raised-button color="primary"
+    [disabled]="commentText.length < 1"
+    (click)="sendComment()"
+    i18n="@@Lähetä">
+    Lähetä
+  </button>
 
-    
-  </mat-card-actions>
+</div>
+
+</mat-card-content>
 
 </mat-card>

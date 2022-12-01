@@ -57,7 +57,7 @@
 
       <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
       <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
-  
+
     </table>
 
   </mat-card-content>
@@ -73,6 +73,8 @@
     <mat-card-content>
 
     <p><button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button></p>
+
+    <!-- <div *ngIf="!showNoQuestions"> -->
 
     <table mat-table *ngIf="!showNoQuestions" [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc"
       class="mat-elevation-z1">
@@ -122,6 +124,9 @@
     <mat-paginator [pageSizeOptions]="[10, 15, 20]" *ngIf="numberOfQuestions > 10" showFirstLastButtons
       aria-label="Valitse kysymysten sivu">
     </mat-paginator>
+
+
+    <!-- </div> -->
 
   </mat-card-content>
 
