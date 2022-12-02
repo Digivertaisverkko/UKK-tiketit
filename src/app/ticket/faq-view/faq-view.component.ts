@@ -24,6 +24,9 @@ constructor (
       .then(response => {
         this.ticket = response;
         this.isLoaded = true;
+      }).catch(error => {
+        console.error(error);
+        this.goBack();
       });
     }
   } 

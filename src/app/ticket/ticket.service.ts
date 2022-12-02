@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ import { truncate } from '../utils/truncate';
 export class TicketService {
   private messages$ = new Subject<string>();
 
-  constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient,
+    private router: Router) {}
 
   // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
   public onMessages(): Observable<any> {
@@ -403,8 +405,13 @@ public getTicketState(numericalState: number): string {
     console.log('error : ' + JSON.stringify(error));
     switch (error.tunnus) {
       case 1000:
-        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-        break;
+        let  courseID = window.sessionStorage.getItem('COURSE_ID');
+        if (courseID !== null) {
+          this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+        } else {
+          message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        }
+          break;
       case 1001:
         message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
         break;
