@@ -67,7 +67,7 @@
   
   <div id="ticketActionsWrapper">
 
-  <mat-checkbox [(ngModel)]="isFaq">Usein kysytty kysymys</mat-checkbox>
+  <mat-checkbox [(ngModel)]="isFaq" *ngIf="userRole !== 'opiskelija'">Usein kysytty kysymys</mat-checkbox>
   
   <div class="spacer"></div>
 
