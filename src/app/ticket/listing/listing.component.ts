@@ -94,10 +94,9 @@ export class ListingComponent implements OnInit {
     ];
 
     this.columnDefinitionsFAQ = [
-      { def: 'nimi', showMobile: true },
-      { def: 'pvm', showMobile: false },
-      { def: 'tyyppi', showMobile: true },
-      { def: 'tehtava', showMobile: false },
+      { def: 'otsikko', showMobile: true },
+      { def: 'aikaleima', showMobile: false },
+      { def: 'tyyppi', showMobile: true }
     ];
 
   }
@@ -258,12 +257,11 @@ export class ListingComponent implements OnInit {
             this.showNoFAQ = false;
           }
           this.dataSourceFAQ = new MatTableDataSource(
-            response.map(({ id, nimi, pvm, tyyppi, tehtava }) => ({
+            response.map(({ id, otsikko, aikaleima, tyyppi }) => ({
               id: id,
-              nimi: nimi,
-              pvm: pvm,
-              tyyppi: tyyppi,
-              tehtava: tehtava
+              otsikko: otsikko,
+              aikaleima: aikaleima,
+              tyyppi: tyyppi
             }))
           );
           // console.log('Saatiin vastaus (alla):');

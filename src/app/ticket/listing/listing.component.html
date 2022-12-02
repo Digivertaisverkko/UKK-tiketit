@@ -17,15 +17,16 @@
       </mat-card>
 
       <!-- *ngIf="!showNoFAQ" -->
-    <table mat-table  class="mat-elevation-z1" [dataSource]="dataSourceFAQ" matSort #sortFaq="matSort" matSortActive="nimi" matSortDirection="desc">
+    <table mat-table  class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort" matSortActive="nimi"
+      matSortDirection="desc">
 
-      <ng-container matColumnDef="nimi">
+      <ng-container matColumnDef="otsikko">
         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
           Otsikko
         </th>
         <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
-          {{ (element.nimi.length > maxItemTitleLength)? (element.nimi | slice:0:maxItemTitleLength) + '...':(element.nimi) }}
+          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
         </td>
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
       </ng-container>
@@ -40,21 +41,21 @@
         <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
       </ng-container>
 
-      <ng-container matColumnDef="pvm" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
+      <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
         <th mat-header-cell *matHeaderCellDef mat-sort-header
           sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
           Päivämäärä
         </th>
-        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.pvm }}</td>
+        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
+      <!-- <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
         <th mat-header-cell *matHeaderCellDef mat-sort-header
           sortActionDescription="Järjestä tyypin mukaan" i18n="@@Tehtävä">
           Tehtävä
         </th>
         <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
-      </ng-container>
+      </ng-container> -->
 
       <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
       <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
@@ -79,9 +80,7 @@
 
     <p><button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button></p>
 
-    <!-- <div *ngIf="!showNoQuestions"> -->
-
-    <table mat-table [dataSource]="dataSource" matSort matSortActive="aikaleima" matSortDirection="desc" #sortQuestions="matSort"
+    <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima" matSortDirection="desc" #sortQuestions="matSort"
       class="mat-elevation-z1">
 
       <ng-container matColumnDef="tila">

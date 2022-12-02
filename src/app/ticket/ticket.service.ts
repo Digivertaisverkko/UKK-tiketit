@@ -479,10 +479,9 @@ export interface NewTicket {
 // id: number;
 export interface FAQ {
   id: number;
-  nimi: string;
-  pvm: string;
+  otsikko: string;
+  aikaleima: string;
   tyyppi: string;
-  tehtava: string;
 }
 
 
