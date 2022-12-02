@@ -473,6 +473,7 @@ export interface NewTicket {
   otsikko: string;
   viesti: string;
   kentat?: Array<Field>;
+  ukk: boolean;
 }
 
 // TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
@@ -501,4 +502,5 @@ export interface Ticket {
   kurssi: number;
   viesti: string;
   kommentit: Array<Comment>;
+  ukk?: boolean;
 }

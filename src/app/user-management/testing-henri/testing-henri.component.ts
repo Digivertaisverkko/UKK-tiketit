@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpTestingService } from './http-testing.service';
-import { TicketService } from 'src/app/ticket/ticket.service';
+import { TicketService, NewTicket } from 'src/app/ticket/ticket.service';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TitleCasePipe } from '@angular/common';
@@ -11,12 +11,6 @@ export interface Question {
   date: string;
   state: number;
   excercise: string;
-}
-
-export interface NewTicket {
-  otsikko: string;
-  viesti: string;
-  kentat?: Array<Field>;
 }
 
 export interface Field {
@@ -53,19 +47,6 @@ export class TestingHenriComponent {
     this.ticket.getTicketFieldInfo('1').then(response => {
       console.log(response);
     });
-  }
-
-  public async addTicket() {
-    // TODO: oikeat id-arvot.
-    const newTicket: NewTicket = {
-      otsikko: 'Saan testejä ajaessa virheviestin, joka valittaa "Cannot run program: Permission denied"',
-      viesti: 'Testiviesti',
-      kentat: [
-        { id: 1, arvo: 'Tehtävän numero'},
-        { id: 2, arvo: 'Ongelmatyypin kuvaus'}
-      ]
-    }
-    this.ticket.addTicket('1', newTicket);
   }
 
   public async getCourseName(courseID: string) {

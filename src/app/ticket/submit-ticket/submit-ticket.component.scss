@@ -21,4 +21,18 @@
     min-width: 7em;
   }
 
+  #ticketActionsWrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    mat-checkbox {
+      margin-left: 1em;
+    }
+  }
+
+  .spacer {
+    display: block;
+    flex: 1 1 auto;
+  }
+
 }
