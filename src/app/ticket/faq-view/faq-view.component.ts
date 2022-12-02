@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TicketService, FAQ, Ticket } from '../ticket.service';
+import { TicketService, Ticket } from '../ticket.service';
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -9,7 +9,7 @@ import { TicketService, FAQ, Ticket } from '../ticket.service';
 export class FaqViewComponent implements OnInit {
 
 private faqID: string | null = this.route.snapshot.paramMap.get('id');
-public faq: Ticket = {} as Ticket;
+public ticket: Ticket = {} as Ticket;
 public isLoaded: boolean = false;
 
 constructor (
@@ -22,7 +22,7 @@ constructor (
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
       .then(response => {
-        this.faq = response;
+        this.ticket = response;
         this.isLoaded = true;
       });
     }

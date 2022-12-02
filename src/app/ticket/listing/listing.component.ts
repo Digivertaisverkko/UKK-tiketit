@@ -296,8 +296,6 @@ export class ListingComponent implements OnInit {
   }
 
   goFaqView(faqID: number) {
-    // FIXME: kun backendiltä voi hakea UKK:n tiedot, niin käytä parametria alla olevan sijaan.
-    faqID = 3;
     let url: string = '/faq-view/' + faqID;
     this.router.navigateByUrl(url);
   }
