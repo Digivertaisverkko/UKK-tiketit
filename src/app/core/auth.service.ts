@@ -7,6 +7,7 @@ import { truncate } from '../utils/truncate';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
+import { Router } from '@angular/router';
 
 export interface LoginResponse {
   success: boolean,
@@ -55,7 +56,8 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private router: Router) {
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
@@ -432,8 +434,13 @@ export class AuthService {
     }
     switch (response.error.tunnus) {
       case 1000:
-        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-        break;
+        let  courseID = window.sessionStorage.getItem('COURSE_ID');
+        if (courseID !== null) {
+          this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+        } else {
+          message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        }
+          break;
       case 1001:
         message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
         break;
