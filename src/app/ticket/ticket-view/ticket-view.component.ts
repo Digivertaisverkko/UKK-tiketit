@@ -1,7 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TicketService, Ticket } from '../ticket.service';
-import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
 
@@ -11,7 +10,7 @@ import { AuthService } from 'src/app/core/auth.service';
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
-export class TicketViewComponent implements OnInit, OnDestroy {
+export class TicketViewComponent implements OnInit  {
   errorMessage: string = '';
   ticket: Ticket;
   tila: string;
@@ -21,7 +20,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   isLoaded: boolean;
   ticketID: string;
 
-  messageSubscription: Subscription;
+  // messageSubscription: Subscription;
   message: string = '';
   public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
 
@@ -37,8 +36,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.commentText = '';
       this.isLoaded = false;
       this.ticketID = String(this.route.snapshot.paramMap.get('id'));
-      this.messageSubscription = this.ticketService.onMessages().subscribe(
-        (message) => { this._snackBar.open(message, 'OK') });
+      // this.messageSubscription = this.ticketService.onMessages().subscribe(
+      //   (message) => { this._snackBar.open(message, 'OK') });
   }
 
   ngOnInit(): void {
@@ -55,10 +54,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/list-tickets?courseID=' + this.ticket.kurssi);
   }
 
-  ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
-  }
-
   private trackUserRole() {
     this.auth.onGetUserRole().subscribe(response => {
       console.log('saatiin rooli: ' + response);
@@ -73,7 +68,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         if (response?.success == true) {
           this.errorMessage = '';
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-          this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
+          // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
         } else {
           this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
           console.log(response);
