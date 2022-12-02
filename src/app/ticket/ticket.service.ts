@@ -496,11 +496,11 @@ export interface NewTicket {
   vastaus?: string;
 }
 
-export interface NewFaq {
-  otsikko: string;
-  viesti: string;
-  vastaus: string;
-} 
+// export interface NewFaq {
+//   otsikko: string;
+//   viesti: string;
+//   vastaus: string;
+// } 
 
 export interface NewFaq extends NewTicket {
   vastaus: string;

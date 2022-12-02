@@ -4,6 +4,8 @@
     <mat-card-title i18n="@@Uusi kysymys">Uusi kysymys</mat-card-title>
   </mat-card-header>
 
+  <form action="" #submitForm="ngForm">
+
   <mat-card-content>
 
     <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
@@ -19,7 +21,7 @@
         autocomplete="off">
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" *ngIf="!isFaq">
       <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
       <input
         name="assignmentText"
@@ -67,14 +69,14 @@
   
   <div id="ticketActionsWrapper">
 
-  <mat-checkbox [(ngModel)]="isFaq" *ngIf="userRole !== 'opiskelija'">Usein kysytty kysymys</mat-checkbox>
+  <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'">Usein kysytty kysymys</mat-checkbox>
   
   <div class="spacer"></div>
 
   <mat-card-actions align="end">
     <button
       mat-raised-button color="primary" id="submitButton"
-      [disabled]="titleText.length < 1 || assignmentText.length < 1 || problemText.length < 1 || messageText.length < 1"
+      [disabled]="submitForm.invalid"
       (click)="sendTicket()"
       i18n="@@Lähetä">
       Lähetä
@@ -82,5 +84,7 @@
   </mat-card-actions>
 
 </div>
+
+</form>
 
 </mat-card>

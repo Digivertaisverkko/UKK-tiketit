@@ -20,6 +20,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   isFaq: boolean = false;
   userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
   answer: string = '';
+  sendingIsAllowed: boolean = false;
 
   messageSubscription: Subscription;
   message: string = '';
