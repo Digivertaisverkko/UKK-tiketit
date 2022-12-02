@@ -209,6 +209,7 @@ export class AuthService {
       this.isUserLoggedIn$.next(false);
       this.setUserName('');
       this.setUserRole('');
+      this.setUserEmail('');
       window.sessionStorage.clear();
     }
   }
