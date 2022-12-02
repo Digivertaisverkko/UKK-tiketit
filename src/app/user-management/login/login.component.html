@@ -39,7 +39,7 @@
             </mat-form-field>
 
             <!-- <p>{{isLoginRemembered}}</p> -->
-            <mat-checkbox [(ngModel)]="isLoginRemembered" i18n="@@Muista minut" >Muista minut</mat-checkbox>
+            <!-- <mat-checkbox [(ngModel)]="isLoginRemembered" name="checkbox" i18n="@@Muista minut" >Muista minut</mat-checkbox> -->
 
             <!-- Custom-komponentti shared-moduulista. -->
             <app-error-card
@@ -88,7 +88,7 @@
         </mat-card-content>
 
       </mat-tab>
-      <mat-tab i18n-label="@@Luo tili" label="Luo tili">
+      <mat-tab i18n-label="@@Luo tili" label="Luo tili" disabled>
         <app-register (event)="makeTabActive($event)"></app-register>
       </mat-tab>
     </mat-tab-group>
