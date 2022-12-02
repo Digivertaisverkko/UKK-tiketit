@@ -6,6 +6,8 @@
 
   <mat-card-content>
 
+    <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+
     <mat-form-field appearance="fill">
       <mat-label i18n="@@Otsikko">Otsikko</mat-label>
       <input
@@ -52,9 +54,8 @@
   </mat-card-content>
 
   <mat-card-actions align="end">
-    <a mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</a>
     <button
-      mat-raised-button color="primary"
+      mat-raised-button color="primary" id="submitButton"
       [disabled]="titleText.length < 1 || assignmentText.length < 1 || problemText.length < 1 || messageText.length < 1"
       (click)="sendTicket()"
       i18n="@@Lähetä">

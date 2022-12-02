@@ -6,8 +6,19 @@
     margin-top: 1em;
   }
 
-  #backButton {
+  mat-card-actions {
+    margin-bottom: 1em;
     margin-right: 0.5em;
+  }
+
+  #backButton {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    max-width: 10em;
+  }
+
+  #submitButton {
+    min-width: 7em;
   }
 
 }
