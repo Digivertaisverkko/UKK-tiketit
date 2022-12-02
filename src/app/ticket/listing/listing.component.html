@@ -61,6 +61,10 @@
 
     </table>
 
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
+      aria-label="Valitse kysymysten sivu">
+    </mat-paginator>
+
   </mat-card-content>
 
     <!-- ----- Tiketit ----- -->
@@ -122,7 +126,7 @@
       <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 15, 20]" *ngIf="numberOfQuestions > 10" showFirstLastButtons
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu">
     </mat-paginator>
 

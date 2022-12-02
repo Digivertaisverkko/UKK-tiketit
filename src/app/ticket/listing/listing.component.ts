@@ -63,8 +63,8 @@ export class ListingComponent implements OnInit {
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  @ViewChild(MatPaginator) paginatorFaq: MatPaginator | null = null;
+  @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
+  @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
