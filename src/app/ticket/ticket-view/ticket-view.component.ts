@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/auth.service';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit  {
-  errorMessage: string = '';
+  public errorMessage: string = '';
   ticket: Ticket;
   tila: string;
   public newCommentState: 3 | 4 | 5 = 4;

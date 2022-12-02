@@ -8,7 +8,7 @@
 
     <mat-card-content>
 
-        <mat-card appearance="outlined" class="faq-view-card">
+        <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined">
             <mat-card-header>
                 <mat-card-title class="faqTitle">{{ticket.otsikko}}</mat-card-title>
 
@@ -51,6 +51,10 @@
                 <p class="message" [innerHTML]=comment.viesti></p>
             </mat-card-content>
         </mat-card>
+
+        <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe" message="{{ errorMessage }}"
+            [styles]="{ margin: '1em 0' }">
+        </app-error-card>
 
     </mat-card-content>
 

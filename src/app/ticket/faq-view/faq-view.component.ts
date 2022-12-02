@@ -8,6 +8,7 @@ import { TicketService, Ticket } from '../ticket.service';
 })
 export class FaqViewComponent implements OnInit {
 
+public errorMessage: string = '';
 private faqID: string | null = this.route.snapshot.paramMap.get('id');
 public ticket: Ticket = {} as Ticket;
 public isLoaded: boolean = false;
@@ -23,6 +24,10 @@ constructor (
       this.ticketService.getTicketInfo(this.faqID)
       .then(response => {
         this.ticket = response;
+      }).catch(error => {
+        console.error(error);
+        this.errorMessage = $localize `:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
+      }).finally( () => {
         this.isLoaded = true;
       });
     }

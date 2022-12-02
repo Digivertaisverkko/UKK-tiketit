@@ -81,6 +81,8 @@
     "ei onnistunut": "failed",
     "Usein kysytyt kysymykset": "Frequently asked questions",
     "Tyyppi": "Type",
-    "Ei yhtään UKK": "No frequently asked questions have been added"
+    "Ei yhtään UKK": "No frequently asked questions have been added",
+    "Vastaus": "Reply",
+    "UKK näyttäminen epäonnistui": "Displaying a frequently asked question failed"
   }
 }
