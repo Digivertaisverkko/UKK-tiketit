@@ -38,7 +38,8 @@
               <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
 
-            <mat-checkbox i18n="@@Muista minut">Muista minut</mat-checkbox>
+            <!-- <p>{{isLoginRemembered}}</p> -->
+            <mat-checkbox [(ngModel)]="isLoginRemembered" i18n="@@Muista minut" >Muista minut</mat-checkbox>
 
             <!-- Custom-komponentti shared-moduulista. -->
             <app-error-card

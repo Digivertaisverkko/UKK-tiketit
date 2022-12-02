@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
   public tabIndex: number = 0;
+  public isLoginRemembered: boolean = false;
 
 
   public lang: string | null = localStorage.getItem('language');
