@@ -51,6 +51,18 @@
         required></textarea>
     </mat-form-field>
 
+    <mat-form-field appearance="fill" *ngIf="isFaq">
+      <mat-label i18n="@@Vastaus">Vastaus</mat-label>
+      <textarea
+        name="answerText"
+        [(ngModel)]="answer"
+        matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="5"
+        cdkAutosizeMaxRows="50"
+        required></textarea>
+    </mat-form-field>
+
   </mat-card-content>
   
   <div id="ticketActionsWrapper">

@@ -143,6 +143,26 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
+  public async sendFaq(courseID: string, newFaq: NewTicket, vastaus: string) {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+    const body = newFaq;
+    body.vastaus = vastaus;
+    try {
+      console.log('Yritetään lähettää UKK POST-kutsulla bodylla: ' + JSON.stringify(body) + '  URL:iin "' +
+      url + '"');
+      response = await firstValueFrom(
+        this.http.post<any>(url, body, httpOptions)
+      );
+      console.log(
+        'saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+  }
+
   // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
   public async addTicket(courseID: string, newTicket: NewTicket) {
     const httpOptions = this.getHttpOptions();
@@ -150,7 +170,7 @@ public getTicketState(numericalState: number): string {
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
+      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' +
       url + '"');
       response = await firstValueFrom(
         this.http.post<NewTicket>(url, body, httpOptions)
@@ -234,9 +254,9 @@ public getTicketState(numericalState: number): string {
       response = await firstValueFrom(
         this.http.get<Question[]>(url, httpOptions)
       );
-      // console.log(
-      //   'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      // );
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -461,7 +481,7 @@ export interface Question {
   };
 }
 
-// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
+// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
 export interface FieldInfo {
   id: string
   otsikko: string
@@ -473,7 +493,17 @@ export interface NewTicket {
   otsikko: string;
   viesti: string;
   kentat?: Array<Field>;
-  ukk: boolean;
+  vastaus?: string;
+}
+
+export interface NewFaq {
+  otsikko: string;
+  viesti: string;
+  vastaus: string;
+} 
+
+export interface NewFaq extends NewTicket {
+  vastaus: string;
 }
 
 // TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
