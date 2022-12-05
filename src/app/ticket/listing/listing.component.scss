@@ -32,7 +32,8 @@ table { width: 100%;
   display: none !important;
 }
 
-.mat-mdc-row:hover .mat-mdc-cell{
+//.mat-mdc-row:hover .mat-mdc-cell{
+tr:hover {
     // background-color: mat-color($primary);
     background-color: $hoverBG;
     // color: white;

@@ -89,8 +89,8 @@ export class ListingComponent implements OnInit {
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
-      { def: 'aikaleima', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false },
+      { def: 'aikaleima', showMobile: true }
     ];
 
     this.columnDefinitionsFAQ = [
