@@ -37,9 +37,9 @@ export class TicketService {
     if (window.sessionStorage.getItem('COURSE_ID') === null) {
       throw new Error('Tallennettua kurssi id:ä ei löydetty.');
     }
-    let  courseID = window.sessionStorage.getItem('COURSE_ID');
+    let courseID = window.sessionStorage.getItem('COURSE_ID');
     if (courseID === null) {
-      courseID = '0';
+      throw new Error('Tallennettua kurssi id:ä ei löydetty.');
     }
     return courseID;
   }

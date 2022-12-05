@@ -120,6 +120,15 @@ export class ListingComponent implements OnInit {
           this.showCourseName(this.courseID);
           this.showHeader(this.courseID);
         }
+      } else {
+        try {
+          const courseID = this.ticket.getActiveCourse();
+          this.courseID = courseID;
+          this.router.navigateByUrl('/list-tickets/' + courseID);
+        } catch {
+          // TODO: Kun on kurssin valintanäkymä, niin ohjaa siihen.
+          this.router.navigateByUrl('/login');
+        }
       }
       // console.log('löydettiin kurssi id: ' + this.courseID)
     });
