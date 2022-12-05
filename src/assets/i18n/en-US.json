@@ -47,7 +47,7 @@
     "Käyttäjätunnus": "Username",
     "Käyttäjätunnus tarvitaan.": " Username required. ",
     "Salasanan pituus": "A least {$INTERPOLATION} characters long password is required. ",
-    "salasana uudelleen": " Please enter your password again. ",
+    "Salasana uudelleen": " Please enter your password again. ",
     "Salasanat eivät täsmää.": " Passwords do not match. ",
     "Virhetila": "Error state",
     "Lähetetty": "Sent",
