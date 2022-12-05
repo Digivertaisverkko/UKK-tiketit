@@ -93,7 +93,7 @@ export class AuthService {
   }
 
   // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin
-  // aloitettu. 
+  // aloitettu.
   public initialize() {
     if (window.sessionStorage.getItem('USER_ROLE') !== null) {
       const userRole = window.sessionStorage.getItem('USER_ROLE');
@@ -184,12 +184,12 @@ export class AuthService {
       this.handleError(error);
     }
     this.checkErrors(response);
-    
-    if (response?.sposti > 0 ) {  
+
+    if (response?.sposti > 0 ) {
       window.sessionStorage.setItem('EMAIL', response.sposti);
       this.userEmail$.next(response.sposti);
     }
-    
+
     return response;
   }
 
@@ -434,13 +434,8 @@ export class AuthService {
     }
     switch (response.error.tunnus) {
       case 1000:
-        let  courseID = window.sessionStorage.getItem('COURSE_ID');
-        if (courseID !== null) {
-          this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
-        } else {
-          message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-        }
-          break;
+        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        break;
       case 1001:
         message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
         break;

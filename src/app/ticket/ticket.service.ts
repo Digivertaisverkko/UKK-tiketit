@@ -405,13 +405,8 @@ public getTicketState(numericalState: number): string {
     console.log('error : ' + JSON.stringify(error));
     switch (error.tunnus) {
       case 1000:
-        let  courseID = window.sessionStorage.getItem('COURSE_ID');
-        if (courseID !== null) {
-          this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
-        } else {
-          message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-        }
-          break;
+        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        break;
       case 1001:
         message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
         break;
@@ -507,7 +502,7 @@ export interface NewTicket {
 //   otsikko: string;
 //   viesti: string;
 //   vastaus: string;
-// } 
+// }
 
 export interface NewFaq extends NewTicket {
   vastaus: string;
