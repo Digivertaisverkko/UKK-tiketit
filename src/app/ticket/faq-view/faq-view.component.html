@@ -6,27 +6,27 @@
         <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
     </mat-card-content>
 
-    <mat-card-content>
+    <mat-card-content *ngIf="ticket.viesti !== undefined">
 
-        <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined">
+        <!-- <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined"> -->
             <mat-card-header>
                 <mat-card-title class="faqTitle">{{ticket.otsikko}}</mat-card-title>
 
                 <mat-card-subtitle>
                     <!-- <span *ngIf="faq.kentat !== undefined && faq.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
                         faq.kentat[0].arvo }} </span> -->
-                    <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo
-                        }}</span>
+                    <mat-card-subtitle *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo
+                        }} 🞄
+                        <span>{{ ticket.aikaleima | date: 'short' }}</span>
+                    </mat-card-subtitle>
                 </mat-card-subtitle>
-                <mat-card-subtitle>
-                    <span>{{ ticket.aikaleima | date: 'short' }}</span>
-                </mat-card-subtitle>
+
             </mat-card-header>
 
-            <mat-card-content class="messageContent">
-                <p class="message" [innerHTML]=ticket.viesti></p>
+            <mat-card-content>
+                <p class="message" id="question" [innerHTML]=ticket.viesti></p>
             </mat-card-content>
-        </mat-card>
+        <!-- </mat-card> -->
 
         <!-- <mat-card appearance="outlined" class="faq-view-card">
             <mat-card-header>
@@ -40,21 +40,27 @@
 
         <!-- ---- Vastaus ---- -->
 
+        <mat-divider></mat-divider>
+
+        <mat-card-header>
+          <mat-card-title class="faqTitle" i18n="@@Vastaus">
+              Vastaus
+          </mat-card-title>
+      </mat-card-header>
+
         <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
-            <mat-card-header>
-                <mat-card-title class="faqTitle" i18n="@@Vastaus">
-                    Vastaus
-                </mat-card-title>
-            </mat-card-header>
             <mat-card-content>
                 <p class="message" [innerHTML]=comment.viesti></p>
             </mat-card-content>
         </mat-card>
 
-        <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe" message="{{ errorMessage }}"
+      </mat-card-content>
+
+      <mat-card-content *ngIf="errorMessage.length > 0">
+        <app-error-card i18n-title="@@Virhe" title="Virhe" message="{{ errorMessage }}"
             [styles]="{ margin: '1em 0' }">
         </app-error-card>
+      </mat-card-content>
 
-    </mat-card-content>
 
 </mat-card>

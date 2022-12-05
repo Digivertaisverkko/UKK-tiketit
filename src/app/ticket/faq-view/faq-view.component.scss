@@ -15,15 +15,23 @@
   }
 
 .faqTitle {
-    margin-bottom: 5px;
+    margin-bottom: 1em;
 }
 
 #viewTitle {
     margin-bottom: 1em;
 }
 
-.messageContent {
-    margin-top: 1em;
+mat-divider {
+  margin-top: 2em;
+  padding-bottom: 2em;
 }
 
-.message { white-space: pre-wrap;}
+#question {
+  margin-left: 1em;
+}
+
+.message {
+  white-space: pre-wrap;
+  // margin-left: 1em;
+}
