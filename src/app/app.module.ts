@@ -18,11 +18,11 @@ import { initializeLanguage  } from "./app.initializers";
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     CoreModule,
     SharedModule,
     UserManagementModule,
-    TicketModule
+    TicketModule,
+    AppRoutingModule,
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: () => initializeLanguage, multi: true },

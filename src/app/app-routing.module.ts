@@ -2,8 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListingComponent } from './ticket/listing/listing.component';
 import { TestingHenriComponent } from './user-management/testing-henri/testing-henri.component';
+import { authGuard } from './user-management/auth.guard';
 
 const routes: Routes = [
+  { path: '**', component: ListingComponent, canActivate: [authGuard] }
 ];
 
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }

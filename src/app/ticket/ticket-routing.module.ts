@@ -11,8 +11,7 @@ const routes: Routes = [
   { path: 'ticket-view/:id', component: TicketViewComponent, canActivate: [authGuard] },
   { path: 'faq-view/:id', component: FaqViewComponent, canActivate: [authGuard] },
   { path: 'submit', component: SubmitTicketComponent, canActivate: [authGuard] },
-  { path: 'list-tickets', component: ListingComponent, canActivate: [authGuard] },
-  { path: '**', component: ListingComponent, canActivate: [authGuard] }
+  { path: 'list-tickets', component: ListingComponent, canActivate: [authGuard] }
 ];
 
 @NgModule({
