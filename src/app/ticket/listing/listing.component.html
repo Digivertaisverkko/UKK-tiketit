@@ -2,71 +2,7 @@
 
 <mat-card appearance="outlined">
 
-    <!-- FAQ -->
 
-    <mat-card-header>
-      <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle">
-        Usein kysytyt kysymykset
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-
-      <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
-        <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
-      </mat-card>
-
-      <!-- *ngIf="!showNoFAQ" -->
-    <table mat-table  class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort" matSortActive="nimi"
-      matSortDirection="desc">
-
-      <ng-container matColumnDef="otsikko">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
-        i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
-          Otsikko
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
-          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
-        </td>
-        <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
-      </ng-container>
-
-      <ng-container matColumnDef="tyyppi">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
-          Tyyppi
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
-          {{ element.tyyppi }}
-        </td>
-        <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
-      </ng-container>
-
-      <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header
-          sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
-          Päivämäärä
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima | date: 'short' }}</td>
-      </ng-container>
-
-      <!-- <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header
-          sortActionDescription="Järjestä tyypin mukaan" i18n="@@Tehtävä">
-          Tehtävä
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
-      </ng-container> -->
-
-      <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
-      <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
-
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
-      aria-label="Valitse kysymysten sivu">
-    </mat-paginator>
-
-  </mat-card-content>
 
     <!-- ----- Tiketit ----- -->
 
@@ -128,9 +64,75 @@
     <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu">
     </mat-paginator>
-
-
     <!-- </div> -->
+
+
+        <!-- FAQ -->
+
+        <mat-card-header>
+          <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle">
+            Usein kysytyt kysymykset
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+          <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
+            <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
+          </mat-card>
+
+          <!-- *ngIf="!showNoFAQ" -->
+        <table mat-table  class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort" matSortActive="nimi"
+          matSortDirection="desc">
+
+          <ng-container matColumnDef="otsikko">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
+            i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
+              Otsikko
+            </th>
+            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
+              {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
+            </td>
+            <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
+          </ng-container>
+
+          <ng-container matColumnDef="tyyppi">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
+              Tyyppi
+            </th>
+            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
+              {{ element.tyyppi }}
+            </td>
+            <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
+          </ng-container>
+
+          <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header
+              sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
+              Päivämäärä
+            </th>
+            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima | date: 'short' }}</td>
+          </ng-container>
+
+          <!-- <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header
+              sortActionDescription="Järjestä tyypin mukaan" i18n="@@Tehtävä">
+              Tehtävä
+            </th>
+            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
+          </ng-container> -->
+
+          <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
+          <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
+
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
+          aria-label="Valitse kysymysten sivu">
+        </mat-paginator>
+
+      </mat-card-content>
+
 
   </mat-card-content>
 
