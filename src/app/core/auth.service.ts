@@ -459,6 +459,7 @@ export class AuthService {
     }
     if (message.length > 0) {
       this.sendErrorMessage(message);
+      console.error($localize`:@@Virhe:Virhe` + ': ' + message);
     }
     if (response.error.tunnus !== 2000) {
       throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + truncate(response.error.virheilmoitus, 250, true));

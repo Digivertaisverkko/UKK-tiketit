@@ -430,6 +430,7 @@ public getTicketState(numericalState: number): string {
     }
     if (message.length > 0) {
       this.sendMessage(message);
+      console.error($localize`:@@Virhe:Virhe` + ': ' + message);
     }
     if (error.tunnus !== 2000) {
       const newError = Error('Virhe: tunnus: ' + error.tunnus + ', viesti: ' + truncate(error.virheilmoitus, 250, true));
@@ -438,7 +439,6 @@ public getTicketState(numericalState: number): string {
 
   // Lähetä virheviesti komponenttiin ja consoleen.
   private sendMessage(message: string) {
-    console.log('ticketService: ' + message);
     this.messages$.next(message);
   }
 }
