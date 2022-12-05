@@ -14,8 +14,6 @@
 
     <mat-card-content>
 
-    <p><button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button></p>
-
     <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima" matSortDirection="desc" #sortQuestions="matSort"
       class="mat-elevation-z1">
 
@@ -61,11 +59,16 @@
       <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
+    <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu">
-    </mat-paginator>
+    </mat-paginator> -->
     <!-- </div> -->
 
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button>
+    </mat-card-actions>
+
+  </mat-card-content>
 
         <!-- FAQ -->
 
@@ -127,11 +130,9 @@
 
         </table>
 
-        <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
+        <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
           aria-label="Valitse kysymysten sivu">
-        </mat-paginator>
-
-      </mat-card-content>
+        </mat-paginator> -->
 
 
   </mat-card-content>
