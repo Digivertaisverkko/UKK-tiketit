@@ -1,87 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
-
-export interface Comment {
-  aikaleima: Date;
-  lahettaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
-  viesti: string;
-}
-
-export interface Course {
-  id: string;
-  nimi: string;
-}
-
-// Field = Tiketin lisäkenttä
-export interface Field {
-  id: number;
-  arvo: string;
-}
-
-export interface Question {
-  tila: number;
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: {
-    id: number,
-    nimi: string;
-    sposti: string;
-    asema: string;
-  };
-}
-
-// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheess omilla kutsuillaan.
-export interface FieldInfo {
-  id: string
-  otsikko: string
-  pakollinen: boolean
-  esitaytettava: boolean
-}
-
-export interface NewTicket {
-  otsikko: string;
-  viesti: string;
-  kentat?: Array<Field>;
-}
-
-// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
-export interface Ticket {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
-  tila: number;
-  kentat?: Array<Field>;
-  viesti: string;
-  kommentit: Array<Comment>;
-}
-
-export enum Tila {
-  "Virhetila",
-  "Lähetty",
-  "Luettu",
-  "Lisätietoa pyydetty",
-  "Kommentoitu",
-  "Ratkaistu",
-  "Arkistoitu"
-}
+import '@angular/localize/init';
+import { truncate } from '../utils/truncate';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -91,7 +14,8 @@ export enum Tila {
 export class TicketService {
   private messages$ = new Subject<string>();
 
-  constructor(private http: HttpClient) {}
+  constructor (private http: HttpClient,
+    private router: Router) {}
 
   // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
   public onMessages(): Observable<any> {
@@ -103,20 +27,81 @@ export class TicketService {
     this.messages$.unsubscribe;
   }
 
+  public setActiveCourse(courseID: string | null) {
+    if (courseID !== null) {
+      window.sessionStorage.setItem('COURSE_ID', courseID);
+    }
+  }
+
+  public getActiveCourse(): string {
+    if (window.sessionStorage.getItem('COURSE_ID') === null) {
+      throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+    }
+    let courseID = window.sessionStorage.getItem('COURSE_ID');
+    if (courseID === null) {
+      throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+    }
+    return courseID;
+  }
+
+// Hae kurssin UKK-kysymykset.
+public async getFAQ(courseID: number): Promise<FAQ[]> {
+  const httpOptions = this.getHttpOptions();
+  let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+  let response: any;
+  try {
+    response = await firstValueFrom(this.http.get<FAQ[]>(url, httpOptions));
+    console.log(
+      'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+    );
+  } catch (error: any) {
+    this.handleError(error);
+  }
+  return response;
+}
+
+  // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
+public getTicketState(numericalState: number): string {
+  if (numericalState < 0 || numericalState > 6 ) {
+    throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
+  }
+  let verbal: string = '';
+  switch (numericalState) {
+      case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
+      case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
+      case 2: verbal = $localize `:@@Luettu:Luettu`; break;
+      case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+      case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
+      case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
+      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`
+  }
+  return verbal;
+}
+
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string): Promise<boolean> {
+  public async addComment(ticketID: string, message: string, tila?: number): Promise<any> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
+    if (tila !== undefined) {
+      if (tila  < 0 || tila > 6) {
+        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      }
+    }
     const httpOptions = this.getHttpOptions();
-    const body: object =  {
-      viesti: message
+    interface newComment {
+      viesti: string;
+      tila?: number;
+    }
+    let body: newComment = { viesti: message }
+    if (tila !== undefined) {
+      body.tila = tila;
     }
     let response: any;
-    console.log('message: ' + body);
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
     console.dir(httpOptions);
     try {
+      console.log('addComment: lähetetään bodyssa: ' + JSON.stringify(body) + ' URL:iin ' + url);
       response = await firstValueFrom(
         this.http.post<object>(url, body, httpOptions)
       );
@@ -124,16 +109,19 @@ export class TicketService {
         'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
     } catch (error: any) {
+      console.log('service: napattiin: ' + JSON.stringify(error));
       this.handleError(error);
+     //  this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
     }
-    this.checkErrors(response);
-    if (response.success !== undefined && response.success == true) {
-      this.sendMessage('Kommentin lisääminen tikettiin onnistui.');
-      return true;
-    } else {
-      this.sendMessage('Kommentin lisääminen tikettiin epäonnistui.');
-      return false;
-    }
+    return response;
+    // this.checkErrors(response);
+    // if (response.success !== undefined && response.success == true) {
+    //   this.sendMessage($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`)
+    //   return true;
+    // } else {
+    //   this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
+    //   return false;
+    // }
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
@@ -157,14 +145,34 @@ export class TicketService {
     return response;
   }
 
+  public async sendFaq(courseID: string, newFaq: NewTicket, vastaus: string) {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+    const body = newFaq;
+    body.vastaus = vastaus;
+    try {
+      console.log('Yritetään lähettää UKK POST-kutsulla bodylla: ' + JSON.stringify(body) + '  URL:iin "' +
+      url + '"');
+      response = await firstValueFrom(
+        this.http.post<any>(url, body, httpOptions)
+      );
+      console.log(
+        'saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+  }
+
   // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
-  public async addTicket(courseID: string, newTicket: NewTicket): Promise<boolean> {
+  public async addTicket(courseID: string, newTicket: NewTicket) {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  ULR:iin "' +
+      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' +
       url + '"');
       response = await firstValueFrom(
         this.http.post<NewTicket>(url, body, httpOptions)
@@ -176,18 +184,21 @@ export class TicketService {
       this.handleError(error);
     }
     let message: string = '';
-    if (response.success == undefined) {
-      this.sendMessage('Tiketin lisäyksen onnistumisesta ei saatu vahvistusta.');
-      return false; 
-    } else {
-      if (response.success == true) {
-        this.sendMessage('Tiketti lisättiin onnistuneesti');
-        return true;
-      } else {
-        this.sendMessage('Tiketin lisääminen epäonnistui');
-        return false;
-      }
-    }
+
+    // this.checkErrors(response);
+
+    // if (response.success == undefined) {
+    //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
+    //   return false;
+    // } else {
+    //   if (response.success == true) {
+    //     this.sendMessage($localize `:@@Kysymys lisättiin onnistuneesti:Kysymys lisättiin onnistuneesti`);
+    //     return true;
+    //   } else {
+    //     this.sendMessage($localize `:@@Kysymys lisääminen epäonnistui:Kysymys lisääminen epäonnistui`);
+    //     return false;
+    //   }
+    // }
   }
 
   // Palauta kurssin nimi.
@@ -207,7 +218,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     return response['nimi'];
   }
 
@@ -230,8 +241,8 @@ export class TicketService {
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
-  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */ 
-  public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<Question[]> {
+  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
+  public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<Question[]> {
     const httpOptions = this.getHttpOptions();
     let target: string;
     if (onlyOwn !== undefined && onlyOwn == true) {
@@ -239,7 +250,7 @@ export class TicketService {
     } else {
       target = 'kaikki';
     }
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
+    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
       response = await firstValueFrom(
@@ -255,21 +266,6 @@ export class TicketService {
     return response;
   }
 
-  // Ei tarvita: käytä Tila: enum tämän sijaan.
-  // public getTicketState(stateNumber: number): string {
-  //   let state: string = '';
-  //   switch (stateNumber) {
-  //     case 0: state = "Virhetila"; break;
-  //     case 1: state = "Lähetty"; break;
-  //     case 2: state = "Luettu"; break;
-  //     case 3: state = "Lisätietoa pyydetty"; break;
-  //     case 4: state = "Kommentoitu"; break;
-  //     case 5: state = "Ratkaistu"; break;
-  //     case 6: state = "Arkistoitu"; break;
-  //     default: throw new Error('Tiketin tilaa ei määritelty välillä 0-6.');
-  //   }
-  //   return state;
-  // }
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
@@ -294,9 +290,8 @@ export class TicketService {
     ticket.viesti = response[0].viesti;
     response.shift();
     ticket.kommentit = response;
-
-    console.log('Lopullinen tiketti alla:');
-    console.log(ticket);
+    // console.log('Lopullinen tiketti alla:');
+    // console.log(ticket);
     return ticket
   }
 
@@ -331,8 +326,8 @@ export class TicketService {
     // const commentsDescending = commentsWithDate.sort(
     //   (commentA, commentB) => commentB.aikaleima.getTime() - commentA.aikaleima.getTime(),
     // );
-    console.log('Kommentit järjestyksessä:');
-    console.dir(commentsAscending);
+    // console.log('Kommentit järjestyksessä:');
+    // console.dir(commentsAscending);
     return commentsAscending;
   }
 
@@ -384,44 +379,163 @@ export class TicketService {
         error.error
       );
     }
-    let message = 'Yhteydenotto palvelimeen ei onnistunut.';
+    let message: string = '';
     if (error !== undefined) {
       if (error.error.length > 0) {
-        message += 'Virhe: ' + error.error;
+        message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
       }
       if (error.status !== undefined) {
-        message += 'Tilakoodi: ' + error.status;
+        message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
       }
     }
-    this.sendMessage(message);
     return throwError(
       () => new Error(message)
     );
   }
 
-  // Palvelimelta saatujen vastauksien virheenkäsittely.
+  // Käsitellään mahdollisesti palvelimelta saatu virheilmoitus.
   private checkErrors(response: any) {
     var message: string = '';
-    if (response == undefined) {
-      message = 'Virhe: ei vastausta palvelimelta.';
-      this.sendMessage(message);
-      throw new Error(message);
+    // if (response == undefined) {
+    //   message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
+    //   this.sendMessage(message);
+    //   throw new Error(message);
+    // }
+    if (response?.error == undefined) {
+      return
     }
-    if (response.error !== undefined && response.error.success == false) {
-      let errorInfo: string = '';
-      if (response.error !== undefined) {
-        const error = response.error;
-        errorInfo = 'Virhekoodi: ' + error.tunnus + ', virheviesti: ' + error.virheilmoitus;
-      }
-      message = 'Yhteydenotto palvelimeen epäonnistui. ' + errorInfo;
+    const error = response.error;
+    console.log('error : ' + JSON.stringify(error));
+    switch (error.tunnus) {
+      case 1000:
+        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
+        break;
+      case 1001:
+        message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
+        break;
+      case 1002:
+        message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
+        break;
+      case 1003:
+        message = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.';
+        break;
+      case 1010:
+        message = $localize`:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa` + '.';
+        break;
+      case 2000:
+        // Haettavaa tietoa ei löytynyt, mutta ei käsitellä virheenä.
+        break;
+      case 3000:
+      case 3004:
+        // Jokin meni vikaan.
+      default:
+        throw new Error('Tuntematon tilakoodi: ' + JSON.stringify(error.tunnus) + ' Viesti: ' + error.virheilmoitus);
+    }
+    if (message.length > 0) {
       this.sendMessage(message);
-      throw new Error(message);
+      console.error($localize`:@@Virhe:Virhe` + ': ' + message);
+    }
+    if (error.tunnus !== 2000) {
+      const newError = Error('Virhe: tunnus: ' + error.tunnus + ', viesti: ' + truncate(error.virheilmoitus, 250, true));
     }
   }
 
   // Lähetä virheviesti komponenttiin ja consoleen.
   private sendMessage(message: string) {
-    console.log('ticketService: ' + message);
     this.messages$.next(message);
   }
+}
+
+export interface Comment {
+  aikaleima: Date;
+  lahettaja: {
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
+  viesti: string;
+}
+
+export interface Course {
+  id: string;
+  nimi: string;
+}
+
+export interface Error {
+  tunnus: number;
+  virheilmoitus: string;
+}
+
+// Field = Tiketin lisäkenttä
+export interface Field {
+  id: number;
+  arvo: string;
+}
+
+export interface Question {
+  tila: number;
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittaja: {
+    id: number,
+    nimi: string;
+    sposti: string;
+    asema: string;
+  };
+}
+
+// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
+export interface FieldInfo {
+  id: string
+  otsikko: string
+  pakollinen: boolean
+  esitaytettava: boolean
+}
+
+export interface NewTicket {
+  otsikko: string;
+  viesti: string;
+  kentat?: Array<Field>;
+  vastaus?: string;
+}
+
+// export interface NewFaq {
+//   otsikko: string;
+//   viesti: string;
+//   vastaus: string;
+// }
+
+export interface NewFaq extends NewTicket {
+  vastaus: string;
+}
+
+// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
+// id: number;
+export interface FAQ {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  tyyppi: string;
+}
+
+
+// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
+export interface Ticket {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittaja: {
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
+  tila: number;
+  kentat?: Array<Field>;
+  kurssi: number;
+  viesti: string;
+  kommentit: Array<Comment>;
+  ukk?: boolean;
 }

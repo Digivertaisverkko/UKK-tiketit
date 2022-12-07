@@ -1,33 +1,65 @@
 @import '/variables.scss';
 
-button {
-    margin-top: 2em;
+#firstTitle {
     margin-bottom: 1em;
-    margin-left: 1em;
 }
 
-table { width: 100%; }
+#secondTitle {
+    // margin-top: 1.5em;
+}
 
-td { cursor: pointer; }
+h3 {
+    margin-top: 1em;
+    padding-left: 1em;
+}
 
-.mat-row:hover .mat-cell{
+button {
+    // margin-top: 1em;
+    // margin: 1em 0.5em 0.5em;
+    // margin-left: 1em;
+}
+
+mat-card-actions {
+  padding-top: 1em;
+  padding-right: 0.5em;
+}
+
+table { width: 100%;
+  td { cursor: pointer; }
+  .mat-cell { padding-right: 1em; }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.mat-mdc-row:hover {
     // background-color: mat-color($primary);
-    background-color: $hoverBG;
+    background-color: $hoverBG !important;
     // color: white;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
     margin: 1em auto;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-title {
-        padding-left: 0.5em;
+        // padding-left: 0.5em;
     }
 }
 
-td.mat-cell, .mat-header-cell {
+td.mat-mdc-cell, .mat-mdc-header-cell {
     padding-left: 1em;
     padding-right: 1em;
     text-align: left;
+}
+
+.noItemsMessage {
+    text-align: center;
+    padding-top: 3em;
+    padding-bottom: 2.5em;
+    margin: 1em 1em;
 }
 
 // .mat-header-cell {

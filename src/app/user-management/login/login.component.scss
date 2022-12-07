@@ -18,14 +18,21 @@
     repeat: no-repeat;
     size: cover;
   }
+  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
-    mat-card-title { text-align: center; }
+    /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+    mat-card-title {
+      margin-top: 0.5em;
+      text-align: center;
+    }
     border-radius: 8px;
-    margin: 7% auto;
+    margin: 20% auto;
     max-width: 500px;
     min-width: 320px;
     width: 30%;
   }
+  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card.is-phone-portrait {
     margin-top: 0;
     margin-bottom: 0;
@@ -34,21 +41,22 @@
   }
 }
 
-.custom-error {
-  display: block;
-  color: #f44336;
-  line-height: 1.125;
-  font: {
-    size: 75%;
-    weight: 400;
-  }
-}
+// .custom-error {
+//   display: block;
+//   color: #f44336;
+//   line-height: 1.125;
+//   font: {
+//     size: 75%;
+//     weight: 400;
+//   }
+// }
 
 // Titleä jos käyttää.
 .spacer {
   flex: 1 1 auto;
 }
 
+/*   TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 mat-form-field,
 mat-checkbox {
   width: 80%;
@@ -56,13 +64,14 @@ mat-checkbox {
   margin: auto;
 }
 
+/*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-content {
   margin-top: 20px;
 }
 
 .login-button {
   display: block;
-  margin: 20px auto;
+  margin: 1em auto 1em auto;
   width: 80%;
 }
 

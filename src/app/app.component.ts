@@ -29,22 +29,21 @@ export class AppComponent implements OnInit {
   }
 
   public initializeApp() {
-    console.log('--- App.component Initialize ajettu ---');
-    // Katsotaan, onko käyttäjä kirjautuneena.
-    if (window.sessionStorage.getItem('SESSION_ID') == null) {
-      console.log('Session storagessa ei login id:ä.');
-      /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee
-         Ei siirrytä suoraan /login, koska url sisältää loginid:n. */
-      this.authService.sendAskLoginRequest('own').then((response: string) => {
-        console.log('AppComponent: saatiin palvelimelta login URL: ' + response);
+    this.authService.initialize();
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee kirjautumisruudussa
+        jonkin muun tavan. Ei siirrytä suoraan /login, koska palvelimelta saatava
+        URL sisältää login id:n. */
+      if (response == false) {
+        this.authService.sendAskLoginRequest('own').then((response: string) => {
           this.router.navigateByUrl(response);
-      }).catch (error => {
-        console.log(error);
-      })
-      this.router.navigateByUrl('login', { replaceUrl: true });
-    } else {
-      this.authService.isUserLoggedIn$.next(true);
-    }
+        }).catch(error => {
+          console.error(error.message);
+        })
+        // Ei saatu login id:ä, mutta näytetään kirjautumisruutu.
+        // this.router.navigateByUrl('login', { replaceUrl: true });
+      }
+    });
   }
 
 }

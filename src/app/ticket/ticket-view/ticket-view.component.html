@@ -1,11 +1,16 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card class="ticket-view-card" *ngIf="isLoaded">
+<mat-card appearance="outlined" class="ticket-view-card" *ngIf="isLoaded">
+
+<mat-card-content>
+  <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+</mat-card-content>
 
   <mat-card-header>
+
     <mat-card-title>{{ ticket.otsikko }}</mat-card-title>
     <mat-card-subtitle>
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">Tehtävä {{ ticket.kentat[0].arvo }} </span>
+      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
       🞄
       <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span>
     </mat-card-subtitle>
@@ -13,18 +18,18 @@
 
   <mat-card-content>
 
-    <mat-card class="question">
+    <mat-card appearance="outlined" class="question">
       <mat-card-header>
         <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja.nimi}}>
         <mat-card-title>
           {{ ticket.aloittaja.nimi }}
-          <span *ngIf="ticket.aloittaja.asema === 'opettaja'"> 🞄 Opettaja</span>
+          <span *ngIf="ticket.aloittaja.asema === 'opettaja'" i18n="@@Opettaja"> 🞄 Opettaja</span>
         </mat-card-title>
         <mat-card-subtitle>{{ ticket.aikaleima | date: 'short' }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p class="message" [innerHTML]=ticket.viesti></p>
-        <h2>{{ tila[ticket.tila] }}</h2>
+        <h2>{{tila}}</h2>
       </mat-card-content>
     </mat-card>
 
@@ -32,20 +37,20 @@
 
 </mat-card>
 
-<mat-card class="ticket-view-card">
+<mat-card appearance="outlined" class="ticket-view-card">
 
   <mat-card-header>
-    <mat-card-title>Kommentit</mat-card-title>
+    <mat-card-title i18n="@@Kommentit">Kommentit</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
 
-    <mat-card class="answer" *ngFor="let comment of ticket.kommentit">
+    <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
       <mat-card-header>
         <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
         <mat-card-title>
           {{ comment.lahettaja.nimi }}
-          <span *ngIf="comment.lahettaja.asema === 'opettaja'"> 🞄 Opettaja</span>
+          <span *ngIf="comment.lahettaja.asema === 'opettaja'" i18n="@@Opettaja"> 🞄 Opettaja</span>
         </mat-card-title>
         <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
       </mat-card-header>
@@ -57,7 +62,7 @@
     <mat-divider></mat-divider>
 
     <mat-form-field appearance="fill">
-      <mat-label>Jatka keskustelua...</mat-label>
+      <mat-label i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-label>
       <textarea name="commentText"
                 [(ngModel)]="commentText"
                 matInput
@@ -67,16 +72,39 @@
                 cdkAutosizeMaxRows="10"></textarea>
     </mat-form-field>
 
-  </mat-card-content>
+  <app-error-card
+  *ngIf="errorMessage.length > 0"
+  i18n-title="@@Virhe"
+  title="Virhe"
+  message="{{ errorMessage }}"
+  [styles]="{ margin: '1em 0' }"
+>
+</app-error-card>
 
-  <mat-card-actions align="end">
-    <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a>
-    <button
-      mat-raised-button color="primary"
-      [disabled]="commentText.length < 1"
-      (click)="sendComment()">
-      Lähetä
-    </button>
-  </mat-card-actions>
+<!-- <p>{{newCommentState}}</p> -->
+
+<div id="ticketActionsWrapper">
+
+<mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
+  <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
+  <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
+  <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
+</mat-radio-group>
+
+<div class="spacer"></div>
+
+  <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
+  <button
+    id="sendButton"
+    mat-raised-button color="primary"
+    [disabled]="commentText.length < 1"
+    (click)="sendComment()"
+    i18n="@@Lähetä">
+    Lähetä
+  </button>
+
+</div>
+
+</mat-card-content>
 
 </mat-card>

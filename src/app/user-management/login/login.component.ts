@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  public courseID: number = 1;
   public email: string = '';
   public isEmailValid: boolean = false;
   public isPhonePortrait = false;
@@ -20,6 +21,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   public readonly passwordMinLength: number = 8;
   public serverErrorMessage: string = '';
   messageSubscription: Subscription;
+  public tabIndex: number = 0;
+  public isLoginRemembered: boolean = false;
+
+
+  public lang: string | null = localStorage.getItem('language');
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,9 +43,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.serverErrorMessage = '';
         }
       });
+
       this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
         if (isLoggedIn === true) {
-          this.router.navigateByUrl('/list-tickets');
+          this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
         }
       })
   }
@@ -56,6 +63,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.setLoginID();
   }
 
+  // Uuden tilin luonnin jälkeen.
+  public makeTabActive(event: any) {
+    this.tabIndex = 0;
+  }
+
   public login(): void {
     this.isEmailValid = this.validateEmail(this.email);
     console.log('email validation: ' + this.isEmailValid);
@@ -66,25 +78,27 @@ export class LoginComponent implements OnInit, OnDestroy {
     // console.log('email ' + this.email);
     // console.log('password ' + this.password);
     console.log('login id: ' + this.loginID);
-    this.authService.sendLoginRequest(this.email, this.password, this.loginID);
+    this.authService.sendLoginRequest(this.email, this.password, this.loginID)
+      .then(response => {
+      
+      })
+      .catch( error => {
+    console.error(error.message)});
   }
 
   public loginWithoutAuth(): void {
     this.authService.saveSessionStatus('123456789');
     console.log('Tehdään satunnainen session id. Huom. palvelin-kutsut eivät tule toimimaan.');
     this.authService.isUserLoggedIn$.next(true);
-    this.router.navigateByUrl('/list-tickets');
+    this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
   }
 
   private setLoginID() {
     this.activatedRoute.queryParams.subscribe({
       next: (params) => {
-        if (params['loginid'] === undefined) {
-          console.log('loginComponent: Ei löydetty (vielä) URL:sta loginid:ä.');
-          // throw new Error('loginComponent: Ei ole palvelimelta saatua login ID:ä, kirjautumista ei voida jatkaa.');
-        } else {
+        if (params['loginid'] !== undefined) {
           this.loginID = params['loginid'];
-          console.log('loginComponent: asetettiin loginID: ' + this.loginID + '. Valmiina kirjautumiseen.');
+          //console.log('loginComponent: asetettiin loginID: ' + this.loginID);
         }
       },
       error: (error) => {

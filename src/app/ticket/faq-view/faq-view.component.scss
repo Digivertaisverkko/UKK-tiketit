@@ -1,0 +1,41 @@
+.faq-view-card {
+    margin: 1em auto;
+
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+    mat-card {
+        margin: 0 auto 1em;
+    }
+
+
+}
+
+#backButton {
+    margin-bottom: 1em;
+    max-width: 10em;
+  }
+
+.faqTitle {
+    // margin-bottom: 1em;
+}
+
+#viewTitle {
+    margin-bottom: 1em;
+}
+
+mat-divider {
+  margin-top: 2em;
+  padding-bottom: 2em;
+}
+
+#question {
+  // margin-left: 1em;
+  margin-top: 1em;
+}
+
+#answer {
+  margin-bottom: 0.5em;
+}
+
+.message {
+  white-space: pre-wrap;
+}

@@ -1,5 +1,5 @@
 <div class="login-page">
-  <mat-card class="mat-elevation-z12">
+  <mat-card appearance="outlined" class="mat-elevation-z12">
     <mat-card-title style="text-align: center"
       >Testisivu</mat-card-title
     >
@@ -20,9 +20,6 @@
         Hae yhden tiketin tiedot
       </button>
       <input placeholder="id" required name="ticketID" [(ngModel)]="ticketID" >
-      <button (click)="addTicket()" class="test-button" mat-raised-button>
-        Lisää uusi tiketti
-      </button>
       <button (click)="getFieldInfo()" class="test-button" mat-raised-button>
         Hae tiketin lisäkenttien lisätiedot.
       </button>
