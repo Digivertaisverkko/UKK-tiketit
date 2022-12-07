@@ -12,14 +12,13 @@
             <mat-card-header>
                 <mat-card-title class="faqTitle">{{ticket.otsikko}}</mat-card-title>
 
-                <mat-card-subtitle>
+                <!-- <mat-card-subtitle> -->
                     <!-- <span *ngIf="faq.kentat !== undefined && faq.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
                         faq.kentat[0].arvo }} </span> -->
-                    <mat-card-subtitle *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo
-                        }} 🞄
+                    <mat-card-subtitle *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }} 🞄
                         <span>{{ ticket.aikaleima | date: 'short' }}</span>
                     </mat-card-subtitle>
-                </mat-card-subtitle>
+                <!-- </mat-card-subtitle> -->
 
             </mat-card-header>
 
@@ -43,7 +42,7 @@
         <mat-divider></mat-divider>
 
         <mat-card-header>
-          <mat-card-title class="faqTitle" i18n="@@Vastaus">
+          <mat-card-title class="faqTitle" id="answer" i18n="@@Vastaus">
               Vastaus
           </mat-card-title>
       </mat-card-header>

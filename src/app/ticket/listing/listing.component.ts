@@ -89,7 +89,6 @@ export class ListingComponent implements OnInit {
     });
 
     this.username = this.authService.getUserName();
-    console.log(' --- username: ' + this.username + ' ----- ');
 
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },

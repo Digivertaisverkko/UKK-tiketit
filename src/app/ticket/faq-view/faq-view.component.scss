@@ -15,7 +15,7 @@
   }
 
 .faqTitle {
-    margin-bottom: 1em;
+    // margin-bottom: 1em;
 }
 
 #viewTitle {
@@ -28,10 +28,14 @@ mat-divider {
 }
 
 #question {
-  margin-left: 1em;
+  // margin-left: 1em;
+  margin-top: 1em;
+}
+
+#answer {
+  margin-bottom: 0.5em;
 }
 
 .message {
   white-space: pre-wrap;
-  // margin-left: 1em;
 }
