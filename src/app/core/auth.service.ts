@@ -240,6 +240,7 @@ export class AuthService {
     // console.log(httpOptions);
     let response: any;
     try {
+      console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
       console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
@@ -252,11 +253,6 @@ export class AuthService {
     const loginUrl = response['login-url'];
     // console.log('loginurl : ' +loginUrl);
     return loginUrl;
-    } else {
-      let message = 'Yhteydenotto palvelimeen ei onnistunut.';
-      this.sendErrorMessage(message);
-      throw new Error(message);
-    }
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
@@ -274,7 +270,7 @@ export class AuthService {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       console.log(httpOptions.headers);
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-      this.colorTrace('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response), 'green');
+      console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       if (error.status === 403) {
         const message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
@@ -286,14 +282,10 @@ export class AuthService {
     if (response.success == true && response['login-code'] !== undefined) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
-      console.log('lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
+      console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       this.sendAuthRequest(this.codeVerifier, this.loginCode);
     }
   }
-
-  private colorTrace(msg: string, color: string) {
-    console.log("%c" + msg, "color:" + color + ";font-weight:bold;");
-}
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
   private async sendAuthRequest(codeVerifier: string, loginCode: string) {
@@ -307,8 +299,12 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
+      console.log('Lähetetään auth-request headereilla: ');
+      console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
-      console.log('authService: saatiin vastaus POST -kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
+      console.log('sendAuthRequest: got response: ');
+      console.log(JSON.stringify(response));
+      console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
