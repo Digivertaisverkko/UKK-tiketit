@@ -134,6 +134,10 @@ export class AuthService {
     this.userName$.next(name);
   }
 
+  public getUserName(): string | null {
+    return window.sessionStorage.getItem('USER_NAME');
+  }
+
   public setUserEmail(email: string) {
     window.sessionStorage.setItem('USER_EMAIL', email);
     this.userEmail$.next(email);

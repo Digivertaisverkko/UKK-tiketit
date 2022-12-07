@@ -46,6 +46,7 @@ export class ListingComponent implements OnInit {
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public courseName: string = '';
+  public username: string | null;;
   ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public isPhonePortrait: boolean = false;
   public showNoQuestions: boolean = true;
@@ -54,6 +55,7 @@ export class ListingComponent implements OnInit {
   public isLoaded: boolean = false;
   public header: string = '';
   public maxItemTitleLength = 100;
+  public me: string =  $localize`:@@Minä:Minä`;
   private routeSubscription: Subscription | null = null;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
@@ -86,6 +88,9 @@ export class ListingComponent implements OnInit {
       }
     });
 
+    this.username = this.authService.getUserName();
+    console.log(' --- username: ' + this.username + ' ----- ');
+
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
@@ -97,7 +102,7 @@ export class ListingComponent implements OnInit {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false },
       { def: 'tyyppi', showMobile: true }
-    ];
+    ];    
 
   }
 
