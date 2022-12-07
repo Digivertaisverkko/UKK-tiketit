@@ -136,12 +136,11 @@
           aria-label="Valitse kysymysten sivu">
         </mat-paginator> -->
 
+        <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
+          <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
+        </mat-card>
 
   </mat-card-content>
-
-  <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
-    <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
-  </mat-card>
 
   <app-error-card
     *ngIf="ticketServiceMessage.length > 0"
