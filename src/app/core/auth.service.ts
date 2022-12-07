@@ -272,6 +272,10 @@ export class AuthService {
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
       console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
+      if (error.status === 403) {
+        const message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
+        this.sendErrorMessage(message);
+      }
       this.handleError(error);
     }
     this.checkErrors(response);
