@@ -49,8 +49,7 @@
       <mat-card-header>
         <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
         <mat-card-title>
-          {{ comment.lahettaja.nimi }}
-          <span *ngIf="comment.lahettaja.asema === 'opettaja'" i18n="@@Opettaja"> 🞄 Opettaja</span>
+          {{ comment.lahettaja.nimi }} <span *ngIf="comment.lahettaja.asema === 'opettaja'">🞄 <span i18n="@@Opettaja">Opettaja</span></span>
         </mat-card-title>
         <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
       </mat-card-header>
