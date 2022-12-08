@@ -3,8 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './user-management/auth.guard';
 import { TestingHenriComponent } from './user-management/testing-henri/testing-henri.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
+import { ListingComponent } from './ticket/listing/listing.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/list-tickets?courseID=1', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 
