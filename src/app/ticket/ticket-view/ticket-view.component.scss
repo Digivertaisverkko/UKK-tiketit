@@ -5,6 +5,10 @@
     margin: 0 auto 1em;
   }
 
+  button {
+    text-transform: uppercase;
+  }
+
   #ticketActionsWrapper {
     display: flex;
     align-items: center;
@@ -35,7 +39,8 @@
 
   #backButton {
     margin-right: 0.5em;
-    max-width: 10em;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 
   #sendButton {

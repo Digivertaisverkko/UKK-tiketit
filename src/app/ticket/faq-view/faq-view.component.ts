@@ -29,10 +29,7 @@ constructor (
         this.errorMessage = $localize `:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
       }).finally( () => {
         this.isLoaded = true;
-      }).catch(error => {
-        console.error(error);
-        this.goBack();
-      });
+      })
     }
   } 
 
