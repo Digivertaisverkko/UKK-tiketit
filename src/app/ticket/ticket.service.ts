@@ -222,7 +222,7 @@ public getTicketState(numericalState: number): string {
     return response['nimi'];
   }
 
-  // Palauta lista käyttäjän kursseista.
+  // Palauta listan kaikista kursseista.
   public async getCourses(): Promise<Course[]> {
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -238,6 +238,23 @@ public getTicketState(numericalState: number): string {
     this.checkErrors(response);
     return response;
   }
+
+    // Palauta listan kaikista kursseista, joilla käyttäjä on.
+    public async getMyCourses(): Promise<MyCourse[]> {
+      const httpOptions = this.getHttpOptions();
+      let response: any;
+      let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
+      try {
+        response = await firstValueFrom<MyCourse[]>(this.http.get<any>(url, httpOptions));
+        console.log(
+          'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+        );
+      } catch (error: any) {
+        this.handleError(error);
+      }
+      this.checkErrors(response);
+      return response;
+    }
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
@@ -457,6 +474,11 @@ export interface Comment {
 export interface Course {
   id: string;
   nimi: string;
+}
+
+export interface MyCourse {
+  kurssi: number;
+  asema: 'opiskelija' | 'opettaja' | 'admin';
 }
 
 export interface Error {

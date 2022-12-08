@@ -3,7 +3,7 @@
 <mat-card appearance="outlined">
 
 
-
+    <div *ngIf="isCourseIDvalid">
     <!-- ----- Tiketit ----- -->
 
     <mat-card-header>
@@ -141,6 +141,8 @@
         </mat-card>
 
   </mat-card-content>
+
+  </div>
 
   <app-error-card
     *ngIf="ticketServiceMessage.length > 0"
