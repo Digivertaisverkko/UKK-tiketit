@@ -14,13 +14,16 @@ import { AuthService } from './auth.service';
 
 import { HeaderComponent } from '../core/header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { SharedModule } from '../shared/shared.module';
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    PrivacyModalComponent
+    PrivacyModalComponent,
+    PageNotFoundComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,8 @@ import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.comp
     MaterialModule,
     MatMenuModule,
     RouterModule,
-    MatDialogModule
+    MatDialogModule,
+    SharedModule
   ],
   providers: [
     AuthService

@@ -85,6 +85,8 @@
     "Vastaus": "Answer",
     "UKK näyttäminen epäonnistui": "Displaying a frequently asked question failed",
     "Et ole kurssilla": "You are not a participant in this course",
-    "Minä": "Me"
+    "Minä": "Me",
+    "404-otsikko": "Page not found",
+    "404": "The page you are trying to access does not exist."
   }
 }
