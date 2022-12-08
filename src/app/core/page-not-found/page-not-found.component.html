@@ -8,3 +8,13 @@ message={{errorMessage}}
 [styles]="{ margin: '1em 5% 1em 5%' }"
 >
 </app-error-card>
+
+<div id="buttonArea" *ngIf="!isLoggedIn">
+    <div class="spacer"></div>
+    <button align="end"
+    mat-raised-button color="primary" id="submitButton"
+    (click)="goToLogin()"
+    i18n="@@Kirjaudu sisään">
+    Kirjaudu sisään
+    </button>
+</div>
