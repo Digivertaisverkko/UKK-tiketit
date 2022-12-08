@@ -7,7 +7,6 @@ import { truncate } from '../utils/truncate';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
-import { Router } from '@angular/router';
 
 export interface LoginResponse {
   success: boolean,
@@ -56,8 +55,7 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  constructor(private http: HttpClient,
-    private router: Router) {
+  constructor(private http: HttpClient) {
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.

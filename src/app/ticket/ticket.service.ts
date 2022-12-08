@@ -4,8 +4,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
-import { Router } from '@angular/router';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -14,8 +12,7 @@ import { Router } from '@angular/router';
 export class TicketService {
   private messages$ = new Subject<string>();
 
-  constructor (private http: HttpClient,
-    private router: Router) {}
+  constructor (private http: HttpClient) {}
 
   // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
   public onMessages(): Observable<any> {
