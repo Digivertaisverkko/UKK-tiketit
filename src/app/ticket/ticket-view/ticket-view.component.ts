@@ -45,13 +45,21 @@ export class TicketViewComponent implements OnInit  {
     this.ticketService.getTicketInfo(this.ticketID)
       .then(response => {
         this.ticket = response;
-        this.isLoaded = true;
         this.tila = this.ticketService.getTicketState(this.ticket.tila);
+      }).catch(response => {
+        this.errorMessage = $localize `:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+      }).finally( () => {
+        this.isLoaded = true;
       });
   }
 
   public goBack(): void {
-    this.router.navigateByUrl('/list-tickets?courseID=' + this.ticket.kurssi);
+    if (this.ticket.kurssi === undefined ) {
+      const courseID = this.ticketService.getActiveCourse();
+      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+    } else {
+      this.router.navigateByUrl('/list-tickets?courseID=' + this.ticket.kurssi);
+    }
   }
 
   private trackUserRole() {

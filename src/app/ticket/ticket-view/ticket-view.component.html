@@ -6,6 +6,8 @@
   <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
 </mat-card-content>
 
+  <div *ngIf="ticket.tila > 0">
+
   <mat-card-header>
 
     <mat-card-title>{{ ticket.otsikko }}</mat-card-title>
@@ -35,16 +37,19 @@
 
   </mat-card-content>
 
+  </div>
+
 </mat-card>
 
 <mat-card appearance="outlined" class="ticket-view-card">
 
-  <mat-card-header>
+  <mat-card-header *ngIf="ticket.tila > 0">
     <mat-card-title i18n="@@Kommentit">Kommentit</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
 
+    <div *ngIf="ticket.tila > 0">
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
       <mat-card-header>
         <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
@@ -70,6 +75,8 @@
                 cdkAutosizeMinRows="5"
                 cdkAutosizeMaxRows="10"></textarea>
     </mat-form-field>
+
+  </div>
 
   <app-error-card
   *ngIf="errorMessage.length > 0"
@@ -97,6 +104,7 @@
     id="sendButton"
     mat-raised-button color="primary"
     [disabled]="commentText.length < 1"
+    *ngIf="ticket.tila > 0"
     (click)="sendComment()"
     i18n="@@Lähetä">
     Lähetä
