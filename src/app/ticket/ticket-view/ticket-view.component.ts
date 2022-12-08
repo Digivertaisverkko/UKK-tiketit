@@ -18,6 +18,7 @@ export class TicketViewComponent implements OnInit  {
   // tila: typeof Tila | typeof State;
   commentText: string;
   isLoaded: boolean;
+  public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   ticketID: string;
 
   // messageSubscription: Subscription;
@@ -67,6 +68,10 @@ export class TicketViewComponent implements OnInit  {
       console.log('saatiin rooli: ' + response);
       this.userRole = response;
     })
+  }
+
+  public getCommentState(tila: number) {
+    return this.ticketService.getTicketState(tila);
   }
 
 

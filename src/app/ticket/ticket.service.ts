@@ -465,6 +465,7 @@ export interface Comment {
     sposti: string;
     asema: string;
   }
+  tila: number;
   viesti: string;
 }
 
