@@ -49,11 +49,16 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
       .pipe(
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
-      ).subscribe(
-        response => {
+      ).subscribe({
+        next: (response) => {
           this.ticket = response;
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
           this.isLoaded = true;
+        },
+        error: (error) => {
+          this.errorMessage = $localize `:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+          this.isLoaded = true;
+        }
         })
 
     // this.ticketService.getTicketInfo(this.ticketID)
