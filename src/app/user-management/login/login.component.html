@@ -12,13 +12,13 @@
             <mat-form-field>
               <input
                 matInput
-                i18n-placeholder="@@Sähköposti" placeholder="Sähköposti"
+                i18n-placeholder="@@Käyttäjätunnus" placeholder="Käyttäjätunnus"
                 required
                 name="email"
                 [(ngModel)]="email"
                 ng-change="validateEmail()"
               />
-              <mat-error i18n="@@Sähköposti tarvitaan">Sähköposti tarvitaan</mat-error>
+              <mat-error i18n="@@Käyttäjätunnus tarvitaan.">Käyttäjätunnus tarvitaan.</mat-error>
               <mat-icon matSuffix>email</mat-icon>
             </mat-form-field>
 
