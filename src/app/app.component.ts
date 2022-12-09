@@ -25,11 +25,12 @@ export class AppComponent implements OnInit {
         this.isPhonePortrait = true;
       }
     });
-    this.initializeApp();
+    // this.initializeApp();
+    this.authService.initialize();
   }
 
-  public initializeApp() {
-    this.authService.initialize();
+  // public initializeApp() {
+  //   this.authService.initialize();
     
     // this.authService.onIsUserLoggedIn().subscribe(response => {
     //   /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee kirjautumisruudussa
@@ -45,7 +46,5 @@ export class AppComponent implements OnInit {
     //     // this.router.navigateByUrl('login', { replaceUrl: true });
     //   }
     // });
-
-
-  }
+  // }
 }
