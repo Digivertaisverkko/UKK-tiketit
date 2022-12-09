@@ -393,7 +393,7 @@ public getTicketState(numericalState: number): string {
     if (sessionID == undefined) {
       throw new Error('No session id set.');
     }
-    console.log('session id on: ' + sessionID);
+    // console.log('session id on: ' + sessionID);
     let options = {
       headers: new HttpHeaders({
         'session-id': sessionID
