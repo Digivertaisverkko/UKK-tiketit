@@ -46,17 +46,16 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
     this.trackUserRole();
 
     this.timeInterval = interval(60000)
-          .pipe(
-            startWith(0),
-            switchMap( () => this.ticketService.getTicketInfo(this.ticketID) )
-            ).subscribe(
-              response => {
-                this.ticket = response;
-                this.tila = this.ticketService.getTicketState(this.ticket.tila);
-                this.isLoaded = true;
-            })
+      .pipe(
+        startWith(0),
+        switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
+      ).subscribe(
+        response => {
+          this.ticket = response;
+          this.tila = this.ticketService.getTicketState(this.ticket.tila);
+          this.isLoaded = true;
+        })
 
-    
     // this.ticketService.getTicketInfo(this.ticketID)
     //   .then(response => {
     //     this.ticket = response;
@@ -91,7 +90,6 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila);
   }
-
 
   public sendComment(): void {
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
