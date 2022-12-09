@@ -1,16 +1,16 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Ticket } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
-
+import { Subscription, interval, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
-export class TicketViewComponent implements OnInit  {
+export class TicketViewComponent implements OnInit, OnDestroy  {
   public errorMessage: string = '';
   ticket: Ticket;
   tila: string;
@@ -20,6 +20,7 @@ export class TicketViewComponent implements OnInit  {
   isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   ticketID: string;
+  private timeInterval: Subscription = new Subscription();
 
   // messageSubscription: Subscription;
   message: string = '';
@@ -43,15 +44,32 @@ export class TicketViewComponent implements OnInit  {
 
   ngOnInit(): void {
     this.trackUserRole();
-    this.ticketService.getTicketInfo(this.ticketID)
-      .then(response => {
-        this.ticket = response;
-        this.tila = this.ticketService.getTicketState(this.ticket.tila);
-      }).catch(response => {
-        this.errorMessage = $localize `:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
-      }).finally( () => {
-        this.isLoaded = true;
-      });
+
+    this.timeInterval = interval(10000)
+          .pipe(
+            startWith(0),
+            switchMap( () => this.ticketService.getTicketInfo(this.ticketID) )
+            ).subscribe(
+              response => {
+                this.ticket = response;
+                this.tila = this.ticketService.getTicketState(this.ticket.tila);
+                this.isLoaded = true;
+            })
+
+    
+    // this.ticketService.getTicketInfo(this.ticketID)
+    //   .then(response => {
+    //     this.ticket = response;
+    //     this.tila = this.ticketService.getTicketState(this.ticket.tila);
+    //   }).catch(response => {
+    //     this.errorMessage = $localize `:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+    //   }).finally( () => {
+    //     this.isLoaded = true;
+    //   });
+  }
+
+  public ngOnDestroy(): void {
+    this.timeInterval.unsubscribe();
   }
 
   public goBack(): void {
