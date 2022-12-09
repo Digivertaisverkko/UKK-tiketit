@@ -314,9 +314,9 @@ export class AuthService {
       console.log('vastauksen sisältöä: ');
 
       let sessionID = response['session-id'];
-      console.log(' -- session ID on ' + sessionID);
+      // console.log(' -- session ID on ' + sessionID);
       this.saveSessionStatus(sessionID);
-      console.log('Authorization success.');
+      // onsole.log('Authorization success.');
     } else {
       console.error(response.error);
     }
