@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
@@ -35,7 +35,7 @@ export interface ColumnDefinition {
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss'],
 })
-export class ListingComponent implements OnInit {
+export class ListingComponent implements OnInit, OnDestroy {
   private courseID: string | null = '';
   // dataSource:any = [];
   dataSource = new MatTableDataSource<Sortable>();
@@ -68,8 +68,8 @@ export class ListingComponent implements OnInit {
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
 
-  @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
-  @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
+  // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
+  // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
@@ -149,7 +149,7 @@ export class ListingComponent implements OnInit {
         }
       }).then(() => {
 
-        const timeInterval = interval(10000)
+        this.timeInterval = interval(60000)
           .pipe(
             startWith(0),
             switchMap( () => this.ticket.getOnQuestions(Number(this.courseID)) )
@@ -176,7 +176,7 @@ export class ListingComponent implements OnInit {
                   // console.log('Saatiin vastaus (alla):');
                   // console.dir(SortableData);
                   this.dataSource.sort = this.sortQuestions;
-                  this.dataSource.paginator = this.paginator;
+                  // this.dataSource.paginator = this.paginator;
 
                   if (this.numberOfQuestions === 0) { 
                     this.showNoQuestions = true;
@@ -187,10 +187,7 @@ export class ListingComponent implements OnInit {
                 }
                 // console.dir(this.dataSource);
               }
-
-
             )
-
       }).catch(error => {
           if (error.message !== undefined) {
             this.ticketServiceMessage = error.message;
@@ -272,7 +269,7 @@ export class ListingComponent implements OnInit {
           // console.log('Saatiin vastaus (alla):');
           // console.dir(SortableData);
           this.dataSource.sort = this.sortQuestions;
-          this.dataSource.paginator = this.paginator;
+          // this.dataSource.paginator = this.paginator;
         }
         // console.dir(this.dataSource);
       })
@@ -370,7 +367,7 @@ export class ListingComponent implements OnInit {
           // console.log('Saatiin vastaus (alla):');
           // console.dir(SortableData);
           this.dataSourceFAQ.sort = this.sortFaq;
-          this.dataSourceFAQ.paginator = this.paginatorFaq;
+          // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
       })
       .catch((error) => {
@@ -405,5 +402,10 @@ export class ListingComponent implements OnInit {
 
   goSendTicket() {
     this.router.navigateByUrl('submit');
+  }
+
+  ngOnDestroy(): void {
+    this.timeInterval.unsubscribe();
+    this.ticketMessageSub.unsubscribe();
   }
 }
