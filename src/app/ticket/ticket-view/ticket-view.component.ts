@@ -45,7 +45,7 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {
     this.trackUserRole();
 
-    this.timeInterval = interval(10000)
+    this.timeInterval = interval(60000)
           .pipe(
             startWith(0),
             switchMap( () => this.ticketService.getTicketInfo(this.ticketID) )
