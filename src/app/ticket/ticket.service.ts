@@ -280,6 +280,30 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
+    /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
+  Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
+  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
+  public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<Question[]> {
+    const httpOptions = this.getHttpOptions();
+    let target: string;
+    if (onlyOwn !== undefined && onlyOwn == true) {
+      target = 'omat';
+    } else {
+      target = 'kaikki';
+    }
+    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
+    let response: any;
+    try {
+      response = this.http.get<Question[]>(url, httpOptions);
+    
+      console.dir(response);
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    this.checkErrors(response);
+    return response;
+  }
+
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {

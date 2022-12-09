@@ -5,10 +5,10 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
+import { Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { TicketService, MyCourse, FAQ } from '../ticket.service';
+import { TicketService, MyCourse, FAQ, Question } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
 
 //   id: number;
@@ -63,6 +63,8 @@ export class ListingComponent implements OnInit {
   public ticketMessageSub: Subscription;
   public ticketServiceMessage: string = '';
 
+  private timeInterval: Subscription = new Subscription();
+
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
 
@@ -116,41 +118,133 @@ export class ListingComponent implements OnInit {
         this.isPhonePortrait = true;
       }
     });
+
     this.routeSubscription = this.route.queryParams.subscribe((params) => {
       if (params['courseID'] === undefined) {
         throw new Error('Kurssia ei löytynyt.');
       }
 
       this.ticket.getMyCourses().then(response => {
-      if (response[0].kurssi !== undefined ) {
-        const myCourses: MyCourse[] = response;
-        var courseIDcandinate: string = params['courseID'];
-        console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
-        // Onko käyttäjä tällä kurssilla.
-        if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-          this.ticketServiceMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
-        } else {
-          this.courseID = courseIDcandinate;
-          // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
-          this.isCourseIDvalid = true;
-          this.ticket.setActiveCourse(this.courseID);
-          if (this.courseID !== null) {
-            this.showCourseName(this.courseID);
-            this.showHeader(this.courseID);
+        if (response[0].kurssi !== undefined) {
+          const myCourses: MyCourse[] = response;
+          var courseIDcandinate: string = params['courseID'];
+          console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
+          // Onko käyttäjä tällä kurssilla.
+          if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+            this.ticketServiceMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
+          } else {
+            this.courseID = courseIDcandinate;
+            // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
+            this.isCourseIDvalid = true;
+            this.ticket.setActiveCourse(this.courseID);
+            if (this.courseID !== null) {
+              this.showCourseName(this.courseID);
+              this.showHeader(this.courseID);
+            }
+            this.showFAQ();
+            // this.showQuestions();
+            // this.pollQuestions();
+
           }
-          this.showFAQ();
-          this.showQuestions();
         }
-      }
+      }).then(() => {
+
+        const timeInterval = interval(10000)
+          .pipe(
+            startWith(0),
+            switchMap( () => this.ticket.getOnQuestions(Number(this.courseID)) )
+            ).subscribe(
+              response => {
+                console.log('question polled');
+                if (response.length > 0) {
+                  let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
+                    tila: this.ticket.getTicketState(tila),
+                    id: id,
+                    otsikko: otsikko,
+                    aikaleima: aikaleima,
+                    aloittajanNimi: aloittaja.nimi
+                  }));
+
+                  // console.log('Tabledata alla:');
+                  // console.log(JSON.stringify(tableData));
+                  if (tableData !== null) {
+                    this.dataSource = new MatTableDataSource(tableData);
+                  }
+                  console.log('MatTableDataSource alla:');
+                  console.dir(this.dataSource);
+                  this.numberOfQuestions = tableData.length;
+                  // console.log('Saatiin vastaus (alla):');
+                  // console.dir(SortableData);
+                  this.dataSource.sort = this.sortQuestions;
+                  this.dataSource.paginator = this.paginator;
+
+                  if (this.numberOfQuestions === 0) { 
+                    this.showNoQuestions = true;
+                  } else {
+                    this.showNoQuestions = false;
+                  }
+
+                }
+                // console.dir(this.dataSource);
+              }
+
+
+            )
+
       }).catch(error => {
-        if (error.message !== undefined) {
-          this.ticketServiceMessage = error.message;
-        }
-      }).finally( () => {
-        this.isLoaded = true;
-      })
+          if (error.message !== undefined) {
+            this.ticketServiceMessage = error.message;
+          }
+        }).finally(() => {
+          this.isLoaded = true;
+        })
       // console.log('löydettiin kurssi id: ' + this.courseID)
     });
+  }
+
+  private pollQuestions() {
+    this.timeInterval = interval(60000).pipe(
+      startWith(0),
+      switchMap( () => this.ticket.getOnQuestions(Number(this.courseID)) )
+    ).subscribe(
+      (response) => {
+        console.log('question polled');
+        if (response.length > 0) {
+          let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
+            tila: this.ticket.getTicketState(tila),
+            id: id,
+            otsikko: otsikko,
+            aikaleima: aikaleima,
+            aloittajanNimi: aloittaja.nimi
+          }));
+          // console.log('Tabledata alla:');
+          // console.log(JSON.stringify(tableData));
+          if (tableData !== null ) {
+            this.dataSource = new MatTableDataSource(tableData);
+          }
+          console.log('MatTableDataSource alla:');
+          console.dir(this.dataSource);
+          this.numberOfQuestions = tableData.length;
+
+          console.log(' tabledatan pituus: ' + tableData.length);
+
+          // console.log('Saatiin vastaus (alla):');
+          // console.dir(SortableData);
+          this.dataSource.sort = this.sortQuestions;
+          // this.dataSource.paginator = this.paginator;
+
+          if (this.numberOfQuestions === 0) {
+            this.showNoQuestions = true;
+          } else {
+            this.showNoQuestions = false;
+          }
+
+          console.log("this.showNoQuestion: " +this.showNoQuestions);
+
+        }
+        // console.dir(this.dataSource);
+      }
+    )
   }
 
   private showQuestions() {
