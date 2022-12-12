@@ -14,6 +14,10 @@
 
     <mat-card-content>
 
+    <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
+      <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
+    </mat-card>
+
     <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima" matSortDirection="desc" #sortQuestions="matSort"
       class="mat-elevation-z1">
 
@@ -135,10 +139,6 @@
         <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
           aria-label="Valitse kysymysten sivu">
         </mat-paginator> -->
-
-        <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
-          <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
-        </mat-card>
 
   </mat-card-content>
 
