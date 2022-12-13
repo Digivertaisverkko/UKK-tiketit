@@ -251,7 +251,7 @@ export class ListingComponent implements OnInit, OnDestroy {
         console.log('response: ');
         console.dir(response);
         if (response.length > 0) {
-          let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
+          let tableData: Sortable[] = response.map( ({ tila, id, otsikko, aikaleima, aloittaja }) => ({
             tila: this.ticket.getTicketState(tila),
             id: id,
             otsikko: otsikko,

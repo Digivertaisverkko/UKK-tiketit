@@ -1,16 +1,17 @@
 $header-height: 64px;
-$footer-height: 196px;
+$footer-height: 182px;
 
 main {
   margin: 0 auto;
   max-width: 800px;
+  // Jotta footer asemoitaisiin oikealle korkeudelle.
   min-height: calc(100vh - $header-height - $footer-height);
   // Vain alapalkilla
   // min-height: calc(100vh - 128px);
 }
 
-#content.is-phone-portrait {
-  min-height: calc(100vh - $header-height - 180px);
+main.is-phone-portrait {
+  min-height: calc(100vh - $header-height - 164px);
 
   // Vain alapalkilla
   // min-height: calc(100vh - 112px);

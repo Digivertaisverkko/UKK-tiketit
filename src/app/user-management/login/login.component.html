@@ -1,13 +1,13 @@
-<div class="login-page">
-  <mat-card
+<!-- <div class="login-page"> -->
+  <mat-card id="login" mat-card
     appearance="outlined"
     class="mat-elevation-z12"
     [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
   >
     <mat-card-title i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</mat-card-title>
-    <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" [(selectedIndex)]="tabIndex">
-      <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu">
-        <mat-card-content>
+    <!-- <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" [(selectedIndex)]="tabIndex"> -->
+      <!-- <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu"> -->
+        <mat-card-content id="content">
           <form action="">
             <mat-form-field>
               <input
@@ -33,7 +33,7 @@
                 [(ngModel)]="password"
               />
               <mat-error i18n="@@Salasanan pituus">
-                Vähintään {{passwordMinLength}} pitkä salasana tarvitaan.
+                Vähintään {{ passwordMinLength }} pitkä salasana tarvitaan.
               </mat-error>
               <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
@@ -58,9 +58,7 @@
 
             <button
               mat-raised-button
-              [disabled]="
-                email.length < 3 || password.length < passwordMinLength
-              "
+              [disabled]="email.length < 3 || password.length < passwordMinLength"
               class="login-button"
               color="primary"
               (click)="login()"
@@ -87,11 +85,11 @@
           </form>
         </mat-card-content>
 
-      </mat-tab>
-      <mat-tab i18n-label="@@Luo tili" label="Luo tili" disabled>
+      <!-- </mat-tab> -->
+      <!-- <mat-tab i18n-label="@@Luo tili" label="Luo tili" disabled>
         <app-register (event)="makeTabActive($event)"></app-register>
       </mat-tab>
-    </mat-tab-group>
+    </mat-tab-group> -->
   </mat-card>
 
-</div>
+<!-- </div> -->
