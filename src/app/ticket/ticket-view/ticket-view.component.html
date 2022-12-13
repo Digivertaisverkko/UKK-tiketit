@@ -66,16 +66,8 @@
 
     <mat-divider></mat-divider>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-label>
-      <textarea name="commentText"
-                [(ngModel)]="commentText"
-                matInput
-                cdkTextareaAutosize
-                #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="5"
-                cdkAutosizeMaxRows="10"></textarea>
-    </mat-form-field>
+    <mat-card-title i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-card-title>
+    <app-editor [(editorContent)]="commentText"></app-editor>
 
   </div>
 
