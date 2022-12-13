@@ -4,12 +4,12 @@
     <mat-card-title i18n="@@Uusi kysymys">Uusi kysymys</mat-card-title>
   </mat-card-header>
 
+  <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+
   <form action="" #submitForm="ngForm">
 
-  <mat-card-content>
-
-    <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
-
+    <mat-card-content>
+    
     <mat-form-field appearance="fill">
       <mat-label i18n="@@Otsikko">Otsikko</mat-label>
       <input
