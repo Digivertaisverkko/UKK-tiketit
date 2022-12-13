@@ -32,9 +32,5 @@ constructor (
       })
     }
   } 
-
-  public goBack(): void {
-    this.router.navigateByUrl('/list-tickets?courseID=' + this.ticketService.getActiveCourse());
-  }
   
 }

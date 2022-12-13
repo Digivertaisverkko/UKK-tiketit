@@ -2,9 +2,7 @@
 
 <mat-card appearance="outlined" class="ticket-view-card" *ngIf="isLoaded">
 
-<mat-card-content>
-  <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
-</mat-card-content>
+<app-to-beginning-button></app-to-beginning-button>
 
   <div *ngIf="ticket.tila > 0">
 

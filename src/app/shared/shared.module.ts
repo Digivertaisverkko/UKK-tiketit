@@ -10,11 +10,13 @@ import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorModule } from 'ngx-editor';
+import { ToBeginningButtonComponent } from './components/to-beginning-button/to-beginning-button.component';
 
 @NgModule({
   declarations: [
     ErrorCardComponent,
-    EditorComponent
+    EditorComponent,
+    ToBeginningButtonComponent
   ],
   imports: [
     CommonModule,
@@ -50,6 +52,7 @@ import { NgxEditorModule } from 'ngx-editor';
     MaterialModule,
     ErrorCardComponent,
     EditorComponent,
+    ToBeginningButtonComponent,
   ]
 })
 export class SharedModule { }

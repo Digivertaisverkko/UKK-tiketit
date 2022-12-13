@@ -65,15 +65,6 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
     this.timeInterval.unsubscribe();
   }
 
-  public goBack(): void {
-    if (this.ticket.kurssi === undefined ) {
-      const courseID = this.ticketService.getActiveCourse();
-      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
-    } else {
-      this.router.navigateByUrl('/list-tickets?courseID=' + this.ticket.kurssi);
-    }
-  }
-
   private trackUserRole() {
     this.auth.onGetUserRole().subscribe(response => {
       console.log('saatiin rooli: ' + response);

@@ -3,7 +3,7 @@
 <mat-card appearance="outlined" class="faq-view-card">
 
     <mat-card-content>
-        <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+        <app-to-beginning-button></app-to-beginning-button>
     </mat-card-content>
 
     <mat-card-content *ngIf="ticket.viesti !== undefined">
