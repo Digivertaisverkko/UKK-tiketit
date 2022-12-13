@@ -44,7 +44,6 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
 
   ngOnInit(): void {
     this.trackUserRole();
-
     this.timeInterval = interval(60000)
       .pipe(
         startWith(0),
@@ -56,20 +55,10 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
           this.isLoaded = true;
         },
         error: (error) => {
-          this.errorMessage = $localize `:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+          this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
           this.isLoaded = true;
         }
-        })
-
-    // this.ticketService.getTicketInfo(this.ticketID)
-    //   .then(response => {
-    //     this.ticket = response;
-    //     this.tila = this.ticketService.getTicketState(this.ticket.tila);
-    //   }).catch(response => {
-    //     this.errorMessage = $localize `:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
-    //   }).finally( () => {
-    //     this.isLoaded = true;
-    //   });
+      })
   }
 
   public ngOnDestroy(): void {
@@ -108,9 +97,8 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
           console.log(response);
         }
       })
-      .then(() => { this.commentText = '' })
+      .then( () => { this.commentText = '' } )
       .catch(error => {
-        //console.log('napattiin virhe');
         //console.dir(error);
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
         console.log(JSON.stringify(error));
