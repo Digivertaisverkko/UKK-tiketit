@@ -41,37 +41,21 @@
         required>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Viesti">Viesti</mat-label>
-      <textarea
-        name="messageText"
-        [(ngModel)]="messageText"
-        matInput
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="5"
-        cdkAutosizeMaxRows="50"
-        required></textarea>
-    </mat-form-field>
+    <mat-card-title i18n="@@Viesti">Viesti</mat-card-title>
+    <app-editor [(editorContent)]="message"></app-editor>
 
-    <mat-form-field appearance="fill" *ngIf="isFaq">
-      <mat-label i18n="@@Vastaus">Vastaus</mat-label>
-      <textarea
-        name="answerText"
-        [(ngModel)]="answer"
-        matInput
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="5"
-        cdkAutosizeMaxRows="50"
-        required></textarea>
-    </mat-form-field>
+    <div *ngIf="isFaq">
+      <mat-card-title i18n="@@Vastaus">Vastaus</mat-card-title>
+      <app-editor [(editorContent)]="answer"></app-editor>
+    </div>
 
   </mat-card-content>
-  
+
   <div id="ticketActionsWrapper">
 
   <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
     Usein kysytty kysymys</mat-checkbox>
-  
+
   <div class="spacer"></div>
 
   <mat-card-actions align="end">

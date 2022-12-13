@@ -58,7 +58,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
 
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
-    this.newTicket.viesti = this.messageText;
+    this.newTicket.viesti = this.message;
     this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
     const courseID = this.ticketService.getActiveCourse();
     console.log(this.newTicket);
@@ -72,9 +72,9 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     } else {
       const newFaq: NewFaq = {
         otsikko: this.titleText,
-        viesti: this.messageText,
-        vastaus: this.answer
-      } 
+        viesti: this.message,
+        vastaus: this.answer,
+      }
       this.ticketService.sendFaq(courseID, this.newTicket, this.answer)
       .then(() => {
         this.goBack()
