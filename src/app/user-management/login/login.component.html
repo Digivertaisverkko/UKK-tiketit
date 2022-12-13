@@ -1,13 +1,13 @@
 <!-- <div class="login-page"> -->
-  <mat-card id="login" mat-card
-    appearance="outlined"
-    class="mat-elevation-z12"
+  <div id="login" 
+   
+    
     [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
   >
-    <mat-card-title i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</mat-card-title>
     <!-- <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" [(selectedIndex)]="tabIndex"> -->
       <!-- <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu"> -->
-        <mat-card-content id="content">
+        <div id="content">
+          <h2 i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</h2>
           <form action="">
             <mat-form-field>
               <input
@@ -83,13 +83,13 @@
               Sisään kirjautumatta (!)
             </button> -->
           </form>
-        </mat-card-content>
+        </div>
 
       <!-- </mat-tab> -->
       <!-- <mat-tab i18n-label="@@Luo tili" label="Luo tili" disabled>
         <app-register (event)="makeTabActive($event)"></app-register>
       </mat-tab>
     </mat-tab-group> -->
-  </mat-card>
+  </div>
 
 <!-- </div> -->

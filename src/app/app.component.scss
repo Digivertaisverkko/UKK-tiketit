@@ -1,11 +1,21 @@
-$header-height: 64px;
-$footer-height: 182px;
+// $header-height: 64px;
+// $footer-height: 182px;
+@import '/variables.scss';
+
+body {
+  background-color: black;
+}
 
 main {
+  // border-color: red;
+  // border-style: solid;
+  // border-width: 2px;
   margin: 0 auto;
   max-width: 800px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
   min-height: calc(100vh - $header-height - $footer-height);
+  // padding-top: 1em;
+  // padding-bottom: 1em;
   // Vain alapalkilla
   // min-height: calc(100vh - 128px);
 }
