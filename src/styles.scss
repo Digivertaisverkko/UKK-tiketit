@@ -2,9 +2,11 @@
 
 @import './variables.scss';
 
-html, body { height: 100%; }
+html { height: 100%; }
 
 body {
+  background-color: gray;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
   margin: 0;
 }
