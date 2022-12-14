@@ -2,10 +2,6 @@
 // $footer-height: 182px;
 @import '/variables.scss';
 
-body {
-  background-color: black;
-}
-
 main {
   // border-color: red;
   // border-style: solid;
@@ -18,7 +14,25 @@ main {
   // padding-bottom: 1em;
   // Vain alapalkilla
   // min-height: calc(100vh - 128px);
+  display: flex;
+  flex-direction: column;
 }
+
+// main > * {
+//   flex-grow: 1;
+//   display: flex;
+//   flex-direction: column;
+// }
+
+// FIXME: ei toimi
+// main:first-child {
+// main:nth-child(2) {
+//   flex-grow: 1;
+//   display: flex;
+//   flex-direction: column;
+// }
+
+
 
 main.is-phone-portrait {
   min-height: calc(100vh - $header-height - 164px);
