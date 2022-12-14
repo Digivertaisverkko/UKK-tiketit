@@ -90,6 +90,20 @@
     "Minä": "Me",
     "404-otsikko": "Page not found",
     "404": "The page you are trying to access does not exist.",
-    "Ei oikeutta kysymykseen": "You do not have read access to this question."
+    "Ei oikeutta kysymykseen": "You do not have read access to this question.",
+    "Lihavoi": "Bold",
+    "Kursivoi": "Italic",
+    "Koodi": "Code",
+    "Lohkolainaus": "Blockquote",
+    "Alleviivaa": "Underline",
+    "Yliviivaa": "Strike-through",
+    "Bullettilista": "Bullet list",
+    "Järjestetty lista": "Ordered list",
+    "Teksti": "Text",
+    "Avaa uudessa välilehdessä": "Open in new tab",
+    "Lisää": "Add",
+    "Poista": "Remove",
+    "Lisää linkki": "Insert link",
+    "Poista linkki": "Remove link"
   }
 }
