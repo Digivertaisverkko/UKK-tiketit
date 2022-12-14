@@ -1,8 +1,11 @@
 @use '@angular/material' as mat;
-@import '@angular/material/theming';
-@include mat-core();
 
-/* ======== Angular material custom theme ======== */ 
+// Tarvitseeko?
+@import '@angular/material/theming';
+
+@include mat.core();
+
+/* ======== Angular material custom theme ======== */
 
 $custom-primary-palette: (
     50:  #e0f4fa,
@@ -16,9 +19,9 @@ $custom-primary-palette: (
     800: #006ca3,
     900: #004e84,
     contrast: (
-        50: black,
-        100: black,
-        200: black,
+        50: rgba(black, 0.87),
+        100: rgba(black, 0.87),
+        200: white,
         300: white,
         400: white,
         500: white,
@@ -29,11 +32,46 @@ $custom-primary-palette: (
     )
 );
 
+$custom-accent-palette: (
+  50:  #f9eae8,
+  100: #fbcdbe,
+  200: #f9ae94,
+  300: #f78f6a,
+  400: #f6774a,
+  500: #f5612b,
+  600: #ea5b27,
+  700: #dc5423,
+  800: #ce4e20,
+  900: #b4421a,
+  contrast: (
+      50: rgba(black, 0.87),
+      100: rgba(black, 0.87),
+      200: rgba(black, 0.87),
+      300: rgba(black, 0.87),
+      400: rgba(black, 0.87),
+      500: rgba(black, 0.87),
+      600: white,
+      700: white,
+      800: white,
+      900: white
+  )
+);
+
+$custom-typography-config: mat.define-typography-config(
+  $headline-1: mat.define-typography-level(35px, 35px, 700, Montserrat),
+  $headline-2: mat.define-typography-level(20px, 20px, 550, Montserrat),
+  $headline-5: mat.define-typography-level(50px, 50px, 800, Montserrat),
+  $headline-6: mat.define-typography-level(50px, 50px, 800, Montserrat),
+  $body-1: mat.define-typography-level(15px, 15px, 400, Roboto),
+  $body-2: mat.define-typography-level(15px, 15px, 700, Roboto)
+);
+
 // $custom-palette: mat.$custom-primary-palette;
 
 // accent: DC5323
 
-$custom-primary: mat.define-palette(mat.$custom-primary-palette, 500);
+$custom-primary: mat.define-palette($custom-primary-palette, 400);
+$custom-accent: mat.define-palette($custom-accent-palette, 700);
 // $custom-primary: mat-palette($custom-primary-palette);
 
 // $custom-accent: mat-palette($mat-pink, 100, 500, A100);
@@ -44,8 +82,9 @@ $custom-primary: mat.define-palette(mat.$custom-primary-palette, 500);
 $custom-theme: mat.define-light-theme((
     color: (
         primary: $custom-primary,
+        accent: $custom-accent
     ),
-    density: 0,
+    typography: $custom-typography-config,
 ));
 
 // Emit theme-dependent styles for common features used across multiple components.
@@ -57,4 +96,5 @@ $custom-theme: mat.define-light-theme((
 @include mat.button-theme($custom-theme);
 @include mat.toolbar-theme($custom-theme);
 
-@include angular-material-theme($custom-primary);
+@include mat.all-component-themes($custom-theme);
+// @include angular-material-theme($custom-primary);
