@@ -1,5 +1,10 @@
-
 .spacer { flex: 1 1 auto; }
+
+#headerTitle {
+  font-family: Montserrat;
+  font-size: 35px;
+  font-weight: 700;
+}
 
 #userName { margin-right: 5px; }
 
@@ -17,7 +22,7 @@
   display: inline-block;
   width: 1.33333333em;
   cursor: pointer;
-  line-height: 1em;
+  line-height: 0.5em;
   margin-right: 6px;
   margin-left: 15px;
 }
