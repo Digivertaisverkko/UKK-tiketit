@@ -1,14 +1,52 @@
-.spacer { flex: 1 1 auto; }
 
-#headerTitle {
-  font-family: Montserrat;
-  font-size: 35px;
-  font-weight: 700;
+mat-toolbar {
+  height: 140px;
 }
 
-#userName { margin-right: 5px; }
+.spacer { flex: 1 1 auto; }
 
-#userEmail { margin-right: 5px; }
+#userName {
+  margin-right: 5px;
+}
+
+#userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+#userEmail {
+  margin-right: 5px;
+}
+
+#userRole {
+  margin-top: 7px;
+  margin-right: 7px;
+  font-weight: 400;
+}
+
+// #account-icon-button {
+//   height: 90%;
+//   width: 120px;
+//   border-style: solid;
+//   border-color: red;
+//   border-width: 1px;
+
+//   mat-icon {
+//     border-style: solid;
+//     border-color: green;
+//     border-width: 1px;
+//     font-size: 5em;
+//     width: 170px;
+//     height: 170px;
+//   }
+// }
+
+
+#userName, #userEmail, #userRole {
+  display: block;
+  font-weight: 600;
+  align-self: flex-end;
+}
 
 #userName.is-phone-portrait {
   display: none;
@@ -50,7 +88,7 @@ mat-slide-toggle {
   // display: inline-block;
   // width: 1.33333333em;
   cursor: pointer;
-  height: 3em;
+  height: 80%;
   // line-height: 1em;
   margin-left: 0.5em;
   // background-image: url(../../../assets/logos/dvv-blue.svg);

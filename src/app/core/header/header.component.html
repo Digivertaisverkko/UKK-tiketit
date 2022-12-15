@@ -18,15 +18,18 @@
   <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä. -->
   <ng-content></ng-content>
 
-  <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }" *ngIf="userName.length > 0">
-    {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
-  </div>
+  <div id="userInfo">
+    <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }" *ngIf="userName.length > 0"
+      class="theme-header-text">
+      {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
+    </div>
 
-  <div id="userEmail" *ngIf="userName.length === 0" >
-    {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}
-  </div>
+    <div id="userEmail" *ngIf="userName.length === 0" class="theme-header-text">
+      {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}
+    </div>
 
-  <div id="userRole">{{userRole}}</div>
+    <div id="userRole" class="theme-header-text-small">{{userRole}}</div>
+  </div>
 
   <!-- <mat-slide-toggle>Custom theme</mat-slide-toggle> -->
 
@@ -35,9 +38,9 @@
   <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
     alt="Vaihda kieli englanniksi"></span>
 
-  <button mat-icon-button class="material-symbols-outlined" *ngIf="isUserLoggedIn$ | async"
+  <button mat-icon-button id="account-icon-button" class="material-symbols-outlined" *ngIf="isUserLoggedIn$ | async"
     [matMenuTriggerFor]="accountMenu" aria-label="Tili">
-    <mat-icon>account_circle</mat-icon>
+    <mat-icon >account_circle</mat-icon>
   </button>
 
 </mat-toolbar>
