@@ -3,6 +3,20 @@ mat-toolbar {
   height: 130px;
 }
 
+#projectLogo {
+  // background-size: contain;
+  // background-position: 50%;
+  // background-repeat: no-repeat;
+  // position: relative;
+  // display: inline-block;
+  // width: 1.33333333em;
+  cursor: pointer;
+  max-height: 75%;
+  // line-height: 1em;
+  margin-left: 0.5em;
+  // background-image: url(../../../assets/logos/dvv-blue.svg);
+}
+
 .spacer { flex: 1 1 auto; }
 
 #userName {
@@ -12,6 +26,7 @@ mat-toolbar {
 #userInfo {
   display: flex;
   flex-direction: column;
+  margin-right: 0.5em;
 }
 
 #userEmail {
@@ -25,10 +40,11 @@ mat-toolbar {
 }
 
 #account-icon-button {
-  height: 90%;
-  width: 120px;
-  font-size: 2.5em;
-  margin-right: -10px;
+  height: 85%;
+  width: 110px;
+  font-size: 2.3em;
+  margin-top: 0px;
+  margin-right: 0px;
 
   // border-style: solid;
   // border-color: red;
@@ -69,9 +85,9 @@ mat-slide-toggle {
   background-repeat: no-repeat;
   position: relative;
   display: inline-block;
-  width: 1.6em;
+  width: 1.3em;
   cursor: pointer;
-  // line-height: 0.5em;
+  line-height: 0.7em;
   margin-right: 10px;
   margin-left: 15px;
 }
@@ -84,18 +100,4 @@ mat-slide-toggle {
 
 .flag-en {
   background-image: url(../../../assets/flag-icons/gb.svg);
-}
-
-#projectLogo {
-  // background-size: contain;
-  // background-position: 50%;
-  // background-repeat: no-repeat;
-  // position: relative;
-  // display: inline-block;
-  // width: 1.33333333em;
-  cursor: pointer;
-  max-height: 80%;
-  // line-height: 1em;
-  margin-left: 0.5em;
-  // background-image: url(../../../assets/logos/dvv-blue.svg);
 }

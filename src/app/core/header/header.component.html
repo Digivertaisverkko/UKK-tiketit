@@ -19,8 +19,12 @@
   <ng-content></ng-content>
 
   <div id="userInfo">
+
     <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }" *ngIf="userName.length > 0"
-      class="theme-header-text">
+      class="theme-header-text"><span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
+      alt="Vaihda kieli suomeksi"></span>
+    <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
+      alt="Vaihda kieli englanniksi"></span>
       {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
     </div>
 
@@ -32,11 +36,6 @@
   </div>
 
   <!-- <mat-slide-toggle>Custom theme</mat-slide-toggle> -->
-
-  <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
-    alt="Vaihda kieli suomeksi"></span>
-  <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
-    alt="Vaihda kieli englanniksi"></span>
 
   <button mat-icon-button id="account-icon-button" class="material-symbols-outlined" *ngIf="isUserLoggedIn$ | async"
     [matMenuTriggerFor]="accountMenu" aria-label="Tili">
