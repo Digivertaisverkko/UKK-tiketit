@@ -83,9 +83,10 @@ $custom-theme: mat.define-light-theme((
     color: (
         primary: $custom-primary,
         accent: $custom-accent
-    ),
-    typography: $custom-typography-config,
+    )
 ));
+
+//typography: $custom-typography-config,
 
 // Emit theme-dependent styles for common features used across multiple components.
 @include mat.core-theme($custom-theme);
