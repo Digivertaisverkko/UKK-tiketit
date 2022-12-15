@@ -40,9 +40,21 @@
     // width: 30%;
     #content {
       // max-width: 400px;
-      max-width: 300px;
+      max-width: 450px;
       margin-left: auto;
       margin-right: auto;
+    }
+    button {
+      display: block;
+      margin: 1em auto 1em auto;
+      text-transform: uppercase;
+      width: 80%;
+    }
+    #loginButton {
+      color: white;
+    }
+    #loginProblemsButton {
+      color: black;
     }
   }
   /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
@@ -75,14 +87,6 @@ mat-checkbox {
 /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-content {
   margin-top: 20px;
-}
-
-.login-button {
-  display: block;
-  margin: 1em auto 1em auto;
-  text-transform: uppercase;
-  width: 80%;
-  color: white;
 }
 
 .line-container {

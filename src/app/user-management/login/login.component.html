@@ -7,6 +7,8 @@
     <!-- <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" [(selectedIndex)]="tabIndex"> -->
       <!-- <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu"> -->
         <div id="content">
+          <h1>DVV-tikettijärjestelmä</h1>
+
           <h2 i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</h2>
           <form action="">
             <mat-form-field>
@@ -19,7 +21,7 @@
                 ng-change="validateEmail()"
               />
               <mat-error i18n="@@Käyttäjätunnus tarvitaan.">Käyttäjätunnus tarvitaan.</mat-error>
-              <mat-icon matSuffix>email</mat-icon>
+              <!-- <mat-icon matSuffix>email</mat-icon> -->
             </mat-form-field>
 
             <mat-form-field>
@@ -35,7 +37,7 @@
               <mat-error i18n="@@Salasanan pituus">
                 Vähintään {{ passwordMinLength }} pitkä salasana tarvitaan.
               </mat-error>
-              <mat-icon matSuffix>lock</mat-icon>
+              <!-- <mat-icon matSuffix>lock</mat-icon> -->
             </mat-form-field>
 
             <!-- <p>{{isLoginRemembered}}</p> -->
@@ -59,12 +61,16 @@
             <button
               mat-raised-button
               [disabled]="email.length < 3 || password.length < passwordMinLength"
-              class="login-button"
+              id="loginButton"
               color="primary"
               (click)="login()"
               i18n="@@Kirjaudu"
             >
               Kirjaudu
+            </button>
+
+            <button id="loginProblemsButton" mat-raised-button>
+              Kirjautumisongelmia?
             </button>
 
             <!-- <div class="line-container">
