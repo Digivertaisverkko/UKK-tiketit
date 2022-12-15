@@ -14,6 +14,11 @@
   display: none;
 }
 
+mat-slide-toggle {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
 .flag {
   background-size: contain;
   background-position: 50%;
@@ -22,7 +27,7 @@
   display: inline-block;
   width: 1.33333333em;
   cursor: pointer;
-  line-height: 0.5em;
+  // line-height: 0.5em;
   margin-right: 6px;
   margin-left: 15px;
 }
@@ -35,4 +40,18 @@
 
 .flag-en {
   background-image: url(../../../assets/flag-icons/gb.svg);
+}
+
+#projectLogo {
+  // background-size: contain;
+  // background-position: 50%;
+  // background-repeat: no-repeat;
+  // position: relative;
+  // display: inline-block;
+  // width: 1.33333333em;
+  cursor: pointer;
+  height: 3em;
+  // line-height: 1em;
+  margin-left: 0.5em;
+  // background-image: url(../../../assets/logos/dvv-blue.svg);
 }

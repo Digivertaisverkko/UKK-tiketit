@@ -5,10 +5,12 @@
         <mat-icon>menu</mat-icon>
     </button> -->
 
-  <span id="headerTitle" (click)="goToFrontPage()"
+  <!-- <span id="headerTitle" (click)="goToFrontPage()" class="mat-headline-1"
     [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
     {{productName}}
-  </span>
+  </span> -->
+
+  <img id="projectLogo" src="../../../assets/logos/dvv-white.svg">
 
   <span class="spacer"></span>
 
@@ -24,6 +26,8 @@
   </div>
 
   <div id="userRole">{{userRole}}</div>
+
+  <!-- <mat-slide-toggle>Custom theme</mat-slide-toggle> -->
 
   <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
     alt="Vaihda kieli suomeksi"></span>
