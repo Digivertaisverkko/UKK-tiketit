@@ -2,6 +2,7 @@
 
 // Tarvitseeko?
 @import '@angular/material/theming';
+@import url("https://fonts.googleapis.com/css?family=Montserrat:800,600,500,400");
 
 @include mat.core();
 
@@ -57,13 +58,15 @@ $custom-accent-palette: (
   )
 );
 
+// $headline-1: mat.define-typography-level(35px, 35px, 700, Montserrat),
+// $headline-2: mat.define-typography-level(20px, 20px, 500, Montserrat),
+// $headline-5: mat.define-typography-level(50px, 50px, 800, Montserrat),
+// $headline-6: mat.define-typography-level(50px, 50px, 800, Montserrat),
+
 $custom-typography-config: mat.define-typography-config(
-  $headline-1: mat.define-typography-level(35px, 35px, 700, Montserrat),
-  $headline-2: mat.define-typography-level(20px, 20px, 550, Montserrat),
-  $headline-5: mat.define-typography-level(50px, 50px, 800, Montserrat),
-  $headline-6: mat.define-typography-level(50px, 50px, 800, Montserrat),
+  $headline-3: mat.define-typography-level(35px, 35px, 700, Montserrat),
   $body-1: mat.define-typography-level(15px, 15px, 400, Roboto),
-  $body-2: mat.define-typography-level(15px, 15px, 700, Roboto)
+  $body-2: mat.define-typography-level(15px, 15px, 400, Roboto)
 );
 
 // $custom-palette: mat.$custom-primary-palette;
@@ -83,10 +86,9 @@ $custom-theme: mat.define-light-theme((
     color: (
         primary: $custom-primary,
         accent: $custom-accent
-    )
+    ),
+    typography: $custom-typography-config,
 ));
-
-//typography: $custom-typography-config,
 
 // Emit theme-dependent styles for common features used across multiple components.
 @include mat.core-theme($custom-theme);
@@ -95,7 +97,20 @@ $custom-theme: mat.define-light-theme((
 // passed to `define-light-theme` omits typography, `button-theme` will not
 // emit any typography styles.
 @include mat.button-theme($custom-theme);
-@include mat.toolbar-theme($custom-theme);
+
+// @include mat.toolbar-theme($custom-theme);
 
 @include mat.all-component-themes($custom-theme);
+
+// FIXME: tässä määritelty font-weight ei tee mitään.
+.theme-header-text {
+    font-family: Montserrat;
+    font-size: 35px;
+}
+
+.theme-header-text-small {
+    font-family: Montserrat;
+    font-size: 20px;
+}
+
 // @include angular-material-theme($custom-primary);
