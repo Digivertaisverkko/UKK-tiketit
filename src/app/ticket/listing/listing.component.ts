@@ -232,7 +232,7 @@ export class ListingComponent implements OnInit, OnDestroy {
             case 'admin':
               this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
             case 'opiskelija':
-              this.header = $localize`:@@Opettajalle lähettämäsi kysymykset:Opettajalle lähettämäsi kysymykset`; break;
+              this.header = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
             default:
               console.error('Käyttäjän asemaa kurssilla ei löydetty.');
           }

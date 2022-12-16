@@ -6,13 +6,12 @@
     <div *ngIf="isCourseIDvalid">
     <!-- ----- Tiketit ----- -->
 
-    <mat-card-header>
-      <mat-card-title id="secondTitle">{{header}}</mat-card-title>
-    </mat-card-header>
-
-    <h3 *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h3>
-
     <mat-card-content>
+
+    <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1>
+    <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
+
+    <h2 id="secondTitle" class="theme-h2">{{header}}</h2>
 
     <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
       <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
@@ -76,15 +75,12 @@
 
   </mat-card-content>
 
-        <!-- FAQ -->
+          <!-- FAQ -->
 
-        <mat-card-header>
-          <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle">
-            Usein kysytyt kysymykset
-          </mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
+          <mat-card-content>
+          <h2 class="theme-h2" i18n="@@Open neuvot" id="firstTitle">
+            Open neuvot
+          </h2>
 
           <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
             <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>

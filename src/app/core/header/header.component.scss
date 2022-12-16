@@ -1,6 +1,6 @@
 
 mat-toolbar {
-  height: 130px;
+  height: 120px;
 }
 
 #projectLogo {
@@ -21,28 +21,35 @@ mat-toolbar {
 
 #userName {
   margin-right: 5px;
+  font-weight: 600;
 }
 
 #userInfo {
   display: flex;
   flex-direction: column;
+  margin-top: 17px;
   margin-right: 0.5em;
+
+  // border-style: solid;
+  // border-color:red;
+  // border-width: 1px;
 }
 
 #userEmail {
   margin-right: 5px;
+  font-weight: 500;
 }
 
 #userRole {
-  margin-top: 7px;
+  margin-top: 3x;
   margin-right: 7px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 #account-icon-button {
   height: 85%;
   width: 110px;
-  font-size: 2.3em;
+  font-size: 2.2em;
   margin-top: 0px;
   margin-right: 0px;
 
@@ -66,7 +73,6 @@ mat-toolbar {
 
 #userName, #userEmail, #userRole {
   display: block;
-  font-weight: 600;
   align-self: flex-end;
 }
 

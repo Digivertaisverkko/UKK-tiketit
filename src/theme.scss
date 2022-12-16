@@ -3,6 +3,7 @@
 // Tarvitseeko?
 @import '@angular/material/theming';
 @import url("https://fonts.googleapis.com/css?family=Montserrat:800,600,500,400");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
 @include mat.core();
 
@@ -58,17 +59,6 @@ $custom-accent-palette: (
   )
 );
 
-// $headline-1: mat.define-typography-level(35px, 35px, 700, Montserrat),
-// $headline-2: mat.define-typography-level(20px, 20px, 500, Montserrat),
-// $headline-5: mat.define-typography-level(50px, 50px, 800, Montserrat),
-// $headline-6: mat.define-typography-level(50px, 50px, 800, Montserrat),
-
-$custom-typography-config: mat.define-typography-config(
-  $headline-3: mat.define-typography-level(35px, 35px, 700, Montserrat),
-  $body-1: mat.define-typography-level(15px, 15px, 400, Roboto),
-  $body-2: mat.define-typography-level(15px, 15px, 400, Roboto)
-);
-
 // $custom-palette: mat.$custom-primary-palette;
 
 // accent: DC5323
@@ -81,17 +71,29 @@ $custom-accent: mat.define-palette($custom-accent-palette, 700);
 // $custom-warn: mat-palette($mat-lime);
 // $custom-theme: mat-light-theme($custom-primary-palette);
 
+// $headline-1: mat.define-typography-level(35px, 35px, 700, Montserrat),
+// $headline-2: mat.define-typography-level(20px, 20px, 500, Montserrat),
+// $headline-6: mat.define-typography-level(50px, 50px, 800, Montserrat),
+
+$custom-typography-config: mat.define-typography-config(
+  $headline-3: mat.define-typography-level(35px, 1, 700, Montserrat, normal),
+  $headline-5: mat.define-typography-level(50px, 1, 800, Montserrat, normal),
+  $body-1: mat.define-typography-level(15px, 1, 400, Roboto, normal),
+  $body-2: mat.define-typography-level(15px, 1, 400, Roboto, normal)
+);
 
 $custom-theme: mat.define-light-theme((
     color: (
         primary: $custom-primary,
-        accent: $custom-accent
+        accent: $custom-accent,
     ),
     typography: $custom-typography-config,
 ));
 
 // Emit theme-dependent styles for common features used across multiple components.
 @include mat.core-theme($custom-theme);
+
+// @include mat-core($custom-typography-config);
 
 // Emit styles for MatButton based on `$my-theme`. Because the configuration
 // passed to `define-light-theme` omits typography, `button-theme` will not
@@ -102,15 +104,35 @@ $custom-theme: mat.define-light-theme((
 
 @include mat.all-component-themes($custom-theme);
 
+// Skaalaus UI-suunnitelman kokoihin.
+$scale-factor: 0.8;
+
 // FIXME: tässä määritelty font-weight ei tee mitään.
 .theme-header-text {
     font-family: Montserrat;
-    font-size: 35px;
+    font-size: calc(35px * $scale-factor);
 }
 
 .theme-header-text-small {
     font-family: Montserrat;
-    font-size: 20px;
+    font-size: calc(20px * $scale-factor);
+}
+
+.theme-h1 {
+    font-family: Montserrat;
+    font-size: calc(50px * $scale-factor);
+    font-weight: 900;
+    margin-block-end: 1.2em;
+    margin-left: 12px;
+
+}
+
+.theme-h2 {
+    font-family: Montserrat;
+    font-size: calc(32px * $scale-factor);
+    font-weight: 800;
+    margin-block-end: 1em;
+    margin-left: 12px;
 }
 
 // @include angular-material-theme($custom-primary);
