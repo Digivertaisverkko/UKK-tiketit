@@ -11,14 +11,16 @@
     <mat-card-content>
     
     <mat-form-field appearance="fill">
-      <mat-label i18n="@@Otsikko">Otsikko</mat-label>
+      <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
       <input
+        id="titleText"
         name="titleText"
         [(ngModel)]="titleText"
         matInput
-        placeholder=""
+        placeholder="Otsikko"
         required
-        autocomplete="off">
+        autocomplete="off"
+        >
     </mat-form-field>
 
     <mat-form-field appearance="fill" *ngIf="!isFaq">

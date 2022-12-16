@@ -16,6 +16,7 @@
   }
 
   #submitButton {
+    color: white;
     min-width: 7em;
   }
 
@@ -26,6 +27,17 @@
     mat-checkbox {
       margin-left: 1em;
     }
+  }
+
+  #titleLabel {
+    margin-left: 0;
+  }
+
+  #titleText {
+    font-size: 25.6px;
+    font-weight: 900;
+    // font-size: calc(32px * 0.8);
+    // font-weight: 900;
   }
 
   .spacer {
