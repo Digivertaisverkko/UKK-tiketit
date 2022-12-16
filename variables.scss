@@ -1,6 +1,10 @@
 @import '@angular/material/theming';
 
-$app-primary: mat-palette($mat-deep-purple);
+// $app-primary: mat-palette($mat-deep-purple);
+$app-primary: #23ACDC;
+
+// #DC5323
+
 $app-accent: mat-palette($mat-amber, A200, A100, A400);
 $theme: mat-light-theme((
   color: (
@@ -10,7 +14,9 @@ $theme: mat-light-theme((
 ));
 $color: mat-get-color-config($theme);
 
-$primary: map-get($color, primary);
+// $primary: map-get($color, primary);
+$primary: #23ACDC;
+
 $accent: map-get($color, accent);
 
 // Muita värejä
