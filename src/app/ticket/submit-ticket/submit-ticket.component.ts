@@ -14,6 +14,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   // max pituus: 255.
   titleText: string = '';
   assignmentText: string = '';
+  public courseName: string = '';
   problemText: string = '';
   messageText: string = '';
   newTicket: NewTicket = {} as NewTicket;
