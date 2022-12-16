@@ -6,9 +6,10 @@
 
   <div *ngIf="ticket.tila > 0">
 
+  <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
+
   <mat-card-header>
 
-    <mat-card-title>{{ ticket.otsikko }}</mat-card-title>
     <mat-card-subtitle>
       <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
       🞄
