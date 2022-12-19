@@ -104,7 +104,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false },
       { def: 'tyyppi', showMobile: true }
-    ];    
+    ];
 
   }
 
@@ -133,9 +133,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               this.showHeader(this.courseID);
             }
             this.showFAQ();
-            // this.showQuestions();
-            // this.pollQuestions();
-
           }
         }
       }).then(() => {
@@ -163,7 +160,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   private pollQuestions() {
-    this.timeInterval = interval(60000)
+    this.timeInterval = interval(600000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
