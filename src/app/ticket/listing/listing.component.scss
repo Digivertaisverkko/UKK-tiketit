@@ -25,9 +25,14 @@ mat-card-actions {
   padding-right: 0.5em;
 }
 
-table { width: 100%;
+table {
   td { cursor: pointer; }
   .mat-cell { padding-right: 1em; }
+  .mat-header-row {  background-color: #D3D3D3; }
+}
+
+:host ::ng-deep .mat-sort-header-sorted {
+  color: #5379FC;
 }
 
 [hidden] {
