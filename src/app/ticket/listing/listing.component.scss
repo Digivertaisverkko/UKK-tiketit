@@ -7,13 +7,6 @@ h3 {
     padding-left: 1em;
 }
 
-button {
-    text-transform: uppercase;
-    // margin-top: 1em;
-    // margin: 1em 0.5em 0.5em;
-    // margin-left: 1em;
-}
-
 mat-card-actions {
   padding-top: 1em;
   padding-right: 0.5em;
@@ -66,7 +59,12 @@ table {
     // padding: 22px
     padding-top: 20px;
     padding-bottom: 20px;
+  }
 
+  mat-card {
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
   }
 }
 
@@ -90,7 +88,6 @@ table {
 /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
     margin: auto;
-    padding-left: 2em;
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 }
 
@@ -103,7 +100,7 @@ mat-card {
 
 #submitButton {
   margin-top: 1em;
-    color: white;
+  color: white;
 }
 
 // .mat-header-cell {
