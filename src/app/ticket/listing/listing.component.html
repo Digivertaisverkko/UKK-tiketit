@@ -8,7 +8,9 @@
 
     <mat-card-content>
 
-    <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1>
+    <div id="headerLine">
+      <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1>
+    </div>
     <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
 
     <h2 id="secondTitle" class="theme-h2">{{header}}</h2>
@@ -43,21 +45,21 @@
       </ng-container>
 
       <ng-container matColumnDef="aloittajanNimi">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä lähettäjän mukaan"
-          i18n-sortActionDescription="@@Järjestä lähettäjän mukaan" i18n="@@Lähettäjä">
+        <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä lähettäjän mukaan"
+          i18n-sortActionDescription="@@Järjestä lähettäjän mukaan" i18n="@@Lähettäjä" style="text-align: right;">
           Lähettäjä
         </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
+        <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
           {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="aikaleima">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header
+        <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
           sortActionDescription="Järjestä aikaleiman mukaan" i18n-sortActionDescription="@@Järjestä aikaleiman mukaan" i18n="@@Aikaleima">
           Aikaleima
         </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'shortDate'}}</td>
+        <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'shortDate'}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
@@ -102,21 +104,21 @@
           </ng-container>
 
           <ng-container matColumnDef="tyyppi">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
+            <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
               Tyyppi
             </th>
-            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
+            <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
               {{ element.tyyppi }}
             </td>
             <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
           </ng-container>
 
           <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
+            <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
               sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
               Päivämäärä
             </th>
-            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima | date: 'shortDate' }}</td>
+            <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima | date: 'shortDate' }}</td>
           </ng-container>
 
           <!-- <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">

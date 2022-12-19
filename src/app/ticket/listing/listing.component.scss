@@ -43,6 +43,18 @@ table {
   tr > :last-child {
     padding-right: 50px;
   }
+  .mat-column-aloittajanNimi,
+  .mat-column-aikaleima,
+  .mat-column-tyyppi {
+    text-align: right;
+  }
+
+  .td-align-right {
+    padding-right: 34px;
+  }
+  //  {
+  //   padding-right: 3em;
+  // }
 }
 
 // th.mat-column-aloittajanNimi {
@@ -58,11 +70,19 @@ table {
   }
 }
 
+:host ::ng-deep .align-right > .mat-sort-header-container {
+  justify-content: flex-end;
+}
+
+
 :host ::ng-deep .mat-sort-header-content {
   color: #595959;
 }
 
-:host ::ng-deep .mat-sort-header-sorted { color: #5379FC; }
+:host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
+  color: #5379FC;
+}
+
 
 [hidden] { display: none !important; }
 
