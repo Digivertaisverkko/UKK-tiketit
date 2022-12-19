@@ -149,12 +149,13 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   private trackScreenSize(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe((result) => {
-      this.isPhonePortrait = false;
-      this.maxItemTitleLength = 100;
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       if (result.matches) {
         this.maxItemTitleLength = 35;
         this.isPhonePortrait = true;
+      } else {
+        this.isPhonePortrait = false;
+        this.maxItemTitleLength = 100;
       }
     });
   }

@@ -1,12 +1,6 @@
 @import '/variables.scss';
 
-#firstTitle {
-    margin-bottom: 1em;
-}
-
-#secondTitle {
-    // margin-top: 1.5em;
-}
+#firstTitle { margin-bottom: 1em; }
 
 h3 {
     margin-top: 1em;
@@ -26,24 +20,51 @@ mat-card-actions {
 }
 
 table {
-  td { cursor: pointer; }
-  .mat-cell { padding-right: 1em; }
-  .mat-header-row {  background-color: #D3D3D3; }
+  td { cursor: pointer;
+    line-height: 1.5;}
+  .mat-mdc-header-row {
+    background-color: #D3D3D3;
+  }
+  .mat-mdc-row:hover { background-color: $hoverBG !important; }
+  // td.mat-mdc-cell  {
+  //   padding-left: 1em;
+  //   padding-right: 1em;
+  //   text-align: left;
+  // }
+  // .mat-mdc-header-cell {
+  //   padding-left: 1em;
+  //   padding-right: 1em;
+  //   text-align: left;
+  // }
+  tr > :first-child {
+    padding-left: 25px;
+  }
+
+  tr > :last-child {
+    padding-right: 50px;
+  }
 }
 
-:host ::ng-deep .mat-sort-header-sorted {
-  color: #5379FC;
+// th.mat-column-aloittajanNimi {
+//   text-align: right;
+// }
+
+@media (min-width: $small) {
+  tr.mat-mdc-row > td {
+    // padding: 22px
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+  }
 }
 
-[hidden] {
-  display: none !important;
+:host ::ng-deep .mat-sort-header-content {
+  color: #595959;
 }
 
-.mat-mdc-row:hover {
-    // background-color: mat-color($primary);
-    background-color: $hoverBG !important;
-    // color: white;
-}
+:host ::ng-deep .mat-sort-header-sorted { color: #5379FC; }
+
+[hidden] { display: none !important; }
 
 /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
@@ -51,12 +72,6 @@ mat-card {
     margin: auto;
     padding-left: 2em;
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-}
-
-td.mat-mdc-cell, .mat-mdc-header-cell {
-    padding-left: 1em;
-    padding-right: 1em;
-    text-align: left;
 }
 
 .noItemsMessage {
@@ -67,6 +82,7 @@ td.mat-mdc-cell, .mat-mdc-header-cell {
 }
 
 #submitButton {
+  margin-top: 1em;
     color: white;
 }
 

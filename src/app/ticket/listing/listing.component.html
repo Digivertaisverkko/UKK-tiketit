@@ -60,7 +60,7 @@
         <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'shortDate'}}</td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()" class="mat-header-row"></tr>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
       <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
     </table>
 
@@ -127,7 +127,7 @@
             <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
           </ng-container> -->
 
-          <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()" class="mat-header-row"></tr>
+          <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
           <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
 
         </table>
