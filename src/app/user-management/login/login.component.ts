@@ -53,9 +53,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      this.isPhonePortrait = false;
       if (result.matches) {
         this.isPhonePortrait = true;
+      } else {
+        this.isPhonePortrait = false;
       }
     });
     this.setLoginID();
@@ -78,7 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID)
       .then(response => {
-      
+
       })
       .catch( error => {
     console.error(error.message)});
