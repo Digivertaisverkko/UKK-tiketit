@@ -29,13 +29,7 @@ table {
   //   padding-right: 1em;
   //   text-align: left;
   // }
-  tr > :first-child {
-    padding-left: 25px;
-  }
 
-  tr > :last-child {
-    padding-right: 50px;
-  }
   .mat-column-aloittajanNimi,
   .mat-column-aikaleima,
   .mat-column-tyyppi {
@@ -55,16 +49,27 @@ table {
 // }
 
 @media (min-width: $small) {
-  tr.mat-mdc-row > td {
-    // padding: 22px
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
 
   mat-card {
     padding-left: 2em;
     padding-right: 2em;
     padding-bottom: 2em;
+  }
+
+  table {
+    tr > :first-child {
+      padding-left: 25px;
+    }
+
+    tr > :last-child {
+      padding-right: 50px;
+    }
+
+    tr.mat-mdc-row > td {
+      // padding: 22px
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
   }
 }
 
