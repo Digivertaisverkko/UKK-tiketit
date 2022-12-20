@@ -49,12 +49,12 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
       ).subscribe({
-        next: (response) => {
+        next: response => {
           this.ticket = response;
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
           this.isLoaded = true;
         },
-        error: (error) => {
+        error: error => {
           this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
           this.isLoaded = true;
         }
@@ -67,7 +67,7 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
 
   private trackUserRole() {
     this.auth.onGetUserRole().subscribe(response => {
-      console.log('saatiin rooli: ' + response);
+      // console.log('saatiin rooli: ' + response);
       this.userRole = response;
     })
   }

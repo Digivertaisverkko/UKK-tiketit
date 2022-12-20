@@ -94,7 +94,8 @@
   <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
   <button
     id="sendButton"
-    mat-raised-button color="primary"
+    mat-raised-button
+    color="primary"
     [disabled]="commentText.length < 1"
     *ngIf="ticket.tila > 0"
     (click)="sendComment()"
