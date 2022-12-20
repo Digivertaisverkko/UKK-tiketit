@@ -6,6 +6,9 @@ main {
   // border-color: red;
   // border-style: solid;
   // border-width: 2px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   max-width: 1024px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
@@ -14,8 +17,7 @@ main {
   // padding-bottom: 1em;
   // Vain alapalkilla
   // min-height: calc(100vh - 128px);
-  display: flex;
-  flex-direction: column;
+  padding: 3em 40px 4em 40px;
 }
 
 app-root {
