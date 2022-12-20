@@ -115,18 +115,48 @@ $scale-factor: 0.8;
 }
 
 .theme-header-text-small {
-    font-family: Montserrat;
-    font-size: 20px;
+  font-family: Montserrat;
+  font-size: 20px;
 }
+
+.theme-main-headline {
+  font-family: Montserrat;
+  font-size: calc(50px * $scale-factor);
+  font-weight: 900;
+}
+
+.theme-main-headline::after {
+  display: block;
+    content: '';
+   width: 110%;
+   height: 3px;
+   background: #DC5323;
+  //  position: relative;
+   bottom: 0;
+   margin-left: -5%;
+  //  margin-right: auto;
+  //  margin-left: auto;
+ }
 
 .theme-h1 {
     font-family: Montserrat;
     font-size: calc(50px * $scale-factor);
     font-weight: 900;
-    margin-block-end: 1.2em;
+    // margin-block-end: 1.2em;
+    // border-bottom: 2px solid red;
     // margin-left: 12px;
-
 }
+
+.theme-h1::after {
+  display: block;
+    content: '';
+   max-width: 500px;
+   height: 3px;
+   background: #DC5323;
+   position: relative;
+   bottom: 0;
+   left: 0;
+ }
 
 .theme-h2 {
     font-family: Montserrat;
@@ -159,4 +189,5 @@ app-login {
 
 .mdc-button {
   text-transform: uppercase;
+  font-weight: 600;
 }
