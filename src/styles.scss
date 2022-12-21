@@ -125,8 +125,8 @@ $scale-factor: 0.95;
 .theme-main-headline::after {
   display: block;
   content: "";
-  width: 600px;
-  height: 3px;
+  width: 630px;
+  height: 2px;
   background: #dc5323;
   position: relative;
   top: -9px;
@@ -142,11 +142,12 @@ $scale-factor: 0.95;
   font-family: Montserrat;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
-  margin-right: auto;
   position: relative;
+  margin-top: 70px;
+  margin-right: auto;
   margin-left: auto;
-  text-align: center;
   margin-bottom: 0;
+  text-align: center;
   z-index: 0;
 }
 
