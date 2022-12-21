@@ -72,15 +72,18 @@ $custom-accent: mat.define-palette($custom-accent-palette, 700);
 // $custom-warn: mat-palette($mat-lime);
 // $custom-theme: mat-light-theme($custom-primary-palette);
 
-// $headline-1: mat.define-typography-level(35px, 35px, 700, Montserrat),
-// $headline-2: mat.define-typography-level(20px, 20px, 500, Montserrat),
-// $headline-6: mat.define-typography-level(50px, 50px, 800, Montserrat),
+// $headline-1: mat.define-typography-level(35px, 35px, 700, $displayFont),
+// $headline-2: mat.define-typography-level(20px, 20px, 500, $displayFont),
+// $headline-6: mat.define-typography-level(50px, 50px, 800, $displayFont),
+
+$displayFont: Montserrat;
+$textFont: Roboto;
 
 $custom-typography-config: mat.define-typography-config(
-  $headline-3: mat.define-typography-level(35px, 1, 700, Montserrat, normal),
-  $headline-5: mat.define-typography-level(50px, 1, 800, Montserrat, normal),
-  $body-1: mat.define-typography-level(15px, 1, 400, Roboto, normal),
-  $body-2: mat.define-typography-level(15px, 1, 400, Roboto, normal),
+  $headline-3: mat.define-typography-level(35px, 1, 700, $displayFont, normal),
+  $headline-5: mat.define-typography-level(50px, 1, 800, $displayFont, normal),
+  $body-1: mat.define-typography-level(15px, 1, 400, $textFont, normal),
+  $body-2: mat.define-typography-level(15px, 1, 400, $textFont, normal),
 );
 
 $custom-theme: mat.define-light-theme(
@@ -112,12 +115,12 @@ $scale-factor: 0.95;
 
 // FIXME: tässä määritelty font-weight ei tee mitään.
 .theme-header-text {
-  font-family: Montserrat;
+  font-family: $displayFont;
   font-size: calc(35px * $scale-factor);
 }
 
 .theme-header-text-small {
-  font-family: Montserrat;
+  font-family: $displayFont;
   font-size: 20px;
 }
 
@@ -139,7 +142,7 @@ $scale-factor: 0.95;
 }
 
 .theme-main-headline {
-  font-family: Montserrat;
+  font-family: $displayFont;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
   position: relative;
@@ -149,7 +152,7 @@ $scale-factor: 0.95;
 }
 
 .theme-h1 {
-  font-family: Montserrat;
+  font-family: $displayFont;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
   position: relative;
@@ -179,7 +182,7 @@ $scale-factor: 0.95;
 }
 
 .theme-h2 {
-  font-family: Montserrat;
+  font-family: $displayFont;
   font-size: calc(32px * $scale-factor);
   font-weight: 800;
   margin-block-end: 30px;
@@ -197,8 +200,6 @@ html {
 }
 
 body {
-  // FIXME: ei toimi.
-  // font-family: Roboto, "Helvetica Neue", sans-serif;
   height: 100%;
   margin: 0;
 }
