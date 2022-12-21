@@ -108,7 +108,7 @@ $custom-theme: mat.define-light-theme(
 @include mat.all-component-themes($custom-theme);
 
 // Skaalaus UI-suunnitelman kokoihin.
-$scale-factor: 0.8;
+$scale-factor: 0.95;
 
 // FIXME: tässä määritelty font-weight ei tee mitään.
 .theme-header-text {
@@ -131,7 +131,7 @@ $scale-factor: 0.8;
   display: block;
   content: "";
   width: 110%;
-  height: 3px;
+  height: 15px;
   background: #dc5323;
   //  position: relative;
   bottom: 0;
