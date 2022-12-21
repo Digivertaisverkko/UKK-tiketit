@@ -154,6 +154,8 @@ $scale-factor: 0.95;
   font-family: Montserrat;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
+  position: relative;
+  z-index: 0;
   // margin-block-end: 1.2em;
   // border-bottom: 2px solid red;
   // margin-left: 12px;
@@ -166,8 +168,9 @@ $scale-factor: 0.95;
   height: 3px;
   background: #dc5323;
   position: relative;
-  bottom: 5px;
+  top: -9px;
   left: 0;
+  z-index: -1;
 }
 
 .theme-h2 {
