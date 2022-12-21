@@ -143,10 +143,7 @@ $scale-factor: 0.95;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
   position: relative;
-  margin-top: 70px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-bottom: 0;
+  margin: 70px auto 0 auto;
   text-align: center;
   z-index: 0;
 }
@@ -171,17 +168,13 @@ $scale-factor: 0.95;
 
 .theme-h1 span:after {
   content: "";
-  height: 3px;
+  height: 2px;
   background: #dc5323;
   position: absolute;
   left: 0;
   bottom: 5px;
   width: 100%;
   padding-right: 5.05em;
-  // transform: translateX(-50%);
-  // position: relative;
-  // top: -9px;
-  // left: 0;
   z-index: -1;
 }
 
