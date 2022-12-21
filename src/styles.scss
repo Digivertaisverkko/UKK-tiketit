@@ -1,8 +1,8 @@
-@use '@angular/material' as mat;
-@import './variables.scss';
+@use "@angular/material" as mat;
+@import "./variables.scss";
 
 // Tarvitseeko?
-@import '@angular/material/theming';
+@import "@angular/material/theming";
 @import url("https://fonts.googleapis.com/css?family=Montserrat:800,600,500,400");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
@@ -11,32 +11,32 @@
 /* ======== Angular material custom theme ======== */
 
 $custom-primary-palette: (
-    50:  #e0f4fa,
-    100: #b0e2f3,
-    200: #7dceeb,
-    300: #4bbbe3,
-    400: #23addf,
-    500: #009dd7,
-    600: #008fca,
-    700: #007db7,
-    800: #006ca3,
-    900: #004e84,
-    contrast: (
-        50: rgba(black, 0.87),
-        100: rgba(black, 0.87),
-        200: white,
-        300: white,
-        400: white,
-        500: white,
-        600: white,
-        700: white,
-        800: white,
-        900: white
-    )
+  50: #e0f4fa,
+  100: #b0e2f3,
+  200: #7dceeb,
+  300: #4bbbe3,
+  400: #23addf,
+  500: #009dd7,
+  600: #008fca,
+  700: #007db7,
+  800: #006ca3,
+  900: #004e84,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
 );
 
 $custom-accent-palette: (
-  50:  #f9eae8,
+  50: #f9eae8,
   100: #fbcdbe,
   200: #f9ae94,
   300: #f78f6a,
@@ -47,17 +47,17 @@ $custom-accent-palette: (
   800: #ce4e20,
   900: #b4421a,
   contrast: (
-      50: rgba(black, 0.87),
-      100: rgba(black, 0.87),
-      200: rgba(black, 0.87),
-      300: rgba(black, 0.87),
-      400: rgba(black, 0.87),
-      500: rgba(black, 0.87),
-      600: white,
-      700: white,
-      800: white,
-      900: white
-  )
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
 );
 
 // $custom-palette: mat.$custom-primary-palette;
@@ -80,16 +80,18 @@ $custom-typography-config: mat.define-typography-config(
   $headline-3: mat.define-typography-level(35px, 1, 700, Montserrat, normal),
   $headline-5: mat.define-typography-level(50px, 1, 800, Montserrat, normal),
   $body-1: mat.define-typography-level(15px, 1, 400, Roboto, normal),
-  $body-2: mat.define-typography-level(15px, 1, 400, Roboto, normal)
+  $body-2: mat.define-typography-level(15px, 1, 400, Roboto, normal),
 );
 
-$custom-theme: mat.define-light-theme((
+$custom-theme: mat.define-light-theme(
+  (
     color: (
-        primary: $custom-primary,
-        accent: $custom-accent,
+      primary: $custom-primary,
+      accent: $custom-accent,
     ),
     typography: $custom-typography-config,
-));
+  )
+);
 
 // Emit theme-dependent styles for common features used across multiple components.
 @include mat.core-theme($custom-theme);
@@ -110,8 +112,8 @@ $scale-factor: 0.8;
 
 // FIXME: tässä määritelty font-weight ei tee mitään.
 .theme-header-text {
-    font-family: Montserrat;
-    font-size: calc(35px * $scale-factor);
+  font-family: Montserrat;
+  font-size: calc(35px * $scale-factor);
 }
 
 .theme-header-text-small {
@@ -127,43 +129,43 @@ $scale-factor: 0.8;
 
 .theme-main-headline::after {
   display: block;
-    content: '';
-   width: 110%;
-   height: 3px;
-   background: #DC5323;
+  content: "";
+  width: 110%;
+  height: 3px;
+  background: #dc5323;
   //  position: relative;
-   bottom: 0;
-   margin-left: -5%;
+  bottom: 0;
+  margin-left: -5%;
   //  margin-right: auto;
   //  margin-left: auto;
- }
+}
 
 .theme-h1 {
-    font-family: Montserrat;
-    font-size: calc(50px * $scale-factor);
-    font-weight: 900;
-    // margin-block-end: 1.2em;
-    // border-bottom: 2px solid red;
-    // margin-left: 12px;
+  font-family: Montserrat;
+  font-size: calc(50px * $scale-factor);
+  font-weight: 900;
+  // margin-block-end: 1.2em;
+  // border-bottom: 2px solid red;
+  // margin-left: 12px;
 }
 
 .theme-h1::after {
   display: block;
-    content: '';
-   max-width: 500px;
-   height: 3px;
-   background: #DC5323;
-   position: relative;
-   bottom: 0;
-   left: 0;
- }
+  content: "";
+  max-width: 500px;
+  height: 3px;
+  background: #dc5323;
+  position: relative;
+  bottom: 5px;
+  left: 0;
+}
 
 .theme-h2 {
-    font-family: Montserrat;
-    font-size: calc(32px * $scale-factor);
-    font-weight: 800;
-    margin-block-end: 30px;
-    // margin-left: 12px;
+  font-family: Montserrat;
+  font-size: calc(32px * $scale-factor);
+  font-weight: 800;
+  margin-block-end: 30px;
+  // margin-left: 12px;
 }
 
 // .mat-mdc-raised-button {
@@ -172,7 +174,9 @@ $scale-factor: 0.8;
 
 // @include angular-material-theme($custom-primary);
 
-html { height: 100%; }
+html {
+  height: 100%;
+}
 
 body {
   // FIXME: ei toimi.
