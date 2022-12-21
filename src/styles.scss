@@ -121,23 +121,33 @@ $scale-factor: 0.95;
   font-size: 20px;
 }
 
-.theme-main-headline {
-  font-family: Montserrat;
-  font-size: calc(50px * $scale-factor);
-  font-weight: 900;
-}
 
 .theme-main-headline::after {
   display: block;
   content: "";
-  width: 110%;
-  height: 15px;
+  width: 600px;
+  height: 3px;
   background: #dc5323;
-  //  position: relative;
-  bottom: 0;
-  margin-left: -5%;
+  position: relative;
+  top: -9px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: -1;
+
   //  margin-right: auto;
   //  margin-left: auto;
+}
+
+.theme-main-headline {
+  font-family: Montserrat;
+  font-size: calc(50px * $scale-factor);
+  font-weight: 900;
+  margin-right: auto;
+  position: relative;
+  margin-left: auto;
+  text-align: center;
+  margin-bottom: 0;
+  z-index: 0;
 }
 
 .theme-h1 {
