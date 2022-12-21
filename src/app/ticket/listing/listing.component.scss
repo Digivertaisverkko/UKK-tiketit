@@ -45,6 +45,7 @@ table {
   //  {
   //   padding-right: 3em;
   // }
+
 }
 
 // th.mat-column-aloittajanNimi {
@@ -64,7 +65,7 @@ table {
       padding-left: 25px;
     }
 
-    tr > :last-child {
+    mat-row > :last-child {
       padding-right: 50px;
     }
 
