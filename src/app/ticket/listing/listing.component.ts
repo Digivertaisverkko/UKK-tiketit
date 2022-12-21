@@ -162,7 +162,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   private pollQuestions() {
-    this.timeInterval = interval(600000)
+    // FIXME: 15min välein ATM ettei koodatessa turhaa pollata.
+    this.timeInterval = interval(900000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
