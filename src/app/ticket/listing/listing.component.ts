@@ -130,6 +130,7 @@ export class ListingComponent implements OnInit, OnDestroy {
             this.ticket.setActiveCourse(this.courseID);
             if (this.courseID !== null) {
               this.showCourseName(this.courseID);
+              // this.courseName = 'Ohjelmointikurssi';
               this.showHeader(this.courseID);
             }
             this.showFAQ();
