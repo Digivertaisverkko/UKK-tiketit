@@ -322,4 +322,13 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.timeInterval.unsubscribe();
     this.ticketMessageSub.unsubscribe();
   }
+
+  //haku toiminto, jossa paginointi kommentoitu pois
+  applyFilter(event: Event){
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceFAQ.filter = filterValue.trim().toLowerCase();
+      /*if (this.dataSourceFAQ.paginator) {
+        this.dataSourceFAQ.paginator.firstPage();
+      }*/
+  }
 }

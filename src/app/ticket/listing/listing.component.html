@@ -6,7 +6,7 @@
   <!-- ----- Tiketit ----- -->
 
   <!-- <mat-card-content> -->
- 
+
   <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName">{{courseName}}</h1>
   <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
 
@@ -90,6 +90,11 @@
     <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
   </mat-card>
 
+  <mat-form-field>
+    <mat-label>Haku</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+  </mat-form-field>
+
   <!-- *ngIf="!showNoFAQ" -->
   <table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort"
     matSortActive="tyyppi" matSortDirection="desc">
@@ -135,6 +140,11 @@
 
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
     <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
+
+    <!--Tällä koodin pätkällä saa lisättyä taulukkoon tekstin, kun haku ei löydä mitään-->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Haulla "{{input.value}}" ei ole tulosta</td>
+    </tr>
 
   </table>
 
