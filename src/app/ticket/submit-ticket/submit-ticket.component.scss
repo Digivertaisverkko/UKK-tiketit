@@ -7,16 +7,29 @@
 
   #shortFieldsDiv {
     max-width: 350px;
+    #messageTitleField {
+      margin-bottom: 15px;
+      #titleText {
+        font-size: 25px;
+        font-weight: 900;
+        // font-size: calc(32px * 0.8);
+        // font-weight: 900;
+      }
+    }
+    .additionalField {
+      // margin-bottom: 0px;
+    }
   }
 
   mat-card-actions {
     margin-bottom: 1em;
     margin-right: 0.5em;
-  }
-
-  #submitButton {
-    color: white;
-    min-width: 10.5em;
+    button {
+      color: white;
+      min-width: 10.5em;
+      margin-top: 15px;
+      margin-right: -8px;
+    }
   }
 
   #ticketActionsWrapper {
@@ -24,19 +37,13 @@
     align-items: center;
     padding: 8px 0;
     mat-checkbox {
-      margin-left: 0em;
+      margin-top: -15px;
+      margin-left: -10px;
     }
   }
 
   #titleLabel {
     margin-left: 0;
-  }
-
-  #titleText {
-    font-size: 25px;
-    font-weight: 900;
-    // font-size: calc(32px * 0.8);
-    // font-weight: 900;
   }
 
   .spacer {

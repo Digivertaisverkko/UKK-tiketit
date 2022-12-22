@@ -14,7 +14,7 @@
 
     <div id="shortFieldsDiv" >
 
-      <mat-form-field appearance="fill">
+      <mat-form-field id="messageTitleField" appearance="fill">
         <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
         <input
           id="titleText"
@@ -27,7 +27,7 @@
           >
       </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngIf="!isFaq">
+      <mat-form-field class="additionalField" appearance="fill" *ngIf="!isFaq">
         <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
         <input
           name="assignmentText"
@@ -37,8 +37,8 @@
           required>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
+      <mat-form-field class="additional-field" appearance="fill">
+        <mat-label class="additional-field" i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
         <input
           name="problemText"
           [(ngModel)]="problemText"
@@ -49,7 +49,7 @@
 
     </div>
 
-    <mat-card-title i18n="@@Viesti">Viesti</mat-card-title>
+    <!-- <mat-card-title i18n="@@Viesti">Viesti</mat-card-title> -->
     <app-editor [(editorContent)]="message"></app-editor>
 
     <div *ngIf="isFaq">
@@ -68,7 +68,7 @@
 
     <mat-card-actions align="end">
       <button
-        mat-raised-button color="primary" id="submitButton"
+        mat-raised-button color="primary"
         [disabled]="submitForm.invalid"
         (click)="sendTicket()"
         i18n="@@Lähetä">
