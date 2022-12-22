@@ -94,7 +94,6 @@ table {
   color: #5379FC;
 }
 
-
 [hidden] { display: none !important; }
 
 /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
@@ -103,6 +102,21 @@ mat-card {
     margin: auto;
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 }
+
+#filteringField {
+  max-width: 30%;
+  margin-right: 5px;
+  margin-top: 30px;
+  margin-bottom: -10px;
+  // margin-left: -15px;
+
+  // mat-label, input {
+  //   padding-left: 8px;
+  // }
+}
+
+.noData-td { padding-top: 1em; padding-bottom: 1em; }
+
 
 .noItemsMessage {
     text-align: center;

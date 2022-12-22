@@ -7,6 +7,7 @@
 
   <!-- <mat-card-content> -->
 
+  <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
   <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h1>
   <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
 
@@ -90,19 +91,21 @@
   <!-- FAQ -->
 
   <!-- <mat-card-content> -->
-  <h2 class="theme-h2" i18n="@@Open neuvot">
-    Open neuvot
-  </h2>
 
   <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
     <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
   </mat-card>
 
   <!--Haku toiminto-->
-  <mat-form-field>
-    <mat-label>Haku</mat-label>
+  <mat-card-actions style="justify-content: space-between;">
+    <h2 class="theme-h2" i18n="@@Open neuvot">
+      Open neuvot
+    </h2>
+  <mat-form-field id="filteringField">
+    <mat-label>Hae neuvoa</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
   </mat-form-field>
+  </mat-card-actions>
 
   <!-- *ngIf="!showNoFAQ" -->
   <table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort"
@@ -151,8 +154,8 @@
     <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
 
     <!--Tällä koodin pätkällä saa lisättyä taulukkoon tekstin, kun haku ei löydä mitään-->
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Haulla "{{input.value}}" ei ole tulosta</td>
+    <tr *matNoDataRow>
+      <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td>
     </tr>
 
   </table>

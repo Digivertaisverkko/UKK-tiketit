@@ -124,7 +124,7 @@ $scale-factor: 0.95;
   font-size: 20px;
 }
 
-
+// Viiva otsikon alle.
 .theme-main-headline::after {
   display: block;
   content: "";
@@ -169,6 +169,7 @@ $scale-factor: 0.95;
   // border-color: green;
 }
 
+// Viiva otsikon alle.
 .theme-h1 span:after {
   content: "";
   height: 2px;
