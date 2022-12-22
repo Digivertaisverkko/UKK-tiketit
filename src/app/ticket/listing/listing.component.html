@@ -11,15 +11,16 @@
   <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h1>
   <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
 
-  <h2 id="secondTitle" class="theme-h2">{{header}}</h2>
-
-  <mat-form-field style="width: 35%; opacity: 75%;">
-    <mat-label>Kurssin nimi otsikon testaukseen: </mat-label>
-  <input
-  matInput
-  [(ngModel)]="courseName"
-  >
-</mat-form-field>
+  <mat-card-actions style="justify-content: space-between;">
+    <h2 id="secondTitle" class="theme-h2">{{header}}</h2>
+    <mat-form-field class="filteringField" style="width: 35%; opacity: 75%;" >
+        <mat-label>Kurssin nimi otsikon testaukseen: </mat-label>
+      <input
+      matInput
+      [(ngModel)]="courseName"
+      >
+    </mat-form-field>
+  </mat-card-actions>
 
   <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
     <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
@@ -101,7 +102,7 @@
     <h2 class="theme-h2" i18n="@@Open neuvot">
       Open neuvot
     </h2>
-  <mat-form-field id="filteringField">
+  <mat-form-field class="filteringField">
     <mat-label>Hae neuvoa</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
   </mat-form-field>
