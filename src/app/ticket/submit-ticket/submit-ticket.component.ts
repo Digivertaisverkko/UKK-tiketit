@@ -38,6 +38,10 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.trackUserRole();
+    const courseID = this.ticketService.getActiveCourse();
+    this.ticketService.getCourseName(courseID).then(response => {
+      this.courseName = response;
+    }).catch(() => {});
   }
 
   goBack() {

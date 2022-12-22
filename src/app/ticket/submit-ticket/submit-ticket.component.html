@@ -1,47 +1,53 @@
-<mat-card appearance="outlined" class="submit-ticket-card">
+<div class="submit-ticket-card">
 
-  <mat-card-header>
+  <h1 class="theme-h1" *ngIf="courseName.length > 0"><span>{{courseName}}</span></h1>
+
+  <!-- <mat-card-header>
     <mat-card-title i18n="@@Uusi kysymys">Uusi kysymys</mat-card-title>
-  </mat-card-header>
+  </mat-card-header> -->
 
   <app-to-beginning-button></app-to-beginning-button>
 
   <form action="" #submitForm="ngForm">
 
-    <mat-card-content>
-    
-    <mat-form-field appearance="fill">
-      <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
-      <input
-        id="titleText"
-        name="titleText"
-        [(ngModel)]="titleText"
-        matInput
-        placeholder="Otsikko"
-        required
-        autocomplete="off"
-        >
-    </mat-form-field>
+    <!-- <mat-card-content> -->
 
-    <mat-form-field appearance="fill" *ngIf="!isFaq">
-      <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
-      <input
-        name="assignmentText"
-        [(ngModel)]="assignmentText"
-        matInput
-        placeholder=""
-        required>
-    </mat-form-field>
+    <div id="shortFieldsDiv" >
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
-      <input
-        name="problemText"
-        [(ngModel)]="problemText"
-        matInput
-        placeholder=""
-        required>
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
+        <input
+          id="titleText"
+          name="titleText"
+          [(ngModel)]="titleText"
+          matInput
+          placeholder="Otsikko"
+          required
+          autocomplete="off"
+          >
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" *ngIf="!isFaq">
+        <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
+        <input
+          name="assignmentText"
+          [(ngModel)]="assignmentText"
+          matInput
+          placeholder=""
+          required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
+        <input
+          name="problemText"
+          [(ngModel)]="problemText"
+          matInput
+          placeholder=""
+          required>
+      </mat-form-field>
+
+    </div>
 
     <mat-card-title i18n="@@Viesti">Viesti</mat-card-title>
     <app-editor [(editorContent)]="message"></app-editor>
@@ -51,27 +57,27 @@
       <app-editor [(editorContent)]="answer"></app-editor>
     </div>
 
-  </mat-card-content>
+  <!-- </mat-card-content> -->
 
   <div id="ticketActionsWrapper">
 
-  <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
-    Usein kysytty kysymys</mat-checkbox>
+    <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
+      Usein kysytty kysymys</mat-checkbox>
 
-  <div class="spacer"></div>
+    <div class="spacer"></div>
 
-  <mat-card-actions align="end">
-    <button
-      mat-raised-button color="primary" id="submitButton"
-      [disabled]="submitForm.invalid"
-      (click)="sendTicket()"
-      i18n="@@Lähetä">
-      Lähetä
-    </button>
-  </mat-card-actions>
+    <mat-card-actions align="end">
+      <button
+        mat-raised-button color="primary" id="submitButton"
+        [disabled]="submitForm.invalid"
+        (click)="sendTicket()"
+        i18n="@@Lähetä">
+        Lähetä
+      </button>
+    </mat-card-actions>
 
-</div>
+  </div>
 
 </form>
 
-</mat-card>
+</div>

@@ -3,7 +3,10 @@
 
   mat-form-field {
     width: 100%;
-    margin-top: 1em;
+  }
+
+  #shortFieldsDiv {
+    max-width: 350px;
   }
 
   mat-card-actions {
@@ -13,7 +16,7 @@
 
   #submitButton {
     color: white;
-    min-width: 7em;
+    min-width: 10.5em;
   }
 
   #ticketActionsWrapper {
@@ -21,7 +24,7 @@
     align-items: center;
     padding: 8px 0;
     mat-checkbox {
-      margin-left: 1em;
+      margin-left: 0em;
     }
   }
 
