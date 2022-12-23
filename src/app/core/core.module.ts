@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatRippleModule } from '@angular/material/core';
 
 import { AuthService } from './auth.service';
 
@@ -28,11 +29,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
   imports: [
     CommonModule,
     HttpClientModule,
+    MatDialogModule,
     MaterialModule,
     MatMenuModule,
+    MatRippleModule,
     RouterModule,
-    MatDialogModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     AuthService

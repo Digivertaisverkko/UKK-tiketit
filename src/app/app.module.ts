@@ -1,7 +1,7 @@
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { TicketModule } from './ticket/ticket.module';
@@ -22,8 +22,8 @@ import { initializeLanguage  } from "./app.initializers";
     BrowserModule,
     CoreModule,
     SharedModule,
-    UserManagementModule,
     TicketModule,
+    UserManagementModule,
     AppRoutingModule,
   ],
   providers: [
