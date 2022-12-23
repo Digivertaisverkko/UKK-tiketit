@@ -1,33 +1,47 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card appearance="outlined" class="faq-view-card">
+<div class="faq-view-card">
+  <!-- <mat-card appearance="outlined" class="faq-view-card"> -->
 
-    <mat-card-content>
-        <app-to-beginning-button></app-to-beginning-button>
-    </mat-card-content>
+  <h1 class="theme-h1" *ngIf="courseName.length > 0">
+    <span>{{ courseName }}</span>
+  </h1>
 
-    <mat-card-content *ngIf="ticket.viesti !== undefined">
+  <app-to-beginning-button></app-to-beginning-button>
 
-        <!-- <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined"> -->
-            <mat-card-header>
-                <mat-card-title class="faqTitle">{{ticket.otsikko}}</mat-card-title>
+  <div *ngIf="ticket.viesti !== undefined">
+    <!-- <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined"> -->
+    <!-- <mat-card-header> -->
+    <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
 
-                <!-- <mat-card-subtitle> -->
-                    <!-- <span *ngIf="faq.kentat !== undefined && faq.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
-                        faq.kentat[0].arvo }} </span> -->
-                    <mat-card-subtitle *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }} 🞄
-                        <span>{{ ticket.aikaleima | date: 'short' }}</span>
-                    </mat-card-subtitle>
-                <!-- </mat-card-subtitle> -->
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
+      <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
+        <p>{{ticket.kentat[0].arvo }}</p>
+          <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
+            ticket.kentat[0].arvo }} </span> -->
+    </div>
 
-            </mat-card-header>
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
+      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
+        <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
+      <p>{{ ticket.kentat[1].arvo }}</p>
+    </div>
 
-            <mat-card-content>
-                <p class="message" id="question" [innerHTML]=ticket.viesti></p>
-            </mat-card-content>
-        <!-- </mat-card> -->
+    <!-- </mat-card-header> -->
 
-        <!-- <mat-card appearance="outlined" class="faq-view-card">
+    <!-- <mat-card-content> -->
+
+      <p class="theme-p">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit risus vel rhoncus rutrum. Proin lacinia massa vitae ultricies volutpat. In accumsan rutrum enim nec commodo. Aenean placerat quis ex nec efficitur. Morbi commodo feugiat velit id iaculis. Aenean velit augue, porttitor non dignissim sed, commodo vel tortor. Ut sed odio tincidunt turpis laoreet efficitur. In elementum nec turpis id vestibulum. Donec et odio orci. Vestibulum finibus massa a velit facilisis aliquet. Quisque maximus erat quis mi aliquam, in cursus nisi rutrum. Vestibulum consequat felis leo, at gravida arcu pellentesque et. Sed quis bibendum ante.
+
+      Quisque venenatis tincidunt rutrum. Sed ullamcorper metus aliquet, maximus leo sit amet, ultricies nibh. Pellentesque ultrices scelerisque nunc vel eleifend. Etiam finibus diam a eleifend ultrices. Nam euismod quam velit, eu bibendum quam maximus ullamcorper. In ut eleifend leo. Ut sagittis nulla augue, vitae mattis felis pellentesque nec. Ut mollis consequat neque, eu euismod ipsum euismod a. Curabitur massa nunc, semper vitae neque ultrices, commodo dignissim nulla. Ut volutpat mattis libero, vitae lobortis arcu consequat sit amet. Aliquam cursus mi ac magna vestibulum placerat. Fusce sit amet ullamcorper dolor. Duis at mi sagittis, dignissim arcu dapibus, blandit quam.
+      </p>
+
+    <!-- <p class="message" id="question" [innerHTML]="ticket.viesti"></p> -->
+    <!-- </mat-card-content> -->
+    <!-- </mat-card> -->
+
+    <!-- <mat-card appearance="outlined" class="faq-view-card">
             <mat-card-header>
                 <mat-card-title>Vastaus</mat-card-title>
             </mat-card-header>
@@ -37,29 +51,35 @@
         </mat-card-content>
         </mat-card> -->
 
-        <!-- ---- Vastaus ---- -->
+    <!-- ---- Vastaus ---- -->
 
-        <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
 
-        <mat-card-header>
-          <mat-card-title class="faqTitle" id="answer" i18n="@@Vastaus">
-              Vastaus
-          </mat-card-title>
-      </mat-card-header>
+    <h2 class="theme-h2" id="answer" i18n="@@Vastaus">Vastaus</h2>
 
-        <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
-            <mat-card-content>
-                <p class="message" [innerHTML]=comment.viesti></p>
-            </mat-card-content>
-        </mat-card>
+    <mat-card
+      appearance="outlined"
+      class="answer"
+      *ngFor="let comment of ticket.kommentit"
+    >
+      <mat-card-content>
+        <!-- <p class="message" [innerHTML]="comment.viesti"></p> -->
+        <p class="message">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit risus vel rhoncus rutrum. Proin lacinia massa vitae ultricies volutpat. In accumsan rutrum enim nec commodo. Aenean placerat quis ex nec efficitur. Morbi commodo feugiat velit id iaculis. Aenean velit augue, porttitor non dignissim sed, commodo vel tortor. Ut sed odio tincidunt turpis laoreet efficitur. In elementum nec turpis id vestibulum. Donec et odio orci. Vestibulum finibus massa a velit facilisis aliquet. Quisque maximus erat quis mi aliquam, in cursus nisi rutrum. Vestibulum consequat felis leo, at gravida arcu pellentesque et. Sed quis bibendum ante.
 
+      Quisque venenatis tincidunt rutrum. Sed ullamcorper metus aliquet, maximus leo sit amet, ultricies nibh. Pellentesque ultrices scelerisque nunc vel eleifend. Etiam finibus diam a eleifend ultrices. Nam euismod quam velit, eu bibendum quam maximus ullamcorper. In ut eleifend leo. Ut sagittis nulla augue, vitae mattis felis pellentesque nec. Ut mollis consequat neque, eu euismod ipsum euismod a. Curabitur massa nunc, semper vitae neque ultrices, commodo dignissim nulla. Ut volutpat mattis libero, vitae lobortis arcu consequat sit amet. Aliquam cursus mi ac magna vestibulum placerat. Fusce sit amet ullamcorper dolor. Duis at mi sagittis, dignissim arcu dapibus, blandit quam.
+      </p>
       </mat-card-content>
+    </mat-card>
+  </div>
 
-      <mat-card-content *ngIf="errorMessage.length > 0">
-        <app-error-card i18n-title="@@Virhe" title="Virhe" message="{{ errorMessage }}"
-            [styles]="{ margin: '1em 0' }">
-        </app-error-card>
-      </mat-card-content>
-
-
-</mat-card>
+  <mat-card-content *ngIf="errorMessage.length > 0">
+    <app-error-card
+      i18n-title="@@Virhe"
+      title="Virhe"
+      message="{{ errorMessage }}"
+      [styles]="{ margin: '1em 0' }"
+    >
+    </app-error-card>
+  </mat-card-content>
+</div>

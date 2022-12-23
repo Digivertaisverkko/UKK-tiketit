@@ -10,6 +10,7 @@ export class FaqViewComponent implements OnInit {
 
 public errorMessage: string = '';
 private faqID: string | null = this.route.snapshot.paramMap.get('id');
+public courseName: string = '';
 public ticket: Ticket = {} as Ticket;
 public isLoaded: boolean = false;
 
@@ -19,18 +20,26 @@ constructor (
   private ticketService: TicketService) {
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
       .then(response => {
         this.ticket = response;
-      }).catch(error => {
+      })
+      .then( () => {
+        if (this.ticket.kurssi !== null) {
+          this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
+            this.courseName = response;
+          });
+        }
+      })
+      .catch(error => {
         console.error(error);
         this.errorMessage = $localize `:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
       }).finally( () => {
         this.isLoaded = true;
       })
     }
-  } 
-  
+  }
+
 }
