@@ -31,11 +31,7 @@
 
     <!-- <mat-card-content> -->
 
-      <p class="theme-p">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit risus vel rhoncus rutrum. Proin lacinia massa vitae ultricies volutpat. In accumsan rutrum enim nec commodo. Aenean placerat quis ex nec efficitur. Morbi commodo feugiat velit id iaculis. Aenean velit augue, porttitor non dignissim sed, commodo vel tortor. Ut sed odio tincidunt turpis laoreet efficitur. In elementum nec turpis id vestibulum. Donec et odio orci. Vestibulum finibus massa a velit facilisis aliquet. Quisque maximus erat quis mi aliquam, in cursus nisi rutrum. Vestibulum consequat felis leo, at gravida arcu pellentesque et. Sed quis bibendum ante.
-
-      Quisque venenatis tincidunt rutrum. Sed ullamcorper metus aliquet, maximus leo sit amet, ultricies nibh. Pellentesque ultrices scelerisque nunc vel eleifend. Etiam finibus diam a eleifend ultrices. Nam euismod quam velit, eu bibendum quam maximus ullamcorper. In ut eleifend leo. Ut sagittis nulla augue, vitae mattis felis pellentesque nec. Ut mollis consequat neque, eu euismod ipsum euismod a. Curabitur massa nunc, semper vitae neque ultrices, commodo dignissim nulla. Ut volutpat mattis libero, vitae lobortis arcu consequat sit amet. Aliquam cursus mi ac magna vestibulum placerat. Fusce sit amet ullamcorper dolor. Duis at mi sagittis, dignissim arcu dapibus, blandit quam.
-      </p>
+      <p id="question" class="theme-p">{{ticket.viesti}}</p>
 
     <!-- <p class="message" id="question" [innerHTML]="ticket.viesti"></p> -->
     <!-- </mat-card-content> -->
@@ -57,20 +53,15 @@
 
     <h2 class="theme-h2" id="answer" i18n="@@Vastaus">Vastaus</h2>
 
-    <mat-card
-      appearance="outlined"
+    <div
       class="answer"
       *ngFor="let comment of ticket.kommentit"
     >
-      <mat-card-content>
-        <!-- <p class="message" [innerHTML]="comment.viesti"></p> -->
-        <p class="message">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit risus vel rhoncus rutrum. Proin lacinia massa vitae ultricies volutpat. In accumsan rutrum enim nec commodo. Aenean placerat quis ex nec efficitur. Morbi commodo feugiat velit id iaculis. Aenean velit augue, porttitor non dignissim sed, commodo vel tortor. Ut sed odio tincidunt turpis laoreet efficitur. In elementum nec turpis id vestibulum. Donec et odio orci. Vestibulum finibus massa a velit facilisis aliquet. Quisque maximus erat quis mi aliquam, in cursus nisi rutrum. Vestibulum consequat felis leo, at gravida arcu pellentesque et. Sed quis bibendum ante.
-
-      Quisque venenatis tincidunt rutrum. Sed ullamcorper metus aliquet, maximus leo sit amet, ultricies nibh. Pellentesque ultrices scelerisque nunc vel eleifend. Etiam finibus diam a eleifend ultrices. Nam euismod quam velit, eu bibendum quam maximus ullamcorper. In ut eleifend leo. Ut sagittis nulla augue, vitae mattis felis pellentesque nec. Ut mollis consequat neque, eu euismod ipsum euismod a. Curabitur massa nunc, semper vitae neque ultrices, commodo dignissim nulla. Ut volutpat mattis libero, vitae lobortis arcu consequat sit amet. Aliquam cursus mi ac magna vestibulum placerat. Fusce sit amet ullamcorper dolor. Duis at mi sagittis, dignissim arcu dapibus, blandit quam.
-      </p>
-      </mat-card-content>
-    </mat-card>
+      <!-- <mat-card-content> -->
+        <!-- <p class="message" ></p> -->
+        <p class="theme-p">{{comment.viesti}}</p>
+      <!-- </mat-card-content> -->
+    </div>
   </div>
 
   <mat-card-content *ngIf="errorMessage.length > 0">
