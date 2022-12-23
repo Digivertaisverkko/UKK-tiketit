@@ -10,14 +10,15 @@ mat-card-actions {
 }
 
 #faqTable {
-  // margin-right: -60px;
   margin-right: -15px;
 }
 
 table {
-  margin-left: -15px;
-  td { cursor: pointer;
-    line-height: 1.5;}
+    margin-left: -15px;
+  td {
+    cursor: pointer;
+    line-height: 1.5;
+  }
   .mat-mdc-header-row {
     background-color: #D3D3D3;
   }
@@ -64,27 +65,26 @@ table {
     padding-bottom: 2em;
   }
 
-  table {
-    tr > :first-child {
-      padding-left: 25px;
-    }
+  tr > :first-child {
+    padding-left: 25px;
+  }
 
-    mat-row > :last-child {
-      padding-right: 50px;
-    }
+  mat-row > :last-child {
+    padding-right: 50px;
+  }
 
-    tr.mat-mdc-row > td {
-      // padding: 22px
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
+  tr.mat-mdc-row > td {
+    // padding: 22px
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 }
+
+// Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
 
 :host ::ng-deep .align-right > .mat-sort-header-container {
   justify-content: flex-end;
 }
-
 
 :host ::ng-deep .mat-sort-header-content {
   color: #595959;
