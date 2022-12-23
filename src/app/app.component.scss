@@ -21,10 +21,6 @@ main {
   padding: 3em 40px 6em 40px;
 }
 
-app-root {
-  background-color: black;
-}
-
 // main > * {
 //   flex-grow: 1;
 //   display: flex;
@@ -38,8 +34,6 @@ app-root {
 //   display: flex;
 //   flex-direction: column;
 // }
-
-
 
 main.is-phone-portrait {
   min-height: calc(100vh - $header-height - 164px);

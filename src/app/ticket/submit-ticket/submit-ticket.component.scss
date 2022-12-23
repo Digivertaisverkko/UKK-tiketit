@@ -1,5 +1,8 @@
-.submit-ticket-card {
+@import "./variables.scss";
+
+.submit-ticket {
   margin: auto;
+  padding-right: $right-padding;
 
   mat-form-field {
     width: 100%;
