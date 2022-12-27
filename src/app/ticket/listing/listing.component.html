@@ -97,12 +97,12 @@
     <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
   </mat-card>
 
-  <!--Haku toiminto-->
   <mat-card-actions style="justify-content: space-between;">
     <h2 class="theme-h2" i18n="@@Open neuvot">
       Open neuvot
     </h2>
-  <mat-form-field class="filteringField">
+  <!--Haku toiminto-->
+    <mat-form-field class="filteringField">
     <mat-label>Hae neuvoa</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
   </mat-form-field>
