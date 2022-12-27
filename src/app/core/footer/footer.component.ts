@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from './privacy-modal/privacy-modal.component';
 
-
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
