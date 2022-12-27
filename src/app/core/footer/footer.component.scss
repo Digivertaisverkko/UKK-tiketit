@@ -1,6 +1,6 @@
 $debug: false;
 
-#footer {
+footer {
   // border: {
   //     style: dashed;
   //     color: black;
@@ -9,53 +9,70 @@ $debug: false;
   margin: 0;
   width: 100%;
 
-  #up-row {
-    // padding: 3em;
-    height: 118px;
-    padding-top: 7px;
-    padding-left: 0;
-    padding-right: 0;
-  }
+  // #top-row {
 
-  #column-container {
+  //   @if $debug {
+  //     border: {
+  //       style: solid;
+  //       color: yellow;
+  //       width: 1px;
+  //     }
+  //   }
+
+  //   align-items: space-between;
+  //   display: flex;
+  //   flex-direction: row;
+  //   // padding: 3em;
+  //   height: 130px;
+  //   margin: 0;
+  //   padding: 7px 0 0 0;
+  //   width: 100%;
+  // }
+
+  #icon-container {
 
     @if $debug {
       border: {
         style: dashed;
-        color: red;
+        color: white;
         width: 1px;
       }
     }
 
     display: flex;
-    justify-content: space-evenly;
+    align-items: flex-end;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
-    height: 118px;
-    max-width: 900px;
+    // height: 100px;
+    max-width: 1024px;
     min-width: 380px;
     width: 100%;
-    margin: auto;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 
-  .col {
+  // .col {
 
-    @if $debug {
-      border: {
-        style: dashed;
-        color: gray;
-        width: 1px;
-      }
-    }
-    width: 33%;
-    height: 118px;
+    // @if $debug {
+    //   border: {
+    //     style: dashed;
+    //     color: gray;
+    //     width: 1px;
+    //   }
+    // }
+
     // padding: 2em 1em 1em 1em;
 
     img {
       display: block;
-      max-height: 100px;
+      height: 100%;
+      margin-left: 20px;
+      margin-right: 20px;
       // padding-top: 1em;
-      // padding-bottom: 1em;
-      margin: auto;
+      // padding-bottom: 1em
 
       @if $debug {
         border: {
@@ -65,9 +82,29 @@ $debug: false;
         }
       }
     }
-  }
+
+    #yo-logo {
+      height: 85px;
+      margin-bottom: 10px;
+      // width: 200px;
+    }
+
+    #oamk-logo {
+      height: 70px;
+    }
+
+    #vipuvoimaa-logo {
+      margin-bottom: 5px;
+      height: 80px;
+    }
+
+    #eu-logo {
+      height: 80px;
+    }
+  // }
 
   #bottom-row {
+    background-color: inherit;
     display: flex;
     width: 100%;
     justify-content: center;
@@ -84,10 +121,6 @@ $debug: false;
     //     width: 2px;
     // }
     margin: 0;
-  }
-
-  #eu-pic {
-    margin-top: 7px;
   }
 
   button {

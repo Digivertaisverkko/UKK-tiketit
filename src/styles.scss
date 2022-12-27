@@ -63,9 +63,9 @@ $custom-accent-palette: (
 // $custom-palette: mat.$custom-primary-palette;
 
 // accent: DC5323
-
 $custom-primary: mat.define-palette($custom-primary-palette, 500);
 $custom-accent: mat.define-palette($custom-accent-palette, 700);
+
 // $custom-primary: mat-palette($custom-primary-palette);
 
 // $custom-accent: mat-palette($mat-pink, 100, 500, A100);
@@ -98,6 +98,10 @@ $custom-theme: mat.define-light-theme(
   )
 );
 
+// @mixin custom-theme($theme) {
+//   $primary: map-get($theme, primary);
+// }
+
 // Emit theme-dependent styles for common features used across multiple components.
 // @include mat.core-theme($custom-theme);
 
@@ -124,6 +128,10 @@ body {
   font-family: $textFont;
   font-size: 15px;
   line-height: 1.45;
+}
+
+.theming-footer {
+  background-color: mat.get-color-from-palette($custom-primary-palette, 500);
 }
 
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
