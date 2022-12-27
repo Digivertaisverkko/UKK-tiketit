@@ -114,6 +114,10 @@ $custom-theme: mat.define-light-theme(
 
 // @include mat.toolbar-theme($custom-theme);
 
+// @include mat.core-theme($custom-theme);
+
+@include mat.button-theme($custom-theme);
+
 // TODO: laita tämän sijaan vain niille komponenteille, mitä käytetään.
 @include mat.all-component-themes($custom-theme);
 

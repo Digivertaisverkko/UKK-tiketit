@@ -1,5 +1,10 @@
 button {
-  margin-left: auto;
-  margin-right: auto;
-  width: 10em;
+  margin: 1em auto;
+  max-width: 10em;
+  padding-right: 2em;
+  padding-left: 2em;
+}
+
+::ng-deep .mdc-button__label {
+  color: white;
 }
