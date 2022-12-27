@@ -50,8 +50,7 @@ footer {
     min-width: 380px;
     width: 100%;
     margin: 0 auto;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 10px 50px 10px;
   }
 
   // .col {
@@ -69,8 +68,8 @@ footer {
     img {
       display: block;
       height: 100%;
-      margin-left: 20px;
-      margin-right: 20px;
+      margin-left: 10px;
+      margin-right: 10px;
       // padding-top: 1em;
       // padding-bottom: 1em
 
@@ -84,13 +83,15 @@ footer {
     }
 
     #yo-logo {
-      height: 85px;
+      height: 80px;
       margin-bottom: 10px;
       // width: 200px;
     }
 
     #oamk-logo {
       height: 70px;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     #vipuvoimaa-logo {
@@ -101,30 +102,40 @@ footer {
     #eu-logo {
       height: 80px;
     }
+
+    mat-nav-list {
+      display: block;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    a {
+      height: 22px;
+    }
+
+    ::ng-deep .mdc-list-item__primary-text {
+      color: white !important;
+    }
   // }
 
-  #bottom-row {
-    background-color: inherit;
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    font-size: 14px;
-    // Tool-bar -määrittelyissä on:
-    // flex-direction: row;
-    // align-items: center;
-    // white-space: nowrap;
-    // height: 64px;
-    // font-size: 20px;
-    // border: {
-    //     style: dashed;
-    //     color: red;
-    //     width: 2px;
-    // }
-    margin: 0;
-  }
-
-  button {
-    color: white;
-  }
-
+  // #bottom-row {
+  //   color: inherit;
+  //   background-color: inherit;
+  //   display: flex;
+  //   width: 100%;
+  //   justify-content: center;
+  //   // Tool-bar -määrittelyissä on:
+  //   // flex-direction: row;
+  //   // align-items: center;
+  //   // white-space: nowrap;
+  //   // height: 64px;
+  //   // font-size: 20px;
+  //   // border: {
+  //   //     style: dashed;
+  //   //     color: red;
+  //   //     width: 2px;
+  //   // }
+  //   margin: 0;
+  // }
 }
+

@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
+import { MatListModule } from '@angular/material/list';
 
 import { AuthService } from './auth.service';
 
@@ -31,6 +32,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     HttpClientModule,
     MatDialogModule,
     MaterialModule,
+    MatListModule,
     MatMenuModule,
     MatRippleModule,
     RouterModule,

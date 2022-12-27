@@ -14,11 +14,14 @@
       <!-- <div class="col" id="col4"> -->
         <img id="eu-logo" src="../../../assets/logos/EU_ESR.png" alt="">
       <!-- </div> -->
+      <mat-nav-list color="primary">
+        <a (click)="openPrivacyModal()" style="color: white;" mat-list-item i18n="@@Yksityisyystiedot">Yksityisyystiedot</a>
+        <a mat-list-item><span class="list-item">Oulun Yliopisto</span></a>
+        <a mat-list-item>Oulun Ammattirkorkeakoulu</a>
+        <a mat-list-item>Hankkeen toimijat</a>
+      </mat-nav-list>
     </div>
 
   </div>
 
-  <mat-toolbar id="bottom-row">
-    <button mat-button (click)="openPrivacyModal()" i18n="@@Yksityisyystiedot">Yksityisyystiedot</button>
-  </mat-toolbar>
 </footer>
