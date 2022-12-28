@@ -1,6 +1,8 @@
 <footer class="theming-footer" color="primary">
   <!-- <div id="top-row"> -->
 
+  <hr>
+
   <div id="icon-container">
       <!-- <div class="col" id="col1"> -->
         <img id="yo-logo" src="../../../assets/logos/oulun_yliopisto-white.png" alt="">
@@ -14,16 +16,16 @@
       <!-- <div class="col" id="col4"> -->
         <img id="eu-logo" src="../../../assets/logos/EU_ESR.png" alt="">
       <!-- </div> -->
-      <mat-nav-list color="primary">
+      <mat-nav-list id="link-list" color="primary">
         <a (click)="openPrivacyModal()" mat-list-item i18n="@@Yksityisyystiedot">Yksityisyystiedot</a>
-        <a mat-list-item><span class="list-item">Oulun Yliopisto</span></a>
-        <a mat-list-item>Oulun Ammattirkorkeakoulu</a>
-        <a mat-list-item>Hankkeen toimijat</a>
+        <a mat-list-item i18n="@@Oulun Yliopisto">Oulun Yliopisto</a>
+        <a mat-list-item i18n="@@OAMK">Oulun Ammattirkorkeakoulu</a>
+        <a mat-list-item i18n="@@Hankkeen toimijat">Hankkeen toimijat</a>
       </mat-nav-list>
 
       <div id="about-software" i18n="@@Ohjelmistosta">
         Tämä on digivertaisverkkohankkeen tuottama ohjelmisto, joka
-        on kehitetty Oulun yliopiston, Oulun ammattikorkeakoulun
+        on kehitetty Oulun Yliopiston, Oulun Ammattikorkeakoulun
         yhteistyönä ja Euroopan sosiaalirahaston rahoittamana.
       </div>
 
