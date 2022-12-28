@@ -1,7 +1,7 @@
 {
   "locale": "fi",
   "translations": {
-    "Yksityisyystiedot": "Privacy information",
+    "Tietoturvaseloste": "Security statement",
     "Kirjaudu_ulos": "Logout",
     "Uusi kysymys": "New question",
     "Järjestä tilan mukaan": "Sort by state",
