@@ -60,7 +60,7 @@ footer {
     min-width: 300px;
     width: 100%;
     margin: 8px auto 0 auto;
-    padding: 10px 2px 40px 2px;
+    padding: 10px 8px 40px 4px;
   }
 
   // .col {
@@ -96,6 +96,7 @@ footer {
       height: 80px;
       // margin-bottom:
       padding-bottom: 22px;;
+      padding-left: 5px;
       // width: 200px;
     }
 
@@ -110,18 +111,23 @@ footer {
     #vipuvoimaa-logo {
       height: 80px;
       padding-bottom: 15px;
+      // padding-right: 8px;
+      // padding-left: 8px;
     }
 
     #eu-logo {
       height: 80px;
-      padding: 12px 12px 12px 12px;
+      padding: 12px 16px 12px 16px;
     }
 
     mat-nav-list {
       // flex-grow: 5;
       // display: block;§
       font-weight: 500;
-      padding: 18px 10px 10px 10px;
+      padding-top: 18px;
+      padding-bottom: 10px;
+      padding-right: 0px;
+      padding-left: 0px;
       text-align: right;
       // max-width: 220px;
       @if $debug {
@@ -133,12 +139,27 @@ footer {
       }
     }
 
+    .spacer {
+      display: block;
+      flex-grow: 3;
+      flex-shrink: 0;
+      flex-basis: auto;
+      @if $debug {
+        border: {
+          style: solid;
+          color: yellow;
+          width: 1px;
+        }
+      }
+    }
+
     #about-software {
       align-self: flex-start;
+      box-sizing: border-box;
       color:white;
       display: block;
-      max-width: 440px;
-      padding: 18px 22px 18px 16px;
+      max-width: 445px;
+      padding: 18px 13px 14px 18px;
       @if $debug {
         border: {
           style: dashed;
@@ -182,5 +203,6 @@ footer {
   #link-list {
     order: 6;
   }
+
 }
 
