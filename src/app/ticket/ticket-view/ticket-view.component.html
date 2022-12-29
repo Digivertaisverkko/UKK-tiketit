@@ -10,7 +10,21 @@
 
     <app-to-beginning-button></app-to-beginning-button>
 
-  <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
+  <div class="ticket-header">
+    <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
+    <div class="spacer"></div>
+    <div class="sender-info">
+      <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
+      <div>
+        <span *ngIf="ticket.aloittaja.asema === 'opettaja'"><span class="theme-label" i18n="@@Opettaja">Opettaja</span></span>
+        <span *ngIf="ticket.aloittaja.asema === 'opiskelija'"><span class="theme-label" i18n="@@Minä">Minä</span></span>
+        -
+        <span class="theme-label">{{ ticket.aikaleima | date: 'short' }}</span>
+      </div>
+        <!-- <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}> -->
+    </div>
+    <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+  </div>
 
   <!-- <mat-card-header> -->
 
@@ -83,7 +97,7 @@
 
         <mat-card-subtitle class="theme-label">
           <span *ngIf="comment.lahettaja.asema === 'opettaja'"><span i18n="@@Opettaja">Opettaja</span></span>
-          &nbsp;-&nbsp;
+          -
           {{ comment.aikaleima | date: 'short' }}
         </mat-card-subtitle>
         <div class="spacer"></div>

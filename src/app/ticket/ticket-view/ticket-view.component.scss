@@ -7,11 +7,29 @@
     margin: 0 auto 18px;
   }
 
-  mat-card-header {
-    // display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  .ticket-header {
+    display: flex;
+    .sender-info {
+      display: flex;
+      gap: 0px;
+      flex-direction: column;
+      margin-top: 26px;
+      text-align: right;
+    }
+    .theme-profile-name {
+      line-height: 1.15;
+      display: block;
+    }
+    img {
+      flex-shrink: 0;
+      height: 40px;
+      margin-left: 10px;
+      margin-top: 25px;
+      object-fit: cover;
+      width: 40px;
+    }
   }
+
 
   mat-card-subtitle {
     margin-top: 3px;
