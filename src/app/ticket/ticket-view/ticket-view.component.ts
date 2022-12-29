@@ -11,6 +11,7 @@ import { Subscription, interval, startWith, switchMap } from 'rxjs';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit, OnDestroy  {
+  public courseName: string = '';
   public errorMessage: string = '';
   ticket: Ticket;
   tila: string;
@@ -52,6 +53,10 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
         next: response => {
           this.ticket = response;
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
+          this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
+            console.log(' saatiin vastaus: ' + response);
+            this.courseName = response;
+          });
           this.isLoaded = true;
         },
         error: error => {
@@ -78,7 +83,7 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
 
   public sendComment(): void {
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
-      .then((response) => { 
+      .then((response) => {
         if (response?.success == true) {
           this.errorMessage = '';
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });

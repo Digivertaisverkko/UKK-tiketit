@@ -1,10 +1,14 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card appearance="outlined" class="ticket-view-card" *ngIf="isLoaded">
+<div class="ticket-view-card" *ngIf="isLoaded">
 
 <app-to-beginning-button></app-to-beginning-button>
 
   <div *ngIf="ticket.tila > 0">
+
+    <h1 class="theme-h1" *ngIf="courseName.length > 0">
+      <span>{{ courseName }}</span>
+    </h1>
 
   <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
 
@@ -38,7 +42,7 @@
 
   </div>
 
-</mat-card>
+</div>
 
 <mat-card appearance="outlined" class="ticket-view-card">
 
