@@ -104,8 +104,18 @@ mat-card {
     /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 }
 
+.input-field-wrapper {
+      justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+h2 {
+  padding-right: 2rem;
+}
+
 .filteringField {
-  max-width: 30%;
+  align-self: flex-end;
+  max-width: 220px;
   margin-right: -22px;
   margin-top: 30px;
   margin-bottom: -10px;
