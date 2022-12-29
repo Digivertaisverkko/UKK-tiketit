@@ -63,15 +63,13 @@
 
 <!-- <mat-card appearance="outlined" class="ticket-view-card"> -->
 
-  <h2 class="theme-h2" *ngIf="ticket.tila > 0" i18n="@@keskustelu">Keskustelu</h2>
+  <h2 class="theme-h2" id="discussion-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
 
   <!-- <mat-card-header *ngIf="ticket.tila > 0">
     <mat-card-title i18n="@@Kommentit">Kommentit</mat-card-title>
   </mat-card-header> -->
 
   <!-- <mat-card-content> -->
-
-    <div *ngIf="ticket.tila > 0">
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
       <mat-card-header>
@@ -94,12 +92,10 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- <mat-divider></mat-divider> -->
-
     <!-- <mat-card-title i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-card-title> -->
-    <app-editor [(editorContent)]="commentText"></app-editor>
+    <div class="vertical-spacer"></div>
 
-  </div>
+    <app-editor [(editorContent)]="commentText"></app-editor>
 
   <app-error-card
   *ngIf="errorMessage.length > 0"
@@ -135,7 +131,6 @@
   </button>
 
 </div>
-
 
 </div>
 

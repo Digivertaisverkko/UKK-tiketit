@@ -9,6 +9,10 @@
     margin-top: 3px;
   }
 
+  #discussion-header {
+    margin-bottom: 16px;
+  }
+
   #ticketActionsWrapper {
     display: flex;
     align-items: center;
@@ -44,6 +48,11 @@
     padding-right: 3em;
     // min-width: 8em;
   }
+
+  .vertical-spacer {
+    height: 26px;
+  }
+
 
   .spacer {
     display: block;
