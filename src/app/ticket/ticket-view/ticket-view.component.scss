@@ -1,8 +1,12 @@
-.ticket-view-card {
-  margin: auto;
+.ticket-view {
+  // margin: auto;
   /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card {
-    margin: 0 auto 1em;
+    margin: 0 auto 18px;
+  }
+
+  mat-card-subtitle {
+    margin-top: 3px;
   }
 
   #ticketActionsWrapper {
@@ -35,8 +39,10 @@
 
   #sendButton {
     color: white;
-    max-height: 35px;
-    min-width: 8em;
+    margin-top: 10px;
+    padding-left: 3em;
+    padding-right: 3em;
+    // min-width: 8em;
   }
 
   .spacer {

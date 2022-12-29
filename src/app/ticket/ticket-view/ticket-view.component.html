@@ -1,8 +1,6 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<div class="ticket-view-card" *ngIf="isLoaded">
-
-<app-to-beginning-button></app-to-beginning-button>
+<div class="ticket-view" *ngIf="isLoaded">
 
   <div *ngIf="ticket.tila > 0">
 
@@ -10,18 +8,37 @@
       <span>{{ courseName }}</span>
     </h1>
 
+    <app-to-beginning-button></app-to-beginning-button>
+
   <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
 
-  <mat-card-header>
+  <!-- <mat-card-header> -->
 
-    <mat-card-subtitle>
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
+    <!-- <mat-card-subtitle> -->
+
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
+      <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
+        <p>{{ticket.kentat[0].arvo }}</p>
+          <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
+            ticket.kentat[0].arvo }} </span> -->
+    </div>
+
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
+      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
+        <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
+      <p>{{ ticket.kentat[1].arvo }}</p>
+    </div>
+
+    <p id="question" class="theme-p">{{ticket.viesti}}</p>
+
+      <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
       🞄
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span>
-    </mat-card-subtitle>
-  </mat-card-header>
+      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span> -->
+    <!-- </mat-card-subtitle> -->
 
-  <mat-card-content>
+  <!-- </mat-card-header> -->
+
+  <!-- <mat-card-content>
 
     <mat-card appearance="outlined" class="question">
       <mat-card-header>
@@ -38,38 +55,48 @@
       </mat-card-content>
     </mat-card>
 
-  </mat-card-content>
+  </mat-card-content> -->
 
   </div>
 
-</div>
+<hr class="theme-divider">
 
-<mat-card appearance="outlined" class="ticket-view-card">
+<!-- <mat-card appearance="outlined" class="ticket-view-card"> -->
 
-  <mat-card-header *ngIf="ticket.tila > 0">
+  <h2 class="theme-h2" *ngIf="ticket.tila > 0" i18n="@@keskustelu">Keskustelu</h2>
+
+  <!-- <mat-card-header *ngIf="ticket.tila > 0">
     <mat-card-title i18n="@@Kommentit">Kommentit</mat-card-title>
-  </mat-card-header>
+  </mat-card-header> -->
 
-  <mat-card-content>
+  <!-- <mat-card-content> -->
 
     <div *ngIf="ticket.tila > 0">
+
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
       <mat-card-header>
         <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
         <mat-card-title>
-          {{ comment.lahettaja.nimi }} <span *ngIf="comment.lahettaja.asema === 'opettaja'">🞄 <span i18n="@@Opettaja">Opettaja</span></span>
+          {{ comment.lahettaja.nimi }}
+          <!-- {{ comment.lahettaja.nimi }} <span *ngIf="comment.lahettaja.asema === 'opettaja'">🞄 <span i18n="@@Opettaja">Opettaja</span></span> -->
         </mat-card-title>
-        <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
+
+        <mat-card-subtitle class="theme-label">
+          <span *ngIf="comment.lahettaja.asema === 'opettaja'"><span i18n="@@Opettaja">Opettaja</span></span>
+          &nbsp;-&nbsp;
+          {{ comment.aikaleima | date: 'short' }}
+        </mat-card-subtitle>
+        <!-- <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle> -->
       </mat-card-header>
       <mat-card-content>
         <p class="message" [innerHTML]=comment.viesti></p>
-        <h2 *ngIf="comment.tila === 5">{{proposedSolution}}</h2>
+        <p *ngIf="comment.tila === 5">{{proposedSolution}}</p>
       </mat-card-content>
     </mat-card>
 
-    <mat-divider></mat-divider>
+    <!-- <mat-divider></mat-divider> -->
 
-    <mat-card-title i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-card-title>
+    <!-- <mat-card-title i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-card-title> -->
     <app-editor [(editorContent)]="commentText"></app-editor>
 
   </div>
@@ -109,6 +136,9 @@
 
 </div>
 
-</mat-card-content>
 
-</mat-card>
+</div>
+
+<!-- </mat-card-content> -->
+
+<!-- </mat-card> -->
