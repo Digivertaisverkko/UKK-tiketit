@@ -1,9 +1,14 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { minimalSetup } from 'codemirror';
+import { javascript } from "@codemirror/lang-javascript"
 import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
-import { Schema } from 'prosemirror-model';
+import { node as codeMirrorNode, CodeMirrorView } from 'prosemirror-codemirror-6';
+import { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
+import { EditorView } from 'prosemirror-view';
 
 const nodes = {
   ...basicNodes,
+  code_mirror: codeMirrorNode,
 }
 
 const schema = new Schema({
@@ -11,7 +16,21 @@ const schema = new Schema({
   marks,
 });
 
-const nodeViews = {};
+const nodeViews = {
+  code_mirror: (node: ProseMirrorNode, view: EditorView, getPos: () => number): CodeMirrorView => {
+    return new CodeMirrorView({
+      node,
+      view,
+      getPos,
+      cmOptions: {
+        extensions: [
+          minimalSetup,
+          javascript(),
+        ],
+      },
+    });
+  },
+};
 
 @Component({
   selector: 'app-editor',

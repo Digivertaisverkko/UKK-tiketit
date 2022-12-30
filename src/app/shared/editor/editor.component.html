@@ -1,10 +1,14 @@
 <div class="editor NgxEditor__Wrapper">
-    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-    <ngx-editor
-        [editor]="editor"
-        [(ngModel)]="editorContent"
-        (ngModelChange)="editorContentChange.emit(editorContent)"
-        [disabled]="false"
-        [placeholder]="''"
-    ></ngx-editor>
+  <ngx-editor-menu [editor]="editor" [toolbar]="toolbar" [customMenuRef]="customMenu"></ngx-editor-menu>
+  <ngx-editor
+      [editor]="editor"
+      [(ngModel)]="editorContent"
+      (ngModelChange)="editorContentChange.emit(editorContent)"
+      [disabled]="false"
+      [placeholder]="''"
+  ></ngx-editor>
 </div>
+
+<ng-template #customMenu>
+  <app-custom-menu [editor]="editor"></app-custom-menu>
+</ng-template>
