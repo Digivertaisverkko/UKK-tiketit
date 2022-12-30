@@ -11,6 +11,7 @@ import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { ToBeginningButtonComponent } from './components/to-beginning-button/to-beginning-button.component';
+import { SafeHtmlPipe } from './safe-html.pipe';
 import { CustomMenuComponent } from './editor/custom-menu/custom-menu.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
@@ -44,6 +45,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     EditorComponent,
     CustomMenuComponent,
     ToBeginningButtonComponent,
+    SafeHtmlPipe
   ],
   imports: [
     CommonModule,
@@ -61,6 +63,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     EditorComponent,
     CustomMenuComponent,
     ToBeginningButtonComponent,
+    SafeHtmlPipe,
   ],
   providers: [
     {
