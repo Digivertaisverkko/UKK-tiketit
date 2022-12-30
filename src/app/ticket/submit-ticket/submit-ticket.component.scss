@@ -10,11 +10,9 @@
   }
 
   mat-form-field {
-    width: 100%;
+    min-width: 21em;
   }
 
-  #shortFieldsDiv {
-    max-width: 25em;
     #messageTitleField {
       // margin-bottom: 5px;
       #titleText {
@@ -25,6 +23,10 @@
         // font-weight: 900;
       }
     }
+
+    #shortFieldsDiv {
+      width: 21em;
+
     .additional-field {
       margin-bottom: -20px;
     }

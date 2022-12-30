@@ -12,7 +12,7 @@
 
     <!-- <mat-card-content> -->
 
-    <div id="shortFieldsDiv" >
+    <div class="ticket-header">
 
       <mat-form-field id="messageTitleField" appearance="fill">
         <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
@@ -26,6 +26,21 @@
           autocomplete="off"
           >
       </mat-form-field>
+
+      <div class="spacer"></div>
+      <div class="sender-info">
+        <span class="theme-profile-name">{{ userName }}</span>
+        <div class="theme-label">
+          <span i18n="@@Minä">Minä</span>
+          -
+          <span i18n="@@Tänään">Tänään </span>
+          <span>{{ currentDate | date: 'shortTime' }}</span>
+        </div>
+      </div>
+      <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+    </div>
+
+    <div id="shortFieldsDiv" >
 
       <mat-form-field class="additional-field" appearance="fill" *ngIf="!isFaq">
         <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>

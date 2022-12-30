@@ -21,10 +21,12 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   isFaq: boolean = false;
   userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
   answer: string = '';
+  public userName: string | null = '';
   sendingIsAllowed: boolean = false;
+  public currentDate = new Date();
 
   messageSubscription: Subscription;
-  message: string = '';
+  public message: string = '';
 
   constructor(
     private auth: AuthService,
@@ -38,6 +40,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.trackUserRole();
+    this.userName = this.auth.getUserName();
     const courseID = this.ticketService.getActiveCourse();
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response;
