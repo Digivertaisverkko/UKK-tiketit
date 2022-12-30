@@ -12,12 +12,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './functions/CustomPaginator';
 import { FaqViewComponent } from './faq-view/faq-view.component';
+import { MessageComponent } from './message/message.component';
 
 @NgModule({
   declarations: [
     SubmitTicketComponent,
     TicketViewComponent,
-    FaqViewComponent
+    FaqViewComponent,
+    MessageComponent
   ],
   imports: [
     CommonModule,
