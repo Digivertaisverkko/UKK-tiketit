@@ -31,7 +31,7 @@
 
     <!-- <mat-card-content> -->
 
-      <p id="question" class="theme-p">{{ticket.viesti}}</p>
+      <app-message id="question" class="theme-p" [messageHtml]=ticket.viesti></app-message>
 
     <!-- <p class="message" id="question" [innerHTML]="ticket.viesti"></p> -->
     <!-- </mat-card-content> -->
@@ -59,7 +59,7 @@
     >
       <!-- <mat-card-content> -->
         <!-- <p class="message" ></p> -->
-        <p class="theme-p">{{comment.viesti}}</p>
+        <app-message id="comment" class="theme-p" [messageHtml]=comment.viesti></app-message>
       <!-- </mat-card-content> -->
     </div>
   </div>
