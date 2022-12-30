@@ -1,26 +1,32 @@
 @import "./variables.scss";
+@import "./styles.scss";
 
 .submit-ticket {
   margin: auto;
   padding-right: $right-padding;
+
+  form {
+    margin-top: 30px;
+  }
 
   mat-form-field {
     width: 100%;
   }
 
   #shortFieldsDiv {
-    max-width: 350px;
+    max-width: 25em;
     #messageTitleField {
-      margin-bottom: 15px;
+      // margin-bottom: 5px;
       #titleText {
-        font-size: 25px;
+        font-family: $displayFont;
+        font-size: 30px;
         font-weight: 900;
         // font-size: calc(32px * 0.8);
         // font-weight: 900;
       }
     }
     .additionalField {
-      // margin-bottom: 0px;
+      margin-bottom: -5px;
     }
   }
 
