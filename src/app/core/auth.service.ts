@@ -13,6 +13,11 @@ export interface LoginResponse {
   'login-code': string
 }
 
+interface LoginResult {
+  success: boolean,
+  redirectUrl?: string
+};
+
 export interface AuthRequestResponse {
   success: boolean,
   error: string,
@@ -254,7 +259,7 @@ export class AuthService {
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
-  public async sendLoginRequest(email: string, password: string, loginID: string) {
+  public async sendLoginRequest(email: string, password: string, loginID: string): Promise<LoginResult> {
     const httpOptions =  {
       headers: new HttpHeaders({
         'ktunnus': email,
@@ -281,12 +286,14 @@ export class AuthService {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
       console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
-      this.sendAuthRequest(this.codeVerifier, this.loginCode);
+      return this.sendAuthRequest(this.codeVerifier, this.loginCode);
+    } else {
+      return { success: false };
     }
   }
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
-  private async sendAuthRequest(codeVerifier: string, loginCode: string) {
+  private async sendAuthRequest(codeVerifier: string, loginCode: string): Promise<LoginResult> {
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': 'own',
@@ -297,7 +304,7 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
-      console.log('Lähetetään auth-request headereilla: ');
+      console.log('Lähetetään auth-request headereilla (alla):');
       console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
       console.log('sendAuthRequest: got response: ');
@@ -307,19 +314,31 @@ export class AuthService {
       this.handleError(error);
     }
     this.checkErrors(response);
-    if (response.success == true) {
+
+    var loginResult: LoginResult;
+    if (response.success !== undefined && response.success == true) {
+      loginResult = { success: true };
+      if (window.sessionStorage.getItem('REDIRECT_URL') !== undefined) {
+        const redirectUrl = window.sessionStorage.getItem('REDIRECT_URL');
+        if (redirectUrl !== null) {
+          loginResult.redirectUrl = redirectUrl;
+        }
+      }
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
-      console.log('Vastaus: ' + JSON.stringify(response));
+      // console.log('Vastaus: ' + JSON.stringify(response));
       // let sessionID = response['login-id'];
       console.log('vastauksen sisältöä: ');
 
       let sessionID = response['session-id'];
       // console.log(' -- session ID on ' + sessionID);
       this.saveSessionStatus(sessionID);
+
       // onsole.log('Authorization success.');
     } else {
+      loginResult = { success: false };
       console.error(response.error);
     }
+    return loginResult;
   }
 
   // Onko käyttäjät kirjautunut.

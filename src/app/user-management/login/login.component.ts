@@ -44,11 +44,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
-        if (isLoggedIn === true) {
-          this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
-        }
-      })
+      // this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
+      //   if (isLoggedIn === true) {
+      //     if
+      //     this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
+      //   }
+      // })
   }
 
   ngOnInit(): void {
@@ -79,17 +80,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID)
       .then(response => {
-
+        if (response.success == true) {
+          var redirectUrl: string;
+          if (response.redirectUrl == undefined) {
+            redirectUrl = '/list-tickets?courseID=' + this.courseID;
+          } else {
+            redirectUrl = response.redirectUrl;
+          }
+          this.router.navigateByUrl(redirectUrl);
+        }
       })
       .catch( error => {
     console.error(error.message)});
-  }
-
-  public loginWithoutAuth(): void {
-    this.authService.saveSessionStatus('123456789');
-    console.log('Varoitus: Tämä on testaukseen. Ilman kirjautumista kutsut palvelimelle eivät toimi. ')
-    this.authService.isUserLoggedIn$.next(true);
-    this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
   }
 
   private setLoginID() {

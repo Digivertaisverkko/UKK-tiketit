@@ -55,7 +55,6 @@ footer {
     flex-wrap: wrap;
     justify-content: space-between;
 
-    // height: 100px;
     max-width: 1024px;
     min-width: 300px;
     width: 100%;
@@ -124,10 +123,7 @@ footer {
       // flex-grow: 5;
       // display: block;§
       font-weight: 500;
-      padding-top: 18px;
-      padding-bottom: 10px;
-      padding-right: 0px;
-      padding-left: 0px;
+      padding: 18px 0 10px 0;
       text-align: right;
       // max-width: 220px;
       @if $debug {
@@ -141,9 +137,7 @@ footer {
 
     .spacer {
       display: block;
-      flex-grow: 3;
-      flex-shrink: 0;
-      flex-basis: auto;
+      flex: 3 0 auto;
       @if $debug {
         border: {
           style: solid;
