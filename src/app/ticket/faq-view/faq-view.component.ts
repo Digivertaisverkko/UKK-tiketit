@@ -25,6 +25,7 @@ constructor (
       this.ticketService.getTicketInfo(this.faqID)
       .then(response => {
         this.ticket = response;
+        this.ticketService.setActiveCourse(String(this.ticket.kurssi));
       })
       .then( () => {
         if (this.ticket.kurssi !== null) {

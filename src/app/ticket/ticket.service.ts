@@ -10,6 +10,8 @@ import { truncate } from '../utils/truncate';
 
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
+
+  private activeCourse: number | undefined = undefined;
   private messages$ = new Subject<string>();
 
   constructor (private http: HttpClient) {}
@@ -25,18 +27,27 @@ export class TicketService {
   }
 
   public setActiveCourse(courseID: string | null) {
-    if (courseID !== null) {
+    // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
+    if (courseID !== null && this.activeCourse !== Number(courseID)) {
       window.sessionStorage.setItem('COURSE_ID', courseID);
+      this.activeCourse = Number(courseID);
+      console.log(' ---- asetettu aktiivinen kurssi ' + courseID + ' ----');
     }
   }
 
   public getActiveCourse(): string {
-    if (window.sessionStorage.getItem('COURSE_ID') === null) {
-      throw new Error('Tallennettua kurssi id:ä ei löydetty.');
-    }
-    let courseID = window.sessionStorage.getItem('COURSE_ID');
-    if (courseID === null) {
-      throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+    let courseID: string | null;
+    if (this.activeCourse == undefined) {
+      if (window.sessionStorage.getItem('COURSE_ID') === null) {
+        throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+      } else {
+        courseID = window.sessionStorage.getItem('COURSE_ID');
+      }
+      if (courseID === null) {
+        throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+      }
+    } else {
+      courseID = String(this.activeCourse);
     }
     return courseID;
   }
@@ -295,7 +306,7 @@ public getTicketState(numericalState: number): string {
     let response: any;
     try {
       response = this.http.get<Question[]>(url, httpOptions);
-    
+
       console.dir(response);
     } catch (error: any) {
       this.handleError(error);
