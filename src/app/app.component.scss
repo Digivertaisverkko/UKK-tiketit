@@ -1,48 +1,37 @@
-// $header-height: 64px;
-// $footer-height: 182px;
+// $header-height: 120px;
+// $footer-height: 274px;
 @import '/variables.scss';
 
+#app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 main {
-  // border-color: red;
-  // border-style: solid;
-  // border-width: 2px;
-  background-color: #ffffff;
+  // border-color: red solid 2px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   margin: 0 auto;
-  // Jostain syystä tekee tällä arvolla n. 1024 leveän, joka pitäisi olla.
-  // max-width: 948px;
-  max-width: 1024px;
+  width: 1024px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
-  min-height: calc(100vh - $header-height - $footer-height);
+  // min-height: calc(100vh - $header-height - $footer-height);
   // padding-top: 1em;
   // padding-bottom: 1em;
   // Vain alapalkilla
   // min-height: calc(100vh - 128px);
-  // TODO: pitäisi tehdä responsiiviseksi.
-  padding: 3em 40px 6em 40px;
+  padding: 50px 40px 90px 40px;
+  // padding: 3rem 40px 6rem 40px;
 }
 
-// main > * {
-//   flex-grow: 1;
-//   display: flex;
-//   flex-direction: column;
-// }
-
-// FIXME: ei toimi
-// main:first-child {
-// main:nth-child(2) {
-//   flex-grow: 1;
-//   display: flex;
-//   flex-direction: column;
-// }
-
-main.is-phone-portrait {
-  min-height: calc(100vh - $header-height - 164px);
-
-  // Vain alapalkilla
-  // min-height: calc(100vh - 112px);
+  @media (max-width: 1024px) {
+    main {
+      width: 100%;
+      min-width: 280px;
+      padding: 20px 20px 45px 20px;
+    }
 }
 
 .spacer {

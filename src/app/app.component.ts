@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { Router } from '@angular/router';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -14,24 +12,17 @@ export class AppComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private responsive: BreakpointObserver
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      this.isPhonePortrait = false;
-      if (result.matches) {
-        this.isPhonePortrait = true;
-      }
-    });
     // this.initializeApp();
     this.authService.initialize();
   }
 
   // public initializeApp() {
   //   this.authService.initialize();
-    
+
     // this.authService.onIsUserLoggedIn().subscribe(response => {
     //   /* Oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee kirjautumisruudussa
     //     jonkin muun tavan. Ei siirrytä suoraan /login, koska palvelimelta saatava

@@ -134,6 +134,10 @@ body {
   line-height: 1.45;
 }
 
+main {
+  background-color: #ffffff;
+}
+
 .theming-footer {
   background-color: mat.get-color-from-palette($custom-primary-palette, 500);
 }
@@ -155,7 +159,9 @@ body {
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
   position: relative;
-  margin: 70px auto 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  // margin: 70px auto 0 auto;
   text-align: center;
   z-index: 0;
 }
