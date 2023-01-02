@@ -1,8 +1,6 @@
 import { CanActivateFn, CanActivateChildFn } from "@angular/router";
 import { inject } from "@angular/core";
-// import { Location } from "@angular/common";
 import { Router } from "@angular/router";
-import { environment } from "src/environments/environment";
 
 import { AuthService } from "../core/auth.service";
 
