@@ -21,7 +21,8 @@
   /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   #login {
-    flex-grow: 1;
+    text-align: center;
+    // flex-grow: 1;
     /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     h2 {
       margin-top: 1em;
