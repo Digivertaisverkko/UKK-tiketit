@@ -13,15 +13,16 @@ import { Subscription, interval, startWith, switchMap } from 'rxjs';
 export class TicketViewComponent implements OnInit, OnDestroy  {
   public courseName: string = '';
   public errorMessage: string = '';
-  ticket: Ticket;
-  tila: string;
+  public ticket: Ticket;
+  public tila: string;
   public newCommentState: 3 | 4 | 5 = 4;
   // tila: typeof Tila | typeof State;
-  commentText: string;
-  isLoaded: boolean;
+  public commentText: string;
+  public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   ticketID: string;
   private timeInterval: Subscription = new Subscription();
+  private readonly currentDate = new Date().toDateString();
 
   // messageSubscription: Subscription;
   message: string = '';
@@ -66,6 +67,23 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
           this.isLoaded = true;
         }
       })
+  }
+
+  // Onko annettu aikaleima tänään.
+  public isToday(timestamp: string | Date) : boolean {
+    if (typeof timestamp === 'string') {
+      var dateString = new Date(timestamp).toDateString();
+    } else {
+      var dateString = timestamp.toDateString();
+    }
+    // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
+    if (dateString == this.currentDate) {
+      // console.log(' on tänään');
+      return true;
+    } else {
+      // console.log('ei ole tänään');
+      return false
+    }
   }
 
   public ngOnDestroy(): void {

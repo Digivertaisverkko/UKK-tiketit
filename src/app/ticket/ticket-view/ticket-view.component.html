@@ -18,8 +18,13 @@
       <div>
         <span *ngIf="ticket.aloittaja.asema === 'opettaja'"><span class="theme-label" i18n="@@Opettaja">Opettaja</span></span>
         <span *ngIf="ticket.aloittaja.asema === 'opiskelija'"><span class="theme-label" i18n="@@Minä">Minä</span></span>
+        <span *ngIf="ticket.aloittaja.asema === 'admin'"><span class="theme-label" i18n="@@Admin">Admin</span></span>
         -
-        <span class="theme-label">{{ ticket.aikaleima | date: 'short' }}</span>
+        <span class="theme-label" *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
+        <ng-template #notToday>
+          <span class="theme-label">{{ ticket.aikaleima | date: 'shortDate' }}</span>
+        </ng-template>
+        <span class="theme-label">&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
       </div>
         <!-- <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}> -->
     </div>
@@ -97,8 +102,12 @@
 
         <mat-card-subtitle class="theme-label">
           <span *ngIf="comment.lahettaja.asema === 'opettaja'"><span i18n="@@Opettaja">Opettaja</span></span>
+          <span *ngIf="ticket.aloittaja.asema === 'opiskelija'"><span class="theme-label" i18n="@@Minä">Minä</span></span>
+          <span *ngIf="ticket.aloittaja.asema === 'admin'"><span class="theme-label" i18n="@@Admin">Admin</span></span>
           -
-          {{ comment.aikaleima | date: 'short' }}
+          <span *ngIf="isToday(comment.aikaleima)" i18n="@@Tänään">Tänään</span>
+          <span *ngIf="!isToday(comment.aikaleima)" >{{ comment.aikaleima | date: 'shortDate' }}</span>
+          {{ comment.aikaleima | date: 'shortTime' }}
         </mat-card-subtitle>
         <div class="spacer"></div>
         <span class="ticket-state" *ngIf="comment.tila === 5">{{proposedSolution}}</span>
