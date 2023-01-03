@@ -1,14 +1,19 @@
 @import '/variables.scss';
 
 mat-card-actions {
-  padding-top: 1em;
+  // padding-top: 1em;
   padding-right: 0.5em;
+}
+
+.mdc-card__actions {
+  min-height: 30px;
 }
 
 #questionTable {
   margin-right: -15px;
 }
 
+// FIXME: jostain syystä tämä taulukko on muutoin pienempi.
 #faqTable {
   width: 103%;
   margin-right: -15px;
@@ -74,10 +79,14 @@ table {
     padding-right: 50px;
   }
 
+  .mdc-data-table__header-row {
+    height: 3em;
+  }
+
   tr.mat-mdc-row > td {
     // padding: 22px
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 }
 
