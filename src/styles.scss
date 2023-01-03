@@ -189,6 +189,7 @@ main {
   font-family: $displayFont;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
+  line-height: 1.2;
   position: relative;
   z-index: 0;
   // border-style: dotted;

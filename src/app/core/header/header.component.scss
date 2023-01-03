@@ -4,9 +4,7 @@ mat-toolbar {
 }
 
 #projectLogo {
-  // background-size: contain;
-  // background-position: 50%;
-  // background-repeat: no-repeat;
+  // background: no-repeat 50% contain;
   // position: relative;
   // display: inline-block;
   // width: 1.33333333em;
@@ -22,8 +20,18 @@ mat-toolbar {
 
 .spacer { flex: 1 1 auto; }
 
-#userName {
+#userName, #userEmail, #userRole {
+  display: block;
+  align-self: flex-end;
+}
+
+#userName.is-phone-portrait {
+  display: none;
+}
+
+#userName, #userEmail {
   margin-right: 5px;
+  line-height: 1.3;
   font-weight: 600;
 }
 
@@ -33,18 +41,11 @@ mat-toolbar {
   margin-top: 17px;
   margin-right: 0.5em;
 
-  // border-style: solid;
-  // border-color:red;
-  // border-width: 1px;
-}
-
-#userEmail {
-  margin-right: 5px;
-  font-weight: 500;
+  // border: solid red 1px;
 }
 
 #userRole {
-  margin-top: 3x;
+  // margin-top: 3x;
   margin-right: 7px;
   font-weight: 500;
 }
@@ -55,37 +56,16 @@ mat-toolbar {
   font-size: 2.2em;
   margin-top: 0px;
   margin-right: 0px;
-
-  // border-style: solid;
-  // border-color: red;
-  // border-width: 1px;
+// border: solid red 1px;
 
   mat-icon {
-    // border-style: solid;
-    // border-color: green;
-    // border-width: 1px;
-
+    // border: solid green 1px;
     margin-left: -40px;
     margin-top: -15px;
     font-size: 2.5em;
-    width: 170px;
-    height: 170px;
+    width: 165px;
+    height: 165px;
   }
-}
-
-
-#userName, #userEmail, #userRole {
-  display: block;
-  align-self: flex-end;
-}
-
-#userName.is-phone-portrait {
-  display: none;
-}
-
-mat-slide-toggle {
-  margin-left: 1em;
-  margin-right: 1em;
 }
 
 .flag {
@@ -94,7 +74,7 @@ mat-slide-toggle {
   background-repeat: no-repeat;
   position: relative;
   display: inline-block;
-  width: 1.3em;
+  width: 40px;
   cursor: pointer;
   line-height: 0.7em;
   margin-right: 10px;
