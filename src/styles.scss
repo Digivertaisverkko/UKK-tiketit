@@ -144,7 +144,7 @@ main {
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 .theme-header-text {
   font-family: $displayFont;
-  font-size: calc(35px * $scale-factor);
+  font-size: 28px;
 }
 
 .theme-header-text-small {
