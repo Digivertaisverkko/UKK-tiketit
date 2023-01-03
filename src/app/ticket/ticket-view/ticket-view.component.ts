@@ -69,6 +69,25 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
       })
   }
 
+  public getSenderTitle(name: string, role: string): string {
+    if (name == this.auth.getUserName()) {
+      return $localize`:@@Minä:Minä`
+    }
+    switch (role) {
+      case 'opiskelija':
+        return $localize`:@@Opiskelija:Opiskelija`;
+        break;
+      case 'opettaja':
+        return $localize`:@@Opettaja:Opettaja`;
+        break;
+      case 'admin':
+        return $localize`:@@Admin:Admin`;
+        break;
+      default:
+        return '';
+    }
+  }
+
   // Onko annettu aikaleima tänään.
   public isToday(timestamp: string | Date) : boolean {
     if (typeof timestamp === 'string') {

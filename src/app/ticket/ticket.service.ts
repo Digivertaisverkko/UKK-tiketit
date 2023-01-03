@@ -492,18 +492,6 @@ public getTicketState(numericalState: number): string {
   }
 }
 
-export interface Comment {
-  aikaleima: Date;
-  lahettaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
-  tila: number;
-  viesti: string;
-}
-
 export interface Course {
   id: string;
   nimi: string;
@@ -590,4 +578,17 @@ export interface Ticket {
   viesti: string;
   kommentit: Array<Comment>;
   ukk?: boolean;
+}
+
+// TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
+export interface Comment {
+  aikaleima: Date;
+  lahettaja: {
+    id: number;
+    nimi: string;
+    sposti: string;
+    asema: string;
+  }
+  tila: number;
+  viesti: string;
 }
