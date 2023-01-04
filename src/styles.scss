@@ -124,7 +124,7 @@ $custom-theme: mat.define-light-theme(
 /* ================================================= */
 
 // Skaalaus UI-suunnitelman kokoihin.
-$scale-factor: 0.93;
+$scale-factor: 0.80;
 
 body {
   font-family: $textFont;
@@ -144,12 +144,12 @@ main {
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 .theme-header-text {
   font-family: $displayFont;
-  font-size: 28px;
+  font-size: 35px * $scale-factor;
 }
 
 .theme-header-text-small {
   font-family: $displayFont;
-  font-size: 20px;
+  font-size: 20px * $scale-factor;
 }
 
 // Käytössä kirjautumissivulla.
@@ -194,6 +194,7 @@ main {
   // border-style: dotted;
   // border-color:#7dceeb;
   overflow: hidden;
+  margin-bottom: 1em;
 }
 
 // H1 -tagien ja otsikon tekstin välinen elementti. Tarvitaan pituuden mukaan muuttuva
@@ -223,7 +224,7 @@ main {
   font-size: calc(32px * $scale-factor);
   font-weight: 900;
   line-height: 1.2;
-  margin-block-end: 30px;
+  margin-block-end: 0.8em;
   // margin-left: 12px;
 }
 

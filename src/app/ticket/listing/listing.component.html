@@ -97,7 +97,7 @@
     <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
   </mat-card>
 
-  <mat-card-actions class="input-field-wrapper">
+  <div class="input-field-wrapper">
     <h2 class="theme-h2" i18n="@@Open neuvot">
       Open neuvot
     </h2>
@@ -106,7 +106,7 @@
     <mat-label>Hae neuvoa</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
   </mat-form-field>
-  </mat-card-actions>
+</div>
 
   <!-- *ngIf="!showNoFAQ" -->
   <table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort"
