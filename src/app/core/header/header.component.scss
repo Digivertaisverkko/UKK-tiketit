@@ -16,6 +16,9 @@ mat-toolbar {
   img {
     max-height: 100%;
   }
+  &:hover {
+    filter: brightness(97%);
+  }
 }
 
 .spacer { flex: 1 1 auto; }
