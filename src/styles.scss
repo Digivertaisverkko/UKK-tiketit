@@ -214,7 +214,7 @@ main {
   bottom: 4px;
   height: 3px;
   left: 0;
-  padding-right: 5.05em;
+  padding-right: 5em;
   position: absolute;
   width: 100%;
   z-index: -1;
@@ -276,11 +276,9 @@ main {
   display: flex;
   .sender-info {
     display: flex;
-    gap: 0px;
     flex-direction: column;
-    margin-top: 26px;
-    margin-left: 15px;
-    margin-right: 10px;
+    gap: 0;
+    margin: 26px 10px 26px 15px;
     min-width: 10em;
     text-align: right;
     .theme-profile-name {
