@@ -3,11 +3,10 @@ $debug: false;
 hr {
   background-color: #dc5323;
   border-width: 0;
-  height: 4px;
+  height: 3px;
   margin: 0 auto;
-  // width: 100%;
   position: relative;
-  top: 14px;
+  top: 12px;
   width: 98%;
 }
 
@@ -20,26 +19,6 @@ footer {
   margin: 0;
   width: 100%;
 
-  // #top-row {
-
-  //   @if $debug {
-  //     border: {
-  //       style: solid;
-  //       color: yellow;
-  //       width: 1px;
-  //     }
-  //   }
-
-  //   align-items: space-between;
-  //   display: flex;
-  //   flex-direction: row;
-  //   // padding: 3em;
-  //   height: 130px;
-  //   margin: 0;
-  //   padding: 7px 0 0 0;
-  //   width: 100%;
-  // }
-
   #icon-container {
 
     @if $debug {
@@ -50,17 +29,16 @@ footer {
       }
     }
 
-    display: flex;
     align-items: flex-end;
     box-sizing: border-box;
+    display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-
+    margin: 4px auto 0 auto;
     max-width: 1024px;
     min-width: 300px;
+    padding: 8px 8px 30px 4px;
     width: 100%;
-    margin: 8px auto 0 auto;
-    padding: 10px 8px 30px 4px;
   }
 
   // .col {
@@ -154,7 +132,7 @@ footer {
       color:white;
       display: block;
       max-width: 445px;
-      padding: 18px 13px 14px 18px;
+      padding: 16px 13px 14px 18px;
       @if $debug {
         border: {
           style: dashed;
