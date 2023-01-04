@@ -1,23 +1,22 @@
 @import '/variables.scss';
 
-.ticket-view {
-  // margin: auto;
-  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-  mat-card {
-    margin: 0 auto 18px;
-  }
-
-  mat-card-subtitle {
-    margin-top: 3px;
-  }
-
-  .ticket-state {
-    color: $primary;
-    margin-right: 1em;
-  }
-
   #discussion-header {
-    margin-bottom: 16px;
+    margin-bottom: 0.5em;
+  }
+
+  mat-card {
+    margin: 0 auto 12px;
+    mat-card-subtitle {
+      margin-top: 3px;
+    }
+    .ticket-state {
+      color: $primary;
+      margin-right: 1em;
+    }
+  }
+
+  .vertical-spacer {
+    height: 18px;
   }
 
   #ticketActionsWrapper {
@@ -25,28 +24,13 @@
     align-items: center;
     padding: 8px 0;
     mat-radio-button {
-      margin-top: 3px;
-      margin-bottom: 3px;
-    }
-  }
-
-  mat-form-field {
-    width: 100%;
-    margin-top: 1em;
-  }
-
-  mat-radio-group {
-    // margin-left: 0.5em;
-    mat-radio-button {
-      margin-right: 2em;
+      margin: 3px 28px 3px 0px;
     }
   }
 
   .mdc-form-field>label {
     padding-left: 0;
   }
-
-  .message { white-space: pre-wrap;}
 
   #sendButton {
     color: white;
@@ -56,14 +40,11 @@
     // min-width: 8em;
   }
 
-  .vertical-spacer {
-    height: 26px;
-  }
-
-
   .spacer {
     display: block;
     flex: 1 1 auto;
   }
 
+::ng-deep .mat-mdc-card-content:last-child {
+  padding-bottom: 0 !important;
 }
