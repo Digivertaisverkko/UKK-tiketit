@@ -1,33 +1,30 @@
 @import '/variables.scss';
 
+section, app-error-card {
+  margin-left: -15px;
+  width: 103%;
+  // padding-right: 15px;
+  // margin-right: -15px;
+}
+
+h1, h2 {
+  padding-left: 20px;
+}
+
 h1 {
   margin-bottom: 0.95em;
 }
 
-mat-card-actions {
-  // padding-top: 1em;
-  padding-right: 0.5em;
+h2 {
+  padding-right: 2rem;
 }
 
 .mdc-card__actions {
   min-height: 30px;
 }
 
-#questionTable {
-  margin-right: -15px;
-}
-
-// FIXME: jostain syystä tämä taulukko on muutoin pienempi.
-
-// Taulukot ovat leveämpiä kuin muut sivujen sisällöt, niin siksi negatiiviset
-// marginaalit.
-#faqTable {
-  width: 103%;
-  margin-right: -15px;
-}
-
 table {
-    margin-left: -15px;
+    width: 100%;
   td {
     cursor: pointer;
     line-height: 1.5;
@@ -60,10 +57,6 @@ table {
   .td-align-right {
     padding-right: 34px;
   }
-  //  {
-  //   padding-right: 3em;
-  // }
-
 }
 
 // th.mat-column-aloittajanNimi {
@@ -113,11 +106,17 @@ table {
 
 [hidden] { display: none !important; }
 
-/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
     margin: auto;
-    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+}
+
+mat-card-actions {
+  padding-right: 0;
+  button {
+    color: white;
+    margin-top: 1em;
+    margin-right: 0px;
+  }
 }
 
 .input-field-wrapper {
@@ -126,24 +125,12 @@ mat-card {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding-right: 5px;
-}
-
-h2 {
-  padding-right: 2rem;
 }
 
 .filteringField {
   align-self: flex-end;
   max-width: 220px;
-  margin-right: -22px;
   margin-top: 30px;
-  // margin-bottom: 10px;
-  // margin-left: -15px;
-
-  // mat-label, input {
-  //   padding-left: 8px;
-  // }
 }
 
 .noData-td { padding-top: 1em; padding-bottom: 1em; }
@@ -155,18 +142,6 @@ h2 {
     margin: 1em 1em;
 }
 
-#submitButton {
-  color: white;
-  margin-top: 1em;
-  margin-right: -22px;
-}
-
 .mat-mdc-form-field {
   width: 97%;
 }
-
-// .mat-header-cell {
-//     padding-left: 1em;
-//     padding-right: 1em;
-//     text-align: left;
-// }

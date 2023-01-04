@@ -2,7 +2,7 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 <!-- <mat-card appearance="outlined"> -->
 
-<div *ngIf="isCourseIDvalid">
+<section *ngIf="isCourseIDvalid">
   <!-- ----- Tiketit ----- -->
 
   <!-- <mat-card-content> -->
@@ -12,7 +12,7 @@
   <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
 
   <!-- <mat-card-actions class="input-field-wrapper"> -->
-    <h2 id="secondTitle" class="theme-h2">{{header}}</h2>
+    <h2 class="theme-h2">{{header}}</h2>
     <!-- <mat-form-field class="filteringField" style="width: 35%; opacity: 75%;" >
         <mat-label>Kurssin nimi otsikon testaukseen: </mat-label>
       <input
@@ -26,7 +26,7 @@
     <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
   </mat-card>
 
-  <table id="questionTable" mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
+  <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
 
     <ng-container matColumnDef="tila">
@@ -83,7 +83,7 @@
   <!-- </div> -->
 
   <mat-card-actions align="end">
-    <button mat-raised-button color="primary" id="submitButton" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi
+    <button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi
       kysymys</button>
   </mat-card-actions>
 
@@ -167,7 +167,7 @@
 
   <!-- </mat-card-content> -->
 
-</div>
+</section>
 
 <app-error-card *ngIf="ticketServiceMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
   message="{{ ticketServiceMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
