@@ -1,5 +1,9 @@
 @import '/variables.scss';
 
+h1 {
+  margin-bottom: 0.95em;
+}
+
 mat-card-actions {
   // padding-top: 1em;
   padding-right: 0.5em;
@@ -14,6 +18,9 @@ mat-card-actions {
 }
 
 // FIXME: jostain syystä tämä taulukko on muutoin pienempi.
+
+// Taulukot ovat leveämpiä kuin muut sivujen sisällöt, niin siksi negatiiviset
+// marginaalit.
 #faqTable {
   width: 103%;
   margin-right: -15px;
@@ -85,8 +92,8 @@ table {
 
   tr.mat-mdc-row > td {
     // padding: 22px
-    padding-top: 0.66em;
-    padding-bottom: 0.66em;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
   }
 }
 
