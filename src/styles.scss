@@ -124,7 +124,7 @@ $custom-theme: mat.define-light-theme(
 /* ================================================= */
 
 // Skaalaus UI-suunnitelman kokoihin.
-$scale-factor: 0.95;
+$scale-factor: 0.93;
 
 body {
   font-family: $textFont;
@@ -222,6 +222,7 @@ main {
   font-family: $displayFont;
   font-size: calc(32px * $scale-factor);
   font-weight: 900;
+  line-height: 1.2;
   margin-block-end: 30px;
   // margin-left: 12px;
 }
