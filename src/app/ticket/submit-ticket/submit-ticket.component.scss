@@ -70,7 +70,7 @@ mat-card-actions {
   flex: 1 1 auto;
 }
 
-@media (min-width: $small) {
+@media (min-width: $XSmall) {
   .submit-ticket {
     // margin: auto;
     padding-right: $right-padding;
@@ -78,7 +78,7 @@ mat-card-actions {
 
 }
 
-@media (max-width: $small) {
+@media (max-width: $XSmall) {
   .sender-info, .mat-mdc-card-avatar {
     display: none;
   }
