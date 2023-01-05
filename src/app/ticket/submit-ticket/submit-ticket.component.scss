@@ -2,22 +2,17 @@
 @import "./styles.scss";
 
 form {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 mat-form-field {
   min-width: 21em;
 }
 
-.ticket-header {
-  align-items: flex-start;
-}
-
 #messageTitleField {
   // margin-bottom: 5px;
   flex-grow: 4;
   .mat-mdc-input-element {
-
     font-family: $displayFont;
     font-size: calc(32px * $scale-factor);
     font-weight: 900;
@@ -59,10 +54,6 @@ mat-card-actions {
     margin-top: 15px;
     margin-right: -8px;
   }
-}
-
-#titleLabel {
-  margin-left: 0;
 }
 
 .spacer {
