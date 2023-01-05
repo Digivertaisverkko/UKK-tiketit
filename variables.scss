@@ -1,33 +1,33 @@
 @import '@angular/material/theming';
 
 // $app-primary: mat-palette($mat-deep-purple);
-$app-primary: #23ACDC;
+// $app-primary: #23ACDC;
 
 $displayFont: Montserrat;
 
 // #DC5323
 
-$app-accent: mat-palette($mat-amber, A200, A100, A400);
-$theme: mat-light-theme((
-  color: (
-    primary: $app-primary,
-    accent: $app-accent,
-  )
-));
-$color: mat-get-color-config($theme);
+// $app-accent: mat-palette($mat-amber, A200, A100, A400);
+// $theme: mat-light-theme((
+//   color: (
+//     primary: $app-primary,
+//     accent: $app-accent,
+//   )
+// ));
+// $color: mat-get-color-config($theme);
 
 // $primary: map-get($color, primary);
 $primary: #009dd7;
 
-$accent: map-get($color, accent);
+// $accent: map-get($color, accent);
 
 // Muita värejä
 $hoverBG:  #f2f2f2;
 $errorFG: white;
 $errorBG: #B00020;
 
-$header-height: 64px;
-$footer-height: 182px;
+// $header-height: 64px;
+// $footer-height: 182px;
 
 $right-padding: 40px;
 
