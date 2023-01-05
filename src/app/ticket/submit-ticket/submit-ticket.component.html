@@ -16,18 +16,22 @@
 
       <mat-form-field id="messageTitleField" appearance="fill">
         <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
-        <input
-          id="titleText"
-          name="titleText"
+        <textarea
           [(ngModel)]="titleText"
+          #autosize="cdkTextareaAutosize"
+          autocomplete="off"
+          cdkAutosizeMaxRows="3"
+          cdkAutosizeMinRows="1"
+          cdkTextareaAutosize
           matInput
+          name="titleText"
           placeholder="Otsikko"
           required
-          autocomplete="off"
-          >
+          contenteditable
+          ></textarea>
       </mat-form-field>
 
-      <div class="spacer"></div>
+      <!-- <div class="spacer"></div> -->
       <div class="sender-info">
         <span class="theme-profile-name">{{ userName }}</span>
         <div class="theme-label">
@@ -41,7 +45,7 @@
 
     </div>
 
-    <div id="shortFieldsDiv" >
+    <section id="shortFieldsDiv" >
 
       <mat-form-field class="additional-field" appearance="fill" *ngIf="!isFaq">
         <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
@@ -67,7 +71,7 @@
       </mat-form-field>
       <div class="characters-label"><span class="theme-label">{{problemText.length}} / 50</span></div>
 
-    </div>
+    </section>
 
     <!-- <mat-card-title i18n="@@Viesti">Viesti</mat-card-title> -->
     <app-editor [(editorContent)]="message"></app-editor>

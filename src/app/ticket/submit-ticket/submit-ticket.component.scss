@@ -1,69 +1,78 @@
 @import "./variables.scss";
 @import "./styles.scss";
 
-.submit-ticket {
-  // margin: auto;
-  padding-right: $right-padding;
+form {
+  margin-top: 30px;
 }
 
-  form {
-    margin-top: 30px;
+mat-form-field {
+  min-width: 21em;
+}
+
+.ticket-header {
+  align-items: flex-start;
+}
+
+#messageTitleField {
+  // margin-bottom: 5px;
+  flex-grow: 4;
+  .mat-mdc-input-element {
+
+    font-family: $displayFont;
+    font-size: calc(32px * $scale-factor);
+    font-weight: 900;
+    line-height: 1.2;
   }
+}
 
-  mat-form-field {
-    min-width: 21em;
+.sender-info {
+  margin-top: 22px;
+}
+
+#shortFieldsDiv {
+  width: 21em;
+  .additional-field {
+    margin-bottom: -20px;
   }
-
-    #messageTitleField {
-      // margin-bottom: 5px;
-      #titleText {
-        font-family: $displayFont;
-        font-size: 30px;
-        font-weight: 900;
-        // font-size: calc(32px * 0.8);
-        // font-weight: 900;
-      }
-    }
-
-    #shortFieldsDiv {
-      width: 21em;
-
-    .additional-field {
-      margin-bottom: -20px;
-    }
-
-    .characters-label {
-      text-align: right;
-      margin-bottom: 5px;
-    }
+  .characters-label {
+    text-align: right;
+    margin-bottom: 5px;
   }
+}
 
-  mat-card-actions {
-    margin-bottom: 1em;
-    margin-right: 0.5em;
-    button {
-      color: white;
-      min-width: 10.5em;
-      margin-top: 15px;
-      margin-right: -8px;
-    }
+#ticketActionsWrapper {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  mat-checkbox {
+    margin-top: -15px;
+    margin-left: -10px;
   }
+}
 
-  #ticketActionsWrapper {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    mat-checkbox {
-      margin-top: -15px;
-      margin-left: -10px;
-    }
+mat-card-actions {
+  margin-bottom: 1em;
+  margin-right: 0.5em;
+  button {
+    color: white;
+    min-width: 10.5em;
+    margin-top: 15px;
+    margin-right: -8px;
   }
+}
 
-  #titleLabel {
-    margin-left: 0;
-  }
+#titleLabel {
+  margin-left: 0;
+}
 
-  .spacer {
-    display: block;
-    flex: 1 1 auto;
+.spacer {
+  display: block;
+  flex: 1 1 auto;
+}
+
+@media (min-width: $small) {
+  .submit-ticket {
+    // margin: auto;
+    padding-right: $right-padding;
   }
+}
