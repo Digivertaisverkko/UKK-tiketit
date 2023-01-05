@@ -1,3 +1,5 @@
+@import '/variables.scss';
+
 // .login-page {
     // border: {
   //     style: solid;
@@ -20,36 +22,27 @@
   // }
   /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+
   #login {
-    h1 {
-      margin-top: 3.5rem;
-      // border: dotted red 1px;
-      margin-bottom: 0;
-    }
+
     text-align: center;
     // flex-grow: 1;
-    /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-
     // height: 70vh;
     // max-width: 800px;
     // min-width: 320px;
     // width: 30%;
     #content {
-      // max-width: 400px;
-      // border-color: gray;
-      // border-width: 1px;
-      // border-style: dotted;;
-
-      max-width: 460px;
+      // border-color: gray dotted 1px;
+      max-width: 27em;
       margin-left: auto;
       margin-right: auto;
       mat-form-field {
-        margin-bottom: 8px;
+        margin-bottom: 0;
       }
     }
     button {
       // display: block;
-      margin: 0 auto 22px auto;
+      margin: 0 auto 14px auto;
       width: 80%;
     }
     #loginButton {
@@ -59,32 +52,18 @@
       color: black;
     }
   }
-  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-#login.is-phone-portrait {
-    // margin-top: 0;
-    // margin-bottom: 0;
-    width: 94%;
-  }
-// }
 
-// .custom-error {
-//   display: block;
-//   color: #f44336;
-//   line-height: 1.125;
-//   font: {
-//     size: 75%;
-//     weight: 400;
-//   }
-// }
-
-/*   TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 mat-form-field {
   width: 80%;
   display: block;
   margin: auto;
 }
 
-/*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-// mat-card-content {
-//   margin-top: 20px;
-// }
+@media screen and (max-width: $XSmall) {
+  #login {
+    width: 100%;
+    }
+  // mat-form-field {
+  //   width: 95%;
+  // }
+  }

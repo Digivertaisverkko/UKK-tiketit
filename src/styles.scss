@@ -154,30 +154,33 @@ main {
 
 // Käytössä kirjautumissivulla.
 .theme-main-headline {
-  display: inline-block;
+  display: block;
   font-family: $displayFont;
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
   position: relative;
-  margin-left: auto;
-  margin-right: auto;
-  // margin: 70px auto 0 auto;
+  margin: 0.8em auto 0 auto;
   text-align: center;
   z-index: 0;
+  span {
+    width: 100%;
+    position: relative;
+  }
 }
 
 // Viiva otsikon alle.
-.theme-main-headline::after {
+.theme-main-headline span:after {
   //  margin-left: auto;
   //  margin-right: auto;
   background: mat.get-color-from-palette($custom-accent-palette, 700);
   content: "";
-  display: block;
+  // display: block;
   height: 3px;
   // margin-left: auto;
   // margin-right: auto;
-  position: relative;
-  top: -14px;
+  position: absolute;
+  // top: -11px;
+  bottom: 4px;
   left: -6%;
   width: 112%;
   // width: 630px;
@@ -196,16 +199,14 @@ main {
   // border-style: dotted;
   // border-color:#7dceeb;
   overflow: hidden;
+  // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
+  // alla olevan viivan pituuden määrittelyyn.
+  span {
+    width: 100%;
+    position: relative;
+  }
 }
 
-// H1 -tagien ja otsikon tekstin välinen elementti. Tarvitaan pituuden mukaan muuttuva
-// inline-elementti alla olevan otsikon alla olevan viivan pituuden määrittelyyn.
-.theme-h1 span {
-  width: 100%;
-  position: relative;
-  // border-style: dotted;
-  // border-color: green;
-}
 
 // Otsikon viimeisen rivin alla oleva viiva.
 .theme-h1 span:after {
@@ -235,7 +236,8 @@ main {
 }
 
 @media (max-width: $XSmall) {
-  .theme-h1 {
+
+  .theme-main-headline, .theme-h1 {
     font-size: calc(40px * $scale-factor);
     line-height: 1.1;
   }

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 // import { ForwardRefHandling } from '@angular/compiler';
@@ -15,7 +14,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public courseID: number = 1;
   public email: string = '';
   public isEmailValid: boolean = false;
-  public isPhonePortrait = false;
   private loginID: string = '';
   public password: string = '';
   public readonly passwordMinLength: number = 8;
@@ -30,7 +28,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private responsive: BreakpointObserver,
     private router: Router
   ) {
     this.messageSubscription = this.authService
@@ -53,13 +50,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      if (result.matches) {
-        this.isPhonePortrait = true;
-      } else {
-        this.isPhonePortrait = false;
-      }
-    });
     this.setLoginID();
   }
 

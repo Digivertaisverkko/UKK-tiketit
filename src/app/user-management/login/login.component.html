@@ -1,9 +1,8 @@
 <!-- <div class="login-page"> -->
-  <div id="login" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }">
+  <h1 class="theme-main-headline"><span>DVV-tikettijärjestelmä</span></h1>
+  <div id="login">
     <!-- <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" [(selectedIndex)]="tabIndex"> -->
       <!-- <mat-tab i18n-label="@@Kirjaudu" label="Kirjaudu"> -->
-
-          <h1 class="theme-main-headline">DVV-tikettijärjestelmä</h1>
           <div id="content">
 
           <h2 class="theme-h2" i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</h2>
@@ -35,7 +34,25 @@
                 Vähintään {{ passwordMinLength }} pitkä salasana tarvitaan.
               </mat-error>
               <!-- <mat-icon matSuffix>lock</mat-icon> -->
+
             </mat-form-field>
+
+            <!-- <div class="line-container">
+              <mat-divider></mat-divider>
+              <div class="mat-typography" i18n="@@tai">tai</div>
+              <mat-divider></mat-divider>
+            </div>
+
+            <button
+              mat-raised-button
+              (click)="loginWithoutAuth()"
+              class="login-button"
+              style="color: gray"
+              i18n="@@Sisään kirjautumatta"
+            >
+              Sisään kirjautumatta (!)
+            </button> -->
+
 
             <!-- <p>{{isLoginRemembered}}</p> -->
             <!-- <mat-checkbox [(ngModel)]="isLoginRemembered" name="checkbox" i18n="@@Muista minut" >Muista minut</mat-checkbox> -->
@@ -70,21 +87,6 @@
               Kirjautumisongelmia?
             </button>
 
-            <!-- <div class="line-container">
-              <mat-divider></mat-divider>
-              <div class="mat-typography" i18n="@@tai">tai</div>
-              <mat-divider></mat-divider>
-            </div>
-
-            <button
-              mat-raised-button
-              (click)="loginWithoutAuth()"
-              class="login-button"
-              style="color: gray"
-              i18n="@@Sisään kirjautumatta"
-            >
-              Sisään kirjautumatta (!)
-            </button> -->
           </form>
         </div>
 
