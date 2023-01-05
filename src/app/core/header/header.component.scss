@@ -1,7 +1,33 @@
 @import '/variables.scss';
 
-mat-toolbar {
-  height: 100px;
+@mixin height-dependant($header-height) {
+
+  mat-toolbar {
+    height: $header-height;
+  }
+
+  $icon-size: calc($header-height * 0.8);
+
+  #account-icon-button {
+    // border: solid red 1px;
+    align-items: center;
+    font-size: $icon-size;
+    height: $icon-size;
+    margin-bottom: auto;
+    margin-top: auto;
+    position: relative;
+    width: $icon-size;
+
+    mat-icon {
+      // border: solid green 1px;
+      font-size: $icon-size;
+      height: auto;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: auto;
+    }
+  }
 }
 
 #projectLogo {
@@ -100,14 +126,10 @@ $icon-size: 80px;
   background-image: url(../../../assets/flag-icons/gb.svg);
 }
 
+@media screen and (min-width: $XSmall) {
+  @include height-dependant($header-height: 100px);
+}
 
-@media (max-width: $XSmall) {
-  #account-icon-button {
-    height: 60px;
-    width: 60px;
-    font-size: 15px;
-    mat-icon {
-      font-size: 65px;
-    }
-  }
+@media screen and (max-width: $XSmall) {
+  @include height-dependant($header-height: 80px);
 }
