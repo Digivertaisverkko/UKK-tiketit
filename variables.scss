@@ -1,5 +1,7 @@
 @import '@angular/material/theming';
 
+// Täällä on variablet, jotka on tarkoitettu importoitavaksi ja käytettäväksi näkymien tyyleissä.
+
 // $app-primary: mat-palette($mat-deep-purple);
 // $app-primary: #23ACDC;
 
@@ -34,6 +36,4 @@ $right-padding: 40px;
 
 // Breakpoints. Material Designista.
 
-$XSmall: 600px;
-$Tablet: (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait),
-  (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape);
+$XSmall: '600px';

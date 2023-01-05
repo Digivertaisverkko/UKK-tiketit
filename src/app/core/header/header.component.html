@@ -22,7 +22,8 @@
 
   <div id="userInfo">
 
-    <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }" *ngIf="userName.length > 0"
+    <div id="userName" *ngIf="userName.length > 0"
+
       class="theme-header-text">
 
       <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"

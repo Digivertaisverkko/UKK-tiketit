@@ -234,6 +234,30 @@ main {
   font-weight: 500;
 }
 
+@media (max-width: $XSmall) {
+  .theme-h1 {
+    font-size: calc(40px * $scale-factor);
+    line-height: 1.1;
+  }
+
+  .theme-h2 {
+    font-size: calc(25px * $scale-factor);
+    line-height: 1;
+  }
+
+  .theme-profile-name {
+    font-size: 16px;
+  }
+
+  .theme-header-text {
+    font-size: 25px * $scale-factor;
+  }
+
+  .theme-header-text-small {
+    font-size: 15px;
+  }
+}
+
 // @include angular-material-theme($custom-primary);
 
 // html {
