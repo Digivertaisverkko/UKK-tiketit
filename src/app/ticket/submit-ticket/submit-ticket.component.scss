@@ -75,4 +75,11 @@ mat-card-actions {
     // margin: auto;
     padding-right: $right-padding;
   }
+
+}
+
+@media (max-width: $small) {
+  .sender-info, .mat-mdc-card-avatar {
+    display: none;
+  }
 }
