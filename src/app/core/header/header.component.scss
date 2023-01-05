@@ -80,29 +80,6 @@
   font-weight: 500;
 }
 
-$icon-size: 80px;
-
-#account-icon-button {
-  // border: solid red 1px;
-  align-items: center;
-  font-size: $icon-size;
-  height: $icon-size;
-  margin-bottom: auto;
-  margin-top: auto;
-  position: relative;
-  width: $icon-size;
-
-  mat-icon {
-    // border: solid green 1px;
-    font-size: $icon-size;
-    height: auto;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: auto;
-  }
-}
-
 .flag {
   background-size: contain;
   background-position: 50%;
