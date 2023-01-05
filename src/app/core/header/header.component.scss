@@ -1,3 +1,4 @@
+@import '/variables.scss';
 
 mat-toolbar {
   height: 100px;
@@ -53,29 +54,26 @@ mat-toolbar {
   font-weight: 500;
 }
 
+$icon-size: 80px;
+
 #account-icon-button {
-  height: 70px;
-  width: 70px;
-  // height: 70px;
-  // width: 70px;
-  // width: 110px;
-  font-size: 1.9em;
-  margin-top: auto;
+  // border: solid red 1px;
+  align-items: center;
+  font-size: $icon-size;
+  height: $icon-size;
   margin-bottom: auto;
-  margin-right: 0px;
-// border: solid red 1px;
+  margin-top: auto;
+  position: relative;
+  width: $icon-size;
 
   mat-icon {
     // border: solid green 1px;
-    margin-left: -18px;
-    margin-top: -15px;
-    font-size: 80px;
-    width: auto;
+    font-size: $icon-size;
     height: auto;
-    // width: 130px;
-    // height: 130px;
-    // width: 165px;
-    // height: 165px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: auto;
   }
 }
 
@@ -100,4 +98,16 @@ mat-toolbar {
 
 .flag-en {
   background-image: url(../../../assets/flag-icons/gb.svg);
+}
+
+
+@media (max-width: $XSmall) {
+  #account-icon-button {
+    height: 60px;
+    width: 60px;
+    font-size: 15px;
+    mat-icon {
+      font-size: 65px;
+    }
+  }
 }
