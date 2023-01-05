@@ -1,6 +1,6 @@
-<div class="submit-ticket">
+<h1 class="theme-h1" *ngIf="courseName.length > 0"><span>{{courseName}}</span></h1>
 
-  <h1 class="theme-h1" *ngIf="courseName.length > 0"><span>{{courseName}}</span></h1>
+<div class="submit-ticket">
 
   <!-- <mat-card-header>
     <mat-card-title i18n="@@Uusi kysymys">Uusi kysymys</mat-card-title>
@@ -38,6 +38,7 @@
         </div>
       </div>
       <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+
     </div>
 
     <div id="shortFieldsDiv" >
