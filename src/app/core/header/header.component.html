@@ -6,14 +6,17 @@
     </button> -->
 
   <!-- <span id="headerTitle" (click)="goToFrontPage()" class="mat-headline-1"
-    [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
+    >
     {{productName}}
   </span> -->
 
-  <button id="logo-button" matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
-    [disabled]="!isUserLoggedIn$">
-    <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
-  </button>
+  <div id="logo">
+    <button matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
+      [disabled]="!isUserLoggedIn$"
+      [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
+      <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
+    </button>
+  </div>
 
   <span class="spacer"></span>
 

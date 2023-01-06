@@ -4,6 +4,7 @@
 
   mat-toolbar {
     height: $header-height;
+    padding-left: 1rem;
   }
 
   $icon-size: calc($header-height * 0.8);
@@ -30,22 +31,22 @@
   }
 }
 
-#logo-button {
-  // background: no-repeat 50% contain;
-  // position: relative;
-  // display: inline-block;
-  // width: 1.33333333em;
-  border-style: none;
-  // cursor: pointer;
-  height: 75%;
-  // line-height: 1em;
-  margin-left: 0.5em;
-  // background-image: url(../../../assets/logos/dvv-blue.svg);
-  img {
-    max-height: 100%;
-  }
-  &:hover {
-    filter: brightness(97%);
+#logo {
+  height: 100%;
+  button {
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    // background: no-repeat 50% contain;
+    border-style: none;
+    height: 80%;
+    &:hover {
+      filter: brightness(97%);
+    }
+    img {
+      height: 100%;
+    }
   }
 }
 
