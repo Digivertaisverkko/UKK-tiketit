@@ -10,14 +10,14 @@
     {{productName}}
   </span> -->
 
-  <div matRipple id="projectLogo" [matRippleUnbounded]="true" [matRippleRadius]="40">
-    <img src="../../../assets/logos/dvv-white.svg"  (click)="goToFrontPage()"
-    [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }" alt="">
-  </div>
+  <button id="logo-button" matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
+    [disabled]="!isUserLoggedIn$">
+    <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
+  </button>
 
   <span class="spacer"></span>
 
-  <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä. -->
+  <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä, jos tulee tarpeen. -->
   <ng-content></ng-content>
 
   <section id="userInfo">
@@ -53,6 +53,5 @@
 </mat-toolbar>
 
 <mat-menu #accountMenu="matMenu">
-
   <button mat-menu-item (click)="logOut()" i18n="@@Kirjaudu_ulos">Kirjaudu ulos</button>
-  </mat-menu>
+</mat-menu>
