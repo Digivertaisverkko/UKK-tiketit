@@ -1,4 +1,4 @@
-@import '/variables.scss';
+@import '/src/variables.scss';
 
 section, app-error-card {
   margin-left: -15px;
@@ -23,41 +23,63 @@ h2 {
   min-height: 30px;
 }
 
+// -------- Table -----------
+
 table {
     width: 100%;
-  td {
-    cursor: pointer;
-    line-height: 1.5;
-  }
-  .mat-mdc-header-row {
-    background-color: #D3D3D3;
-  }
-  .mat-mdc-row:hover { background-color: $hoverBG !important; }
-  // td.mat-mdc-cell  {
-  //   padding-left: 1em;
-  //   padding-right: 1em;
-  //   text-align: left;
-  // }
-  // .mat-mdc-header-cell {
-  //   padding-left: 1em;
-  //   padding-right: 1em;
-  //   text-align: left;
-  // }
-
-  .mat-column-aloittajanNimi,
-  .mat-column-aikaleima,
-  .mat-column-tyyppi {
-    text-align: right;
-  }
-
-  .mat-column-aloittajanNimi {
-    min-width: 12em;
-  }
-
-  .td-align-right {
-    padding-right: 34px;
-  }
 }
+
+td {
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.mat-mdc-header-row {
+  background-color: #D3D3D3;
+}
+
+.mat-mdc-row:hover { background-color: $hoverBG !important; }
+// td.mat-mdc-cell  {
+//   padding-left: 1em;
+//   padding-right: 1em;
+//   text-align: left;
+// }
+// .mat-mdc-header-cell {
+//   padding-left: 1em;
+//   padding-right: 1em;
+//   text-align: left;
+// }
+
+.mat-column-aloittajanNimi,
+.mat-column-aikaleima,
+.mat-column-tyyppi {
+  text-align: right;
+}
+
+.mat-column-aloittajanNimi {
+  min-width: 12em;
+}
+
+.td-align-right {
+  padding-right: 34px;
+}
+
+// Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
+
+:host ::ng-deep .align-right > .mat-sort-header-container {
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .mat-sort-header-content {
+  color: #595959;
+}
+
+:host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
+  color: #5379FC;
+}
+
+// ------------------------
+
 
 // th.mat-column-aloittajanNimi {
 //   text-align: right;
@@ -90,20 +112,6 @@ table {
   }
 }
 
-// Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
-
-:host ::ng-deep .align-right > .mat-sort-header-container {
-  justify-content: flex-end;
-}
-
-:host ::ng-deep .mat-sort-header-content {
-  color: #595959;
-}
-
-:host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
-  color: #5379FC;
-}
-
 [hidden] { display: none !important; }
 
 mat-card {
@@ -113,6 +121,7 @@ mat-card {
 mat-card-actions {
   padding-right: 0;
   button {
+    // FIXME: Ei ota color:a teeman contrast -arvosta.
     color: white;
     margin-top: 1em;
     margin-right: 0;
@@ -133,7 +142,10 @@ mat-card-actions {
   margin-top: 30px;
 }
 
-.noData-td { padding-top: 1em; padding-bottom: 1em; }
+.noData-td {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
 
 .noItemsMessage {
     text-align: center;
