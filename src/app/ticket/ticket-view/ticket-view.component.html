@@ -28,10 +28,6 @@
     <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
   </div>
 
-  <!-- <mat-card-header> -->
-
-    <!-- <mat-card-subtitle> -->
-
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
         <p>{{ticket.kentat[0].arvo }}</p>
@@ -50,9 +46,6 @@
       <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
       🞄
       <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span> -->
-    <!-- </mat-card-subtitle> -->
-
-  <!-- </mat-card-header> -->
 
   <!-- <mat-card-content>
 
@@ -77,15 +70,7 @@
 
 <hr class="theme-divider">
 
-<!-- <mat-card appearance="outlined" class="ticket-view-card"> -->
-
   <h2 class="theme-h2" id="discussion-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
-
-  <!-- <mat-card-header *ngIf="ticket.tila > 0">
-    <mat-card-title i18n="@@Kommentit">Kommentit</mat-card-title>
-  </mat-card-header> -->
-
-  <!-- <mat-card-content> -->
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 
@@ -114,48 +99,39 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- <mat-card-title i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-card-title> -->
-    <div class="vertical-spacer"></div>
+  <div class="vertical-spacer"></div>
 
-    <app-editor [(editorContent)]="commentText"></app-editor>
+  <app-editor [(editorContent)]="commentText"></app-editor>
 
   <app-error-card
-  *ngIf="errorMessage.length > 0"
-  i18n-title="@@Virhe"
-  title="Virhe"
-  message="{{ errorMessage }}"
-  [styles]="{ margin: '1em 0' }"
->
-</app-error-card>
+    *ngIf="errorMessage.length > 0"
+    i18n-title="@@Virhe"
+    title="Virhe"
+    message="{{ errorMessage }}"
+    [styles]="{ margin: '1em 0' }"
+    >
+  </app-error-card>
 
-<!-- <p>{{newCommentState}}</p> -->
+  <div class="actions-wrapper">
 
-<div id="ticketActionsWrapper">
+    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
+      <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
+      <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
+      <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
+    </mat-radio-group>
 
-<mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
-  <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
-  <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
-  <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
-</mat-radio-group>
+    <div class="spacer"></div>
 
-<div class="spacer"></div>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="commentText.length < 1"
+      *ngIf="ticket.tila > 0"
+      (click)="sendComment()"
+      i18n="@@Lähetä">
+      Lähetä
+    </button>
 
-  <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
-  <button
-    id="sendButton"
-    mat-raised-button
-    color="primary"
-    [disabled]="commentText.length < 1"
-    *ngIf="ticket.tila > 0"
-    (click)="sendComment()"
-    i18n="@@Lähetä">
-    Lähetä
-  </button>
+  </div>
 
 </div>
-
-</div>
-
-<!-- </mat-card-content> -->
-
-<!-- </mat-card> -->

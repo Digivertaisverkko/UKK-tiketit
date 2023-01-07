@@ -1,48 +1,42 @@
-@import '/src/variables.scss';
+@import "/src/variables.scss";
 
-  #discussion-header {
-    margin-bottom: 0.5em;
-  }
+#discussion-header {
+  margin-bottom: 0.5em;
+}
 
-  mat-card {
-    margin: 0 auto 12px;
-    mat-card-subtitle {
-      margin-top: 3px;
-    }
-    .ticket-state {
-      color: $primary;
-      margin-right: 1em;
-    }
+mat-card {
+  margin: 0 auto 12px;
+  mat-card-subtitle {
+    margin-top: 3px;
   }
+  .ticket-state {
+    color: $primary;
+    margin-right: 1em;
+  }
+}
 
-  .vertical-spacer {
-    height: 18px;
-  }
+.vertical-spacer {
+  height: 18px;
+}
 
-  #ticketActionsWrapper {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    mat-radio-button {
-      margin: 3px 28px 3px 0px;
-    }
+.actions-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  margin-top: 10px;
+  mat-radio-button {
+    margin: 3px 28px 3px 0px;
   }
+}
 
-  .mdc-form-field>label {
-    padding-left: 0;
-  }
+.mdc-form-field > label {
+  padding-left: 0;
+}
 
-  #sendButton {
-    margin-top: 10px;
-    padding-left: 3em;
-    padding-right: 3em;
-    // min-width: 8em;
-  }
-
-  .spacer {
-    display: block;
-    flex: 1 1 auto;
-  }
+.spacer {
+  display: block;
+  flex: 1 1 auto;
+}
 
 ::ng-deep .mat-mdc-card-content:last-child {
   padding-bottom: 0 !important;

@@ -8,7 +8,8 @@
 
   <app-to-beginning-button></app-to-beginning-button>
 
-  <div *ngIf="ticket.viesti !== undefined">
+  <section *ngIf="ticket.viesti !== undefined">
+
     <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
 
    <!-- ---- Kysymys ---- -->
@@ -40,7 +41,8 @@
         <app-message class="theme-p" [messageHtml]=comment.viesti></app-message>
       <!-- </mat-card-content> -->
     </div>
-  </div>
+
+  </section>
 
   <mat-card-content *ngIf="errorMessage.length > 0">
     <app-error-card
