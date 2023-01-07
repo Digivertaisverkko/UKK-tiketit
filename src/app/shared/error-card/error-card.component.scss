@@ -1,9 +1,7 @@
-@import '/src/variables.scss';
-
 mat-card {
   // background-color: #ffe6e6;
-  color: $errorFG;
-  background-color: $errorBG;
+  color: var(--contrast);
+  background-color: var(--error);
   min-width: unset;
   width: unset;
   margin-bottom: 1em;

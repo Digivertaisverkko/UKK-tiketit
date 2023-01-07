@@ -38,7 +38,9 @@ td {
   background-color: #D3D3D3;
 }
 
-.mat-mdc-row:hover { background-color: $hoverBG !important; }
+.mat-mdc-row:hover {
+  background-color: #f2f2f2 !important;
+}
 // td.mat-mdc-cell  {
 //   padding-left: 1em;
 //   padding-right: 1em;
