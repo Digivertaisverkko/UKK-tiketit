@@ -168,20 +168,19 @@ main {
   span {
     width: 100%;
     position: relative;
+    // Otsikon viimeisen rivin alla oleva viiva.
+    &:after {
+      background: mat.get-color-from-palette($custom-accent-palette, 700);
+      bottom: 4px;
+      content: "";
+      height: 3px;
+      left: 0;
+      padding-right: 5em;
+      position: absolute;
+      width: 100%;
+      z-index: -1;
+    }
   }
-}
-
-// Otsikon viimeisen rivin alla oleva viiva.
-.theme-h1 span:after {
-  content: "";
-  background: mat.get-color-from-palette($custom-accent-palette, 700);
-  bottom: 4px;
-  height: 3px;
-  left: 0;
-  padding-right: 5em;
-  position: absolute;
-  width: 100%;
-  z-index: -1;
 }
 
 .theme-h2 {
@@ -239,6 +238,12 @@ main {
   text-transform: uppercase;
   font-weight: 600;
 }
+
+// FIXME: Miksei toimi teeman värimäärittelyistä?
+.mat-primary {
+  color: white !important;
+}
+
 
 .theme-label {
   // color: rgba(0, 0, 0, 0.6);
