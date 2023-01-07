@@ -1,5 +1,5 @@
 @import "/src/variables.scss";
-@import "/src/styles.scss";
+// @import "/src/styles.scss";
 
 form {
   margin-top: 20px;
@@ -49,7 +49,6 @@ mat-card-actions {
   margin-bottom: 1em;
   margin-right: 0.5em;
   button {
-    color: white;
     min-width: 10.5em;
     margin-top: 15px;
     margin-right: -8px;
@@ -62,15 +61,13 @@ mat-card-actions {
 }
 
 @media (min-width: $XSmall) {
+
+  .sender-info, .mat-mdc-card-avatar {
+    display: none;
+  }
+
   .submit-ticket {
     // margin: auto;
     padding-right: $right-padding;
-  }
-
-}
-
-@media (max-width: $XSmall) {
-  .sender-info, .mat-mdc-card-avatar {
-    display: none;
   }
 }
