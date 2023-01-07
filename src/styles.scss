@@ -65,6 +65,13 @@ $custom-accent-palette: (
 $custom-primary: mat.define-palette($custom-primary-palette, 500);
 $custom-accent: mat.define-palette($custom-accent-palette, 700);
 
+// Template .scss voivat käyttää tätä ilman importtia. Pitää olla väriarvo eikä muuttuja.
+:root {
+  --primary: #009dd7;
+  --accent: #dc5423;
+  --contrast: white;
+}
+
 // $custom-primary: mat-palette($custom-primary-palette);
 
 // $custom-accent: mat-palette($mat-pink, 100, 500, A100);
