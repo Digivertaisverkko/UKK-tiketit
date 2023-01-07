@@ -63,7 +63,7 @@ mat-card-actions {
   }
 }
 
-@media (max-width: $XSmall) {
+@media (max-width: 800px) {
   .sender-info, .mat-mdc-card-avatar {
     display: none;
   }

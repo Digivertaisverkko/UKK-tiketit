@@ -2,6 +2,13 @@
   margin-bottom: 0.5em;
 }
 
+.ticket-header {
+  // flex-wrap: wrap;
+  h2 {
+    max-width: 80%;
+  }
+}
+
 mat-card {
   margin: 0 auto 12px;
   mat-card-subtitle {

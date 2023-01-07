@@ -11,10 +11,12 @@
     <app-to-beginning-button></app-to-beginning-button>
 
   <div class="ticket-header">
+
     <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
     <div class="spacer"></div>
     <div class="sender-info">
       <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
+
       <div class="theme-label">
         <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
         <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
@@ -23,9 +25,12 @@
         </ng-template>
         <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
       </div>
+
         <!-- <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}> -->
     </div>
+
     <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+
   </div>
 
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
