@@ -1,5 +1,4 @@
 @import "/src/variables.scss";
-// @import "/src/styles.scss";
 
 form {
   margin-top: 20px;
@@ -9,33 +8,32 @@ mat-form-field {
   min-width: 21em;
 }
 
-#messageTitleField {
-  // margin-bottom: 5px;
-  flex-grow: 4;
-  .mat-mdc-input-element {
-    font-family: $displayFont;
-    font-size: calc(32px * $scale-factor);
-    font-weight: 900;
-    line-height: 1.2;
-  }
+.ticket-header {
+  // align-items: flex-start;
+}
+
+.message-title {
+  // flex-grow: 4;
+  // .mat-mdc-input-element {
+  // }
 }
 
 .sender-info {
   margin-top: 22px;
 }
 
-#shortFieldsDiv {
+.short-field-wrapper {
   width: 21em;
-  .additional-field {
-    margin-bottom: -20px;
-  }
-  .characters-label {
-    text-align: right;
-    margin-bottom: 5px;
-  }
+}
+.additional-field {
+  margin-bottom: -20px;
+}
+.characters-label {
+  text-align: right;
+  margin-bottom: 5px;
 }
 
-#ticketActionsWrapper {
+.actions-wrapper {
   display: flex;
   align-items: center;
   padding: 8px 0;
@@ -43,6 +41,11 @@ mat-form-field {
     margin-top: -15px;
     margin-left: -10px;
   }
+}
+
+.spacer {
+  display: block;
+  flex: 1 0 auto;
 }
 
 mat-card-actions {
@@ -54,14 +57,8 @@ mat-card-actions {
   }
 }
 
-.spacer {
-  display: block;
-  flex: 1 1 auto;
-}
-
 @media (min-width: $XSmall) {
   .submit-ticket {
-    // margin: auto;
     padding-right: $right-padding;
   }
 }
@@ -69,5 +66,8 @@ mat-card-actions {
 @media (max-width: $XSmall) {
   .sender-info, .mat-mdc-card-avatar {
     display: none;
+  }
+  mat-form-field {
+    min-width: 95%;
   }
 }

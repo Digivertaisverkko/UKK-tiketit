@@ -2,36 +2,32 @@
 
 <div class="submit-ticket">
 
-  <!-- <mat-card-header>
-    <mat-card-title i18n="@@Uusi kysymys">Uusi kysymys</mat-card-title>
-  </mat-card-header> -->
-
   <app-to-beginning-button></app-to-beginning-button>
 
   <form action="" #submitForm="ngForm">
 
-    <!-- <mat-card-content> -->
-
     <div class="ticket-header">
 
-      <mat-form-field id="messageTitleField" appearance="fill">
-        <!-- <mat-label i18n="@@Otsikko" class="theme-h2" id="titleLabel">Otsikko</mat-label> -->
+      <mat-form-field class="message-title" appearance="fill" class="theme-h2">
+
         <textarea
           [(ngModel)]="titleText"
+          class="theme-h2"
           #autosize="cdkTextareaAutosize"
           autocomplete="off"
           cdkAutosizeMaxRows="3"
           cdkAutosizeMinRows="1"
           cdkTextareaAutosize
+          contenteditable
           matInput
           name="titleText"
           placeholder="Otsikko"
           required
-          contenteditable
           ></textarea>
       </mat-form-field>
 
-      <!-- <div class="spacer"></div> -->
+      <div class="spacer"></div>
+
       <div class="sender-info">
         <span class="theme-profile-name">{{ userName }}</span>
         <div class="theme-label">
@@ -45,7 +41,7 @@
 
     </div>
 
-    <section id="shortFieldsDiv" >
+    <section class="short-field-wrapper">
 
       <mat-form-field class="additional-field" appearance="fill" *ngIf="!isFaq">
         <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
@@ -73,7 +69,6 @@
 
     </section>
 
-    <!-- <mat-card-title i18n="@@Viesti">Viesti</mat-card-title> -->
     <app-editor [(editorContent)]="message"></app-editor>
 
     <div *ngIf="isFaq">
@@ -81,27 +76,25 @@
       <app-editor [(editorContent)]="answer"></app-editor>
     </div>
 
-  <!-- </mat-card-content> -->
+    <div class="actions-wrapper">
 
-  <div id="ticketActionsWrapper">
+      <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
+        Usein kysytty kysymys</mat-checkbox>
 
-    <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
-      Usein kysytty kysymys</mat-checkbox>
+      <div class="spacer"></div>
 
-    <div class="spacer"></div>
+      <mat-card-actions align="end">
+        <button
+          mat-raised-button color="primary"
+          [disabled]="submitForm.invalid"
+          (click)="sendTicket()"
+          i18n="@@Lähetä">
+          Lähetä
+        </button>
+      </mat-card-actions>
 
-    <mat-card-actions align="end">
-      <button
-        mat-raised-button color="primary"
-        [disabled]="submitForm.invalid"
-        (click)="sendTicket()"
-        i18n="@@Lähetä">
-        Lähetä
-      </button>
-    </mat-card-actions>
+    </div>
 
-  </div>
-
-</form>
+  </form>
 
 </div>
