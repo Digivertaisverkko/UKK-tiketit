@@ -1,6 +1,6 @@
-<h1 class="theme-h1"><span>DVV-tikettijärjestelmä</span></h1>
+<h1 class="theme-h1 centered-h1"><span>DVV-tikettijärjestelmä</span></h1>
 
-<div id="content">
+<div class="content">
   <h2 class="theme-h2" i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</h2>
   <form action="">
     <mat-form-field>
@@ -68,7 +68,6 @@
     <button
       mat-raised-button
       [disabled]="email.length < 3 || password.length < passwordMinLength"
-      id="loginButton"
       color="primary"
       (click)="login()"
       i18n="@@Kirjaudu"
@@ -76,7 +75,7 @@
       Kirjaudu
     </button>
 
-    <button id="loginProblemsButton" mat-raised-button>
+    <button mat-raised-button>
       Kirjautumisongelmia?
     </button>
   </form>
