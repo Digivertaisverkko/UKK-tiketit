@@ -1,10 +1,8 @@
 @use "@angular/material" as mat;
-@import "./variables.scss";
+@import "/src/variables.scss";
 
 // Tarvitseeko alla olevaa johonkin?
 // @import "@angular/material/theming";
-@import url("https://fonts.googleapis.com/css?family=Montserrat:800,600,500,400");
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
 @include mat.core();
 
@@ -206,7 +204,6 @@ main {
     position: relative;
   }
 }
-
 
 // Otsikon viimeisen rivin alla oleva viiva.
 .theme-h1 span:after {
