@@ -151,41 +151,6 @@ main {
   font-size: 20px * $scale-factor;
 }
 
-// Käytössä kirjautumissivulla.
-.theme-main-headline {
-  display: block;
-  font-family: $displayFont;
-  font-size: calc(50px * $scale-factor);
-  font-weight: 900;
-  position: relative;
-  margin: 0.8em auto 0 auto;
-  text-align: center;
-  z-index: 0;
-  span {
-    width: 100%;
-    position: relative;
-  }
-}
-
-// Viiva otsikon alle.
-.theme-main-headline span:after {
-  //  margin-left: auto;
-  //  margin-right: auto;
-  background: mat.get-color-from-palette($custom-accent-palette, 700);
-  content: "";
-  // display: block;
-  height: 3px;
-  // margin-left: auto;
-  // margin-right: auto;
-  position: absolute;
-  // top: -11px;
-  bottom: 4px;
-  left: -6%;
-  width: 112%;
-  // width: 630px;
-  z-index: -1;
-}
-
 .theme-h1 {
   font-family: $displayFont;
   font-size: calc(50px * $scale-factor);

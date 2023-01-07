@@ -1,57 +1,39 @@
-@import '/src/variables.scss';
-
-// .login-page {
-    // border: {
-  //     style: solid;
-  //     color: green;
-  //     width: 2px;
-  // }
-  // flex-grow: 5;
-
-  // padding: 0;
-  // width: 100%;
-
-  // min-height: calc(100vh - 2 * 64px);
-
-  // overflow: hidden;
-
-  // background: {
-  //   position: center
-  //   repeat: no-repeat;
-  //   size: cover;
-  // }
-  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-
-  #login {
-
-    text-align: center;
-    // flex-grow: 1;
-    // height: 70vh;
-    // max-width: 800px;
-    // min-width: 320px;
-    // width: 30%;
-    #content {
-      // border-color: gray dotted 1px;
-      max-width: 27em;
-      margin-left: auto;
-      margin-right: auto;
-      mat-form-field {
-        margin-bottom: 0;
-      }
-    }
-    button {
-      // display: block;
-      margin: 0 auto 14px auto;
-      width: 80%;
-    }
-    #loginButton {
-      color: white;
-    }
-    #loginProblemsButton {
-      color: black;
-    }
+@import "/src/variables.scss";
+.theme-h1 {
+  margin: 0.8em auto 0 auto;
+  text-align: center;
+  span:after {
+    bottom: 4px;
+    left: -6%;
+    padding-right: 0;
+    width: 112%;
   }
+}
+
+#content {
+  // border-color: gray dotted 1px;
+  max-width: 27em;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  mat-form-field {
+    margin-bottom: 0;
+  }
+}
+
+button {
+  // display: block;
+  margin: 0 auto 1em auto;
+  width: 80%;
+}
+
+#loginButton {
+  color: white;
+}
+
+#loginProblemsButton {
+  color: black;
+}
 
 mat-form-field {
   width: 80%;
@@ -62,8 +44,8 @@ mat-form-field {
 @media screen and (max-width: $XSmall) {
   #login {
     width: 100%;
-    }
+  }
   // mat-form-field {
   //   width: 95%;
   // }
-  }
+}
