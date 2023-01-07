@@ -1,7 +1,6 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<div class="faq-view">
-  <!-- <mat-card appearance="outlined" class="faq-view-card"> -->
+<div class="faq-view" *ngIf="isLoaded">
 
   <h1 class="theme-h1" *ngIf="courseName.length > 0">
     <span>{{ courseName }}</span>
@@ -10,56 +9,35 @@
   <app-to-beginning-button></app-to-beginning-button>
 
   <div *ngIf="ticket.viesti !== undefined">
-    <!-- <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined"> -->
-    <!-- <mat-card-header> -->
     <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
+
+   <!-- ---- Kysymys ---- -->
 
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
-        <p>{{ticket.kentat[0].arvo }}</p>
-          <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
-            ticket.kentat[0].arvo }} </span> -->
+      <p>{{ticket.kentat[0].arvo }}</p>
+      <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
+        ticket.kentat[0].arvo }} </span> -->
     </div>
 
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
-        <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
+      <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
       <p>{{ ticket.kentat[1].arvo }}</p>
     </div>
 
-    <!-- </mat-card-header> -->
-
-    <!-- <mat-card-content> -->
-
-      <app-message id="question" class="theme-p" [messageHtml]=ticket.viesti></app-message>
-
-    <!-- <p class="message" id="question" [innerHTML]="ticket.viesti"></p> -->
-    <!-- </mat-card-content> -->
-    <!-- </mat-card> -->
-
-    <!-- <mat-card appearance="outlined" class="faq-view-card">
-            <mat-card-header>
-                <mat-card-title>Vastaus</mat-card-title>
-            </mat-card-header>
-
-            <mat-card-content class="messageContent">
-            <p class="message">{{vastaus}}</p>
-        </mat-card-content>
-        </mat-card> -->
-
-    <!-- ---- Vastaus ---- -->
+    <app-message class="theme-p" [messageHtml]=ticket.viesti></app-message>
 
     <hr class="theme-divider">
 
-    <h2 class="theme-h2" id="answer" i18n="@@Vastaus">Vastaus</h2>
+    <!-- ---- Vastaus ---- -->
 
-    <div
-      class="answer"
-      *ngFor="let comment of ticket.kommentit"
-    >
+    <h2 class="theme-h2" i18n="@@Vastaus">Vastaus</h2>
+
+    <div *ngFor="let comment of ticket.kommentit">
       <!-- <mat-card-content> -->
         <!-- <p class="message" ></p> -->
-        <app-message id="comment" class="theme-p" [messageHtml]=comment.viesti></app-message>
+        <app-message class="theme-p" [messageHtml]=comment.viesti></app-message>
       <!-- </mat-card-content> -->
     </div>
   </div>
@@ -73,4 +51,5 @@
     >
     </app-error-card>
   </mat-card-content>
+
 </div>

@@ -1,20 +1,14 @@
 .faq-view {
-    padding-right: 80px;
-    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-    mat-card {
-        margin: 0 auto 1em;
-    }
+  padding-right: 80px;
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+  margin-bottom: 0.5em;
 }
 
-#viewTitle {
-    margin-bottom: 1em;
-}
-
-#question {
+app-message {
   // margin-left: 1em;
   margin-top: 1em;
 }
 
-#answer {
-  margin-bottom: 0.5em;
+mat-card {
+  margin: 0 auto 1em;
 }
