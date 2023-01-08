@@ -4,8 +4,6 @@
 // Tarvitseeko alla olevaa johonkin?
 // @import "@angular/material/theming";
 
-@include mat.core();
-
 /* ======== Angular material custom theme ======== */
 
 // FIXME: contrast värit eivät jostain syystä toimi esim. buttoneilla, vaan on templaten tyyleissä määritelty.
@@ -87,13 +85,23 @@ $textFont: Roboto;
   --display-font: Montserrat;
 }
 
-// FIXME: Nämä fonttimäärittelyt ei jostain syystä tee mitään.
+// Material -komponentit käyttävät näitä.
+// Arvot ovat: font-size, line-height, font-weight, font-family, letter-spacing
+// subtitle-1: table header, subtitle-2: list footerissa
+
+$scale-factor: 0.8;
+
+$hl-5: calc(50px * $scale-factor);
+$hl-6: calc(35px * $scale-factor);
 
 $custom-typography-config: mat.define-typography-config(
-  $headline-3: mat.define-typography-level(35px, 35px, 700, $displayFont, normal),
-  $headline-5: mat.define-typography-level(50px, 50px, 800, $displayFont, normal),
-  $body-1: mat.define-typography-level(15px, 15px, 400, $textFont, normal),
-  $body-2: mat.define-typography-level(15px, 15px, 400, $textFont, normal),
+  $headline-5: mat.define-typography-level($hl-5, 1.2em, 900, $displayFont, normal),
+  $headline-6: mat.define-typography-level($hl-6, $hl-6, 700, $displayFont, normal),
+  $subtitle-1: mat.define-typography-level(16px, 16px, 400, $textFont, normal),
+  $subtitle-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $button: mat.define-typography-level(rem, rem, 600, $textFont, normal),
+  $body-1: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $body-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
 );
 
 $custom-theme: mat.define-light-theme(
@@ -102,9 +110,19 @@ $custom-theme: mat.define-light-theme(
       primary: $custom-primary,
       accent: $custom-accent,
     ),
-    typography: $custom-typography-config,
+    typography: $custom-typography-config
   )
 );
+
+// Tällä teemoittaa H1 ja H2.
+// @include mat.all-component-typographies($custom-typography-config);
+
+// Tämä pitää olla ohjelmassa vain yhden kerran.
+
+// Pitäisi toimia, mutta antaa errorin.
+//@include mat.core($custom-typography-config);
+
+@include mat.core();
 
 // @mixin custom-theme($theme) {
 //   $primary: map-get($theme, primary);
@@ -136,7 +154,7 @@ $scale-factor: 0.80;
 
 body {
   font-family: $textFont;
-  font-size: 15px;
+  // font-size: 15px;
   line-height: 1.45;
   margin: 0;
 }
@@ -152,19 +170,21 @@ main {
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 .theme-header-text {
   font-family: $displayFont;
-  font-size: 35px * $scale-factor;
+  font-size: calc(35px * $scale-factor);
 }
 
 .theme-header-text-small {
   font-family: $displayFont;
-  font-size: 20px * $scale-factor;
+  font-size: calc(20px * $scale-factor);
 }
 
 .theme-h1 {
   font-family: $displayFont;
+  // font-family: mat.font-family($custom-typography-config, 'headline-3');
   font-size: calc(50px * $scale-factor);
   font-weight: 900;
   line-height: 1.2;
+
   // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
   margin-bottom: 0.2em;
   position: relative;
@@ -256,9 +276,8 @@ button[mat-raised-button] {
   color: white !important;
 }
 
-
+//
 .theme-label {
-  // color: rgba(0, 0, 0, 0.6);
   color: #757575;
   font-size: 75%;
   // line-height: 0.75em;
