@@ -87,34 +87,6 @@ td {
 //   text-align: right;
 // }
 
-@media (min-width: $XSmall) {
-
-  mat-card {
-    padding-left: 2em;
-    padding-right: 2em;
-    padding-bottom: 2em;
-  }
-
-  tr > :first-child {
-    padding-left: 25px;
-  }
-
-  mat-row > :last-child {
-    padding-right: 50px;
-  }
-
-  .mdc-data-table__header-row {
-    height: 3em;
-  }
-
-  tr.mat-mdc-row > td {
-    // padding: 22px
-    padding-top: 0.6em;
-    padding-bottom: 0.6em;
-  }
-
-}
-
 [hidden] { display: none !important; }
 
 mat-card {
@@ -124,7 +96,6 @@ mat-card {
 mat-card-actions {
   padding-right: 0;
   button {
-    // FIXME: Ei ota color:a teeman contrast -arvosta.
     margin-top: 1em;
     margin-right: 0;
   }
@@ -159,3 +130,41 @@ mat-card-actions {
 .mat-mdc-form-field {
   width: 97%;
 }
+
+@media (min-width: $XSmall) {
+
+  mat-card {
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
+  }
+
+  tr > :first-child {
+    padding-left: 25px;
+  }
+
+  mat-row > :last-child {
+    padding-right: 50px;
+  }
+
+  .mdc-data-table__header-row {
+    height: 3em;
+  }
+
+  tr.mat-mdc-row > td {
+    // padding: 22px
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+  }
+
+}
+
+@media (max-width: $XSmall) {
+  main {
+    padding-right: 0;
+  }
+}
+
+// @media (max-width: $XSmall) {
+
+// }
