@@ -1,12 +1,20 @@
-#discussion-header {
-  margin-bottom: 0.5em;
-}
-
 .ticket-header {
   // flex-wrap: wrap;
   h2 {
     max-width: 80%;
   }
+}
+
+#question {
+ 
+}
+
+.vertical-spacer {
+  height: 18px;
+}
+
+#discussion-header {
+  margin-bottom: 0.5em;
 }
 
 mat-card {
@@ -18,10 +26,6 @@ mat-card {
     color: var(--primary);
     margin-right: 1em;
   }
-}
-
-.vertical-spacer {
-  height: 18px;
 }
 
 .actions-wrapper {

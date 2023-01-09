@@ -94,15 +94,15 @@ $scale-factor: 0.8;
 $hl-5: calc(50px * $scale-factor);
 $hl-6: calc(35px * $scale-factor);
 
-// headline-5 = h1, headline6 = h2
+// headline-5 = h1, headline6 = h2, subtitle1 = mm. footerin lista.
 $custom-typography-config: mat.define-typography-config(
   $headline-5: mat.define-typography-level($hl-5, 1.2em, 900, $displayFont, normal),
   $headline-6: mat.define-typography-level($hl-6, $hl-6, 700, $displayFont, normal),
-  $subtitle-1: mat.define-typography-level(16px, 16px, 400, $textFont, normal),
-  $subtitle-2: mat.define-typography-level(400, $textFont, normal),
-  $button: mat.define-typography-level(600, $textFont, normal),
-  $body-1: mat.define-typography-level(400, $textFont, normal),
-  $body-2: mat.define-typography-level(400, $textFont, normal),
+  $subtitle-1: mat.define-typography-level(rem, rem, 600, $textFont, normal),
+  $subtitle-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $button: mat.define-typography-level(rem, rem, 600, $textFont, normal),
+  $body-1: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $body-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
 );
 
 $custom-theme: mat.define-light-theme(
@@ -143,7 +143,7 @@ $custom-theme: mat.define-light-theme(
 
 // @include mat.core-theme($custom-theme);
 
-@include mat.button-theme($custom-theme);
+// @include mat.button-theme($custom-theme);
 
 // FIXME: laita tämän sijaan vain niille komponenteille, mitä käytetään.
 @include mat.all-component-themes($custom-theme);
@@ -164,7 +164,7 @@ main {
   background-color: #ffffff;
 }
 
-.theming-footer {
+.theme-footer {
   background-color: mat.get-color-from-palette($custom-primary-palette, 500);
 }
 
@@ -262,7 +262,6 @@ main {
 // }
 
 button[mat-raised-button] {
-  font-weight: 600;
   min-width: 10em;
   padding-left: 2em;
   padding-right: 2em;
@@ -283,6 +282,7 @@ button[mat-raised-button] {
 }
 
 .theme-p {
+  font-weight: 400;
   white-space: pre-wrap;
 }
 

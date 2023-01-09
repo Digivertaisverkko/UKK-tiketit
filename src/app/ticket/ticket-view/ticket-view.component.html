@@ -10,6 +10,8 @@
 
     <app-to-beginning-button></app-to-beginning-button>
 
+  <!-- ----------- Kysymys -------------------------------------- -->
+
   <div class="ticket-header">
 
     <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
@@ -73,7 +75,11 @@
 
   </section>
 
+  <!-- ----------------------------------------------------- -->
+
 <hr class="theme-divider">
+
+  <!-- ----------- Keskustelu -------------------------------------- -->
 
   <h2 class="theme-h2" id="discussion-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
 
