@@ -101,7 +101,6 @@ footer {
     mat-nav-list {
       // flex-grow: 5;
       // display: block;§
-      font-weight: 500;
       padding: 18px 0 10px 0;
       text-align: right;
       // max-width: 220px;
@@ -173,7 +172,7 @@ footer {
 }
 
 @media (max-width: 1000px) {
-  #link-list {
+  mat-nav-list {
     order: 6;
   }
 
