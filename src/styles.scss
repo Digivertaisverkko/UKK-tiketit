@@ -94,14 +94,15 @@ $scale-factor: 0.8;
 $hl-5: calc(50px * $scale-factor);
 $hl-6: calc(35px * $scale-factor);
 
+// headline-5 = h1, headline6 = h2
 $custom-typography-config: mat.define-typography-config(
   $headline-5: mat.define-typography-level($hl-5, 1.2em, 900, $displayFont, normal),
   $headline-6: mat.define-typography-level($hl-6, $hl-6, 700, $displayFont, normal),
   $subtitle-1: mat.define-typography-level(16px, 16px, 400, $textFont, normal),
-  $subtitle-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
-  $button: mat.define-typography-level(rem, rem, 600, $textFont, normal),
-  $body-1: mat.define-typography-level(rem, rem, 400, $textFont, normal),
-  $body-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $subtitle-2: mat.define-typography-level(400, $textFont, normal),
+  $button: mat.define-typography-level(600, $textFont, normal),
+  $body-1: mat.define-typography-level(400, $textFont, normal),
+  $body-2: mat.define-typography-level(400, $textFont, normal),
 );
 
 $custom-theme: mat.define-light-theme(
@@ -170,12 +171,12 @@ main {
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 .theme-header-text {
   font-family: $displayFont;
-  font-size: calc(35px * $scale-factor);
+  font-size: 1.3rem;
 }
 
 .theme-header-text-small {
   font-family: $displayFont;
-  font-size: calc(20px * $scale-factor);
+  font-size: 1rem;
 }
 
 .theme-h1 {
@@ -222,7 +223,8 @@ main {
 }
 
 .theme-profile-name {
-  font-size: 20px;
+  font-family: $textFont;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
@@ -238,16 +240,12 @@ main {
     line-height: 1;
   }
 
-  .theme-profile-name {
-    font-size: 16px;
-  }
-
   .theme-header-text {
-    font-size: 25px * $scale-factor;
+    font-size: 1.25rem;
   }
 
   .theme-header-text-small {
-    font-size: 15px;
+    font-size: 1rem;
   }
 }
 
