@@ -5,12 +5,13 @@
         <mat-icon>menu</mat-icon>
     </button> -->
 
+    <!-- [disabled]="!isUserLoggedIn$" -->
+
   <div id="logo">
-    <button matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
-      [disabled]="!isUserLoggedIn$"
+    <div matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
       [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
       <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
-    </button>
+    </div>
   </div>
 
   <span class="spacer"></span>
