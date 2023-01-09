@@ -32,14 +32,15 @@
 }
 
 #logo {
-  height: 100%;
-  button {
+  // height: 100%;
     position: relative;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
+    // top: 50%;
+    // -ms-transform: translateY(-50%);
+    // transform: translateY(-50%);
     // background: no-repeat 50% contain;
     border-style: none;
+    margin-top:auto;
+    margin-bottom: auto;
     height: 80%;
     &:hover {
       filter: brightness(97%);
@@ -47,7 +48,6 @@
     img {
       height: 100%;
     }
-  }
 }
 
 .spacer { flex: 1 1 auto; }
