@@ -39,7 +39,7 @@
     // transform: translateY(-50%);
     // background: no-repeat 50% contain;
     border-style: none;
-    margin-top:auto;
+    margin-top: auto;
     margin-bottom: auto;
     height: 80%;
     &:hover {
@@ -70,7 +70,7 @@
 #userInfo {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  margin-top: 0.2em;
   margin-right: 0.5em;
 
   // border: solid red 1px;
@@ -106,9 +106,9 @@
 }
 
 @media screen and (min-width: $XSmall) {
-  @include height-dependant($header-height: 100px);
+  @include height-dependant($header-height: 80px);
 }
 
 @media screen and (max-width: $XSmall) {
-  @include height-dependant($header-height: 80px);
+  @include height-dependant($header-height: 70px);
 }
