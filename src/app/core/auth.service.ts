@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, Observable, throwError, firstValueFrom } from
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 import { truncate } from '../utils/truncate';
+import { Router } from '@angular/router';
 // import { LocalStorageModule } from 'angular-2-local-storage';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
@@ -60,7 +61,8 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private router: Router) {
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
@@ -126,6 +128,17 @@ export class AuthService {
       }
     }
   }
+
+  // public async handleNotLoggedIn() {
+  //   console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.')
+  //   const loginUrl = await this.sendAskLoginRequest('own');
+  //   // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
+  //   const route = window.location.pathname;
+  //   if (route.startsWith('/login') == false) {
+  //     window.sessionStorage.setItem('REDIRECT_URL', window.location.pathname);
+  //   }
+  //   this.router.navigateByUrl(loginUrl);
+  // }
 
   public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
     window.sessionStorage.setItem('USER_ROLE', asema);
