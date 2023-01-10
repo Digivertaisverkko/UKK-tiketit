@@ -23,10 +23,6 @@
     </mat-form-field>
   </mat-card-actions> -->
 
-  <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
-    <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
-  </mat-card>
-
   <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
 
@@ -183,8 +179,8 @@
 
 </section>
 
-<app-error-card *ngIf="ticketServiceMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-  message="{{ ticketServiceMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
+  message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
 </app-error-card>
 
 <!-- </div> -->

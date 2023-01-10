@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+// import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Subscription, interval, startWith, switchMap } from 'rxjs';
 
@@ -55,13 +55,14 @@ export class ListingComponent implements OnInit, OnDestroy {
   public FAQisLoaded: boolean = false;
   public isLoaded: boolean = false;
   public header: string = '';
+  // Ei ole vakio.
   public maxItemTitleLength = 100;
   public me: string =  $localize`:@@Minä:Minä`;
   private routeSubscription: Subscription | null = null;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
   public ticketMessageSub: Subscription;
-  public ticketServiceMessage: string = '';
+  public errorMessage: string = '';
 
   private timeInterval: Subscription = new Subscription();
 
@@ -82,12 +83,12 @@ export class ListingComponent implements OnInit, OnDestroy {
     private ticket: TicketService,
     private authService: AuthService
   ) {
-    this.ticketMessageSub = this.ticket.onMessages().subscribe((message) => {
+    this.ticketMessageSub = this.ticket.onMessages().subscribe(message => {
       if (message) {
-        this.ticketServiceMessage = message;
+        this.errorMessage = message;
       } else {
         // Poista viestit, jos saadaan tyhjä viesti.
-        this.ticketServiceMessage = '';
+        this.errorMessage = '';
       }
     });
 
@@ -120,10 +121,10 @@ export class ListingComponent implements OnInit, OnDestroy {
         if (response[0].kurssi !== undefined) {
           const myCourses: MyCourse[] = response;
           var courseIDcandinate: string = params['courseID'];
-          console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
+          // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
           // Onko käyttäjä tällä kurssilla.
           if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-            this.ticketServiceMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
+            this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
           } else {
             this.courseID = courseIDcandinate;
             // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
@@ -140,9 +141,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       }).then(() => {
         this.pollQuestions();
       }).catch(error => {
-        if (error.message !== undefined) {
-          this.ticketServiceMessage = error.message;
-        }
+        this.handleError(error);
       }).finally(() => {
         this.isLoaded = true;
       })
@@ -170,6 +169,7 @@ export class ListingComponent implements OnInit, OnDestroy {
         switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
       ).subscribe(
         response => {
+          response = [];
           console.log('question polled');
           if (response.length > 0) {
             let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
@@ -185,8 +185,8 @@ export class ListingComponent implements OnInit, OnDestroy {
             if (tableData !== null) {
               this.dataSource = new MatTableDataSource(tableData);
             }
-            console.log('MatTableDataSource alla:');
-            console.dir(this.dataSource);
+            // console.log('MatTableDataSource alla:');
+            // console.dir(this.dataSource);
             this.numberOfQuestions = tableData.length;
             // console.log('Saatiin vastaus (alla):');
             // console.dir(SortableData);
@@ -243,7 +243,7 @@ export class ListingComponent implements OnInit, OnDestroy {
           }
         }
       })
-      .catch((error) =>
+      .catch(error =>
         console.error(
           'listingComponent: Saatiin virhe haettaessa käyttäjän asemaa: ' +
           error.message
@@ -270,7 +270,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   private showFAQ() {
     this.ticket
       .getFAQ(Number(this.courseID))
-      .then((response) => {
+      .then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
           if (this.numberOfFAQ === 0) {
@@ -292,12 +292,21 @@ export class ListingComponent implements OnInit, OnDestroy {
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
       })
-      .catch((error) => {
-
+      .catch(error => {
+        this.handleError(error);
       })
       .finally(() => {
         this.FAQisLoaded = true;
       });
+  }
+
+  // TODO: lisää virheilmoitusten käsittelyjä.
+  private handleError(error: any) {
+    if (error.tunnus !== undefined ) {
+      if (error.tunnus == 1000 ) {
+        this.errorMessage = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.'
+      }     
+    }
   }
 
   announceSortChange(sortState: Sort) {

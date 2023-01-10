@@ -37,8 +37,11 @@ td {
 .icon-wrapper {
   display: flex;
   justify-content: center;
-  width: 1.7rem;
-  height: 1.7rem;
+  // width: 90%;
+  // height: 90%;
+  // max-width: 2.5rem;
+  // min-width: 1.8rem;
+  width: 1.8rem;
 }
 
 .mat-mdc-header-row {
@@ -104,6 +107,7 @@ mat-card-actions {
   padding-right: 0;
   button {
     margin-top: 1em;
+    margin-left: 1rem;
     margin-right: 0;
   }
 }
