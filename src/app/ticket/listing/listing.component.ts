@@ -95,7 +95,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.username = this.authService.getUserName();
 
     this.columnDefinitions = [
-      { def: 'ikoni', showMobile: true },
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false },
