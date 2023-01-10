@@ -284,10 +284,10 @@ button[mat-raised-button] {
   }
 }
 
-.theme-p {
-  font-weight: 400;
-  white-space: pre-wrap;
-}
+// .theme-p {
+//   font-weight: 400;
+//   white-space: pre-wrap;
+// }
 
 .theme-divider {
   border-top-color: mat.get-color-from-palette($custom-accent-palette, 700);

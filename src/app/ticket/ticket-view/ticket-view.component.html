@@ -48,7 +48,7 @@
       <p>{{ ticket.kentat[1].arvo }}</p>
     </div>
 
-    <app-message id="question" class="theme-p" [messageHtml]=ticket.viesti></app-message>
+    <app-message id="question" [messageHtml]=ticket.viesti></app-message>
 
       <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
       🞄
@@ -104,7 +104,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        <app-message id="comment" class="theme-p" [messageHtml]=comment.viesti></app-message>
+        <app-message id="comment" [messageHtml]=comment.viesti></app-message>
       </mat-card-content>
     </mat-card>
 
