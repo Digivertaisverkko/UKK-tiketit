@@ -5,17 +5,15 @@
   }
 }
 
-#question {
- 
-}
-
 .vertical-spacer {
   height: 18px;
 }
 
-#discussion-header {
-  margin-bottom: 0.5em;
+// Muuten marginaalit menevät päällekkäin jostain syystä.
+.short-vertical-spacer {
+  height: 1px;
 }
+
 
 mat-card {
   margin: 0 auto 12px;

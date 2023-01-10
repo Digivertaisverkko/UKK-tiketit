@@ -34,25 +34,27 @@
 
   </div>
 
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
+    <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
         <p>{{ticket.kentat[0].arvo }}</p>
     </div>
 
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
+    <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
       <p>{{ ticket.kentat[1].arvo }}</p>
     </div>
 
-    <app-message id="question" [messageHtml]=ticket.viesti></app-message>
+    <div class="short-vertical-spacer"></div>
+    
+    <app-message [messageHtml]=ticket.viesti></app-message>
 
   </section>
 
-<hr class="theme-divider">
+  <hr class="theme-divider">
 
   <!-- ----------- Keskustelu -------------------------------------- -->
 
-  <h2 class="theme-h2" id="discussion-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
+  <h2 class="theme-h2" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 
@@ -75,7 +77,7 @@
       </mat-card-header>
 
       <mat-card-content>
-        <app-message id="comment" [messageHtml]=comment.viesti></app-message>
+        <app-message [messageHtml]=comment.viesti></app-message>
       </mat-card-content>
     </mat-card>
 
