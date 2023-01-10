@@ -28,7 +28,6 @@
         <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
       </div>
 
-        <!-- <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}> -->
     </div>
 
     <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
@@ -38,40 +37,14 @@
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
         <p>{{ticket.kentat[0].arvo }}</p>
-          <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
-            ticket.kentat[0].arvo }} </span> -->
     </div>
 
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
-        <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
       <p>{{ ticket.kentat[1].arvo }}</p>
     </div>
 
     <app-message id="question" [messageHtml]=ticket.viesti></app-message>
-
-      <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
-      🞄
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span> -->
-
-  <!-- <mat-card-content>
-
-    <mat-card appearance="outlined" class="question">
-      <mat-card-header>
-        <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja.nimi}}>
-        <mat-card-title>
-          {{ ticket.aloittaja.nimi }}
-          <span *ngIf="ticket.aloittaja.asema === 'opettaja'" i18n="@@Opettaja"> 🞄 Opettaja</span>
-        </mat-card-title>
-        <mat-card-subtitle>{{ ticket.aikaleima | date: 'short' }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="message" [innerHTML]=ticket.viesti></p>
-        <h2>{{tila}}</h2>
-      </mat-card-content>
-    </mat-card>
-
-  </mat-card-content> -->
 
   </section>
 
@@ -88,7 +61,6 @@
         <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}>
         <mat-card-title class="theme-profile-name">
           {{ comment.lahettaja.nimi }}
-          <!-- {{ comment.lahettaja.nimi }} <span *ngIf="comment.lahettaja.asema === 'opettaja'">🞄 <span i18n="@@Opettaja">Opettaja</span></span> -->
         </mat-card-title>
 
         <mat-card-subtitle class="theme-label">
@@ -99,7 +71,6 @@
         </mat-card-subtitle>
         <div class="spacer"></div>
         <span class="ticket-state" *ngIf="comment.tila === 5">{{proposedSolution}}</span>
-        <!-- <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle> -->
 
       </mat-card-header>
 
