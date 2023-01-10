@@ -169,7 +169,6 @@ export class ListingComponent implements OnInit, OnDestroy {
         switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
       ).subscribe(
         response => {
-          response = [];
           console.log('question polled');
           if (response.length > 0) {
             let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
