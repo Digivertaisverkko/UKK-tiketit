@@ -276,9 +276,12 @@ button[mat-raised-button] {
 //
 .theme-label {
   color: #757575;
-  font-size: 75%;
-  // line-height: 0.75em;
-  margin-bottom: -1em;
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  margin-bottom: 0.2rem;
+  + p {
+    margin-top: 0.3rem;
+  }
 }
 
 .theme-p {
