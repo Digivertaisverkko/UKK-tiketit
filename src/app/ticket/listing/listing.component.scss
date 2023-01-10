@@ -31,18 +31,14 @@ table {
 
 td {
   cursor: pointer;
-  line-height: 1.5;
-}
-
-.icon {
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 0.5rem;
+  line-height: 1.5rem;
 }
 
 .icon-wrapper {
-  height: 1.5rem;
-  width: 1.5rem;
+  display: flex;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
 }
 
 .mat-mdc-header-row {

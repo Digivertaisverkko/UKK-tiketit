@@ -94,6 +94,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.username = this.authService.getUserName();
 
     this.columnDefinitions = [
+      { def: 'ikoni', showMobile: true },
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false },
@@ -172,6 +173,7 @@ export class ListingComponent implements OnInit, OnDestroy {
           console.log('question polled');
           if (response.length > 0) {
             let tableData: Sortable[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
+              tilaID: tila,
               tila: this.ticket.getTicketState(tila),
               id: id,
               otsikko: otsikko,
@@ -247,6 +249,10 @@ export class ListingComponent implements OnInit, OnDestroy {
           error.message
         )
       );
+  }
+
+  public showStateIcon() {
+
   }
 
   public getDisplayedColumnFAQ(): string[] {
