@@ -301,13 +301,12 @@ h2 {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    gap: 1rem;
+    gap: inherit;
     margin-top: 2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
     height: 100%;
     .text-info {        // Käyttäjätiedot
       @if $debug { border: 1px solid gray; }
-      display: inline-block;
-      // margin: auto 1rem auto auto;
+      margin-top: 0.3rem;
       text-align: right;
       .theme-profile-name {
         display: block;
