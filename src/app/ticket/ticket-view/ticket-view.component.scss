@@ -40,8 +40,9 @@ mat-radio-button {
 }
 
 @media (max-width: $XSmall) {
-  .user-info-block {
-    order: -1;
-    margin-bottom: -30px;
-  }
+  // Välttämättä ei mene useammalle riville.
+  // .user-info-block {
+  //   order: -1;
+  //   margin-bottom: -30px;
+  // }
 }

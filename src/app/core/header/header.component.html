@@ -7,12 +7,10 @@
 
     <!-- [disabled]="!isUserLoggedIn$" -->
 
-  <!-- <div id="logo"> -->
     <div id="logo" matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
       [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
       <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
     </div>
-  <!-- </div> -->
 
   <span class="spacer"></span>
 
