@@ -1,7 +1,8 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
 <section *ngIf="isCourseIDvalid">
-  <!-- ----- Tiketit ----- -->
+
+  <!-- -------- Tiketit --------- -->
 
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
   <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h1>
@@ -16,16 +17,18 @@
         i18n-sortActionDescription="@@Järjestä tilan mukaan" i18n="@@Tila">
         Tila
       </th>
-      <td mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
-        <div class="state-wrapper">
-          <div class="icon-wrapper" [ngSwitch]="element.tilaID">
-            <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
-            <img class="icon" *ngSwitchCase="2" src="../../../assets/icons/Kasittelyssa.svg" height="100%" width="100%" alt="">
-            <img class="icon" *ngSwitchCase="4" src="../../../assets/icons/Kommentti.svg" height="100%" width="100%" alt="">
-            <img class="icon" *ngSwitchCase="6" src="../../../assets/icons/Arkistoitu.svg" height="100%" width="100%" alt="">
+      <td mat-cell *matCellDef="let element">
+        <a [routerLink]="'/ticket-view/' + element.id">
+          <div class="state-wrapper">
+            <div class="icon-wrapper" [ngSwitch]="element.tilaID">
+              <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="2" src="../../../assets/icons/Kasittelyssa.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="4" src="../../../assets/icons/Kommentti.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="6" src="../../../assets/icons/Arkistoitu.svg" height="100%" width="100%" alt="">
+            </div>
+            <div>{{ element.tila }}</div>
           </div>
-        <div>{{ element.tila }}</div>
-      </div>
+        </a>
       </td>
 
       <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
@@ -37,9 +40,9 @@
         Otsikko
       </th>
       <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
-      <td mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
+      <td mat-cell *matCellDef="let element" ><a [routerLink]="'/ticket-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
-        '...':(element.otsikko) }}
+        '...':(element.otsikko) }}</a>
       </td>
     </ng-container>
 
@@ -49,8 +52,10 @@
         i18n="@@Lähettäjä">
         Lähettäjä
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
-        {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
+      <td class="td-align-right" mat-cell *matCellDef="let element">
+        <a [routerLink]="'/ticket-view/' + element.id">
+          {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
+        </a>
       </td>
     </ng-container>
 
@@ -60,8 +65,11 @@
         i18n="@@Aikaleima">
         Aikaleima
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
-        {{element.aikaleima | date: 'shortDate'}}</td>
+      <td class="td-align-right" mat-cell *matCellDef="let element">
+        <a [routerLink]="'/ticket-view/' + element.id">
+          {{element.aikaleima | date: 'shortDate'}}
+        </a>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
