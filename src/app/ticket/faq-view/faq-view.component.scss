@@ -4,10 +4,15 @@
   margin-bottom: 0.5em;
 }
 
-app-message {
-  // margin-left: 1em;
-  margin-top: 1em;
+// Muuten marginaalit menevät päällekkäin jostain syystä.
+.short-vertical-spacer {
+  height: 1px;
 }
+
+.short-field-value:last-child {
+  margin-bottom: 1.5rem;
+}
+
 
 mat-card {
   margin: 0 auto 1em;

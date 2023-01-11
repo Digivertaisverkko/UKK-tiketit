@@ -37,15 +37,13 @@
 
     <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
-        <p>{{ticket.kentat[0].arvo }}</p>
+        <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
     </div>
 
     <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
-      <p>{{ ticket.kentat[1].arvo }}</p>
+      <p class="short-field-value">{{ ticket.kentat[1].arvo }}</p>
     </div>
-
-    <div class="short-vertical-spacer"></div>
 
     <app-message [messageHtml]=ticket.viesti></app-message>
 

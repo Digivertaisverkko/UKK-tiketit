@@ -7,14 +7,18 @@
   }
 }
 
+.short-field-value:last-child {
+  margin-bottom: 1.5rem;
+}
+
 .vertical-spacer {
   height: 18px;
 }
 
 // Muuten marginaalit menevät päällekkäin jostain syystä.
-.short-vertical-spacer {
-  height: 1px;
-}
+// .short-vertical-spacer {
+//   height: 1px;
+// }
 
 mat-card {
   margin: 0 auto 12px;
