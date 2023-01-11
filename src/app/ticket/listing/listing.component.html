@@ -16,7 +16,7 @@
         i18n-sortActionDescription="@@Järjestä tilan mukaan" i18n="@@Tila">
         Tila
       </th>
-      <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
+      <td mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
         <div class="state-wrapper">
           <div class="icon-wrapper" [ngSwitch]="element.tilaID">
             <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
@@ -36,11 +36,11 @@
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
         Otsikko
       </th>
-      <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
+      <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
+      <td mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
         '...':(element.otsikko) }}
       </td>
-      <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
     </ng-container>
 
     <ng-container matColumnDef="aloittajanNimi">
@@ -49,7 +49,7 @@
         i18n="@@Lähettäjä">
         Lähettäjä
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
+      <td class="td-align-right" mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
         {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
       </td>
     </ng-container>
@@ -60,7 +60,7 @@
         i18n="@@Aikaleima">
         Aikaleima
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
+      <td class="td-align-right" mat-cell *matCellDef="let element" [routerLink]="'/ticket-view/' + element.id">
         {{element.aikaleima | date: 'shortDate'}}</td>
     </ng-container>
 
@@ -74,28 +74,24 @@
   <!-- </div> -->
 
   <div class="theme-actions">
-    <button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button>
+    <button mat-raised-button color="primary" [routerLink]="'/submit/'" i18n="@@Uusi kysymys">Uusi kysymys</button>
   </div>
 
-  <!-- </mat-card-content> -->
-
   <!-- FAQ -->
-
-  <!-- <mat-card-content> -->
 
   <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
     <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
   </mat-card>
 
   <div class="input-field-wrapper">
-    <h2 class="theme-h2" i18n="@@Open neuvot">
-      Open neuvot
-    </h2>
+    <h2 class="theme-h2" i18n="@@Open neuvot">Open neuvot</h2>
+
   <!--Haku toiminto-->
     <mat-form-field class="filteringField">
     <mat-label>Hae neuvoa</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
   </mat-form-field>
+
 </div>
 
   <table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort"
@@ -106,7 +102,7 @@
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
         Otsikko
       </th>
-      <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
+      <td mat-cell *matCellDef="let element" [routerLink]="'/faq-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
         '...':(element.otsikko) }}
       </td>
@@ -117,7 +113,7 @@
       <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
         Tyyppi
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
+      <td class="td-align-right" mat-cell *matCellDef="let element" [routerLink]="'/faq-view/' + element.id">
         {{ element.tyyppi }}
       </td>
       <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
@@ -128,7 +124,7 @@
         sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
         Päivämäärä
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima
+      <td class="td-align-right" mat-cell *matCellDef="let element" [routerLink]="'/faq-view/' + element.id"> {{element.aikaleima
         | date: 'shortDate' }}</td>
     </ng-container>
 

@@ -303,7 +303,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (error.tunnus !== undefined ) {
       if (error.tunnus == 1000 ) {
         this.errorMessage = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.'
-      }     
+      }
     }
   }
 
@@ -317,20 +317,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
-  }
-
-  goTicketView(ticketID: number) {
-    let url: string = '/ticket-view/' + ticketID;
-    this.router.navigateByUrl(url);
-  }
-
-  goFaqView(faqID: number) {
-    let url: string = '/faq-view/' + faqID;
-    this.router.navigateByUrl(url);
-  }
-
-  goSendTicket() {
-    this.router.navigateByUrl('submit');
   }
 
   ngOnDestroy(): void {
