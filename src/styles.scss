@@ -300,14 +300,14 @@ h2 {
 
 .ticket-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   @if $debug { border: 1px dotted purple; }
   .user-info-block {    // Käyttäjätiedot + ikoni
     @if $debug { border: 1px dotted green; }
     display: flex;
     align-items: center;
-    margin-top: 1.2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    margin-top: 2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
     margin-left: 0;       // Ei marginaalia/paddingia, jos asemoidaan vasempaan reunaan.
     height: 100%;
     .text-info {        // Käyttäjätiedot
