@@ -1,37 +1,15 @@
-<!-- <div class="ex-mat-card"> -->
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
-<!-- <mat-card appearance="outlined"> -->
 
 <section *ngIf="isCourseIDvalid">
   <!-- ----- Tiketit ----- -->
 
-  <!-- <mat-card-content> -->
-
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-  <!-- mat-h1 -->
   <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h1>
-  <!-- <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h1> -->
 
-  <!-- <mat-card-actions class="input-field-wrapper"> -->
-    <h2 class="theme-h2">{{header}}</h2>
-    <!-- <mat-form-field class="filteringField" style="width: 35%; opacity: 75%;" >
-        <mat-label>Kurssin nimi otsikon testaukseen: </mat-label>
-      <input
-      matInput
-      [(ngModel)]="courseName"
-      >
-    </mat-form-field>
-  </mat-card-actions> -->
+  <h2 class="theme-h2">{{header}}</h2>
 
   <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
-
-    <!-- <ng-container matColumnDef="ikoni">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
-
-      </td>
-    </ng-container> -->
 
     <ng-container matColumnDef="tila" colspan="-2">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan"
@@ -120,7 +98,6 @@
   </mat-form-field>
 </div>
 
-  <!-- *ngIf="!showNoFAQ" -->
   <table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort"
     matSortActive="tyyppi" matSortDirection="desc">
 
@@ -177,13 +154,8 @@
           aria-label="Valitse kysymysten sivu">
         </mat-paginator> -->
 
-  <!-- </mat-card-content> -->
-
 </section>
 
 <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
   message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
 </app-error-card>
-
-<!-- </div> -->
-<!-- </mat-card> -->
