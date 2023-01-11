@@ -3,8 +3,6 @@
 section, app-error-card {
   margin-left: -15px;
   width: 103%;
-  // padding-right: 15px;
-  // margin-right: -15px;
 }
 
 h1, h2 {
@@ -69,9 +67,7 @@ td {
 //   text-align: left;
 // }
 
-.mat-column-aloittajanNimi,
-.mat-column-aikaleima,
-.mat-column-tyyppi {
+.mat-column-aloittajanNimi, .mat-column-aikaleima, .mat-column-tyyppi {
   text-align: right;
 }
 
@@ -98,7 +94,6 @@ td {
 }
 
 // ------------------------
-
 
 // th.mat-column-aloittajanNimi {
 //   text-align: right;

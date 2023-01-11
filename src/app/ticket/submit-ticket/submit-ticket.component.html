@@ -8,8 +8,7 @@
 
     <div class="ticket-header">
 
-      <mat-form-field class="message-title" appearance="fill" class="theme-h2">
-
+      <mat-form-field appearance="fill" class="theme-h2">
         <textarea
           [(ngModel)]="titleText"
           class="theme-h2"
@@ -23,12 +22,13 @@
           name="titleText"
           placeholder="Otsikko"
           required
-          ></textarea>
+        ></textarea>
       </mat-form-field>
 
-      <div class="spacer"></div>
+      <!-- <div class="spacer"></div> -->
 
       <div class="sender-info">
+
         <span class="theme-profile-name">{{ userName }}</span>
         <div class="theme-label">
           <span i18n="@@Minä">Minä</span>
@@ -36,6 +36,7 @@
           <span i18n="@@Tänään">Tänään </span>
           <span>{{ currentDate | date: 'shortTime' }}</span>
         </div>
+
       </div>
       <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
 
@@ -72,18 +73,17 @@
     <app-editor [(editorContent)]="message"></app-editor>
 
     <div *ngIf="isFaq">
-      <mat-card-title i18n="@@Vastaus">Vastaus</mat-card-title>
+      <h2 i18n="@@Vastaus">Vastaus</h2>
       <app-editor [(editorContent)]="answer"></app-editor>
     </div>
 
-    <div class="actions-wrapper">
+    <div class="theme-actions">
 
       <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
         Usein kysytty kysymys</mat-checkbox>
 
       <div class="spacer"></div>
 
-      <mat-card-actions align="end">
         <button
           mat-raised-button color="primary"
           [disabled]="submitForm.invalid"
@@ -91,7 +91,6 @@
           i18n="@@Lähetä">
           Lähetä
         </button>
-      </mat-card-actions>
 
     </div>
 

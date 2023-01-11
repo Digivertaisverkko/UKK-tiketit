@@ -9,17 +9,16 @@ mat-form-field {
 }
 
 .ticket-header {
+  display: flex;
+  justify-content: space-between;
   // align-items: flex-start;
-}
-
-.message-title {
-  // flex-grow: 4;
-  // .mat-mdc-input-element {
-  // }
+  mat-form-field {
+    flex-basis: 100%;
+  }
 }
 
 .sender-info {
-  margin-top: 22px;
+  margin-bottom: 2rem;
 }
 
 .short-field-wrapper {
@@ -33,26 +32,15 @@ mat-form-field {
   margin-bottom: 5px;
 }
 
-.actions-wrapper {
-  display: flex;
-  align-items: center;
-  padding: 8px 0;
-  mat-checkbox {
-    margin-top: -15px;
-    margin-left: -10px;
-  }
-}
-
-.spacer {
-  display: block;
-  flex: 1 0 auto;
+mat-checkbox {
+  margin-left: -10px;
 }
 
 mat-card-actions {
   margin-bottom: 1em;
   margin-right: 0.5em;
   button {
-    margin-top: 15px;
+    margin-top: 1rem;
     margin-right: -8px;
   }
 }

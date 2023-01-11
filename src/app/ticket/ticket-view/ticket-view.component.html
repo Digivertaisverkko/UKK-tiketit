@@ -45,7 +45,7 @@
     </div>
 
     <div class="short-vertical-spacer"></div>
-    
+
     <app-message [messageHtml]=ticket.viesti></app-message>
 
   </section>
@@ -94,7 +94,7 @@
     >
   </app-error-card>
 
-  <div class="actions-wrapper">
+  <div class="theme-actions">
 
     <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
       <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>

@@ -249,6 +249,18 @@ main {
   }
 }
 
+// Sisältää yleisimmin buttonin.
+.theme-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.spacer {
+  display: block;
+  flex: 1 1 auto;
+}
+
 // @include angular-material-theme($custom-primary);
 
 // html {
@@ -311,10 +323,9 @@ button[mat-raised-button] {
       line-height: 1.15;
       display: block;
     }
-
   }
   img {
-    flex-shrink: 1;
+    flex-shrink: 0;
     height: 40px;
     margin-top: 25px;
     object-fit: cover;

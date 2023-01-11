@@ -14,7 +14,6 @@
   height: 1px;
 }
 
-
 mat-card {
   margin: 0 auto 12px;
   mat-card-subtitle {
@@ -26,23 +25,12 @@ mat-card {
   }
 }
 
-.actions-wrapper {
-  display: flex;
-  align-items: center;
-  padding: 8px 0;
-  margin-top: 10px;
-  mat-radio-button {
-    margin: 3px 28px 3px 0px;
-  }
+mat-radio-button {
+  margin: 3px 1.7rem 3px 0px;
 }
 
 .mdc-form-field > label {
   padding-left: 0;
-}
-
-.spacer {
-  display: block;
-  flex: 1 1 auto;
 }
 
 ::ng-deep .mat-mdc-card-content:last-child {
