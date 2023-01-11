@@ -9,8 +9,8 @@ export const initializeLanguage = (): Promise<void> | void => {
   if (language && language !== 'fi-FI') {
     // Pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
-      .then((response) => response.json())
-      .then((response) => {
+      .then(response => response.json())
+      .then(response => {
         loadTranslations(response.translations);
       })
       .catch(() => {
