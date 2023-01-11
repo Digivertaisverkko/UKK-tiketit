@@ -11,7 +11,7 @@
   <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
 
-    <ng-container matColumnDef="tila" colspan="-2">
+    <ng-container matColumnDef="tila">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan"
         i18n-sortActionDescription="@@Järjestä tilan mukaan" i18n="@@Tila">
         Tila

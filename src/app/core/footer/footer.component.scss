@@ -11,23 +11,12 @@ hr {
 }
 
 footer {
-  // border: {
-  //     style: dashed;
-  //     color: black;
-  //     width: 2px;
-  // }
   margin: 0;
   width: 100%;
 
   #icon-container {
 
-    @if $debug {
-      border: {
-        style: dashed;
-        color: white;
-        width: 1px;
-      }
-    }
+    @if $debug {border: dashed white 1px;}
 
     align-items: flex-end;
     box-sizing: border-box;
@@ -102,6 +91,7 @@ footer {
       // flex-grow: 5;
       // display: block;§
       padding: 18px 0 10px 0;
+      max-width: 16em;
       text-align: right;
       // max-width: 220px;
       @if $debug {
