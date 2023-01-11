@@ -1,12 +1,10 @@
 .faq-view {
   padding-right: 80px;
-  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   margin-bottom: 0.5em;
 }
 
-// Muuten marginaalit menevät päällekkäin jostain syystä.
-.short-vertical-spacer {
-  height: 1px;
+.short-field-value:last-child {
+  margin-bottom: 1.5rem;
 }
 
 .short-field-value:last-child {

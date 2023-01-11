@@ -300,6 +300,7 @@ h2 {
     @if $debug { border: 1px dotted green; }
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     gap: 1rem;
     margin-top: 2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
     height: 100%;
