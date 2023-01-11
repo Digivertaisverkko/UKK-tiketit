@@ -36,6 +36,7 @@
     "prosemirror-view": "^1.29.1",
     "rxjs": "~7.5.0",
     "sha.js": "^2.4.11",
+    "style-mod": "^4.0.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

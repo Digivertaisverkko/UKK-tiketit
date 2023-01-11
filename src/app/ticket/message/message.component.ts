@@ -1,13 +1,13 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { highlightTree } from '@lezer/highlight';
 import { defaultHighlightStyle, Language } from '@codemirror/language';
 import { javascript } from "@codemirror/lang-javascript";
+import { StyleModule } from 'style-mod';
 
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements OnInit {
   @Input() messageHtml: string = '';
@@ -52,6 +52,7 @@ export class MessageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    StyleModule.mount(document, defaultHighlightStyle.module!);
     this.html = this.highlightCodeTags(this.messageHtml);
   }
 
