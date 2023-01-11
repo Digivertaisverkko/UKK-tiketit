@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { minimalSetup } from 'codemirror';
 import { javascript } from "@codemirror/lang-javascript"
 import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
@@ -35,8 +35,7 @@ const nodeViews = {
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss'],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit, OnDestroy {
   editor!: Editor;
