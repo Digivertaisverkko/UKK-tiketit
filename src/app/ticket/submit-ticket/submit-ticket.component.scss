@@ -1,49 +1,51 @@
 @import "/src/variables.scss";
 
+
 form {
-  margin-top: 20px;
+  margin-top: -6px;
 }
 
 mat-form-field {
-  min-width: 21em;
+  min-width: 21rem;
 }
 
 .ticket-header {
-  display: flex;
-  justify-content: space-between;
-  // align-items: flex-start;
   mat-form-field {
-    flex-basis: 100%;
+    flex-grow: 3;
   }
-}
-
-.sender-info {
-  margin-bottom: 2rem;
+  .user-info-block {
+    margin-bottom: 1.5rem;
+  }
+  margin-bottom: -20px;
 }
 
 .short-field-wrapper {
   width: 21em;
+  margin-bottom: 6px;
 }
+
 .additional-field {
-  margin-bottom: -20px;
+  margin-bottom: -18px;
 }
+
 .characters-label {
   text-align: right;
-  margin-bottom: 5px;
+  margin-top: -6px;
+  margin-bottom: 3px;
 }
 
 mat-checkbox {
   margin-left: -10px;
 }
 
-mat-card-actions {
-  margin-bottom: 1em;
-  margin-right: 0.5em;
-  button {
-    margin-top: 1rem;
-    margin-right: -8px;
-  }
-}
+// mat-card-actions {
+//   margin-bottom: 1em;
+//   margin-right: 0.5em;
+//   button {
+//     margin-top: 1rem;
+//     margin-right: -8px;
+//   }
+// }
 
 @media (min-width: $XSmall) {
   .submit-ticket {
@@ -51,8 +53,8 @@ mat-card-actions {
   }
 }
 
-@media (max-width: 800px) {
-  .sender-info, .mat-mdc-card-avatar {
+@media (max-width: $XSmall) {
+  .user-info-block, .mat-mdc-card-avatar {
     display: none;
   }
   mat-form-field {

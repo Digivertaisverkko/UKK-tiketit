@@ -1,7 +1,9 @@
+@import '/src/variables.scss';
+
 .ticket-header {
   // flex-wrap: wrap;
   h2 {
-    max-width: 80%;
+    max-width: 75%;
   }
 }
 
@@ -35,4 +37,11 @@ mat-radio-button {
 
 ::ng-deep .mat-mdc-card-content:last-child {
   padding-bottom: 0 !important;
+}
+
+@media (max-width: $XSmall) {
+  .user-info-block {
+    order: -1;
+    margin-bottom: -30px;
+  }
 }

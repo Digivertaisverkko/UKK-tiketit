@@ -27,18 +27,19 @@
 
       <!-- <div class="spacer"></div> -->
 
-      <div class="sender-info">
+      <div class="user-info-block">
+        <div class="text-info">
+          <span class="theme-profile-name">{{ userName }}</span>
+          <div class="theme-label">
+            <span i18n="@@Minä">Minä</span>
+            -
+            <span i18n="@@Tänään">Tänään </span>
+            <span>{{ currentDate | date: 'shortTime' }}</span>
+          </div>
 
-        <span class="theme-profile-name">{{ userName }}</span>
-        <div class="theme-label">
-          <span i18n="@@Minä">Minä</span>
-          -
-          <span i18n="@@Tänään">Tänään </span>
-          <span>{{ currentDate | date: 'shortTime' }}</span>
         </div>
-
+        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
       </div>
-      <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
 
     </div>
 

@@ -1,6 +1,7 @@
 @use "@angular/material" as mat;
 @import "/src/variables.scss";
 
+
 // Tarvitseeko alla olevaa johonkin?
 // @import "@angular/material/theming";
 
@@ -270,7 +271,7 @@ button[mat-raised-button] {
 .theme-label {
   color: #757575;
   font-size: 0.75rem;
-  line-height: 0.75rem;
+  line-height: 0.9rem;
   margin-bottom: 0.2rem;
   + p {
     margin-top: 0.3rem;
@@ -291,28 +292,49 @@ button[mat-raised-button] {
   width: 94%;
 }
 
+$debug: false;
+
+h2 {
+  @if $debug {  border: 1px solid blue; }
+}
+
 .ticket-header {
   display: flex;
-  .sender-info {
+  align-items: center;
+  gap: 1rem;
+  @if $debug { border: 1px dotted purple; }
+  .user-info-block {    // Käyttäjätiedot + ikoni
+    @if $debug { border: 1px dotted green; }
     display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 26px 10px 26px 15px;
-    min-width: 10em;
-    text-align: right;
-    .theme-profile-name {
-      line-height: 1.15;
-      display: block;
+    align-items: center;
+    margin-top: 1.2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    margin-left: 0;       // Ei marginaalia/paddingia, jos asemoidaan vasempaan reunaan.
+    height: 100%;
+    .text-info {        // Käyttäjätiedot
+      @if $debug { border: 1px solid gray; }
+      display: inline-block;
+      margin: auto 1rem auto auto;
+      text-align: right;
+      .theme-profile-name {
+        display: block;
+        line-height: 1.15;
+        margin-bottom: 0.3rem;
+      }
+    }
+    img {
+      @if $debug { border: 1px solid lightblue; }
+      display: inline-block;
+      flex-shrink: 0;
+      position: relative;
+      height: 3rem;
+      width: 3rem;
+      margin: auto;
+      object-fit: cover;
     }
   }
-  img {
-    flex-shrink: 0;
-    height: 40px;
-    margin-top: 25px;
-    object-fit: cover;
-    width: 40px;
-  }
 }
+
+
 
 @media (max-width: $XSmall) {
 
@@ -332,6 +354,10 @@ button[mat-raised-button] {
 
   .theme-header-text-small {
     font-size: 1rem;
+  }
+
+  .ticket-header {
+    flex-wrap: wrap;
   }
 }
 
