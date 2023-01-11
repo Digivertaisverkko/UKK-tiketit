@@ -182,7 +182,7 @@ main {
 .theme-h1 {
   font-family: $displayFont;
   // font-family: mat.font-family($custom-typography-config, 'headline-3');
-  font-size: calc(50px * $scale-factor);
+  font-size: 2.5rem;
   font-weight: 900;
   line-height: 1.2;
 
@@ -216,7 +216,7 @@ main {
 
 .theme-h2 {
   font-family: $displayFont;
-  font-size: calc(32px * $scale-factor);
+  font-size: 1.66rem;
   font-weight: 900;
   line-height: 1.2;
   margin-block-start: 2.6rem;
@@ -228,27 +228,6 @@ main {
   font-family: $textFont;
   font-size: 1.3rem;
   font-weight: 500;
-}
-
-@media (max-width: $XSmall) {
-
-  .theme-main-headline, .theme-h1 {
-    font-size: calc(40px * $scale-factor);
-    line-height: 1.1;
-  }
-
-  .theme-h2 {
-    font-size: calc(25px * $scale-factor);
-    line-height: 1;
-  }
-
-  .theme-header-text {
-    font-size: 1.25rem;
-  }
-
-  .theme-header-text-small {
-    font-size: 1rem;
-  }
 }
 
 // Sisältää yleisimmin buttonin.
@@ -332,6 +311,27 @@ button[mat-raised-button] {
     margin-top: 25px;
     object-fit: cover;
     width: 40px;
+  }
+}
+
+@media (max-width: $XSmall) {
+
+  .theme-main-headline, .theme-h1 {
+    font-size: 2.5rem * 0.8;
+    line-height: 1.1;
+  }
+
+  .theme-h2 {
+    font-size: 1.66rem * 0.8;
+    line-height: 1;
+  }
+
+  .theme-header-text {
+    font-size: 1.25rem;
+  }
+
+  .theme-header-text-small {
+    font-size: 1rem;
   }
 }
 
