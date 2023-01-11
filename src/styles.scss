@@ -189,7 +189,7 @@ main {
 
   // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
   margin-top: 4rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.6rem;
   position: relative;
   z-index: 0;
   // border-style: dotted;
@@ -249,12 +249,6 @@ main {
   // height: 100%;
 // }
 
-// app-login {
-//   display: flex;
-//   flex-grow: 1;
-//   flex-direction: column;
-// }
-
 button[mat-raised-button] {
   min-width: 10em;
   padding-left: 2em;
@@ -278,10 +272,9 @@ button[mat-raised-button] {
   }
 }
 
-// .theme-p {
-//   font-weight: 400;
-//   white-space: pre-wrap;
-// }
+mat-progress-bar {
+  margin-top: 30px;
+}
 
 .theme-divider {
   border-top-color: mat.get-color-from-palette($custom-accent-palette, 700);
@@ -303,17 +296,17 @@ h2 {
   align-items: flex-start;
   gap: 1rem;
   @if $debug { border: 1px dotted purple; }
-  .user-info-block {    // Käyttäjätiedot + ikoni
+  .user-info-block {    // .text-info + ikoni
     @if $debug { border: 1px dotted green; }
     display: flex;
     align-items: center;
+    gap: 1rem;
     margin-top: 2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
-    margin-left: 0;       // Ei marginaalia/paddingia, jos asemoidaan vasempaan reunaan.
     height: 100%;
     .text-info {        // Käyttäjätiedot
       @if $debug { border: 1px solid gray; }
       display: inline-block;
-      margin: auto 1rem auto auto;
+      // margin: auto 1rem auto auto;
       text-align: right;
       .theme-profile-name {
         display: block;
