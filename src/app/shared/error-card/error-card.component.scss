@@ -1,13 +1,14 @@
 mat-card {
-  // background-color: #ffe6e6;
   color: var(--contrast);
   background-color: var(--error);
   min-width: unset;
   width: unset;
+  padding-top: 1em;
   margin-bottom: 1em;
   mat-card-title {
-    font-size: medium;
+    font-size: 1.2rem;
     margin-top: 0.5em;
-    margin-left: 1em;
+    margin-left: 0.9em;
+    margin-bottom: 0.7rem;
   }
 }
