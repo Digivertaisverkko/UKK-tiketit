@@ -29,7 +29,7 @@ export class TicketService {
   public setActiveCourse(courseID: string | null) {
     // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
     if (courseID !== null && this.activeCourse !== Number(courseID)) {
-      window.sessionStorage.setItem('COURSE_ID', courseID);
+      window.localStorage.setItem('COURSE_ID', courseID);
       this.activeCourse = Number(courseID);
       console.log(' ---- asetettu aktiivinen kurssi ' + courseID + ' ----');
     }
@@ -38,10 +38,10 @@ export class TicketService {
   public getActiveCourse(): string {
     let courseID: string | null;
     if (this.activeCourse == undefined) {
-      if (window.sessionStorage.getItem('COURSE_ID') === null) {
+      if (window.localStorage.getItem('COURSE_ID') === null) {
         throw new Error('Tallennettua kurssi id:ä ei löydetty.');
       } else {
-        courseID = window.sessionStorage.getItem('COURSE_ID');
+        courseID = window.localStorage.getItem('COURSE_ID');
       }
       if (courseID === null) {
         throw new Error('Tallennettua kurssi id:ä ei löydetty.');
@@ -400,7 +400,7 @@ public getTicketState(numericalState: number): string {
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
-    let sessionID = window.sessionStorage.getItem('SESSION_ID');
+    let sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
       throw new Error('No session id set.');
     }

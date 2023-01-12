@@ -100,8 +100,8 @@ export class AuthService {
   // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin
   // aloitettu.
   public initialize() {
-    if (window.sessionStorage.getItem('USER_ROLE') !== null) {
-      const userRole = window.sessionStorage.getItem('USER_ROLE');
+    if (window.localStorage.getItem('USER_ROLE') !== null) {
+      const userRole = window.localStorage.getItem('USER_ROLE');
       switch (userRole) {
         case "opettaja":
         case "opiskelija":
@@ -111,18 +111,18 @@ export class AuthService {
         }
       }
     }
-    if (window.sessionStorage.getItem('SESSION_ID') !== null) {
-      const isUserLoggedIn: string | null = window.sessionStorage.getItem('SESSION_ID');
+    if (window.localStorage.getItem('SESSION_ID') !== null) {
+      const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');
         this.isUserLoggedIn$.next(true);
     }
-    if (window.sessionStorage.getItem('USER_NAME') !== null) {
-      const userName: string | null = window.sessionStorage.getItem('USER_NAME');
+    if (window.localStorage.getItem('USER_NAME') !== null) {
+      const userName: string | null = window.localStorage.getItem('USER_NAME');
       if (userName !== null && userName.length > 0 ) {
         this.userName$.next(userName);
       }
     }
-    if (window.sessionStorage.getItem('EMAIL') !== null) {
-      const userEmail: string | null = window.sessionStorage.getItem('EMAIL');
+    if (window.localStorage.getItem('EMAIL') !== null) {
+      const userEmail: string | null = window.localStorage.getItem('EMAIL');
       if (userEmail !== null && userEmail.length > 0 ) {
         this.userEmail$.next(userEmail);
       }
@@ -135,27 +135,27 @@ export class AuthService {
   //   // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
   //   const route = window.location.pathname;
   //   if (route.startsWith('/login') == false) {
-  //     window.sessionStorage.setItem('REDIRECT_URL', window.location.pathname);
+  //     window.localStorage.setItem('REDIRECT_URL', window.location.pathname);
   //   }
   //   this.router.navigateByUrl(loginUrl);
   // }
 
   public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
-    window.sessionStorage.setItem('USER_ROLE', asema);
+    window.localStorage.setItem('USER_ROLE', asema);
     this.userRole$.next(asema);
   }
 
   public setUserName(name: string) {
-    window.sessionStorage.setItem('USER_NAME', name);
+    window.localStorage.setItem('USER_NAME', name);
     this.userName$.next(name);
   }
 
   public getUserName(): string | null {
-    return window.sessionStorage.getItem('USER_NAME');
+    return window.localStorage.getItem('USER_NAME');
   }
 
   public setUserEmail(email: string) {
-    window.sessionStorage.setItem('USER_EMAIL', email);
+    window.localStorage.setItem('USER_EMAIL', email);
     this.userEmail$.next(email);
   }
 
@@ -206,7 +206,7 @@ export class AuthService {
     this.checkErrors(response);
 
     if (response?.sposti > 0 ) {
-      window.sessionStorage.setItem('EMAIL', response.sposti);
+      window.localStorage.setItem('EMAIL', response.sposti);
       this.userEmail$.next(response.sposti);
     }
 
@@ -215,7 +215,7 @@ export class AuthService {
 
   // Suorita uloskirjautuminen.
   public async logOut(): Promise<any> {
-    const sessionID = window.sessionStorage.getItem('SESSION_ID');
+    const sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
       throw new Error('Session ID not found.');
     }
@@ -232,7 +232,7 @@ export class AuthService {
       this.setUserName('');
       this.setUserRole('');
       this.setUserEmail('');
-      window.sessionStorage.clear();
+      window.localStorage.clear();
     }
   }
 
@@ -331,8 +331,8 @@ export class AuthService {
     var loginResult: LoginResult;
     if (response.success !== undefined && response.success == true) {
       loginResult = { success: true };
-      if (window.sessionStorage.getItem('REDIRECT_URL') !== undefined) {
-        const redirectUrl = window.sessionStorage.getItem('REDIRECT_URL');
+      if (window.localStorage.getItem('REDIRECT_URL') !== undefined) {
+        const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
         if (redirectUrl !== null) {
           loginResult.redirectUrl = redirectUrl;
         }
@@ -356,7 +356,7 @@ export class AuthService {
 
   // Onko käyttäjät kirjautunut.
   public getIsUserLoggedIn(): Boolean {
-    const sessionID = window.sessionStorage.getItem('SESSION_ID');
+    const sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
       return false
     } else {
@@ -366,14 +366,14 @@ export class AuthService {
 
   public saveSessionStatus(sessionID: string) {
     this.isUserLoggedIn$.next(true);
-    window.sessionStorage.setItem('SESSION_ID', sessionID);
+    window.localStorage.setItem('SESSION_ID', sessionID);
     console.log('tallennettiin sessionid: ' + sessionID);
   }
 
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
-    let sessionID = window.sessionStorage.getItem('SESSION_ID');
+    let sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
       throw new Error('Session ID:ä ei ole asetettu. Kutsut palvelimeen eivät toimi.');
     }

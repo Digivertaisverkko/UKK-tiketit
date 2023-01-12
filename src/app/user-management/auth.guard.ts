@@ -22,7 +22,7 @@ export const authGuard: CanActivateFn = async () => {
         // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
         const route = window.location.pathname;
         if (route.startsWith('/login') == false) {
-          window.sessionStorage.setItem('REDIRECT_URL', window.location.pathname);
+          window.localStorage.setItem('REDIRECT_URL', window.location.pathname);
         }
         return router.navigateByUrl(loginUrl);
         // Ei saatu login id:ä, mutta näytetään kirjautumisruutu.
