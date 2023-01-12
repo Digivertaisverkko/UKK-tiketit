@@ -183,7 +183,7 @@ main {
   font-family: $displayFont;
   // font-family: mat.font-family($custom-typography-config, 'headline-3');
   font-size: 2.5rem;
-  font-weight: 900;
+  font-weight: 800;
   line-height: 1.2;
 
   // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
@@ -217,7 +217,7 @@ main {
 .theme-h2 {
   font-family: $displayFont;
   font-size: 1.66rem;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.2;
   margin-block-start: 1.6rem;
   // margin-block-start: 2.6rem;
@@ -256,9 +256,9 @@ button[mat-raised-button] {
   text-transform: uppercase;
 }
 
-// .mdc-button {
-//   height: 2.4em !important;
-// }
+.mdc-button {
+  height: 2.3em !important;
+}
 
 // FIXME: Miksei toimi teeman värimäärittelyistä?
 .mat-primary {
