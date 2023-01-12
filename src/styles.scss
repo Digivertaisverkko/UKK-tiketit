@@ -1,7 +1,6 @@
 @use "@angular/material" as mat;
 @import "/src/variables.scss";
 
-
 // Tarvitseeko alla olevaa johonkin?
 // @import "@angular/material/theming";
 
@@ -116,11 +115,10 @@ $custom-theme: mat.define-light-theme(
 // Tällä teemoittaa H1 ja H2.
 // @include mat.all-component-typographies($custom-typography-config);
 
-// Tämä pitää olla ohjelmassa vain yhden kerran.
-
 // Pitäisi toimia, mutta antaa errorin.
 //@include mat.core($custom-typography-config);
 
+// Tämä pitää olla ohjelmassa vain yhden kerran.
 @include mat.core();
 
 // @mixin custom-theme($theme) {
@@ -135,12 +133,9 @@ $custom-theme: mat.define-light-theme(
 // Emit styles for MatButton based on `$my-theme`. Because the configuration
 // passed to `define-light-theme` omits typography, `button-theme` will not
 // emit any typography styles.
-// @include mat.button-theme($custom-theme);
 
 // @include mat.toolbar-theme($custom-theme);
-
 // @include mat.core-theme($custom-theme);
-
 // @include mat.button-theme($custom-theme);
 
 // FIXME: laita tämän sijaan vain niille komponenteille, mitä käytetään.
@@ -153,7 +148,6 @@ $scale-factor: 0.80;
 
 body {
   font-family: $textFont;
-  // font-size: 15px;
   line-height: 1.45;
   margin: 0;
 }
@@ -166,33 +160,32 @@ main {
   background-color: mat.get-color-from-palette($custom-primary-palette, 500);
 }
 
-// FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
-.theme-header-text {
+.theme-header-text, .theme-header-text-small, .theme-h1, .theme-h2 {
   font-family: $displayFont;
+}
+
+// FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
+// Tätä käytetään headerin käyttäjän nimessä.
+.theme-header-text {
   font-weight: 700;
   font-size: 1.3rem;
 }
 
 .theme-header-text-small {
-  font-family: $displayFont;
   font-weight: 500;
   font-size: 1rem;
 }
 
 .theme-h1 {
-  font-family: $displayFont;
   // font-family: mat.font-family($custom-typography-config, 'headline-3');
   font-size: 2.5rem;
   font-weight: 800;
   line-height: 1.2;
-
   // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
   margin-top: 3.8rem;
   margin-bottom: 0.6rem;
   position: relative;
   z-index: 0;
-  // border-style: dotted;
-  // border-color:#7dceeb;
   overflow: hidden;
   // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
   // alla olevan viivan pituuden määrittelyyn.
@@ -215,7 +208,6 @@ main {
 }
 
 .theme-h2 {
-  font-family: $displayFont;
   font-size: 1.66rem;
   font-weight: 700;
   line-height: 1.2;
@@ -231,23 +223,14 @@ main {
   font-weight: 500;
 }
 
+// ----Nappeihin liittyvät--------------
+
 // Sisältää yleisimmin buttonin.
 .theme-actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 1.4rem;
 }
-
-.spacer {
-  display: block;
-  flex: 1 1 auto;
-}
-
-// @include angular-material-theme($custom-primary);
-
-// html {
-  // height: 100%;
-// }
 
 button[mat-raised-button] {
   min-width: 10em;
@@ -265,7 +248,9 @@ button[mat-raised-button] {
   color: white !important;
 }
 
-//
+// -------------------------------------
+
+// Pieni harmaa teksti.
 .theme-label {
   color: #757575;
   font-size: 0.75rem;
@@ -280,9 +265,7 @@ button[mat-raised-button] {
 // }
 
 .theme-divider {
-  border-top-color: mat.get-color-from-palette($custom-accent-palette, 700);
-  border-top-width: 3px;
-  border-top-style: solid;
+  border:var(--accent) 3px solid;
   display: block;
   margin: 56px auto;
   width: 94%;
@@ -330,7 +313,14 @@ h2 {
   }
 }
 
+// ---- Utilityt---------------------
 
+.spacer {
+  display: block;
+  flex: 1 1 auto;
+}
+
+// ---- Media queryt ----------------
 
 @media (max-width: $XSmall) {
 
@@ -356,3 +346,5 @@ h2 {
     flex-wrap: wrap;
   }
 }
+
+// -----------------------------------
