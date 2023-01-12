@@ -31,16 +31,13 @@
   }
 }
 
-#logo {
-  height: 100%;
-    position: relative;
-    // top: 50%;
+.logo {
+    // position: relative;
     // -ms-transform: translateY(-50%);
     // transform: translateY(-50%);
     // background: no-repeat 50% contain;
-    border-style: none;
-    margin-top: auto;
-    margin-bottom: auto;
+    // border-style: none;
+    margin: auto;
     height: 80%;
     &:hover {
       filter: brightness(97%);
@@ -50,34 +47,14 @@
     }
 }
 
-#userName, #userEmail, #userRole {
-  display: block;
-  align-self: flex-end;
-}
-
-#userName.is-phone-portrait {
-  display: none;
-}
-
-#userName, #userEmail {
-  margin-right: 5px;
-  line-height: 1.1;
-  font-weight: 600;
-}
-
-#userInfo {
+.user-info {
   display: flex;
   flex-direction: column;
-  margin-top: 0.2em;
+  align-items: flex-end;
+  gap: 0.2rem;
+  margin-top: 0.1em;
   margin-right: 0.5em;
-
   // border: solid red 1px;
-}
-
-#userRole {
-  // margin-top: 3x;
-  margin-right: 7px;
-  font-weight: 500;
 }
 
 .flag {
@@ -109,4 +86,7 @@
 
 @media screen and (max-width: $XSmall) {
   @include height-dependant($header-height: 70px);
+  .use-name {
+    display: none;
+  }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -35,7 +34,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
-    private responsive: BreakpointObserver,
     private router: Router,
     private ticketService: TicketService)
     {
@@ -44,12 +42,6 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      this.isPhonePortrait = false;
-      if (result.matches) {
-        this.isPhonePortrait = true;
-      }
-    });
     this.updateUserRole();
     this.updateUserName();
     this.updateUserEmail();

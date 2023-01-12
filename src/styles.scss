@@ -169,11 +169,13 @@ main {
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 .theme-header-text {
   font-family: $displayFont;
+  font-weight: 700;
   font-size: 1.3rem;
 }
 
 .theme-header-text-small {
   font-family: $displayFont;
+  font-weight: 500;
   font-size: 1rem;
 }
 

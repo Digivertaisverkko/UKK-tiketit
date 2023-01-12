@@ -7,7 +7,7 @@
 
     <!-- [disabled]="!isUserLoggedIn$" -->
 
-    <div id="logo" matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
+    <div class="logo" matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
       [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
       <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
     </div>
@@ -17,11 +17,9 @@
   <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä, jos tulee tarpeen. -->
   <ng-content></ng-content>
 
-  <section id="userInfo">
+  <section class="user-info">
 
-    <div id="userName" *ngIf="userName.length > 0"
-
-      class="theme-header-text">
+    <div class="theme-header-text" *ngIf="userName.length > 0">
 
       <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
       alt="Vaihda kieli suomeksi"></span>
@@ -32,11 +30,11 @@
       {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
     </div>
 
-    <div id="userEmail" *ngIf="userName.length === 0" class="theme-header-text">
+    <div class="email" *ngIf="userName.length === 0" class="theme-header-text">
       {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}
     </div>
 
-    <div id="userRole" class="theme-header-text-small">{{userRole}}</div>
+    <div class="theme-header-text-small">{{userRole}}</div>
 
   </section>
 
