@@ -275,9 +275,8 @@ button[mat-raised-button] {
   }
 }
 
-mat-progress-bar {
-  margin-top: 30px;
-}
+// mat-progress-bar {
+// }
 
 .theme-divider {
   border-top-color: mat.get-color-from-palette($custom-accent-palette, 700);
