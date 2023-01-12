@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
 export class HeaderComponent implements OnInit {
   public isUserLoggedIn$: Observable<boolean>;
   public isUserLoggedIn: boolean = false;
-  public isPhonePortrait = false;
   public productName: string = environment.productName;
   public readonly maxUserLength = 40;
   public userRole: string = '';
@@ -91,8 +90,14 @@ export class HeaderComponent implements OnInit {
     })
   }
 
-  public changeLanguage(language: 'en-US' | 'fi-FI') {
-    this.language = language;
+  // public changeLanguage(language: 'en-US' | 'fi-FI') {
+  //   this.language = language;
+  // }
+
+
+  public toggleLanguage() {
+    console.log(' --- kieli: ' + this.language);
+    this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
   }
 
 

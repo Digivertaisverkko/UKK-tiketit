@@ -21,11 +21,11 @@
 
     <div class="theme-header-text" *ngIf="userName.length > 0">
 
-      <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
+      <!-- <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
       alt="Vaihda kieli suomeksi"></span>
 
     <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
-      alt="Vaihda kieli englanniksi"></span>
+      alt="Vaihda kieli englanniksi"></span> -->
 
       {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
     </div>
@@ -48,5 +48,9 @@
 </mat-toolbar>
 
 <mat-menu #accountMenu="matMenu">
+
+  <button mat-menu-item (click)="toggleLanguage()" i18n="@@vaihda kieli">Change language to english</button>
+
   <button mat-menu-item (click)="logOut()" i18n="@@Kirjaudu_ulos">Kirjaudu ulos</button>
+
 </mat-menu>
