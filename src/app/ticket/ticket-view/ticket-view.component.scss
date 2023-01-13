@@ -1,16 +1,10 @@
 @import '/src/variables.scss';
 
-.short-field-value:last-child {
-  margin-bottom: 1.5rem;
-}
+.short-field-value:last-child { margin-bottom: 1.5rem; }
 
-.short-field-value:last-child {
-  margin-bottom: 1.5rem;
-}
+.short-field-value:last-child { margin-bottom: 1.5rem; }
 
-.vertical-spacer {
-  height: 18px;
-}
+.vertical-spacer { height: 18px; }
 
 // Muuten marginaalit menevät päällekkäin jostain syystä.
 // .short-vertical-spacer {
@@ -28,13 +22,9 @@ mat-card {
   }
 }
 
-mat-radio-button {
-  margin: 3px 1.7rem 3px 0px;
-}
+mat-radio-button { margin: 3px 1.7rem 3px 0px; }
 
-.mdc-form-field > label {
-  padding-left: 0;
-}
+.mdc-form-field > label { padding-left: 0; }
 
 // ::ng-deep .mat-mdc-card-content:last-child {
 //   padding-bottom: 0 !important;

@@ -16,7 +16,7 @@ footer {
 
   #icon-container {
 
-    @if $debug {border: dashed white 1px;}
+    @if $debug { border: dashed white 1px; }
 
     align-items: flex-end;
     box-sizing: border-box;
@@ -30,18 +30,6 @@ footer {
     width: 100%;
   }
 
-  // .col {
-
-    // @if $debug {
-    //   border: {
-    //     style: dashed;
-    //     color: gray;
-    //     width: 1px;
-    //   }
-    // }
-
-    // padding: 2em 1em 1em 1em;
-
     img {
       display: block;
       height: 100%;
@@ -49,14 +37,7 @@ footer {
       margin-right: 10px;
       // padding-top: 1em;
       // padding-bottom: 1em
-
-      @if $debug {
-        border: {
-          style: dashed;
-          color: green;
-          width: 1px;
-        }
-      }
+      @if $debug { border: dashed green 1px; }
     }
 
     #yo-logo {
@@ -106,13 +87,7 @@ footer {
     .spacer {
       display: block;
       flex: 3 0 auto;
-      @if $debug {
-        border: {
-          style: solid;
-          color: yellow;
-          width: 1px;
-        }
-      }
+      @if $debug { border: solid yellow 1px;  }
     }
 
     #about-software {
@@ -122,49 +97,19 @@ footer {
       display: block;
       max-width: 445px;
       padding: 16px 13px 14px 18px;
-      @if $debug {
-        border: {
-          style: dashed;
-          color: gray;
-          width: 1px;
-        }
-      }
+      @if $debug { border: dashed gray 1px; }
     }
 
-    a {
-      height: 22px;
-    }
+    a { height: 22px; }
 
     ::ng-deep .mdc-list-item__primary-text {
       color: var(--contrast-color) !important;
     }
-  // }
 
-  // #bottom-row {
-  //   color: inherit;
-  //   background-color: inherit;
-  //   display: flex;
-  //   width: 100%;
-  //   justify-content: center;
-  //   // Tool-bar -määrittelyissä on:
-  //   // flex-direction: row;
-  //   // align-items: center;
-  //   // white-space: nowrap;
-  //   // height: 64px;
-  //   // font-size: 20px;
-  //   // border: {
-  //   //     style: dashed;
-  //   //     color: red;
-  //   //     width: 2px;
-  //   // }
-  //   margin: 0;
-  // }
 }
 
 @media (max-width: 1000px) {
   mat-nav-list {
     order: 6;
   }
-
 }
-

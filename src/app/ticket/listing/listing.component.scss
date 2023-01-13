@@ -5,18 +5,14 @@ section, app-error-card {
   width: 103%;
 }
 
-h1, h2 {
-  padding-left: 20px;
-}
+h1, h2 { padding-left: 20px; }
 
 h2 {
   margin-top: 2.2rem;
   padding-right: 2rem;
 }
 
-.mdc-card__actions {
-  min-height: 30px;
-}
+.mdc-card__actions { min-height: 30px; }
 
 // -------- Table -----------
 
@@ -51,13 +47,9 @@ a {
   width: 1.8rem;
 }
 
-.mat-mdc-header-row {
-  background-color: #D3D3D3;
-}
+.mat-mdc-header-row { background-color: #D3D3D3; }
 
-.mat-mdc-row:hover {
-  background-color: #f2f2f2 !important;
-}
+.mat-mdc-row:hover { background-color: #f2f2f2 !important; }
 // td.mat-mdc-cell  {
 //   padding-left: 1em;
 //   padding-right: 1em;
@@ -73,14 +65,10 @@ a {
   text-align: right;
 }
 
-.mat-column-aloittajanNimi {
-  min-width: 11em;
-}
+.mat-column-aloittajanNimi { min-width: 11em; }
 
 // headereissa sorting-nuoli ottaa oikealta puolelta tilaa.
-.td-align-right {
-  padding-right: 2.1rem;
-}
+.td-align-right { padding-right: 2.1rem; }
 
 // Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
 
@@ -88,9 +76,7 @@ a {
   justify-content: flex-end;
 }
 
-:host ::ng-deep .mat-sort-header-content {
-  color: #595959;
-}
+:host ::ng-deep .mat-sort-header-content { color: #595959; }
 
 :host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
   color: #5379FC;
@@ -104,9 +90,7 @@ a {
 
 [hidden] { display: none !important; }
 
-mat-card {
-    margin: auto;
-}
+mat-card { margin: auto; }
 
 mat-card-actions {
   padding-right: 0;
@@ -143,9 +127,7 @@ mat-card-actions {
     margin: 1rem 1rem;
 }
 
-.mat-mdc-form-field {
-  width: 97%;
-}
+.mat-mdc-form-field { width: 97%; }
 
 @media (min-width: $XSmall) {
 
@@ -155,17 +137,11 @@ mat-card-actions {
     padding-bottom: 2em;
   }
 
-  tr > :first-child {
-    padding-left: 25px;
-  }
+  tr > :first-child { padding-left: 25px; }
 
-  mat-row > :last-child {
-    padding-right: 50px;
-  }
+  mat-row > :last-child { padding-right: 50px; }
 
-  .mdc-data-table__header-row {
-    height: 3em;
-  }
+  .mdc-data-table__header-row { height: 3em; }
 
   tr.mat-mdc-row > td {
     // padding: 22px
@@ -176,9 +152,7 @@ mat-card-actions {
 }
 
 @media (max-width: $XSmall) {
-  main {
-    padding-right: 0;
-  }
+  main { padding-right: 0; }
 }
 
 // @media (max-width: $XSmall) {
