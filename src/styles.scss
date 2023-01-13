@@ -136,19 +136,21 @@ $debug: false;
 
 h2 {  @if $debug {  border: 1px solid blue; } }
 
+// käytetään ticket-view ja submit-ticket -komponenteissa tiketin otsakkeessa. Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni.
 .ticket-header {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-center;
   gap: 1rem;
   @if $debug { border: 1px dotted purple; }
   .user-info-block {    // .text-info + ikoni
     @if $debug { border: 1px dotted green; }
     display: flex;
     align-items: center;
+    align-self: flex-start;
     flex-shrink: 0;
     gap: inherit;
-    margin-top: 2rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
-    height: 100%;
+    margin-top: 0.8rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    // height: 100%;
     .text-info {        // Käyttäjätiedot
       @if $debug { border: 1px solid gray; }
       margin-top: 0.3rem;

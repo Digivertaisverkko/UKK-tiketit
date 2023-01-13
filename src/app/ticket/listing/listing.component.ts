@@ -11,8 +11,6 @@ import { environment } from 'src/environments/environment';
 import { TicketService, MyCourse, FAQ, Question } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
 
-//   id: number;
-
 export interface Sortable {
   tila: string;
   id: number;
@@ -20,11 +18,6 @@ export interface Sortable {
   aikaleima: string;
   aloittajanNimi: string
 }
-
-// const emptyData: Array<Sortable> = [
-//   { id: 0, otsikko: '', aikaleima: '', aloittajanNimi: ''}
-// ]
-
 export interface ColumnDefinition {
   def: string;
   showMobile: boolean;
