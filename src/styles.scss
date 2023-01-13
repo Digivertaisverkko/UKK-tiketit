@@ -78,10 +78,10 @@ $textFont: Roboto;
 
 // Tyylitiedostot voivat käyttää näitä ilman importtia. Alla pitää olla väriarvot eikä toimi muuttujat.
 :root {
-  --primary: #009dd7;
-  --accent: #dc5423;
-  --contrast: white;
-  --error: #B00020;
+  --primary-color: #009dd7;
+  --accent-color: #dc5423;
+  --contrast-color: white;
+  --error-color: #B00020;
   --display-font: Montserrat;
 }
 
@@ -152,13 +152,9 @@ body {
   margin: 0;
 }
 
-main {
-  background-color: #ffffff;
-}
+main { background-color: #ffffff; }
 
-.theme-footer {
-  background-color: mat.get-color-from-palette($custom-primary-palette, 500);
-}
+.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
 
 .theme-header-text, .theme-header-text-small, .theme-h1, .theme-h2 {
   font-family: $displayFont;
@@ -201,7 +197,7 @@ $debug: false;
     // Otsikon viimeisen rivin alla oleva viiva.lock;
     &:after {
       @if $debug { outline: 2px solid green; }
-      border-bottom: 3px solid var(--accent);
+      border-bottom: 3px solid var(--accent-color);
       bottom: 4px;
       // top: 5px;
       content: "";
@@ -247,14 +243,10 @@ button[mat-raised-button] {
   text-transform: uppercase;
 }
 
-.mdc-button {
-  height: 2.3em !important;
-}
+.mdc-button { height: 2.3em !important; }
 
 // FIXME: Miksei toimi teeman värimäärittelyistä?
-.mat-primary {
-  color: white !important;
-}
+.mat-primary { color: white !important; }
 
 // -------------------------------------
 
@@ -273,7 +265,7 @@ button[mat-raised-button] {
 // }
 
 .theme-divider {
-  border:var(--accent) 3px solid;
+  border:var(--accent-color) 3px solid;
   display: block;
   margin: 56px auto;
   width: 94%;
@@ -281,9 +273,7 @@ button[mat-raised-button] {
 
 $debug: false;
 
-h2 {
-  @if $debug {  border: 1px solid blue; }
-}
+h2 {  @if $debug {  border: 1px solid blue; } }
 
 .ticket-header {
   display: flex;
@@ -342,17 +332,11 @@ h2 {
     line-height: 1;
   }
 
-  .theme-header-text {
-    font-size: 1.25rem;
-  }
+  .theme-header-text { font-size: 1.25rem; }
 
-  .theme-header-text-small {
-    font-size: 1rem;
-  }
+  .theme-header-text-small { font-size: 1rem; }
 
-  .ticket-header {
-    flex-wrap: wrap;
-  }
+  .ticket-header { flex-wrap: wrap; }
 }
 
 // -----------------------------------

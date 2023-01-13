@@ -1,7 +1,7 @@
 $debug: false;
 
 hr {
-  background-color: var(--accent);
+  background-color: var(--accent-color);
   border-width: 0;
   height: 3px;
   margin: 0 auto;
@@ -118,7 +118,7 @@ footer {
     #about-software {
       align-self: flex-start;
       box-sizing: border-box;
-      color: var(--contrast);
+      color: var(--contrast-color);
       display: block;
       max-width: 445px;
       padding: 16px 13px 14px 18px;
@@ -136,7 +136,7 @@ footer {
     }
 
     ::ng-deep .mdc-list-item__primary-text {
-      color: var(--contrast) !important;
+      color: var(--contrast-color) !important;
     }
   // }
 
