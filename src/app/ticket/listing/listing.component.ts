@@ -249,10 +249,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       );
   }
 
-  public showStateIcon() {
-
-  }
-
   public getDisplayedColumnFAQ(): string[] {
     return this.columnDefinitionsFAQ
       .filter((cd) => !this.isPhonePortrait || cd.showMobile)
