@@ -13,6 +13,7 @@ private faqID: string | null = this.route.snapshot.paramMap.get('id');
 public courseName: string = '';
 public ticket: Ticket = {} as Ticket;
 public isLoaded: boolean = false;
+public isInIframe: boolean = true;
 
 constructor (
   private router: Router,
@@ -21,6 +22,7 @@ constructor (
   }
 
   ngOnInit(): void {
+    this.getIfInIframe();
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
       .then(response => {
@@ -40,6 +42,15 @@ constructor (
       }).finally( () => {
         this.isLoaded = true;
       })
+    }
+  }
+
+  private getIfInIframe() {
+    const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
+    if (isInIframe == 'false') {
+      this.isInIframe = false;
+    } else {
+      this.isInIframe = true;
     }
   }
 

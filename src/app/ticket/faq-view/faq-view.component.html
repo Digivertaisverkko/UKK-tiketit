@@ -2,7 +2,7 @@
 
 <div class="faq-view" *ngIf="isLoaded">
 
-  <h1 class="theme-h1" *ngIf="courseName.length > 0">
+  <h1 class="theme-h1" *ngIf="courseName.length > 0 && !isInIframe">
     <span>{{ courseName }}</span>
   </h1>
 

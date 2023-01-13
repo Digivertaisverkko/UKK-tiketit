@@ -56,7 +56,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public ticketMessageSub: Subscription;
   public errorMessage: string = '';
-
+  public isInIframe: boolean = true;
   private timeInterval: Subscription = new Subscription();
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
@@ -103,6 +103,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getIfInIframe();
+    // console.log(' lista: --- iframe: ' + this.isInIframe + ' window.self: ' + window.self );
     // if (this.route.snapshot.paramMap.get('courseID') !== null) {};
     this.trackScreenSize();
     this.routeSubscription = this.route.queryParams.subscribe(params => {
@@ -139,6 +141,23 @@ export class ListingComponent implements OnInit, OnDestroy {
       })
       // console.log('löydettiin kurssi id: ' + this.courseID)
     });
+  }
+
+  private getIfInIframe() {
+    const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
+    if (isInIframe == 'false') {
+      this.isInIframe = false;
+    } else {
+      this.isInIframe = true;
+    }
+  }
+
+  private testIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
   }
 
   private trackScreenSize(): void {

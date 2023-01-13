@@ -1,6 +1,6 @@
 <div id="app-wrapper">
 
-  <app-header>
+  <app-header *ngIf="!isInIframe">
     <span class="spacer"></span>
     <!-- <button mat-icon-button class="search-icon" aria-label="Search">
           <mat-icon>search</mat-icon>
@@ -11,6 +11,6 @@
     <router-outlet></router-outlet>
   </main>
 
-  <app-footer></app-footer>
+  <app-footer *ngIf="!isInIframe"></app-footer>
 
 </div>
