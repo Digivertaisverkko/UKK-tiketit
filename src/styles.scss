@@ -176,6 +176,8 @@ main {
   font-size: 1rem;
 }
 
+$debug: false;
+
 .theme-h1 {
   // font-family: mat.font-family($custom-typography-config, 'headline-3');
   font-size: 2.5rem;
@@ -190,14 +192,20 @@ main {
   // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
   // alla olevan viivan pituuden määrittelyyn.
   span {
-    width: 100%;
+    @if $debug { outline: 2px dotted blue; }
+    // width: 100%;
     position: relative;
-    // Otsikon viimeisen rivin alla oleva viiva.
+    // Firefoxilla korkeutta ei määritellä span-elementillä, vaan tarvitaan tämä.
+    // Viiva on tällöin koko näkymän leveyksinen.
+    @-moz-document url-prefix() { display: inline-block; }
+    // Otsikon viimeisen rivin alla oleva viiva.lock;
     &:after {
-      background: mat.get-color-from-palette($custom-accent-palette, 700);
+      @if $debug { outline: 2px solid green; }
+      border-bottom: 3px solid var(--accent);
       bottom: 4px;
+      // top: 5px;
       content: "";
-      height: 3px;
+      // height: 3px;
       left: 0;
       padding-right: 5em;
       position: absolute;
