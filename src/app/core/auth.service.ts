@@ -29,7 +29,7 @@ export interface User {
   id: number,
   nimi: string,
   sposti: string,
-  asema: 'opettaja' | 'oppilas' | 'admin'
+  asema: 'opettaja' | 'opiskelija' | 'admin'
 }
 
 export interface GenericResponse {
