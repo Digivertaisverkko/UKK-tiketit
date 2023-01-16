@@ -73,6 +73,8 @@ $custom-accent: mat.define-palette($custom-accent-palette, 700);
 // $headline-2: mat.define-typography-level(20px, 20px, 500, $displayFont),
 // $headline-6: mat.define-typography-level(50px, 50px, 800, $displayFont),
 
+// TODO: fallback -fonttien määritys.
+
 $displayFont: Montserrat;
 $textFont: Roboto;
 
@@ -138,5 +140,19 @@ $custom-theme: mat.define-light-theme(
 
 // FIXME: laita tämän sijaan vain niille komponenteille, mitä käytetään.
 @include mat.all-component-themes($custom-theme);
+
+button[mat-raised-button] {
+  min-width: 10em;
+  padding-left: 2em;
+  padding-right: 2em;
+  text-transform: uppercase;
+}
+
+// Important -ylikirjoitukset
+
+// FIXME: Miksei poimi teeman kontrastiväriä?
+.mat-primary { color: white !important; }
+
+.mdc-button { height: 2.3em !important; }
 
 /* ================================================= */

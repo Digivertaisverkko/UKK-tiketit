@@ -1,24 +1,24 @@
 @use "@angular/material" as mat;
 @import '/src/variables.scss';
-@import '/src/styles/custom-theme.scss';
 
+// Material teeman määrittely:
+@import '/src/styles/custom-theme.scss';
 
 // $displayFont: Montserrat;
 // $textFont: Roboto;
 
+html { font-family: $textFont; }
+
 body {
-  font-family: $textFont;
   line-height: 1.45;
   margin: 0;
 }
 
-main { background-color: #ffffff; }
-
-.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
-
-.theme-header-text, .theme-header-text-small, .theme-h1, .theme-h2 {
+.theme-header-text, .theme-header-text-small, .theme-h1, .h3 {
   font-family: $displayFont;
 }
+
+.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
 
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 // Tätä käytetään headerin käyttäjän nimessä.
@@ -71,7 +71,7 @@ $debug: false;
   }
 }
 
-.theme-h2 {
+.h3 {
   font-size: 1.66rem;
   font-weight: 700;
   line-height: 1.2;
@@ -82,7 +82,6 @@ $debug: false;
 }
 
 .theme-profile-name {
-  font-family: $textFont;
   font-size: 1.3rem;
   font-weight: 500;
 }
@@ -95,18 +94,6 @@ $debug: false;
   justify-content: flex-end;
   margin-top: 1.4rem;
 }
-
-button[mat-raised-button] {
-  min-width: 10em;
-  padding-left: 2em;
-  padding-right: 2em;
-  text-transform: uppercase;
-}
-
-.mdc-button { height: 2.3em !important; }
-
-// FIXME: Miksei toimi teeman värimäärittelyistä?
-.mat-primary { color: white !important; }
 
 // -------------------------------------
 
@@ -190,7 +177,7 @@ h2 {  @if $debug {  border: 1px solid blue; } }
     line-height: 1.1;
   }
 
-  .theme-h2 {
+  .h3 {
     font-size: 1.66rem * 0.8;
     line-height: 1;
   }
