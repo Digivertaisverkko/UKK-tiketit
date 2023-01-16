@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +11,12 @@ export class AppComponent implements OnInit {
   public isInIframe: boolean = false;
 
   constructor(
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.isInIframe = this.testIframe();
-    window.sessionStorage.setItem('IN-IFRAME', 'true');
+    window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     this.authService.initialize();
   }
 
