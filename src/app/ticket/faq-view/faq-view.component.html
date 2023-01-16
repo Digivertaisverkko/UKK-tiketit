@@ -10,7 +10,7 @@
 
   <section *ngIf="ticket.viesti !== undefined">
 
-    <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
+    <h2 class="h3">{{ ticket.otsikko }}</h2>
 
    <!-- ---- Kysymys ---- -->
 
@@ -27,7 +27,7 @@
       <p class="short-field-value">{{ ticket.kentat[1].arvo }} </p>
     </div>
 
-    <h2 class="theme-h2" i18n="@@Kysymys">Kysymys</h2>
+    <h2 class="h3" i18n="@@Kysymys">Kysymys</h2>
 
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
@@ -35,7 +35,7 @@
 
     <!-- ---- Vastaus ---- -->
 
-    <h2 class="theme-h2" i18n="@@Vastaus">Vastaus</h2>
+    <h2 class="h3" i18n="@@Vastaus">Vastaus</h2>
 
     <div class="short-vertical-spacer"></div>
 

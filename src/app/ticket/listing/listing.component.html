@@ -9,7 +9,7 @@
     <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
     <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h1>
 
-    <h2 class="theme-h2">{{header}}</h2>
+    <h2 class="h3">{{header}}</h2>
 
     <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
       matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
@@ -90,7 +90,7 @@
   </mat-card>
 
   <div class="input-field-wrapper">
-    <h2 class="theme-h2" i18n="@@Open neuvot">Open neuvot</h2>
+    <h2 class="h3" i18n="@@Open neuvot">Open neuvot</h2>
 
   <!--Haku toiminto-->
     <mat-form-field class="filteringField">

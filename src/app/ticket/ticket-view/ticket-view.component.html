@@ -14,7 +14,7 @@
 
   <div class="ticket-header">
 
-    <h2 class="theme-h2">{{ ticket.otsikko }}</h2>
+    <h2 class="h3">{{ ticket.otsikko }}</h2>
 
     <div class="spacer"></div>
 
@@ -55,7 +55,7 @@
 
   <!-- ----------- Keskustelu -------------------------------------- -->
 
-  <h2 class="theme-h2" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
+  <h2 class="h3" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 

@@ -28,15 +28,6 @@ mat-form-field { min-width: 21rem; }
 
 mat-checkbox { margin-left: -10px; }
 
-// mat-card-actions {
-//   margin-bottom: 1em;
-//   margin-right: 0.5em;
-//   button {
-//     margin-top: 1rem;
-//     margin-right: -8px;
-//   }
-// }
-
 @media (min-width: $XSmall) {
   .submit-ticket { padding-right: $right-padding; }
 }
