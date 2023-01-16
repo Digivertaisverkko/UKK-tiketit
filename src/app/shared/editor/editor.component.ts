@@ -4,6 +4,7 @@ import { javascript } from "@codemirror/lang-javascript"
 import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
 import { node as codeMirrorNode, CodeMirrorView } from 'prosemirror-codemirror-6';
 import { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
+import { Plugin, PluginKey } from "prosemirror-state";
 import { EditorView } from 'prosemirror-view';
 
 const nodes = {
@@ -31,6 +32,19 @@ const nodeViews = {
     });
   },
 };
+
+// Tämä plugin sanitoi liitetyn tekstin ja palauttaa ainoastaan tesktin ilman mitään muotoiluja
+// TODO: rivinvaihdot pitäisi kuitenkin saada asianmukaisesti <br > tageina
+const sanitizePastedHTMLPlugin = new Plugin({
+  key: new PluginKey("PastePlugin"),
+  props: {
+    transformPastedHTML(inputHtml: string): string {
+      let tempDivElement = document.createElement("div");
+      tempDivElement.innerHTML = inputHtml;
+      return tempDivElement.textContent || tempDivElement.innerText || "";
+    },
+  },
+});
 
 @Component({
   selector: 'app-editor',
@@ -62,6 +76,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         resizeImage: true,
       },
     });
+    this.editor.registerPlugin(sanitizePastedHTMLPlugin);
   }
 
   // make sure to destory the editor
