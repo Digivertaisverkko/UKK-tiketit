@@ -103,16 +103,16 @@ export class AuthService {
     }
   }
 
-  // public async handleNotLoggedIn() {
-  //   console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.')
-  //   const loginUrl = await this.sendAskLoginRequest('own');
-  //   // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
-  //   const route = window.location.pathname;
-  //   if (route.startsWith('/login') == false) {
-  //     window.localStorage.setItem('REDIRECT_URL', window.location.pathname);
-  //   }
-  //   this.router.navigateByUrl(loginUrl);
-  // }
+  public async handleNotLoggedIn() {
+    console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.')
+    const loginUrl = await this.sendAskLoginRequest('own');
+    // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
+    const route = window.location.pathname;
+    if (route.startsWith('/login') == false) {
+      window.localStorage.setItem('REDIRECT_URL', window.location.pathname);
+    }
+    this.router.navigateByUrl(loginUrl);
+  }
 
   public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
     window.localStorage.setItem('USER_ROLE', asema);
@@ -151,7 +151,7 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     if (response.success == true) {
       this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@onnistui:onnistui` + '.');
       return true;
@@ -177,36 +177,13 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
 
     if (response?.sposti > 0 ) {
       window.localStorage.setItem('EMAIL', response.sposti);
       this.userEmail$.next(response.sposti);
     }
     return response;
-  }
-
-  // Suorita uloskirjautuminen.
-  public async logOut(): Promise<any> {
-    const sessionID = window.localStorage.getItem('SESSION_ID');
-    if (sessionID == undefined) {
-      throw new Error('Session ID not found.');
-    }
-    const httpOptions = this.getHttpOptions();
-    let response: any;
-    let url = environment.apiBaseUrl + '/kirjaudu-ulos';
-    try {
-      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
-    } catch (error: any) {
-      this.handleError(error);
-    } finally {
-      this.isUserLoggedIn$.next(false);
-      this.setUserName('');
-      this.setUserRole('');
-      this.setUserEmail('');
-      window.localStorage.clear();
-    }
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
@@ -235,7 +212,7 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     if (response['login-url'] == undefined) {
       throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
     }
@@ -267,7 +244,7 @@ export class AuthService {
       }
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     if (response.success == true && response['login-code'] !== undefined) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
@@ -299,7 +276,7 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
 
     var loginResult: LoginResult;
     if (response.success !== undefined && response.success == true) {
@@ -406,40 +383,62 @@ export class AuthService {
       return url.protocol === "http:" || url.protocol === "https:";
     }
 
+    private handleError(error: any) {
+      if (error.status === 0) {
+        // A client-side or network error occurred.
+        console.error('Asiakas- tai verkkovirhe tapahtui:', error.error);
+      } else {
+        // The backend returned an unsuccessful response code.
+        console.error(
+          `Saatiin virhe HTTP-tilakoodilla ${error.status}, sisäisellä tilakoodilla ${error.error.error.tunnus} ja viestillä:`, error.error.error.virheilmoitus
+        );
+        if (error.status === 403 ) {
+          console.dir(error);
+          if (error.error !== undefined && error.error.error.tunnus == 1000) {
+            this.handleNotLoggedIn();
+          }
+        } 
+  
+      }
+      // }
+      // Templatessa pitäisi olla catch tälle.
+      return throwError( () => new Error(error) );
+    }
+
 // HTTP-kutsujen virheidenkäsittely
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      // A client-side or network error occurred.
-      console.error('Virhe tapahtui:', error.error);
-    } else {
-      // The backend returned an unsuccessful response code.
-      console.error(
-        `Saatiin virhe tilakoodilla ${error.status} ja viestillä: `,
-        truncate(error.error, 250, true)
-      );
-    }
-    let message: string = '';
-    if (error !== undefined) {
-      if (error.error.length > 0 ) {
-        message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
-      }
-      if (error.status !== undefined ) {
-        message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
-      }
-    }
-    return throwError(
-      () => new Error(message)
-    );
-  }
+  // private handleError(error: HttpErrorResponse) {
+  //   if (error.status === 0) {
+  //     // A client-side or network error occurred.
+  //     console.error('Virhe tapahtui:', error.error);
+  //   } else {
+  //     // The backend returned an unsuccessful response code.
+  //     console.error(
+  //       `Saatiin virhe tilakoodilla ${error.status} ja viestillä: `,
+  //       truncate(error.error, 250, true)
+  //     );
+  //   }
+  //   let message: string = '';
+  //   if (error !== undefined) {
+  //     if (error.error.length > 0 ) {
+  //       message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
+  //     }
+  //     if (error.status !== undefined ) {
+  //       message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
+  //     }
+  //   }
+  //   return throwError(
+  //     () => new Error(message)
+  //   );
+  // }
 
   // Palvelimelta saatujen vastauksien virheenkäsittely.
   private checkErrors(response: any) {
     var message: string = '';
-    if (response == undefined) {
-      message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
-      this.sendErrorMessage(message);
-      throw new Error(message);
-    }
+    // if (response == undefined) {
+    //   message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
+    //   this.sendErrorMessage(message);
+    //   throw new Error(message);
+    // }
     if (response.error == undefined) {
       return
     }
@@ -485,7 +484,33 @@ export class AuthService {
     console.log('Code challenge : ' + this.codeChallenge);
     console.log('oAuthState: ' + this.oAuthState);
   }
+
+  // Suorita uloskirjautuminen.
+  public async logOut(): Promise<any> {
+    const sessionID = window.localStorage.getItem('SESSION_ID');
+    if (sessionID == undefined) {
+      throw new Error('Session ID not found.');
+    }
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    let url = environment.apiBaseUrl + '/kirjaudu-ulos';
+    try {
+      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
+    } catch (error: any) {
+      this.handleError(error);
+    } finally {
+      this.isUserLoggedIn$.next(false);
+      this.setUserName('');
+      this.setUserRole('');
+      this.setUserEmail('');
+      window.localStorage.clear();
+    }
+    }
+
+
 }
+
 
 export interface LoginResponse {
   success: boolean,

@@ -33,7 +33,6 @@ export class TicketService {
     if (courseID !== null && this.activeCourse !== Number(courseID)) {
       window.localStorage.setItem('COURSE_ID', courseID);
       this.activeCourse = Number(courseID);
-      console.log(' ---- asetettu aktiivinen kurssi ' + courseID + ' ----');
     }
   }
 
@@ -146,14 +145,12 @@ public getTicketState(numericalState: number): string {
       response = await firstValueFrom(
         this.http.get<FieldInfo[]>(url, httpOptions)
       );
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
       console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     return response;
   }
 
@@ -166,9 +163,7 @@ public getTicketState(numericalState: number): string {
     try {
       console.log('Yritetään lähettää UKK POST-kutsulla bodylla: ' + JSON.stringify(body) + '  URL:iin "' +
       url + '"');
-      response = await firstValueFrom(
-        this.http.post<any>(url, body, httpOptions)
-      );
+      response = await firstValueFrom(this.http.post<any>(url, body, httpOptions));
       console.log(
         'saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response)
       );
@@ -186,9 +181,7 @@ public getTicketState(numericalState: number): string {
     try {
       console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' +
       url + '"');
-      response = await firstValueFrom(
-        this.http.post<NewTicket>(url, body, httpOptions)
-      );
+      response = await firstValueFrom(this.http.post<NewTicket>(url, body, httpOptions));
       console.log(
         'saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response)
       );
@@ -227,11 +220,11 @@ public getTicketState(numericalState: number): string {
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
       console.log(typeof response);
+      this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
     // this.checkErrors(response);
-    this.auth.setLoggedIn();
     return response['nimi'];
   }
 
@@ -245,11 +238,11 @@ public getTicketState(numericalState: number): string {
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
+      this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
-    this.auth.setLoggedIn();
+    // this.checkErrors(response);
     return response;
   }
 
@@ -258,16 +251,14 @@ public getTicketState(numericalState: number): string {
       const httpOptions = this.getHttpOptions();
       let response: any;
       let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
-      // try {
+      try {
         response = await firstValueFrom<MyCourse[]>(this.http.get<any>(url, httpOptions));
-        console.log(
-          'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-        );
-      // } catch (error: any) {
-      //   this.handleError(error);
-      // }
-      this.checkErrors(response);
-      this.auth.setLoggedIn();
+        console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+        this.auth.setLoggedIn();
+      } catch (error: any) {
+        this.handleError(error);
+      }
+      // this.checkErrors(response);
       return response;
     }
 
@@ -291,11 +282,11 @@ public getTicketState(numericalState: number): string {
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
+      this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
-    this.auth.setLoggedIn();
+    // this.checkErrors(response);
     return response;
   }
 
@@ -319,7 +310,7 @@ public getTicketState(numericalState: number): string {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     this.auth.setLoggedIn();
     return response;
   }
@@ -339,7 +330,7 @@ public getTicketState(numericalState: number): string {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     let ticket: Ticket = response;
     response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;
@@ -404,7 +395,7 @@ public getTicketState(numericalState: number): string {
     } catch (error: any) {
       this.handleError(error);
     }
-    this.checkErrors(response);
+    // this.checkErrors(response);
     return response;
   }
 
@@ -426,29 +417,37 @@ public getTicketState(numericalState: number): string {
   private handleError(error: any) {
     if (error.status === 0) {
       // A client-side or network error occurred.
-      console.error('Virhe tapahtui:', error.error);
+      console.error('Asiakas- tai verkkovirhe tapahtui:', error.error);
     } else {
       // The backend returned an unsuccessful response code.
       console.error(
         `Saatiin virhe HTTP-tilakoodilla ${error.status}, sisäisellä tilakoodilla ${error.error.error.tunnus} ja viestillä:`, error.error.error.virheilmoitus
       );
+      if (error.status === 403 ) {
+        console.dir(error);
+        if (error.error !== undefined && error.error.error.tunnus == 1000) {
+          this.auth.handleNotLoggedIn();
+        }
+      } 
+
     }
-    let message: string = '';
-    if (error !== undefined) {
-      if (error.error.length > 0) {
-        message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
-      }
-      if (error.status !== undefined) {
-        message += $localize `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
-      }
-    }
-    return throwError(
-      () => new Error(message)
-    );
+    // let message: string = '';
+    // if (error !== undefined) {
+    //   if (error.error.length > 0) {
+    //     message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
+    //   }
+    //   if (error.status !== undefined) {
+    //     message += $localize `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
+    //   }
+    // }
+    // Templatessa pitäisi olla catch tälle.
+    return throwError( () => new Error(error) );
   }
 
-  // Käsitellään mahdollisesti palvelimelta saatu virheilmoitus.
+  // Käsitellään mahdollisesti palvelimelta saatu virheilmoitus, joka ei tullut catch-blokkiin.
+  // Tätä ei pitäisi enää tarvita.
   private checkErrors(response: any) {
+    console.log(' --- checkErrors ----');
     var message: string = '';
     // if (response == undefined) {
     //   message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
@@ -458,8 +457,10 @@ public getTicketState(numericalState: number): string {
     if (response?.error == undefined) {
       return
     }
+    console.error(' Huomattiin responsena error, vaikkei jouduttu catch-blokkiin.');
     const error = response.error;
     console.log('error : ' + JSON.stringify(error));
+    
     switch (error.tunnus) {
       case 1000:
         message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
@@ -489,7 +490,9 @@ public getTicketState(numericalState: number): string {
       this.sendMessage(message);
       console.error($localize`:@@Virhe:Virhe` + ': ' + message);
     }
-    if (error.tunnus !== 2000) {
+    if (error.tunnus == 1000) {
+      this.auth.handleNotLoggedIn();
+    } else if (error.tunnus !== 2000) {
       const newError = Error('Virhe: tunnus: ' + error.tunnus + ', viesti: ' + truncate(error.virheilmoitus, 250, true));
     }
   }

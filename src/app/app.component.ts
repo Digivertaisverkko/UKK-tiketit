@@ -11,9 +11,8 @@ export class AppComponent implements OnInit {
   public isInIframe: boolean = false;
 
   constructor(
-    private authService: AuthService
+      private authService: AuthService
   ) {}
-
   ngOnInit(): void {
     this.isInIframe = this.testIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
