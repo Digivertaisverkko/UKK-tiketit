@@ -135,7 +135,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       }).then(() => {
         this.pollQuestions();
       }).catch(error => {
-        console.log('saatiin error: ');
+        console.log('listing.component: saatiin error: ');
         console.dir(error);
         this.handleError(error);
       }).finally(() => {
@@ -204,7 +204,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             // console.dir(SortableData);
             this.dataSource.sort = this.sortQuestions;
             // this.dataSource.paginator = this.paginator;
-
             if (this.numberOfQuestions === 0) {
               this.showNoQuestions = true;
             } else {

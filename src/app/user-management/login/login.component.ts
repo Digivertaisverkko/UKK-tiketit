@@ -80,8 +80,14 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl(redirectUrl);
         }
       })
-      .catch( error => {
-    console.error(error.message)});
+      .catch( () => {
+        // console.log('virhe napattu');
+        // console.dir(error)
+// ;        if (error.status == 403) {
+//           let message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
+//           this.serverErrorMessage = message;
+//         }
+      });
   }
 
   private setLoginID() {
