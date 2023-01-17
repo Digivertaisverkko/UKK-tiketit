@@ -5,7 +5,8 @@ section, app-error-card {
   width: 103%;
 }
 
-h1, h2 { padding-left: 20px; }
+// Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
+h1, h2, h3, .theme-actions { padding-left: 20px; }
 
 h2 {
   margin-top: 2.2rem;

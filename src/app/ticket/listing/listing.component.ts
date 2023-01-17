@@ -135,6 +135,8 @@ export class ListingComponent implements OnInit, OnDestroy {
       }).then(() => {
         this.pollQuestions();
       }).catch(error => {
+        console.log('saatiin error: ');
+        console.dir(error);
         this.handleError(error);
       }).finally(() => {
         this.isLoaded = true;
@@ -311,7 +313,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (error.tunnus !== undefined ) {
       if (error.tunnus == 1000 ) {
         this.errorMessage = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.'
-      }
+      } 
     }
   }
 
