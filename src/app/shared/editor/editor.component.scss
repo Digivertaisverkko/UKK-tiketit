@@ -6,6 +6,11 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
+.NgxEditor__Content {
+  min-height: 10em;
+  overflow: auto;
+}
+
 .ProseMirror-gapcursor {
   display: none;
   pointer-events: none;
@@ -35,3 +40,4 @@
 .cm-editor {
   margin-bottom: 1em;
 }
+
