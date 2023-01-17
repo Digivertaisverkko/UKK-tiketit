@@ -78,7 +78,6 @@ export class EditorComponent implements OnInit, OnDestroy {
         resizeImage: true,
       },
       plugins: [
-        sanitizePastedHTMLPlugin,
         gapCursor(),
       ],
     });
