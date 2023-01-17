@@ -5,9 +5,9 @@
 <section *ngIf="!isInIframe && isCourseIDvalid">
 
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-  <h1 class="theme-h1" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h1>
+  <h2 class="main-header" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h2>
 
-  <h3 class="h3">{{header}}</h3>
+  <h3 class="sub-header">{{header}}</h3>
 
   <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
@@ -89,7 +89,7 @@
 </mat-card> -->
 
 <div class="input-field-wrapper">
-  <h3 class="h3" i18n="@@Open neuvot">Open neuvot</h3>
+  <h3 class="sub-header" i18n="@@Open neuvot">Open neuvot</h3>
   <!--Haku toiminto-->
   <mat-form-field class="filteringField">
     <mat-label>Hae neuvoa</mat-label>

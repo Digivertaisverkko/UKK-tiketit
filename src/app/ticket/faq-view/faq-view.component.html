@@ -2,15 +2,15 @@
 
 <div class="faq-view" *ngIf="isLoaded">
 
-  <h1 class="theme-h1" *ngIf="courseName.length > 0 && !isInIframe">
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
     <span>{{ courseName }}</span>
-  </h1>
+  </h2>
 
   <app-to-beginning-button></app-to-beginning-button>
 
   <section *ngIf="ticket.viesti !== undefined">
 
-    <h2 class="h3">{{ ticket.otsikko }}</h2>
+    <h3 class="sub-header">{{ ticket.otsikko }}</h3>
 
    <!-- ---- Kysymys ---- -->
 
@@ -27,7 +27,7 @@
       <p class="short-field-value">{{ ticket.kentat[1].arvo }} </p>
     </div>
 
-    <h2 class="h3" i18n="@@Kysymys">Kysymys</h2>
+    <h3 class="sub-header" i18n="@@Kysymys">Kysymys</h3>
 
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
@@ -35,7 +35,7 @@
 
     <!-- ---- Vastaus ---- -->
 
-    <h2 class="h3" i18n="@@Vastaus">Vastaus</h2>
+    <h3 class="sub-header" i18n="@@Vastaus">Vastaus</h3>
 
     <div class="short-vertical-spacer"></div>
 

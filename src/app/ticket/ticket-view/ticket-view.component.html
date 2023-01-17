@@ -4,9 +4,9 @@
 
   <section *ngIf="ticket.tila > 0">
 
-    <h1 class="theme-h1" *ngIf="courseName.length > 0">
+    <h2 class="main-header" *ngIf="courseName.length > 0">
       <span>{{ courseName }}</span>
-    </h1>
+    </h2>
 
     <app-to-beginning-button></app-to-beginning-button>
 
@@ -14,7 +14,7 @@
 
   <div class="ticket-header">
 
-    <h2 class="h3">{{ ticket.otsikko }}</h2>
+    <h3 class="sub-header">{{ ticket.otsikko }}</h3>
 
     <div class="spacer"></div>
 
@@ -55,7 +55,7 @@
 
   <!-- ----------- Keskustelu -------------------------------------- -->
 
-  <h2 class="h3" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h2>
+  <h3 class="sub-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h3>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 

@@ -6,7 +6,7 @@ section, app-error-card {
 }
 
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
-h1, h2, h3, .theme-actions { padding-left: 20px; }
+h2, h3, .theme-actions { padding-left: 20px; }
 
 h2 {
   margin-top: 2.2rem;
@@ -28,7 +28,6 @@ a {
   display: inline-block;
   text-decoration: none;
   width: 98%;
-
 }
 
 .state-wrapper {
