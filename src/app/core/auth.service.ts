@@ -5,37 +5,8 @@ import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 import { truncate } from '../utils/truncate';
 import { Router } from '@angular/router';
-// import { LocalStorageModule } from 'angular-2-local-storage';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
-
-export interface LoginResponse {
-  success: boolean,
-  'login-code': string
-}
-
-interface LoginResult {
-  success: boolean,
-  redirectUrl?: string
-};
-
-export interface AuthRequestResponse {
-  success: boolean,
-  error: string,
-  'session-id': string
-}
-
-export interface User {
-  id: number,
-  nimi: string,
-  sposti: string,
-  asema: 'opettaja' | 'opiskelija' | 'admin'
-}
-
-export interface GenericResponse {
-  success: boolean,
-  error: object
-}
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +17,7 @@ export class AuthService {
 
   // Onko käyttäjä kirjautuneena.
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
-  public isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   private userRole$ = new BehaviorSubject<string>('');
   private userName$ = new BehaviorSubject<string>('');
   private userEmail$ = new BehaviorSubject<string>('');
@@ -63,6 +34,10 @@ export class AuthService {
 
   constructor(private http: HttpClient,
               private router: Router) {
+  }
+
+  public setLoggedIn() {
+    this.isUserLoggedIn$.next(true);
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
@@ -97,8 +72,7 @@ export class AuthService {
     return this.userEmail$.asObservable();
   }
 
-  // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin
-  // aloitettu.
+  // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin aloitettu.
   public initialize() {
     if (window.localStorage.getItem('USER_ROLE') !== null) {
       const userRole = window.localStorage.getItem('USER_ROLE');
@@ -113,7 +87,7 @@ export class AuthService {
     }
     if (window.localStorage.getItem('SESSION_ID') !== null) {
       const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');
-        this.isUserLoggedIn$.next(true);
+      // this.isUserLoggedIn$.next(true);
     }
     if (window.localStorage.getItem('USER_NAME') !== null) {
       const userName: string | null = window.localStorage.getItem('USER_NAME');
@@ -209,7 +183,6 @@ export class AuthService {
       window.localStorage.setItem('EMAIL', response.sposti);
       this.userEmail$.next(response.sposti);
     }
-
     return response;
   }
 
@@ -512,5 +485,32 @@ export class AuthService {
     console.log('Code challenge : ' + this.codeChallenge);
     console.log('oAuthState: ' + this.oAuthState);
   }
+}
 
+export interface LoginResponse {
+  success: boolean,
+  'login-code': string
+}
+
+interface LoginResult {
+  success: boolean,
+  redirectUrl?: string
+};
+
+export interface AuthRequestResponse {
+  success: boolean,
+  error: string,
+  'session-id': string
+}
+
+export interface User {
+  id: number,
+  nimi: string,
+  sposti: string,
+  asema: 'opettaja' | 'opiskelija' | 'admin'
+}
+
+export interface GenericResponse {
+  success: boolean,
+  error: object
 }
