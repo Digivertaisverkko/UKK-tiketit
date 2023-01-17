@@ -2,10 +2,10 @@
 
   <!-- -------- Tiketit --------- -->
 
-<section *ngIf="!isInIframe && isCourseIDvalid">
+<section *ngIf="isCourseIDvalid">
 
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-  <h2 class="main-header" *ngIf="courseName.length > 0" id="courseName"><span>{{courseName}}</span></h2>
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName"><span>{{courseName}}</span></h2>
 
   <h3 class="sub-header">{{header}}</h3>
 
@@ -22,7 +22,9 @@
             <div class="icon-wrapper" [ngSwitch]="element.tilaID">
               <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
               <img class="icon" *ngSwitchCase="2" src="../../../assets/icons/Kasittelyssa.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="3" src="../../../assets/icons/Kysymys.svg" height="100%" width="100%" alt="">
               <img class="icon" *ngSwitchCase="4" src="../../../assets/icons/Kommentti.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="5" src="../../../assets/icons/Ratkaisu_64.svg" height="100%" width="100%" alt="">
               <img class="icon" *ngSwitchCase="6" src="../../../assets/icons/Arkistoitu.svg" height="100%" width="100%" alt="">
             </div>
             <div>{{ element.tila }}</div>
