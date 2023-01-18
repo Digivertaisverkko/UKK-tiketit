@@ -78,7 +78,7 @@
 </section>
 
   <div class="theme-actions" [ngStyle]="showNoQuestions ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-    <button mat-raised-button color="primary" [routerLink]="'/submit/'"
+    <button mat-raised-button color="primary" (click)="submitTicket()"
       i18n="@@Uusi kysymys">Uusi kysymys</button>
   </div>
 

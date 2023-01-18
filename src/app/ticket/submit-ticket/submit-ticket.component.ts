@@ -41,6 +41,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.trackUserRole();
     this.userName = this.auth.getUserName();
+    console.log(' username: ' + this.auth.getUserName())
     const courseID = this.ticketService.getActiveCourse();
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response;
@@ -58,10 +59,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
       console.log('saatiin rooli: ' + response);
       this.userRole = response;
     })
-  }
-
-  ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
   }
 
   public sendTicket(): void {
@@ -86,10 +83,12 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
       this.ticketService.sendFaq(courseID, this.newTicket, this.answer)
       .then(() => {
         this.goBack()
-      }).catch( error => {
-        console.error(error.message);
-      });
+      }).catch( () => {});
     }
+  }
+
+  ngOnDestroy(): void {
+    this.messageSubscription.unsubscribe();
   }
 
 }

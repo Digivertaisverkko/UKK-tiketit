@@ -401,7 +401,7 @@ public getTicketState(numericalState: number): string {
   private getHttpOptions(): object {
     let sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
-      throw new Error('No session id set.');
+      throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
     }
     // console.log('session id on: ' + sessionID);
     // sessionID = '123456789';

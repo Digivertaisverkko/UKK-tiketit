@@ -119,13 +119,23 @@ export class ListingComponent implements OnInit, OnDestroy {
       }
       var courseIDcandinate: string = params['courseID'];
       this.showFAQ(courseIDcandinate);
-      this.authService.saveUserInfo(courseIDcandinate);
       this.setTicketListHeader();
+      this.ticket.setActiveCourse(courseIDcandinate);
+      // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
+      // this.authService.saveUserInfo(courseIDcandinate);
       this.trackLoginState(courseIDcandinate);
     });
   }
 
-  trackLoginState(courseIDcandinate: string) {
+  public submitTicket () {
+    if (this.authService.getIsUserLoggedIn() == false) {
+      window.localStorage.setItem('REDIRECT_URL', 'submit');
+      console.log('--- Tallennettiin redirect URL: /submit/ ----');
+    }
+    this.router.navigateByUrl('submit');
+  }
+
+  private trackLoginState(courseIDcandinate: string) {
     this.authService.onIsUserLoggedIn().subscribe(response => {
       console.log('lista : saatiin kirjautumistieto: ' + response);
       this.isLoaded = true;
@@ -135,7 +145,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     });
   }
 
-  public updateLoggedInView(courseIDcandinate: string) {
+  private updateLoggedInView(courseIDcandinate: string) {
     this.ticket.getMyCourses().then(response => {
       if (response[0].kurssi !== undefined) {
         const myCourses: MyCourse[] = response;

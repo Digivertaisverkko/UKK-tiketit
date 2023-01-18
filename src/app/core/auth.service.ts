@@ -182,10 +182,10 @@ export class AuthService {
     }
   }
 
-  // Hae ja aseta palvelimelta käyttöjätiedot paikallisesti käytettäviksi.
+  // Hae ja aseta palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
   public saveUserInfo(courseID: string) {
     if (window.localStorage.getItem('SESSION_ID') == null) {
-      console.log('saveUserInfo: ei session id:ä, ei haeta tietoja.');
+      console.log('saveUserInfo: ei session id:ä, ei voida hakea ja tallentaa tietoja.');
       return;
     }
     this.getMyUserInfo(courseID)
@@ -334,13 +334,15 @@ export class AuthService {
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
       // console.log('Vastaus: ' + JSON.stringify(response));
       // let sessionID = response['login-id'];
-      console.log('vastauksen sisältöä: ');
-
+      window.localStorage.removeItem('REDIRECT_URL')
       let sessionID = response['session-id'];
-      // console.log(' -- session ID on ' + sessionID);
       this.saveSessionStatus(sessionID);
 
-      // onsole.log('Authorization success.');
+      // console.log(' -- session ID on ' + sessionID);
+      const courseID: string | null = window.localStorage.getItem('COURSE_ID');
+      if (courseID !== null) {
+        this.saveUserInfo(courseID);
+      } 
     } else {
       loginResult = { success: false };
       console.error(response.error);
@@ -348,7 +350,7 @@ export class AuthService {
     return loginResult;
   }
 
-  // Onko käyttäjät kirjautunut.
+  // Onko käyttäjät kirjautunut. TODO: muuta observableen perustuvaksi tämän sijaan?
   public getIsUserLoggedIn(): Boolean {
     const sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
@@ -359,7 +361,7 @@ export class AuthService {
   }
 
   public saveSessionStatus(sessionID: string) {
-    this.isUserLoggedIn$.next(true);
+    this.setLoggedIn();
     window.localStorage.setItem('SESSION_ID', sessionID);
     console.log('tallennettiin sessionid: ' + sessionID);
   }
