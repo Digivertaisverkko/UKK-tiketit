@@ -50,4 +50,10 @@
 <mat-menu #accountMenu="matMenu">
   <button mat-menu-item (click)="toggleLanguage()" i18n="@@vaihda kieli">Change to english</button>
   <button mat-menu-item (click)="logOut()" i18n="@@Kirjaudu ulos">Kirjaudu ulos</button>
+
+  <!-- <ng-template id="logIn">
+    <button mat-menu-item (click)="logIn()" i18n="@@Kirjaudu sisään">Kirjaudu sisään</button>
+  </ng-template>
+  <button mat-menu-item (click)="logOut()" *ngIf="isUserLoggedIn$ | async; else logIn" i18n="@@Kirjaudu ulos">Kirjaudu ulos</button> -->
+
 </mat-menu>

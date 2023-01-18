@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
     this.updateUserRole();
     this.updateUserName();
     this.updateUserEmail();
+
   }
 
   updateUserName() {
@@ -106,6 +107,10 @@ export class HeaderComponent implements OnInit {
       const courseID = this.ticketService.getActiveCourse();
       this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
     }
+  }
+
+  public logIn() {
+    this.authService.handleNotLoggedIn();
   }
 
   public logOut() {
