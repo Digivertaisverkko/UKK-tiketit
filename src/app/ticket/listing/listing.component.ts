@@ -1,11 +1,11 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+// import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, MyCourse, FAQ, Question } from '../ticket.service';
@@ -58,6 +58,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public errorMessage: string = '';
   public isInIframe: boolean = true;
   private timeInterval: Subscription = new Subscription();
+  // public isLoggedIn$: Observable<boolean>;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -68,8 +69,9 @@ export class ListingComponent implements OnInit, OnDestroy {
   //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
   //data = new MatTableDataSource(kurssit);
 
+  // private _liveAnnouncer: LiveAnnouncer,
+
   constructor(
-    private _liveAnnouncer: LiveAnnouncer,
     private responsive: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
@@ -84,6 +86,8 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.errorMessage = '';
       }
     });
+
+    // this.isLoggedIn$ = this.authService.onIsUserLoggedIn();
 
     this.username = this.authService.getUserName();
 
@@ -104,45 +108,62 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getIfInIframe();
-    // console.log(' lista: --- iframe: ' + this.isInIframe + ' window.self: ' + window.self );
     // if (this.route.snapshot.paramMap.get('courseID') !== null) {};
     this.trackScreenSize();
     this.routeSubscription = this.route.queryParams.subscribe(params => {
       if (params['courseID'] === undefined) {
+        // TODO: Jokin parempi virheilmoitus tähän.
+        this.errorMessage = "Kurssi ID:ä ei löytynyt. Oikea URL-linkin muoto esim kurssille 1: localhost:4200/list-tickets?courseID=1. Tämä ilmoitus kehitysversioon tarkoitettu.";
+        this.isLoaded = true;
         throw new Error('Kurssia ei löytynyt.');
       }
-      this.ticket.getMyCourses().then(response => {
-        if (response[0].kurssi !== undefined) {
-          const myCourses: MyCourse[] = response;
-          var courseIDcandinate: string = params['courseID'];
-          // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
-          // Onko käyttäjä tällä kurssilla.
-          if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-            this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
-          } else {
-            this.courseID = courseIDcandinate;
-            // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
-            this.isCourseIDvalid = true;
-            this.ticket.setActiveCourse(this.courseID);
-            if (this.courseID !== null) {
-              this.showCourseName(this.courseID);
-              // this.courseName = 'Ohjelmointikurssi';
-              this.showHeader(this.courseID);
-            }
-            this.showFAQ();
-          }
-        }
-      }).then(() => {
-        this.pollQuestions();
-      }).catch(error => {
-        console.log('listing.component: saatiin error: ');
-        console.dir(error);
-        this.handleError(error);
-      }).finally(() => {
-        this.isLoaded = true;
-      })
-      // console.log('löydettiin kurssi id: ' + this.courseID)
+      var courseIDcandinate: string = params['courseID'];
+      this.showFAQ(courseIDcandinate);
+      this.authService.saveUserInfo(courseIDcandinate);
+      this.setTicketListHeader();
+      this.trackLoginState(courseIDcandinate);
     });
+  }
+
+  trackLoginState(courseIDcandinate: string) {
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.log('lista : saatiin kirjautumistieto: ' + response);
+      this.isLoaded = true;
+      if (response == true) {
+        this.updateLoggedInView(courseIDcandinate);
+      }
+    });
+  }
+
+  public updateLoggedInView(courseIDcandinate: string) {
+    this.ticket.getMyCourses().then(response => {
+      if (response[0].kurssi !== undefined) {
+        const myCourses: MyCourse[] = response;
+        // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
+        // Onko käyttäjä URL parametrilla saadulla kurssilla.
+        if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+          this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
+        } else {
+          this.courseID = courseIDcandinate;
+          // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
+          this.isCourseIDvalid = true;
+          this.ticket.setActiveCourse(this.courseID);
+          if (this.courseID !== null) {
+            this.showCourseName(this.courseID);
+            // this.courseName = 'Ohjelmointikurssi';
+          }
+
+        }
+      }
+    }).then(() => {
+      this.pollQuestions();
+    }).catch(error => {
+      console.log('listing.component: saatiin error: ');
+      console.dir(error);
+      this.handleError(error);
+    }).finally(() => {
+      // this.isLoaded = true;
+    })
   }
 
   private getIfInIframe() {
@@ -225,41 +246,19 @@ export class ListingComponent implements OnInit, OnDestroy {
     })
   }
 
-  // Näytä otsikko riippuen käyttäjän roolista.
-  private showHeader(courseID: string) {
-    this.authService
-      .getMyUserInfo(courseID)
-      .then((response) => {
-        if (response?.sposti.length > 0) {
-          this.authService.setUserEmail(response.sposti);
-        }
-        if (response?.nimi.length > 0) {
-          this.authService.setUserName(response.nimi);
-        }
-        if (response.asema !== undefined) {
-          let userRole: string = response.asema;
-          // console.log('Käyttäjän asema: ' + userRole);
-          switch (userRole) {
-            case 'opettaja':
-              this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
-            case 'admin':
-              this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
-            case 'opiskelija':
-              this.header = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
-            default:
-              console.error('Käyttäjän asemaa kurssilla ei löydetty.');
-          }
-          if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
-            this.authService.setUserRole(userRole);
-          }
-        }
-      })
-      .catch(error =>
-        console.error(
-          'listingComponent: Saatiin virhe haettaessa käyttäjän asemaa: ' +
-          error.message
-        )
-      );
+  public setTicketListHeader() {
+    let userRole = this.authService.getUserRole();
+    switch (userRole) {
+      case 'opettaja':
+        this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
+      case 'admin':
+        this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
+      case 'opiskelija':
+        this.header = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
+      default:
+        // Jos ei olla kirjautuneina.
+        this.header = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
+    }
   }
 
   public getDisplayedColumnFAQ(): string[] {
@@ -274,9 +273,9 @@ export class ListingComponent implements OnInit, OnDestroy {
       .map((cd) => cd.def);
   }
 
-  private showFAQ() {
+  private showFAQ(courseID: string) {
     this.ticket
-      .getFAQ(Number(this.courseID))
+      .getFAQ(Number(courseID))
       .then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
@@ -316,17 +315,17 @@ export class ListingComponent implements OnInit, OnDestroy {
     }
   }
 
-  announceSortChange(sortState: Sort) {
+  // announceSortChange(sortState: Sort) {
     // This example uses English messages. If your application supports
     // multiple language, you would internationalize these strings.
     // Furthermore, you can customize the message to add additional
     // details about the values being sorted.
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
-  }
+  //   if (sortState.direction) {
+  //     this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+  //   } else {
+  //     this._liveAnnouncer.announce('Sorting cleared');
+  //   }
+  // }
 
   ngOnDestroy(): void {
     this.timeInterval.unsubscribe();

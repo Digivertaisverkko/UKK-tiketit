@@ -1,12 +1,15 @@
 @import '/src/variables.scss';
 
-section, app-error-card {
+// Leveys on tässä näkymässä leveämpi kuin muilla leveämpien taulukoiden vuoksi.
+
+section, app-error-card { width: 103%; }
+
+.main-header, #tickets-header, section, app-error-card {
   margin-left: -15px;
-  width: 103%;
 }
 
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
-h2, h3, .theme-actions { padding-left: 20px; }
+h2, h3 { padding-left: 20px; }
 
 h2 {
   margin-top: 2.2rem;

@@ -2,12 +2,12 @@
 
   <!-- -------- Tiketit --------- -->
 
-<section *ngIf="isCourseIDvalid">
-
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
   <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName"><span>{{courseName}}</span></h2>
 
-  <h3 class="sub-header">{{header}}</h3>
+  <h3 id="tickets-header" class="sub-header" *ngIf="header.length > 0">{{header}}</h3>
+
+  <section *ngIf="isCourseIDvalid">
 
   <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
@@ -75,16 +75,18 @@
     </mat-paginator> -->
   <!-- </div> -->
 
+</section>
+
   <div class="theme-actions" [ngStyle]="showNoQuestions ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
     <button mat-raised-button color="primary" [routerLink]="'/submit/'"
       i18n="@@Uusi kysymys">Uusi kysymys</button>
   </div>
 
-</section>
+
 
 <!-- FAQ -->
 
-<section *ngIf="isCourseIDvalid">
+<section *ngIf="FAQisLoaded">
 
 <!-- <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
   <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>

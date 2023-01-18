@@ -37,10 +37,19 @@ export class AuthService {
   }
 
   public setLoggedIn() {
-    this.isUserLoggedIn$.next(true);
+    if (this.isUserLoggedIn$.value == false) {
+      this.isUserLoggedIn$.next(true);
+    }
+  }
+
+  public setNotLoggegIn() {
+    if (this.isUserLoggedIn$.value == true) {
+      this.isUserLoggedIn$.next(false);
+    }
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
+
   public onIsUserLoggedIn(): Observable<any> {
     return this.isUserLoggedIn$.asObservable();
   }
@@ -60,6 +69,10 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
+  public getUserRole(): String {
+    return this.userRole$.value;
+  }
+
   public onGetUserRole(): Observable<any> {
     return this.userRole$.asObservable();
   }
@@ -72,8 +85,20 @@ export class AuthService {
     return this.userEmail$.asObservable();
   }
 
-  // Alustetaan ohjelman tila huomioiden, että sessio voi olla aiemmin aloitettu.
+  // Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
+  // olla jo local storagessa.
+  // Ei haeta tässä palvelimelta käyttäjätietoja, koska siihen tarvittavaa courseID:ä ei vielä tiedossa.
   public initialize() {
+    if (window.localStorage.getItem('SESSION_ID') == null) {
+      return
+    }
+      // const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');  
+      // if (isUserLoggedIn == null) {
+      //   this.handleNotLoggedIn();
+      // }
+      // this.isUserLoggedIn$.next(true);   
+    // }
+
     if (window.localStorage.getItem('USER_ROLE') !== null) {
       const userRole = window.localStorage.getItem('USER_ROLE');
       switch (userRole) {
@@ -84,10 +109,6 @@ export class AuthService {
           // console.log('havaittiin user role ' + userRole);
         }
       }
-    }
-    if (window.localStorage.getItem('SESSION_ID') !== null) {
-      const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');
-      // this.isUserLoggedIn$.next(true);
     }
     if (window.localStorage.getItem('USER_NAME') !== null) {
       const userName: string | null = window.localStorage.getItem('USER_NAME');
@@ -161,8 +182,33 @@ export class AuthService {
     }
   }
 
+  // Hae ja aseta palvelimelta käyttöjätiedot paikallisesti käytettäviksi.
+  public saveUserInfo(courseID: string) {
+    if (window.localStorage.getItem('SESSION_ID') == null) {
+      console.log('saveUserInfo: ei session id:ä, ei haeta tietoja.');
+      return;
+    }
+    this.getMyUserInfo(courseID)
+      .then((response) => {
+        this.setLoggedIn();
+        if (response?.sposti.length > 0) {
+          this.setUserEmail(response.sposti);
+        }
+        if (response?.nimi.length > 0) {
+          this.setUserName(response.nimi);
+        }
+        if (response.asema !== undefined) {
+          let userRole: string = response.asema;
+          if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
+            this.setUserRole(userRole);
+          } 
+        }
+      })
+      .catch(error => this.handleError(error));
+  }
+
   // Hae omat kurssikohtaiset tiedot.
-  public async getMyUserInfo(courseID: string): Promise<User> {
+  private async getMyUserInfo(courseID: string): Promise<User> {
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
     }
@@ -171,9 +217,7 @@ export class AuthService {
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
     try {
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response))
     } catch (error: any) {
       this.handleError(error);
     }
@@ -325,7 +369,7 @@ export class AuthService {
   private getHttpOptions(): object {
     let sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
-      throw new Error('Session ID:ä ei ole asetettu. Kutsut palvelimeen eivät toimi.');
+      throw new Error('Session ID:ä ei ole asetettu. Ei olla kirjautuneita.');
     }
     // console.log('session id on: ' + sessionID);
     let options = {

@@ -9,9 +9,9 @@ import { authGuard } from '../user-management/auth.guard';
 
 const routes: Routes = [
   { path: 'ticket-view/:id', component: TicketViewComponent, canActivate: [authGuard] },
-  { path: 'faq-view/:id', component: FaqViewComponent, canActivate: [authGuard] },
   { path: 'submit', component: SubmitTicketComponent, canActivate: [authGuard] },
-  { path: 'list-tickets', component: ListingComponent, canActivate: [authGuard] }
+  { path: 'faq-view/:id', component: FaqViewComponent },
+  { path: 'list-tickets', component: ListingComponent }
 ];
 
 @NgModule({

@@ -55,15 +55,14 @@ export class TicketService {
 
 // Hae kurssin UKK-kysymykset.
 public async getFAQ(courseID: number): Promise<FAQ[]> {
-  const httpOptions = this.getHttpOptions();
+  // const httpOptions = this.getHttpOptions();
   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
   let response: any;
   try {
-    response = await firstValueFrom(this.http.get<FAQ[]>(url, httpOptions));
+    response = await firstValueFrom(this.http.get<FAQ[]>(url));
     console.log(
       'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
     );
-    this.auth.setLoggedIn();
   } catch (error: any) {
     this.handleError(error);
   }
@@ -290,7 +289,7 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
-    /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
+  /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<Question[]> {
@@ -314,7 +313,6 @@ public getTicketState(numericalState: number): string {
     this.auth.setLoggedIn();
     return response;
   }
-
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
