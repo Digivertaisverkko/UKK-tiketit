@@ -2,11 +2,15 @@
 
 <div *ngIf="isLoaded">
 
-  <section *ngIf="ticket.tila > 0">
-
     <h2 class="main-header" *ngIf="courseName.length > 0">
       <span>{{ courseName }}</span>
     </h2>
+
+    <section *ngIf="ticket.tila > 0">
+
+    <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
+
+    <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
 
     <app-to-beginning-button></app-to-beginning-button>
 
@@ -49,9 +53,9 @@
 
     <app-message [messageHtml]=ticket.viesti></app-message>
 
-  </section>
-
   <hr class="theme-divider">
+
+  </section>
 
   <!-- ----------- Keskustelu -------------------------------------- -->
 
@@ -84,14 +88,14 @@
 
   <div class="vertical-spacer"></div>
 
-  <app-editor [(editorContent)]="commentText"></app-editor>
+  <app-editor *ngIf="ticket.tila > 0" [(editorContent)]="commentText"></app-editor>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
     i18n-title="@@Virhe"
     title="Virhe"
     message="{{ errorMessage }}"
-    [styles]="{ margin: '1em 0' }"
+    [styles]="{ margin: '0' }"
     >
   </app-error-card>
 
