@@ -8,6 +8,7 @@
   </app-header>
 
   <main>
+    <span class="login-status" *ngIf="isInIframe">{{loggingStatus}}</span>
     <router-outlet></router-outlet>
   </main>
 

@@ -16,6 +16,7 @@ main {
   flex-direction: column;
   flex-grow: 1;
   margin: 0 auto;
+  position: relative;
   width: 1024px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
   // min-height: calc(100vh - $header-height - $footer-height);
@@ -26,6 +27,14 @@ main {
   padding: 0 40px 50px 40px;
   // padding: 50px 40px 90px 40px;
   // padding: 3rem 40px 6rem 40px;
+}
+
+.login-status {
+  display: inline-block;
+  margin-top: 0.25rem;
+  margin-right: 1rem;
+  position: absolute;
+  right: 0;
 }
 
   @media (max-width: 1024px) {
