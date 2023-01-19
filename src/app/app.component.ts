@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +10,13 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
+  private isLogged: boolean = false;
   // public isUserLoggedIn$: Observable<boolean>;
-  public loggingStatus: string = ''
+  public logButtonString: string = ''
 
   constructor(
-      private authService: AuthService
+      private authService: AuthService,
+      private router: Router
   ) {
     // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
   }
@@ -26,14 +28,27 @@ export class AppComponent implements OnInit {
     this.authService.initialize();
     this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response == true) {
-        this.loggingStatus = "Olet kirjautunut";
+        this.isLogged = true;
+        this.logButtonString = "Kirjaudu ulos";
       } else if (response == false) {
-        this.loggingStatus = "Et ole kirjautunut";
+        this.isLogged = false;
+        this.logButtonString = "Kirjaudu sisään";
       }
     });
   }
 
-  testIframe () {
+  public logInOut() {
+    if (this.isLogged == true ) {
+      this.authService.logOut();
+      this.authService.sendAskLoginRequest('own').then((response: any) => {
+          this.router.navigateByUrl(response);
+      }).catch ( () => {})
+    } else {
+      this.authService.handleNotLoggedIn();
+    }
+  }
+
+  private testIframe () {
     try {
         return window.self !== window.top;
     } catch (e) {

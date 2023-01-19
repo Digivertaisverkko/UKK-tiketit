@@ -8,7 +8,9 @@
   </app-header>
 
   <main>
-    <span class="login-status" *ngIf="isInIframe">{{loggingStatus}}</span>
+    <button mat-raised-button class="login-status" (click)="logInOut()" *ngIf="isInIframe">
+      {{logButtonString}}
+    </button>
     <router-outlet></router-outlet>
   </main>
 

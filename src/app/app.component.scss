@@ -31,10 +31,11 @@ main {
 
 .login-status {
   display: inline-block;
-  margin-top: 0.25rem;
-  margin-right: 1rem;
+  // margin-top: 0.25rem;
+  // margin-right: 0;
   position: absolute;
   right: 0;
+  font-size: 75%;
 }
 
   @media (max-width: 1024px) {
