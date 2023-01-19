@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Route } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   public userRole: string = '';
   public userName: string = '';
   public userEmail: string = '';
+  public hideLogging: boolean = true;
 
   get language(): string {
     return this._language;
@@ -30,6 +31,8 @@ export class HeaderComponent implements OnInit {
     }
   }
   private _language!: string;
+
+  // private route: ActivatedRoute,
 
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
@@ -44,8 +47,12 @@ export class HeaderComponent implements OnInit {
     this.updateUserRole();
     this.updateUserName();
     this.updateUserEmail();
-
+    // this.router.events.subscribe(() => {
+      
+    // });
   }
+
+  // (route.startsWith('/login') == false) {
 
   updateUserName() {
     this.authService.onGetUserName().subscribe(response => {
@@ -109,7 +116,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  public logIn() {
+  public login(): void{
     this.authService.handleNotLoggedIn();
   }
 

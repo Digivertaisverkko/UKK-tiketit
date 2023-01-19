@@ -60,8 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public login(): void {
     this.isEmailValid = this.validateEmail(this.email);
-    console.log('email validation: ' + this.isEmailValid);
-    console.log(typeof this.isEmailValid);
+    // console.log('email validation: ' + this.isEmailValid);
     // Lisää ensin custom ErrorStateMatcher
     // if (this.isEmailValid === false) return;
     // console.log('LoginComponent: login request info:');

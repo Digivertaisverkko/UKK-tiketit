@@ -139,7 +139,6 @@ public getTicketState(numericalState: number): string {
     const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
-    console.dir(httpOptions);
     try {
       response = await firstValueFrom(
         this.http.get<FieldInfo[]>(url, httpOptions)
@@ -209,8 +208,7 @@ public getTicketState(numericalState: number): string {
   public async getCourseName(courseID: string): Promise<string> {
     const httpOptions = this.getHttpOptions();
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID;
-    console.dir(httpOptions);
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID;   
     try {
       response = await firstValueFrom(
         this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions)

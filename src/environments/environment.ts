@@ -6,6 +6,8 @@
 
 const baseUrl = 'http://localhost:3000/api';
 
+// clientID on 3rd party -tunnistautumista varten.
+
 export const environment = {
   production: false,
   clientID: 'angularApp',
