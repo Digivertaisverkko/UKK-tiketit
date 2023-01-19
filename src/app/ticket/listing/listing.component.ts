@@ -123,7 +123,11 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.ticket.setActiveCourse(courseIDcandinate);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
-      this.trackLoginState(courseIDcandinate);
+      // this.trackLoginState(courseIDcandinate);
+      if (this.authService.getIsUserLoggedIn() == true) {
+        this.updateLoggedInView(courseIDcandinate);
+      }
+      this.isLoaded = true;
     });
   }
 
@@ -321,7 +325,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (error.tunnus !== undefined ) {
       if (error.tunnus == 1000 ) {
         this.errorMessage = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.'
-      } 
+      }
     }
   }
 
