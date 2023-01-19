@@ -69,8 +69,12 @@ export class AuthService {
     this.errorMessages$.next('');
   }
 
-  public getUserRole(): String {
-    return this.userRole$.value;
+  public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | '' {
+    let role: any = this.userRole$.value;
+    if (role == null) {
+      role = '';
+    }
+    return role
   }
 
   public onGetUserRole(): Observable<any> {
@@ -92,11 +96,11 @@ export class AuthService {
     if (window.localStorage.getItem('SESSION_ID') == null) {
       return
     }
-      // const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');  
+      // const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');
       // if (isUserLoggedIn == null) {
       //   this.handleNotLoggedIn();
       // }
-      // this.isUserLoggedIn$.next(true);   
+      // this.isUserLoggedIn$.next(true);
     // }
 
     if (window.localStorage.getItem('USER_ROLE') !== null) {
@@ -201,7 +205,7 @@ export class AuthService {
           let userRole: string = response.asema;
           if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
             this.setUserRole(userRole);
-          } 
+          }
         }
       })
       .catch(error => this.handleError(error));
@@ -342,7 +346,7 @@ export class AuthService {
       const courseID: string | null = window.localStorage.getItem('COURSE_ID');
       if (courseID !== null) {
         this.saveUserInfo(courseID);
-      } 
+      }
     } else {
       loginResult = { success: false };
       console.error(response.error);
@@ -443,8 +447,8 @@ export class AuthService {
           if (error.error !== undefined && error.error.error.tunnus == 1000) {
             this.handleNotLoggedIn();
           }
-        } 
-  
+        }
+
       }
       // }
       // Templatessa pitäisi olla catch tälle.
@@ -554,9 +558,7 @@ export class AuthService {
     }
     }
 
-
 }
-
 
 export interface LoginResponse {
   success: boolean,
