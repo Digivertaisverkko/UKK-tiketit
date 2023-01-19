@@ -35,6 +35,8 @@ export class FaqViewComponent implements OnInit {
               .getCourseName(String(this.ticket.kurssi))
               .then((response) => {
                 this.courseName = response;
+            }).catch((error) => {
+              console.error()
             });
           }
         })

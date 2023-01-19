@@ -217,7 +217,6 @@ public getTicketState(numericalState: number): string {
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
       console.log(typeof response);
-      this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -314,13 +313,12 @@ public getTicketState(numericalState: number): string {
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Ticket> {
+    var sessionID: string | null = window.localStorage.getItem('SESSION_ID');
     const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
-      response = await firstValueFrom(
-        this.http.get<Ticket>(url, httpOptions)
-      );
+      response = await firstValueFrom(this.http.get<Ticket>(url, httpOptions));
       console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response) + ' . Vastaus myös alla.');
       console.dir(response);
     } catch (error: any) {
@@ -337,7 +335,6 @@ public getTicketState(numericalState: number): string {
     ticket.kommentit = response;
     // console.log('Lopullinen tiketti alla:');
     // console.log(ticket);
-    this.auth.setLoggedIn();
     return ticket
   }
 
@@ -398,14 +395,19 @@ public getTicketState(numericalState: number): string {
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
     let sessionID = window.localStorage.getItem('SESSION_ID');
-    if (sessionID == undefined) {
-      throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
-    }
+    // if (sessionID == undefined) {
+    //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
+    // }
     // console.log('session id on: ' + sessionID);
     // sessionID = '123456789';
-    let options = {
-      headers: new HttpHeaders({ 'session-id': sessionID })
-    };
+    var options;
+    if (sessionID == undefined) {
+      options = {};
+    } else {
+      options = {
+        headers: new HttpHeaders({ 'session-id': sessionID })
+      };
+    }
     return options;
   }
 
