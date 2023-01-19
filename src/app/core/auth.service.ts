@@ -132,9 +132,9 @@ export class AuthService {
     console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.')
     const loginUrl = await this.sendAskLoginRequest('own');
     // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
-    const route = window.location.pathname;
-    if (route.startsWith('/login') == false) {
-      window.localStorage.setItem('REDIRECT_URL', window.location.pathname);
+    const currentRoute = window.location.pathname + window.location.search;
+    if (currentRoute.startsWith('/login') == false) {
+      window.localStorage.setItem('REDIRECT_URL', window.location.pathname + window.location.search);
     }
     this.router.navigateByUrl(loginUrl);
   }
@@ -145,11 +145,14 @@ export class AuthService {
   }
 
   public setUserName(name: string) {
+    console.log(' tallennetaan nimi: ' + name);
     window.localStorage.setItem('USER_NAME', name);
     this.userName$.next(name);
   }
 
   public getUserName(): string | null {
+    // return this.userName$.value;
+    console.log(" local storage user name: " + window.localStorage.getItem('USER_NAME'));
     return window.localStorage.getItem('USER_NAME');
   }
 
@@ -186,30 +189,51 @@ export class AuthService {
     }
   }
 
-  // Hae ja aseta palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
-  public saveUserInfo(courseID: string) {
+  // Hae ja tallenna palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
+  public async saveUserInfo(courseID: string) {
     if (window.localStorage.getItem('SESSION_ID') == null) {
-      console.log('saveUserInfo: ei session id:ä, ei voida hakea ja tallentaa tietoja.');
+      console.error('Virhe: saveUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.');
       return;
     }
-    this.getMyUserInfo(courseID)
-      .then((response) => {
-        this.setLoggedIn();
-        if (response?.sposti.length > 0) {
-          this.setUserEmail(response.sposti);
+    try {
+    const userInfo = await this.getMyUserInfo(courseID);
+      console.log('haettiin käyttäjätiedot onnistuneesti.');
+      if (userInfo?.sposti.length > 0) {
+        this.setUserEmail(userInfo.sposti);
+      }
+      if (userInfo?.nimi.length > 0) {
+        this.setUserName(userInfo.nimi);
+      }
+      if (userInfo.asema !== undefined) {
+        let userRole: string = userInfo.asema;
+        if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
+          this.setUserRole(userRole);
         }
-        if (response?.nimi.length > 0) {
-          this.setUserName(response.nimi);
-        }
-        if (response.asema !== undefined) {
-          let userRole: string = response.asema;
-          if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
-            this.setUserRole(userRole);
-          }
-        }
-      })
-      .catch(error => this.handleError(error));
+      }
+    } catch (error: any) {
+      this.handleError(error);
+    }
+
   }
+
+  //   this.getMyUserInfo(courseID)
+  //     .then((response) => {
+
+  //       if (response?.sposti.length > 0) {
+  //         this.setUserEmail(response.sposti);
+  //       }
+  //       if (response?.nimi.length > 0) {
+  //         this.setUserName(response.nimi);
+  //       }
+  //       if (response.asema !== undefined) {
+  //         let userRole: string = response.asema;
+  //         if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
+  //           this.setUserRole(userRole);
+  //         }
+  //       }
+  //     })
+  //     .catch(error => this.handleError(error));
+  // }
 
   // Hae omat kurssikohtaiset tiedot.
   private async getMyUserInfo(courseID: string): Promise<User> {
@@ -315,8 +339,8 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
-      console.log('Lähetetään auth-request headereilla (alla):');
-      console.dir(httpOptions);
+      // console.log('Lähetetään auth-request headereilla (alla):');
+      // console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
       console.log('sendAuthRequest: got response: ');
       console.log(JSON.stringify(response));
@@ -335,17 +359,19 @@ export class AuthService {
           loginResult.redirectUrl = redirectUrl;
         }
       }
+      window.localStorage.removeItem('REDIRECT_URL')
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
       // console.log('Vastaus: ' + JSON.stringify(response));
       // let sessionID = response['login-id'];
-      window.localStorage.removeItem('REDIRECT_URL')
       let sessionID = response['session-id'];
-      this.saveSessionStatus(sessionID);
+      this.setLoggedIn();
+      window.localStorage.setItem('SESSION_ID', sessionID);
+      // console.log('tallennettiin sessionid: ' + sessionID);
 
       // console.log(' -- session ID on ' + sessionID);
       const courseID: string | null = window.localStorage.getItem('COURSE_ID');
       if (courseID !== null) {
-        this.saveUserInfo(courseID);
+        await this.saveUserInfo(courseID);
       }
     } else {
       loginResult = { success: false };
@@ -363,13 +389,6 @@ export class AuthService {
       return true
     }
   }
-
-  public saveSessionStatus(sessionID: string) {
-    this.setLoggedIn();
-    window.localStorage.setItem('SESSION_ID', sessionID);
-    console.log('tallennettiin sessionid: ' + sessionID);
-  }
-
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {

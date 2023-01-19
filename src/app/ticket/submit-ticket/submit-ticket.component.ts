@@ -39,9 +39,8 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     }
 
   ngOnInit(): void {
-    this.trackUserRole();
     this.userName = this.auth.getUserName();
-    console.log(' username: ' + this.auth.getUserName())
+    this.userRole = this.auth.getUserRole();
     const courseID = this.ticketService.getActiveCourse();
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response;
