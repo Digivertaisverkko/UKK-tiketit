@@ -113,9 +113,9 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.queryParams.subscribe(params => {
       if (params['courseID'] === undefined) {
         // TODO: Jokin parempi virheilmoitus tähän.
-        this.errorMessage = "Kurssi ID:ä ei löytynyt. Oikea URL-linkin muoto esim kurssille 1: localhost:4200/list-tickets?courseID=1. Tämä ilmoitus kehitysversioon tarkoitettu.";
+        this.errorMessage = "Kurssin tunnistetietoa ei löytynyt.";
         this.isLoaded = true;
-        throw new Error('Kurssia ei löytynyt.');
+        throw new Error('Kurssi ID:ä ei löytynyt.');
       }
       var courseIDcandinate: string = params['courseID'];
       this.showFAQ(courseIDcandinate);

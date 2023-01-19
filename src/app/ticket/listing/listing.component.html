@@ -57,9 +57,9 @@
 
     <ng-container matColumnDef="aikaleima">
       <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
-        sortActionDescription="Järjestä aikaleiman mukaan" i18n-sortActionDescription="@@Järjestä aikaleiman mukaan"
-        i18n="@@Aikaleima">
-        Aikaleima
+        sortActionDescription="Järjestä luodun päivämäärän mukaan" i18n-sortActionDescription="@@Järjestä luodun mukaan"
+        i18n="@@Luotu">
+        Luotu
       </th>
       <td class="td-align-right" mat-cell *matCellDef="let element">
         {{element.aikaleima | date: 'shortDate'}}
