@@ -70,10 +70,9 @@
     <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
   </table>
 
+  <!-- Jos halutaan paginator -->
   <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
-      aria-label="Valitse kysymysten sivu">
-    </mat-paginator> -->
-  <!-- </div> -->
+      aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
 </section>
 
@@ -82,9 +81,7 @@
       i18n="@@Uusi kysymys">Uusi kysymys</button>
   </div>
 
-
-
-<!-- FAQ -->
+<!------------ UKK ------------>
 
 <section *ngIf="FAQisLoaded">
 
@@ -135,27 +132,19 @@
     </td>
   </ng-container>
 
-  <!-- <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header
-            sortActionDescription="Järjestä tyypin mukaan" i18n="@@Tehtävä">
-            Tehtävä
-          </th>
-          <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
-        </ng-container> -->
-
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
 
   <!--Tällä koodin pätkällä saa lisättyä taulukkoon tekstin, kun haku ei löydä mitään-->
   <tr *matNoDataRow>
+    <!-- TODO: myös enkuksi -->
     <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td>
   </tr>
 
 </table>
 
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
-        aria-label="Valitse kysymysten sivu">
-      </mat-paginator> -->
+        aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
 </section>
 
