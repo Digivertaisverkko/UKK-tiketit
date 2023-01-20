@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
 export class HeaderComponent implements OnInit {
   public isUserLoggedIn$: Observable<boolean>;
   public isUserLoggedIn: boolean = false;
-  public productName: string = environment.productName;
   public readonly maxUserLength = 40;
   public userRole: string = '';
   public userName: string = '';
