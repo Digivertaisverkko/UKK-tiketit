@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 import { NewTicket, TicketService, NewFaq } from '../ticket.service';
 
 @Component({
@@ -10,21 +10,25 @@ import { NewTicket, TicketService, NewFaq } from '../ticket.service';
   templateUrl: './submit-ticket.component.html',
   styleUrls: ['./submit-ticket.component.scss']
 })
+
 export class SubmitTicketComponent implements OnDestroy, OnInit {
   // max pituus: 255.
   titleText: string = '';
   assignmentText: string = '';
   public courseName: string = '';
+  // public user: User;
   problemText: string = '';
   messageText: string = '';
   newTicket: NewTicket = {} as NewTicket;
   isFaq: boolean = false;
+  // public userName: string | null = '';
   userRole: string = '';
   answer: string = '';
-  public userName: string | null = '';
   sendingIsAllowed: boolean = false;
   public currentDate = new Date();
 
+  public user: User;
+  
   messageSubscription: Subscription;
   public message: string = '';
 
@@ -36,14 +40,21 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     ) {
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         (message) => { this._snackBar.open(message, 'OK') });
+
+      this.user = { id: 0, nimi: '', sposti: '', asema: '' }
     }
 
   ngOnInit(): void {
     const courseID = this.ticketService.getActiveCourse();
+    // Uudempi tapa
+    if (this.auth.getUserName2.length == 0) {
+      this.auth.saveUserInfo(String(courseID));
+      this.user = this.auth.getUserInfo();
+    }
     if (this.auth.getUserName.length == 0) {
       this.auth.saveUserInfo(String(courseID));
     }
-    this.userName = this.auth.getUserName();
+    // this.userName = this.auth.getUserName();
     this.userRole = this.auth.getUserRole();
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response;
