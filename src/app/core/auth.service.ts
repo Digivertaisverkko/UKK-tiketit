@@ -21,7 +21,7 @@ export class AuthService {
   private errorMessages$ = new Subject <any>();
 
   // Tullaan siirtymään käyttäjätiedoissa tähän:
-  private user$ = new BehaviorSubject <User|null>(null);
+  private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
 
   // Vanhat, vielä monessa paikkaa käytössä olevat:
   private userRole$ = new BehaviorSubject <string>('');
@@ -54,7 +54,6 @@ export class AuthService {
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
-
   public onIsUserLoggedIn(): Observable<any> {
     return this.isUserLoggedIn$.asObservable();
   }
@@ -76,10 +75,21 @@ export class AuthService {
 
   public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | '' {
     let role: any = this.userRole$.value;
-    if (role == null) {
-      role = '';
-    }
-    return role
+    return (role == null) ? '' : role;
+  }
+
+  public getUserInfo(): User {
+    const user: User | null = this.user$.value;
+    // Hae käyttäjätiedot jos niitä ei ole?
+    // if (user == null || user.nimi.length == 0) {
+    //   const courseID: string = this.ticketService.getActiveCourse();
+    //   this.getMyUserInfo(courseID).then( response => {
+    //     this.user$.next(response)
+    //   }).catch(error => {
+    //     console.log("getUserInfo(): Virhe: ei saatu haettua käyttäjän tietoja");
+    //   })
+    // }
+    return user;
   }
 
   public onGetUserRole(): Observable<string> {
@@ -158,6 +168,12 @@ export class AuthService {
     this.userName$.next(name);
   }
 
+  // Tulee korvaamaan alemman.
+  public getUserName2(): string {
+    const user: User  = this.user$.value;
+    return user.nimi;
+  }
+
   public getUserName(): string | null {
     // return this.userName$.value;
     console.log(" local storage user name: " + window.localStorage.getItem('USER_NAME'));
@@ -207,9 +223,11 @@ export class AuthService {
     try {
     const userInfo = await this.getMyUserInfo(courseID);
       console.log('haettiin käyttäjätiedot onnistuneesti.');
+
       if (userInfo !== null) {
         this.user$.next(userInfo);
       }
+
       if (userInfo?.sposti.length > 0) {
         this.setUserEmail(userInfo.sposti);
       }
@@ -596,8 +614,7 @@ export class AuthService {
       this.setUserEmail('');
       window.localStorage.clear();
     }
-    }
-
+  }
 }
 
 export interface LoginResponse {
