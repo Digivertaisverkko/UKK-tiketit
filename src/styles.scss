@@ -92,7 +92,7 @@ $debug: false;
   font-weight: 500;
 }
 
-// Sisältää yleisimmin napin. Asemoidaan oikein ja varataan tarvittava määrä tilaa.
+// Nappien asemoiminen ja tarvittavan tilan ottaminen.
 .theme-actions {
   display: flex;
   justify-content: flex-end;
@@ -174,12 +174,12 @@ h2 {  @if $debug {  border: 1px solid blue; } }
 
 @media (max-width: $XSmall) {
 
-  .theme-main-headline, .theme-h1 {
+  .main-header {
     font-size: 2.5rem * 0.8;
     line-height: 1.1;
   }
 
-  .h3 {
+  .sub-header {
     font-size: 1.66rem * 0.8;
     line-height: 1;
   }
