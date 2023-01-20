@@ -44,40 +44,44 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateUserRole();
-    this.updateUserName();
-    this.updateUserEmail();
+    // this.updateUserRole();
+    // this.updateUserName();
+    // this.updateUserEmail();
     // this.router.events.subscribe(() => {
-      
+      this.trackUserInfo();
     // });
   }
 
   // (route.startsWith('/login') == false) {
 
-  updateUserName() {
-    this.authService.onGetUserName().subscribe(response => {
-        if (response.length > 0 ) {
-          this.userName = response.charAt(0).toUpperCase() + response.slice(1);
+  trackUserInfo() {
+    this.authService.trackUserInfo().subscribe(response => {
+      if (response !== null) {
+
+        let newUserName: string = response.nimi;
+        if (newUserName.length > 0) {
+          newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
+          if (newUserName !== this.userName) {
+            this.userName = newUserName;
+          }
         } else {
           this.userName = '';
         }
-    })
-  }
 
-  updateUserEmail() {
-    this.authService.onGetUserEmail().subscribe(response => {
-        if (response.length > 0 ) {
-          this.userEmail = response;
+        // TODO: tarkastus, onko muuttunut.
+        if (response.sposti.length > 0) {
+          this.userEmail = response.sposti;
         } else {
           this.userEmail = '';
         }
+        this.setUserRole(response.asema);
+      }
     })
   }
 
-  updateUserRole() {
-    this.authService.onGetUserRole().subscribe(response => {
-      let role: string = '';
-      switch (response) {
+  setUserRole(asema: string): void {
+    let role: string = '';
+      switch (asema) {
         case 'opiskelija': {
           role = $localize`:@@Opiskelija:Opiskelija`;
           break;
@@ -95,8 +99,51 @@ export class HeaderComponent implements OnInit {
         }
       }
         this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
-    })
   }
+
+  // updateUserName() {
+  //   this.authService.onGetUserName().subscribe(response => {
+  //       if (response.length > 0 ) {
+  //         this.userName = response.charAt(0).toUpperCase() + response.slice(1);
+  //       } else {
+  //         this.userName = '';
+  //       }
+  //   })
+  // }
+
+  // updateUserEmail() {
+  //   this.authService.onGetUserEmail().subscribe(response => {
+  //       if (response.length > 0 ) {
+  //         this.userEmail = response;
+  //       } else {
+  //         this.userEmail = '';
+  //       }
+  //   })
+  // }
+
+  // updateUserRole() {
+  //   this.authService.onGetUserRole().subscribe(response => {
+  //     let role: string = '';
+  //     switch (response) {
+  //       case 'opiskelija': {
+  //         role = $localize`:@@Opiskelija:Opiskelija`;
+  //         break;
+  //       }
+  //       case 'opettaja': {
+  //         role = $localize`:@@Opettaja:Opettaja`;
+  //         break;
+  //       }
+  //       case 'admin': {
+  //         role = $localize`:@@Admin:Järjestelmävalvoja`;
+  //         break;
+  //       }
+  //       default: {
+  //         this.userRole = '';
+  //       }
+  //     }
+  //       this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
+  //   })
+  // }
 
   // public changeLanguage(language: 'en-US' | 'fi-FI') {
   //   this.language = language;
