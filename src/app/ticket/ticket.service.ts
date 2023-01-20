@@ -37,19 +37,18 @@ export class TicketService {
   }
 
   public getActiveCourse(): string {
-    let courseID: string | null;
+    var courseID: string = '';
     if (this.activeCourse == undefined) {
-      if (window.localStorage.getItem('COURSE_ID') === null) {
-        throw new Error('Tallennettua kurssi id:ä ei löydetty.');
+      const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+      if (savedCourseID !== null) {
+          courseID = savedCourseID;
+        } else {
+          throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
+        }
       } else {
-        courseID = window.localStorage.getItem('COURSE_ID');
+        courseID = String(this.activeCourse);
       }
-      if (courseID === null) {
-        throw new Error('Tallennettua kurssi id:ä ei löydetty.');
-      }
-    } else {
-      courseID = String(this.activeCourse);
-    }
+
     return courseID;
   }
 

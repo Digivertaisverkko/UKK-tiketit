@@ -108,16 +108,14 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getIfInIframe();
-    // if (this.route.snapshot.paramMap.get('courseID') !== null) {};
     this.trackScreenSize();
     this.routeSubscription = this.route.queryParams.subscribe(params => {
-      if (params['courseID'] === undefined) {
-        // TODO: Jokin parempi virheilmoitus tähän.
-        this.errorMessage = "Kurssin tunnistetietoa ei löytynyt.";
-        this.isLoaded = true;
-        throw new Error('Kurssi ID:ä ei löytynyt.');
-      }
       var courseIDcandinate: string = params['courseID'];
+      if (courseIDcandinate === undefined) {
+        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.` + '.';
+        this.isLoaded = true;
+        throw new Error('Virhe: ei kurssi ID:ä.');
+      }
       this.showFAQ(courseIDcandinate);
       this.setTicketListHeader();
       this.ticket.setActiveCourse(courseIDcandinate);
@@ -125,6 +123,10 @@ export class ListingComponent implements OnInit, OnDestroy {
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
       if (this.authService.getIsUserLoggedIn() == true) {
+        // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
+        if (this.authService.getUserName.length == 0) {
+          this.authService.saveUserInfo(courseIDcandinate);
+        }
         this.updateLoggedInView(courseIDcandinate);
       }
       this.isLoaded = true;
@@ -164,9 +166,7 @@ export class ListingComponent implements OnInit, OnDestroy {
           this.ticket.setActiveCourse(this.courseID);
           if (this.courseID !== null) {
             this.showCourseName(this.courseID);
-            // this.courseName = 'Ohjelmointikurssi';
           }
-
         }
       }
     }).then(() => {
@@ -176,7 +176,8 @@ export class ListingComponent implements OnInit, OnDestroy {
       console.dir(error);
       this.handleError(error);
     }).finally(() => {
-      // this.isLoaded = true;
+      // Elä laita this.isLoaded = true; tähän.
+      // 
     })
   }
 
@@ -186,14 +187,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.isInIframe = false;
     } else {
       this.isInIframe = true;
-    }
-  }
-
-  private testIframe () {
-    try {
-        return window.self !== window.top;
-    } catch (e) {
-        return true;
     }
   }
 
@@ -341,17 +334,17 @@ export class ListingComponent implements OnInit, OnDestroy {
   //   }
   // }
 
-  ngOnDestroy(): void {
-    this.timeInterval.unsubscribe();
-    this.ticketMessageSub.unsubscribe();
-  }
-
-  //haku toiminto, jossa paginointi kommentoitu pois
+  //hakutoiminto, jossa paginointi kommentoitu pois
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceFAQ.filter = filterValue.trim().toLowerCase();
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
       }*/
+  }
+
+  ngOnDestroy(): void {
+    this.timeInterval.unsubscribe();
+    this.ticketMessageSub.unsubscribe();
   }
 }

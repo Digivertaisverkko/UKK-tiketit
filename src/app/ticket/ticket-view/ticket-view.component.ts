@@ -55,6 +55,9 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
         next: response => {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
+          if (this.auth.getUserName.length == 0) {
+            this.auth.saveUserInfo(String(this.ticket.kurssi));
+          }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
           this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
             console.log(' saatiin vastaus: ' + response);

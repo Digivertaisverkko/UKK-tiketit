@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth.service';
 import { TicketService, Ticket } from '../ticket.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class FaqViewComponent implements OnInit {
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(
+    private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private ticketService: TicketService
@@ -28,6 +30,9 @@ export class FaqViewComponent implements OnInit {
         .then((response) => {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
+          if (this.auth.getUserName.length == 0) {
+            this.auth.saveUserInfo(String(this.ticket.kurssi));
+          }
         })
         .then(() => {
           if (this.ticket.kurssi !== null) {

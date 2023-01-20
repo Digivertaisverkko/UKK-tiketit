@@ -71,6 +71,7 @@
     "Palvelimelta haettavaa tietoa ei löytynyt": "Retrievable information from server not found",
     "Tilin luominen ei onnistunut": "Account creation failed.",
     "Joku meni vikaan": "Something went wrong",
+    "puuttuu kurssiID": "No course ID was found. Check URL address spelling.",
     "Virhe": "Error",
     "Tilakoodi": "Status code",
     "Virheilmoitus": "Error message",

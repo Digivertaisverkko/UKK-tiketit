@@ -145,7 +145,7 @@ export class AuthService {
   }
 
   public setUserName(name: string) {
-    console.log(' tallennetaan nimi: ' + name);
+    console.log(' --- setUserName: tallennettiin nimi: ' + name);
     window.localStorage.setItem('USER_NAME', name);
     this.userName$.next(name);
   }
@@ -368,10 +368,13 @@ export class AuthService {
       window.localStorage.setItem('SESSION_ID', sessionID);
       // console.log('tallennettiin sessionid: ' + sessionID);
 
-      // console.log(' -- session ID on ' + sessionID);
+      // Kurssi ID voi olla, jos ollaan tultu loggaamattomaan näkymään ensin.
       const courseID: string | null = window.localStorage.getItem('COURSE_ID');
       if (courseID !== null) {
+        console.log('-- ajetaan saveUserInfo ----');
         await this.saveUserInfo(courseID);
+      } else {
+        console.log('-- ei ajettu saveUserInfo: kurssi ID: ' + courseID + ' ----');
       }
     } else {
       loginResult = { success: false };
@@ -393,15 +396,20 @@ export class AuthService {
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
     let sessionID = window.localStorage.getItem('SESSION_ID');
-    if (sessionID == undefined) {
-      throw new Error('Session ID:ä ei ole asetettu. Ei olla kirjautuneita.');
-    }
+    // if (sessionID == undefined) {
+    //   throw new Error('Session ID:ä ei ole asetettu. Ei olla kirjautuneita.');
+    // }
     // console.log('session id on: ' + sessionID);
-    let options = {
-      headers: new HttpHeaders({
-        'session-id': sessionID
-      })
-    };
+    var options;
+    if (sessionID == null ) {
+      options = {}
+    } else {
+      options = {
+        headers: new HttpHeaders({
+          'session-id': sessionID
+        })
+      };
+    }
     return options;
   }
 
