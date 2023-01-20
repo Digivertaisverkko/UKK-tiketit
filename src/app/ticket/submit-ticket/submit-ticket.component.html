@@ -46,7 +46,7 @@
 
     <section class="short-field-wrapper">
 
-      <mat-form-field class="additional-field" appearance="fill" *ngIf="!isFaq">
+      <mat-form-field class="additional-field" appearance="fill">
         <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
         <input
           name="assignmentText"
@@ -74,15 +74,7 @@
 
     <app-editor [(editorContent)]="message"></app-editor>
 
-    <div *ngIf="isFaq">
-      <h2 i18n="@@Vastaus">Vastaus</h2>
-      <app-editor [(editorContent)]="answer"></app-editor>
-    </div>
-
     <div class="theme-actions">
-
-      <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'" i18n="@@Usein kysytty kysymys">
-        Usein kysytty kysymys</mat-checkbox>
 
       <div class="spacer"></div>
 

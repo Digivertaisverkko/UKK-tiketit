@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { NewTicket, TicketService, NewFaq } from '../ticket.service';
+import { NewTicket, TicketService } from '../ticket.service';
 
 @Component({
   selector: 'app-submit-ticket',
@@ -20,7 +20,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   problemText: string = '';
   messageText: string = '';
   newTicket: NewTicket = {} as NewTicket;
-  isFaq: boolean = false;
   // public userName: string | null = '';
   userRole: string = '';
   answer: string = '';
@@ -28,7 +27,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   public currentDate = new Date();
 
   public user: User;
-  
+
   messageSubscription: Subscription;
   public message: string = '';
 
@@ -80,24 +79,12 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
     const courseID = this.ticketService.getActiveCourse();
     console.log(this.newTicket);
-    if (!this.isFaq) {
     this.ticketService.addTicket(courseID, this.newTicket)
       .then(() => {
         this.goBack()
       }).catch( error => {
         console.error(error.message);
       });
-    } else {
-      const newFaq: NewFaq = {
-        otsikko: this.titleText,
-        viesti: this.message,
-        vastaus: this.answer,
-      }
-      this.ticketService.sendFaq(courseID, newFaq)
-      .then(() => {
-        this.goBack()
-      }).catch( () => {});
-    }
   }
 
   ngOnDestroy(): void {
