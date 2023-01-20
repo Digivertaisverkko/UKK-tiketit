@@ -10,7 +10,7 @@ import { Subscription, interval, startWith, switchMap } from 'rxjs';
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
-export class TicketViewComponent implements OnInit, OnDestroy  {
+export class TicketViewComponent implements OnInit, OnDestroy {
   public courseName: string = '';
   public errorMessage: string = '';
   public ticket: Ticket;
@@ -20,13 +20,13 @@ export class TicketViewComponent implements OnInit, OnDestroy  {
   public commentText: string;
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
-  ticketID: string;
+  public ticketID: string;
   private timeInterval: Subscription = new Subscription();
   private readonly currentDate = new Date().toDateString();
 
   // messageSubscription: Subscription;
-  message: string = '';
-  public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
+  public message: string = '';
+  public userRole: string = '';
 
   constructor(
     private auth: AuthService,

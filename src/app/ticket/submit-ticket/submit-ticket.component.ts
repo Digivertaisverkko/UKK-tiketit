@@ -19,7 +19,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   messageText: string = '';
   newTicket: NewTicket = {} as NewTicket;
   isFaq: boolean = false;
-  userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
+  userRole: string = '';
   answer: string = '';
   public userName: string | null = '';
   sendingIsAllowed: boolean = false;
