@@ -1,0 +1,39 @@
+@import "/src/variables.scss";
+
+form { margin-top: -6px; }
+
+mat-form-field { min-width: 21rem; }
+
+.ticket-header {
+  mat-form-field { flex-grow: 3; }
+  .user-info-block {
+    padding-top: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+  margin-bottom: -20px;
+}
+
+.short-field-wrapper {
+  width: 21em;
+  margin-bottom: 6px;
+}
+
+.additional-field { margin-bottom: -18px; }
+
+.characters-label {
+  text-align: right;
+  margin-top: -6px;
+  margin-bottom: 3px;
+}
+
+mat-checkbox { margin-left: -10px; }
+
+@media (min-width: $XSmall) {
+  .submit-faq { padding-right: $right-padding; }
+}
+
+@media (max-width: $XSmall) {
+  .user-info-block, .mat-mdc-card-avatar { display: none; }
+
+  mat-form-field { min-width: 95%; }
+}

@@ -93,7 +93,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
         viesti: this.message,
         vastaus: this.answer,
       }
-      this.ticketService.sendFaq(courseID, this.newTicket, this.answer)
+      this.ticketService.sendFaq(courseID, newFaq)
       .then(() => {
         this.goBack()
       }).catch( () => {});

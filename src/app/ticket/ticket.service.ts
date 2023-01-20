@@ -151,12 +151,11 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
-  public async sendFaq(courseID: string, newFaq: NewTicket, vastaus: string) {
+  public async sendFaq(courseID: string, newFaq: NewFaq) {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
     const body = newFaq;
-    body.vastaus = vastaus;
     try {
       console.log('Yritetään lähettää UKK POST-kutsulla bodylla: ' + JSON.stringify(body) + '  URL:iin "' +
       url + '"');
@@ -207,7 +206,7 @@ public getTicketState(numericalState: number): string {
   public async getCourseName(courseID: string): Promise<string> {
     const httpOptions = this.getHttpOptions();
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID;   
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID;
     try {
       response = await firstValueFrom(
         this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions)
@@ -425,7 +424,7 @@ public getTicketState(numericalState: number): string {
         if (error.error !== undefined && error.error.error.tunnus == 1000) {
           this.auth.handleNotLoggedIn();
         }
-      } 
+      }
 
     }
     // let message: string = '';
@@ -457,7 +456,7 @@ public getTicketState(numericalState: number): string {
     console.error(' Huomattiin responsena error, vaikkei jouduttu catch-blokkiin.');
     const error = response.error;
     console.log('error : ' + JSON.stringify(error));
-    
+
     switch (error.tunnus) {
       case 1000:
         message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
@@ -546,7 +545,6 @@ export interface NewTicket {
   otsikko: string;
   viesti: string;
   kentat?: Array<Field>;
-  vastaus?: string;
 }
 
 // export interface NewFaq {

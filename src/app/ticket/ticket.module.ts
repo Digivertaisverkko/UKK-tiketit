@@ -13,13 +13,15 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomPaginator } from './functions/CustomPaginator';
 import { FaqViewComponent } from './faq-view/faq-view.component';
 import { MessageComponent } from './message/message.component';
+import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
 
 @NgModule({
   declarations: [
     SubmitTicketComponent,
     TicketViewComponent,
     FaqViewComponent,
-    MessageComponent
+    MessageComponent,
+    SubmitFaqComponent
   ],
   imports: [
     CommonModule,

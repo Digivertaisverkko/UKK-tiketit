@@ -1,0 +1,84 @@
+<h2 class="main-header" *ngIf="courseName.length > 0"><span>{{ courseName }}</span></h2>
+
+<div class="submit-faq">
+  <app-to-beginning-button></app-to-beginning-button>
+
+  <form action="" #submitForm="ngForm">
+
+    <div class="ticket-header">
+      <mat-form-field appearance="fill" class="sub-header">
+        <textarea
+          [(ngModel)]="faqTitle"
+          class="h3"
+          #autosize="cdkTextareaAutosize"
+          autocomplete="off"
+          cdkAutosizeMaxRows="3"
+          cdkAutosizeMinRows="1"
+          cdkTextareaAutosize
+          contenteditable
+          matInput
+          name="faqTitle"
+          placeholder="Otsikko"
+          required
+        ></textarea>
+      </mat-form-field>
+      <div class="user-info-block">
+        <div class="text-info">
+          <span class="theme-profile-name">{{ userName }}</span>
+          <div class="theme-label">
+            <span i18n="@@Minä">Minä</span>
+            -
+            <span i18n="@@Tänään">Tänään </span>
+            <span>{{ currentDate | date: 'shortTime' }}</span>
+          </div>
+        </div>
+        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+      </div>
+    </div>
+
+    <section class="short-field-wrapper">
+      <mat-form-field class="additional-field" appearance="fill">
+        <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
+        <input
+          name="faqAssignment"
+          [(ngModel)]="faqAssignment"
+          matInput
+          maxlength="50"
+          placeholder=""
+          >
+      </mat-form-field>
+      <div class="characters-label"><span class="theme-label">{{ faqAssignment.length }} / 50</span></div>
+
+      <mat-form-field class="additional-field" appearance="fill">
+        <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
+        <input
+          name="faqProblem"
+          [(ngModel)]="faqProblem"
+          matInput
+          maxlength="50"
+          placeholder=""
+          >
+      </mat-form-field>
+      <div class="characters-label"><span class="theme-label">{{ faqProblem.length }} / 50</span></div>
+    </section>
+
+    <h2 i18n="@@Kysymys">Kysymys</h2>
+    <app-editor [(editorContent)]="faqMessage"></app-editor>
+
+    <h2 i18n="@@Vastaus">Vastaus</h2>
+    <app-editor [(editorContent)]="faqAnswer"></app-editor>
+
+    <div class="theme-actions">
+      <div class="spacer"></div>
+        <button
+          mat-raised-button color="primary"
+          [disabled]="submitForm.invalid"
+          (click)="sendFaq()"
+          i18n="@@Lähetä">
+          Lähetä
+        </button>
+    </div>
+
+  </form>
+
+</div>

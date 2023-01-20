@@ -59,6 +59,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public isInIframe: boolean = true;
   private timeInterval: Subscription = new Subscription();
   // public isLoggedIn$: Observable<boolean>;
+  public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -107,6 +108,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userRole = this.authService.getUserRole();
     this.getIfInIframe();
     this.trackScreenSize();
     this.routeSubscription = this.route.queryParams.subscribe(params => {
@@ -139,6 +141,14 @@ export class ListingComponent implements OnInit, OnDestroy {
       console.log('--- Tallennettiin redirect URL: /submit/ ----');
     }
     this.router.navigateByUrl('submit');
+  }
+
+  public submitFaq () {
+    if (this.authService.getIsUserLoggedIn() == false) {
+      window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
+      console.log('--- Tallennettiin redirect URL: /submit-faq/ ----');
+    }
+    this.router.navigateByUrl('submit-faq');
   }
 
   private trackLoginState(courseIDcandinate: string) {
@@ -177,7 +187,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.handleError(error);
     }).finally(() => {
       // Elä laita this.isLoaded = true; tähän.
-      // 
+      //
     })
   }
 
