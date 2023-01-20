@@ -14,11 +14,11 @@ body {
   margin: 0;
 }
 
+.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
+
 .theme-header-text, .theme-header-text-small, .main-header, .sub-header {
   font-family: $displayFont;
 }
-
-.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
 
 // FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 // Tätä käytetään headerin käyttäjän nimessä.
@@ -34,6 +34,7 @@ body {
 
 $debug: false;
 
+// Yläotsikko, jossa punainen viiva. Käytetään esim. <h2 class="main-header"><span>Otsikko</span</h2>
 .main-header  {
   // font-family: mat.font-family($custom-typography-config, 'headline-3');
   font-size: 2.5rem;
@@ -71,6 +72,7 @@ $debug: false;
   }
 }
 
+// Alaotsikko
 .sub-header {
   font-size: 1.66rem;
   font-weight: 700;
@@ -119,6 +121,7 @@ $debug: false;
   width: 94%;
 }
 
+// Testaamiseen jos haluaa osan block-elementeistä näkyviin.
 $debug: false;
 
 h2 {  @if $debug {  border: 1px solid blue; } }
@@ -136,7 +139,7 @@ h2 {  @if $debug {  border: 1px solid blue; } }
     align-self: flex-start;
     flex-shrink: 0;
     gap: inherit;
-    margin-top: 0.8rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    margin-top: 1.3rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
     // height: 100%;
     .text-info {        // Käyttäjätiedot
       @if $debug { border: 1px solid gray; }
