@@ -14,14 +14,14 @@
 
    <!-- ---- Kysymys ---- -->
 
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null">
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
       <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
       <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
         ticket.kentat[0].arvo }} </span> -->
     </div>
 
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null">
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
       <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
       <p class="short-field-value">{{ ticket.kentat[1].arvo }} </p>
