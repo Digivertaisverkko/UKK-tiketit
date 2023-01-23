@@ -29,36 +29,35 @@ export interface ColumnDefinition {
   styleUrls: ['./listing.component.scss'],
 })
 export class ListingComponent implements OnInit, OnDestroy {
-  private courseID: string | null = '';
-  // dataSource:any = [];
-  dataSource = new MatTableDataSource<Sortable>();
-  dataSourceFAQ = new MatTableDataSource<FAQ>();
-  // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // dataSource = new MatTableDataSource<Sortable>();
+  // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
+  // public isLoggedIn$: Observable<boolean>;
+  private courseID: string | null = '';
+  private routeSubscription: Subscription | null = null;
+  private timeInterval: Subscription = new Subscription();
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public courseName: string = '';
-  public username: string | null;;
-  ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  public isCourseIDvalid: boolean = false;
-  public isPhonePortrait: boolean = false;
-  public showNoQuestions: boolean = true;
-  public showNoFAQ: boolean = true;
+  public dataSource = new MatTableDataSource<Sortable>();
+  public dataSourceFAQ = new MatTableDataSource<FAQ>();
+  public errorMessage: string = '';
   public FAQisLoaded: boolean = false;
-  public isLoaded: boolean = false;
   public header: string = '';
-  // Ei ole vakio.
+  public isCourseIDvalid: boolean = false;
+  public isInIframe: boolean = true;
+  public isLoaded: boolean = false;
+  public isPhonePortrait: boolean = false;
+  // Älä aseta vakioksi.
   public maxItemTitleLength = 100;
   public me: string =  $localize`:@@Minä:Minä`;
-  private routeSubscription: Subscription | null = null;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
+  public showNoFAQ: boolean = true;
+  public showNoQuestions: boolean = true;
   public ticketMessageSub: Subscription;
-  public errorMessage: string = '';
-  public isInIframe: boolean = true;
-  private timeInterval: Subscription = new Subscription();
-  // public isLoggedIn$: Observable<boolean>;
+  public ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
+  public username: string | null;;
   public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
@@ -118,19 +117,22 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
+      if (params['sessionID'] !== undefined) {
+        this.authService.setSessionID(params['sessionID']);
+      }
       this.showFAQ(courseIDcandinate);
-      this.setTicketListHeader();
       this.ticket.setActiveCourse(courseIDcandinate);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
-      if (this.authService.getIsUserLoggedIn() == true) {
+      if (this.authService.getIsUserLoggedIn() == true || this.authService.getSessionID() !== null) {
         // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
-        if (this.authService.getUserName.length == 0) {
+        if (this.authService.getUserName2.length == 0) {
           this.authService.saveUserInfo(courseIDcandinate);
         }
         this.updateLoggedInView(courseIDcandinate);
       }
+      this.setTicketListHeader();
       this.isLoaded = true;
     });
   }
@@ -138,7 +140,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public submitTicket () {
     if (this.authService.getIsUserLoggedIn() == false) {
       window.localStorage.setItem('REDIRECT_URL', 'submit');
-      console.log('--- Tallennettiin redirect URL: /submit/ ----');
+      console.log('---- Tallennettiin redirect URL: /submit/ ----');
     }
     this.router.navigateByUrl('submit');
   }

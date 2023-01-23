@@ -108,6 +108,16 @@ export class AuthService {
     return this.userEmail$.asObservable();
   }
 
+  public setSessionID(newSessionID: string) {
+    const oldSessionID =  window.localStorage.getItem('SESSION_ID');
+    if (oldSessionID !== undefined && oldSessionID !== newSessionID)
+    window.localStorage.setItem('SESSION_ID', newSessionID);
+  }
+
+  public getSessionID(): string | null {
+    return window.localStorage.getItem('SESSION_ID');
+  }
+
   // Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
   // olla jo local storagessa.
   // Ei haeta tässä palvelimelta käyttäjätietoja, koska siihen tarvittavaa courseID:ä ei vielä tiedossa.
@@ -395,7 +405,8 @@ export class AuthService {
       // let sessionID = response['login-id'];
       let sessionID = response['session-id'];
       this.setLoggedIn();
-      window.localStorage.setItem('SESSION_ID', sessionID);
+      this.setSessionID(sessionID);
+      
       // console.log('tallennettiin sessionid: ' + sessionID);
 
       // Kurssi ID voi olla, jos ollaan tultu loggaamattomaan näkymään ensin.
