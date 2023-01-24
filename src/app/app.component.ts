@@ -29,10 +29,10 @@ export class AppComponent implements OnInit {
     this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response == true) {
         this.isLogged = true;
-        this.logButtonString = "Kirjaudu ulos";
+        this.logButtonString = $localize`:@@Kirjaudu ulos:Kirjaudu ulos`;
       } else if (response == false) {
         this.isLogged = false;
-        this.logButtonString = "Kirjaudu sisään";
+        this.logButtonString = $localize`:@@Kirjaudu sisään:Kirjaudu sisään`;
       }
     });
   }
