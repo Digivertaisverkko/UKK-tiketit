@@ -57,7 +57,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public showNoQuestions: boolean = true;
   public ticketMessageSub: Subscription;
   public ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  public username: string | null;;
+  public username: string | null = '';
   public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
@@ -89,8 +89,6 @@ export class ListingComponent implements OnInit, OnDestroy {
 
     // this.isLoggedIn$ = this.authService.onIsUserLoggedIn();
 
-    this.username = this.authService.getUserName();
-
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
@@ -107,6 +105,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.username = this.authService.getUserName();
     this.userRole = this.authService.getUserRole();
     this.getIfInIframe();
     this.trackScreenSize();
@@ -118,6 +117,9 @@ export class ListingComponent implements OnInit, OnDestroy {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       if (params['sessionID'] !== undefined) {
+        const route = window.location.pathname + window.location.search;
+        console.log(' URL on: ' + route);
+        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
         this.authService.setSessionID(params['sessionID']);
       }
       this.showFAQ(courseIDcandinate);
@@ -140,7 +142,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public submitTicket () {
     if (this.authService.getIsUserLoggedIn() == false) {
       window.localStorage.setItem('REDIRECT_URL', 'submit');
-      console.log('---- Tallennettiin redirect URL: /submit/ ----');
+      // console.log('Tallennettiin redirect URL: /submit/ ');
     }
     this.router.navigateByUrl('submit');
   }
@@ -148,14 +150,14 @@ export class ListingComponent implements OnInit, OnDestroy {
   public submitFaq () {
     if (this.authService.getIsUserLoggedIn() == false) {
       window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
-      console.log('--- Tallennettiin redirect URL: /submit-faq/ ----');
+      // console.log('Tallennettiin redirect URL: /submit-faq/');
     }
     this.router.navigateByUrl('submit-faq');
   }
 
   private trackLoginState(courseIDcandinate: string) {
     this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('lista : saatiin kirjautumistieto: ' + response);
+      // console.log('lista : saatiin kirjautumistieto: ' + response);
       this.isLoaded = true;
       if (response == true) {
         this.updateLoggedInView(courseIDcandinate);

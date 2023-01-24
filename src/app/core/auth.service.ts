@@ -44,6 +44,7 @@ export class AuthService {
   public setLoggedIn() {
     if (this.isUserLoggedIn$.value == false) {
       this.isUserLoggedIn$.next(true);
+      console.log('Olet nyt kirjautunut.');
     }
   }
 
@@ -286,15 +287,16 @@ export class AuthService {
     try {
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
       console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response))
+      this.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
     // this.checkErrors(response);
 
-    if (response?.sposti > 0 ) {
-      window.localStorage.setItem('EMAIL', response.sposti);
-      this.userEmail$.next(response.sposti);
-    }
+    // if (response?.sposti > 0 ) {
+    //   window.localStorage.setItem('EMAIL', response.sposti);
+    //   this.userEmail$.next(response.sposti);
+    // }
     return response;
   }
 
