@@ -409,24 +409,59 @@ public getTicketState(numericalState: number): string {
     return options;
   }
 
-  // HTTP-kutsujen virheidenkäsittely
   private handleError(error: any) {
+    var message: string;
     if (error.status === 0) {
       // A client-side or network error occurred.
-      console.error('Asiakas- tai verkkovirhe tapahtui:', error.error);
+      message = 'Asiakas- tai verkkovirhe tapahtui';
+      if (error.error !== undefined) {
+        message += ": " + error.error;
+      }
     } else {
       // The backend returned an unsuccessful response code.
-      console.error(
-        `Saatiin virhe HTTP-tilakoodilla ${error.status}, sisäisellä tilakoodilla ${error.error.error.tunnus} ja viestillä:`, error.error.error.virheilmoitus
-      );
-      if (error.status === 403 ) {
-        console.dir(error);
-        if (error.error !== undefined && error.error.error.tunnus == 1000) {
-          this.auth.handleNotLoggedIn();
+      message = "Saatin virhe ";
+      if (error.status !== undefined) {
+        message += "HTTP-tilakoodilla " + error.status;
+      }
+      if (error.error !== undefined) {
+        var errorObject = error.error;
+        if (errorObject.error !== undefined) {
+          message += ", sisäisellä tilakoodilla " + errorObject.error.tunnus;
+          if (errorObject.error.virheilmoitus !== undefined) {
+            message += " ja viestillä: ", errorObject.error.virheilmoitus
+          }
         }
       }
-
     }
+
+    console.error(message + ".");
+
+    if (error.status === 403) {
+      if (error.error !== undefined && error.error.error.tunnus == 1000) {
+        this.auth.handleNotLoggedIn();
+      }
+    }
+    // }
+    // Templatessa pitäisi olla catch tälle.
+    return throwError(() => new Error(error));
+  }
+
+  // private handleError(error: any) {
+  //   if (error.status === 0) {
+  //     // A client-side or network error occurred.
+  //     console.error('Asiakas- tai verkkovirhe tapahtui:', error.error);
+  //   } else {
+  //     // The backend returned an unsuccessful response code.
+  //     console.error(
+  //       `Saatiin virhe HTTP-tilakoodilla ${error.status}, sisäisellä tilakoodilla ${error.error.error.tunnus} ja viestillä:`, error.error.error.virheilmoitus
+  //     );
+  //     if (error.status === 403 ) {
+  //       console.dir(error);
+  //       if (error.error !== undefined && error.error.error.tunnus == 1000) {
+  //         this.auth.handleNotLoggedIn();
+  //       }
+  //     }
+  //   }
     // let message: string = '';
     // if (error !== undefined) {
     //   if (error.error.length > 0) {
@@ -437,8 +472,8 @@ public getTicketState(numericalState: number): string {
     //   }
     // }
     // Templatessa pitäisi olla catch tälle.
-    return throwError( () => new Error(error) );
-  }
+  //   return throwError( () => new Error(error) );
+  // }
 
   // Käsitellään mahdollisesti palvelimelta saatu virheilmoitus, joka ei tullut catch-blokkiin.
   // Tätä ei pitäisi enää tarvita.

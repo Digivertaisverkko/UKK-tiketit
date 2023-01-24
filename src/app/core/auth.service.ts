@@ -503,27 +503,42 @@ export class AuthService {
       return url.protocol === "http:" || url.protocol === "https:";
     }
 
-    private handleError(error: any) {
-      if (error.status === 0) {
-        // A client-side or network error occurred.
-        console.error('Asiakas- tai verkkovirhe tapahtui:', error.error);
-      } else {
-        // The backend returned an unsuccessful response code.
-        console.error(
-          `Saatiin virhe HTTP-tilakoodilla ${error.status}, sisäisellä tilakoodilla ${error.error.error.tunnus} ja viestillä:`, error.error.error.virheilmoitus
-        );
-        if (error.status === 403 ) {
-          console.dir(error);
-          if (error.error !== undefined && error.error.error.tunnus == 1000) {
-            this.handleNotLoggedIn();
+  private handleError(error: any) {
+    var message: string;
+    if (error.status === 0) {
+      // A client-side or network error occurred.
+      message = 'Asiakas- tai verkkovirhe tapahtui';
+      if (error.error !== undefined) {
+        message += ": " + error.error;
+      }
+    } else {
+      // The backend returned an unsuccessful response code.
+      message = "Saatin virhe ";
+      if (error.status !== undefined) {
+        message += "HTTP-tilakoodilla " + error.status;
+      }
+      if (error.error !== undefined) {
+        var errorObject = error.error;
+        if (errorObject.error !== undefined) {
+          message += ", sisäisellä tilakoodilla " + errorObject.error.tunnus;
+          if (errorObject.error.virheilmoitus !== undefined) {
+            message += " ja viestillä: ", errorObject.error.virheilmoitus
           }
         }
-
       }
-      // }
-      // Templatessa pitäisi olla catch tälle.
-      return throwError( () => new Error(error) );
     }
+
+    console.error(message + ".");
+
+    if (error.status === 403) {
+      if (error.error !== undefined && error.error.error.tunnus == 1000) {
+        this.handleNotLoggedIn();
+      }
+    }
+    // }
+    // Templatessa pitäisi olla catch tälle.
+    return throwError(() => new Error(error));
+  }
 
 // HTTP-kutsujen virheidenkäsittely
   // private handleError(error: HttpErrorResponse) {
