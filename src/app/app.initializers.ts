@@ -3,7 +3,9 @@ import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 
 export const initializeLanguage = (): Promise<void> | void => {
+ 
   const language = getLanguage();
+
   document.documentElement.lang = language;
   // registerLocaleData(localeFi, 'fi-FI');
   if (language && language !== 'fi-FI') {
@@ -11,18 +13,19 @@ export const initializeLanguage = (): Promise<void> | void => {
     return fetch(`/assets/i18n/${language}.json`)
       .then(response => response.json())
       .then(response => {
+        console.log('ladataan kieli');
         loadTranslations(response.translations);
       })
       .catch(() => {
-        console.log(`language ${language} not found, fallback to english`);
+        console.log(`Kieltä ${language} ei löytynyt.`);
       });
   }
 };
 
 function getLanguage(): string {
-  // Jos on käyttäjä tässä sovelluksessa valinnut kielen.
+  // Jos käyttäjä on aiemmin valinnut kielen.
   let language: string | null = localStorage.getItem('language');
-  console.log(' localStoragen kieli: ' + language);
+  // console.log(' localStoragen kieli: ' + language);
 
   if (language == null || language == undefined) {
     language = 'fi-FI';
@@ -38,8 +41,21 @@ function getLanguage(): string {
   // if (language !== 'fi-FI') {
     // language = 'en-US';
   // }
-  console.log('valittiin kieli: ' + language);
   return language;
+}
+
+export function changeToLang(newLang: 'en' | 'fi') {
+  var language: string;
+    if (newLang == 'en') {
+      language = 'en-US';
+    } else {
+      language = 'fi-FI';
+    }
+    const oldLang = localStorage.getItem('language');
+    if (language !== oldLang) {
+      localStorage.setItem('language', language);
+      window.location.reload();
+    }
 }
 
 // export const initializeSupportedLocales = () => {
