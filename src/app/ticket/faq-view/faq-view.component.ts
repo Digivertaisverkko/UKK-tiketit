@@ -7,12 +7,13 @@ import { TicketService, Ticket } from '../ticket.service';
   templateUrl: './faq-view.component.html',
   styleUrls: ['./faq-view.component.scss'],
 })
+
 export class FaqViewComponent implements OnInit {
-  public errorMessage: string = '';
   public courseName: string = '';
-  public ticket: Ticket = {} as Ticket;
-  public isLoaded: boolean = false;
+  public errorMessage: string = '';
   public isInIframe: boolean = true;
+  public isLoaded: boolean = false;
+  public ticket: Ticket = {} as Ticket;
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(
@@ -20,7 +21,8 @@ export class FaqViewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private ticketService: TicketService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.getIfInIframe();
