@@ -105,8 +105,19 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.username = this.authService.getUserName();
-    this.userRole = this.authService.getUserRole();
+    // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
+    this.authService.trackUserInfo().subscribe(response => {
+      if (response !== null) {
+        if (response.nimi !== undefined ) {
+          this.username = response.nimi;
+        }
+        if (response.asema !== undefined ) {
+          this.userRole = response.asema;
+        }
+      }
+    });
+    // this.username = this.authService.getUserName();
+    // this.userRole = this.authService.getUserRole();
     this.getIfInIframe();
     this.trackScreenSize();
     this.routeSubscription = this.route.queryParams.subscribe(params => {

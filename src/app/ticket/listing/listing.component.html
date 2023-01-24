@@ -148,8 +148,9 @@
 
 </section>
 
-<div class="theme-actions">
-  <button mat-raised-button color="primary" justify-content="flex-end" *ngIf="userRole !== 'opiskelija'" (click)="submitFaq()"
+<div class="theme-actions" *ngIf="userRole === 'opettaja' || userRole === 'admin'"
+[ngStyle]="showNoFAQ ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submitFaq()"
     i18n="@@Uusi UKK">Uusi UKK</button>
 </div>
 

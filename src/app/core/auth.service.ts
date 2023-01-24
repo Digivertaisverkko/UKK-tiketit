@@ -75,8 +75,11 @@ export class AuthService {
   }
 
   public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | '' {
-    let role: any = this.userRole$.value;
-    return (role == null) ? '' : role;
+    let user = this.user$.value;
+    // console.log('getUserRole() user: ' + JSON.stringify(user));
+    // let role: any = this.userRole$.value;
+    // console.log('saatiin rooli: ' + user.asema);
+    return (user.asema == null) ? '' : user.asema;
   }
 
   public getUserInfo(): User {
@@ -101,7 +104,7 @@ export class AuthService {
     return this.userName$.asObservable();
   }
 
-  public trackUserInfo(): Observable<User|null> {
+  public trackUserInfo(): Observable<User> {
     return this.user$.asObservable();
   }
 
@@ -233,28 +236,31 @@ export class AuthService {
     }
     try {
     const userInfo = await this.getMyUserInfo(courseID);
-      console.log('haettiin käyttäjätiedot onnistuneesti.');
 
+      // Uudempi tapa.
       if (userInfo !== null) {
         this.user$.next(userInfo);
       }
 
+      // Nämä vielä yhteensopivuuden vuoksi.
       if (userInfo?.sposti.length > 0) {
         this.setUserEmail(userInfo.sposti);
       }
+
       if (userInfo?.nimi.length > 0) {
         this.setUserName(userInfo.nimi);
       }
-      if (userInfo.asema !== undefined) {
+
+      if (userInfo?.asema.length > 0) {
         let userRole: string = userInfo.asema;
         if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
           this.setUserRole(userRole);
         }
       }
+
     } catch (error: any) {
       this.handleError(error);
     }
-
   }
 
   //   this.getMyUserInfo(courseID)
@@ -286,7 +292,7 @@ export class AuthService {
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
     try {
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response))
+      console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
       this.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -414,7 +420,7 @@ export class AuthService {
       // Kurssi ID voi olla, jos ollaan tultu loggaamattomaan näkymään ensin.
       const courseID: string | null = window.localStorage.getItem('COURSE_ID');
       if (courseID !== null) {
-        // console.log('-- ajetaan saveUserInfo ----');
+        console.log('-- ajetaan saveUserInfo ----');
         await this.saveUserInfo(courseID);
       } else {
         // console.log('-- ei ajettu saveUserInfo: kurssi ID: ' + courseID + ' ----');
