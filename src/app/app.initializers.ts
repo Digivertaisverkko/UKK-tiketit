@@ -45,10 +45,9 @@ function getLanguage(): string {
   } else {
     // Jos käyttäjä on aiemmin valinnut kielen.
     language = localStorage.getItem('language');
-
     // Oletuskieli
     if (language == null || language == undefined) {
-      language = 'fi-FI';
+      language = (isInIframe) ? 'en-US' : 'fi-FI';
     }
   }
 
@@ -64,6 +63,14 @@ function getLanguage(): string {
     // language = 'en-US';
   // }
   return language;
+}
+
+function isInIframe () {
+  try {
+      return window.self !== window.top;
+  } catch (e) {
+      return true;
+  }
 }
 
 export function changeToLang(newLang: 'en' | 'fi') {
