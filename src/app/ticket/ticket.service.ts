@@ -143,7 +143,6 @@ export class TicketService {
         this.http.get<KentanTiedot[]>(url, httpOptions)
       );
       console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
-      console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -214,7 +213,6 @@ export class TicketService {
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
-      console.log(typeof response);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -531,6 +529,8 @@ export class TicketService {
   }
 }
 
+// ========== Rajapinnat ==============
+
 export interface Error {
   tunnus: number;
   virheilmoitus: string;
@@ -555,24 +555,28 @@ export interface TiketinPerustiedot {
   id: number;
   otsikko: string;
   aikaleima: string;
+  aloittaja: Kurssilainen;
   tila: number;
-  aloittaja: {
-    id: number,
-    nimi: string;
-    sposti: string;
-    asema: string;
-  };
+}
+
+export interface Kurssilainen {
+  id: number,
+  nimi: string;
+  sposti: string;
+  asema: string;
 }
 
 // Metodi: getTicketInfo. Koostetaan useammista API-kutsuista.
 // Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
 // eri vaiheessa omilla kutsuillaan.
+// Backend palauttaa 1. kommentissa tiketin viestin sisällön, josta
+// tulee rajapinnan jäsenmuuttujan "viesti" -sisältö.
 export interface Tiketti extends TiketinPerustiedot {
-  kentat?: Array<Kentta>;
   kurssi: number;
   viesti: string;
-  kommentit: Array<Kommentti>;
   ukk?: boolean;
+  kentat?: Array<Kentta>;
+  kommentit: Array<Kommentti>;
 }
 
 // Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
@@ -621,12 +625,7 @@ export interface KentanTiedot {
 // TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
 export interface Kommentti {
   aikaleima: Date;
-  lahettaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
+  lahettaja: Kurssilainen;
   tila: number;
   viesti: string;
 }
