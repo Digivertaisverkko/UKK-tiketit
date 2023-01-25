@@ -13,11 +13,13 @@ import { environment } from 'src/environments/environment';
 export class HeaderComponent implements OnInit {
   public isUserLoggedIn$: Observable<boolean>;
   public isUserLoggedIn: boolean = false;
+  public disableLanguageSelection: boolean = false;
   public readonly maxUserLength = 40;
   public userRole: string = '';
   public userName: string = '';
   public userEmail: string = '';
   public hideLogging: boolean = true;
+  public sliderChecked: boolean;
 
   get language(): string {
     return this._language;
@@ -40,9 +42,11 @@ export class HeaderComponent implements OnInit {
     {
     this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
+    this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
   }
 
   ngOnInit(): void {
+
     // this.updateUserRole();
     // this.updateUserName();
     // this.updateUserEmail();
@@ -76,6 +80,17 @@ export class HeaderComponent implements OnInit {
         this.setUserRole(response.asema);
       }
     })
+  }
+
+  updateMenu() {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('lang') !== null) {
+      this.disableLanguageSelection = true;
+      console.log(' kieli disabloitu');
+    } else {
+      this.disableLanguageSelection = false;
+      console.log(' kieli enabloitu');
+    };
   }
 
   setUserRole(asema: string): void {

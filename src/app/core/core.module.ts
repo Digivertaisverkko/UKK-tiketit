@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
+import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 import { AuthService } from './auth.service';
 
@@ -35,6 +36,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatListModule,
     MatMenuModule,
     MatRippleModule,
+    MatSlideToggleModule,
     RouterModule,
     SharedModule,
   ],

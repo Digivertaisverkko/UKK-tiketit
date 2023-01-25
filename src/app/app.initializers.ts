@@ -1,9 +1,10 @@
 import { loadTranslations } from '@angular/localize';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
+import { ActivatedRoute } from '@angular/router';
 
 export const initializeLanguage = (): Promise<void> | void => {
- 
+
   const language = getLanguage();
 
   document.documentElement.lang = language;
@@ -23,16 +24,37 @@ export const initializeLanguage = (): Promise<void> | void => {
 };
 
 function getLanguage(): string {
-  // Jos käyttäjä on aiemmin valinnut kielen.
-  let language: string | null = localStorage.getItem('language');
-  // console.log(' localStoragen kieli: ' + language);
 
-  if (language == null || language == undefined) {
-    language = 'fi-FI';
+  const url = new URL(window.location.href);
+  const urlLang = url.searchParams.get('lang');
+  var language: string | null;
+
+  console.log('urlLang: ' + urlLang);
+
+  if (urlLang !== null) {
+    if (urlLang == 'en') {
+      language = 'en-US';
+      console.log('enkku valittu url:sta');
+    } else if (urlLang == 'fi') {
+      language = 'fi-FI';
+      console.log('suomi valittu url:sta');
+    } else {
+      language = 'en-US';
+      console.log('Tuntematon kieli: "' + urlLang  + '", käytetään englantia.');
+    }
+  } else {
+    // Jos käyttäjä on aiemmin valinnut kielen.
+    language = localStorage.getItem('language');
+
+    // Oletuskieli
+    if (language == null || language == undefined) {
+      language = 'fi-FI';
+    }
+  }
+
     // Jos haluaa käyttää selaimen kieltä.
     // language = navigator.language;
     // console.log('navigator.language -kieli: ' + language);
-  }
 
   // if (language === undefined || language === null ) {
   //   const browserLanguages: string[] | undefined = getBrowserLocales();

@@ -35,7 +35,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   // public isLoggedIn$: Observable<boolean>;
 
-  public readonly pollingRateMin = 15;
+  public readonly pollingRateMin: number;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public dataSource = new MatTableDataSource<Sortable>();
@@ -63,12 +63,8 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
-
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
-
-  //displayedColumns: string[] = ['id', 'nimi', 'ulkotunnus']
-  //data = new MatTableDataSource(kurssit);
 
   // private _liveAnnouncer: LiveAnnouncer,
 
@@ -79,6 +75,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     private ticket: TicketService,
     private authService: AuthService
   ) {
+    this.pollingRateMin = (environment.production == true ) ? 1 : 15;
     this.ticketMessageSub = this.ticket.onMessages().subscribe(message => {
       if (message) {
         this.errorMessage = message;
