@@ -8,7 +8,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { TicketService, MyCourse, FAQ, Question } from '../ticket.service';
+import { TicketService, Kurssini, UKK, TiketinPerustiedot } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
 
 export interface Sortable {
@@ -40,7 +40,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public columnDefinitionsFAQ: ColumnDefinition[];
   public courseName: string = '';
   public dataSource = new MatTableDataSource<Sortable>();
-  public dataSourceFAQ = new MatTableDataSource<FAQ>();
+  public dataSourceFAQ = new MatTableDataSource<UKK>();
   public errorMessage: string = '';
   public FAQisLoaded: boolean = false;
   public header: string = '';
@@ -179,7 +179,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   private updateLoggedInView(courseIDcandinate: string) {
     this.ticket.getMyCourses().then(response => {
       if (response[0].kurssi !== undefined) {
-        const myCourses: MyCourse[] = response;
+        const myCourses: Kurssini[] = response;
         // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
         // Onko käyttäjä URL parametrilla saadulla kurssilla.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {

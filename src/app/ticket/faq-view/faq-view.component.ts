@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { TicketService, Ticket } from '../ticket.service';
+import { TicketService, Tiketti } from '../ticket.service';
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -13,7 +13,7 @@ export class FaqViewComponent implements OnInit {
   public errorMessage: string = '';
   public isInIframe: boolean = true;
   public isLoaded: boolean = false;
-  public ticket: Ticket = {} as Ticket;
+  public ticket: Tiketti = {} as Tiketti;
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(

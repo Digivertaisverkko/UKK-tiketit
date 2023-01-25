@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/core/auth.service';
-import { NewFaq, TicketService } from '../ticket.service';
+import { UusiUKK, TicketService } from '../ticket.service';
 
 @Component({
   selector: 'app-submit-faq',
@@ -55,7 +55,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   }
 
   public sendFaq(): void {
-    const newFaq: NewFaq = {
+    const newFaq: UusiUKK = {
       otsikko: this.faqTitle,
       viesti: this.faqMessage,
       kentat: [

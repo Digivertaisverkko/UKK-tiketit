@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpTestingService } from './http-testing.service';
-import { TicketService, NewTicket } from 'src/app/ticket/ticket.service';
+import { TicketService, UusiTiketti } from 'src/app/ticket/ticket.service';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TitleCasePipe } from '@angular/common';

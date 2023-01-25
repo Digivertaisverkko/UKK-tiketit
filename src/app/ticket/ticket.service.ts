@@ -52,39 +52,39 @@ export class TicketService {
     return courseID;
   }
 
-// Hae kurssin UKK-kysymykset.
-public async getFAQ(courseID: number): Promise<FAQ[]> {
-  // const httpOptions = this.getHttpOptions();
-  let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
-  let response: any;
-  try {
-    response = await firstValueFrom(this.http.get<FAQ[]>(url));
-    console.log(
-      'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-    );
-  } catch (error: any) {
-    this.handleError(error);
+  // Hae kurssin UKK-kysymykset.
+  public async getFAQ(courseID: number): Promise<UKK[]> {
+    // const httpOptions = this.getHttpOptions();
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.get<UKK[]>(url));
+      console.log(
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
   }
-  return response;
-}
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
-public getTicketState(numericalState: number): string {
-  if (numericalState < 0 || numericalState > 6 ) {
-    throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
+  public getTicketState(numericalState: number): string {
+    if (numericalState < 0 || numericalState > 6 ) {
+      throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
+    }
+    let verbal: string = '';
+    switch (numericalState) {
+        case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
+        case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
+        case 2: verbal = $localize `:@@Luettu:Luettu`; break;
+        case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+        case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
+        case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
+        case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`
+    }
+    return verbal;
   }
-  let verbal: string = '';
-  switch (numericalState) {
-      case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
-      case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
-      case 2: verbal = $localize `:@@Luettu:Luettu`; break;
-      case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
-      case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
-      case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
-      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`
-  }
-  return verbal;
-}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
   public async addComment(ticketID: string, message: string, tila?: number): Promise<any> {
@@ -134,13 +134,13 @@ public getTicketState(numericalState: number): string {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
-  public async getTicketFieldInfo(courseID: string): Promise<FieldInfo[]> {
+  public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
     const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
     try {
       response = await firstValueFrom(
-        this.http.get<FieldInfo[]>(url, httpOptions)
+        this.http.get<KentanTiedot[]>(url, httpOptions)
       );
       console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
       console.log(typeof response);
@@ -151,7 +151,7 @@ public getTicketState(numericalState: number): string {
     return response;
   }
 
-  public async sendFaq(courseID: string, newFaq: NewFaq) {
+  public async sendFaq(courseID: string, newFaq: UusiUKK) {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
@@ -169,7 +169,7 @@ public getTicketState(numericalState: number): string {
   }
 
   // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
-  public async addTicket(courseID: string, newTicket: NewTicket) {
+  public async addTicket(courseID: string, newTicket: UusiTiketti) {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
@@ -177,7 +177,7 @@ public getTicketState(numericalState: number): string {
     try {
       console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' +
       url + '"');
-      response = await firstValueFrom(this.http.post<NewTicket>(url, body, httpOptions));
+      response = await firstValueFrom(this.http.post<UusiTiketti>(url, body, httpOptions));
       console.log(
         'saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response)
       );
@@ -223,12 +223,12 @@ public getTicketState(numericalState: number): string {
   }
 
   // Palauta listan kaikista kursseista.
-  public async getCourses(): Promise<Course[]> {
+  public async getCourses(): Promise<Kurssi[]> {
     const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
-      response = await firstValueFrom<Course[]>(this.http.get<any>(url, httpOptions));
+      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
       );
@@ -241,12 +241,12 @@ public getTicketState(numericalState: number): string {
   }
 
     // Palauta listan kaikista kursseista, joilla käyttäjä on.
-    public async getMyCourses(): Promise<MyCourse[]> {
+    public async getMyCourses(): Promise<Kurssini[]> {
       const httpOptions = this.getHttpOptions();
       let response: any;
       let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
       try {
-        response = await firstValueFrom<MyCourse[]>(this.http.get<any>(url, httpOptions));
+        response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url, httpOptions));
         console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
         this.auth.setLoggedIn();
       } catch (error: any) {
@@ -259,7 +259,7 @@ public getTicketState(numericalState: number): string {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<Question[]> {
+  public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
     const httpOptions = this.getHttpOptions();
     let target: string;
     if (onlyOwn !== undefined && onlyOwn == true) {
@@ -270,12 +270,8 @@ public getTicketState(numericalState: number): string {
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
-      response = await firstValueFrom(
-        this.http.get<Question[]>(url, httpOptions)
-      );
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -287,7 +283,7 @@ public getTicketState(numericalState: number): string {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<Question[]> {
+  public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<TiketinPerustiedot[]> {
     const httpOptions = this.getHttpOptions();
     let target: string;
     if (onlyOwn !== undefined && onlyOwn == true) {
@@ -298,7 +294,7 @@ public getTicketState(numericalState: number): string {
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
-      response = this.http.get<Question[]>(url, httpOptions);
+      response = this.http.get<TiketinPerustiedot[]>(url, httpOptions);
 
       console.dir(response);
     } catch (error: any) {
@@ -310,20 +306,20 @@ public getTicketState(numericalState: number): string {
   }
 
   // Palauta yhden tiketin tiedot.
-  public async getTicketInfo(ticketID: string): Promise<Ticket> {
+  public async getTicketInfo(ticketID: string): Promise<Tiketti> {
     var sessionID: string | null = window.localStorage.getItem('SESSION_ID');
     const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
-      response = await firstValueFrom(this.http.get<Ticket>(url, httpOptions));
+      response = await firstValueFrom(this.http.get<Tiketti>(url, httpOptions));
       console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response) + ' . Vastaus myös alla.');
       console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
     // this.checkErrors(response);
-    let ticket: Ticket = response;
+    let ticket: Tiketti = response;
     response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;
     response  = await this.getComments(ticketID, httpOptions);
@@ -337,11 +333,11 @@ public getTicketState(numericalState: number): string {
   }
 
   // Palauta listan tiketin kommenteista.
-  private async getComments(ticketID: string, httpOptions: object): Promise<Comment[]>{
+  private async getComments(ticketID: string, httpOptions: object): Promise<Kommentti[]>{
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
     try {
-      response = await firstValueFrom<Comment[]>(
+      response = await firstValueFrom<Kommentti[]>(
         this.http.get<any>(url, httpOptions)
       );
       console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
@@ -351,13 +347,13 @@ public getTicketState(numericalState: number): string {
     }
     // if (Object.keys(response).length === 0) {
     // }
-    let comments: Comment[];
+    let comments: Kommentti[];
     comments = this.arrangeComments(response);
     return comments
   }
 
   // Järjestä kommentit vanhimmasta uusimpaan.
-  private arrangeComments(comments: Comment[]): Comment[] {
+  private arrangeComments(comments: Kommentti[]): Kommentti[] {
     const commentsWithDate = comments.map(comment => {
       return { ...comment, aikaleima: new Date(comment.aikaleima) }
     });
@@ -373,11 +369,11 @@ public getTicketState(numericalState: number): string {
   }
 
   // Hae lisäkentät
-  private async getFields(ticketID: string, httpOptions: object): Promise<Field[]> {
+  private async getFields(ticketID: string, httpOptions: object): Promise<Kentta[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
-      response = await firstValueFrom<Field[]>(
+      response = await firstValueFrom<Kentta[]>(
         this.http.get<any>(url, httpOptions)
       );
       console.log(
@@ -409,7 +405,9 @@ public getTicketState(numericalState: number): string {
     return options;
   }
 
-  private handleError(error: any) {
+  // Lähetä muotoiltu virheviesti consoleen. Ohjaa kirjautumiseen, jos ei olla kirjauduttu.
+  // Palauta virhe otettavaksi vastaan komponentissa.
+  private handleError(error: any): Observable<never> {
     var message: string;
     if (error.status === 0) {
       // A client-side or network error occurred.
@@ -433,7 +431,6 @@ public getTicketState(numericalState: number): string {
         }
       }
     }
-
     console.error(message + ".");
 
     if (error.status === 403) {
@@ -534,32 +531,31 @@ public getTicketState(numericalState: number): string {
   }
 }
 
-export interface Course {
-  id: string;
-  nimi: string;
-}
-
-export interface MyCourse {
-  kurssi: number;
-  asema: 'opiskelija' | 'opettaja' | 'admin';
-}
-
 export interface Error {
   tunnus: number;
   virheilmoitus: string;
 }
 
-// Field = Tiketin lisäkenttä
-export interface Field {
-  id: number;
-  arvo: string;
+// Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen API:a se vastaa.
+
+// Metodi: getCourses, API: /api/kurssit/
+export interface Kurssi {
+  id: string;
+  nimi: string;
 }
 
-export interface Question {
-  tila: number;
+// Metodi: getMyCourses, API: /api/kurssi/omatkurssit/
+export interface Kurssini {
+  kurssi: number;
+  asema: 'opiskelija' | 'opettaja' | 'admin';
+}
+
+// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
+export interface TiketinPerustiedot {
   id: number;
   otsikko: string;
   aikaleima: string;
+  tila: number;
   aloittaja: {
     id: number,
     nimi: string;
@@ -568,61 +564,62 @@ export interface Question {
   };
 }
 
-// Kentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
-export interface FieldInfo {
-  id: string
-  otsikko: string
-  pakollinen: boolean
-  esitaytettava: boolean
-}
-
-export interface NewTicket {
-  otsikko: string;
+// Metodi: getTicketInfo. Koostetaan useammista API-kutsuista.
+// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
+// eri vaiheessa omilla kutsuillaan.
+export interface Tiketti extends TiketinPerustiedot {
+  kentat?: Array<Kentta>;
+  kurssi: number;
   viesti: string;
-  kentat?: Array<Field>;
+  kommentit: Array<Kommentti>;
+  ukk?: boolean;
 }
 
-// export interface NewFaq {
-//   otsikko: string;
-//   viesti: string;
-//   vastaus: string;
-// }
-
-export interface NewFaq extends NewTicket {
-  vastaus: string;
-}
-
-// TODO: dummy-datassa ei vielä id:ä ja otsikko -> nimi. Tulee muuttumaan tikettiä vastaavaksi.
-// id: number;
-export interface FAQ {
+// Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
+export interface UKK {
   id: number;
   otsikko: string;
   aikaleima: string;
   tyyppi: string;
 }
 
-
-// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan myöhemmässä vaiheessa omilla kutsuillaan.
-export interface Ticket {
-  id: number;
+// Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/
+export interface UusiTiketti {
   otsikko: string;
-  aikaleima: string;
-  aloittaja: {
-    id: number;
-    nimi: string;
-    sposti: string;
-    asema: string;
-  }
-  tila: number;
-  kentat?: Array<Field>;
-  kurssi: number;
   viesti: string;
-  kommentit: Array<Comment>;
-  ukk?: boolean;
+  kentat?: Array<Kentta>;
 }
 
+// Metodi: sendFaq. API: /api/kurssi/:kurssi-id/ukk/
+export interface UusiUKK extends UusiTiketti {
+  vastaus: string;
+}
+
+// Tiketin lisäkenttä.
+// Metodi: getFields, API: /api/tiketti/:tiketti-id/kentat/
+// Uusia propertyjä: tyyppi ja ohje.
+export interface Kentta {
+  id: number;
+  arvo: string;
+  tyyppi?: string;
+  ohje?: string;
+}
+
+// Metodi: getTicketFieldInfo
+// API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
+// api/kurssi/:kurssi-id/tiketinkentat/
+export interface KentanTiedot {
+  id: string;
+  otsikko: string;
+  pakollinen: boolean;
+  esitaytettava: boolean;
+  esitäyttö: string;
+}
+
+// Tiketin kommentti
+// Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
 // TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
-export interface Comment {
+export interface Kommentti {
   aikaleima: Date;
   lahettaja: {
     id: number;

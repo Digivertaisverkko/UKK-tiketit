@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { NewTicket, TicketService } from '../ticket.service';
+import { UusiTiketti, TicketService } from '../ticket.service';
 
 @Component({
   selector: 'app-submit-ticket',
@@ -19,7 +19,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   // public user: User;
   problemText: string = '';
   messageText: string = '';
-  newTicket: NewTicket = {} as NewTicket;
+  newTicket: UusiTiketti = {} as UusiTiketti;
   // public userName: string | null = '';
   userRole: string = '';
   answer: string = '';

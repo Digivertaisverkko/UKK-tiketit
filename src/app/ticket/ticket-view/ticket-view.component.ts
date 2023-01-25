@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TicketService, Ticket } from '../ticket.service';
+import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
 import { Subscription, interval, startWith, switchMap } from 'rxjs';
@@ -13,7 +13,7 @@ import { Subscription, interval, startWith, switchMap } from 'rxjs';
 export class TicketViewComponent implements OnInit, OnDestroy {
   public courseName: string = '';
   public errorMessage: string = '';
-  public ticket: Ticket;
+  public ticket: Tiketti;
   public tila: string;
   public newCommentState: 3 | 4 | 5 = 4;
   // tila: typeof Tila | typeof State;
@@ -35,7 +35,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private router: Router,
     private _snackBar: MatSnackBar
     ) {
-      this.ticket = {} as Ticket;
+      this.ticket = {} as Tiketti;
       this.tila = '';
       this.commentText = '';
       this.isLoaded = false;
