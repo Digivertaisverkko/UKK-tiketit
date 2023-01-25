@@ -305,7 +305,6 @@ export class TicketService {
 
   // Palauta yhden tiketin tiedot.
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
-    var sessionID: string | null = window.localStorage.getItem('SESSION_ID');
     const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
@@ -374,9 +373,7 @@ export class TicketService {
       response = await firstValueFrom<Kentta[]>(
         this.http.get<any>(url, httpOptions)
       );
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      console.log('getFields: Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -550,6 +547,13 @@ export interface Kurssini {
   asema: 'opiskelija' | 'opettaja' | 'admin';
 }
 
+export interface Kurssilainen {
+  id: number,
+  nimi: string;
+  sposti: string;
+  asema: string;
+}
+
 // Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
 export interface TiketinPerustiedot {
   id: number;
@@ -559,18 +563,11 @@ export interface TiketinPerustiedot {
   tila: number;
 }
 
-export interface Kurssilainen {
-  id: number,
-  nimi: string;
-  sposti: string;
-  asema: string;
-}
-
-// Metodi: getTicketInfo. Koostetaan useammista API-kutsuista.
-// Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
-// eri vaiheessa omilla kutsuillaan.
-// Backend palauttaa 1. kommentissa tiketin viestin sisällön, josta
-// tulee rajapinnan jäsenmuuttujan "viesti" -sisältö.
+/* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
+  Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
+  eri vaiheessa omilla kutsuillaan.
+  Backend palauttaa 1. kommentissa tiketin viestin sisällön, josta
+  tulee rajapinnan jäsenmuuttujan "viesti" -sisältö. */
 export interface Tiketti extends TiketinPerustiedot {
   kurssi: number;
   viesti: string;
@@ -591,7 +588,7 @@ export interface UKK {
 export interface UusiTiketti {
   otsikko: string;
   viesti: string;
-  kentat?: Array<Kentta>;
+  kentat?: Array<{ id: number, arvo: string }>;
 }
 
 // Metodi: sendFaq. API: /api/kurssi/:kurssi-id/ukk/
@@ -599,13 +596,15 @@ export interface UusiUKK extends UusiTiketti {
   vastaus: string;
 }
 
-// Tiketin lisäkenttä.
-// Metodi: getFields, API: /api/tiketti/:tiketti-id/kentat/
-// Uusia propertyjä: tyyppi ja ohje.
+/* Tiketin lisäkenttä.
+  Metodi: getTicketInfo -> getTickgetFields,
+  API: /api/tiketti/:tiketti-id/kentat/
+  Uusia propertyjä: tyyppi ja ohje.
+  Palautustyypit tarkistettu 25.1.23. */
 export interface Kentta {
-  id: number;
+  otsikko: string;
   arvo: string;
-  tyyppi?: string;
+  tyyppi: string;
   ohje?: string;
 }
 
