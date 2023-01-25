@@ -190,7 +190,6 @@ export class AuthService {
 
   public getUserName(): string | null {
     // return this.userName$.value;
-    console.log(" local storage user name: " + window.localStorage.getItem('USER_NAME'));
     return window.localStorage.getItem('USER_NAME');
   }
 
@@ -414,7 +413,7 @@ export class AuthService {
       let sessionID = response['session-id'];
       this.setLoggedIn();
       this.setSessionID(sessionID);
-      
+
       // console.log('tallennettiin sessionid: ' + sessionID);
 
       // Kurssi ID voi olla, jos ollaan tultu loggaamattomaan näkymään ensin.

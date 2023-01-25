@@ -7,13 +7,11 @@ import { UserManagementRoutingModule } from './user-management-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule }  from '@angular/material/divider';
 import { RegisterComponent } from './register/register.component';
-import { TestingHenriComponent } from './testing-henri/testing-henri.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent,
-    TestingHenriComponent,
+    RegisterComponent
   ],
   imports: [
     MatDividerModule,
