@@ -555,6 +555,7 @@ export interface Kurssilainen {
 }
 
 // Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
+// Tikettilistan näyttämistä varten.
 export interface TiketinPerustiedot {
   id: number;
   otsikko: string;

@@ -12,6 +12,7 @@ import { TicketService, Kurssini, UKK, TiketinPerustiedot } from '../ticket.serv
 import { AuthService } from 'src/app/core/auth.service';
 
 export interface Sortable {
+  tilaID: number;
   tila: string;
   id: number;
   otsikko: string;
@@ -33,9 +34,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   // public isLoggedIn$: Observable<boolean>;
-  private courseID: string | null = '';
-  private routeSubscription: Subscription | null = null;
-  private timeInterval: Subscription = new Subscription();
+
+  public readonly pollingRateMin = 15;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public courseName: string = '';
@@ -48,8 +48,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public isInIframe: boolean = true;
   public isLoaded: boolean = false;
   public isPhonePortrait: boolean = false;
-  // Älä aseta vakioksi.
-  public maxItemTitleLength = 100;
+  public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public me: string =  $localize`:@@Minä:Minä`;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
@@ -59,6 +58,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public username: string | null = '';
   public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
+  private courseID: string | null = '';
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -120,7 +120,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     // this.userRole = this.authService.getUserRole();
     this.getIfInIframe();
     this.trackScreenSize();
-    this.routeSubscription = this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       var courseIDcandinate: string = params['courseID'];
       if (courseIDcandinate === undefined) {
         this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.` + '.';
@@ -229,7 +229,8 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   private pollQuestions() {
     // FIXME: 15min välein ATM ettei koodatessa turhaa pollata.
-    this.timeInterval = interval(900000)
+
+    interval(this.pollingRateMin * 60 * 1000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
@@ -245,16 +246,15 @@ export class ListingComponent implements OnInit, OnDestroy {
               aikaleima: aikaleima,
               aloittajanNimi: aloittaja.nimi
             }));
-            // console.log('Tabledata alla:');
-            // console.log(JSON.stringify(tableData));
+            // Arkistoituja kysymyksiä ei näytetä.
+            tableData = tableData.filter(ticket => ticket.tilaID !== 6)
+            // console.log('Tabledata alla:'); console.log(JSON.stringify(tableData));
             if (tableData !== null) {
               this.dataSource = new MatTableDataSource(tableData);
             }
-            // console.log('MatTableDataSource alla:');
-            // console.dir(this.dataSource);
+            // console.log('MatTableDataSource alla:'); console.dir(this.dataSource);
             this.numberOfQuestions = tableData.length;
-            // console.log('Saatiin vastaus (alla):');
-            // console.dir(SortableData);
+            // console.log('Saatiin vastaus (alla):'); console.dir(SortableData);
             this.dataSource.sort = this.sortQuestions;
             // this.dataSource.paginator = this.paginator;
             if (this.numberOfQuestions === 0) {
@@ -263,7 +263,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               this.showNoQuestions = false;
             }
           }
-          // console.dir(this.dataSource);
         }
       )
   }
@@ -369,7 +368,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.timeInterval.unsubscribe();
     this.ticketMessageSub.unsubscribe();
   }
 }
