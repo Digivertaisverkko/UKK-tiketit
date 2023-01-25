@@ -5,11 +5,11 @@
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
   <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName"><span>{{courseName}}</span></h2>
 
-  <h3 id="tickets-header" class="sub-header" *ngIf="header.length > 0">{{header}}</h3>
+  <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">{{headline}}</h3>
 
   <section *ngIf="isCourseIDvalid">
 
-  <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima"
+  <table mat-table [dataSource]="dataSource" [hidden]="numberOfQuestions === 0" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
 
     <ng-container matColumnDef="tila">
@@ -76,7 +76,7 @@
 
 </section>
 
-  <div class="theme-actions" [ngStyle]="showNoQuestions ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+  <div class="theme-actions" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
     <button mat-raised-button color="primary" (click)="submitTicket()"
       i18n="@@Uusi kysymys">Uusi kysymys</button>
   </div>
@@ -88,18 +88,20 @@
 <div class="input-field-wrapper">
   <h3 class="sub-header" i18n="@@Open neuvot">Open neuvot</h3>
   <!--Haku toiminto-->
-  <mat-form-field class="filteringField" *ngIf="!showNoFAQ">
+  <mat-form-field class="filteringField" *ngIf="numberOfFAQ !== 0">
     <mat-label i18n="@@Hae neuvoa">Hae neuvoa</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
   </mat-form-field>
 </div>
 
 <!-- <mat-card appearance="outlined" > -->
-  <p class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded" i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
+  <p class="noItemsMessage" *ngIf="numberOfFAQ === 0 && FAQisLoaded" i18n="@@Ei yhtään UKK">
+    Yhtään usein kysyttyä kysymystä ei ole lisätty.
+  </p>
 <!-- </mat-card> -->
 
-<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort"
-  matSortActive="tyyppi" matSortDirection="desc">
+<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="numberOfFAQ === 0"
+  matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 
   <ng-container matColumnDef="otsikko">
     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
@@ -150,7 +152,7 @@
 </section>
 
 <div class="theme-actions" *ngIf="userRole === 'opettaja' || userRole === 'admin'"
-[ngStyle]="showNoFAQ ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+[ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
   <button mat-raised-button color="primary" justify-content="flex-end" (click)="submitFaq()"
     i18n="@@Uusi UKK">Uusi UKK</button>
 </div>

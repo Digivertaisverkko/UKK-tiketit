@@ -12,12 +12,12 @@ import { TicketService, Kurssini, UKK, TiketinPerustiedot } from '../ticket.serv
 import { AuthService } from 'src/app/core/auth.service';
 
 export interface Sortable {
-  tilaID: number;
-  tila: string;
   id: number;
   otsikko: string;
   aikaleima: string;
   aloittajanNimi: string
+  tilaID: number;
+  tila: string;
 }
 export interface ColumnDefinition {
   def: string;
@@ -38,27 +38,28 @@ export class ListingComponent implements OnInit, OnDestroy {
   public readonly pollingRateMin = 15;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
-  public courseName: string = '';
   public dataSource = new MatTableDataSource<Sortable>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
-  public errorMessage: string = '';
   public FAQisLoaded: boolean = false;
-  public header: string = '';
   public isCourseIDvalid: boolean = false;
   public isInIframe: boolean = true;
   public isLoaded: boolean = false;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
-  public me: string =  $localize`:@@Minä:Minä`;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  public showNoFAQ: boolean = true;
-  public showNoQuestions: boolean = true;
   public ticketMessageSub: Subscription;
+  private courseID: string | null = '';
+
+  // Merkkijonot
+
+  public courseName: string = '';
+  public errorMessage: string = '';
+  public headline: string = '';
+  public me: string =  $localize`:@@Minä:Minä`;
   public ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public username: string | null = '';
   public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
-  private courseID: string | null = '';
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -145,7 +146,7 @@ export class ListingComponent implements OnInit, OnDestroy {
         }
         this.updateLoggedInView(courseIDcandinate);
       }
-      this.setTicketListHeader();
+      this.setTicketListHeadline();
       this.isLoaded = true;
     });
   }
@@ -153,7 +154,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   public submitTicket () {
     if (this.authService.getIsUserLoggedIn() == false) {
       window.localStorage.setItem('REDIRECT_URL', 'submit');
-      // console.log('Tallennettiin redirect URL: /submit/ ');
     }
     this.router.navigateByUrl('submit');
   }
@@ -161,14 +161,12 @@ export class ListingComponent implements OnInit, OnDestroy {
   public submitFaq () {
     if (this.authService.getIsUserLoggedIn() == false) {
       window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
-      // console.log('Tallennettiin redirect URL: /submit-faq/');
     }
     this.router.navigateByUrl('submit-faq');
   }
 
   private trackLoginState(courseIDcandinate: string) {
     this.authService.onIsUserLoggedIn().subscribe(response => {
-      // console.log('lista : saatiin kirjautumistieto: ' + response);
       this.isLoaded = true;
       if (response == true) {
         this.updateLoggedInView(courseIDcandinate);
@@ -194,13 +192,10 @@ export class ListingComponent implements OnInit, OnDestroy {
           }
         }
       }
-    }).then(() => {
-      this.pollQuestions();
-    }).catch(error => {
-      console.log('listing.component: saatiin error: ');
-      console.dir(error);
-      this.handleError(error);
-    }).finally(() => {
+    }).then(() => this.pollQuestions()
+    ).catch(error =>
+      this.handleError(error)
+    ).finally(() => {
       // Elä laita this.isLoaded = true; tähän.
       //
     })
@@ -248,20 +243,12 @@ export class ListingComponent implements OnInit, OnDestroy {
             }));
             // Arkistoituja kysymyksiä ei näytetä.
             tableData = tableData.filter(ticket => ticket.tilaID !== 6)
-            // console.log('Tabledata alla:'); console.log(JSON.stringify(tableData));
             if (tableData !== null) {
               this.dataSource = new MatTableDataSource(tableData);
             }
-            // console.log('MatTableDataSource alla:'); console.dir(this.dataSource);
             this.numberOfQuestions = tableData.length;
-            // console.log('Saatiin vastaus (alla):'); console.dir(SortableData);
             this.dataSource.sort = this.sortQuestions;
             // this.dataSource.paginator = this.paginator;
-            if (this.numberOfQuestions === 0) {
-              this.showNoQuestions = true;
-            } else {
-              this.showNoQuestions = false;
-            }
           }
         }
       )
@@ -277,18 +264,18 @@ export class ListingComponent implements OnInit, OnDestroy {
     })
   }
 
-  public setTicketListHeader() {
+  public setTicketListHeadline() {
     let userRole = this.authService.getUserRole();
     switch (userRole) {
       case 'opettaja':
-        this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
+        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
       case 'admin':
-        this.header = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
+        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
       case 'opiskelija':
-        this.header = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
+        this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
       default:
         // Jos ei olla kirjautuneina.
-        this.header = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
+        this.headline = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
     }
   }
 
@@ -310,11 +297,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       .then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
-          if (this.numberOfFAQ === 0) {
-            this.showNoFAQ = true;
-          } else {
-            this.showNoFAQ = false;
-          }
           this.dataSourceFAQ = new MatTableDataSource(
             response.map(({ id, otsikko, aikaleima, tyyppi }) => ({
               id: id,
@@ -332,9 +314,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       .catch(error => {
         this.handleError(error);
       })
-      .finally(() => {
-        this.FAQisLoaded = true;
-      });
+      .finally(() => this.FAQisLoaded = true);
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.
