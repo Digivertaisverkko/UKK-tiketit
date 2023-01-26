@@ -61,13 +61,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     this.router.navigateByUrl(url);
   }
 
-  private trackUserRole() {
-    this.auth.onGetUserRole().subscribe(response => {
-      console.log('saatiin rooli: ' + response);
-      this.userRole = response;
-    })
-  }
-
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
     this.newTicket.viesti = this.message;

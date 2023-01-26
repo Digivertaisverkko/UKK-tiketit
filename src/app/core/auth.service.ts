@@ -23,10 +23,12 @@ export class AuthService {
   // Tullaan siirtymään käyttäjätiedoissa tähän:
   private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
 
+  // private activeCourse$ = new BehaviorSubject <Kurssi>({ id: '0', nimi: '' });
+
   // Vanhat, vielä monessa paikkaa käytössä olevat:
-  private userRole$ = new BehaviorSubject <string>('');
+  // private userRole$ = new BehaviorSubject <string>('');
   private userName$ = new BehaviorSubject <string>('');
-  private userEmail$ = new BehaviorSubject <string>('');
+  // private userEmail$ = new BehaviorSubject <string>('');
 
   private codeVerifier: string = '';
   private codeChallenge: string = '';
@@ -39,6 +41,21 @@ export class AuthService {
 
   constructor(private http: HttpClient,
               private router: Router) {
+  }
+
+  // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.
+  public setActiveCourse(courseID: string | null) {
+    // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
+    // if (courseID !== null && this.activeCourse$.value.id !== courseID) {
+      if (courseID !== null) {
+      window.localStorage.setItem('COURSE_ID', courseID);
+      // Nimi ei vielä käytössä.
+      // this.activeCourse$.next({ id: courseID, nimi: ''});
+      if (this.user$.value.id === 0) {
+        this.getUserInfo();
+      }
+      }
+    // }
   }
 
   public setLoggedIn() {
@@ -96,21 +113,32 @@ export class AuthService {
     return user;
   }
 
-  public onGetUserRole(): Observable<string> {
-    return this.userRole$.asObservable();
+  private getActiveCourse(): string {
+    var courseID: string = '';
+    const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+    if (savedCourseID !== null) {
+        courseID = savedCourseID;
+      } else {
+        throw new Error('auth.Service: getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
+      }
+    return courseID;
+  }
+
+  // public onGetUserRole(): Observable<string> {
+  //   return this.userRole$.asObservable();
+  // }
+
+  public trackUserInfo(): Observable<User> {
+    return this.user$.asObservable();
   }
 
   public onGetUserName(): Observable<string> {
     return this.userName$.asObservable();
   }
 
-  public trackUserInfo(): Observable<User> {
-    return this.user$.asObservable();
-  }
-
-  public onGetUserEmail(): Observable<string> {
-    return this.userEmail$.asObservable();
-  }
+  // public onGetUserEmail(): Observable<string> {
+  //   return this.userEmail$.asObservable();
+  // }
 
   public setSessionID(newSessionID: string) {
     const oldSessionID =  window.localStorage.getItem('SESSION_ID');
@@ -136,29 +164,36 @@ export class AuthService {
       // this.isUserLoggedIn$.next(true);
     // }
 
-    if (window.localStorage.getItem('USER_ROLE') !== null) {
-      const userRole = window.localStorage.getItem('USER_ROLE');
-      switch (userRole) {
-        case "opettaja":
-        case "opiskelija":
-        case "admin": {
-          this.userRole$.next(userRole);
-          // console.log('havaittiin user role ' + userRole);
-        }
-      }
+    const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+
+    if (savedCourseID !== null) {
+      this.saveUserInfo(savedCourseID);
     }
+
+    // Näistä siirrytään pois.
+    // if (window.localStorage.getItem('USER_ROLE') !== null) {
+    //   const userRole = window.localStorage.getItem('USER_ROLE');
+    //   switch (userRole) {
+    //     case "opettaja":
+    //     case "opiskelija":
+    //     case "admin": {
+    //       this.userRole$.next(userRole);
+    //       // console.log('havaittiin user role ' + userRole);
+    //     }
+    //   }
+    // }
     if (window.localStorage.getItem('USER_NAME') !== null) {
       const userName: string | null = window.localStorage.getItem('USER_NAME');
       if (userName !== null && userName.length > 0 ) {
         this.userName$.next(userName);
       }
     }
-    if (window.localStorage.getItem('EMAIL') !== null) {
-      const userEmail: string | null = window.localStorage.getItem('EMAIL');
-      if (userEmail !== null && userEmail.length > 0 ) {
-        this.userEmail$.next(userEmail);
-      }
-    }
+    // if (window.localStorage.getItem('EMAIL') !== null) {
+    //   const userEmail: string | null = window.localStorage.getItem('EMAIL');
+    //   if (userEmail !== null && userEmail.length > 0 ) {
+    //     this.userEmail$.next(userEmail);
+    //   }
+    // }
   }
 
   public async handleNotLoggedIn() {
@@ -172,10 +207,10 @@ export class AuthService {
     this.router.navigateByUrl(loginUrl);
   }
 
-  public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
-    window.localStorage.setItem('USER_ROLE', asema);
-    this.userRole$.next(asema);
-  }
+  // public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
+  //   window.localStorage.setItem('USER_ROLE', asema);
+  //   this.userRole$.next(asema);
+  // }
 
   public setUserName(name: string) {
     window.localStorage.setItem('USER_NAME', name);
@@ -193,10 +228,10 @@ export class AuthService {
     return window.localStorage.getItem('USER_NAME');
   }
 
-  public setUserEmail(email: string) {
-    window.localStorage.setItem('USER_EMAIL', email);
-    this.userEmail$.next(email);
-  }
+  // public setUserEmail(email: string) {
+  //   window.localStorage.setItem('USER_EMAIL', email);
+  //   this.userEmail$.next(email);
+  // }
 
   // Luo käyttäjätili
   public async addUser(email: string, password: string): Promise<boolean> {
@@ -242,20 +277,20 @@ export class AuthService {
       }
 
       // Nämä vielä yhteensopivuuden vuoksi.
-      if (userInfo?.sposti.length > 0) {
-        this.setUserEmail(userInfo.sposti);
-      }
+      // if (userInfo?.sposti.length > 0) {
+      //   this.setUserEmail(userInfo.sposti);
+      // }
 
       if (userInfo?.nimi.length > 0) {
         this.setUserName(userInfo.nimi);
       }
 
-      if (userInfo?.asema.length > 0) {
-        let userRole: string = userInfo.asema;
-        if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
-          this.setUserRole(userRole);
-        }
-      }
+      // if (userInfo?.asema.length > 0) {
+      //   let userRole: string = userInfo.asema;
+      //   if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
+      //     this.setUserRole(userRole);
+      //   }
+      // }
 
     } catch (error: any) {
       this.handleError(error);
@@ -512,7 +547,7 @@ export class AuthService {
     var message: string;
     if (error.status === 0) {
       // A client-side or network error occurred.
-      message = 'Asiakas- tai verkkovirhe tapahtui';
+      message = 'Saatiin virhe statuskoodilla 0. Yleensä tapahtuu, kun palvelimeen ei saada yhteyttä.';
       if (error.error !== undefined) {
         message += ": " + error.error;
       }
@@ -643,8 +678,8 @@ export class AuthService {
       this.isUserLoggedIn$.next(false);
       this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
       this.setUserName('');
-      this.setUserRole('');
-      this.setUserEmail('');
+      // this.setUserRole('');
+      // this.setUserEmail('');
       window.localStorage.clear();
     }
   }
@@ -671,6 +706,11 @@ export interface User {
   nimi: string,
   sposti: string,
   asema: 'opettaja' | 'opiskelija' | 'admin' | ''
+}
+
+export interface Kurssi {
+  id: string;
+  nimi: string;
 }
 
 export interface GenericResponse {

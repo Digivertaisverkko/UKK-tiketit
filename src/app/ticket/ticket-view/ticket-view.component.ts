@@ -48,7 +48,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.trackUserRole();
+    this.auth.trackUserInfo().subscribe(response => {
+        if (response.asema !== undefined ) this.userRole = response.asema;
+    });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
     this.timeInterval = interval(600000)
       .pipe(
@@ -115,12 +117,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.timeInterval.unsubscribe();
   }
 
-  private trackUserRole() {
-    this.auth.onGetUserRole().subscribe(response => {
-      // console.log('saatiin rooli: ' + response);
-      this.userRole = response;
-    })
-  }
+  // private trackUserRole() {
+  //   this.auth.onGetUserRole().subscribe(response => {
+  //     // console.log('saatiin rooli: ' + response);
+  //     this.userRole = response;
+  //   })
+  // }
 
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila);
