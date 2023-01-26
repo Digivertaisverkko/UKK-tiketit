@@ -1,155 +1,166 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card appearance="outlined">
+  <!-- -------- Tiketit --------- -->
 
+  <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName"><span>{{courseName}}</span></h2>
 
+  <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">{{headline}}</h3>
 
-    <!-- ----- Tiketit ----- -->
+  <section *ngIf="isCourseIDvalid">
 
-    <mat-card-header>
-      <mat-card-title id="secondTitle">{{header}}</mat-card-title>
-    </mat-card-header>
+  <table mat-table [dataSource]="dataSource" [hidden]="numberOfQuestions === 0" matSort matSortActive="aikaleima"
+    matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
 
-    <h3 *ngIf="courseName.length > 0" id="courseName" >{{courseName}}</h3>
-
-    <mat-card-content>
-
-    <table mat-table [dataSource]="dataSource" [hidden]="showNoQuestions" matSort matSortActive="aikaleima" matSortDirection="desc" #sortQuestions="matSort"
-      class="mat-elevation-z1">
-
-      <ng-container matColumnDef="tila">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan"
+    <ng-container matColumnDef="tila">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan"
         i18n-sortActionDescription="@@Järjestä tilan mukaan" i18n="@@Tila">
-          Tila
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
-          {{ element.tila }}
-        </td>
-        <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
-      </ng-container>
+        Tila
+      </th>
+      <td mat-cell *matCellDef="let element">
+          <div class="state-wrapper">
+            <div class="icon-wrapper" [ngSwitch]="element.tilaID">
+              <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="2" src="../../../assets/icons/Kasittelyssa.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="3" src="../../../assets/icons/Kysymys.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="4" src="../../../assets/icons/Kommentti.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="5" src="../../../assets/icons/Ratkaisu_64.svg" height="100%" width="100%" alt="">
+              <img class="icon" *ngSwitchCase="6" src="../../../assets/icons/Arkistoitu.svg" height="100%" width="100%" alt="">
+            </div>
+            <div>{{ element.tila }}</div>
+          </div>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="otsikko">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
+    <ng-container matColumnDef="otsikko">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
-          Otsikko
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
-          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
-        </td>
-        <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
-      </ng-container>
+        Otsikko
+      </th>
+      <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
+      <td mat-cell *matCellDef="let element" ><a [routerLink]="'/ticket-view/' + element.id">
+        {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
+        '...':(element.otsikko) }}</a>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="aloittajanNimi">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä aloittajan mukaan"
-          i18n-sortActionDescription="@@Järjestä aloittajan mukaan" i18n="@@Aloittaja">
-          Aloittaja
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)">
-          {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="aloittajanNimi">
+      <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
+        sortActionDescription="Järjestä lähettäjän mukaan" i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"
+        i18n="@@Lähettäjä">
+        Lähettäjä
+      </th>
+      <td class="td-align-right" mat-cell *matCellDef="let element">
+        {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="aikaleima">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header
-          sortActionDescription="Järjestä aikaleiman mukaan" i18n-sortActionDescription="@@Järjestä aikaleiman mukaan" i18n="@@Päivämäärä">
-          Päivämäärä
-        </th>
-        <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> {{element.aikaleima | date: 'short'}}</td>
-      </ng-container>
+    <ng-container matColumnDef="aikaleima">
+      <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
+        sortActionDescription="Järjestä luodun päivämäärän mukaan" i18n-sortActionDescription="@@Järjestä luodun mukaan"
+        i18n="@@Luotu">
+        Luotu
+      </th>
+      <td class="td-align-right" mat-cell *matCellDef="let element">
+        {{element.aikaleima | date: 'shortDate'}}
+      </td>
+    </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-      <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
-    </table>
+    <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
+  </table>
 
-    <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
-      aria-label="Valitse kysymysten sivu">
-    </mat-paginator> -->
-    <!-- </div> -->
+  <!-- Jos halutaan paginator -->
+  <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
+      aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-    <mat-card-actions align="end">
-      <button mat-raised-button color="primary" (click)="goSendTicket()" i18n="@@Uusi kysymys">Uusi kysymys</button>
-    </mat-card-actions>
+</section>
 
-  </mat-card-content>
+  <div class="theme-actions" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+    <button mat-raised-button color="primary" (click)="submitTicket()"
+      i18n="@@Uusi kysymys">Uusi kysymys</button>
+  </div>
 
-        <!-- FAQ -->
+<!------------ UKK ------------>
 
-        <mat-card-header>
-          <mat-card-title i18n="@@Usein kysytyt kysymykset" id="firstTitle">
-            Usein kysytyt kysymykset
-          </mat-card-title>
-        </mat-card-header>
+<section *ngIf="FAQisLoaded">
 
-        <mat-card-content>
+<div class="input-field-wrapper">
+  <h3 class="sub-header" i18n="@@Open neuvot">Open neuvot</h3>
+  <!--Haku toiminto-->
+  <mat-form-field class="filteringField" *ngIf="numberOfFAQ !== 0">
+    <mat-label i18n="@@Hae neuvoa">Hae neuvoa</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+  </mat-form-field>
+</div>
 
-          <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoFAQ && FAQisLoaded">
-            <p i18n="@@Ei yhtään UKK">Yhtään usein kysyttyä kysymystä ei ole lisätty.</p>
-          </mat-card>
+<!-- <mat-card appearance="outlined" > -->
+  <p class="noItemsMessage" *ngIf="numberOfFAQ === 0 && FAQisLoaded" i18n="@@Ei yhtään UKK">
+    Yhtään usein kysyttyä kysymystä ei ole lisätty.
+  </p>
+<!-- </mat-card> -->
 
-          <!-- *ngIf="!showNoFAQ" -->
-        <table mat-table  class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="showNoFAQ" matSort #sortFaq="matSort" matSortActive="nimi"
-          matSortDirection="desc">
+<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="numberOfFAQ === 0"
+  matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 
-          <ng-container matColumnDef="otsikko">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
-            i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
-              Otsikko
-            </th>
-            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
-              {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
-            </td>
-            <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
-          </ng-container>
+  <ng-container matColumnDef="otsikko">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä otsikon mukaan"
+      i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
+      Otsikko
+    </th>
+    <td mat-cell *matCellDef="let element" [routerLink]="'/faq-view/' + element.id">
+      <a [routerLink]="'/faq-view/' + element.id">
+        {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
+      </a>
+    </td>
+  </ng-container>
 
-          <ng-container matColumnDef="tyyppi">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
-              Tyyppi
-            </th>
-            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)">
-              {{ element.tyyppi }}
-            </td>
-            <!-- <td mat-cell *matCellDef="let element" [routerLink]="'/' + [ticketViewLink + element.id]">{{element.otsikko}}</td> -->
-          </ng-container>
+  <ng-container matColumnDef="tyyppi">
+    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
+      Tyyppi
+    </th>
+    <td class="td-align-right" mat-cell *matCellDef="let element">
+      {{ element.tyyppi }}
+    </td>
+  </ng-container>
 
-          <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
-              Päivämäärä
-            </th>
-            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.aikaleima | date: 'short' }}</td>
-          </ng-container>
+  <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
+    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
+      sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
+      Päivämäärä
+    </th>
+    <td class="td-align-right" mat-cell *matCellDef="let element">
+      {{element.aikaleima | date: 'shortDate' }}
+    </td>
+  </ng-container>
 
-          <!-- <ng-container matColumnDef="tehtava" i18n-sortActionDescription="@@Järjestä tyypin mukaan">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header
-              sortActionDescription="Järjestä tyypin mukaan" i18n="@@Tehtävä">
-              Tehtävä
-            </th>
-            <td mat-cell *matCellDef="let element" (click)="goFaqView(element.id)"> {{element.tehtava}}</td>
-          </ng-container> -->
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
 
-          <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
-          <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
+  <!--Tällä koodin pätkällä saa lisättyä taulukkoon tekstin, kun haku ei löydä mitään-->
+  <tr *matNoDataRow>
+    <td class="noData-td" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</td>
+    <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
+    <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
+  </tr>
 
-        </table>
+</table>
 
-        <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
-          aria-label="Valitse kysymysten sivu">
-        </mat-paginator> -->
+<!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
+        aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
+</section>
 
-  </mat-card-content>
+<div class="theme-actions" *ngIf="userRole === 'opettaja' || userRole === 'admin'"
+[ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submitFaq()"
+    i18n="@@Uusi UKK">Uusi UKK</button>
+</div>
 
-  <mat-card appearance="outlined" class="noItemsMessage" *ngIf="showNoQuestions && isLoaded">
-    <p i18n="@@Et ole lähettänyt vielä yhtään kysymystä">Et ole lähettänyt vielä yhtään kysymystä.</p>
-  </mat-card>
+<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
+  message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+</app-error-card>
 
-  <app-error-card
-    *ngIf="ticketServiceMessage.length > 0"
-    i18n-title="@@Virhe"
-    title="Virhe"
-    message="{{ ticketServiceMessage }}"
-    [styles]="{ margin: '1em 20% 1em 20%' }"
-  >
-  </app-error-card>
-
-</mat-card>
+<!-- <div class="theme-actions">
+  <button mat-raised-button *ngIf="isLoaded && isInIframe" color="primary" [routerLink]="'/submit/'">Avaa kurssinäkymä</button>
+</div> -->

@@ -1,90 +1,94 @@
-<mat-card appearance="outlined" class="submit-ticket-card">
+<h2 class="main-header" *ngIf="courseName.length > 0"><span>{{courseName}}</span></h2>
 
-  <mat-card-header>
-    <mat-card-title i18n="@@Uusi kysymys">Uusi kysymys</mat-card-title>
-  </mat-card-header>
+<div class="submit-ticket">
+
+  <app-to-beginning-button></app-to-beginning-button>
 
   <form action="" #submitForm="ngForm">
 
-  <mat-card-content>
+    <div class="ticket-header">
 
-    <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
+      <mat-form-field appearance="fill" class="sub-header">
+        <textarea
+          [(ngModel)]="titleText"
+          class="h3"
+          #autosize="cdkTextareaAutosize"
+          autocomplete="off"
+          cdkAutosizeMaxRows="3"
+          cdkAutosizeMinRows="1"
+          cdkTextareaAutosize
+          contenteditable
+          matInput
+          name="titleText"
+          placeholder="Otsikko"
+          i18n-placeholder="@@Otsikko"
+          required
+        ></textarea>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Otsikko">Otsikko</mat-label>
-      <input
-        name="titleText"
-        [(ngModel)]="titleText"
-        matInput
-        placeholder=""
-        required
-        autocomplete="off">
-    </mat-form-field>
+      <!-- <div class="spacer"></div> -->
 
-    <mat-form-field appearance="fill" *ngIf="!isFaq">
-      <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
-      <input
-        name="assignmentText"
-        [(ngModel)]="assignmentText"
-        matInput
-        placeholder=""
-        required>
-    </mat-form-field>
+      <div class="user-info-block">
+        <div class="text-info">
+          <span class="theme-profile-name">{{ userName }}</span>
+          <!-- <span class="theme-profile-name">{{ userName }}</span> -->
+          <div class="theme-label">
+            <span i18n="@@Minä">Minä</span>
+            -
+            <span i18n="@@Tänään">Tänään </span>
+            <span>{{ currentDate | date: 'shortTime' }}</span>
+          </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
-      <input
-        name="problemText"
-        [(ngModel)]="problemText"
-        matInput
-        placeholder=""
-        required>
-    </mat-form-field>
+        </div>
+        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+      </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Viesti">Viesti</mat-label>
-      <textarea
-        name="messageText"
-        [(ngModel)]="messageText"
-        matInput
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="5"
-        cdkAutosizeMaxRows="50"
-        required></textarea>
-    </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill" *ngIf="isFaq">
-      <mat-label i18n="@@Vastaus">Vastaus</mat-label>
-      <textarea
-        name="answerText"
-        [(ngModel)]="answer"
-        matInput
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="5"
-        cdkAutosizeMaxRows="50"
-        required></textarea>
-    </mat-form-field>
+    <section class="short-field-wrapper">
 
-  </mat-card-content>
-  
-  <div id="ticketActionsWrapper">
+      <mat-form-field class="additional-field" appearance="fill">
+        <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
+        <input
+          name="assignmentText"
+          [(ngModel)]="assignmentText"
+          matInput
+          maxlength="50"
+          placeholder=""
+        >
+      </mat-form-field>
+      <div class="characters-label"><span class="theme-label">{{assignmentText.length}} / 50</span></div>
 
-  <mat-checkbox [(ngModel)]="isFaq" name="checkbox" *ngIf="userRole !== 'opiskelija'">Usein kysytty kysymys</mat-checkbox>
-  
-  <div class="spacer"></div>
+      <mat-form-field class="additional-field" appearance="fill">
+        <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
+        <input
+          name="problemText"
+          [(ngModel)]="problemText"
+          matInput
+          maxlength="50"
+          placeholder=""
+        >
+      </mat-form-field>
+      <div class="characters-label"><span class="theme-label">{{problemText.length}} / 50</span></div>
 
-  <mat-card-actions align="end">
-    <button
-      mat-raised-button color="primary" id="submitButton"
-      [disabled]="submitForm.invalid"
-      (click)="sendTicket()"
-      i18n="@@Lähetä">
-      Lähetä
-    </button>
-  </mat-card-actions>
+    </section>
+
+    <app-editor [(editorContent)]="message"></app-editor>
+
+    <div class="theme-actions">
+
+      <div class="spacer"></div>
+
+        <button
+          mat-raised-button color="primary"
+          [disabled]="submitForm.invalid"
+          (click)="sendTicket()"
+          i18n="@@Lähetä">
+          Lähetä
+        </button>
+
+    </div>
+
+  </form>
 
 </div>
-
-</form>
-
-</mat-card>

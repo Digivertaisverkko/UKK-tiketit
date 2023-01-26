@@ -9,26 +9,36 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatRippleModule } from '@angular/material/core';
+import { MatListModule } from '@angular/material/list';
+import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 import { AuthService } from './auth.service';
 
 import { HeaderComponent } from '../core/header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { SharedModule } from '../shared/shared.module';
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    PrivacyModalComponent
+    PrivacyModalComponent,
+    PageNotFoundComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
+    MatDialogModule,
     MaterialModule,
+    MatListModule,
     MatMenuModule,
+    MatRippleModule,
+    MatSlideToggleModule,
     RouterModule,
-    MatDialogModule
+    SharedModule,
   ],
   providers: [
     AuthService

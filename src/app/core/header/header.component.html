@@ -5,39 +5,55 @@
         <mat-icon>menu</mat-icon>
     </button> -->
 
-  <span id="headerTitle" (click)="goToFrontPage()"
-    [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
-    {{productName}}
-  </span>
+    <!-- [disabled]="!isUserLoggedIn$" -->
+
+    <div class="logo" matRipple [matRippleUnbounded]="isUserLoggedIn" [matRippleRadius]="30"
+      [ngStyle]="{ 'cursor': ( isUserLoggedIn$ | async ) ? 'pointer' : 'unset' }">
+      <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
+    </div>
 
   <span class="spacer"></span>
 
-  <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä. -->
+  <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä, jos tulee tarpeen. -->
   <ng-content></ng-content>
 
-  <div id="userName" [ngClass]="{ 'is-phone-portrait': isPhonePortrait }" *ngIf="userName.length > 0">
-    {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
-  </div>
+  <!-- <mat-slide-toggle [checked]="sliderChecked" style="font-size: 1rem; color: white;">Upotus</mat-slide-toggle> -->
 
-  <div id="userEmail" *ngIf="userName.length === 0" >
-    {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}
-  </div>
 
-  <div id="userRole">{{userRole}}</div>
+  <section class="user-info">
 
-  <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
-    alt="Vaihda kieli suomeksi"></span>
-  <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
-    alt="Vaihda kieli englanniksi"></span>
+    <div class="theme-header-text" *ngIf="userName.length > 0">
 
-  <button mat-icon-button class="material-symbols-outlined" *ngIf="isUserLoggedIn$ | async"
-    [matMenuTriggerFor]="accountMenu" aria-label="Tili">
-    <mat-icon>account_circle</mat-icon>
+      <!-- <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
+      alt="Vaihda kieli suomeksi"></span>
+
+    <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
+      alt="Vaihda kieli englanniksi"></span> -->
+
+      {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
+    </div>
+
+    <div class="email" *ngIf="userName.length === 0 && userEmail.length > 0" class="theme-header-text">
+      {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}
+    </div>
+
+    <div class="theme-header-text-small">{{userRole}}</div>
+
+  </section>
+
+  <button mat-icon-button id="account-icon-button" class="material-symbols-outlined"
+    [matMenuTriggerFor]="accountMenu" aria-label="Tili" (click)="updateMenu()">
+    <mat-icon >account_circle</mat-icon>
   </button>
 
 </mat-toolbar>
 
 <mat-menu #accountMenu="matMenu">
+  <button mat-menu-item (click)="toggleLanguage()" i18n="@@vaihda kieli" [disabled]="disableLanguageSelection">Change to english</button>
 
-  <button mat-menu-item (click)="logOut()" i18n="@@Kirjaudu_ulos">Kirjaudu ulos</button>
-  </mat-menu>
+  <button mat-menu-item (click)="logOut()" *ngIf="isUserLoggedIn$ | async; else logIn" i18n="@@Kirjaudu ulos">Kirjaudu ulos</button>
+  <ng-template #logIn>
+    <button mat-menu-item (click)="login()" i18n="@@Kirjaudu sisään">Kirjaudu sisään</button>
+  </ng-template>
+
+</mat-menu>

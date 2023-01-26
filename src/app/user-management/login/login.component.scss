@@ -1,92 +1,40 @@
-.login-page {
-  //   border: {
-  //     style: solid;
-  //     color: green;
-  //     width: 2px;
-  // }
-  // flex-grow: 5;
+@import "/src/variables.scss";
 
-  // padding: 0;
-  width: 100%;
-
-  // min-height: calc(100vh - 2 * 64px);
-
-  overflow: hidden;
-
-  background: {
-    position: center;
-    repeat: no-repeat;
-    size: cover;
+.centered-h1 {
+  margin: 1.8em auto 0 auto;
+  text-align: center;
+  span:after {
+    bottom: 4px;
+    left: -6%;
+    padding-right: 0;
+    width: 112%;
   }
-  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-  mat-card {
-    /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-    mat-card-title {
-      margin-top: 0.5em;
-      text-align: center;
-    }
-    border-radius: 8px;
-    margin: 20% auto;
-    max-width: 500px;
-    min-width: 320px;
-    width: 30%;
-  }
-  /*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-  mat-card.is-phone-portrait {
-    margin-top: 0;
+}
+
+.content {
+  // border: red dotted 1px;
+  max-width: 21em;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  mat-form-field {
     margin-bottom: 0;
-    border-radius: 0px;
-    width: 94%;
   }
 }
 
-// .custom-error {
-//   display: block;
-//   color: #f44336;
-//   line-height: 1.125;
-//   font: {
-//     size: 75%;
-//     weight: 400;
-//   }
-// }
-
-// Titleä jos käyttää.
-.spacer {
-  flex: 1 1 auto;
+button, mat-form-field {
+  width: 100%;
 }
 
-/*   TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
-mat-form-field,
-mat-checkbox {
-  width: 80%;
-  display: block;
-  margin: auto;
+button {
+  margin: 0 auto 1em auto;
 }
 
-/*   TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-mat-card-content {
-  margin-top: 20px;
-}
-
-.login-button {
-  display: block;
-  margin: 1em auto 1em auto;
-  width: 80%;
-}
-
-.line-container {
-  display: flex;
-  flex-direction: row;
-  /* justify-content: center; */
-  align-items: center;
-  mat-divider {
-    flex: 1;
+@media screen and (max-width: $XSmall) {
+  .content {
+    max-width: 100%;
   }
-  .mat-typography {
-    padding: {
-      left: 10px;
-      right: 10px;
-    }
-  }
+  // mat-form-field {
+  //   width: 95%;
+  // }
 }

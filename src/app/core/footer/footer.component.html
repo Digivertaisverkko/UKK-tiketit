@@ -1,23 +1,25 @@
-<div id="footer">
-  <mat-toolbar id="up-row">
+<footer class="theme-footer" color="primary">
+  <hr>
 
-    <div id="column-container">
+  <div id="icon-container">
+    <img id="yo-logo" src="../../../assets/logos/oulun_yliopisto-white.png" alt="">
+    <img id="oamk-logo" src="../../../assets/logos/oamk-white.png" alt="">
+    <img id="vipuvoimaa-logo" src="../../../assets/logos/vipuvoimaa-eu-white.png" alt="">
+    <img id="eu-logo" src="../../../assets/logos/EU_ESR.png" alt="">
 
-        <div class="col" id="col1">
-            <img src="../../../assets/financier-icons/UniOulu.png">
-        </div>
-        <div class="col" id="col2">
-            <img src="../../../assets/financier-icons/VipuvoimaaEU.png">
-        </div>
-        <div class="col" id="col3">
-            <img id="eu-pic" src="../../../assets/financier-icons/EU_ESR.png">
-        </div>
+    <!-- <div class="spacer"></div> -->
 
-      </div>
+    <mat-nav-list color="primary">
+      <a (click)="openPrivacyModal()" mat-list-item i18n="@@Tietoturvaseloste">Tietoturvaseloste</a>
+      <a href="https://www.oulu.fi/fi" target="_blank" mat-list-item i18n="@@Oulun Yliopisto">Oulun Yliopisto</a>
+      <a href="https://www.oamk.fi" target="_blank" mat-list-item i18n="@@OAMK">Oulun Ammattikorkeakoulu</a>
+      <a href="https://interact.oulu.fi/site/digivertaisverkko" target="_blank" mat-list-item i18n="@@Digivertaisverkko">Digivertaisverkko</a>
+    </mat-nav-list>
 
-    </mat-toolbar>
+    <div id="about-software" i18n="@@Ohjelmistosta">Tämä on digivertaisverkkohankkeen tuottama ohjelmisto,
+      joka on kehitetty Oulun Yliopiston, Oulun Ammattikorkeakoulun yhteistyönä ja Euroopan sosiaalirahaston rahoittamana.
+    </div>
 
-  <mat-toolbar id="bottom-row" color="primary">
-    <button mat-button (click)="openPrivacyModal()" i18n="@@Yksityisyystiedot">Yksityisyystiedot</button>
-  </mat-toolbar>
-</div>
+  </div>
+
+</footer>

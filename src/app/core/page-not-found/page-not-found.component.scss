@@ -1,0 +1,22 @@
+
+h1 {
+    margin: 2em 0 2em 2em;
+}
+
+#buttonArea {
+    display: flex;
+    // border-radius: 1px;
+    // border-color: red;
+    // border-style: solid;
+    margin-top: 2em;
+    padding-right: 3em;
+}
+
+.spacer {
+    display: block;
+    flex: 1 1 auto;
+}
+
+button {
+    min-width: 8em;
+}

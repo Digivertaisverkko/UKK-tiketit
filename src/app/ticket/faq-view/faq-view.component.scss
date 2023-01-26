@@ -1,41 +1,12 @@
-.faq-view-card {
-    margin: 1em auto;
-
-    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-    mat-card {
-        margin: 0 auto 1em;
-    }
-
-
-}
-
-#backButton {
-    margin-bottom: 1em;
-    max-width: 10em;
-  }
-
-.faqTitle {
-    // margin-bottom: 1em;
-}
-
-#viewTitle {
-    margin-bottom: 1em;
-}
-
-mat-divider {
-  margin-top: 2em;
-  padding-bottom: 2em;
-}
-
-#question {
-  // margin-left: 1em;
-  margin-top: 1em;
-}
-
-#answer {
+.faq-view {
+  padding-right: 80px;
   margin-bottom: 0.5em;
 }
 
-.message {
-  white-space: pre-wrap;
-}
+// .short-field-value:last-child {
+//   margin-bottom: 1.5rem;
+// }
+
+h3 { margin-bottom: 1em; }
+
+mat-card { margin: 0 auto 1em; }

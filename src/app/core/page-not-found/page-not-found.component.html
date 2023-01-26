@@ -1,0 +1,20 @@
+<h1 i18n="@@404-otsikko">Sivua ei löytynyt</h1>
+
+<app-error-card
+i18n-title="@@Virhe"
+title="Virhe"
+i18n-message="404"
+message={{errorMessage}}
+[styles]="{ margin: '1em 5% 1em 5%' }"
+>
+</app-error-card>
+
+<div id="buttonArea" *ngIf="!isLoggedIn">
+    <div class="spacer"></div>
+    <button align="end"
+    mat-raised-button color="primary" id="submitButton"
+    (click)="goToLogin()"
+    i18n="@@Kirjaudu sisään">
+    Kirjaudu sisään
+    </button>
+</div>

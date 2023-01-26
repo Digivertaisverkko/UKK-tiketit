@@ -1,0 +1,158 @@
+@use "@angular/material" as mat;
+@import "/src/variables.scss";
+
+// Tarvitseeko alla olevaa johonkin?
+// @import "@angular/material/theming";
+
+/* ======== Angular material custom theme ======== */
+
+// FIXME: contrast värit eivät jostain syystä toimi esim. buttoneilla, vaan on templaten tyyleissä määritelty.
+$custom-primary-palette: (
+  50: #e0f4fa,
+  100: #b0e2f3,
+  200: #7dceeb,
+  300: #4bbbe3,
+  400: #23addf,
+  500: #009dd7,
+  600: #008fca,
+  700: #007db7,
+  800: #006ca3,
+  900: #004e84,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+
+$custom-accent-palette: (
+  50: #f9eae8,
+  100: #fbcdbe,
+  200: #f9ae94,
+  300: #f78f6a,
+  400: #f6774a,
+  500: #f5612b,
+  600: #ea5b27,
+  700: #dc5423,
+  800: #ce4e20,
+  900: #b4421a,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+
+// $custom-palette: mat.$custom-primary-palette;
+
+// accent: DC5323
+$custom-primary: mat.define-palette($custom-primary-palette, 500);
+$custom-accent: mat.define-palette($custom-accent-palette, 700);
+
+// $custom-primary: mat-palette($custom-primary-palette);
+
+// $custom-accent: mat-palette($mat-pink, 100, 500, A100);
+// $custom-warn: mat-palette($mat-lime);
+// $custom-theme: mat-light-theme($custom-primary-palette);
+
+// $headline-1: mat.define-typography-level(35px, 35px, 700, $displayFont),
+// $headline-2: mat.define-typography-level(20px, 20px, 500, $displayFont),
+// $headline-6: mat.define-typography-level(50px, 50px, 800, $displayFont),
+
+// TODO: fallback -fonttien määritys.
+
+$displayFont: Montserrat;
+$textFont: Roboto;
+
+// Tyylitiedostot voivat käyttää näitä ilman importtia. Alla pitää olla väriarvot eikä toimi muuttujat.
+:root {
+  --primary-color: #009dd7;
+  --accent-color: #dc5423;
+  --contrast-color: white;
+  --error-color: #B00020;
+  --display-font: Montserrat;
+}
+
+// Material -komponentit käyttävät näitä.
+// Arvot ovat: font-size, line-height, font-weight, font-family, letter-spacing
+// subtitle-1: table header, subtitle-2: list footerissa
+
+// headline-5 = h1, headline6 = h2, subtitle1 = mm. footerin lista.
+$custom-typography-config: mat.define-typography-config(
+  $headline-5: mat.define-typography-level(2.5rem, 1.2, 900, $displayFont, normal),
+  $headline-6: mat.define-typography-level(1.66rem, 1.2, 700, $displayFont, normal),
+  $subtitle-1: mat.define-typography-level(rem, rem, 600, $textFont, normal),
+  $subtitle-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $button: mat.define-typography-level(rem, rem, 600, $textFont, normal),
+  $body-1: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+  $body-2: mat.define-typography-level(rem, rem, 400, $textFont, normal),
+);
+
+$custom-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $custom-primary,
+      accent: $custom-accent,
+    ),
+    typography: $custom-typography-config
+  )
+);
+
+// Tällä teemoittaa H1 ja H2.
+// @include mat.all-component-typographies($custom-typography-config);
+
+// Pitäisi toimia, mutta antaa errorin.
+//@include mat.core($custom-typography-config);
+
+// Tämä pitää olla ohjelmassa vain yhden kerran.
+@include mat.core();
+
+// @mixin custom-theme($theme) {
+//   $primary: map-get($theme, primary);
+// }
+
+// Emit theme-dependent styles for common features used across multiple components.
+// @include mat.core-theme($custom-theme);
+
+// @include mat-core($custom-typography-config);
+
+// Emit styles for MatButton based on `$my-theme`. Because the configuration
+// passed to `define-light-theme` omits typography, `button-theme` will not
+// emit any typography styles.
+
+// @include mat.toolbar-theme($custom-theme);
+// @include mat.core-theme($custom-theme);
+// @include mat.button-theme($custom-theme);
+
+// FIXME: laita tämän sijaan vain niille komponenteille, mitä käytetään.
+@include mat.all-component-themes($custom-theme);
+
+button[mat-raised-button] {
+  min-width: 10em;
+  padding-left: 2em;
+  padding-right: 2em;
+  text-transform: uppercase;
+}
+
+// Important -ylikirjoitukset
+
+// FIXME: Miksei poimi teeman kontrastiväriä?
+.mat-primary { color: white !important; }
+
+.mdc-button { height: 2.3em !important; }
+
+/* ================================================= */

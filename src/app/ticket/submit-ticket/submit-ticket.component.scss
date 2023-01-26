@@ -1,38 +1,39 @@
-.submit-ticket-card {
-  margin: 1em auto;
+@import "/src/variables.scss";
 
-  mat-form-field {
-    width: 100%;
-    margin-top: 1em;
+form { margin-top: -6px; }
+
+mat-form-field { min-width: 21rem; }
+
+.ticket-header {
+  mat-form-field { flex-grow: 3; }
+  .user-info-block {
+    padding-top: 1.1rem;
+    margin-bottom: 1.5rem;
   }
+  margin-bottom: -20px;
+}
 
-  mat-card-actions {
-    margin-bottom: 1em;
-    margin-right: 0.5em;
-  }
+.short-field-wrapper {
+  width: 21em;
+  margin-bottom: 6px;
+}
 
-  #backButton {
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    max-width: 10em;
-  }
+.additional-field { margin-bottom: -18px; }
 
-  #submitButton {
-    min-width: 7em;
-  }
+.characters-label {
+  text-align: right;
+  margin-top: -6px;
+  margin-bottom: 3px;
+}
 
-  #ticketActionsWrapper {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    mat-checkbox {
-      margin-left: 1em;
-    }
-  }
+mat-checkbox { margin-left: -10px; }
 
-  .spacer {
-    display: block;
-    flex: 1 1 auto;
-  }
+@media (min-width: $XSmall) {
+  .submit-ticket { padding-right: $right-padding; }
+}
 
+@media (max-width: $XSmall) {
+  .user-info-block, .mat-mdc-card-avatar { display: none; }
+
+  mat-form-field { min-width: 95%; }
 }

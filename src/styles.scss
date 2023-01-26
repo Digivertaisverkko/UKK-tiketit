@@ -1,10 +1,194 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+@import '/src/variables.scss';
 
-@import './variables.scss';
+// Material teeman määrittely:
+@import '/src/styles/custom-theme.scss';
 
-html, body { height: 100%; }
+// $displayFont: Montserrat;
+// $textFont: Roboto;
+
+html { font-family: $textFont; }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  line-height: 1.45;
   margin: 0;
 }
+
+.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
+
+.theme-header-text, .theme-header-text-small, .main-header, .sub-header {
+  font-family: $displayFont;
+}
+
+// FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
+// Käytetään headerin käyttäjän nimessä.
+.theme-header-text {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+// Headerin pieni teksti, käyttäjärooli.
+.theme-header-text-small {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+// Jos haluat divejä näkyviin.
+$debug: false;
+
+// Yläotsikko, jossa punainen viiva. Käytetään esim: <h2 class="main-header"><span>Otsikko</span</h2>
+// Vaatii <span> elementit.
+.main-header  {
+  // font-family: mat.font-family($custom-typography-config, 'headline-3');
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
+  margin-top: 3.8rem;
+  margin-bottom: 0.6rem;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
+  // alla olevan viivan pituuden määrittelyyn.
+  span {
+    @if $debug { outline: 2px dotted blue; }
+    // width: 100%;
+    position: relative;
+    // Firefoxilla korkeutta ei määritellä span-elementillä, vaan tarvitaan tämä.
+    // Viiva on tällöin koko näkymän leveyksinen.
+    @-moz-document url-prefix() { display: inline-block; }
+    // Otsikon viimeisen rivin alla oleva viiva.lock;
+    &:after {
+      @if $debug { outline: 2px solid green; }
+      border-bottom: 3px solid var(--accent-color);
+      bottom: 4px;
+      // top: 5px;
+      content: "";
+      // height: 3px;
+      left: 0;
+      padding-right: 5em;
+      position: absolute;
+      width: 100%;
+      z-index: -1;
+    }
+  }
+}
+
+// Alaotsikko
+.sub-header {
+  font-size: 1.66rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-block-start: 2.5rem;
+  // margin-block-start: 2.6rem;
+  margin-block-end: 0.8em; // Älä muuta
+  // margin-left: 12px;
+}
+
+// Käyttäjän nimi.
+.theme-profile-name {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+// Nappien asemoiminen ja tarvittavan tilan ottaminen.
+.theme-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.4rem;
+}
+
+// Pieni harmaa teksti.
+.theme-label {
+  color: #757575;
+  font-size: 0.75rem;
+  line-height: 0.9rem;
+  margin-bottom: 0.2rem;
+  + p {
+    margin-top: 0.3rem;
+  }
+}
+
+// Punainen tilan jakava viiva.
+.theme-divider {
+  background-color :var(--accent-color);
+  display: block;
+  height: 3px;
+  margin: 56px auto;
+  width: 94%;
+}
+
+// Testaamiseen jos haluaa osan block-elementeistä näkyviin.
+$debug: false;
+
+h2 {  @if $debug {  border: 1px solid blue; } }
+
+// käytetään ticket-view ja submit-ticket -komponenteissa tiketin otsakkeessa. Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni.
+.ticket-header {
+  display: flex;
+  align-items: flex-center;
+  gap: 1rem;
+  @if $debug { border: 1px dotted purple; }
+  .user-info-block {    // .text-info + ikoni
+    @if $debug { border: 1px dotted green; }
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    gap: inherit;
+    margin-top: 1.3rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    // height: 100%;
+    .text-info {        // Käyttäjätiedot
+      @if $debug { border: 1px solid gray; }
+      margin-top: 0.3rem;
+      text-align: right;
+      .theme-profile-name {
+        display: block;
+        line-height: 1.15;
+        margin-bottom: 0.3rem;
+      }
+    }
+    img {
+      @if $debug { border: 1px solid lightblue; }
+      display: inline-block;
+      flex-shrink: 0;
+      position: relative;
+      height: 3rem;
+      width: 3rem;
+      margin: auto;
+      object-fit: cover;
+    }
+  }
+}
+
+// ---- Utilityt---------------------
+
+// Ottaa horisontaalisesti käytettävissä olevan tilan.
+.spacer {
+  display: block;
+  flex: 1 1 auto;
+}
+
+// ---- Media queryt ----------------
+
+@media (max-width: $XSmall) {
+
+  .main-header {
+    font-size: 2.5rem * 0.8;
+    line-height: 1.1;
+  }
+
+  .sub-header {
+    font-size: 1.66rem * 0.8;
+    line-height: 1;
+  }
+
+  .theme-header-text { font-size: 1.25rem; }
+
+  .theme-header-text-small { font-size: 1rem; }
+
+  .ticket-header { flex-wrap: wrap; }
+}
+
+// -----------------------------------

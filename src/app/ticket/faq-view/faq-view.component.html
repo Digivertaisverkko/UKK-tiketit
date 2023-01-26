@@ -1,65 +1,58 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card appearance="outlined" class="faq-view-card">
+<div class="faq-view" *ngIf="isLoaded">
 
-    <mat-card-content>
-        <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
-    </mat-card-content>
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+    <span>{{ courseName }}</span>
+  </h2>
 
-    <mat-card-content *ngIf="ticket.viesti !== undefined">
+  <app-to-beginning-button></app-to-beginning-button>
 
-        <!-- <mat-card appearance="outlined" class="faq-view-card" *ngIf="ticket.otsikko !== undefined"> -->
-            <mat-card-header>
-                <mat-card-title class="faqTitle">{{ticket.otsikko}}</mat-card-title>
+  <section *ngIf="ticket.viesti !== undefined">
 
-                <!-- <mat-card-subtitle> -->
-                    <!-- <span *ngIf="faq.kentat !== undefined && faq.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
-                        faq.kentat[0].arvo }} </span> -->
-                    <mat-card-subtitle *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }} 🞄
-                        <span>{{ ticket.aikaleima | date: 'short' }}</span>
-                    </mat-card-subtitle>
-                <!-- </mat-card-subtitle> -->
+    <h3 class="sub-header">{{ ticket.otsikko }}</h3>
 
-            </mat-card-header>
+   <!-- ---- Kysymys ---- -->
 
-            <mat-card-content>
-                <p class="message" id="question" [innerHTML]=ticket.viesti></p>
-            </mat-card-content>
-        <!-- </mat-card> -->
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
+      <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
+      <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
+      <!-- <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{
+        ticket.kentat[0].arvo }} </span> -->
+    </div>
 
-        <!-- <mat-card appearance="outlined" class="faq-view-card">
-            <mat-card-header>
-                <mat-card-title>Vastaus</mat-card-title>
-            </mat-card-header>
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
+      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
+      <!-- 🞄<span>{{ ticket.aikaleima | date : "short" }}</span> -->
+      <p class="short-field-value">{{ ticket.kentat[1].arvo }} </p>
+    </div>
 
-            <mat-card-content class="messageContent">
-            <p class="message">{{vastaus}}</p>
-        </mat-card-content>
-        </mat-card> -->
+    <h3 class="sub-header" i18n="@@Kysymys">Kysymys</h3>
 
-        <!-- ---- Vastaus ---- -->
+    <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
-        <mat-divider></mat-divider>
+    <hr class="theme-divider">
 
-        <mat-card-header>
-          <mat-card-title class="faqTitle" id="answer" i18n="@@Vastaus">
-              Vastaus
-          </mat-card-title>
-      </mat-card-header>
+    <!-- ---- Vastaus ---- -->
 
-        <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
-            <mat-card-content>
-                <p class="message" [innerHTML]=comment.viesti></p>
-            </mat-card-content>
-        </mat-card>
+    <h3 class="sub-header" i18n="@@Vastaus">Vastaus</h3>
 
-      </mat-card-content>
+    <div class="short-vertical-spacer"></div>
 
-      <mat-card-content *ngIf="errorMessage.length > 0">
-        <app-error-card i18n-title="@@Virhe" title="Virhe" message="{{ errorMessage }}"
-            [styles]="{ margin: '1em 0' }">
-        </app-error-card>
-      </mat-card-content>
+    <div *ngFor="let comment of ticket.kommentit">
+        <app-message [messageHtml]=comment.viesti></app-message>
+    </div>
 
+  </section>
 
-</mat-card>
+  <mat-card-content *ngIf="errorMessage.length > 0">
+    <app-error-card
+      i18n-title="@@Virhe"
+      title="Virhe"
+      message="{{ errorMessage }}"
+      [styles]="{ margin: '1em 0' }"
+    >
+    </app-error-card>
+  </mat-card-content>
+
+</div>

@@ -1,110 +1,134 @@
 <mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-<mat-card appearance="outlined" class="ticket-view-card" *ngIf="isLoaded">
+<div *ngIf="isLoaded">
 
-<mat-card-content>
-  <button mat-raised-button (click)="goBack()" id="backButton" i18n="@@Kysymyslistaan">Kysymyslistaan</button>
-</mat-card-content>
+    <h2 class="main-header" *ngIf="courseName.length > 0">
+      <span>{{ courseName }}</span>
+    </h2>
 
-  <mat-card-header>
+    <section *ngIf="ticket.tila > 0">
 
-    <mat-card-title>{{ ticket.otsikko }}</mat-card-title>
-    <mat-card-subtitle>
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null" i18n="@@Tehtävä">Tehtävä {{ ticket.kentat[0].arvo }} </span>
-      🞄
-      <span *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null"> {{ ticket.kentat[1].arvo }}</span>
-    </mat-card-subtitle>
-  </mat-card-header>
+    <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
 
-  <mat-card-content>
+    <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
+    <div id="top-buttons" class="theme-actions">
+    <app-to-beginning-button></app-to-beginning-button>
+    <button
+      mat-raised-button
+      color="primary"
+      i18n="@@Tee UKK"
+      *ngIf="userRole === 'opettaja' || userRole === 'admin'"
+      (click)="goSubmitFaqWithId()"
+      >
+      Tee UKK
+    </button>
+  </div>
 
-    <mat-card appearance="outlined" class="question">
-      <mat-card-header>
-        <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{ticket.aloittaja.nimi}}>
-        <mat-card-title>
-          {{ ticket.aloittaja.nimi }}
-          <span *ngIf="ticket.aloittaja.asema === 'opettaja'" i18n="@@Opettaja"> 🞄 Opettaja</span>
-        </mat-card-title>
-        <mat-card-subtitle>{{ ticket.aikaleima | date: 'short' }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p class="message" [innerHTML]=ticket.viesti></p>
-        <h2>{{tila}}</h2>
-      </mat-card-content>
-    </mat-card>
+  <!-- ----------- Kysymys -------------------------------------- -->
 
-  </mat-card-content>
+  <div class="ticket-header">
 
-</mat-card>
+    <h3 class="sub-header">{{ ticket.otsikko }}</h3>
 
-<mat-card appearance="outlined" class="ticket-view-card">
+    <div class="spacer"></div>
 
-  <mat-card-header>
-    <mat-card-title i18n="@@Kommentit">Kommentit</mat-card-title>
-  </mat-card-header>
+    <div class="user-info-block">
+      <div class="text-info">
+        <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
+        <div class="theme-label">
+          <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
+          <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
+          <ng-template #notToday>
+            <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
+          </ng-template>
+          <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
+        </div>
+      </div>
+      <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+    </div>
 
-  <mat-card-content>
+  </div>
+
+    <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
+      <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
+        <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
+    </div>
+
+    <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
+      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
+      <p class="short-field-value">{{ ticket.kentat[1].arvo }}</p>
+    </div>
+
+    <!-- TODO: Lisää tähän muiden kenttien näyttäminen. -->
+
+    <app-message [messageHtml]=ticket.viesti></app-message>
+
+  <hr class="theme-divider">
+
+  </section>
+
+  <!-- ----------- Keskustelu -------------------------------------- -->
+
+  <h3 class="sub-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h3>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
+
       <mat-card-header>
-        <img mat-card-avatar src="../../../assets/financier-icons/UniOulu.png" alt={{comment.lahettaja.nimi}}>
-        <mat-card-title>
+
+        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}>
+        <mat-card-title class="theme-profile-name">
           {{ comment.lahettaja.nimi }}
-          <span *ngIf="comment.lahettaja.asema === 'opettaja'" i18n="@@Opettaja"> 🞄 Opettaja</span>
         </mat-card-title>
-        <mat-card-subtitle>{{ comment.aikaleima | date: 'short' }}</mat-card-subtitle>
+
+        <mat-card-subtitle class="theme-label">
+          <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}} - </span>
+          <span *ngIf="isToday(comment.aikaleima)" i18n="@@Tänään">Tänään</span>
+          <span *ngIf="!isToday(comment.aikaleima)" >{{ comment.aikaleima | date: 'shortDate' }}</span>
+          {{ comment.aikaleima | date: 'shortTime' }}
+        </mat-card-subtitle>
+        <div class="spacer"></div>
+        <span class="ticket-state" *ngIf="comment.tila === 5">{{proposedSolution}}</span>
+
       </mat-card-header>
+
       <mat-card-content>
-        <p class="message" [innerHTML]=comment.viesti></p>
+        <app-message [messageHtml]=comment.viesti></app-message>
       </mat-card-content>
     </mat-card>
 
-    <mat-divider></mat-divider>
+  <div class="vertical-spacer"></div>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Jatka keskustelua...">Jatka keskustelua...</mat-label>
-      <textarea name="commentText"
-                [(ngModel)]="commentText"
-                matInput
-                cdkTextareaAutosize
-                #autosize="cdkTextareaAutosize"
-                cdkAutosizeMinRows="5"
-                cdkAutosizeMaxRows="10"></textarea>
-    </mat-form-field>
+  <app-editor *ngIf="ticket.tila > 0" [(editorContent)]="commentText"></app-editor>
 
   <app-error-card
-  *ngIf="errorMessage.length > 0"
-  i18n-title="@@Virhe"
-  title="Virhe"
-  message="{{ errorMessage }}"
-  [styles]="{ margin: '1em 0' }"
->
-</app-error-card>
+    *ngIf="errorMessage.length > 0"
+    i18n-title="@@Virhe"
+    title="Virhe"
+    message="{{ errorMessage }}"
+    [styles]="{ margin: '0' }"
+    >
+  </app-error-card>
 
-<!-- <p>{{newCommentState}}</p> -->
+  <div class="theme-actions">
 
-<div id="ticketActionsWrapper">
+    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
+      <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
+      <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
+      <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
+    </mat-radio-group>
 
-<mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
-  <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
-  <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
-  <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
-</mat-radio-group>
+    <div class="spacer"></div>
 
-<div class="spacer"></div>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="commentText.length < 1"
+      *ngIf="ticket.tila > 0"
+      (click)="sendComment()"
+      i18n="@@Lähetä">
+      Lähetä
+    </button>
 
-  <!-- <a mat-raised-button routerLink="/list-tickets">Tikettilistaan</a> -->
-  <button
-    id="sendButton"
-    mat-raised-button color="primary"
-    [disabled]="commentText.length < 1"
-    (click)="sendComment()"
-    i18n="@@Lähetä">
-    Lähetä
-  </button>
+  </div>
 
 </div>
-
-</mat-card-content>
-
-</mat-card>

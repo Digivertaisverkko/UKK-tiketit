@@ -1,12 +1,60 @@
+@import '/src/variables.scss';
 
-.spacer { flex: 1 1 auto; }
+@mixin height-dependant($header-height) {
 
-#userName { margin-right: 5px; }
+  mat-toolbar {
+    height: $header-height;
+    padding-left: 1rem;
+  }
 
-#userEmail { margin-right: 5px; }
+  $icon-size: calc($header-height * 0.8);
 
-#userName.is-phone-portrait {
-  display: none;
+  #account-icon-button {
+    // border: solid red 1px;
+    align-items: center;
+    font-size: $icon-size;
+    height: $icon-size;
+    margin-bottom: auto;
+    margin-top: auto;
+    position: relative;
+    width: $icon-size;
+
+    mat-icon {
+      // border: solid green 1px;
+      font-size: $icon-size;
+      height: auto;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: auto;
+    }
+  }
+}
+
+.logo {
+    // position: relative;
+    // -ms-transform: translateY(-50%);
+    // transform: translateY(-50%);
+    // background: no-repeat 50% contain;
+    // border-style: none;
+    margin: auto;
+    height: 80%;
+    &:hover {
+      filter: brightness(97%);
+    }
+    img {
+      height: 100%;
+    }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  margin-top: 0.1em;
+  margin-right: 0.5em;
+  // border: solid red 1px;
 }
 
 .flag {
@@ -15,10 +63,10 @@
   background-repeat: no-repeat;
   position: relative;
   display: inline-block;
-  width: 1.33333333em;
+  width: 40px;
   cursor: pointer;
-  line-height: 1em;
-  margin-right: 6px;
+  line-height: 0.7em;
+  margin-right: 10px;
   margin-left: 15px;
 }
 .flag:before { content: '\00a0'; }
@@ -30,4 +78,15 @@
 
 .flag-en {
   background-image: url(../../../assets/flag-icons/gb.svg);
+}
+
+@media screen and (min-width: $XSmall) {
+  @include height-dependant($header-height: 80px);
+}
+
+@media screen and (max-width: $XSmall) {
+  @include height-dependant($header-height: 70px);
+  .use-name {
+    display: none;
+  }
 }

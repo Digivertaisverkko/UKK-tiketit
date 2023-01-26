@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Route } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
@@ -13,13 +12,14 @@ import { environment } from 'src/environments/environment';
 })
 export class HeaderComponent implements OnInit {
   public isUserLoggedIn$: Observable<boolean>;
-  public isUserLoggedIn: Boolean = false;
-  public isPhonePortrait = false;
-  public productName: string = environment.productName;
+  public isUserLoggedIn: boolean = false;
+  public disableLanguageSelection: boolean = false;
   public readonly maxUserLength = 40;
   public userRole: string = '';
   public userName: string = '';
   public userEmail: string = '';
+  public hideLogging: boolean = true;
+  public sliderChecked: boolean;
 
   get language(): string {
     return this._language;
@@ -33,52 +33,69 @@ export class HeaderComponent implements OnInit {
   }
   private _language!: string;
 
+  // private route: ActivatedRoute,
+
   constructor(private authService: AuthService,
     private activatedRoute: ActivatedRoute,
-    private responsive: BreakpointObserver,
     private router: Router,
     private ticketService: TicketService)
     {
     this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
+    this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
   }
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      this.isPhonePortrait = false;
-      if (result.matches) {
-        this.isPhonePortrait = true;
-      }
-    });
-    this.updateUserRole();
-    this.updateUserName();
-    this.updateUserEmail();
+
+    // this.updateUserRole();
+    // this.updateUserName();
+    // this.updateUserEmail();
+    // this.router.events.subscribe(() => {
+      this.trackUserInfo();
+    // });
   }
 
-  updateUserName() {
-    this.authService.onGetUserName().subscribe(response => {
-        if (response.length > 0 ) {
-          this.userName = response.charAt(0).toUpperCase() + response.slice(1) + ',';
+  // (route.startsWith('/login') == false) {
+
+  trackUserInfo() {
+    this.authService.trackUserInfo().subscribe(response => {
+      if (response !== null) {
+
+        let newUserName: string = response.nimi;
+        if (newUserName.length > 0) {
+          newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
+          if (newUserName !== this.userName) {
+            this.userName = newUserName;
+          }
         } else {
           this.userName = '';
         }
-    })
-  }
 
-  updateUserEmail() {
-    this.authService.onGetUserEmail().subscribe(response => {
-        if (response.length > 0 ) {
-          this.userEmail = response + ', ';
+        // TODO: tarkastus, onko muuttunut.
+        if (response.sposti.length > 0) {
+          this.userEmail = response.sposti;
         } else {
           this.userEmail = '';
         }
+        this.setUserRole(response.asema);
+      }
     })
   }
 
-  updateUserRole() {
-    this.authService.onGetUserRole().subscribe(response => {
-      let role: string = '';
-      switch (response) {
+  updateMenu() {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('lang') !== null) {
+      this.disableLanguageSelection = true;
+      console.log(' kieli disabloitu');
+    } else {
+      this.disableLanguageSelection = false;
+      console.log(' kieli enabloitu');
+    };
+  }
+
+  setUserRole(asema: string): void {
+    let role: string = '';
+      switch (asema) {
         case 'opiskelija': {
           role = $localize`:@@Opiskelija:Opiskelija`;
           break;
@@ -91,13 +108,65 @@ export class HeaderComponent implements OnInit {
           role = $localize`:@@Admin:Järjestelmävalvoja`;
           break;
         }
+        default: {
+          this.userRole = '';
+        }
       }
         this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
-    })
   }
 
-  public changeLanguage(language: 'en-US' | 'fi-FI') {
-    this.language = language;
+  // updateUserName() {
+  //   this.authService.onGetUserName().subscribe(response => {
+  //       if (response.length > 0 ) {
+  //         this.userName = response.charAt(0).toUpperCase() + response.slice(1);
+  //       } else {
+  //         this.userName = '';
+  //       }
+  //   })
+  // }
+
+  // updateUserEmail() {
+  //   this.authService.onGetUserEmail().subscribe(response => {
+  //       if (response.length > 0 ) {
+  //         this.userEmail = response;
+  //       } else {
+  //         this.userEmail = '';
+  //       }
+  //   })
+  // }
+
+  // updateUserRole() {
+  //   this.authService.onGetUserRole().subscribe(response => {
+  //     let role: string = '';
+  //     switch (response) {
+  //       case 'opiskelija': {
+  //         role = $localize`:@@Opiskelija:Opiskelija`;
+  //         break;
+  //       }
+  //       case 'opettaja': {
+  //         role = $localize`:@@Opettaja:Opettaja`;
+  //         break;
+  //       }
+  //       case 'admin': {
+  //         role = $localize`:@@Admin:Järjestelmävalvoja`;
+  //         break;
+  //       }
+  //       default: {
+  //         this.userRole = '';
+  //       }
+  //     }
+  //       this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
+  //   })
+  // }
+
+  // public changeLanguage(language: 'en-US' | 'fi-FI') {
+  //   this.language = language;
+  // }
+
+
+  public toggleLanguage() {
+    console.log(' --- kieli: ' + this.language);
+    this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
   }
 
 
@@ -106,6 +175,10 @@ export class HeaderComponent implements OnInit {
       const courseID = this.ticketService.getActiveCourse();
       this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
     }
+  }
+
+  public login(): void{
+    this.authService.handleNotLoggedIn();
   }
 
   public logOut() {

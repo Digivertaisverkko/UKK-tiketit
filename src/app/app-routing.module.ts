@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListingComponent } from './ticket/listing/listing.component';
-import { TestingHenriComponent } from './user-management/testing-henri/testing-henri.component';
 import { authGuard } from './user-management/auth.guard';
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
+import { ListingComponent } from './ticket/listing/listing.component';
 
+// FIXME: viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
 const routes: Routes = [
-  { path: '**', component: ListingComponent, canActivate: [authGuard] }
+  { path: '', redirectTo: '/list-tickets?courseID=1', pathMatch: 'full' },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }

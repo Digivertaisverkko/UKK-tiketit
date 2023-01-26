@@ -1,51 +1,42 @@
-.ticket-view-card {
-  margin: 1em auto;
-  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
-  mat-card {
-    margin: 0 auto 1em;
+@import '/src/variables.scss';
+
+#top-buttons {
+  justify-content: flex-start;
+  gap: 4rem;
+}
+
+.short-field-value:last-child { margin-bottom: 1.5rem; }
+
+.vertical-spacer { height: 18px; }
+
+// Muuten marginaalit menevät päällekkäin jostain syystä.
+// .short-vertical-spacer {
+//   height: 1px;
+// }
+
+mat-card {
+  margin: 0 auto 12px;
+  mat-card-subtitle {
+    margin-top: 3px;
   }
-
-  #ticketActionsWrapper {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    mat-radio-button {
-      margin-top: 3px;
-      margin-bottom: 3px;
-    }
+  .ticket-state {
+    color: var(--primary-color);
+    margin-right: 1em;
   }
+}
 
-  mat-form-field {
-    width: 100%;
-    margin-top: 1em;
-  }
+mat-radio-button { margin: 3px 1.7rem 3px 0px; }
 
-  mat-radio-group {
-    // margin-left: 0.5em;
-    mat-radio-button {
-      margin-right: 2em;
-    }
-  }
+.mdc-form-field > label { padding-left: 0; }
 
-  .mdc-form-field>label {
-    padding-left: 0;
-  }
+// ::ng-deep .mat-mdc-card-content:last-child {
+//   padding-bottom: 0 !important;
+// }
 
-  .message { white-space: pre-wrap;}
-
-  #backButton {
-    margin-right: 0.5em;
-    max-width: 10em;
-  }
-
-  #sendButton {
-    max-height: 35px;
-    min-width: 8em;
-  }
-
-  .spacer {
-    display: block;
-    flex: 1 1 auto;
-  }
-
+@media (max-width: $XSmall) {
+  // Välttämättä ei mene useammalle riville.
+  // .user-info-block {
+  //   order: -1;
+  //   margin-bottom: -30px;
+  // }
 }

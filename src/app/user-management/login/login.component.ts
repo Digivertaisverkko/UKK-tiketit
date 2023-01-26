@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 // import { environment } from 'src/environments/environment';
 // import { ForwardRefHandling } from '@angular/compiler';
@@ -15,7 +14,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public courseID: number = 1;
   public email: string = '';
   public isEmailValid: boolean = false;
-  public isPhonePortrait = false;
   private loginID: string = '';
   public password: string = '';
   public readonly passwordMinLength: number = 8;
@@ -30,7 +28,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private responsive: BreakpointObserver,
     private router: Router
   ) {
     this.messageSubscription = this.authService
@@ -44,22 +41,17 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
-        if (isLoggedIn === true) {
-          this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
-        }
-      })
+      // this.authService.onIsUserLoggedIn().subscribe(isLoggedIn => {
+      //   if (isLoggedIn === true) {
+      //     if
+      //     this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
+      //   }
+      // })
   }
 
   // release -branch
 
   ngOnInit(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      this.isPhonePortrait = false;
-      if (result.matches) {
-        this.isPhonePortrait = true;
-      }
-    });
     this.setLoginID();
   }
 
@@ -70,8 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public login(): void {
     this.isEmailValid = this.validateEmail(this.email);
-    console.log('email validation: ' + this.isEmailValid);
-    console.log(typeof this.isEmailValid);
+    // console.log('email validation: ' + this.isEmailValid);
     // Lisää ensin custom ErrorStateMatcher
     // if (this.isEmailValid === false) return;
     // console.log('LoginComponent: login request info:');
@@ -80,17 +71,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID)
       .then(response => {
-      
+        if (response.success == true) {
+          var redirectUrl: string;
+          if (response.redirectUrl == undefined) {
+            redirectUrl = '/list-tickets?courseID=' + this.courseID;
+          } else {
+            redirectUrl = response.redirectUrl;
+          }
+          this.router.navigateByUrl(redirectUrl);
+        }
       })
-      .catch( error => {
-    console.error(error.message)});
-  }
-
-  public loginWithoutAuth(): void {
-    this.authService.saveSessionStatus('123456789');
-    console.log('Tehdään satunnainen session id. Huom. palvelin-kutsut eivät tule toimimaan.');
-    this.authService.isUserLoggedIn$.next(true);
-    this.router.navigateByUrl('/list-tickets?courseID=' + this.courseID);
+      .catch( () => {
+        // console.log('virhe napattu');
+        // console.dir(error)
+// ;        if (error.status == 403) {
+//           let message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
+//           this.serverErrorMessage = message;
+//         }
+      });
   }
 
   private setLoginID() {

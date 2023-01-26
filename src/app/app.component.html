@@ -1,13 +1,19 @@
-<app-header>
-  <span class="spacer"></span>
-  <!-- <button mat-icon-button class="search-icon" aria-label="Search">
-        <mat-icon>search</mat-icon>
-        </button> -->
-</app-header>
+<div id="app-wrapper">
 
-<main [ngClass]="{ 'is-phone-portrait': isPhonePortrait }"
-  class="mat-sidenav-container">
-  <router-outlet></router-outlet>
-</main>
+  <app-header *ngIf="!isInIframe">
+    <span class="spacer"></span>
+    <!-- <button mat-icon-button class="search-icon" aria-label="Search">
+          <mat-icon>search</mat-icon>
+          </button> -->
+  </app-header>
 
-<app-footer></app-footer>
+  <main>
+    <button mat-raised-button class="login-status" (click)="logInOut()" *ngIf="isInIframe">
+      {{logButtonString}}
+    </button>
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-footer *ngIf="!isInIframe"></app-footer>
+
+</div>
