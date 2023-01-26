@@ -4,6 +4,7 @@ import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
 import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
   selector: 'app-ticket-view',
@@ -13,6 +14,7 @@ import { Subscription, interval, startWith, switchMap } from 'rxjs';
 export class TicketViewComponent implements OnInit, OnDestroy {
   public courseName: string = '';
   public errorMessage: string = '';
+  public isInIframe: boolean;
   public ticket: Tiketti;
   public tila: string;
   public newCommentState: 3 | 4 | 5 = 4;
@@ -38,6 +40,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.ticket = {} as Tiketti;
       this.tila = '';
       this.commentText = '';
+      this.isInIframe = getIsInIframe();
       this.isLoaded = false;
       this.ticketID = String(this.route.snapshot.paramMap.get('id'));
       // this.messageSubscription = this.ticketService.onMessages().subscribe(
@@ -148,5 +151,4 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     console.log('submit-faq: url: ' + url);
     this.router.navigateByUrl(url);
   }
-
 }

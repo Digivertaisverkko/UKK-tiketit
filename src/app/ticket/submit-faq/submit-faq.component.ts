@@ -22,8 +22,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public originalTicket: Tiketti | undefined;
   // public userName: string | null = '';
   public userName: string = '';
-
-  public user$ = this.authService.trackUserInfo();
+  // public user$ = this.authService.trackUserInfo();
 
   private courseId: string = this.ticketService.getActiveCourse();
   private messageSubscription: Subscription;

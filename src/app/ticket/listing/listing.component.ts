@@ -10,6 +10,7 @@ import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK, TiketinPerustiedot } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { getIsInIframe } from '../functions/isInIframe';
 
 export interface Sortable {
   id: number;
@@ -42,7 +43,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public FAQisLoaded: boolean = false;
   public isCourseIDvalid: boolean = false;
-  public isInIframe: boolean = true;
+  public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
@@ -76,6 +77,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) {
     this.pollingRateMin = (environment.production == true ) ? 1 : 15;
+    this.isInIframe = getIsInIframe();
     this.ticketMessageSub = this.ticket.onMessages().subscribe(message => {
       if (message) {
         this.errorMessage = message;
@@ -116,7 +118,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     });
     // this.username = this.authService.getUserName();
     // this.userRole = this.authService.getUserRole();
-    this.getIfInIframe();
     this.trackScreenSize();
     this.route.queryParams.subscribe(params => {
       var courseIDcandinate: string = params['courseID'];
@@ -196,15 +197,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       // Elä laita this.isLoaded = true; tähän.
       //
     })
-  }
-
-  private getIfInIframe() {
-    const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
-    if (isInIframe == 'false') {
-      this.isInIframe = false;
-    } else {
-      this.isInIframe = true;
-    }
   }
 
   private trackScreenSize(): void {
