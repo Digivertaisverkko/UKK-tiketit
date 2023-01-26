@@ -21,7 +21,9 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public faqTitle: string = '';
   public originalTicket: Tiketti | undefined;
   // public userName: string | null = '';
-  public user: User;
+  public userName: string = '';
+
+  public user$ = this.authService.trackUserInfo();
 
   private courseId: string = this.ticketService.getActiveCourse();
   private messageSubscription: Subscription;
@@ -36,10 +38,12 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     ) {
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         message => { this._snackBar.open(message, 'OK') });
-      this.user = this.authService.getUserInfo();
   }
 
   ngOnInit(): void {
+    this.authService.trackUserInfo().subscribe(response => {
+      if (response.nimi !== null) this.userName = response.nimi;
+    })
     if (this.ticketId !== null) {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
