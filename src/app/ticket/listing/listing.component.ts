@@ -8,7 +8,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { TicketService, Kurssini, UKK, TiketinPerustiedot } from '../ticket.service';
+import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
 
@@ -57,8 +57,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   public courseName: string = '';
   public errorMessage: string = '';
   public headline: string = '';
-  public me: string =  $localize`:@@Minä:Minä`;
-  public ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
+  public readonly me: string =  $localize`:@@Minä:Minä`;
+  public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public username: string | null = '';
   public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
 
