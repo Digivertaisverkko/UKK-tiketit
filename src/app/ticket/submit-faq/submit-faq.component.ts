@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 import { UusiUKK, TicketService, Kommentti, Tiketti } from '../ticket.service';
 
 @Component({
@@ -20,7 +20,8 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public faqProblem: string = '';
   public faqTitle: string = '';
   public originalTicket: Tiketti | undefined;
-  public userName: string | null = '';
+  // public userName: string | null = '';
+  public user: User;
 
   private courseId: string = this.ticketService.getActiveCourse();
   private messageSubscription: Subscription;
@@ -35,6 +36,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     ) {
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         message => { this._snackBar.open(message, 'OK') });
+      this.user = this.authService.getUserInfo();
   }
 
   ngOnInit(): void {
@@ -82,7 +84,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   }
 
   public getSenderTitle(name: string, role: string): string {
-    if (name === this.authService.getUserName()) {
+    if (name === this.authService.getUserName2()) {
       return $localize`:@@Minä:Minä`
     }
     switch (role) {
