@@ -20,13 +20,12 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   problemText: string = '';
   messageText: string = '';
   newTicket: UusiTiketti = {} as UusiTiketti;
-  // public userName: string | null = '';
+  public userName: string | null = '';
   userRole: string = '';
   answer: string = '';
   sendingIsAllowed: boolean = false;
   public currentDate = new Date();
-
-  public user: User;
+  // public user$ = this.auth.trackUserInfo();
 
   messageSubscription: Subscription;
   public message: string = '';
@@ -40,21 +39,17 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         (message) => { this._snackBar.open(message, 'OK') });
 
-      this.user = { id: 0, nimi: '', sposti: '', asema: '' }
     }
 
   ngOnInit(): void {
     const courseID = this.ticketService.getActiveCourse();
-    // Uudempi tapa
-    if (this.auth.getUserName2.length == 0) {
-      this.auth.saveUserInfo(String(courseID));
-      this.user = this.auth.getUserInfo();
-    }
-    if (this.auth.getUserName.length == 0) {
-      this.auth.saveUserInfo(String(courseID));
-    }
-    // this.userName = this.auth.getUserName();
-    this.userRole = this.auth.getUserRole();
+    this.auth.trackUserInfo().subscribe(response => {
+      if (response.nimi !== null) this.userName = response.nimi;
+      if (response.asema !== null) this.userRole = response.asema;
+    })
+    // if (this.auth.getUserName2.length == 0) {
+    //   this.auth.saveUserInfo(String(courseID));
+    // }
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response;
     }).catch(() => {});
