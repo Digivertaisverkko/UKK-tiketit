@@ -29,6 +29,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   // messageSubscription: Subscription;
   public message: string = '';
   public userRole: string = '';
+  private userName: string = '';
 
   constructor(
     private auth: AuthService,
@@ -50,6 +51,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
         if (response.asema !== undefined ) this.userRole = response.asema;
+        if (response.nimi !== undefined ) this.userName = response.nimi;
     });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
     this.timeInterval = interval(600000)
@@ -60,7 +62,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         next: response => {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
-          if (this.auth.getUserName.length == 0) {
+          if (this.userName.length == 0) {
             this.auth.saveUserInfo(String(this.ticket.kurssi));
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
@@ -78,19 +80,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public getSenderTitle(name: string, role: string): string {
-    if (name == this.auth.getUserName()) {
-      return $localize`:@@Minä:Minä`
-    }
+    if (name == this.userName) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
-        return $localize`:@@Opiskelija:Opiskelija`;
-        break;
+        return $localize`:@@Opiskelija:Opiskelija`; break;
       case 'opettaja':
-        return $localize`:@@Opettaja:Opettaja`;
-        break;
+        return $localize`:@@Opettaja:Opettaja`; break;
       case 'admin':
-        return $localize`:@@Admin:Admin`;
-        break;
+        return $localize`:@@Admin:Admin`; break;
       default:
         return '';
     }

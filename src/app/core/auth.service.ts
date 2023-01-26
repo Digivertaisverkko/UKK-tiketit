@@ -93,9 +93,6 @@ export class AuthService {
 
   public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | '' {
     let user = this.user$.value;
-    // console.log('getUserRole() user: ' + JSON.stringify(user));
-    // let role: any = this.userRole$.value;
-    // console.log('saatiin rooli: ' + user.asema);
     return (user.asema == null) ? '' : user.asema;
   }
 
@@ -124,21 +121,9 @@ export class AuthService {
     return courseID;
   }
 
-  // public onGetUserRole(): Observable<string> {
-  //   return this.userRole$.asObservable();
-  // }
-
   public trackUserInfo(): Observable<User> {
     return this.user$.asObservable();
   }
-
-  public onGetUserName(): Observable<string> {
-    return this.userName$.asObservable();
-  }
-
-  // public onGetUserEmail(): Observable<string> {
-  //   return this.userEmail$.asObservable();
-  // }
 
   public setSessionID(newSessionID: string) {
     const oldSessionID =  window.localStorage.getItem('SESSION_ID');
@@ -157,43 +142,8 @@ export class AuthService {
     if (window.localStorage.getItem('SESSION_ID') == null) {
       return
     }
-      // const isUserLoggedIn: string | null = window.localStorage.getItem('SESSION_ID');
-      // if (isUserLoggedIn == null) {
-      //   this.handleNotLoggedIn();
-      // }
-      // this.isUserLoggedIn$.next(true);
-    // }
-
     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-
-    if (savedCourseID !== null) {
-      this.saveUserInfo(savedCourseID);
-    }
-
-    // Näistä siirrytään pois.
-    // if (window.localStorage.getItem('USER_ROLE') !== null) {
-    //   const userRole = window.localStorage.getItem('USER_ROLE');
-    //   switch (userRole) {
-    //     case "opettaja":
-    //     case "opiskelija":
-    //     case "admin": {
-    //       this.userRole$.next(userRole);
-    //       // console.log('havaittiin user role ' + userRole);
-    //     }
-    //   }
-    // }
-    if (window.localStorage.getItem('USER_NAME') !== null) {
-      const userName: string | null = window.localStorage.getItem('USER_NAME');
-      if (userName !== null && userName.length > 0 ) {
-        this.userName$.next(userName);
-      }
-    }
-    // if (window.localStorage.getItem('EMAIL') !== null) {
-    //   const userEmail: string | null = window.localStorage.getItem('EMAIL');
-    //   if (userEmail !== null && userEmail.length > 0 ) {
-    //     this.userEmail$.next(userEmail);
-    //   }
-    // }
+    if (savedCourseID !== null) this.saveUserInfo(savedCourseID);
   }
 
   public async handleNotLoggedIn() {
@@ -212,10 +162,10 @@ export class AuthService {
   //   this.userRole$.next(asema);
   // }
 
-  public setUserName(name: string) {
-    window.localStorage.setItem('USER_NAME', name);
-    this.userName$.next(name);
-  }
+  // public setUserName(name: string) {
+  //   window.localStorage.setItem('USER_NAME', name);
+  //   this.userName$.next(name);
+  // }
 
   // Tulee korvaamaan alemman.
   public getUserName2(): string {
@@ -225,7 +175,8 @@ export class AuthService {
 
   public getUserName(): string | null {
     // return this.userName$.value;
-    return window.localStorage.getItem('USER_NAME');
+    const user: User  = this.user$.value;
+    return user.nimi;
   }
 
   // public setUserEmail(email: string) {
@@ -269,29 +220,8 @@ export class AuthService {
       return;
     }
     try {
-    const userInfo = await this.getMyUserInfo(courseID);
-
-      // Uudempi tapa.
-      if (userInfo !== null) {
-        this.user$.next(userInfo);
-      }
-
-      // Nämä vielä yhteensopivuuden vuoksi.
-      // if (userInfo?.sposti.length > 0) {
-      //   this.setUserEmail(userInfo.sposti);
-      // }
-
-      if (userInfo?.nimi.length > 0) {
-        this.setUserName(userInfo.nimi);
-      }
-
-      // if (userInfo?.asema.length > 0) {
-      //   let userRole: string = userInfo.asema;
-      //   if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
-      //     this.setUserRole(userRole);
-      //   }
-      // }
-
+      const userInfo = await this.getMyUserInfo(courseID);
+      if (userInfo !== null) this.user$.next(userInfo);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -569,7 +499,6 @@ export class AuthService {
     }
 
     console.error(message + ".");
-
     if (error.status === 403) {
       if (error.error !== undefined && error.error.error.tunnus == 1000) {
         this.handleNotLoggedIn();
@@ -664,7 +593,7 @@ export class AuthService {
   public async logOut(): Promise<any> {
     const sessionID = window.localStorage.getItem('SESSION_ID');
     if (sessionID == undefined) {
-      throw new Error('Session ID not found.');
+      throw new Error('authService.logout: ei session ID:ä.');
     }
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -677,9 +606,6 @@ export class AuthService {
     } finally {
       this.isUserLoggedIn$.next(false);
       this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
-      this.setUserName('');
-      // this.setUserRole('');
-      // this.setUserEmail('');
       window.localStorage.clear();
     }
   }
