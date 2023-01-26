@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'ticket-view/:id', component: TicketViewComponent, canActivate: [authGuard] },
   { path: 'submit', component: SubmitTicketComponent, canActivate: [authGuard] },
   { path: 'submit-faq', component: SubmitFaqComponent, canActivate: [authGuard] },
+  { path: 'submit-faq/:id', component: SubmitFaqComponent, canActivate: [authGuard] },
   { path: 'faq-view/:id', component: FaqViewComponent },
   { path: 'list-tickets', component: ListingComponent }
 ];

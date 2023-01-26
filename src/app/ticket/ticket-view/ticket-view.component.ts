@@ -143,5 +143,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       });
   }
 
+  public goSubmitFaqWithId(): void {
+    let url:string = '/submit-faq/' + this.ticketID;
+    console.log('submit-faq: url: ' + url);
+    this.router.navigateByUrl(url);
+  }
 
 }

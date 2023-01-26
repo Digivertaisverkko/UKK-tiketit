@@ -37,3 +37,23 @@ mat-checkbox { margin-left: -10px; }
 
   mat-form-field { min-width: 95%; }
 }
+
+mat-card {
+  margin: 0 auto 12px;
+  mat-card-subtitle {
+    margin-top: 3px;
+  }
+  .ticket-state {
+    color: var(--primary-color);
+    margin-right: 1em;
+  }
+}
+
+.mdc-form-field > label { padding-left: 0; }
+
+#top-buttons {
+  justify-content: flex-start;
+  gap: 4rem;
+}
+
+.short-field-value:last-child { margin-bottom: 1.5rem; }

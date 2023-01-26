@@ -13,7 +13,15 @@
     <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
     <div id="top-buttons" class="theme-actions">
     <app-to-beginning-button></app-to-beginning-button>
-    <button mat-raised-button color="primary" i18n="@@Tee UKK" *ngIf="userRole === 'opettaja' || userRole === 'admin'">Tee UKK</button>
+    <button
+      mat-raised-button
+      color="primary"
+      i18n="@@Tee UKK"
+      *ngIf="userRole === 'opettaja' || userRole === 'admin'"
+      (click)="goSubmitFaqWithId()"
+      >
+      Tee UKK
+    </button>
   </div>
 
   <!-- ----------- Kysymys -------------------------------------- -->
