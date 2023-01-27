@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { UusiUKK, TicketService, Kommentti, Tiketti } from '../ticket.service';
+import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
   selector: 'app-submit-faq',
@@ -19,6 +20,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public faqMessage: string = '';
   public faqProblem: string = '';
   public faqTitle: string = '';
+  public isInIframe: boolean;
   public originalTicket: Tiketti | undefined;
   // public userName: string | null = '';
   public userName: string = '';
@@ -35,11 +37,13 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     private router: Router,
     private ticketService: TicketService,
     ) {
+      this.isInIframe = getIsInIframe();
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         message => { this._snackBar.open(message, 'OK') });
   }
 
   ngOnInit(): void {
+    this.isInIframe = getIsInIframe();
     this.authService.trackUserInfo().subscribe(response => {
       if (response.nimi !== null) this.userName = response.nimi;
     })

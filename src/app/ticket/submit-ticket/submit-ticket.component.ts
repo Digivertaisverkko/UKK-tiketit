@@ -41,7 +41,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
       this.isInIframe = getIsInIframe();
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         (message) => { this._snackBar.open(message, 'OK') });
- 
     }
 
   ngOnInit(): void {
