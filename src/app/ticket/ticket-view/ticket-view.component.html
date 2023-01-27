@@ -111,7 +111,7 @@
 
   <div class="theme-actions">
 
-    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
+    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opiskelija' || userRole ==='admin' && ticket.tila > 0">
       <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
       <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
       <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
