@@ -17,10 +17,10 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   titleText: string = '';
   assignmentText: string = '';
   public courseName: string = '';
+  public errorMessage: string = '';
   // public user: User;
   public isInIframe: boolean;
   problemText: string = '';
-  messageText: string = '';
   newTicket: UusiTiketti = {} as UusiTiketti;
   public userName: string | null = '';
   userRole: string = '';
