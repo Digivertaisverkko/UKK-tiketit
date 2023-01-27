@@ -24,7 +24,7 @@ export class AppComponent implements OnInit  {
   ngOnInit(): void {
     this.isInIframe = this.testIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
-    console.log(' iframe upotuksen tila: ' + this.isInIframe.toString());
+    console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.authService.initialize();
     this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response == true) {

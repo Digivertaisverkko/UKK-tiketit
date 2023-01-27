@@ -28,8 +28,7 @@ function getLanguage(): string {
   const url = new URL(window.location.href);
   const urlLang = url.searchParams.get('lang');
   var language: string | null;
-
-  console.log('urlLang: ' + urlLang);
+  // console.log('urlLang: ' + urlLang);
 
   if (urlLang !== null) {
     if (urlLang == 'en') {
