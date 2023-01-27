@@ -1,7 +1,6 @@
 @import '/src/variables.scss';
 
-// Leveys on tässä näkymässä leveämpi kuin muilla leveämpien taulukoiden vuoksi.
-
+// Leveys on tässä näkymässä leveämpi kuin muilla taulukoiden vuoksi.
 section, app-error-card { width: 103%; }
 
 .main-header, #tickets-header, section, app-error-card {
@@ -11,10 +10,7 @@ section, app-error-card { width: 103%; }
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
 h2, h3 { padding-left: 20px; }
 
-h2 {
-  margin-top: 2.2rem;
-  padding-right: 2rem;
-}
+h2 { padding-right: 2rem; }
 
 .mdc-card__actions { min-height: 30px; }
 
