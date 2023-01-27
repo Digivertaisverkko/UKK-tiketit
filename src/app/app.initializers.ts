@@ -44,6 +44,7 @@ function getLanguage(): string {
   } else {
     // Jos käyttäjä on aiemmin valinnut kielen.
     language = localStorage.getItem('language');
+    console.log('Löydettiin tallennettu kieli: ' + language);
     // Oletuskieli
     if (language == null || language == undefined) {
       language = (isInIframe) ? 'en-US' : 'fi-FI';

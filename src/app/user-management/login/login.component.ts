@@ -49,19 +49,14 @@ export class LoginComponent implements OnInit {
       })
       .catch(error => {
         switch (error?.tunnus) {
-          case 1000:
-            this.errorMessage = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-            break;
           case 1001:
-            this.errorMessage = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
-            break;
+            this.errorMessage = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.'; break;
           case 1002:
-            this.errorMessage = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
-            break;
+            this.errorMessage = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.'; break;
           case 1003:
-            this.errorMessage = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.';
-            break;
+            this.errorMessage = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.'; break;
           default:
+            this.errorMessage = $localize`:@@Kirjautuminen ei onnistunut:Kirjautuminen ei onnistunut` + '.'; break;
         }
       });
   }
