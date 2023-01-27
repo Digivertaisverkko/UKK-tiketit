@@ -145,7 +145,9 @@ export class AuthService {
 
   public async handleNotLoggedIn() {
     console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.');
-    
+    this.setNotLoggegIn();
+    this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
+    window.localStorage.clear();
     const loginUrl = await this.sendAskLoginRequest('own');
     // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
     const currentRoute = window.location.pathname + window.location.search;
@@ -337,12 +339,12 @@ export class AuthService {
     return loginResult;
   }
 
-  // Onko käyttäjät kirjautunut.
+  // Tämään hetkinen kirjautumisen tila.
   public getIsUserLoggedIn(): Boolean {
     return this.isUserLoggedIn$.value;
   }
 
-  // Palauta HttpOptions, johon on asetettu session-id headeriin.
+  // Palauta HTTP-kutsuihin tarvittavat HTTP -options, joka sisältää headerit, joissa on session id jos sellainen on saatavilla.
   private getHttpOptions(): object {
     let sessionID = window.localStorage.getItem('SESSION_ID');
     // if (sessionID == undefined) {
@@ -413,7 +415,7 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     } finally {
-      this.isUserLoggedIn$.next(false);
+      this.setNotLoggegIn();
       this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
       window.localStorage.clear();
     }
