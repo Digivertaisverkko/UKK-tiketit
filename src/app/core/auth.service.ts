@@ -7,6 +7,7 @@ import { truncate } from '../utils/truncate';
 import { Router } from '@angular/router';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,8 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  constructor(private http: HttpClient,
+  constructor(private errorService: ErrorService,
+              private http: HttpClient,
               private router: Router) {
   }
 
@@ -374,46 +376,7 @@ export class AuthService {
 
   // Lähetä muotoiltuvirheilmoitus consoleen, puutu ylemmän tason virheisiin kuten jos ei olle kirjautuneita.
   // Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
-  private handleError(error: any) {
-    var logMessage: string;
-    var backendResponse = error?.error;
-    var backendError = backendResponse?.error;
-    if (error.status === 0) {
-      // A client-side or network error occurred.
-      logMessage = 'Saatiin virhe statuskoodilla 0. Yleensä tapahtuu, kun palvelimeen ei saada yhteyttä.';
-      if (error.error !== undefined) {
-        logMessage += ": " + error.error;
-      }
-    } else {
-      // The backend returned an unsuccessful response code.
-      logMessage = "Saatin virhe ";
-      if (error.status !== undefined) {
-        logMessage += "HTTP-tilakoodilla " + error.status;
-      }
-    }
 
-    if (backendError !== undefined) {       
-      logMessage += ", sisäisellä tilakoodilla " + backendError.tunnus;
-      if (backendError.virheilmoitus?.length > 1 ) {
-        logMessage += " ja viestillä: " + backendError.virheilmoitus;
-      } else {
-        logMessage += ".";
-      }
-      if (backendError.original?.length > 0) {
-        logMessage += " Alkuperäinen virheilmoitus: " + backendError.original;
-      }
-    }
-    
-    console.error(logMessage);
-    if (error.status === 403) {
-      if (backendError?.tunnus == 1000) {
-        console.log('ohjataan loginiin');
-        this.handleNotLoggedIn();
-      }
-    }
-    throw backendError;
-    // return throwError(() => new Error(error));
-  }
 
   // Näytä client-side login tietoja ennen kirjautumisyritystä.
   private logBeforeLogin() {
@@ -444,6 +407,17 @@ export class AuthService {
       window.localStorage.clear();
     }
   }
+
+  // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan virheen käsittelyä.
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
+        console.log('Virhe, et ole kirjautunut. Ohjataan kirjautumiseen.');
+        this.handleNotLoggedIn();
+    } else {
+      this.errorService.handleServerError(error);
+    }
+  }
+  
 }
 
 export interface LoginResponse {
