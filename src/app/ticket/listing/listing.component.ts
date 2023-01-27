@@ -139,7 +139,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       // this.trackLoginState(courseIDcandinate);
       if (this.authService.getIsUserLoggedIn() == true || this.authService.getSessionID() !== null) {
         // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
-        if (this.authService.getUserName2.length == 0) {
+        if (this.authService.getUserName.length == 0) {
           this.authService.saveUserInfo(courseIDcandinate);
         }
         this.updateLoggedInView(courseIDcandinate);

@@ -91,7 +91,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   }
 
   public getSenderTitle(name: string, role: string): string {
-    if (name === this.authService.getUserName2()) {
+    if (name === this.authService.getUserName()) {
       return $localize`:@@Minä:Minä`
     }
     switch (role) {

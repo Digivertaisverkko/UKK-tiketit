@@ -18,7 +18,6 @@ export class AuthService {
   // Onko käyttäjä kirjautuneena.
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
-  private errorMessages$ = new Subject <any>();
 
   // Tullaan siirtymään käyttäjätiedoissa tähän:
   private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
@@ -43,19 +42,28 @@ export class AuthService {
               private router: Router) {
   }
 
+  /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
+    olla jo local storagessa. */
+  public initialize() {
+    if (window.localStorage.getItem('SESSION_ID') == null) {
+      return
+    }
+    const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+    if (savedCourseID !== null) this.saveUserInfo(savedCourseID);
+  }
+
   // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.
   public setActiveCourse(courseID: string | null) {
     // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
     // if (courseID !== null && this.activeCourse$.value.id !== courseID) {
-      if (courseID !== null) {
+    if (courseID !== null) {
       window.localStorage.setItem('COURSE_ID', courseID);
       // Nimi ei vielä käytössä.
       // this.activeCourse$.next({ id: courseID, nimi: ''});
       if (this.user$.value.id === 0) {
         this.getUserInfo();
       }
-      }
-    // }
+    }
   }
 
   public setLoggedIn() {
@@ -79,16 +87,6 @@ export class AuthService {
   // Lopeta kirjautumisen seuraaminen.
   public unsubscribeIsUserLoggedin(): void {
     this.isUserLoggedIn$.unsubscribe;
-  }
-
-  // Ala seuraamaan virheviestejä.
-  public onErrorMessages(): Observable<any> {
-    return this.errorMessages$.asObservable();
-  }
-
-  // Tyhjennä viestit
-  public clearMessages(): void {
-    this.errorMessages$.next('');
   }
 
   public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | '' {
@@ -135,17 +133,6 @@ export class AuthService {
     return window.localStorage.getItem('SESSION_ID');
   }
 
-  // Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
-  // olla jo local storagessa.
-  // Ei haeta tässä palvelimelta käyttäjätietoja, koska siihen tarvittavaa courseID:ä ei vielä tiedossa.
-  public initialize() {
-    if (window.localStorage.getItem('SESSION_ID') == null) {
-      return
-    }
-    const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-    if (savedCourseID !== null) this.saveUserInfo(savedCourseID);
-  }
-
   public async handleNotLoggedIn() {
     console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.')
     const loginUrl = await this.sendAskLoginRequest('own');
@@ -157,32 +144,11 @@ export class AuthService {
     this.router.navigateByUrl(loginUrl);
   }
 
-  // public setUserRole(asema: 'opiskelija' | 'opettaja' | 'admin' | '') {
-  //   window.localStorage.setItem('USER_ROLE', asema);
-  //   this.userRole$.next(asema);
-  // }
-
-  // public setUserName(name: string) {
-  //   window.localStorage.setItem('USER_NAME', name);
-  //   this.userName$.next(name);
-  // }
-
-  // Tulee korvaamaan alemman.
-  public getUserName2(): string {
-    const user: User  = this.user$.value;
-    return user.nimi;
-  }
-
   public getUserName(): string | null {
     // return this.userName$.value;
     const user: User  = this.user$.value;
     return user.nimi;
   }
-
-  // public setUserEmail(email: string) {
-  //   window.localStorage.setItem('USER_EMAIL', email);
-  //   this.userEmail$.next(email);
-  // }
 
   // Luo käyttäjätili
   public async addUser(email: string, password: string): Promise<boolean> {
@@ -204,12 +170,13 @@ export class AuthService {
     }
     // this.checkErrors(response);
     if (response.success == true) {
-      this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@onnistui:onnistui` + '.');
+      // this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@onnistui:onnistui` + '.');
       return true;
     } else {
-      this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@ei onnistunut:ei onnistunut` + '.');
+      // this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@ei onnistunut:ei onnistunut` + '.');
       return false;
     }
+    
   }
 
   // Hae ja tallenna palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
@@ -227,25 +194,6 @@ export class AuthService {
     }
   }
 
-  //   this.getMyUserInfo(courseID)
-  //     .then((response) => {
-
-  //       if (response?.sposti.length > 0) {
-  //         this.setUserEmail(response.sposti);
-  //       }
-  //       if (response?.nimi.length > 0) {
-  //         this.setUserName(response.nimi);
-  //       }
-  //       if (response.asema !== undefined) {
-  //         let userRole: string = response.asema;
-  //         if (userRole == 'opettaja' || userRole == 'admin' || userRole == 'opiskelija' || userRole == '') {
-  //           this.setUserRole(userRole);
-  //         }
-  //       }
-  //     })
-  //     .catch(error => this.handleError(error));
-  // }
-
   // Hae omat kurssikohtaiset tiedot.
   private async getMyUserInfo(courseID: string): Promise<User> {
     if (isNaN(Number(courseID))) {
@@ -261,12 +209,6 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
-
-    // if (response?.sposti > 0 ) {
-    //   window.localStorage.setItem('EMAIL', response.sposti);
-    //   this.userEmail$.next(response.sposti);
-    // }
     return response;
   }
 
@@ -287,7 +229,6 @@ export class AuthService {
         'code-challenge': this.codeChallenge
       })
     };
-    // console.log(httpOptions);
     let response: any;
     try {
       console.log('Lähetetään 1. kutsu');
@@ -296,12 +237,10 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     if (response['login-url'] == undefined) {
       throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
     }
     const loginUrl = response['login-url'];
-    // console.log('loginurl : ' +loginUrl);
     return loginUrl;
   }
 
@@ -322,13 +261,8 @@ export class AuthService {
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
       console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
-      if (error.status === 403) {
-        const message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
-        this.sendErrorMessage(message);
-      }
       this.handleError(error);
     }
-    // this.checkErrors(response);
     if (response.success == true && response['login-code'] !== undefined) {
       console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
@@ -360,8 +294,6 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
-
     var loginResult: LoginResult;
     if (response.success !== undefined && response.success == true) {
       loginResult = { success: true };
@@ -374,13 +306,9 @@ export class AuthService {
       window.localStorage.removeItem('REDIRECT_URL')
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
       // console.log('Vastaus: ' + JSON.stringify(response));
-      // let sessionID = response['login-id'];
       let sessionID = response['session-id'];
       this.setLoggedIn();
       this.setSessionID(sessionID);
-
-      // console.log('tallennettiin sessionid: ' + sessionID);
-
       // Kurssi ID voi olla, jos ollaan tultu loggaamattomaan näkymään ensin.
       const courseID: string | null = window.localStorage.getItem('COURSE_ID');
       if (courseID !== null) {
@@ -396,14 +324,9 @@ export class AuthService {
     return loginResult;
   }
 
-  // Onko käyttäjät kirjautunut. TODO: muuta observableen perustuvaksi tämän sijaan?
+  // Onko käyttäjät kirjautunut.
   public getIsUserLoggedIn(): Boolean {
-    const sessionID = window.localStorage.getItem('SESSION_ID');
-    if (sessionID == undefined) {
-      return false
-    } else {
-      return true
-    }
+    return this.isUserLoggedIn$.value;
   }
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
@@ -438,146 +361,58 @@ export class AuthService {
     }
   }
 
-  // Lähetä virheviesti näkymään.
-  private sendErrorMessage(message: string) {
-    this.errorMessages$.next(message);
+  // Onko string muodoltaan HTTP URL.
+  isValidHttpUrl(testString: string): boolean {
+    let url: URL;
+    try {
+      url = new URL(testString);
+    } catch (_) {
+      return false;
+    }
+    return url.protocol === "http:" || url.protocol === "https:";
   }
 
-  // private getCodeChallenge(codeVerifier: string): string {
-    // let codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
-    // let codeChallenge = codeVerifierHash.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-    // return shajs('sha256').update({stringToBeHashed}).digest('hex')
-
-      // const encoder = new TextEncoder();
-      // const data = encoder.encode(codeVerifier);
-      // return window.crypto.subtle.digest('SHA-256', data).then(array => {
-      //   return this.base64UrlEncode(array);
-      // });
-  // }
-
-  // base64UrlEncode(array) {
-  //   return btoa(String.fromCharCode.apply(null, new Uint8Array(array)))
-  //       .replace(/\+/g, '-')
-  //       .replace(/\//g, '_')
-  //       .replace(/=+$/, '');
-  // }
-
-    // Onko string muodoltaan HTTP URL.
-    isValidHttpUrl(testString: string): boolean {
-      let url: URL;
-      try {
-        url = new URL(testString);
-      } catch (_) {
-        return false;
-      }
-      return url.protocol === "http:" || url.protocol === "https:";
-    }
-
+  // Lähetä muotoiltuvirheilmoitus consoleen, puutu ylemmän tason virheisiin kuten jos ei olle kirjautuneita.
+  // Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
   private handleError(error: any) {
-    var message: string;
+    var logMessage: string;
+    var backendResponse = error?.error;
+    var backendError = backendResponse?.error;
     if (error.status === 0) {
       // A client-side or network error occurred.
-      message = 'Saatiin virhe statuskoodilla 0. Yleensä tapahtuu, kun palvelimeen ei saada yhteyttä.';
+      logMessage = 'Saatiin virhe statuskoodilla 0. Yleensä tapahtuu, kun palvelimeen ei saada yhteyttä.';
       if (error.error !== undefined) {
-        message += ": " + error.error;
+        logMessage += ": " + error.error;
       }
     } else {
       // The backend returned an unsuccessful response code.
-      message = "Saatin virhe ";
+      logMessage = "Saatin virhe ";
       if (error.status !== undefined) {
-        message += "HTTP-tilakoodilla " + error.status;
-      }
-      if (error.error !== undefined) {
-        var errorObject = error.error;
-        if (errorObject.error !== undefined) {
-          message += ", sisäisellä tilakoodilla " + errorObject.error.tunnus;
-          if (errorObject.error.virheilmoitus !== undefined) {
-            message += " ja viestillä: ", errorObject.error.virheilmoitus
-          }
-        }
+        logMessage += "HTTP-tilakoodilla " + error.status;
       }
     }
 
-    console.error(message + ".");
+    if (backendError !== undefined) {       
+      logMessage += ", sisäisellä tilakoodilla " + backendError.tunnus;
+      if (backendError.virheilmoitus?.length > 1 ) {
+        logMessage += " ja viestillä: " + backendError.virheilmoitus;
+      } else {
+        logMessage += ".";
+      }
+      if (backendError.original?.length > 0) {
+        logMessage += " Alkuperäinen virheilmoitus: " + backendError.original;
+      }
+    }
+    
+    console.error(logMessage);
     if (error.status === 403) {
-      if (error.error !== undefined && error.error.error.tunnus == 1000) {
+      if (backendError?.tunnus == 1000) {
+        console.log('ohjataan loginiin');
         this.handleNotLoggedIn();
       }
     }
-    // }
-    // Templatessa pitäisi olla catch tälle.
-    return throwError(() => new Error(error));
-  }
-
-// HTTP-kutsujen virheidenkäsittely
-  // private handleError(error: HttpErrorResponse) {
-  //   if (error.status === 0) {
-  //     // A client-side or network error occurred.
-  //     console.error('Virhe tapahtui:', error.error);
-  //   } else {
-  //     // The backend returned an unsuccessful response code.
-  //     console.error(
-  //       `Saatiin virhe tilakoodilla ${error.status} ja viestillä: `,
-  //       truncate(error.error, 250, true)
-  //     );
-  //   }
-  //   let message: string = '';
-  //   if (error !== undefined) {
-  //     if (error.error.length > 0 ) {
-  //       message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
-  //     }
-  //     if (error.status !== undefined ) {
-  //       message += `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
-  //     }
-  //   }
-  //   return throwError(
-  //     () => new Error(message)
-  //   );
-  // }
-
-  // Palvelimelta saatujen vastauksien virheenkäsittely.
-  private checkErrors(response: any) {
-    var message: string = '';
-    // if (response == undefined) {
-    //   message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
-    //   this.sendErrorMessage(message);
-    //   throw new Error(message);
-    // }
-    if (response.error == undefined) {
-      return
-    }
-    switch (response.error.tunnus) {
-      case 1000:
-        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-        break;
-      case 1001:
-        message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
-        break;
-      case 1002:
-        message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
-        break;
-      case 1003:
-        message = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.';
-        break;
-      case 1010:
-        message = $localize`:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa` + '.';
-        break;
-      case 2000:
-        // Ei löytynyt: ei virhettä.
-        break;
-      case 3000:
-      case 3004:
-        throw new Error(response.error);
-      default:
-        throw new Error('Tuntematon virhetunnus: ' + JSON.stringify(response.error));
-    }
-    if (message.length > 0) {
-      this.sendErrorMessage(message);
-      console.error($localize`:@@Virhe:Virhe` + ': ' + message);
-    }
-    if (response.error.tunnus !== 2000) {
-      throw new Error('Virhe: tunnus: ' + response.error.tunnus + ', viesti: ' + truncate(response.error.virheilmoitus, 250, true));
-    }
+    throw backendError;
+    // return throwError(() => new Error(error));
   }
 
   // Näytä client-side login tietoja ennen kirjautumisyritystä.
