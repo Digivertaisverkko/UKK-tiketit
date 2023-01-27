@@ -46,12 +46,19 @@ export class AuthService {
 
   /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
     olla jo local storagessa. */
-  public initialize() {
+  public async initialize() {
     if (window.localStorage.getItem('SESSION_ID') == null) {
       return
     }
     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-    if (savedCourseID !== null) this.saveUserInfo(savedCourseID);
+    if (savedCourseID !== null) {
+      // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
+      // jotta ei ohjauduta loginiin page refresh:lla.
+      this.setLoggedIn();
+      this.saveUserInfo(savedCourseID);
+    } else {
+      console.log('authService.initialize: ei kurssi ID:ä!');
+    }
   }
 
   // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.
@@ -71,6 +78,7 @@ export class AuthService {
   public setLoggedIn() {
     if (this.isUserLoggedIn$.value == false) {
       this.isUserLoggedIn$.next(true);
+
       console.log('Olet nyt kirjautunut.');
     }
   }
@@ -136,7 +144,8 @@ export class AuthService {
   }
 
   public async handleNotLoggedIn() {
-    console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.')
+    console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.');
+    
     const loginUrl = await this.sendAskLoginRequest('own');
     // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
     const currentRoute = window.location.pathname + window.location.search;
@@ -190,7 +199,9 @@ export class AuthService {
     }
     try {
       const userInfo = await this.getMyUserInfo(courseID);
-      if (userInfo !== null) this.user$.next(userInfo);
+      if (userInfo !== null) {
+        this.user$.next(userInfo);
+      }
     } catch (error: any) {
       this.handleError(error);
     }
@@ -417,7 +428,7 @@ export class AuthService {
       this.errorService.handleServerError(error);
     }
   }
-  
+
 }
 
 export interface LoginResponse {

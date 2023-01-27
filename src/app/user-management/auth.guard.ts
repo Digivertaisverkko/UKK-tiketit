@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = async () => {
   // const location = inject(Location);
 
   if (authService.getIsUserLoggedIn()) {
-    // console.log('authGuard: olet kirjautunut.');
+    console.log('authGuard: olet kirjautunut.');
     return true
   } else {
     console.log('authGuard: et ole kirjautunut.');
@@ -20,10 +20,9 @@ export const authGuard: CanActivateFn = async () => {
         URL sisältää login id:n. */
         const route = window.location.pathname + window.location.search;
         if (route.startsWith('/login') == false) {
-          // Linkkejä valittaessa on voitu asettaa.
           if (window.localStorage.getItem('REDIRECT_URL') == null) {
             window.localStorage.setItem('REDIRECT_URL', route);
-            console.log('Tallennettiin redirect URL: ' + route);
+            console.log('Tallennettiin redirect URL: ' + route + ', johon ohjataan kirjautumisen jälkeen.');
           }
         }
         const loginUrl = await authService.sendAskLoginRequest('own');
