@@ -153,18 +153,21 @@ export class TicketService {
     return response;
   }
 
-  public async sendFaq(courseID: string, newFaq: UusiUKK) {
+  // ID on kurssi ID tai UKK:n ID riippuen, lisätäänkö uusi vai muokataanko vanhaa UKK:a.
+  public async sendFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
     const httpOptions = this.getHttpOptions();
     let response: any;
-    const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+    let url: string;
+    if (editFaq?.toString() === 'true') {
+      url = `${environment.apiBaseUrl}/tiketti/${ID}/muokkaaukk`;
+    } else {
+      url = `${environment.apiBaseUrl}/kurssi/${ID}/ukk`;
+    }
     const body = newFaq;
     try {
-      console.log('Yritetään lähettää UKK POST-kutsulla bodylla: ' + JSON.stringify(body) + '  URL:iin "' +
-      url + '"');
-      response = await firstValueFrom(this.http.post<any>(url, body, httpOptions));
-      console.log(
-        'saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response)
-      );
+      console.log('Yritetään lähettää body: ' + JSON.stringify(body) + '  URL:iin "' + url + '"');
+      response = await firstValueFrom(this.http.post<UusiUKK>(url, body, httpOptions));
+      console.log('saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -177,12 +180,9 @@ export class TicketService {
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' +
-      url + '"');
+      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' + url + '"');
       response = await firstValueFrom(this.http.post<UusiTiketti>(url, body, httpOptions));
-      console.log(
-        'saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response)
-      );
+      console.log('saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -301,12 +301,11 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     this.auth.setLoggedIn();
     return response;
   }
 
-  // Palauta yhden tiketin tiedot.
+  // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -318,7 +317,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     let ticket: Tiketti = response;
     response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;

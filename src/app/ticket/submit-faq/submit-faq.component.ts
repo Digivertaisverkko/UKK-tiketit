@@ -22,8 +22,8 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public faqTitle: string = '';
   public isInIframe: boolean;
   public originalTicket: Tiketti | undefined;
-  // public userName: string | null = '';
   public userName: string = '';
+  public editExisting: boolean;
   // public user$ = this.authService.trackUserInfo();
 
   private courseId: string = this.ticketService.getActiveCourse();
@@ -40,9 +40,11 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       this.isInIframe = getIsInIframe();
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         message => { this._snackBar.open(message, 'OK') });
+      this.editExisting = window.history.state.editFaq ?? false;
   }
 
   ngOnInit(): void {
+    console.log('editoidaan UKK:a: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
     this.authService.trackUserInfo().subscribe(response => {
       if (response.nimi !== null) this.userName = response.nimi;
@@ -132,7 +134,8 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
 
     console.log(newFaq);
 
-    this.ticketService.sendFaq(this.courseId, newFaq)
+    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
+    this.ticketService.sendFaq(id, newFaq, this.editExisting)
       .then(() => { this.goBack() })
       .catch(error => {
         console.error(error.message);
