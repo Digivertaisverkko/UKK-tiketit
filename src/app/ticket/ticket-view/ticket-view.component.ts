@@ -18,7 +18,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public ticket: Tiketti;
   public tila: string;
   public newCommentState: 3 | 4 | 5 = 4;
-  // tila: typeof Tila | typeof State;
   public commentText: string;
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
@@ -26,7 +25,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private timeInterval: Subscription = new Subscription();
   private readonly currentDate = new Date().toDateString();
 
-  // messageSubscription: Subscription;
   public message: string = '';
   public userRole: string = '';
   private userName: string = '';
@@ -73,7 +71,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           this.isLoaded = true;
         },
         error: error => {
-          this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+          switch (error.tunnus) {
+            case '1003':
+              this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+              break;
+            default:
+              this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:Kysymyksen näyttäminen epäonnistui`;
+          }
+
           this.isLoaded = true;
         }
       })
@@ -101,13 +106,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       var dateString = timestamp.toDateString();
     }
     // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    if (dateString == this.currentDate) {
-      // console.log(' on tänään');
-      return true;
-    } else {
-      // console.log('ei ole tänään');
-      return false
-    }
+    return dateString == this.currentDate ? true : false
   }
 
   public ngOnDestroy(): void {

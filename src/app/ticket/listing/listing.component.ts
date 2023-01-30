@@ -166,9 +166,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   private trackLoginState(courseIDcandinate: string) {
     this.authService.onIsUserLoggedIn().subscribe(response => {
       this.isLoaded = true;
-      if (response == true) {
-        this.updateLoggedInView(courseIDcandinate);
-      }
+      if (response == true) this.updateLoggedInView(courseIDcandinate);
     });
   }
 
