@@ -49,7 +49,7 @@
 </mat-toolbar>
 
 <mat-menu #accountMenu="matMenu">
-  <button mat-menu-item (click)="toggleLanguage()" i18n="@@vaihda kieli" [disabled]="disableLanguageSelection">Change to english</button>
+  <button mat-menu-item (click)="toggleLanguage()" i18n="@@vaihda kieli" [disabled]="disableLanguageSelection">Change to English</button>
 
   <button mat-menu-item (click)="logOut()" *ngIf="isUserLoggedIn$ | async; else logIn" i18n="@@Kirjaudu ulos">Kirjaudu ulos</button>
   <ng-template #logIn>
