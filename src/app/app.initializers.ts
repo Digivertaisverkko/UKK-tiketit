@@ -6,10 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 export const initializeLanguage = (): Promise<void> | void => {
 
   const language = getLanguage();
-
+  localStorage.setItem('language', language);
   document.documentElement.lang = language;
   // registerLocaleData(localeFi, 'fi-FI');
-  if (language && language !== 'fi-FI') {
+  if (language == 'en-US') {
     // Pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
       .then(response => response.json())
@@ -26,10 +26,11 @@ export const initializeLanguage = (): Promise<void> | void => {
 function getLanguage(): string {
 
   const url = new URL(window.location.href);
-  const urlLang = url.searchParams.get('lang');
-  var language: string | null;
+  var language: string;
   // console.log('urlLang: ' + urlLang);
 
+  // Upotuksessa kieli tulee URL-parametrina.
+  const urlLang = url.searchParams.get('lang');
   if (urlLang !== null) {
     if (urlLang == 'en') {
       language = 'en-US';
@@ -42,17 +43,19 @@ function getLanguage(): string {
       console.log('Tuntematon kieli: "' + urlLang  + '", käytetään englantia.');
     }
   } else {
-    // Jos käyttäjä on aiemmin valinnut kielen.
-    language = localStorage.getItem('language');
-    // Oletuskieli
-    if (language == null || language == undefined) {
-      if (isInIframe()) {
-        console.log('Ei tallennettua kieltä, valitaan upotuksessa englanti.');
-        language = 'en-US';
+    var savedlanguage: string | null = localStorage.getItem('language');
+    if (savedlanguage !== null) {
+      if (savedlanguage === 'en-US' || savedlanguage === "fi-FI") {
+        language = savedlanguage;
       } else {
-        console.log('Ei tallennettua kieltä, valitaan oletuksena suomi.');
-        language = 'fi-FI';
+        console.error('app.initializers.ts: Tuntematon tallennettu kieli: ' + savedlanguage);
+        console.log('Käytetään oletuskieltä');
+        // Oletus on upotuksessa englanti, koska käyttäjä ei voi vaihtaa kieltä toisin kuin normaalinäkymässä.
+        language = isInIframe() ? 'en-US' : 'fi-FI'; 
       }
+    } else {
+      console.log('Ei kieltä tallennettuna tai URL:ssa, käytetään oletusta.');
+      language = isInIframe() ? 'en-US' : 'fi-FI'; 
     }
   }
 
