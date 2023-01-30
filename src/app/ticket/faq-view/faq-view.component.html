@@ -2,9 +2,13 @@
 
 <div class="faq-view" *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer">
     <span>{{ courseName }}</span>
   </h2>
+
+  <ng-template #verticalSpacer>
+    <div class="vertical-spacer"></div>
+  </ng-template>
 
   <app-to-beginning-button></app-to-beginning-button>
 
