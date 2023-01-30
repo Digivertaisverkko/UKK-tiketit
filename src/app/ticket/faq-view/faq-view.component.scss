@@ -7,6 +7,11 @@
   height: 1rem;
 }
 
+#top-buttons {
+  justify-content: flex-start;
+  gap: 4rem;
+}
+
 // .short-field-value:last-child {
 //   margin-bottom: 1.5rem;
 // }

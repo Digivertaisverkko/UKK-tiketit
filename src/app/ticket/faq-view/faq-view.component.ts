@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
+import { UserManagementModule } from 'src/app/user-management/user-management.module';
 import { TicketService, Tiketti } from '../ticket.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class FaqViewComponent implements OnInit {
   public isInIframe: boolean = true;
   public isLoaded: boolean = false;
   public ticket: Tiketti = {} as Tiketti;
+  public user: User = <User>{};
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(
@@ -22,6 +24,9 @@ export class FaqViewComponent implements OnInit {
     private route: ActivatedRoute,
     private ticketService: TicketService
   ) {
+    this.auth.trackUserInfo().subscribe(response => {
+        this.user = response;
+      });
   }
 
   ngOnInit(): void {
@@ -56,6 +61,10 @@ export class FaqViewComponent implements OnInit {
           this.isLoaded = true;
         });
     }
+  }
+
+  editFaq() {
+
   }
 
   private getIfInIframe() {
