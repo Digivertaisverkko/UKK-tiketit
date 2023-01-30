@@ -86,10 +86,8 @@ export class HeaderComponent implements OnInit {
     const url = new URL(window.location.href);
     if (url.searchParams.get('lang') !== null) {
       this.disableLanguageSelection = true;
-      console.log(' kieli disabloitu');
     } else {
       this.disableLanguageSelection = false;
-      console.log(' kieli enabloitu');
     };
   }
 
