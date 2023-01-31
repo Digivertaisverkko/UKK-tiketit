@@ -43,6 +43,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public displayedTicketsCount: number = 0;
+  public displayedFAQCount: number = 0;
   public FAQisLoaded: boolean = false;
   public isCourseIDvalid: boolean = false;
   public isInIframe: boolean;
@@ -289,6 +290,7 @@ export class ListingComponent implements OnInit, OnDestroy {
           );
           // console.log('Saatiin vastaus (alla):');
           // console.dir(SortableData);
+          this.displayedFAQCount = this.numberOfFAQ;
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
@@ -322,12 +324,11 @@ export class ListingComponent implements OnInit, OnDestroy {
     if (isTicket) {
       this.dataSource.filter = filterValue.trim().toLowerCase();
       
-      
       console.log('kysymysten määrä: ' + this.numberOfQuestions);
       // this.displayedTicketCount = this.dataSource.data.values.length === 0
     } else {
       this.dataSourceFAQ.filter = filterValue.trim().toLowerCase();
-      this.dataSourceFAQ.data.length;
+      this.displayedFAQCount = this.dataSourceFAQ.data.length;
     }
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
