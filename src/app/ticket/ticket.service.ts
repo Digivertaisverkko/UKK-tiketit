@@ -401,6 +401,10 @@ export class TicketService {
     return options;
   }
 
+  private getMethodName() {
+    return this.getMethodName.caller.name
+}
+
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
@@ -414,6 +418,8 @@ export class TicketService {
 }
 
 // ========== Rajapinnat ==============
+
+// Jäsenmuuttujien järjestys pitäisi vastata palvelimen API-dokumenttia.
 
 export interface Error {
   tunnus: number;

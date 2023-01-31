@@ -47,7 +47,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     console.log('editoidaan UKK:a: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
     this.authService.trackUserInfo().subscribe(response => {
-      if (response.nimi !== null) this.userName = response.nimi;
+      this.userName = response?.nimi;
     })
     if (this.ticketId !== null) {
       this.ticketService.getTicketInfo(this.ticketId)
@@ -82,7 +82,6 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
           }
         });
     }
-
     this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response })
       .catch( error => { console.error(error.message) });
@@ -132,7 +131,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       vastaus: this.faqAnswer,
     }
 
-    console.log(newFaq);
+    // console.log(newFaq);
 
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.sendFaq(id, newFaq, this.editExisting)
