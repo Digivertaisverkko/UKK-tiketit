@@ -52,7 +52,6 @@ export class TicketService {
       } else {
         courseID = String(this.activeCourse);
       }
-
     return courseID;
   }
 
