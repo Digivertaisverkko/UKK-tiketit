@@ -47,9 +47,7 @@ export class AuthService {
   /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
     olla jo local storagessa. */
   public async initialize() {
-    if (window.localStorage.getItem('SESSION_ID') == null) {
-      return
-    }
+    if (window.localStorage.getItem('SESSION_ID') == null) return
     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
     if (savedCourseID !== null) {
       // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
@@ -69,16 +67,13 @@ export class AuthService {
       window.localStorage.setItem('COURSE_ID', courseID);
       // Nimi ei vielä käytössä.
       // this.activeCourse$.next({ id: courseID, nimi: ''});
-      if (this.user$.value.id === 0) {
-        this.getUserInfo();
-      }
+      if (this.user$.value.id === 0) this.getUserInfo();
     }
   }
 
   public setLoggedIn() {
     if (this.isUserLoggedIn$.value == false) {
       this.isUserLoggedIn$.next(true);
-
       console.log('Olet nyt kirjautunut.');
     }
   }
@@ -201,9 +196,7 @@ export class AuthService {
     }
     try {
       const userInfo = await this.getMyUserInfo(courseID);
-      if (userInfo !== null) {
-        this.user$.next(userInfo);
-      }
+      if (userInfo !== null) this.user$.next(userInfo);
     } catch (error: any) {
       this.handleError(error);
     }

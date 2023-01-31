@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
-import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { interval, startWith, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
@@ -11,7 +11,7 @@ import { getIsInIframe } from '../functions/isInIframe';
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
-export class TicketViewComponent implements OnInit, OnDestroy {
+export class TicketViewComponent implements OnInit {
   public courseName: string = '';
   public errorMessage: string = '';
   public isInIframe: boolean;
@@ -22,7 +22,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
-  private timeInterval: Subscription = new Subscription();
   private readonly currentDate = new Date().toDateString();
 
   public message: string = '';
@@ -52,7 +51,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         if (response.nimi !== undefined ) this.userName = response.nimi;
     });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
-    this.timeInterval = interval(600000)
+    interval(600000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
@@ -109,10 +108,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     return dateString == this.currentDate ? true : false
   }
 
-  public ngOnDestroy(): void {
-    this.timeInterval.unsubscribe();
-  }
-
   // private trackUserRole() {
   //   this.auth.onGetUserRole().subscribe(response => {
   //     // console.log('saatiin rooli: ' + response);
@@ -138,15 +133,13 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       })
       .then( () => { this.commentText = '' } )
       .catch(error => {
-        //console.dir(error);
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
-        console.log(JSON.stringify(error));
       });
   }
 
-  public goSubmitFaqWithId(): void {
-    let url:string = '/submit-faq/' + this.ticketID;
-    console.log('submit-faq: url: ' + url);
-    this.router.navigateByUrl(url);
-  }
+  // public goSubmitFaqWithId(): void {
+  //   let url:string = '/submit-faq/' + this.ticketID;
+  //   console.log('submit-faq: url: ' + url);
+  //   this.router.navigateByUrl(url);
+  // }
 }

@@ -46,13 +46,10 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    // this.updateUserRole();
-    // this.updateUserName();
-    // this.updateUserEmail();
-    // this.router.events.subscribe(() => {
+    this.router.events.subscribe(() => {
+      
+    });
       this.trackUserInfo();
-    // });
   }
 
   // (route.startsWith('/login') == false) {
@@ -64,19 +61,13 @@ export class HeaderComponent implements OnInit {
         let newUserName: string = response.nimi;
         if (newUserName.length > 0) {
           newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
-          if (newUserName !== this.userName) {
-            this.userName = newUserName;
-          }
+          if (newUserName !== this.userName) this.userName = newUserName;
         } else {
           this.userName = '';
         }
 
         // TODO: tarkastus, onko muuttunut.
-        if (response.sposti.length > 0) {
-          this.userEmail = response.sposti;
-        } else {
-          this.userEmail = '';
-        }
+        this.userEmail = response.sposti ?? '';
         this.setUserRole(response.asema);
       }
     })
@@ -95,16 +86,13 @@ export class HeaderComponent implements OnInit {
     let role: string = '';
       switch (asema) {
         case 'opiskelija': {
-          role = $localize`:@@Opiskelija:Opiskelija`;
-          break;
+          role = $localize`:@@Opiskelija:Opiskelija`; break;
         }
         case 'opettaja': {
-          role = $localize`:@@Opettaja:Opettaja`;
-          break;
+          role = $localize`:@@Opettaja:Opettaja`; break;
         }
         case 'admin': {
-          role = $localize`:@@Admin:Järjestelmävalvoja`;
-          break;
+          role = $localize`:@@Admin:Järjestelmävalvoja`; break;
         }
         default: {
           this.userRole = '';
