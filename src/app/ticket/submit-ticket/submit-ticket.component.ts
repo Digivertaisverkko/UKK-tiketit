@@ -67,10 +67,10 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     const courseID = this.ticketService.getActiveCourse();
     console.log(this.newTicket);
     this.ticketService.addTicket(courseID, this.newTicket)
-      .then(() => {
-        this.goBack()
-      }).catch( error => {
-        console.error(error.message);
+      .then(() => this.goBack()
+      ).catch( error => {
+        // TODO: lisää eri virhekoodeja?
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
   }
 
