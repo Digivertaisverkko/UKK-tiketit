@@ -5,16 +5,16 @@
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
   <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName"><span>{{courseName}}</span></h2>
 
+  <section *ngIf="isCourseIDvalid">
+
   <div class="input-field-wrapper">
     <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">{{headline}}</h3>
     <!--Hakutoiminto-->
     <mat-form-field class="filteringField" *ngIf="numberOfQuestions !== 0">
-      <mat-label i18n="@@Hae hae kysymystä">Hae kysymystä</mat-label>
+      <mat-label i18n="@@Hae kysymystä">Hae kysymystä</mat-label>
       <input matInput (keyup)="applyFilter($event, true)" placeholder="" #input>
     </mat-form-field>
   </div>
-
-  <section *ngIf="isCourseIDvalid">
 
   <table mat-table [dataSource]="dataSource" [hidden]="displayedTicketsCount === 0" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">

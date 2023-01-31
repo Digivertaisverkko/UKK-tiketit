@@ -3,12 +3,12 @@
 // Leveys on tässä näkymässä leveämpi kuin muilla taulukoiden vuoksi.
 section, app-error-card { width: 103%; }
 
-.main-header, #tickets-header, section, app-error-card {
+section, app-error-card {
   margin-left: -15px;
 }
 
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
-h2, h3 { padding-left: 20px; }
+h3 { padding-left: 20px; }
 
 h2 { padding-right: 2rem; }
 
