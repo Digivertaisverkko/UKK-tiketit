@@ -79,14 +79,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   ) {
     this.pollingRateMin = (environment.production == true ) ? 1 : 15;
     this.isInIframe = getIsInIframe();
-    this.ticketMessageSub = this.ticket.onMessages().subscribe(message => {
-      if (message) {
-        this.errorMessage = message;
-      } else {
-        // Poista viestit, jos saadaan tyhjä viesti.
-        this.errorMessage = '';
-      }
-    });
+    this.ticketMessageSub = this.ticket.onMessages().subscribe(message =>
+      this.errorMessage = message ?? '');
 
     // this.isLoggedIn$ = this.authService.onIsUserLoggedIn();
 
@@ -111,8 +105,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.username = response?.nimi ?? '';
       this.userRole = response?.asema ?? '';
     });
-    // this.username = this.authService.getUserName();
-    // this.userRole = this.authService.getUserRole();
     this.trackScreenSize();
     this.route.queryParams.subscribe(params => {
       var courseIDcandinate: string = params['courseID'];
@@ -121,14 +113,17 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
+      if (this.courseID !== null) this.showCourseName(courseIDcandinate);
+      this.ticket.setActiveCourse(courseIDcandinate);
+
       if (params['sessionID'] !== undefined) {
         const route = window.location.pathname + window.location.search;
-        console.log(' URL on: ' + route);
+        console.log('URL on: ' + route);
         console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
         this.authService.setSessionID(params['sessionID']);
       }
+
       this.showFAQ(courseIDcandinate);
-      this.ticket.setActiveCourse(courseIDcandinate);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
@@ -178,7 +173,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
           this.isCourseIDvalid = true;
           this.ticket.setActiveCourse(this.courseID);
-          if (this.courseID !== null) this.showCourseName(this.courseID);
         }
       }
     }).then(() => this.pollQuestions()
