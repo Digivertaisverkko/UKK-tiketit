@@ -72,6 +72,10 @@
     <h2 i18n="@@Vastaus">Vastaus</h2>
     <app-editor [(editorContent)]="faqAnswer"></app-editor>
 
+    <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
+      message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+    </app-error-card>
+
     <div class="theme-actions">
       <div class="spacer"></div>
         <button

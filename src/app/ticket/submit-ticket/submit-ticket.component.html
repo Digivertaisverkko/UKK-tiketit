@@ -76,6 +76,7 @@
     </section>
 
     <app-editor [(editorContent)]="message"></app-editor>
+
     <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
       message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
     </app-error-card>

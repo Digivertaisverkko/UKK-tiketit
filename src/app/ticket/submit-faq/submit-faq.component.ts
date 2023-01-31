@@ -24,6 +24,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public originalTicket: Tiketti | undefined;
   public userName: string = '';
   public editExisting: boolean;
+  public errorMessage: string = '';
   // public user$ = this.authService.trackUserInfo();
 
   private courseId: string = this.ticketService.getActiveCourse();
@@ -130,14 +131,12 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       ],
       vastaus: this.faqAnswer,
     }
-
     // console.log(newFaq);
-
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.sendFaq(id, newFaq, this.editExisting)
       .then(() => { this.goBack() })
       .catch(error => {
-        console.error(error.message);
+        this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
       });
   }
 
