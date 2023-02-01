@@ -22,7 +22,7 @@
 
   <section class="user-info">
 
-    <div class="theme-header-text" *ngIf="userName.length > 0">
+    <div class="theme-header-text" *ngIf="user.nimi.length > 0">
 
       <!-- <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
       alt="Vaihda kieli suomeksi"></span>
@@ -30,14 +30,14 @@
     <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
       alt="Vaihda kieli englanniksi"></span> -->
 
-      {{ (userName.length > maxUserLength)? (userName | slice:0:maxUserLength) + '...':(userName) }}
+      {{ (user.nimi.length > maxUserLength)? (user.nimi | slice:0:maxUserLength) + '...':(user.nimi) | titlecase}}
     </div>
 
-    <div class="email" *ngIf="userName.length === 0 && userEmail.length > 0" class="theme-header-text">
-      {{ (userEmail.length > maxUserLength)? (userEmail | slice:0:maxUserLength) + '...':(userEmail) }}
+    <div class="email" *ngIf="user.nimi.length === 0 && user.sposti.length > 0" class="theme-header-text">
+      {{ (user.sposti.length > maxUserLength)? (user.sposti | slice:0:maxUserLength) + '...':(user.sposti) }}
     </div>
 
-    <div class="theme-header-text-small">{{userRole}}</div>
+    <div class="theme-header-text-small">{{userRole | titlecase}}</div>
 
   </section>
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ResolveEnd, Router  } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth.service';
+import { AuthService, User } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,12 +16,8 @@ export class HeaderComponent implements OnInit {
   public isLoggedIn: boolean = false;
   public disableLanguageSelection: boolean = false;
   public readonly maxUserLength = 40;
+  public user: User = {} as User;
   public userRole: string = '';
-  public userName: string = '';
-  public userEmail: string = '';
-  public hideLogging: boolean = true;
-  private currentRoute: string = '';
-
   get language(): string {
     return this._language;
   }
@@ -70,16 +66,15 @@ export class HeaderComponent implements OnInit {
   trackUserInfo() {
     this.authService.trackUserInfo().subscribe(response => {
         // console.log('header: saatiin user info: ' + response);
-        let newUserName: string = response?.nimi ?? '';
+        this.user = response;
+        // let newUserName: string = response?.nimi ?? '';
         // console.log('käyttäjänimi:  '+ newUserName);
-        if (newUserName.length > 0) {
-          newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
-          if (newUserName !== this.userName) this.userName = newUserName;
-        } else {
-          this.userName = '';
-        }
-        // TODO: tarkastus, onko muuttunut.
-        this.userEmail = response?.sposti;
+        // if (newUserName.length > 0) {
+        //   newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
+        //   if (newUserName !== this.userName) this.userName = newUserName;
+        // } else {
+        //   this.userName = '';
+        // }
         this.setUserRole(response?.asema);
     })
   }
@@ -99,58 +94,15 @@ export class HeaderComponent implements OnInit {
           role = $localize`:@@Opettaja:Opettaja`; break;
         }
         case 'admin': {
-          role = $localize`:@@Admin:Järjestelmävalvoja`; break;
+          role = $localize`:@@Admin:Admin`; break;
         }
         default: {
-          this.userRole = '';
+          role = '';
         }
       }
-        this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
+      this.userRole = role;
   }
 
-  // updateUserName() {
-  //   this.authService.onGetUserName().subscribe(response => {
-  //       if (response.length > 0 ) {
-  //         this.userName = response.charAt(0).toUpperCase() + response.slice(1);
-  //       } else {
-  //         this.userName = '';
-  //       }
-  //   })
-  // }
-
-  // updateUserEmail() {
-  //   this.authService.onGetUserEmail().subscribe(response => {
-  //       if (response.length > 0 ) {
-  //         this.userEmail = response;
-  //       } else {
-  //         this.userEmail = '';
-  //       }
-  //   })
-  // }
-
-  // updateUserRole() {
-  //   this.authService.onGetUserRole().subscribe(response => {
-  //     let role: string = '';
-  //     switch (response) {
-  //       case 'opiskelija': {
-  //         role = $localize`:@@Opiskelija:Opiskelija`;
-  //         break;
-  //       }
-  //       case 'opettaja': {
-  //         role = $localize`:@@Opettaja:Opettaja`;
-  //         break;
-  //       }
-  //       case 'admin': {
-  //         role = $localize`:@@Admin:Järjestelmävalvoja`;
-  //         break;
-  //       }
-  //       default: {
-  //         this.userRole = '';
-  //       }
-  //     }
-  //       this.userRole = role.charAt(0).toUpperCase() + role.slice(1);
-  //   })
-  // }
 
   // public changeLanguage(language: 'en-US' | 'fi-FI') {
   //   this.language = language;
