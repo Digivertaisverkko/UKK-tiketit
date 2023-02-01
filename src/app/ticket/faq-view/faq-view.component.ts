@@ -38,7 +38,7 @@ export class FaqViewComponent implements OnInit {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.auth.getUserName.length == 0) {
-            this.auth.saveUserInfo(String(this.ticket.kurssi));
+            this.auth.fetchUserInfo(String(this.ticket.kurssi));
           }
         })
         .then(() => {

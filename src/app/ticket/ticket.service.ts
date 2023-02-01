@@ -402,7 +402,7 @@ export class TicketService {
 
   private getMethodName() {
     return this.getMethodName.caller.name
-}
+  }
 
 
   private handleError(error: HttpErrorResponse) {

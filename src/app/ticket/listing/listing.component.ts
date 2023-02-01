@@ -115,8 +115,8 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
-      if (this.courseID !== null) this.showCourseName(courseIDcandinate);
       this.ticket.setActiveCourse(courseIDcandinate);
+      this.showCourseName(courseIDcandinate);
 
       if (params['sessionID'] !== undefined) {
         const route = window.location.pathname + window.location.search;
@@ -132,7 +132,7 @@ export class ListingComponent implements OnInit, OnDestroy {
       if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
         // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
         if (this.authService.getUserName.length === 0) {
-          this.authService.saveUserInfo(courseIDcandinate);
+          this.authService.fetchUserInfo(courseIDcandinate);
         }
         this.updateLoggedInView(courseIDcandinate);
       }
@@ -219,7 +219,7 @@ export class ListingComponent implements OnInit, OnDestroy {
             this.displayedTicketsCount = this.numberOfQuestions;
 
             this.dataSource.sort = this.sortQuestions;
-            console.log('----- näytetään: ' + this.dataSource.data.values.length);
+            // console.log('----- näytetään: ' + this.dataSource.data.values.length);
             // console.log('------ data source : ' + this.dataSource.data.length);
             // this.dataSource.paginator = this.paginator;
           }
@@ -288,8 +288,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               tyyppi: tyyppi
             }))
           );
-          // console.log('Saatiin vastaus (alla):');
-          // console.dir(SortableData);
           this.displayedFAQCount = this.numberOfFAQ;
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;

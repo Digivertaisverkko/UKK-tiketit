@@ -60,7 +60,7 @@ export class TicketViewComponent implements OnInit {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.userName.length == 0) {
-            this.auth.saveUserInfo(String(this.ticket.kurssi));
+            this.auth.fetchUserInfo(String(this.ticket.kurssi));
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
           this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
@@ -70,8 +70,9 @@ export class TicketViewComponent implements OnInit {
           this.isLoaded = true;
         },
         error: error => {
+          // console.dir(error);
           switch (error.tunnus) {
-            case '1003':
+            case 1003:
               this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
               break;
             default:

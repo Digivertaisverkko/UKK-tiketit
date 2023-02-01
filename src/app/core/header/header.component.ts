@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute, ResolveEnd, Router  } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
@@ -11,15 +11,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  public isUserLoggedIn$: Observable<boolean>;
-  public isUserLoggedIn: boolean = false;
+  // public isUserLoggedIn$: Observable<boolean>;
+  // Async pipeä varten.
+  public isLoggedIn: boolean = false;
   public disableLanguageSelection: boolean = false;
   public readonly maxUserLength = 40;
   public userRole: string = '';
   public userName: string = '';
   public userEmail: string = '';
   public hideLogging: boolean = true;
-  public sliderChecked: boolean;
+  private currentRoute: string = '';
 
   get language(): string {
     return this._language;
@@ -40,36 +41,43 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private ticketService: TicketService)
     {
-    this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
+    // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      this.isLoggedIn = response;
+    })
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
+    // this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
   }
 
   ngOnInit(): void {
-    this.router.events.subscribe(() => {
-      
+    this.trackUserInfo();
+    this.router.events.subscribe(event => {
+      if (event instanceof ResolveEnd) {
+        console.dir(event);
+        let courseID: string | null = this.authService.getActiveCourse();
+        console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
+        if (this.isLoggedIn === true && courseID !== null && courseID.length > 0) {
+          this.authService.fetchUserInfo(courseID);
+        }
+      }
     });
-      this.trackUserInfo();
+
   }
 
   // (route.startsWith('/login') == false) {
 
   trackUserInfo() {
     this.authService.trackUserInfo().subscribe(response => {
-      if (response !== null) {
-
-        let newUserName: string = response.nimi;
+        let newUserName: string = response?.nimi ?? '';
         if (newUserName.length > 0) {
           newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
           if (newUserName !== this.userName) this.userName = newUserName;
         } else {
           this.userName = '';
         }
-
         // TODO: tarkastus, onko muuttunut.
-        this.userEmail = response.sposti ?? '';
-        this.setUserRole(response.asema);
-      }
+        this.userEmail = response?.sposti ?? '';
+        this.setUserRole(response?.asema ?? '');
     })
   }
 
@@ -149,12 +157,10 @@ export class HeaderComponent implements OnInit {
   //   this.language = language;
   // }
 
-
   public toggleLanguage() {
     console.log(' --- kieli: ' + this.language);
     this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
   }
-
 
   public goToFrontPage() {
     if (this.authService.getIsUserLoggedIn() == true) {
