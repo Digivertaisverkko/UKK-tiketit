@@ -71,15 +71,20 @@ export class AuthService {
   }
 
   public setLoggedIn() {
-    if (this.isUserLoggedIn$.value == false) {
+    if (this.isUserLoggedIn$.value === false) {
       this.isUserLoggedIn$.next(true);
       console.log('Olet nyt kirjautunut.');
     }
   }
 
   public setNotLoggegIn() {
-    if (this.isUserLoggedIn$.value == true) {
+    // console.log('--- Not logged ---');
+    if (this.isUserLoggedIn$.value === true) {
       this.isUserLoggedIn$.next(false);
+    }
+    if (this.user$.value.nimi !== '') {
+      // console.log('lähetetään tyhjä user');
+      this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
     }
   }
 
@@ -128,7 +133,9 @@ export class AuthService {
   }
 
   public getSessionID(): string | null {
-    return window.localStorage.getItem('SESSION_ID');
+    const sessionID = (window.localStorage.getItem('SESSION_ID'));
+    if (sessionID === undefined || sessionID === null) this.setNotLoggegIn();
+    return sessionID;
   }
 
   private getMethodName() {
@@ -138,7 +145,6 @@ export class AuthService {
   public async handleNotLoggedIn() {
     console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.');
     this.setNotLoggegIn();
-    this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
     window.localStorage.clear();
     const loginUrl = await this.sendAskLoginRequest('own');
     // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
@@ -188,11 +194,11 @@ export class AuthService {
   // Tästä luovutaan. Jatkossa yksi käyttäjäobjekti on vain auth.service:ssä.
   public async fetchUserInfo(courseID: string) {
     if (window.localStorage.getItem('SESSION_ID') == null) {
-      console.error('Virhe: saveUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.');
-      return
+      console.error('Virhe: fetchUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.');
+      this.setNotLoggegIn();
     }
     if (courseID === null) {
-      console.error('Virhe: saveUserInfo(): Kurssi ID:ä, ei voida hakea tietoja.');
+      console.error('Virhe: fetchUserInfo(): Kurssi ID:ä, ei voida hakea tietoja.');
       return
     }
     try {
@@ -340,6 +346,7 @@ export class AuthService {
 
   // Tämään hetkinen kirjautumisen tila.
   public getIsUserLoggedIn(): Boolean {
+    this.getSessionID();
     return this.isUserLoggedIn$.value;
   }
 
@@ -352,7 +359,7 @@ export class AuthService {
     // console.log('session id on: ' + sessionID);
     var options;
     if (sessionID == null ) {
-      options = {}
+      options = {};
     } else {
       options = {
         headers: new HttpHeaders({
@@ -401,27 +408,25 @@ export class AuthService {
 
   // Suorita uloskirjautuminen.
   public async logOut(): Promise<any> {
-    const sessionID = window.localStorage.getItem('SESSION_ID');
+    const sessionID = this.getSessionID();
     if (sessionID == undefined) {
       console.error('authService.logout: ei session ID:ä.');
+      this.setNotLoggegIn();
+      window.localStorage.clear();
     } else {
-      this.setNotLoggegIn();
-      this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
-      window.localStorage.clear();
-    }
-    const httpOptions = this.getHttpOptions();
-    let response: any;
-    let url = environment.apiBaseUrl + '/kirjaudu-ulos';
-    try {
-      console.log('Lähetettäisiin logout-kutsu, mutta ei ole tukea sille vielä.');
-      // response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      // console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
-    } catch (error: any) {
-      this.handleError(error);
-    } finally {
-      this.setNotLoggegIn();
-      this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
-      window.localStorage.clear();
+      const httpOptions = this.getHttpOptions();
+      let response: any;
+      let url = environment.apiBaseUrl + '/kirjaudu-ulos';
+      try {
+        console.log('Lähetettäisiin logout-kutsu, mutta ei ole tukea sille vielä.');
+        // response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+        // console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
+      } catch (error: any) {
+        this.handleError(error);
+      } finally {
+        this.setNotLoggegIn();
+        window.localStorage.clear();
+      }
     }
   }
 
