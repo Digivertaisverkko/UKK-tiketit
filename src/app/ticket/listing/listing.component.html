@@ -16,7 +16,7 @@
     </mat-form-field>
   </div>
 
-  <table mat-table [dataSource]="dataSource" [hidden]="displayedTicketsCount === 0" matSort matSortActive="aikaleima"
+  <table mat-table [dataSource]="dataSource" [hidden]="dataSource.filteredData.length === 0" matSort matSortActive="aikaleima"
     matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
 
     <ng-container matColumnDef="tila">
@@ -87,7 +87,7 @@
 
   </table>
 
-    <p  *ngIf="dataSource.data.length === 0" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
+    <p  *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
     <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
     <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
 
@@ -116,12 +116,12 @@
 </div>
 
 <!-- <mat-card appearance="outlined" > -->
-  <p class="noItemsMessage" *ngIf="numberOfFAQ === 0 && FAQisLoaded" i18n="@@Ei yhtään UKK">
+  <p class="no-items-message" *ngIf="numberOfFAQ === 0 && FAQisLoaded" i18n="@@Ei yhtään UKK">
     Yhtään usein kysyttyä kysymystä ei ole lisätty.
   </p>
 <!-- </mat-card> -->
 
-<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="numberOfFAQ === 0"
+<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="dataSourceFAQ.filteredData.length === 0"
   matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 
   <ng-container matColumnDef="otsikko">
@@ -161,7 +161,7 @@
 </table>
 
   <!-- Kkun haku ei löydä mitään-->
-    <p *ngIf="displayedFAQCount === 0" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
+    <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
     <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
     <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
 

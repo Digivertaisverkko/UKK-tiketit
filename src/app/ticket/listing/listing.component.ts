@@ -42,8 +42,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   public columnDefinitionsFAQ: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
-  public displayedTicketsCount: number = 0;
-  public displayedFAQCount: number = 0;
   public FAQisLoaded: boolean = false;
   public isCourseIDvalid: boolean = false;
   public isInIframe: boolean;
@@ -215,9 +213,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             tableData = tableData.filter(ticket => ticket.tilaID !== 6)
             if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
             this.numberOfQuestions = tableData.length;
-
-            this.displayedTicketsCount = this.numberOfQuestions;
-
             this.dataSource.sort = this.sortQuestions;
             // console.log('----- näytetään: ' + this.dataSource.data.values.length);
             // console.log('------ data source : ' + this.dataSource.data.length);
@@ -288,7 +283,6 @@ export class ListingComponent implements OnInit, OnDestroy {
               tyyppi: tyyppi
             }))
           );
-          this.displayedFAQCount = this.numberOfFAQ;
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
@@ -318,15 +312,12 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   //hakutoiminto, jossa paginointi kommentoitu pois
   applyFilter(event: Event, isTicket: boolean ){
-    const filterValue = (event.target as HTMLInputElement).value;
+    let filterValue = (event.target as HTMLInputElement).value;
+    filterValue = filterValue.trim().toLowerCase();
     if (isTicket) {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
-      
-      console.log('kysymysten määrä: ' + this.numberOfQuestions);
-      // this.displayedTicketCount = this.dataSource.data.values.length === 0
+      this.dataSource.filter = filterValue;
     } else {
-      this.dataSourceFAQ.filter = filterValue.trim().toLowerCase();
-      this.displayedFAQCount = this.dataSourceFAQ.data.length;
+      this.dataSourceFAQ.filter = filterValue;
     }
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
