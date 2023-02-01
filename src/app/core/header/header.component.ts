@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
     // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
     this.authService.onIsUserLoggedIn().subscribe(response => {
       this.isLoggedIn = response;
+      // console.log('header: asetettiin kirjautumisen tila: ' + this.isLoggedIn);
     })
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     // this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
@@ -53,22 +54,24 @@ export class HeaderComponent implements OnInit {
     this.trackUserInfo();
     this.router.events.subscribe(event => {
       if (event instanceof ResolveEnd) {
-        console.dir(event);
+        // Testataan, ollaanko kirjautuneina.
+        this.authService.getSessionID();
         let courseID: string | null = this.authService.getActiveCourse();
-        console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
+        // console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
         if (this.isLoggedIn === true && courseID !== null && courseID.length > 0) {
           this.authService.fetchUserInfo(courseID);
         }
       }
     });
-
   }
 
   // (route.startsWith('/login') == false) {
 
   trackUserInfo() {
     this.authService.trackUserInfo().subscribe(response => {
+        // console.log('header: saatiin user info: ' + response);
         let newUserName: string = response?.nimi ?? '';
+        // console.log('käyttäjänimi:  '+ newUserName);
         if (newUserName.length > 0) {
           newUserName = newUserName.charAt(0).toUpperCase() + newUserName.slice(1);
           if (newUserName !== this.userName) this.userName = newUserName;
@@ -76,18 +79,14 @@ export class HeaderComponent implements OnInit {
           this.userName = '';
         }
         // TODO: tarkastus, onko muuttunut.
-        this.userEmail = response?.sposti ?? '';
-        this.setUserRole(response?.asema ?? '');
+        this.userEmail = response?.sposti;
+        this.setUserRole(response?.asema);
     })
   }
 
   updateMenu() {
     const url = new URL(window.location.href);
-    if (url.searchParams.get('lang') !== null) {
-      this.disableLanguageSelection = true;
-    } else {
-      this.disableLanguageSelection = false;
-    };
+    this.disableLanguageSelection =  (url.searchParams.get('lang') !== null) ? true : false;
   }
 
   setUserRole(asema: string): void {
