@@ -9,7 +9,7 @@ import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
 import { MatTab } from '@angular/material/tabs';
 
@@ -60,8 +60,9 @@ export class ListingComponent implements OnInit, OnDestroy {
   public headline: string = '';
   public readonly me: string =  $localize`:@@Minä:Minä`;
   public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  public username: string | null = '';
-  public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
+  // public username: string | null = '';
+  // public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
+  public user: User = {} as User;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -102,8 +103,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
     this.authService.trackUserInfo().subscribe(response => {
-      this.username = response?.nimi ?? '';
-      this.userRole = response?.asema ?? '';
+      this.user = response;
+      this.setTicketListHeadline();
     });
     this.trackScreenSize();
     this.route.queryParams.subscribe(params => {
@@ -134,7 +135,6 @@ export class ListingComponent implements OnInit, OnDestroy {
         }
         this.updateLoggedInView(courseIDcandinate);
       }
-      this.setTicketListHeadline();
       this.isLoaded = true;
     });
   }
@@ -231,8 +231,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   public setTicketListHeadline() {
-    let userRole = this.authService.getUserRole();
-    switch (userRole) {
+    // let userRole = this.authService.getUserRole();
+    switch (this.user.asema) {
       case 'opettaja':
         this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
       case 'admin':
@@ -240,7 +240,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       case 'opiskelija':
         this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
       default:
-        // Jos ei olla kirjautuneina.
         this.headline = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
     }
   }

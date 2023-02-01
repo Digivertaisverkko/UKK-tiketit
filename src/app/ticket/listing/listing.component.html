@@ -58,7 +58,7 @@
         Lähettäjä
       </th>
       <td class="td-align-right" mat-cell *matCellDef="let element">
-        {{ username === element.aloittajanNimi ? me : element.aloittajanNimi }}
+        {{ user.nimi === element.aloittajanNimi ? me : element.aloittajanNimi }}
       </td>
     </ng-container>
 
@@ -170,7 +170,7 @@
 
 </section>
 
-<div class="theme-actions" *ngIf="userRole === 'opettaja' || userRole === 'admin'"
+<div class="theme-actions" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
 [ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
   <button mat-raised-button color="primary" justify-content="flex-end" (click)="submitFaq()"
     i18n="@@Uusi UKK">Uusi UKK</button>
