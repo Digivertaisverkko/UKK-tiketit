@@ -2,35 +2,31 @@
 
 <div *ngIf="isLoaded">
 
-    <h2 class="main-header" *ngIf="courseName.length > 0">
-      <span>{{ courseName }}</span>
-    </h2>
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+    <span>{{ courseName }}</span>
+  </h2>
 
-    <section *ngIf="ticket.tila > 0">
 
     <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
 
     <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
     <div id="top-buttons" class="theme-actions">
-    <app-to-beginning-button></app-to-beginning-button>
-    <button
-      mat-raised-button
-      color="primary"
-      i18n="@@Tee UKK"
-      *ngIf="userRole === 'opettaja' || userRole === 'admin'"
-      (click)="goSubmitFaqWithId()"
-      >
-      Tee UKK
-    </button>
-  </div>
+      <app-to-beginning-button></app-to-beginning-button>
+      <button mat-raised-button color="primary" i18n="@@Kopioi UKK" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole === 'admin')"
+         routerLink="/submit-faq/{{ticketID}}">
+        Kopioi UKK:ksi
+      </button>
+    </div>
 
-  <!-- ----------- Kysymys -------------------------------------- -->
+    <section *ngIf="ticket.tila > 0">
 
-  <div class="ticket-header">
+    <!-------------- Kysymys ----------------------------------------->
 
-    <h3 class="sub-header">{{ ticket.otsikko }}</h3>
+    <div class="ticket-header">
 
-    <div class="spacer"></div>
+      <h3 class="sub-header">{{ ticket.otsikko }}</h3>
+
+      <div class="spacer"></div>
 
     <div class="user-info-block">
       <div class="text-info">
@@ -61,15 +57,17 @@
 
     <!-- TODO: Lisää tähän muiden kenttien näyttäminen. -->
 
+    <h4 class="sub-header" i18n="@@Viesti">Viesti</h4>
+
     <app-message [messageHtml]=ticket.viesti></app-message>
 
   <hr class="theme-divider">
 
   </section>
 
-  <!-- ----------- Keskustelu -------------------------------------- -->
+  <!-------------- Keskustelu ----------------------------------------->
 
-  <h3 class="sub-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h3>
+  <h4 class="sub-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h4>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 
@@ -111,7 +109,7 @@
 
   <div class="theme-actions">
 
-    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole !== 'opiskelija'">
+    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 && (userRole === 'opiskelija' || userRole ==='admin' && ticket.tila > 0)">
       <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
       <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
       <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>

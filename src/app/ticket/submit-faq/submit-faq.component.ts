@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { UusiUKK, TicketService, Kommentti, Tiketti } from '../ticket.service';
+import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
   selector: 'app-submit-faq',
@@ -19,11 +20,12 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public faqMessage: string = '';
   public faqProblem: string = '';
   public faqTitle: string = '';
+  public isInIframe: boolean;
   public originalTicket: Tiketti | undefined;
-  // public userName: string | null = '';
   public userName: string = '';
-
-  public user$ = this.authService.trackUserInfo();
+  public editExisting: boolean;
+  public errorMessage: string = '';
+  // public user$ = this.authService.trackUserInfo();
 
   private courseId: string = this.ticketService.getActiveCourse();
   private messageSubscription: Subscription;
@@ -36,13 +38,17 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     private router: Router,
     private ticketService: TicketService,
     ) {
+      this.isInIframe = getIsInIframe();
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         message => { this._snackBar.open(message, 'OK') });
+      this.editExisting = window.history.state.editFaq ?? false;
   }
 
   ngOnInit(): void {
+    console.log('editoidaan UKK:a: '+ this.editExisting);
+    this.isInIframe = getIsInIframe();
     this.authService.trackUserInfo().subscribe(response => {
-      if (response.nimi !== null) this.userName = response.nimi;
+      this.userName = response?.nimi;
     })
     if (this.ticketId !== null) {
       this.ticketService.getTicketInfo(this.ticketId)
@@ -77,7 +83,6 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
           }
         });
     }
-
     this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response })
       .catch( error => { console.error(error.message) });
@@ -88,7 +93,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   }
 
   public getSenderTitle(name: string, role: string): string {
-    if (name === this.authService.getUserName2()) {
+    if (name === this.authService.getUserName()) {
       return $localize`:@@Minä:Minä`
     }
     switch (role) {
@@ -126,13 +131,12 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       ],
       vastaus: this.faqAnswer,
     }
-
-    console.log(newFaq);
-
-    this.ticketService.sendFaq(this.courseId, newFaq)
+    // console.log(newFaq);
+    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
+    this.ticketService.sendFaq(id, newFaq, this.editExisting)
       .then(() => { this.goBack() })
       .catch(error => {
-        console.error(error.message);
+        this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
       });
   }
 

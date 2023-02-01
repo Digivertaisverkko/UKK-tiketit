@@ -1,6 +1,8 @@
-<h2 class="main-header" *ngIf="courseName.length > 0"><span>{{courseName}}</span></h2>
+<h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe"><span>{{courseName}}</span></h2>
 
 <div class="submit-ticket">
+
+  <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
   <app-to-beginning-button></app-to-beginning-button>
 
@@ -11,7 +13,7 @@
       <mat-form-field appearance="fill" class="sub-header">
         <textarea
           [(ngModel)]="titleText"
-          class="h3"
+          class="sub-header"
           #autosize="cdkTextareaAutosize"
           autocomplete="off"
           cdkAutosizeMaxRows="3"
@@ -75,6 +77,10 @@
 
     <app-editor [(editorContent)]="message"></app-editor>
 
+    <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
+      message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+    </app-error-card>
+
     <div class="theme-actions">
 
       <div class="spacer"></div>
@@ -83,8 +89,8 @@
           mat-raised-button color="primary"
           [disabled]="submitForm.invalid"
           (click)="sendTicket()"
-          i18n="@@Lähetä">
-          Lähetä
+          i18n="@@Lähetä opettajille">
+          Lähetä opettajille
         </button>
 
     </div>

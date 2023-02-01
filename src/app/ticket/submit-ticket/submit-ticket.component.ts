@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 import { UusiTiketti, TicketService } from '../ticket.service';
+import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
   selector: 'app-submit-ticket',
@@ -16,9 +17,10 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   titleText: string = '';
   assignmentText: string = '';
   public courseName: string = '';
+  public errorMessage: string = '';
   // public user: User;
+  public isInIframe: boolean;
   problemText: string = '';
-  messageText: string = '';
   newTicket: UusiTiketti = {} as UusiTiketti;
   public userName: string | null = '';
   userRole: string = '';
@@ -36,9 +38,9 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     private ticketService: TicketService,
     private _snackBar: MatSnackBar
     ) {
+      this.isInIframe = getIsInIframe();
       this.messageSubscription = this.ticketService.onMessages().subscribe(
         (message) => { this._snackBar.open(message, 'OK') });
-
     }
 
   ngOnInit(): void {
@@ -47,9 +49,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
       if (response.nimi !== null) this.userName = response.nimi;
       if (response.asema !== null) this.userRole = response.asema;
     })
-    // if (this.auth.getUserName2.length == 0) {
-    //   this.auth.saveUserInfo(String(courseID));
-    // }
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response;
     }).catch(() => {});
@@ -61,13 +60,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     this.router.navigateByUrl(url);
   }
 
-  private trackUserRole() {
-    this.auth.onGetUserRole().subscribe(response => {
-      console.log('saatiin rooli: ' + response);
-      this.userRole = response;
-    })
-  }
-
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
     this.newTicket.viesti = this.message;
@@ -75,10 +67,10 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     const courseID = this.ticketService.getActiveCourse();
     console.log(this.newTicket);
     this.ticketService.addTicket(courseID, this.newTicket)
-      .then(() => {
-        this.goBack()
-      }).catch( error => {
-        console.error(error.message);
+      .then(() => this.goBack()
+      ).catch( error => {
+        // TODO: lisää eri virhekoodeja?
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
   }
 

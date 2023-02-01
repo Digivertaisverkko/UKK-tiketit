@@ -10,13 +10,13 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit  {
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
-  private isLogged: boolean = false;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
+  private isLogged: boolean = false;
 
   constructor(
-      private authService: AuthService,
-      private router: Router
+    private authService: AuthService,
+    private router: Router
   ) {
     // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
   }
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit  {
   ngOnInit(): void {
     this.isInIframe = this.testIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
-    console.log(' iframe upotuksen tila: ' + this.isInIframe.toString());
+    console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.authService.initialize();
     this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response == true) {
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit  {
     if (this.isLogged == true ) {
       this.authService.logOut();
       this.authService.sendAskLoginRequest('own').then((response: any) => {
-          this.router.navigateByUrl(response);
+        this.router.navigateByUrl(response);
       }).catch ( () => {})
     } else {
       this.authService.handleNotLoggedIn();
@@ -50,9 +50,9 @@ export class AppComponent implements OnInit  {
 
   private testIframe () {
     try {
-        return window.self !== window.top;
+      return window.self !== window.top;
     } catch (e) {
-        return true;
+      return true;
     }
   }
 

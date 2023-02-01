@@ -3,11 +3,9 @@ mat-card {
   background-color: var(--error-color);
   min-width: unset;
   width: unset;
-  padding-top: 1em;
   margin-bottom: 1em;
   mat-card-title {
     font-size: 1.2rem;
-    margin-top: 0.5em;
     margin-bottom: 0.7rem;
   }
 }

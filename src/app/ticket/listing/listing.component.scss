@@ -1,20 +1,16 @@
 @import '/src/variables.scss';
 
-// Leveys on tässä näkymässä leveämpi kuin muilla leveämpien taulukoiden vuoksi.
-
+// Leveys on tässä näkymässä leveämpi kuin muilla taulukoiden vuoksi.
 section, app-error-card { width: 103%; }
 
-.main-header, #tickets-header, section, app-error-card {
+section, app-error-card {
   margin-left: -15px;
 }
 
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
-h2, h3 { padding-left: 20px; }
+h3 { padding-left: 20px; }
 
-h2 {
-  margin-top: 2.2rem;
-  padding-right: 2rem;
-}
+h2 { padding-right: 2rem; }
 
 .mdc-card__actions { min-height: 30px; }
 
@@ -25,13 +21,18 @@ table {
   line-height: 1.4rem;
 }
 
+.mat-mdc-header-row { background-color: #D3D3D3; }
+
 a {
-  // border: solid red 1px;
   color: unset;
   display: inline-block;
   text-decoration: none;
   width: 98%;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
 }
+
+.mat-mdc-row:hover { background-color: #f2f2f2 !important; }
 
 .state-wrapper {
   display: flex;
@@ -50,9 +51,6 @@ a {
   width: 1.8rem;
 }
 
-.mat-mdc-header-row { background-color: #D3D3D3; }
-
-.mat-mdc-row:hover { background-color: #f2f2f2 !important; }
 // td.mat-mdc-cell  {
 //   padding-left: 1em;
 //   padding-right: 1em;
@@ -92,8 +90,6 @@ a {
 // }
 
 [hidden] { display: none !important; }
-
-// mat-card { margin: auto; }
 
 .theme-actions {
   margin-right: -15px;
@@ -151,11 +147,10 @@ mat-card-actions {
 
   .mdc-data-table__header-row { height: 3em; }
 
-  tr.mat-mdc-row > td {
-    // padding: 22px
-    padding-top: 0.6em;
-    padding-bottom: 0.6em;
-  }
+  // Muuta anchorin kokoa tarvittaessa, mutta älä tätä.
+  // tr.mat-mdc-row > td {
+
+  // }
 
 }
 

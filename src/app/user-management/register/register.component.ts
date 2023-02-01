@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/core/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
 
 import { Output, EventEmitter} from '@angular/core';
 
@@ -19,7 +18,6 @@ export class RegisterComponent {
   public newPassword: string;
   public repassword: string;
   public minPasswordLength: number = 8;
-  public messageSub: Subscription;
   public serverMessage: string = '';
 
   constructor(private auth: AuthService,
@@ -28,14 +26,6 @@ export class RegisterComponent {
     this.email = '';
     this.newPassword  = '';
     this.repassword = '';
-    this.messageSub = this.auth.onErrorMessages().subscribe(message => {
-      if (message) {
-        this.serverMessage = message;
-      } else {
-        // Poista viestit, jos saadaan tyhjä viesti.
-        this.serverMessage = '';
-      }
-    })
   }
 
   changeActiveTab() {
@@ -57,7 +47,6 @@ export class RegisterComponent {
     this.email = '';
     this.newPassword  = '';
     this.repassword = '';
-    this.auth.clearMessages();
   }
 
 }

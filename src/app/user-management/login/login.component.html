@@ -57,10 +57,10 @@
 
     <!-- Custom-komponentti shared-moduulista. -->
     <app-error-card
-      *ngIf="serverErrorMessage.length > 0"
+      *ngIf="errorMessage.length > 0"
       i18n-title="@@Kirjautuminen ei onnistunut"
       title="Kirjautuminen ei onnistunut"
-      message="{{ serverErrorMessage }}"
+      message="{{ errorMessage }}"
       [styles]="{ margin: '1em 10% 1em 10%;'}"
     >
     </app-error-card>

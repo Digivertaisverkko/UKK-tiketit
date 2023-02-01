@@ -2,17 +2,27 @@
 
 <div class="faq-view" *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer">
     <span>{{ courseName }}</span>
   </h2>
 
-  <app-to-beginning-button></app-to-beginning-button>
+  <ng-template #verticalSpacer>
+    <div class="vertical-spacer"></div>
+  </ng-template>
+
+  <div id="top-buttons" class="theme-actions">
+    <app-to-beginning-button></app-to-beginning-button>
+    <button mat-raised-button color="primary" i18n="@@Muokkaa" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
+    (click)="editFaq()">
+    Muokkaa
+  </button>
+  </div>
 
   <section *ngIf="ticket.viesti !== undefined">
 
     <h3 class="sub-header">{{ ticket.otsikko }}</h3>
 
-   <!-- ---- Kysymys ---- -->
+    <!----------- Kysymys ----------->
 
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
       <p class="theme-label"><span i18n="@@Tehtävä">Tehtävä</span></p>
@@ -27,15 +37,15 @@
       <p class="short-field-value">{{ ticket.kentat[1].arvo }} </p>
     </div>
 
-    <h3 class="sub-header" i18n="@@Kysymys">Kysymys</h3>
+    <h4 class="sub-header" i18n="@@Kysymys">Kysymys</h4>
 
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
     <hr class="theme-divider">
 
-    <!-- ---- Vastaus ---- -->
+    <!----------- Vastaus ----------->
 
-    <h3 class="sub-header" i18n="@@Vastaus">Vastaus</h3>
+    <h4 class="sub-header" i18n="@@Vastaus">Vastaus</h4>
 
     <div class="short-vertical-spacer"></div>
 

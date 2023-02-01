@@ -3,30 +3,30 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
-import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { interval, startWith, switchMap } from 'rxjs';
+import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
-export class TicketViewComponent implements OnInit, OnDestroy {
+export class TicketViewComponent implements OnInit {
   public courseName: string = '';
   public errorMessage: string = '';
+  public isInIframe: boolean;
   public ticket: Tiketti;
   public tila: string;
   public newCommentState: 3 | 4 | 5 = 4;
-  // tila: typeof Tila | typeof State;
   public commentText: string;
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
-  private timeInterval: Subscription = new Subscription();
   private readonly currentDate = new Date().toDateString();
 
-  // messageSubscription: Subscription;
   public message: string = '';
   public userRole: string = '';
+  private userName: string = '';
 
   constructor(
     private auth: AuthService,
@@ -38,6 +38,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.ticket = {} as Tiketti;
       this.tila = '';
       this.commentText = '';
+      this.isInIframe = getIsInIframe();
       this.isLoaded = false;
       this.ticketID = String(this.route.snapshot.paramMap.get('id'));
       // this.messageSubscription = this.ticketService.onMessages().subscribe(
@@ -45,9 +46,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.trackUserRole();
+    this.auth.trackUserInfo().subscribe(response => {
+        if (response.asema !== undefined ) this.userRole = response.asema;
+        if (response.nimi !== undefined ) this.userName = response.nimi;
+    });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
-    this.timeInterval = interval(600000)
+    interval(600000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
@@ -55,8 +59,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         next: response => {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
-          if (this.auth.getUserName.length == 0) {
-            this.auth.saveUserInfo(String(this.ticket.kurssi));
+          if (this.userName.length == 0) {
+            this.auth.fetchUserInfo(String(this.ticket.kurssi));
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
           this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
@@ -66,26 +70,29 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           this.isLoaded = true;
         },
         error: error => {
-          this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+          // console.dir(error);
+          switch (error.tunnus) {
+            case 1003:
+              this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+              break;
+            default:
+              this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:Kysymyksen näyttäminen epäonnistui`;
+          }
+
           this.isLoaded = true;
         }
       })
   }
 
   public getSenderTitle(name: string, role: string): string {
-    if (name == this.auth.getUserName()) {
-      return $localize`:@@Minä:Minä`
-    }
+    if (name == this.userName) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
-        return $localize`:@@Opiskelija:Opiskelija`;
-        break;
+        return $localize`:@@Opiskelija:Opiskelija`; break;
       case 'opettaja':
-        return $localize`:@@Opettaja:Opettaja`;
-        break;
+        return $localize`:@@Opettaja:Opettaja`; break;
       case 'admin':
-        return $localize`:@@Admin:Admin`;
-        break;
+        return $localize`:@@Admin:Admin`; break;
       default:
         return '';
     }
@@ -99,25 +106,15 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       var dateString = timestamp.toDateString();
     }
     // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    if (dateString == this.currentDate) {
-      // console.log(' on tänään');
-      return true;
-    } else {
-      // console.log('ei ole tänään');
-      return false
-    }
+    return dateString == this.currentDate ? true : false
   }
 
-  public ngOnDestroy(): void {
-    this.timeInterval.unsubscribe();
-  }
-
-  private trackUserRole() {
-    this.auth.onGetUserRole().subscribe(response => {
-      // console.log('saatiin rooli: ' + response);
-      this.userRole = response;
-    })
-  }
+  // private trackUserRole() {
+  //   this.auth.onGetUserRole().subscribe(response => {
+  //     // console.log('saatiin rooli: ' + response);
+  //     this.userRole = response;
+  //   })
+  // }
 
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila);
@@ -137,16 +134,13 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       })
       .then( () => { this.commentText = '' } )
       .catch(error => {
-        //console.dir(error);
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
-        console.log(JSON.stringify(error));
       });
   }
 
-  public goSubmitFaqWithId(): void {
-    let url:string = '/submit-faq/' + this.ticketID;
-    console.log('submit-faq: url: ' + url);
-    this.router.navigateByUrl(url);
-  }
-
+  // public goSubmitFaqWithId(): void {
+  //   let url:string = '/submit-faq/' + this.ticketID;
+  //   console.log('submit-faq: url: ' + url);
+  //   this.router.navigateByUrl(url);
+  // }
 }

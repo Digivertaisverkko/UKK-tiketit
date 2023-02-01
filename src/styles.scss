@@ -44,7 +44,8 @@ $debug: false;
   font-weight: 800;
   line-height: 1.2;
   // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
-  margin-top: 3.8rem;
+  margin-top: 2.2rem;
+  // margin-top: 3.8rem;
   margin-bottom: 0.6rem;
   position: relative;
   z-index: 0;
@@ -92,13 +93,6 @@ $debug: false;
   font-weight: 500;
 }
 
-// Nappien asemoiminen ja tarvittavan tilan ottaminen.
-.theme-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.4rem;
-}
-
 // Pieni harmaa teksti.
 .theme-label {
   color: #757575;
@@ -108,6 +102,13 @@ $debug: false;
   + p {
     margin-top: 0.3rem;
   }
+}
+
+// Nappien asemoiminen ja tarvittavan tilan ottaminen.
+.theme-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.4rem;
 }
 
 // Punainen tilan jakava viiva.
@@ -121,8 +122,6 @@ $debug: false;
 
 // Testaamiseen jos haluaa osan block-elementeistä näkyviin.
 $debug: false;
-
-h2 {  @if $debug {  border: 1px solid blue; } }
 
 // käytetään ticket-view ja submit-ticket -komponenteissa tiketin otsakkeessa. Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni.
 .ticket-header {

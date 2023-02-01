@@ -5,6 +5,7 @@ import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
 import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
 import { AuthService } from '../core/auth.service';
+import { ErrorService } from '../core/error.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -16,6 +17,7 @@ export class TicketService {
   private messages$ = new Subject<string>();
 
   constructor (private auth: AuthService,
+    private errorService: ErrorService,
     private http: HttpClient) {}
 
   // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
@@ -36,6 +38,8 @@ export class TicketService {
     }
   }
 
+  /* Aseta kurssi aktiiviseksi muistiin. Tarvitaan mm. käyttäjätietojen
+     hakemiseen */
   public getActiveCourse(): string {
     var courseID: string = '';
     if (this.activeCourse == undefined) {
@@ -48,7 +52,6 @@ export class TicketService {
       } else {
         courseID = String(this.activeCourse);
       }
-
     return courseID;
   }
 
@@ -70,18 +73,17 @@ export class TicketService {
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
   public getTicketState(numericalState: number): string {
-    if (numericalState < 0 || numericalState > 6 ) {
-      throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
-    }
-    let verbal: string = '';
+    let verbal: string;
     switch (numericalState) {
-        case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
-        case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
-        case 2: verbal = $localize `:@@Luettu:Luettu`; break;
-        case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
-        case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
-        case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
-        case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`
+      case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
+      case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
+      case 2: verbal = $localize `:@@Luettu:Luettu`; break;
+      case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+      case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
+      case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
+      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`; break;
+      default:
+        throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
     }
     return verbal;
   }
@@ -150,18 +152,21 @@ export class TicketService {
     return response;
   }
 
-  public async sendFaq(courseID: string, newFaq: UusiUKK) {
+  // ID on kurssi ID tai UKK:n ID riippuen, lisätäänkö uusi vai muokataanko vanhaa UKK:a.
+  public async sendFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
     const httpOptions = this.getHttpOptions();
     let response: any;
-    const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+    let url: string;
+    if (editFaq?.toString() === 'true') {
+      url = `${environment.apiBaseUrl}/tiketti/${ID}/muokkaaukk`;
+    } else {
+      url = `${environment.apiBaseUrl}/kurssi/${ID}/ukk`;
+    }
     const body = newFaq;
     try {
-      console.log('Yritetään lähettää UKK POST-kutsulla bodylla: ' + JSON.stringify(body) + '  URL:iin "' +
-      url + '"');
-      response = await firstValueFrom(this.http.post<any>(url, body, httpOptions));
-      console.log(
-        'saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response)
-      );
+      console.log('Yritetään lähettää body: ' + JSON.stringify(body) + '  URL:iin "' + url + '"');
+      response = await firstValueFrom(this.http.post<UusiUKK>(url, body, httpOptions));
+      console.log('saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -174,12 +179,9 @@ export class TicketService {
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' +
-      url + '"');
+      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' + url + '"');
       response = await firstValueFrom(this.http.post<UusiTiketti>(url, body, httpOptions));
-      console.log(
-        'saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response)
-      );
+      console.log('saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -298,12 +300,11 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     this.auth.setLoggedIn();
     return response;
   }
 
-  // Palauta yhden tiketin tiedot.
+  // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -315,7 +316,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     let ticket: Tiketti = response;
     response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;
@@ -400,133 +400,25 @@ export class TicketService {
     return options;
   }
 
-  // Lähetä muotoiltu virheviesti consoleen. Ohjaa kirjautumiseen, jos ei olla kirjauduttu.
-  // Palauta virhe otettavaksi vastaan komponentissa.
-  private handleError(error: any): Observable<never> {
-    var message: string;
-    if (error.status === 0) {
-      // A client-side or network error occurred.
-      message = 'Asiakas- tai verkkovirhe tapahtui';
-      if (error.error !== undefined) {
-        message += ": " + error.error;
-      }
-    } else {
-      // The backend returned an unsuccessful response code.
-      message = "Saatin virhe ";
-      if (error.status !== undefined) {
-        message += "HTTP-tilakoodilla " + error.status;
-      }
-      if (error.error !== undefined) {
-        var errorObject = error.error;
-        if (errorObject.error !== undefined) {
-          message += ", sisäisellä tilakoodilla " + errorObject.error.tunnus;
-          if (errorObject.error.virheilmoitus !== undefined) {
-            message += " ja viestillä: ", errorObject.error.virheilmoitus
-          }
-        }
-      }
-    }
-    console.error(message + ".");
+  private getMethodName() {
+    return this.getMethodName.caller.name
+  }
 
-    if (error.status === 403) {
-      if (error.error !== undefined && error.error.error.tunnus == 1000) {
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
+        console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
         this.auth.handleNotLoggedIn();
-      }
-    }
-    // }
-    // Templatessa pitäisi olla catch tälle.
-    return throwError(() => new Error(error));
-  }
-
-  // private handleError(error: any) {
-  //   if (error.status === 0) {
-  //     // A client-side or network error occurred.
-  //     console.error('Asiakas- tai verkkovirhe tapahtui:', error.error);
-  //   } else {
-  //     // The backend returned an unsuccessful response code.
-  //     console.error(
-  //       `Saatiin virhe HTTP-tilakoodilla ${error.status}, sisäisellä tilakoodilla ${error.error.error.tunnus} ja viestillä:`, error.error.error.virheilmoitus
-  //     );
-  //     if (error.status === 403 ) {
-  //       console.dir(error);
-  //       if (error.error !== undefined && error.error.error.tunnus == 1000) {
-  //         this.auth.handleNotLoggedIn();
-  //       }
-  //     }
-  //   }
-    // let message: string = '';
-    // if (error !== undefined) {
-    //   if (error.error.length > 0) {
-    //     message += $localize `:@@Virhe:Virhe` + ': ' + error.error;
-    //   }
-    //   if (error.status !== undefined) {
-    //     message += $localize `:@@Tilakoodi:Tilakoodi` + ': ' + error.status;
-    //   }
-    // }
-    // Templatessa pitäisi olla catch tälle.
-  //   return throwError( () => new Error(error) );
-  // }
-
-  // Käsitellään mahdollisesti palvelimelta saatu virheilmoitus, joka ei tullut catch-blokkiin.
-  // Tätä ei pitäisi enää tarvita.
-  private checkErrors(response: any) {
-    console.log(' --- checkErrors ----');
-    var message: string = '';
-    // if (response == undefined) {
-    //   message = $localize `:@@Ei vastausta palvelimelta:Ei vastausta palvelimelta`;
-    //   this.sendMessage(message);
-    //   throw new Error(message);
-    // }
-    if (response?.error == undefined) {
-      return
-    }
-    console.error(' Huomattiin responsena error, vaikkei jouduttu catch-blokkiin.');
-    const error = response.error;
-    console.log('error : ' + JSON.stringify(error));
-
-    switch (error.tunnus) {
-      case 1000:
-        message = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.';
-        break;
-      case 1001:
-        message = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.';
-        break;
-      case 1002:
-        message = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.';
-        break;
-      case 1003:
-        message = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.';
-        break;
-      case 1010:
-        message = $localize`:@@Luotava tili on jo olemassa:Luotava tili on jo olemassa` + '.';
-        break;
-      case 2000:
-        // Haettavaa tietoa ei löytynyt, mutta ei käsitellä virheenä.
-        break;
-      case 3000:
-      case 3004:
-        // Jokin meni vikaan.
-      default:
-        throw new Error('Tuntematon tilakoodi: ' + JSON.stringify(error.tunnus) + ' Viesti: ' + error.virheilmoitus);
-    }
-    if (message.length > 0) {
-      this.sendMessage(message);
-      console.error($localize`:@@Virhe:Virhe` + ': ' + message);
-    }
-    if (error.tunnus == 1000) {
-      this.auth.handleNotLoggedIn();
-    } else if (error.tunnus !== 2000) {
-      const newError = Error('Virhe: tunnus: ' + error.tunnus + ', viesti: ' + truncate(error.virheilmoitus, 250, true));
+    } else {
+      this.errorService.handleServerError(error);
     }
   }
 
-  // Lähetä virheviesti komponenttiin ja consoleen.
-  private sendMessage(message: string) {
-    this.messages$.next(message);
-  }
 }
 
 // ========== Rajapinnat ==============
+
+// Jäsenmuuttujien järjestys pitäisi vastata palvelimen API-dokumenttia.
 
 export interface Error {
   tunnus: number;
