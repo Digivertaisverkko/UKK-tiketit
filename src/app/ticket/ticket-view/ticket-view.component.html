@@ -6,18 +6,19 @@
     <span>{{ courseName }}</span>
   </h2>
 
-  <section *ngIf="ticket.tila > 0">
 
     <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
 
     <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
     <div id="top-buttons" class="theme-actions">
       <app-to-beginning-button></app-to-beginning-button>
-      <button mat-raised-button color="primary" i18n="@@Kopioi UKK" *ngIf="userRole === 'opettaja' || userRole === 'admin'"
+      <button mat-raised-button color="primary" i18n="@@Kopioi UKK" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole === 'admin')"
          routerLink="/submit-faq/{{ticketID}}">
         Kopioi UKK:ksi
       </button>
     </div>
+
+    <section *ngIf="ticket.tila > 0">
 
     <!-------------- Kysymys ----------------------------------------->
 
@@ -108,7 +109,7 @@
 
   <div class="theme-actions">
 
-    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opiskelija' || userRole ==='admin' && ticket.tila > 0">
+    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 && (userRole === 'opiskelija' || userRole ==='admin' && ticket.tila > 0)">
       <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
       <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
       <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
