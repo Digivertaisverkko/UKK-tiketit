@@ -32,22 +32,21 @@ export class FaqViewComponent implements OnInit {
   ngOnInit(): void {
     this.getIfInIframe();
     if (this.faqID !== null) {
-      this.ticketService
-        .getTicketInfo(this.faqID)
+      this.ticketService.getTicketInfo(this.faqID)
         .then((response) => {
           this.ticket = response;
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.auth.getUserName.length == 0) {
-            this.auth.fetchUserInfo(String(this.ticket.kurssi));
+            try {
+             this.auth.fetchUserInfo(String(this.ticket.kurssi));
+            } catch {}
           }
         })
         .then(() => {
           if (this.ticket.kurssi !== null) {
-            this.ticketService
-              .getCourseName(String(this.ticket.kurssi))
-              .then((response) => {
-                this.courseName = response;
-            }).catch(() => {});
+            this.ticketService.getCourseName(String(this.ticket.kurssi))
+              .then((response) => this.courseName = response
+            ).catch()
           }
         })
         .catch(error => {
