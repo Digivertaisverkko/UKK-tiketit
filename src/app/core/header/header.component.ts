@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router  } from '@angular/router';
+import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, Route  } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService, User } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
@@ -116,10 +116,9 @@ export class HeaderComponent implements OnInit {
   }
 
   public goToFrontPage() {
-    if (this.authService.getIsUserLoggedIn() == true) {
+    // const currentRoute = window.location.pathname + window.location.search;
       const courseID = this.ticketService.getActiveCourse();
-      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
-    }
+      if (courseID !== null) this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
   }
 
   public login(): void{
