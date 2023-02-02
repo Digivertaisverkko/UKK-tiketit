@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { UserManagementModule } from 'src/app/user-management/user-management.module';
 import { TicketService, Tiketti } from '../ticket.service';
 
 @Component({
@@ -17,12 +16,13 @@ export class FaqViewComponent implements OnInit {
   public ticket: Tiketti = {} as Tiketti;
   public user: User = <User>{};
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
+  public isArchivePressed: boolean = false;
 
   constructor(
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private ticketService: TicketService
+    private ticketService: TicketService,
   ) {
     this.auth.trackUserInfo().subscribe(response => {
         this.user = response;
@@ -47,19 +47,14 @@ export class FaqViewComponent implements OnInit {
               .getCourseName(String(this.ticket.kurssi))
               .then((response) => {
                 this.courseName = response;
-            }).catch((error) => {
-              console.error()
-            });
+            }).catch(() => {});
           }
         })
-        .catch((error) => {
-          console.error(error);
+        .catch(error => {
           this.errorMessage =
             $localize`:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
         })
-        .finally(() => {
-          this.isLoaded = true;
-        });
+        .finally(() => this.isLoaded = true );
     }
   }
 
@@ -69,13 +64,15 @@ export class FaqViewComponent implements OnInit {
     this.router.navigate([url], { state: { editFaq: 'true' } });
   }
 
+  archiveFaq() {
+    this.isArchivePressed = false;
+    const courseID = this.ticketService.getActiveCourse();
+    this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+  }
+
   private getIfInIframe() {
     const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
-    if (isInIframe == 'false') {
-      this.isInIframe = false;
-    } else {
-      this.isInIframe = true;
-    }
+    this.isInIframe = (isInIframe === 'false') ? false : true;
   }
 
 }
