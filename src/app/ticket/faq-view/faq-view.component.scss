@@ -8,8 +8,12 @@
 }
 
 #top-buttons {
-  justify-content: flex-start;
-  gap: 4rem;
+  justify-content: space-between;
+}
+
+.edit-buttons-wrapper {
+  display: flex;
+  gap: 1.5rem;
 }
 
 // .short-field-value:last-child {

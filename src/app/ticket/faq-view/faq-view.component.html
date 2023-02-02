@@ -12,10 +12,22 @@
 
   <div id="top-buttons" class="theme-actions">
     <app-to-beginning-button></app-to-beginning-button>
-    <button mat-raised-button i18n="@@Muokkaa" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
-    (click)="editFaq()">
-    Muokkaa
-  </button>
+      
+    <div class="edit-buttons-wrapper" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'">
+      <button mat-raised-button i18n="@@Muokkaa"
+        (click)="editFaq()">
+        Muokkaa
+      </button>
+
+      <button mat-raised-button *ngIf="isArchivePressed === false" i18n="@@Poista" (click)="isArchivePressed = true">
+        Poista
+      </button>
+
+      <button mat-raised-button (click)="archiveFaq()" *ngIf="isArchivePressed === true" color="accent" i18n="@@Vahvista poisto">
+        Vahvista poisto
+      </button>
+    </div>
+
   </div>
 
   <section *ngIf="ticket.viesti !== undefined">
