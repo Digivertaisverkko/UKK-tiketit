@@ -62,6 +62,7 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
           }
           if (String(response.kurssi) !== this.courseId) {
             this.courseId = String(response.kurssi);
+            this.authService.fetchUserInfo(this.courseId);
             this.ticketService.setActiveCourse(String(this.courseId));
             this.ticketService.getCourseName(this.courseId)
               .then( response => { this.courseName = response })
