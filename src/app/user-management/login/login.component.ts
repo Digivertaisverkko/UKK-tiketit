@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
           case 1002:
             this.errorMessage = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.'; break;
           case 1003:
-            this.errorMessage = $localize`:@@Ei oikeuksia:Ei käyttäjäoikeuksia resurssiin` + '.'; break;
+            this.errorMessage = $localize`:@@Ei oikeuksia:Ei ole tarvittavia käyttäjäoikeuksia` + '.'; break;
           default:
             this.errorMessage = $localize`:@@Kirjautuminen ei onnistunut:Kirjautuminen ei onnistunut` + '.'; break;
         }
