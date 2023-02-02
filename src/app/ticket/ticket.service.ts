@@ -63,7 +63,7 @@ export class TicketService {
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
       console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true)
       );
     } catch (error: any) {
       this.handleError(error);
@@ -287,7 +287,7 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -295,6 +295,7 @@ export class TicketService {
     // this.checkErrors(response);
     return response;
   }
+
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
@@ -400,21 +401,19 @@ export class TicketService {
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
     var sessionID = window.localStorage.getItem('SESSION_ID');
-    console.log(sessionID);
     // if (sessionID == undefined) {
     //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
     // }
     // console.log('session id on: ' + sessionID);
     // sessionID = '123456789';
-    var options;
-    if (sessionID == undefined) {
-      options = {};
+
+    if (sessionID === undefined || sessionID === null) {
+      return {}
     } else {
-      options = {
+      return  {
         headers: new HttpHeaders({ 'session-id': sessionID })
       };
     }
-    return options;
   }
 
   private getMethodName() {
