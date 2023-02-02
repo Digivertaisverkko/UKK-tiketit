@@ -203,6 +203,21 @@ export class TicketService {
     // }
   }
 
+  // Arkistoi (poista) UKK.
+  public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    const url = environment.apiBaseUrl + '/tiketti/' + String(ticketID) + '/arkistoiukk';
+    try {
+      console.log('Yritetään lähettää body {} POST-kutsu osoitteeseen ' + url);
+      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}, httpOptions));
+      console.log('saatiin vastaus UKK poistamiseen: ' + JSON.stringify(response));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
     const httpOptions = this.getHttpOptions();
@@ -228,6 +243,7 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
+      console.dir(httpOptions);
       response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
@@ -383,7 +399,8 @@ export class TicketService {
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
-    let sessionID = window.localStorage.getItem('SESSION_ID');
+    var sessionID = window.localStorage.getItem('SESSION_ID');
+    console.log(sessionID);
     // if (sessionID == undefined) {
     //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
     // }
@@ -475,6 +492,7 @@ export interface UKK {
   otsikko: string;
   aikaleima: string;
   tyyppi: string;
+  tila: number;
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/

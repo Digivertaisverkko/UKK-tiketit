@@ -66,8 +66,12 @@ export class FaqViewComponent implements OnInit {
 
   archiveFaq() {
     this.isArchivePressed = false;
-    const courseID = this.ticketService.getActiveCourse();
-    this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+    this.ticketService.archiveFAQ(Number(this.faqID)).then(response => {
+      const courseID = this.ticketService.getActiveCourse();
+      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+    }).catch(error => {
+      this.errorMessage = $localize `:@@UKK poisto epäonnistui:Usein kysytyn kysymyksen poistaminen ei onnistunut.`
+    })
   }
 
   private getIfInIframe() {
