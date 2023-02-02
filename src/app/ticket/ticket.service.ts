@@ -354,7 +354,7 @@ export class TicketService {
       response = await firstValueFrom<Kommentti[]>(
         this.http.get<any>(url, httpOptions)
       );
-      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
+      console.log('Got from "' + url + '" response: ' + truncate(JSON.stringify(response), 300, true));
       console.dir(response);
     } catch (error: any) {
       this.handleError(error);
