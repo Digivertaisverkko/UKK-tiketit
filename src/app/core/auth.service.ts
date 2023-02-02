@@ -196,8 +196,9 @@ export class AuthService {
   // Tästä luovutaan. Jatkossa yksi käyttäjäobjekti on vain auth.service:ssä.
   public async fetchUserInfo(courseID: string) {
     if (window.localStorage.getItem('SESSION_ID') == null) {
-      console.error('Virhe: fetchUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.');
+      console.warn('Virhe: fetchUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.');
       this.setNotLoggegIn();
+      return
     }
     if (courseID === null) {
       console.error('Virhe: fetchUserInfo(): Kurssi ID:ä, ei voida hakea tietoja.');
