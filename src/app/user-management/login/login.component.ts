@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 // import { environment } from 'src/environments/environment';
@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/core/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
+
 export class LoginComponent implements OnInit {
   public courseID: number = 1;
   public email: string = '';
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit {
         if (response.success == true) {
           var redirectUrl: string;
           if (response.redirectUrl == undefined) {
+            // redirectUrl = '/kurssi/' + this.courseID + '/list-tickets?courseID=' + this.courseID;
             redirectUrl = '/list-tickets?courseID=' + this.courseID;
           } else {
             redirectUrl = response.redirectUrl;
@@ -69,9 +71,7 @@ export class LoginComponent implements OnInit {
           //console.log('loginComponent: asetettiin loginID: ' + this.loginID);
         }
       },
-      error: (error) => {
-        console.error(error);
-      }
+      error: () => { }
     });
   }
 

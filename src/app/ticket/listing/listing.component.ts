@@ -60,8 +60,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   public headline: string = '';
   public readonly me: string =  $localize`:@@Minä:Minä`;
   public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  // public username: string | null = '';
-  // public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
   public user: User = {} as User;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
@@ -274,14 +272,19 @@ export class ListingComponent implements OnInit, OnDestroy {
           // this.dataSourceFAQ = new MatTableDataSource(tableData);
           console.log(response.map);
           // Tarvittaessa voi muokata, mitä tietoja halutaan näyttää.
-          this.dataSourceFAQ = new MatTableDataSource(
-            response.map(({ id, otsikko, aikaleima, tyyppi }) => ({
+          // this.dataSourceFAQ = new MatTableDataSource(
+          let tableData = response.map(({ id, otsikko, aikaleima, tyyppi, tila }) => ({
               id: id,
               otsikko: otsikko,
               aikaleima: aikaleima,
-              tyyppi: tyyppi
-            }))
-          );
+              tyyppi: tyyppi,
+              tila: tila
+            }));
+
+          tableData = tableData.filter(faq => faq.tila !== 6)  
+          
+          this.dataSourceFAQ = new MatTableDataSource(tableData);
+
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
