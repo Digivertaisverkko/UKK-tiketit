@@ -270,7 +270,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           // );
           // tableData = tableData.filter(ukk => ukk.tilaID !== 6);
           // this.dataSourceFAQ = new MatTableDataSource(tableData);
-          console.log(response.map);
           // Tarvittaessa voi muokata, mitä tietoja halutaan näyttää.
           // this.dataSourceFAQ = new MatTableDataSource(
           let tableData = response.map(({ id, otsikko, aikaleima, tyyppi, tila }) => ({

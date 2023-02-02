@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ResolveEnd, Router  } from '@angular/router';
+import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router  } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService, User } from '../auth.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
@@ -49,12 +49,14 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.trackUserInfo();
     this.router.events.subscribe(event => {
-      if (event instanceof ResolveEnd) {
+      // console.log(JSON.stringify(event));
+      if (event instanceof GuardsCheckStart) {
         // Testataan, ollaanko kirjautuneina.
         this.authService.getSessionID();
         let courseID: string | null = this.authService.getActiveCourse();
         // console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
         if (this.isLoggedIn === true && courseID !== null && courseID.length > 0) {
+
           this.authService.fetchUserInfo(courseID);
         }
       }
@@ -75,7 +77,7 @@ export class HeaderComponent implements OnInit {
         // } else {
         //   this.userName = '';
         // }
-        this.setUserRole(response?.asema);
+        this.setUserRole(this.user.asema);
     })
   }
 
@@ -109,7 +111,7 @@ export class HeaderComponent implements OnInit {
   // }
 
   public toggleLanguage() {
-    console.log(' --- kieli: ' + this.language);
+    // console.log(' --- kieli: ' + this.language);
     this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
   }
 
@@ -127,11 +129,9 @@ export class HeaderComponent implements OnInit {
   public logOut() {
     this.authService.logOut();
     this.authService.sendAskLoginRequest('own').then((response: any) => {
-      console.log(' headerComponent: saatiin vastaus: ' + JSON.stringify(response));
+      // console.log(' headerComponent: saatiin vastaus: ' + JSON.stringify(response));
         this.router.navigateByUrl(response);
-    }).catch (error => {
-      console.error('headerComponent: Virhe uloskirjautuessa: ' + error);
-    })
+    }).catch (error => {})
   }
 
 }
