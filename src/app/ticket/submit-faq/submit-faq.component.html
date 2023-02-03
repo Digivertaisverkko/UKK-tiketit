@@ -41,7 +41,7 @@
     </div>
 
     <section class="short-field-wrapper">
-      <mat-form-field class="additional-field" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
         <input
           name="faqAssignment"
@@ -53,7 +53,7 @@
       </mat-form-field>
       <div class="characters-label"><span class="theme-label">{{ faqAssignment.length }} / 50</span></div>
 
-      <mat-form-field class="additional-field" appearance="fill">
+      <mat-form-field appearance="fill">
         <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
         <input
           name="faqProblem"
@@ -97,6 +97,7 @@
 
     <div class="ticket-header">
       <h3 class="sub-header">{{ originalTicket.otsikko }}</h3>
+
       <div class="spacer"></div>
       <div class="user-info-block">
         <div class="text-info">
@@ -114,12 +115,12 @@
       </div>
     </div>
 
-    <div class="additional-field" *ngIf="originalTicket.kentat !== undefined && originalTicket.kentat[0] !== null && originalTicket.kentat[0].arvo.length > 0">
+    <div *ngIf="originalTicket.kentat !== undefined && originalTicket.kentat[0] !== null && originalTicket.kentat[0].arvo.length > 0">
       <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
       <p class="short-field-value">{{originalTicket.kentat[0].arvo }}</p>
     </div>
 
-    <div class="additional-field" *ngIf="originalTicket.kentat !== undefined && originalTicket.kentat[1] !== null && originalTicket.kentat[1].arvo.length > 0">
+    <div *ngIf="originalTicket.kentat !== undefined && originalTicket.kentat[1] !== null && originalTicket.kentat[1].arvo.length > 0">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
       <p class="short-field-value">{{ originalTicket.kentat[1].arvo }}</p>
     </div>
