@@ -9,7 +9,7 @@ import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
 import { MatTab } from '@angular/material/tabs';
 
@@ -42,8 +42,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   public columnDefinitionsFAQ: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
-  public displayedTicketsCount: number = 0;
-  public displayedFAQCount: number = 0;
   public FAQisLoaded: boolean = false;
   public isCourseIDvalid: boolean = false;
   public isInIframe: boolean;
@@ -62,8 +60,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public headline: string = '';
   public readonly me: string =  $localize`:@@Minä:Minä`;
   public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
-  public username: string | null = '';
-  public userRole: 'opettaja' | 'opiskelija' | 'admin' | '' = '';
+  public user: User = {} as User;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -104,8 +101,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
     this.authService.trackUserInfo().subscribe(response => {
-      this.username = response?.nimi ?? '';
-      this.userRole = response?.asema ?? '';
+      this.user = response;
+      this.setTicketListHeadline();
     });
     this.trackScreenSize();
     this.route.queryParams.subscribe(params => {
@@ -136,7 +133,6 @@ export class ListingComponent implements OnInit, OnDestroy {
         }
         this.updateLoggedInView(courseIDcandinate);
       }
-      this.setTicketListHeadline();
       this.isLoaded = true;
     });
   }
@@ -215,9 +211,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             tableData = tableData.filter(ticket => ticket.tilaID !== 6)
             if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
             this.numberOfQuestions = tableData.length;
-
-            this.displayedTicketsCount = this.numberOfQuestions;
-
             this.dataSource.sort = this.sortQuestions;
             // console.log('----- näytetään: ' + this.dataSource.data.values.length);
             // console.log('------ data source : ' + this.dataSource.data.length);
@@ -236,8 +229,8 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   public setTicketListHeadline() {
-    let userRole = this.authService.getUserRole();
-    switch (userRole) {
+    // let userRole = this.authService.getUserRole();
+    switch (this.user.asema) {
       case 'opettaja':
         this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
       case 'admin':
@@ -245,7 +238,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       case 'opiskelija':
         this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
       default:
-        // Jos ei olla kirjautuneina.
         this.headline = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
     }
   }
@@ -278,17 +270,20 @@ export class ListingComponent implements OnInit, OnDestroy {
           // );
           // tableData = tableData.filter(ukk => ukk.tilaID !== 6);
           // this.dataSourceFAQ = new MatTableDataSource(tableData);
-          console.log(response.map);
           // Tarvittaessa voi muokata, mitä tietoja halutaan näyttää.
-          this.dataSourceFAQ = new MatTableDataSource(
-            response.map(({ id, otsikko, aikaleima, tyyppi }) => ({
+          // this.dataSourceFAQ = new MatTableDataSource(
+          let tableData = response.map(({ id, otsikko, aikaleima, tyyppi, tila }) => ({
               id: id,
               otsikko: otsikko,
               aikaleima: aikaleima,
-              tyyppi: tyyppi
-            }))
-          );
-          this.displayedFAQCount = this.numberOfFAQ;
+              tyyppi: tyyppi,
+              tila: tila
+            }));
+
+          tableData = tableData.filter(faq => faq.tila !== 6)  
+          
+          this.dataSourceFAQ = new MatTableDataSource(tableData);
+
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
@@ -318,15 +313,12 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   //hakutoiminto, jossa paginointi kommentoitu pois
   applyFilter(event: Event, isTicket: boolean ){
-    const filterValue = (event.target as HTMLInputElement).value;
+    let filterValue = (event.target as HTMLInputElement).value;
+    filterValue = filterValue.trim().toLowerCase();
     if (isTicket) {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
-      
-      console.log('kysymysten määrä: ' + this.numberOfQuestions);
-      // this.displayedTicketCount = this.dataSource.data.values.length === 0
+      this.dataSource.filter = filterValue;
     } else {
-      this.dataSourceFAQ.filter = filterValue.trim().toLowerCase();
-      this.displayedFAQCount = this.dataSourceFAQ.data.length;
+      this.dataSourceFAQ.filter = filterValue;
     }
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();

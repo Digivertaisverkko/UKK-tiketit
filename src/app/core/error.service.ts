@@ -15,7 +15,6 @@ export class ErrorService {
 
   public handleServerError(error: any) {
 
-    console.log('error service: saatiin error');
     var logMessage: string;
     var backendResponse = error?.error;
     var backendError = backendResponse?.error;
@@ -34,7 +33,7 @@ export class ErrorService {
     }
   
     if (backendError !== undefined) {       
-      logMessage += ", sisäisellä tilakoodilla " + backendError.tunnus;
+      logMessage += ", palvelimen tilakoodilla " + backendError.tunnus;
       if (backendError.virheilmoitus?.length > 1 ) {
         logMessage += " ja viestillä: " + backendError.virheilmoitus;
       } else {
@@ -45,7 +44,8 @@ export class ErrorService {
       }
     }
     
-    console.error(logMessage);
+    console.error(logMessage + ". Alkuperäinen vastaus alla.");
+    console.dir(backendError);
     throw backendError;
     // return throwError(() => new Error(error));
   }

@@ -7,5 +7,5 @@ export function truncate( str: string, length: number, useWordBoundary: boolean 
   const subString = str.slice(0, length-1);
   return (useWordBoundary
     ? subString.slice(0, subString.lastIndexOf(" "))
-    : subString) + "&hellip;";
+    : subString) + "...";
 };

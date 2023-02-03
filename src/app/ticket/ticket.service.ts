@@ -63,7 +63,7 @@ export class TicketService {
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
       console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
+        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true)
       );
     } catch (error: any) {
       this.handleError(error);
@@ -203,6 +203,21 @@ export class TicketService {
     // }
   }
 
+  // Arkistoi (poista) UKK.
+  public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
+    const httpOptions = this.getHttpOptions();
+    let response: any;
+    const url = environment.apiBaseUrl + '/tiketti/' + String(ticketID) + '/arkistoiukk';
+    try {
+      console.log('Yritetään lähettää body {} POST-kutsu osoitteeseen ' + url);
+      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}, httpOptions));
+      console.log('saatiin vastaus UKK poistamiseen: ' + JSON.stringify(response));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
     const httpOptions = this.getHttpOptions();
@@ -228,6 +243,7 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
+      console.dir(httpOptions);
       response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
       console.log(
         'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
@@ -271,7 +287,7 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -279,6 +295,7 @@ export class TicketService {
     // this.checkErrors(response);
     return response;
   }
+
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
@@ -337,7 +354,7 @@ export class TicketService {
       response = await firstValueFrom<Kommentti[]>(
         this.http.get<any>(url, httpOptions)
       );
-      console.log('Got from "' + url + '" response: ' + JSON.stringify(response));
+      console.log('Got from "' + url + '" response: ' + truncate(JSON.stringify(response), 300, true));
       console.dir(response);
     } catch (error: any) {
       this.handleError(error);
@@ -383,27 +400,26 @@ export class TicketService {
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
-    let sessionID = window.localStorage.getItem('SESSION_ID');
+    
+    var sessionID = window.localStorage.getItem('SESSION_ID');
     // if (sessionID == undefined) {
     //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
     // }
     // console.log('session id on: ' + sessionID);
     // sessionID = '123456789';
-    var options;
-    if (sessionID == undefined) {
-      options = {};
+
+    if (sessionID === undefined || sessionID === null) {
+      return {}
     } else {
-      options = {
+      return  {
         headers: new HttpHeaders({ 'session-id': sessionID })
       };
     }
-    return options;
   }
 
   private getMethodName() {
     return this.getMethodName.caller.name
   }
-
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
@@ -475,6 +491,7 @@ export interface UKK {
   otsikko: string;
   aikaleima: string;
   tyyppi: string;
+  tila: number;
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/
