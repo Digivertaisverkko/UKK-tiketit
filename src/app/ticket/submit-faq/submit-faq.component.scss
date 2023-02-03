@@ -13,6 +13,14 @@ mat-form-field { min-width: 21rem; }
   margin-bottom: -20px;
 }
 
+.message-label {
+  // TODO: 
+  margin-bottom: -0.8rem;
+  + p {
+    margin-top: -2rem;
+  }
+}
+
 .short-field-wrapper {
   width: 21em;
   margin-bottom: 6px;

@@ -14,6 +14,14 @@
 //   height: 1px;
 // }
 
+.message-label {
+  // TODO: 
+  margin-bottom: -0.8rem;
+  + p {
+    margin-top: -2rem;
+  }
+}
+
 mat-card {
   margin: 0 auto 12px;
   mat-card-subtitle { margin-top: 3px; }
