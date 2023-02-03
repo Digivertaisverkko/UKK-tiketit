@@ -400,6 +400,7 @@ export class TicketService {
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
+    
     var sessionID = window.localStorage.getItem('SESSION_ID');
     // if (sessionID == undefined) {
     //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
@@ -419,7 +420,6 @@ export class TicketService {
   private getMethodName() {
     return this.getMethodName.caller.name
   }
-
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
