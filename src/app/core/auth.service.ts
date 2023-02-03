@@ -9,18 +9,15 @@ import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 import { ErrorService } from './error.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 
 // Tämä service käsittelee käyttäjäautentikointia.
 export class AuthService {
 
-  // Onko käyttäjä kirjautuneena.
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
-
-  // Tullaan siirtymään käyttäjätiedoissa tähän:
+  // Onko käyttäjä osallisena aktiivisella kurssilla.
+  private isParticipant$ = new BehaviorSubject<boolean>(false);
   private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
 
   // private activeCourse$ = new BehaviorSubject <Kurssi>({ id: '0', nimi: '' });
@@ -30,6 +27,7 @@ export class AuthService {
   private userName$ = new BehaviorSubject <string>('');
   // private userEmail$ = new BehaviorSubject <string>('');
 
+  // TODO: nämä oAuth tiedot yhteen tietotyyppiin.
   private codeVerifier: string = '';
   private codeChallenge: string = '';
   private loginCode: string = '';
@@ -56,6 +54,20 @@ export class AuthService {
     } else {
       console.log('authService.initialize: ei kurssi ID:ä!');
     }
+  }
+
+    // Aseta tieto, onko käyttäjä osallistujana aktiivisella kurssilla.
+  public setIsParticipant(isParticipant: boolean) {
+    if (isParticipant) {
+      if (this.isParticipant$.value === false) this.isParticipant$.next(true);
+    } else {
+      if (this.isParticipant$.value === true) this.isParticipant$.next(false);
+    }
+  }
+
+  // Onko käyttäjä osallistustaja aktiivisella kurssilla.
+  public getIsParticipant(): boolean {
+    return this.isParticipant$.value
   }
 
   // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.

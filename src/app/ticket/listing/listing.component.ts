@@ -164,9 +164,12 @@ export class ListingComponent implements OnInit, OnDestroy {
         const myCourses: Kurssini[] = response;
         // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
         // Onko käyttäjä URL parametrilla saadulla kurssilla.
+        // Ei tarvitse olla enää osallistujana.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+          this.authService.setIsParticipant(false);
           this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
         } else {
+          this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
           // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
           this.isCourseIDvalid = true;
