@@ -18,7 +18,7 @@ export class AppComponent implements OnInit  {
     private authService: AuthService,
     private router: Router
   ) {
-    // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
+
   }
 
   ngOnInit(): void {
@@ -27,10 +27,10 @@ export class AppComponent implements OnInit  {
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.authService.initialize();
     this.authService.onIsUserLoggedIn().subscribe(response => {
-      if (response == true) {
+      if (response) {
         this.isLogged = true;
         this.logButtonString = $localize`:@@Kirjaudu ulos:Kirjaudu ulos`;
-      } else if (response == false) {
+      } else if (!response) {
         this.isLogged = false;
         this.logButtonString = $localize`:@@Kirjaudu sisään:Kirjaudu sisään`;
       }
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit  {
   }
 
   public logInOut() {
-    if (this.isLogged == true ) {
+    if (this.isLogged) {
       this.authService.logOut();
       this.authService.sendAskLoginRequest('own').then((response: any) => {
         this.router.navigateByUrl(response);

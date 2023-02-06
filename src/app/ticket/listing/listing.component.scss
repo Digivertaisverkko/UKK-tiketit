@@ -7,10 +7,14 @@ section, app-error-card, .theme-actions {
   margin-left: -15px;
 }
 
+h2 { padding-right: 2rem; }
+
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
 h3 { padding-left: 20px; }
 
-h2 { padding-right: 2rem; }
+.vertical-spacer {
+  height: 1.5rem;
+}
 
 .mdc-card__actions { min-height: 30px; }
 
@@ -91,14 +95,10 @@ a {
 
 [hidden] { display: none !important; }
 
-mat-card-actions {
-  padding-right: 0;
   button {
-    margin-top: 1em;
     margin-left: 1rem;
     margin-right: 0;
   }
-}
 
 .input-field-wrapper {
   align-items: flex-end;
@@ -111,7 +111,10 @@ mat-card-actions {
 .filteringField {
   align-self: flex-end;
   max-width: 220px;
-  margin-top: 30px;
+}
+
+.filter-FAQ {
+  margin-top: 1.8rem;
 }
 
 // .noData-td {

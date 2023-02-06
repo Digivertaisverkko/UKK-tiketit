@@ -43,7 +43,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public FAQisLoaded: boolean = false;
-  public isCourseIDvalid: boolean = false;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isPhonePortrait: boolean = false;
@@ -172,7 +171,6 @@ export class ListingComponent implements OnInit, OnDestroy {
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
           // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
-          this.isCourseIDvalid = true;
           this.ticket.setActiveCourse(this.courseID);
         }
       }
