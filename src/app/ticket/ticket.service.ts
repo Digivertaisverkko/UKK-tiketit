@@ -325,6 +325,7 @@ export class TicketService {
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
     const httpOptions = this.getHttpOptions();
     let response: any;
+    // ticketID = '2309483290';
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url, httpOptions));
@@ -400,13 +401,13 @@ export class TicketService {
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
-    
+     
     var sessionID = window.localStorage.getItem('SESSION_ID');
     // if (sessionID == undefined) {
     //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
     // }
     // console.log('session id on: ' + sessionID);
-    // sessionID = '123456789';
+    // var sessionID = '123456789';
 
     if (sessionID === undefined || sessionID === null) {
       return {}

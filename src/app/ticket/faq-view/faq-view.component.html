@@ -13,7 +13,8 @@
   <div id="top-buttons" class="theme-actions">
     <app-to-beginning-button></app-to-beginning-button>
       
-    <div class="edit-buttons-wrapper" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'">
+    <!-- Tiketin tilan tarkastamalla tietää, saatiinko tiedot haettua. -->
+    <div class="edit-buttons-wrapper" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && ticket.tila > 0">
       <button mat-raised-button i18n="@@Muokkaa"
         (click)="editFaq()">
         Muokkaa
