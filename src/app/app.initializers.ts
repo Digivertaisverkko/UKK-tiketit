@@ -1,25 +1,19 @@
 import { loadTranslations } from '@angular/localize';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
-import { ActivatedRoute } from '@angular/router';
 
 export const initializeLanguage = (): Promise<void> | void => {
 
   const language = getLanguage();
   localStorage.setItem('language', language);
   document.documentElement.lang = language;
-  // registerLocaleData(localeFi, 'fi-FI');
+  registerLocaleData(localeFi, 'fi-FI');
   if (language == 'en-US') {
     // Pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
       .then(response => response.json())
-      .then(response => {
-        console.log('ladataan kieli');
-        loadTranslations(response.translations);
-      })
-      .catch(() => {
-        console.log(`Kieltä ${language} ei löytynyt.`);
-      });
+      .then(response => loadTranslations(response.translations))
+      .catch(() => console.log(`Käännöstä "${language}" ei löytynyt.`));
   }
 };
 
@@ -88,8 +82,8 @@ export function changeToLang(newLang: 'en' | 'fi') {
     } else {
       language = 'fi-FI';
     }
-    const oldLang = localStorage.getItem('language');
-    if (language !== oldLang) {
+    const OLD_LANG = localStorage.getItem('language');
+    if (language !== OLD_LANG) {
       localStorage.setItem('language', language);
       window.location.reload();
     }
