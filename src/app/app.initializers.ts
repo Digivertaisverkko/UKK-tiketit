@@ -19,11 +19,9 @@ export const initializeLanguage = (): Promise<void> | void => {
 };
 
 function getLanguage(): string {
-
   const url = new URL(window.location.href);
   var language: string;
   // console.log('urlLang: ' + urlLang);
-
   // Upotuksessa kieli tulee URL-parametrina.
   const urlLang = url.searchParams.get('lang');
   if (urlLang !== null) {
@@ -53,7 +51,6 @@ function getLanguage(): string {
       language = isInIframe() ? 'en-US' : 'fi-FI'; 
     }
   }
-
     // Jos haluaa käyttää selaimen kieltä.
     // language = navigator.language;
     // console.log('navigator.language -kieli: ' + language);
