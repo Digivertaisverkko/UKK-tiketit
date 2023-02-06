@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
 import { interval, startWith, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-ticket-view',
@@ -22,7 +23,9 @@ export class TicketViewComponent implements OnInit {
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
-  private readonly currentDate = new Date().toDateString();
+  // Ticket info polling rate in minutes.
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
+  private readonly CURRENT_DATE = new Date().toDateString();
 
   public message: string = '';
   public userRole: string = '';
@@ -51,7 +54,7 @@ export class TicketViewComponent implements OnInit {
         if (response.nimi !== undefined ) this.userName = response.nimi;
     });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
-    interval(600000)
+    interval(this.POLLING_RATE_MIN * 60 * 1000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
@@ -70,7 +73,6 @@ export class TicketViewComponent implements OnInit {
           this.isLoaded = true;
         },
         error: error => {
-          // console.dir(error);
           switch (error.tunnus) {
             case 1003:
               this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
@@ -78,7 +80,6 @@ export class TicketViewComponent implements OnInit {
             default:
               this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:Kysymyksen näyttäminen epäonnistui`;
           }
-
           this.isLoaded = true;
         }
       })
@@ -106,7 +107,7 @@ export class TicketViewComponent implements OnInit {
       var dateString = timestamp.toDateString();
     }
     // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    return dateString == this.currentDate ? true : false
+    return dateString == this.CURRENT_DATE ? true : false
   }
 
   // private trackUserRole() {
