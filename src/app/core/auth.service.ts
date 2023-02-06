@@ -9,6 +9,9 @@ import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 import { ErrorService } from './error.service';
 
+import { getLocaleDateFormat, FormatWidth} from '@angular/common';
+import { Inject, LOCALE_ID } from '@angular/core';
+
 @Injectable({ providedIn: 'root' })
 
 // Tämä service käsittelee käyttäjäautentikointia.
@@ -38,7 +41,8 @@ export class AuthService {
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
   /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
@@ -54,6 +58,10 @@ export class AuthService {
     } else {
       console.log('authService.initialize: ei kurssi ID:ä!');
     }
+  }
+
+  public getDateFormat(): string {
+    return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
 
     // Aseta tieto, onko käyttäjä osallistujana aktiivisella kurssilla.

@@ -45,6 +45,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isPhonePortrait: boolean = false;
+  public localeDateFormat: string;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
@@ -74,6 +75,7 @@ export class ListingComponent implements OnInit, OnDestroy {
     private ticket: TicketService,
     private authService: AuthService
   ) {
+    this.localeDateFormat = this.authService.getDateFormat();
     this.pollingRateMin = (environment.production == true ) ? 1 : 15;
     this.isInIframe = getIsInIframe();
     this.ticketMessageSub = this.ticket.onMessages().subscribe(message =>

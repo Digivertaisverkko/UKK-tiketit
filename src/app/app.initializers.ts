@@ -2,6 +2,7 @@ import { loadTranslations } from '@angular/localize';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 
+
 export const initializeLanguage = (): Promise<void> | void => {
 
   const language = getLanguage();

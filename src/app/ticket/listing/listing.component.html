@@ -72,7 +72,7 @@
         Luotu
       </th>
       <td class="td-align-right" mat-cell *matCellDef="let element">
-        {{element.aikaleima | date: 'shortDate'}}
+        {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
       </td>
     </ng-container>
 
@@ -154,7 +154,7 @@
       Päivämäärä
     </th>
     <td class="td-align-right" mat-cell *matCellDef="let element">
-      {{element.aikaleima | date: 'shortDate' }}
+      {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
     </td>
   </ng-container>
 
