@@ -5,13 +5,12 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
+import { Subscription, interval, startWith, switchMap } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
-import { MatTab } from '@angular/material/tabs';
 
 export interface SortableTicket {
   id: number;
@@ -79,8 +78,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     this.isInIframe = getIsInIframe();
     this.ticketMessageSub = this.ticket.onMessages().subscribe(message =>
       this.errorMessage = message ?? '');
-
-    // this.isLoggedIn$ = this.authService.onIsUserLoggedIn();
 
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
