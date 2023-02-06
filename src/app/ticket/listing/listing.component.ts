@@ -36,7 +36,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   // public isLoggedIn$: Observable<boolean>;
 
-  public readonly pollingRateMin: number;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
@@ -51,13 +50,14 @@ export class ListingComponent implements OnInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public ticketMessageSub: Subscription;
   private courseID: string | null = '';
+  // Ticket info polling rate in minutes.
+  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15
 
   // Merkkijonot
-
   public courseName: string = '';
   public errorMessage: string = '';
   public headline: string = '';
-  public readonly me: string =  $localize`:@@Minä:Minä`;
+  public me: string =  $localize`:@@Minä:Minä`;
   public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
   public user: User = {} as User;
 
@@ -76,7 +76,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     private authService: AuthService
   ) {
     this.localeDateFormat = this.authService.getDateFormat();
-    this.pollingRateMin = (environment.production == true ) ? 1 : 15;
     this.isInIframe = getIsInIframe();
     this.ticketMessageSub = this.ticket.onMessages().subscribe(message =>
       this.errorMessage = message ?? '');
@@ -192,7 +191,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   private pollQuestions() {
-    interval(this.pollingRateMin * 60 * 1000)
+    interval(this.POLLING_RATE_MIN * 60 * 1000)
       .pipe(
         startWith(0),
         switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
