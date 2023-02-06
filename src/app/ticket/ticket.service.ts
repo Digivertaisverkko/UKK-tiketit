@@ -302,18 +302,12 @@ export class TicketService {
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<TiketinPerustiedot[]> {
     const httpOptions = this.getHttpOptions();
-    let target: string;
-    if (onlyOwn !== undefined && onlyOwn == true) {
-      target = 'omat';
-    } else {
-      target = 'kaikki';
-    }
+    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
       response = this.http.get<TiketinPerustiedot[]>(url, httpOptions);
-
-      console.dir(response);
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
     } catch (error: any) {
       this.handleError(error);
     }
