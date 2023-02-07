@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 // import { LiveAnnouncer } from '@angular/cdk/a11y';
@@ -102,24 +102,23 @@ export class ListingComponent implements OnInit, OnDestroy {
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
-    this.route.queryParams.subscribe(params => {
-      var courseID = String(this.route.snapshot.paramMap.get('courseid'));
-      if (courseID === undefined) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.` + '.';
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      var courseID: string | null = paramMap.get('courseid');
+      if (courseID === null) {
+        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
-         // var courseIDcandinate: string = params['courseID'];
       this.courseID = courseID;
       this.ticket.setActiveCourse(courseID);
       this.showCourseName(courseID);
 
-      if (params['sessionID'] !== undefined) {
-        const route = window.location.pathname + window.location.search;
-        console.log('URL on: ' + route);
-        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
-        this.authService.setSessionID(params['sessionID']);
-      }
+      // if (paramMap['sessionID'] !== undefined) {
+      //   const route = window.location.pathname + window.location.search;
+      //   console.log('URL on: ' + route);
+      //   console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
+      //   this.authService.setSessionID(params['sessionID']);
+      // }
 
       this.showFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
