@@ -89,9 +89,9 @@ export class TicketViewComponent implements OnInit {
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
-      this.errorMessage = `:@@Ei oikeuksia: Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
+      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
-    this.router.navigateByUrl('/submit-faq/' + this.ticketID);
+    this.router.navigateByUrl('/course/' + this.ticket.kurssi + '/submit-faq/' + this.ticketID);
   }
 
 

@@ -48,7 +48,7 @@
         Otsikko
       </th>
       <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
-      <td mat-cell *matCellDef="let element" ><a [routerLink]="'/ticket-view/' + element.id">
+      <td mat-cell *matCellDef="let element" ><a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
         '...':(element.otsikko) }}</a>
       </td>
@@ -101,7 +101,7 @@
 </section>
 
   <div class="theme-actions" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-    <button mat-raised-button color="primary" (click)="submitTicket()"
+    <button mat-raised-button color="primary" (click)="submit()"
       i18n="@@Kysy opettajilta">Kysy opettajilta</button>
   </div>
 
@@ -132,8 +132,8 @@
       i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
       Otsikko
     </th>
-    <td mat-cell *matCellDef="let element" [routerLink]="'/faq-view/' + element.id">
-      <a [routerLink]="'/faq-view/' + element.id">
+    <td mat-cell *matCellDef="let element">
+      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
       </a>
     </td>
@@ -175,7 +175,7 @@
 
 <div class="theme-actions" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
 [ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submitFaq()"
+  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submit('-faq')"
     i18n="@@Uusi UKK">Uusi UKK</button>
 </div>
 

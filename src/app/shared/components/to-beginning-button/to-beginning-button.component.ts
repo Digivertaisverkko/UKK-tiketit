@@ -18,7 +18,8 @@ export class ToBeginningButtonComponent {
   public goBack(): void {
     // if (this.ticket.kurssi === undefined ) {
       const courseID = this.ticketService.getActiveCourse();
-      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+      // this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+      this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
     // } else {
     //   this.router.navigateByUrl('/list-tickets?courseID=' + this.ticket.kurssi);
     // }

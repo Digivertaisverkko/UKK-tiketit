@@ -56,7 +56,7 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   }
 
   goBack() {
-    let url:string = '/list-tickets?courseID=' + this.ticketService.getActiveCourse();
+    let url:string = 'course/' + this.ticketService.getActiveCourse() + '/list-tickets';
     console.log('submit-ticket: url: ' + url);
     this.router.navigateByUrl(url);
   }

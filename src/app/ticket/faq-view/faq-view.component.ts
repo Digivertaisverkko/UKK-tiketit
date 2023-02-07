@@ -56,7 +56,7 @@ export class FaqViewComponent implements OnInit {
   }
 
   editFaq() {
-    let url:string = '/submit-faq/' + this.faqID;
+    let url:string = '/course/' + this.ticket.kurssi + '/submit-faq/' + this.faqID;
     console.log('submit-faq: url: ' + url);
     this.router.navigate([url], { state: { editFaq: 'true' } });
   }
@@ -65,7 +65,7 @@ export class FaqViewComponent implements OnInit {
     this.isArchivePressed = false;
     this.ticketService.archiveFAQ(Number(this.faqID)).then(response => {
       const courseID = this.ticketService.getActiveCourse();
-      this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+      this.router.navigateByUrl('course/' + this.ticket.kurssi +  '/list-tickets');
     }).catch((error: Error) => {
       if (error.tunnus == 1003) {
         this.errorMessage = $localize `:@@:Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';

@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit {
           if (response.redirectUrl == undefined) {
             // redirectUrl = '/kurssi/' + this.courseID + '/list-tickets?courseID=' + this.courseID;
             // TODO: Yritä session storagesta etsiä tallennettua?
-            redirectUrl = '/list-tickets?courseID=' + this.courseID;
-            // redirectUrl = '/kurssi/' + this.courseID +  '/list-tickets/?courseID=' + this.courseID;
+            // redirectUrl = '/list-tickets?courseID=' + this.courseID;
+            redirectUrl = 'course/' + this.courseID +  '/list-tickets';
           } else {
             redirectUrl = response.redirectUrl;
           }

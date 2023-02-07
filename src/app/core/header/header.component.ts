@@ -118,7 +118,7 @@ export class HeaderComponent implements OnInit {
   public goToFrontPage() {
     // const currentRoute = window.location.pathname + window.location.search;
       const courseID = this.ticketService.getActiveCourse();
-      if (courseID !== null) this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+      if (courseID !== null) this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
   }
 
   public login(): void{

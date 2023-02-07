@@ -6,7 +6,7 @@ import { ListingComponent } from './ticket/listing/listing.component';
 
 // FIXME: viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
 const routes: Routes = [
-  { path: '', redirectTo: '/list-tickets?courseID=1', pathMatch: 'full' },
+  { path: '', redirectTo: '/course/1/list-tickets', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];
 

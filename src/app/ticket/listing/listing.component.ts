@@ -49,7 +49,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
   public ticketMessageSub: Subscription;
-  private courseID: string = '';
+  public courseID: string = '';
   // Ticket info polling rate in minutes.
   private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
 
@@ -58,7 +58,7 @@ export class ListingComponent implements OnInit, OnDestroy {
   public errorMessage: string = '';
   public headline: string = '';
   public me: string =  $localize`:@@Minä:Minä`;
-  public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
+  public ticketViewLink = '';
   public user: User = {} as User;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
@@ -103,15 +103,16 @@ export class ListingComponent implements OnInit, OnDestroy {
     });
     this.trackScreenSize();
     this.route.queryParams.subscribe(params => {
-      var courseIDcandinate: string = params['courseID'];
-      if (courseIDcandinate === undefined) {
+      var courseID = String(this.route.snapshot.paramMap.get('courseid'));
+      if (courseID === undefined) {
         this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.` + '.';
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
-      this.courseID = courseIDcandinate;
-      this.ticket.setActiveCourse(courseIDcandinate);
-      this.showCourseName(courseIDcandinate);
+         // var courseIDcandinate: string = params['courseID'];
+      this.courseID = courseID;
+      this.ticket.setActiveCourse(courseID);
+      this.showCourseName(courseID);
 
       if (params['sessionID'] !== undefined) {
         const route = window.location.pathname + window.location.search;
@@ -120,33 +121,42 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.authService.setSessionID(params['sessionID']);
       }
 
-      this.showFAQ(courseIDcandinate);
+      this.showFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
       if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
         // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
         if (this.authService.getUserName.length === 0) {
-          this.authService.fetchUserInfo(courseIDcandinate);
+          this.authService.fetchUserInfo(courseID);
         }
-        this.updateLoggedInView(courseIDcandinate);
+        this.updateLoggedInView(courseID);
       }
       this.isLoaded = true;
     });
   }
 
-  public submitTicket () {
+  public submit(linkEnding?: string) {
+    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     if (this.authService.getIsUserLoggedIn() === false) {
-      window.localStorage.setItem('REDIRECT_URL', 'submit');
+      window.localStorage.setItem('REDIRECT_URL', link);
     }
-    this.router.navigateByUrl('submit');
+    this.router.navigateByUrl(link);
   }
+
+  // public submitTicket () {
+  //   const link = '/course/' + this.courseID + 'submit';
+  //   if (this.authService.getIsUserLoggedIn() === false) {
+  //     window.localStorage.setItem('REDIRECT_URL', link);
+  //   }
+  //   this.router.navigateByUrl(link);
+  // }
 
   public submitFaq () {
     if (this.authService.getIsUserLoggedIn() === false) {
       window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
     }
-    this.router.navigateByUrl('submit-faq');
+    this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq');
   }
 
   private trackLoginState(courseIDcandinate: string) {
