@@ -104,35 +104,20 @@ export class TicketService {
       tila?: number;
     }
     let body: newComment = { viesti: message }
-    if (tila !== undefined) {
-      body.tila = tila;
-    }
+    if (tila !== undefined) body.tila = tila
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
     console.dir(httpOptions);
     try {
       console.log('addComment: lähetetään bodyssa: ' + JSON.stringify(body) + ' URL:iin ' + url);
-      response = await firstValueFrom(
-        this.http.post<object>(url, body, httpOptions)
-      );
-      console.log(
-        'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom( this.http.post<object>(url, body, httpOptions) );
+      console.log( 'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response) );
       this.auth.setLoggedIn();
     } catch (error: any) {
-      console.log('service: napattiin: ' + JSON.stringify(error));
       this.handleError(error);
      //  this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
     }
     return response;
-    // this.checkErrors(response);
-    // if (response.success !== undefined && response.success == true) {
-    //   this.sendMessage($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`)
-    //   return true;
-    // } else {
-    //   this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
-    //   return false;
-    // }
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
@@ -141,14 +126,11 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
     try {
-      response = await firstValueFrom(
-        this.http.get<KentanTiedot[]>(url, httpOptions)
-      );
+      response = await firstValueFrom( this.http.get<KentanTiedot[]>(url, httpOptions) );
       console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response;
   }
 
@@ -224,12 +206,8 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID;
     try {
-      response = await firstValueFrom(
-        this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions)
-      );
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions) );
+      console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response) );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -245,9 +223,7 @@ export class TicketService {
     try {
       console.dir(httpOptions);
       response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response) );
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -307,7 +283,7 @@ export class TicketService {
     let response: any;
     try {
       response = this.http.get<TiketinPerustiedot[]>(url, httpOptions);
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
+      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -329,6 +305,7 @@ export class TicketService {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
+    // TODO: Tee nämä kutsut rinnakkain.
     response = await this.getFields(ticketID, httpOptions);
     ticket.kentat = response;
     response  = await this.getComments(ticketID, httpOptions);
@@ -336,8 +313,6 @@ export class TicketService {
     ticket.viesti = response[0].viesti;
     response.shift();
     ticket.kommentit = response;
-    // console.log('Lopullinen tiketti alla:');
-    // console.log(ticket);
     return ticket
   }
 
@@ -382,36 +357,30 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
-      response = await firstValueFrom<Kentta[]>(
-        this.http.get<any>(url, httpOptions)
-      );
+      response = await firstValueFrom<Kentta[]>( this.http.get<any>(url, httpOptions) );
       console.log('getFields: Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response;
   }
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
-     
-    var sessionID = window.localStorage.getItem('SESSION_ID');
-    // if (sessionID == undefined) {
-    //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
-    // }
+    const SESSION_ID = window.localStorage.getItem('SESSION_ID');
     // console.log('session id on: ' + sessionID);
     // var sessionID = '123456789';
 
-    if (sessionID === undefined || sessionID === null) {
+    if (SESSION_ID === undefined || SESSION_ID === null) {
       return {}
     } else {
       return  {
-        headers: new HttpHeaders({ 'session-id': sessionID })
+        headers: new HttpHeaders({ 'session-id': SESSION_ID })
       };
     }
   }
 
+  // logitukseen.
   private getMethodName() {
     return this.getMethodName.caller.name
   }
