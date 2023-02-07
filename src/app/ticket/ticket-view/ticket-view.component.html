@@ -13,7 +13,7 @@
     <div id="top-buttons" class="theme-actions">
       <app-to-beginning-button></app-to-beginning-button>
       <button mat-raised-button i18n="@@Kopioi UKK" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole === 'admin')"
-         routerLink="/submit-faq/{{ticketID}}">
+        (click)="copyAsFAQ()">
         Kopioi UKK:ksi
       </button>
     </div>
