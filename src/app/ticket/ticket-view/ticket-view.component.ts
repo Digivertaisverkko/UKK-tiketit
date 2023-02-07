@@ -54,7 +54,8 @@ export class TicketViewComponent implements OnInit {
         if (response.nimi !== undefined ) this.userName = response.nimi;
     });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
-    interval(this.POLLING_RATE_MIN * 60 * 1000)
+    const MILLISECONDS_IN_MIN = 60000;
+    interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
       .pipe(
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
