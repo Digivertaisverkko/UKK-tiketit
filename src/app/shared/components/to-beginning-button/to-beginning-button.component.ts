@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TicketService } from 'src/app/ticket/ticket.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-to-beginning-button',
@@ -10,19 +10,14 @@ import { Router } from '@angular/router';
 })
 export class ToBeginningButtonComponent {
 
-  constructor (private ticketService: TicketService,
-    private router: Router) {
-
+  constructor (
+    private router: Router,
+    private route: ActivatedRoute) {
   }
 
   public goBack(): void {
-    // if (this.ticket.kurssi === undefined ) {
-      const courseID = this.ticketService.getActiveCourse();
-      // this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
-      this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
-    // } else {
-    //   this.router.navigateByUrl('/list-tickets?courseID=' + this.ticket.kurssi);
-    // }
+    const courseID = this.route.snapshot.paramMap.get('courseid');
+    this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
   }
 
 }
