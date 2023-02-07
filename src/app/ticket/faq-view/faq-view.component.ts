@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { TicketService, Tiketti } from '../ticket.service';
+import { TicketService, Tiketti, Error } from '../ticket.service';
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -24,9 +24,7 @@ export class FaqViewComponent implements OnInit {
     private route: ActivatedRoute,
     private ticketService: TicketService,
   ) {
-    this.auth.trackUserInfo().subscribe(response => {
-        this.user = response;
-      });
+    this.auth.trackUserInfo().subscribe(response => this.user = response);
   }
 
   ngOnInit(): void {
@@ -38,7 +36,7 @@ export class FaqViewComponent implements OnInit {
           this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.auth.getUserName.length == 0) {
             try {
-             this.auth.fetchUserInfo(String(this.ticket.kurssi));
+              this.auth.fetchUserInfo(String(this.ticket.kurssi));
             } catch {}
           }
         })
@@ -68,8 +66,12 @@ export class FaqViewComponent implements OnInit {
     this.ticketService.archiveFAQ(Number(this.faqID)).then(response => {
       const courseID = this.ticketService.getActiveCourse();
       this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
-    }).catch(error => {
-      this.errorMessage = $localize `:@@UKK poisto epäonnistui:Usein kysytyn kysymyksen poistaminen ei onnistunut.`
+    }).catch((error: Error) => {
+      if (error.tunnus == 1003) {
+        this.errorMessage = $localize `:@@:Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+      } else {
+        this.errorMessage = $localize `:@@UKK poisto epäonnistui:Usein kysytyn kysymyksen poistaminen ei onnistunut.`
+      }
     })
   }
 
