@@ -81,10 +81,12 @@ export function changeToLang(newLang: 'en' | 'fi') {
     }
 }
 
+// Jos haluaa kielen mukaan vaihtuvat lokaalit käyttöön.
+// Pitää laittaa app.module.ts: { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
+// ja import { initializeSupportedLocales } from './app.initializers';
 export const initializeSupportedLocales = () => {
   registerLocaleData(localeFi, 'fi-FI');
   const LANG = getLanguage();
-  console.log('valitaan locale: ' + LANG);
   return LANG;
 };
 

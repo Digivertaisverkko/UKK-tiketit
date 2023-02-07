@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { initializeSupportedLocales } from './app.initializers';
+// import { initializeSupportedLocales } from './app.initializers';
 import { LOCALE_ID } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -30,7 +30,7 @@ import { initializeLanguage  } from "./app.initializers";
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: () => initializeLanguage, multi: true },
-    { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
+    { provide: LOCALE_ID, useValue: 'fi' }
   ],
   bootstrap: [AppComponent],
   exports: []
@@ -38,5 +38,6 @@ import { initializeLanguage  } from "./app.initializers";
 
 export class AppModule { }
 
+// useFactory: initializeSupportedLocales 
 // { provide: LOCALE_ID, useValue: 'fi' }
 //  { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
