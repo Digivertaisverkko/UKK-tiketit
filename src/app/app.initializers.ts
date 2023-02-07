@@ -8,7 +8,6 @@ export const initializeLanguage = (): Promise<void> | void => {
   const language = getLanguage();
   localStorage.setItem('language', language);
   document.documentElement.lang = language;
-  registerLocaleData(localeFi, 'fi-FI');
   if (language == 'en-US') {
     // Pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
@@ -67,31 +66,27 @@ function getLanguage(): string {
 
 function isInIframe () {
   try {
-      return window.self !== window.top;
+    return window.self !== window.top;
   } catch (e) {
-      return true;
+    return true;
   }
 }
 
 export function changeToLang(newLang: 'en' | 'fi') {
-  var language: string;
-    if (newLang == 'en') {
-      language = 'en-US';
-    } else {
-      language = 'fi-FI';
-    }
-    const OLD_LANG = localStorage.getItem('language');
-    if (language !== OLD_LANG) {
-      localStorage.setItem('language', language);
+  const LANG = (newLang == 'en') ? 'en-US' : 'fi-FI';
+  const OLD_LANG = localStorage.getItem('language');
+    if (LANG !== OLD_LANG) {
+      localStorage.setItem('language', LANG);
       window.location.reload();
     }
 }
 
-// export const initializeSupportedLocales = () => {
-  // registerLocaleData(localeFi, 'fi-FI');
-  // const language = getLanguage();
-  // return language;
-// };
+export const initializeSupportedLocales = () => {
+  registerLocaleData(localeFi, 'fi-FI');
+  const LANG = getLanguage();
+  console.log('valitaan locale: ' + LANG);
+  return LANG;
+};
 
 function getBrowserLocales(options = {}): string[] | undefined {
   const defaultOptions = {
