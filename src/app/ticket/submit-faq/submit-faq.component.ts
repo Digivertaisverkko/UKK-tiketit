@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { UusiUKK, TicketService, Kommentti, Tiketti } from '../ticket.service';
+import { UusiUKK, TicketService, Tiketti, Error } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
@@ -136,8 +136,12 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.sendFaq(id, newFaq, this.editExisting)
       .then(() => { this.goBack() })
-      .catch(error => {
-        this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+      .catch( (error: Error) => {
+        if (error.tunnus == 1003) {
+          this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+        } else {
+          this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+        }
       });
   }
 
