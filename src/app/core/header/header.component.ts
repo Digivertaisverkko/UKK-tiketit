@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, Route  } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router  } from '@angular/router';
 import { AuthService, User } from '../auth.service';
-import { TicketService } from 'src/app/ticket/ticket.service';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -32,10 +29,10 @@ export class HeaderComponent implements OnInit {
 
   // private route: ActivatedRoute,
 
-  constructor(private authService: AuthService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private ticketService: TicketService)
+  constructor (
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router)
     {
     // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
     this.authService.onIsUserLoggedIn().subscribe(response => {
@@ -53,10 +50,9 @@ export class HeaderComponent implements OnInit {
       if (event instanceof GuardsCheckStart) {
         // Testataan, ollaanko kirjautuneina.
         this.authService.getSessionID();
-        let courseID: string | null = this.authService.getActiveCourse();
+        let courseID = this.route.snapshot.paramMap.get('courseid');
         // console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
-        if (this.isLoggedIn === true && courseID !== null && courseID.length > 0) {
-
+        if (this.isLoggedIn === true && courseID !== undefined && courseID !== null) {
           this.authService.fetchUserInfo(courseID);
         }
       }
@@ -117,8 +113,8 @@ export class HeaderComponent implements OnInit {
 
   public goToFrontPage() {
     // const currentRoute = window.location.pathname + window.location.search;
-      const courseID = this.ticketService.getActiveCourse();
-      if (courseID !== null) this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
+    const courseID = this.route.snapshot.paramMap.get('courseid');
+    this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
   }
 
   public login(): void{
