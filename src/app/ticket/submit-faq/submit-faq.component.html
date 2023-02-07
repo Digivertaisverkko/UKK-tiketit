@@ -80,7 +80,7 @@
       <div class="spacer"></div>
         <button
           mat-raised-button color="primary"
-          [disabled]="submitForm.invalid"
+          [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
           (click)="sendFaq()"
           i18n="@@Julkaise">
           Julkaise
