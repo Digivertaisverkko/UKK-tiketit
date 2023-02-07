@@ -49,9 +49,9 @@ export class ListingComponent implements OnInit, OnDestroy {
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
   public ticketMessageSub: Subscription;
-  private courseID: string | null = '';
+  private courseID: string = '';
   // Ticket info polling rate in minutes.
-  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15
+  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
 
   // Merkkijonot
   public courseName: string = '';
@@ -109,6 +109,7 @@ export class ListingComponent implements OnInit, OnDestroy {
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
+      this.courseID = courseIDcandinate;
       this.ticket.setActiveCourse(courseIDcandinate);
       this.showCourseName(courseIDcandinate);
 
@@ -175,7 +176,6 @@ export class ListingComponent implements OnInit, OnDestroy {
     }).then(() => this.pollQuestions()
     ).catch(error => this.handleError(error));
     // .finally(this.isLoaded = true) ei toiminut.
-
   }
 
   private trackScreenSize(): void {
@@ -191,10 +191,11 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   private pollQuestions() {
-    interval(this.POLLING_RATE_MIN * 60 * 1000)
+    const MILLISECONDS_IN_MIN = 60000;
+    interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
       .pipe(
         startWith(0),
-        switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
+        switchMap(() => this.ticket.getOnQuestions(this.courseID))
       ).subscribe(
         response => {
           if (response.length > 0) {
@@ -211,8 +212,6 @@ export class ListingComponent implements OnInit, OnDestroy {
             if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
             this.numberOfQuestions = tableData.length;
             this.dataSource.sort = this.sortQuestions;
-            // console.log('----- näytetään: ' + this.dataSource.data.values.length);
-            // console.log('------ data source : ' + this.dataSource.data.length);
             // this.dataSource.paginator = this.paginator;
           }
         }
@@ -255,7 +254,7 @@ export class ListingComponent implements OnInit, OnDestroy {
 
   private showFAQ(courseID: string) {
     this.ticket
-      .getFAQ(Number(courseID))
+      .getFAQ(courseID)
       .then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;

@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/auth.service';
 })
 
 export class LoginComponent implements OnInit {
-  public courseID: number = 1;
+  public courseID: string = '1';
   public email: string = '';
   public isEmailValid: boolean = false;
   private loginID: string = '';
@@ -42,7 +42,9 @@ export class LoginComponent implements OnInit {
           var redirectUrl: string;
           if (response.redirectUrl == undefined) {
             // redirectUrl = '/kurssi/' + this.courseID + '/list-tickets?courseID=' + this.courseID;
+            // TODO: Yritä session storagesta etsiä tallennettua?
             redirectUrl = '/list-tickets?courseID=' + this.courseID;
+            // redirectUrl = '/kurssi/' + this.courseID +  '/list-tickets/?courseID=' + this.courseID;
           } else {
             redirectUrl = response.redirectUrl;
           }

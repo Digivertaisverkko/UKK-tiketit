@@ -13,7 +13,7 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
-  private activeCourse: number | undefined = undefined;
+  private activeCourse: string | undefined = undefined;
   private messages$ = new Subject<string>();
 
   constructor (private auth: AuthService,
@@ -32,9 +32,9 @@ export class TicketService {
 
   public setActiveCourse(courseID: string | null) {
     // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
-    if (courseID !== null && this.activeCourse !== Number(courseID)) {
+    if (courseID !== null && this.activeCourse !== courseID) {
       window.localStorage.setItem('COURSE_ID', courseID);
-      this.activeCourse = Number(courseID);
+      this.activeCourse = courseID;
     }
   }
 
@@ -56,7 +56,7 @@ export class TicketService {
   }
 
   // Hae kurssin UKK-kysymykset.
-  public async getFAQ(courseID: number): Promise<UKK[]> {
+  public async getFAQ(courseID: string): Promise<UKK[]> {
     // const httpOptions = this.getHttpOptions();
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
     let response: any;
@@ -251,43 +251,45 @@ export class TicketService {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
-    const httpOptions = this.getHttpOptions();
-    let target: string;
-    if (onlyOwn !== undefined && onlyOwn == true) {
-      target = 'omat';
-    } else {
-      target = 'kaikki';
-    }
-    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
-    let response: any;
-    try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
+  // public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
+  //   const httpOptions = this.getHttpOptions();
+  //   let target: string;
+  //   if (onlyOwn !== undefined && onlyOwn == true) {
+  //     target = 'omat';
+  //   } else {
+  //     target = 'kaikki';
+  //   }
+  //   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
+  //   let response: any;
+  //   try {
+  //     response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+  //     console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
+  //     this.auth.setLoggedIn();
+  //   } catch (error: any) {
+  //     this.handleError(error);
+  //   }
     // this.checkErrors(response);
-    return response;
-  }
+  //   return response;
+  // }
 
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<TiketinPerustiedot[]> {
+  public getOnQuestions(courseID: string, onlyOwn?: boolean): Observable<TiketinPerustiedot[]> {
+    if (courseID === '') {
+      throw new Error('Ei kurssi ID:ä.');
+    }
     const httpOptions = this.getHttpOptions();
     let target = (onlyOwn == true) ? 'omat' : 'kaikki';
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
       response = this.http.get<TiketinPerustiedot[]>(url, httpOptions);
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+      // Console.log ei toimi tässä, kun ei käytetä await:a.
     } catch (error: any) {
       this.handleError(error);
     }
-    this.auth.setLoggedIn();
     return response;
   }
 
@@ -372,6 +374,7 @@ export class TicketService {
     // var sessionID = '123456789';
 
     if (SESSION_ID === undefined || SESSION_ID === null) {
+      console.warn('getHttpOptions: ei session ID:ä.');
       return {}
     } else {
       return  {
