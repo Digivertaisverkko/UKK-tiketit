@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   public readonly maxUserLength = 40;
   public user: User = {} as User;
   public userRole: string = '';
-  public courseID: string | null;
+  public courseID: string | null = null;
 
   get language(): string {
     return this._language;
@@ -34,8 +34,6 @@ export class HeaderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router)
     {
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
-    console.log('snapshot id: ' + this.courseID);
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     // this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
   }
@@ -43,9 +41,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.trackUserInfo();
     this.authService.onIsUserLoggedIn().subscribe(response => this.isLoggedIn = response);
-    this.route.paramMap.subscribe((paramMap) => {
-      if (paramMap.get('courseID') !== null) this.courseID = paramMap.get('courseID');
-    });
     // Käyttäjätietojen päivitys.
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
