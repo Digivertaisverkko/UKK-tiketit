@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit {
+  
   public courseName: string = '';
   public errorMessage: string = '';
   public isInIframe: boolean;
@@ -24,6 +25,7 @@ export class TicketViewComponent implements OnInit {
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
   // Ticket info polling rate in minutes.
+  private courseID: string | null;
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private readonly CURRENT_DATE = new Date().toDateString();
 
@@ -38,14 +40,13 @@ export class TicketViewComponent implements OnInit {
     private router: Router,
     private _snackBar: MatSnackBar
     ) {
+      this.courseID = this.route.snapshot.paramMap.get('courseid');
       this.ticket = {} as Tiketti;
       this.tila = '';
       this.commentText = '';
       this.isInIframe = getIsInIframe();
       this.isLoaded = false;
       this.ticketID = String(this.route.snapshot.paramMap.get('id'));
-      // this.messageSubscription = this.ticketService.onMessages().subscribe(
-      //   (message) => { this._snackBar.open(message, 'OK') });
   }
 
   ngOnInit(): void {
@@ -61,13 +62,15 @@ export class TicketViewComponent implements OnInit {
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
       ).subscribe({
         next: response => {
+          if (this.courseID === null) {
+            throw new Error('Kurssi ID puuttuu URL:sta.');
+          }
           this.ticket = response;
-          this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.userName.length == 0) {
-            this.auth.fetchUserInfo(String(this.ticket.kurssi));
+            if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
-          this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
+          this.ticketService.getCourseName(this.courseID).then(response => {
             console.log(' saatiin vastaus: ' + response);
             this.courseName = response;
           });
@@ -91,7 +94,7 @@ export class TicketViewComponent implements OnInit {
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
       this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
-    this.router.navigateByUrl('/course/' + this.ticket.kurssi + '/submit-faq/' + this.ticketID);
+    this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq/' + this.ticketID);
   }
 
 
