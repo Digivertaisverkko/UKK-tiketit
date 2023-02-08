@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { Subject, firstValueFrom, Observable } from 'rxjs';
 import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
 import { AuthService } from '../core/auth.service';
@@ -13,7 +13,7 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
-  private refreshEmitter$ = new BehaviorSubject<boolean>(false);
+  private refreshEmitter$ = new Subject<boolean>();
   private activeCourse: string | undefined = undefined;
 
   constructor (private auth: AuthService,
