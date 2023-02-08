@@ -54,6 +54,12 @@ export class TicketViewComponent implements OnInit {
         if (response.asema !== undefined ) this.userRole = response.asema;
         if (response.nimi !== undefined ) this.userName = response.nimi;
     });
+    if (this.courseID === null) {
+      throw new Error('Kurssi ID puuttuu URL:sta.');
+    }
+    this.ticketService.getCourseName(this.courseID).then(response => {
+      this.courseName = response;
+    });
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
     const MILLISECONDS_IN_MIN = 60000;
     interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
@@ -62,18 +68,11 @@ export class TicketViewComponent implements OnInit {
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
       ).subscribe({
         next: response => {
-          if (this.courseID === null) {
-            throw new Error('Kurssi ID puuttuu URL:sta.');
-          }
           this.ticket = response;
           if (this.userName.length == 0) {
             if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
-          this.ticketService.getCourseName(this.courseID).then(response => {
-            console.log(' saatiin vastaus: ' + response);
-            this.courseName = response;
-          });
           this.isLoaded = true;
         },
         error: error => {
@@ -96,7 +95,6 @@ export class TicketViewComponent implements OnInit {
     }
     this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq/' + this.ticketID);
   }
-
 
   public getSenderTitle(name: string, role: string): string {
     if (name == this.userName) return $localize`:@@Minä:Minä`
