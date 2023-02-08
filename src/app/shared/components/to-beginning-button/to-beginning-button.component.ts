@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TicketService } from 'src/app/ticket/ticket.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

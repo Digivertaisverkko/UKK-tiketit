@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router  } from '@angular/router';
+import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, ParamMap  } from '@angular/router';
 import { AuthService, User } from '../auth.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   public readonly maxUserLength = 40;
   public user: User = {} as User;
   public userRole: string = '';
+  public courseID: string | null;
   get language(): string {
     return this._language;
   }
@@ -35,6 +36,8 @@ export class HeaderComponent implements OnInit {
     private router: Router)
     {
     // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
+    this.courseID = this.route.snapshot.paramMap.get('courseid');
+    console.log('snapshot id: ' + this.courseID);
     this.authService.onIsUserLoggedIn().subscribe(response => {
       this.isLoggedIn = response;
       // console.log('header: asetettiin kirjautumisen tila: ' + this.isLoggedIn);
@@ -45,15 +48,18 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.trackUserInfo();
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.get('courseID') !== null) this.courseID = paramMap.get('courseID');
+  });
+    // Käyttäjätietojen päivitys.
     this.router.events.subscribe(event => {
       // console.log(JSON.stringify(event));
       if (event instanceof GuardsCheckStart) {
         // Testataan, ollaanko kirjautuneina.
         this.authService.getSessionID();
-        let courseID = this.route.snapshot.paramMap.get('courseid');
         // console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
-        if (this.isLoggedIn === true && courseID !== undefined && courseID !== null) {
-          this.authService.fetchUserInfo(courseID);
+        if (this.isLoggedIn === true && this.courseID !== null) {
+          this.authService.fetchUserInfo(this.courseID);
         }
       }
     });
@@ -112,9 +118,13 @@ export class HeaderComponent implements OnInit {
   }
 
   public goToFrontPage() {
-    // const currentRoute = window.location.pathname + window.location.search;
-    const courseID = this.route.snapshot.paramMap.get('courseid');
-    this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
+    console.log('kurssi id: ' + this.courseID);
+    console.log(JSON.stringify(this.courseID));
+    if (this.courseID !== null) {
+      this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
+    } else {
+      console.error('Ei kurssi ID:ä.');
+    }
   }
 
   public login(): void{
