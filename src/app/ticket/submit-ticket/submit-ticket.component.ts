@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/core/auth.service';
 import { UusiTiketti, TicketService } from '../ticket.service';
@@ -29,41 +29,42 @@ export class SubmitTicketComponent implements OnInit {
   public currentDate = new Date();
   // public user$ = this.auth.trackUserInfo();
   public message: string = '';
+  private courseID: string | null;
 
   constructor(
     private auth: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private ticketService: TicketService,
     private _snackBar: MatSnackBar
     ) {
+      this.courseID = this.route.snapshot.paramMap.get('courseid');
       this.isInIframe = getIsInIframe();
     }
 
   ngOnInit(): void {
-    const courseID = this.ticketService.getActiveCourse();
-    this.auth.fetchUserInfo(courseID);
+    if (this.courseID === null) { throw new Error('Ei kurssi ID:ä.')}
+    this.auth.fetchUserInfo(this.courseID);
     this.auth.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi ?? '';
       this.userRole = response?.asema ?? '';
     })
-    this.ticketService.getCourseName(courseID).then(response => {
+    this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     }).catch(() => {});
   }
 
   goBack() {
-    let url:string = 'course/' + this.ticketService.getActiveCourse() + '/list-tickets';
-    console.log('submit-ticket: url: ' + url);
-    this.router.navigateByUrl(url);
+    this.router.navigateByUrl('course/' + this.courseID + '/list-tickets');
   }
 
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
     this.newTicket.viesti = this.message;
     this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
-    const courseID = this.ticketService.getActiveCourse();
     console.log(this.newTicket);
-    this.ticketService.addTicket(courseID, this.newTicket)
+    if (this.courseID === null) { throw new Error('Ei kurssi ID:ä.')}
+    this.ticketService.addTicket(this.courseID, this.newTicket)
       .then(() => this.goBack()
       ).catch( error => {
         // TODO: lisää eri virhekoodeja?
