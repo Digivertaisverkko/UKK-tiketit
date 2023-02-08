@@ -51,7 +51,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public courseID: string = '';
   // Ticket info polling rate in minutes.
-  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 1;
+  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
 
   // Merkkijonot
   public courseName: string = '';
