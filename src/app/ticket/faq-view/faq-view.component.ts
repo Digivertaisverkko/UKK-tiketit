@@ -16,6 +16,7 @@ export class FaqViewComponent implements OnInit {
   public ticket: Tiketti = {} as Tiketti;
   public user: User = <User>{};
   public isArchivePressed: boolean = false;
+  private courseID: string | null;
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(
@@ -24,27 +25,26 @@ export class FaqViewComponent implements OnInit {
     private route: ActivatedRoute,
     private ticketService: TicketService,
   ) {
+    this.courseID = this.route.snapshot.paramMap.get('courseid');
     this.auth.trackUserInfo().subscribe(response => this.user = response);
   }
 
   ngOnInit(): void {
     this.getIfInIframe();
+    if (this.courseID === null) {
+      throw new Error('Kurssi ID puuttuu URL:sta.');
+    }
+    this.ticketService.getCourseName(this.courseID).then(response => {
+      this.courseName = response;
+    });
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
         .then((response) => {
           this.ticket = response;
-          this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.auth.getUserName.length == 0) {
             try {
-              this.auth.fetchUserInfo(String(this.ticket.kurssi));
+              if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
             } catch {}
-          }
-        })
-        .then(() => {
-          if (this.ticket.kurssi !== null) {
-            this.ticketService.getCourseName(String(this.ticket.kurssi))
-              .then((response) => this.courseName = response
-            ).catch()
           }
         })
         .catch(error => {
@@ -56,7 +56,7 @@ export class FaqViewComponent implements OnInit {
   }
 
   editFaq() {
-    let url:string = '/course/' + this.ticket.kurssi + '/submit-faq/' + this.faqID;
+    let url:string = '/course/' + this.courseID + '/submit-faq/' + this.faqID;
     console.log('submit-faq: url: ' + url);
     this.router.navigate([url], { state: { editFaq: 'true' } });
   }
