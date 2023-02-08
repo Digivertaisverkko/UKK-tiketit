@@ -14,21 +14,10 @@ import { ErrorService } from '../core/error.service';
 export class TicketService {
 
   private activeCourse: string | undefined = undefined;
-  private messages$ = new Subject<string>();
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient) {}
-
-  // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
-  public onMessages(): Observable<any> {
-    return this.messages$.asObservable();
-  }
-
-  // Lopeta viestien vastaanottaminen tästä servicestä.
-  public unsubscribeMessage(): void {
-    this.messages$.unsubscribe;
-  }
 
   public setActiveCourse(courseID: string | null) {
     // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
@@ -115,7 +104,6 @@ export class TicketService {
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
-     //  this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
     }
     return response;
   }
@@ -169,8 +157,6 @@ export class TicketService {
     }
     let message: string = '';
 
-    // this.checkErrors(response);
-
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
     //   return false;
@@ -211,7 +197,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response['nimi'];
   }
 
@@ -228,7 +213,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response;
   }
 
@@ -244,7 +228,6 @@ export class TicketService {
       } catch (error: any) {
         this.handleError(error);
       }
-      // this.checkErrors(response);
       return response;
     }
 
@@ -268,7 +251,6 @@ export class TicketService {
   //   } catch (error: any) {
   //     this.handleError(error);
   //   }
-    // this.checkErrors(response);
   //   return response;
   // }
 

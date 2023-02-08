@@ -30,7 +30,7 @@ export interface ColumnDefinition {
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss'],
 })
-export class ListingComponent implements OnInit, OnDestroy {
+export class ListingComponent implements OnInit {
   // dataSource = new MatTableDataSource<Sortable>();
   // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
@@ -48,7 +48,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  public ticketMessageSub: Subscription;
   public courseID: string = '';
   // Ticket info polling rate in minutes.
   private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
@@ -77,8 +76,6 @@ export class ListingComponent implements OnInit, OnDestroy {
   ) {
     this.localeDateFormat = this.authService.getDateFormat();
     this.isInIframe = getIsInIframe();
-    this.ticketMessageSub = this.ticket.onMessages().subscribe(message =>
-      this.errorMessage = message ?? '');
 
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
@@ -332,7 +329,6 @@ export class ListingComponent implements OnInit, OnDestroy {
       }*/
   }
 
-  ngOnDestroy(): void {
-    this.ticketMessageSub.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+  // }
 }

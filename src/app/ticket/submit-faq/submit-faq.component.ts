@@ -11,7 +11,7 @@ import { getIsInIframe } from '../functions/isInIframe';
   templateUrl: './submit-faq.component.html',
   styleUrls: ['./submit-faq.component.scss']
 })
-export class SubmitFaqComponent implements OnDestroy, OnInit {
+export class SubmitFaqComponent implements OnInit {
 
   public courseName: string = '';
   public currentDate = new Date();
@@ -28,7 +28,6 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   // public user$ = this.authService.trackUserInfo();
 
   private courseId: string = this.ticketService.getActiveCourse();
-  private messageSubscription: Subscription;
   private ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
 
   constructor(
@@ -39,8 +38,6 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
     private ticketService: TicketService,
     ) {
       this.isInIframe = getIsInIframe();
-      this.messageSubscription = this.ticketService.onMessages().subscribe(
-        message => { this._snackBar.open(message, 'OK') });
       this.editExisting = window.history.state.editFaq ?? false;
   }
 
@@ -89,9 +86,9 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       .catch( error => { console.error(error.message) });
   }
 
-  ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+
+  // }
 
   public getSenderTitle(name: string, role: string): string {
     if (name === this.authService.getUserName()) {

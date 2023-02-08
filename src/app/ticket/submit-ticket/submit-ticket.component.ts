@@ -12,7 +12,7 @@ import { getIsInIframe } from '../functions/isInIframe';
   styleUrls: ['./submit-ticket.component.scss']
 })
 
-export class SubmitTicketComponent implements OnDestroy, OnInit {
+export class SubmitTicketComponent implements OnInit {
   // max pituus: 255.
   titleText: string = '';
   assignmentText: string = '';
@@ -28,8 +28,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
   sendingIsAllowed: boolean = false;
   public currentDate = new Date();
   // public user$ = this.auth.trackUserInfo();
-
-  messageSubscription: Subscription;
   public message: string = '';
 
   constructor(
@@ -39,8 +37,6 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
     private _snackBar: MatSnackBar
     ) {
       this.isInIframe = getIsInIframe();
-      this.messageSubscription = this.ticketService.onMessages().subscribe(
-        (message) => { this._snackBar.open(message, 'OK') });
     }
 
   ngOnInit(): void {
@@ -75,8 +71,8 @@ export class SubmitTicketComponent implements OnDestroy, OnInit {
       });
   }
 
-  ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+
+  // }
 
 }
