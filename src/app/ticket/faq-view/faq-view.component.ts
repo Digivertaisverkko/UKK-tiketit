@@ -61,6 +61,10 @@ export class FaqViewComponent implements OnInit {
     this.router.navigate([url], { state: { editFaq: 'true' } });
   }
 
+  changeArchiveButton() {
+    setTimeout(() => this.isArchivePressed = true, 300);
+  }
+
   archiveFaq() {
     this.isArchivePressed = false;
     this.ticketService.archiveFAQ(Number(this.faqID)).then(response => {
