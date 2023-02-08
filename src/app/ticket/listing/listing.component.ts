@@ -1,11 +1,11 @@
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 // import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
@@ -30,7 +30,7 @@ export interface ColumnDefinition {
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss'],
 })
-export class ListingComponent implements OnInit {
+export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // dataSource = new MatTableDataSource<Sortable>();
   // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
@@ -51,7 +51,7 @@ export class ListingComponent implements OnInit {
   public numberOfQuestions: number = 0;
   public courseID: string = '';
   // Ticket info polling rate in minutes.
-  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
+  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 1;
 
   // Merkkijonot
   public courseName: string = '';
@@ -132,6 +132,16 @@ export class ListingComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.ticket.trackRefresh().subscribe(response => {
+      if (response) this.fetchQuestions(this.courseID);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.ticket.untrackRefresh();
+  }
+
   public submit(linkEnding?: string) {
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     if (this.authService.getIsUserLoggedIn() === false) {
@@ -179,7 +189,10 @@ export class ListingComponent implements OnInit {
           this.courseID = courseIDcandinate;
         }
       }
-    }).then(() => this.pollQuestions()
+    }).then(() => {
+      const MILLISECONDS_IN_MIN = 60000;
+      timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe( () => this.fetchQuestions(this.courseID) );
+    }
     ).catch(error => this.handleError(error));
     // .finally(this.isLoaded = true) ei toiminut.
   }
@@ -196,32 +209,28 @@ export class ListingComponent implements OnInit {
     });
   }
 
-  private pollQuestions() {
-    const MILLISECONDS_IN_MIN = 60000;
-    interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.ticket.getOnQuestions(this.courseID))
-      ).subscribe(
-        response => {
-          if (response.length > 0) {
-            let tableData: SortableTicket[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
-              tilaID: tila,
-              tila: this.ticket.getTicketState(tila),
-              id: id,
-              otsikko: otsikko,
-              aikaleima: aikaleima,
-              aloittajanNimi: aloittaja.nimi
-            }));
-            // Arkistoituja kysymyksiä ei näytetä.
-            tableData = tableData.filter(ticket => ticket.tilaID !== 6)
-            if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
-            this.numberOfQuestions = tableData.length;
-            this.dataSource.sort = this.sortQuestions;
-            // this.dataSource.paginator = this.paginator;
+  private fetchQuestions(courseID: string) {
+    this.ticket.getTicketList(courseID).then(response => {
+      if (response.length > 0) {
+        let tableData: SortableTicket[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
+          {
+            tilaID: tila,
+            tila: this.ticket.getTicketState(tila),
+            id: id,
+            otsikko: otsikko,
+            aikaleima: aikaleima,
+            aloittajanNimi: aloittaja.nimi
           }
-        }
-      )
+        ));
+        // Arkistoituja kysymyksiä ei näytetä.
+        tableData = tableData.filter(ticket => ticket.tilaID !== 6)
+        if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
+        this.numberOfQuestions = tableData.length;
+        this.dataSource.sort = this.sortQuestions;
+        // this.dataSource.paginator = this.paginator;
+      }
+    });
+
   }
 
   private showCourseName(courseID: string) {
