@@ -64,8 +64,7 @@ export class FaqViewComponent implements OnInit {
   archiveFaq() {
     this.isArchivePressed = false;
     this.ticketService.archiveFAQ(Number(this.faqID)).then(response => {
-      const courseID = this.ticketService.getActiveCourse();
-      this.router.navigateByUrl('course/' + this.ticket.kurssi +  '/list-tickets');
+      this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
     }).catch((error: Error) => {
       if (error.tunnus == 1003) {
         this.errorMessage = $localize `:@@:Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';

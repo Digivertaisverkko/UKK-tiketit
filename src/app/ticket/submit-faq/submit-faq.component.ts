@@ -25,7 +25,6 @@ export class SubmitFaqComponent implements OnInit {
   public editExisting: boolean;
   public errorMessage: string = '';
   // public user$ = this.authService.trackUserInfo();
-
   private courseID: string | null;
   private ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
 
