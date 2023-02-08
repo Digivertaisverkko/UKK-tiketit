@@ -19,30 +19,24 @@ export class TicketService {
     private errorService: ErrorService,
     private http: HttpClient) {}
 
-  public setActiveCourse(courseID: string | null) {
-    // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
-    if (courseID !== null && this.activeCourse !== courseID) {
-      window.localStorage.setItem('COURSE_ID', courseID);
-      this.activeCourse = courseID;
-    }
-  }
+
 
   /* Aseta kurssi aktiiviseksi muistiin. Tarvitaan mm. käyttäjätietojen
      hakemiseen */
-  public getActiveCourse(): string {
-    var courseID: string = '';
-    if (this.activeCourse == undefined) {
-      const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-      if (savedCourseID !== null) {
-          courseID = savedCourseID;
-        } else {
-          throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
-        }
-      } else {
-        courseID = String(this.activeCourse);
-      }
-    return courseID;
-  }
+  // public getActiveCourse(): string {
+  //   var courseID: string = '';
+  //   if (this.activeCourse == undefined) {
+  //     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+  //     if (savedCourseID !== null) {
+  //         courseID = savedCourseID;
+  //       } else {
+  //         throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
+  //       }
+  //     } else {
+  //       courseID = String(this.activeCourse);
+  //     }
+  //   return courseID;
+  // }
 
   // Hae kurssin UKK-kysymykset.
   public async getFAQ(courseID: string): Promise<UKK[]> {
@@ -122,7 +116,8 @@ export class TicketService {
     return response;
   }
 
-  // ID on kurssi ID tai UKK:n ID riippuen, lisätäänkö uusi vai muokataanko vanhaa UKK:a.
+  /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
+     Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
   public async sendFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
     const httpOptions = this.getHttpOptions();
     let response: any;
@@ -142,8 +137,8 @@ export class TicketService {
     }
   }
 
-  // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
-  public async addTicket(courseID: string, newTicket: UusiTiketti) {
+  // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
+  public async addTicket(courseID: string, newTicket: UusiTiketti): Promise<boolean> {
     const httpOptions = this.getHttpOptions();
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
@@ -155,7 +150,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    let message: string = '';
+    return true
 
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)

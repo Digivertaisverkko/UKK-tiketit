@@ -79,16 +79,16 @@ export class AuthService {
   }
 
   // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.
-  public setActiveCourse(courseID: string | null) {
+  // public setActiveCourse(courseID: string | null) {
     // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
     // if (courseID !== null && this.activeCourse$.value.id !== courseID) {
-    if (courseID !== null) {
-      window.localStorage.setItem('COURSE_ID', courseID);
+    // if (courseID !== null) {
+    //   window.localStorage.setItem('COURSE_ID', courseID);
       // Nimi ei vielä käytössä.
       // this.activeCourse$.next({ id: courseID, nimi: ''});
-      if (this.user$.value.id === 0) this.getUserInfo();
-    }
-  }
+  //     if (this.user$.value.id === 0) this.getUserInfo();
+  //   }
+  // }
 
   // Aseta tila kirjautuneeksi.
   public setLoggedIn() {
@@ -137,11 +137,6 @@ export class AuthService {
     //   })
     // }
     return user;
-  }
-
-  public getActiveCourse(): string | null{
-    const courseID: string | null = window.localStorage.getItem('COURSE_ID');
-    return courseID;
   }
 
   public trackUserInfo(): Observable<User> {

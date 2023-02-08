@@ -107,7 +107,6 @@ export class ListingComponent implements OnInit {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
-      this.ticket.setActiveCourse(courseID);
       this.showCourseName(courseID);
 
       // if (paramMap['sessionID'] !== undefined) {
