@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
 import { AuthService } from '../core/auth.service';
@@ -13,30 +13,25 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
+  private refreshEmitter$ = new BehaviorSubject<boolean>(false);
   private activeCourse: string | undefined = undefined;
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient) {}
 
+  // Voidaan lähettää tätä seuraaville komponenteille pyyntö päivittää näkymä.
+  public trackRefresh(): Observable<boolean> {
+    return this.refreshEmitter$.asObservable();
+  }
 
+  public sendRefresh(): void {
+    this.refreshEmitter$.next(true);
+  }
 
-  /* Aseta kurssi aktiiviseksi muistiin. Tarvitaan mm. käyttäjätietojen
-     hakemiseen */
-  // public getActiveCourse(): string {
-  //   var courseID: string = '';
-  //   if (this.activeCourse == undefined) {
-  //     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-  //     if (savedCourseID !== null) {
-  //         courseID = savedCourseID;
-  //       } else {
-  //         throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
-  //       }
-  //     } else {
-  //       courseID = String(this.activeCourse);
-  //     }
-  //   return courseID;
-  // }
+  public untrackRefresh(): void {
+    this.refreshEmitter$.unsubscribe;
+  }
 
   // Hae kurssin UKK-kysymykset.
   public async getFAQ(courseID: string): Promise<UKK[]> {
@@ -253,7 +248,7 @@ export class TicketService {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public getOnQuestions(courseID: string, onlyOwn?: boolean): Observable<TiketinPerustiedot[]> {
+  public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
@@ -262,7 +257,8 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
-      response = this.http.get<TiketinPerustiedot[]>(url, httpOptions);
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+      console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
       // Console.log ei toimi tässä, kun ei käytetä await:a.
     } catch (error: any) {
       this.handleError(error);
@@ -343,6 +339,23 @@ export class TicketService {
     }
     return response;
   }
+
+    /* Aseta kurssi aktiiviseksi muistiin. Tarvitaan mm. käyttäjätietojen
+     hakemiseen */
+  // public getActiveCourse(): string {
+  //   var courseID: string = '';
+  //   if (this.activeCourse == undefined) {
+  //     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+  //     if (savedCourseID !== null) {
+  //         courseID = savedCourseID;
+  //       } else {
+  //         throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
+  //       }
+  //     } else {
+  //       courseID = String(this.activeCourse);
+  //     }
+  //   return courseID;
+  // }
 
   // Palauta HttpOptions, johon on asetettu session-id headeriin.
   private getHttpOptions(): object {
