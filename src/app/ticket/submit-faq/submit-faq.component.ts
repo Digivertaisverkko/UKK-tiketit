@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { UusiUKK, TicketService, Tiketti, Error } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
@@ -27,7 +26,7 @@ export class SubmitFaqComponent implements OnInit {
   public errorMessage: string = '';
   // public user$ = this.authService.trackUserInfo();
 
-  private courseId: string = this.ticketService.getActiveCourse();
+  private courseID: string | null;
   private ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
 
   constructor(
@@ -35,8 +34,10 @@ export class SubmitFaqComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private ticketService: TicketService,
+    private route: ActivatedRoute,
+    private ticketService: TicketService
     ) {
+      this.courseID = this.route.snapshot.paramMap.get('courseid');
       this.isInIframe = getIsInIframe();
       this.editExisting = window.history.state.editFaq ?? false;
   }
@@ -44,6 +45,9 @@ export class SubmitFaqComponent implements OnInit {
   ngOnInit(): void {
     console.log('editoidaan UKK:a: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
+    if (this.courseID === null) {
+      throw new Error('Kurssi ID puuttuu URL:sta.');
+    }
     this.authService.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi;
     })
@@ -57,13 +61,12 @@ export class SubmitFaqComponent implements OnInit {
               this.faqAnswer = comment.viesti;
             }
           }
-          if (String(response.kurssi) !== this.courseId) {
-            this.courseId = String(response.kurssi);
-            this.authService.fetchUserInfo(this.courseId);
-            this.ticketService.setActiveCourse(String(this.courseId));
-            this.ticketService.getCourseName(this.courseId)
+          if (String(response.kurssi) !== this.courseID) {
+            this.courseID = String(response.kurssi);
+            this.authService.fetchUserInfo(this.courseID);
+            this.ticketService.getCourseName(this.courseID)
               .then( response => { this.courseName = response })
-              .catch( error => { console.error(error.message) });
+              .catch( error => {});
           }
           this.faqMessage = response.viesti;
           this.faqTitle = response.otsikko;
@@ -81,9 +84,9 @@ export class SubmitFaqComponent implements OnInit {
           }
         });
     }
-    this.ticketService.getCourseName(this.courseId)
+    this.ticketService.getCourseName(this.courseID)
       .then( response => { this.courseName = response })
-      .catch( error => { console.error(error.message) });
+      .catch( error => {});
   }
 
   // ngOnDestroy(): void {
@@ -107,9 +110,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   private goBack(): void {
-    let url:string = '/list-tickets?courseID=' + this.courseId;
-    console.log('submit-ticket: url: ' + url);
-    this.router.navigateByUrl(url);
+    this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
   }
 
   // Onko annettu aikaleima tänään.
@@ -129,8 +130,8 @@ export class SubmitFaqComponent implements OnInit {
       ],
       vastaus: this.faqAnswer,
     }
-    // console.log(newFaq);
-    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
+    if (this.courseID === null) throw new Error('Ei kurssi ID:ä.');
+    let id = this.editExisting ? this.ticketId ?? '' : this.courseID;
     this.ticketService.sendFaq(id, newFaq, this.editExisting)
       .then(() => { this.goBack() })
       .catch( (error: Error) => {
