@@ -110,12 +110,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.courseID = courseID;
       this.showCourseName(courseID);
 
-      // if (paramMap['sessionID'] !== undefined) {
-      //   const route = window.location.pathname + window.location.search;
-      //   console.log('URL on: ' + route);
-      //   console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
-      //   this.authService.setSessionID(params['sessionID']);
-      // }
+      var sessionID = paramMap.get('sessionID');
+      if (sessionID !== null) {
+        const route = window.location.pathname + window.location.search;
+        console.log('URL on: ' + route);
+        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
+        this.authService.setSessionID(sessionID);
+      }
 
       this.showFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
