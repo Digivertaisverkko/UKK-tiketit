@@ -7,10 +7,15 @@
 
     <!-- [disabled]="!isUserLoggedIn$" -->
 
-    <div class="logo" matRipple [matRippleUnbounded]="isLoggedIn" [matRippleRadius]="30"
-      [ngStyle]="{ 'cursor': ( isLoggedIn ) ? 'pointer' : 'unset' }">
-      <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
+    <div class="logo" *ngIf="courseID === null; else clickableLogo">
+      <img src="../../../assets/logos/dvv-white.svg" alt="">
     </div>
+  
+  <ng-template #clickableLogo>
+    <div class="logo logo-clickable" matRipple [matRippleUnbounded]="true" [matRippleRadius]="30">
+    <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
+      </div>
+  </ng-template>
 
   <span class="spacer"></span>
 

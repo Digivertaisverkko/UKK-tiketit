@@ -1,5 +1,6 @@
 @import '/src/variables.scss';
 
+// Skaalataan headerin korkeuden mukaan.
 @mixin height-dependant($header-height) {
 
   mat-toolbar {
@@ -39,11 +40,12 @@
     // border-style: none;
     margin: auto;
     height: 80%;
-    &:hover {
-      filter: brightness(97%);
-    }
-    img {
-      height: 100%;
+
+    img { height: 100%; }
+
+    &-clickable {
+      &:hover { filter: brightness(97%); }
+      cursor: pointer;
     }
 }
 

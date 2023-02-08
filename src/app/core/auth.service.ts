@@ -149,6 +149,7 @@ export class AuthService {
     window.localStorage.setItem('SESSION_ID', newSessionID);
   }
 
+  // Palauta session ID ja päivitä status kirjautumattomaksi, jos sitä ei ole.
   public getSessionID(): string | null {
     const sessionID = (window.localStorage.getItem('SESSION_ID'));
     if (sessionID === undefined || sessionID === null) this.setNotLoggegIn();
