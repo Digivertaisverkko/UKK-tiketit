@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, ParamMap, ActivationEnd  } from '@angular/router';
+import { TicketService } from 'src/app/ticket/ticket.service';
 import { AuthService, User } from '../auth.service';
 
 @Component({
@@ -32,7 +33,8 @@ export class HeaderComponent implements OnInit {
   constructor (
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router)
+    private router: Router,
+    private ticketService: TicketService)
     {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     // this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
@@ -100,13 +102,17 @@ export class HeaderComponent implements OnInit {
   // }
 
   public toggleLanguage() {
-    // console.log(' --- kieli: ' + this.language);
     this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
   }
 
   public goToFrontPage() {
     if (this.courseID !== null) {
-      this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
+      const currentRoute = window.location.pathname;
+      if (currentRoute.includes('/list-tickets')) {
+        this.ticketService.sendRefresh();
+      } else {
+        this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
+      }
     } else {
       console.error('Ei kurssi ID:ä.');
     }
