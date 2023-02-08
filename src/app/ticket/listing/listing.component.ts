@@ -109,7 +109,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.courseID = courseID;
       this.showCourseName(courseID);
-
       var sessionID = paramMap.get('sessionID');
       if (sessionID !== null) {
         const route = window.location.pathname + window.location.search;
@@ -117,7 +116,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
         this.authService.setSessionID(sessionID);
       }
-
       this.showFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
@@ -135,8 +133,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.ticket.trackRefresh().subscribe(response => {
-      if (response) this.fetchQuestions(this.courseID);
-    });
+      if (response) {
+        this.fetchQuestions(this.courseID);
+        this.showFAQ(this.courseID);
+      }
+      });
   }
 
   ngOnDestroy(): void {
