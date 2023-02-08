@@ -43,6 +43,7 @@ export class ListingComponent implements OnInit {
   public FAQisLoaded: boolean = false;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
+  public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
   public localeDateFormat: string;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
@@ -169,13 +170,13 @@ export class ListingComponent implements OnInit {
         // Onko käyttäjä URL parametrilla saadulla kurssilla.
         // Ei tarvitse olla enää osallistujana.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+          this.isParticipant = false;
           this.authService.setIsParticipant(false);
           this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
         } else {
+          this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
-          // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
-          this.ticket.setActiveCourse(this.courseID);
         }
       }
     }).then(() => this.pollQuestions()
