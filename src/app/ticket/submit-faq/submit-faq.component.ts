@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 import { UusiUKK, TicketService, Tiketti, Error } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
 
@@ -14,6 +13,8 @@ export class SubmitFaqComponent implements OnInit {
 
   public courseName: string = '';
   public currentDate = new Date();
+  public editExisting: boolean;
+  public errorMessage: string = '';
   public faqAnswer: string = '';
   public faqAssignment: string = '';
   public faqMessage: string = '';
@@ -21,15 +22,11 @@ export class SubmitFaqComponent implements OnInit {
   public faqTitle: string = '';
   public isInIframe: boolean;
   public originalTicket: Tiketti | undefined;
-  public userName: string = '';
-  public editExisting: boolean;
-  public errorMessage: string = '';
-  // public user$ = this.authService.trackUserInfo();
-  private courseID: string | null;
   public ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
+  public userName: string = '';
+  private courseID: string | null;
 
   constructor(
-    private _snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
@@ -42,7 +39,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('editoidaan UKK:a: '+ this.editExisting);
+    console.log('Editoidaanko?: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -54,7 +51,8 @@ export class SubmitFaqComponent implements OnInit {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
           this.originalTicket = response;
-          // Valitaan oletusvastaukseksi ensimmäinen kommentti, jonka tila on "ratkaisuehdotus", eli tila 5.
+          // Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli "Ratkaisuehdotuksen" omaava kommentti
+          // oletusvastaukseksi. Lopputuloksena viimeinen ratkaisuehdotus jää oletusvastaukseksi.
           for (let comment of response.kommentit) {
             if (comment.tila === 5) {
               this.faqAnswer = comment.viesti;
@@ -64,8 +62,7 @@ export class SubmitFaqComponent implements OnInit {
             this.courseID = String(response.kurssi);
             this.authService.fetchUserInfo(this.courseID);
             this.ticketService.getCourseName(this.courseID)
-              .then( response => { this.courseName = response })
-              .catch( error => {});
+              .then( response => { this.courseName = response });
           }
           this.faqMessage = response.viesti;
           this.faqTitle = response.otsikko;
@@ -84,13 +81,8 @@ export class SubmitFaqComponent implements OnInit {
         });
     }
     this.ticketService.getCourseName(this.courseID)
-      .then( response => { this.courseName = response })
-      .catch( error => {});
+      .then( response => { this.courseName = response });
   }
-
-  // ngOnDestroy(): void {
-
-  // }
 
   private goBack(): void {
     this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
