@@ -98,12 +98,14 @@
   <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-  <div class="theme-actions" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+  </section>
+
+  <div class="theme-actions" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
+  *ngIf="isParticipant">
     <button mat-raised-button color="primary" (click)="submit()"
       i18n="@@Kysy opettajilta">Kysy opettajilta</button>
   </div>
 
-</section>
 
 <!------------ UKK ------------>
 
