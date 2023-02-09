@@ -111,6 +111,11 @@ $debug: false;
   margin-top: 1.4rem;
 }
 
+.theme-progress-bar{
+  position: absolute !important;
+  left: 0 !important;
+}
+
 // Punainen tilan jakava viiva.
 .theme-divider {
   background-color :var(--accent-color);
