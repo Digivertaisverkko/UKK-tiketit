@@ -149,29 +149,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ticket.untrackRefresh();
   }
 
-  public submit(linkEnding?: string) {
-    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
-    if (this.authService.getIsUserLoggedIn() === false) {
-      window.localStorage.setItem('REDIRECT_URL', link);
-    }
-    this.router.navigateByUrl(link);
-  }
-
-  // public submitTicket () {
-  //   const link = '/course/' + this.courseID + 'submit';
-  //   if (this.authService.getIsUserLoggedIn() === false) {
-  //     window.localStorage.setItem('REDIRECT_URL', link);
-  //   }
-  //   this.router.navigateByUrl(link);
-  // }
-
-  public submitFaq () {
-    if (this.authService.getIsUserLoggedIn() === false) {
-      window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
-    }
-    this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq');
-  }
-
   private updateLoggedInView(courseIDcandinate: string) {
     this.ticket.getMyCourses().then(response => {
       if (response[0].kurssi !== undefined) {
@@ -210,29 +187,17 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private fetchQuestions(courseID: string) {
-    this.ticket.getTicketList(courseID).then(response => {
-      if (response.length > 0) {
-        let tableData: SortableTicket[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => (
-          {
-            tilaID: tila,
-            tila: this.ticket.getTicketState(tila),
-            id: id,
-            otsikko: otsikko,
-            aikaleima: aikaleima,
-            aloittajanNimi: aloittaja.nimi
-          }
-        ));
+    this.ticket.getTicketList(courseID).then(tableData => {
         // Arkistoituja kysymyksiä ei näytetä.
-        tableData = tableData.filter(ticket => ticket.tilaID !== 6)
         if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
         this.numberOfQuestions = tableData.length;
         this.dataSource.sort = this.sortQuestions;
         // this.dataSource.paginator = this.paginator;
-      }
     }).catch(error => {
       this.handleError(error);
     });
   }
+
 
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
@@ -272,38 +237,24 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       .then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
-          // let tableData = (
-          //   response.map(({ id, otsikko, aikaleima, tyyppi }) => ({
-          //     id: id,
-          //     otsikko: otsikko,
-          //     aikaleima: aikaleima,
-          //     tyyppi: tyyppi
-          //   }))
-          // );
-          // tableData = tableData.filter(ukk => ukk.tilaID !== 6);
-          // this.dataSourceFAQ = new MatTableDataSource(tableData);
-          // Tarvittaessa voi muokata, mitä tietoja halutaan näyttää.
-          let tableData = response.map(({ id, otsikko, aikaleima, tyyppi, tila }) => ({
-              id: id,
-              otsikko: otsikko,
-              aikaleima: aikaleima,
-              tyyppi: tyyppi,
-              tila: tila
-            }));
-
-          tableData = tableData.filter(faq => faq.tila !== 6);
-          this.dataSourceFAQ = new MatTableDataSource(tableData);
+          this.dataSourceFAQ = new MatTableDataSource(response);
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
       })
-      .catch(error => {
-          this.handleError(error)
-        })
+      .catch(error => this.handleError(error))
       .finally(() => {
         this.FAQisLoaded = true;
         if (refresh !== true) this.isLoaded = true;
       });
+  }
+
+  public submit(linkEnding?: string) {
+    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
+    if (this.authService.getIsUserLoggedIn() === false) {
+      window.localStorage.setItem('REDIRECT_URL', link);
+    }
+    this.router.navigateByUrl(link);
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.

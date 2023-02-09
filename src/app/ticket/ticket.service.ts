@@ -33,20 +33,29 @@ export class TicketService {
     this.refreshEmitter$.unsubscribe;
   }
 
-  // Hae kurssin UKK-kysymykset.
+  // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
     // const httpOptions = this.getHttpOptions();
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true)
-      );
+      console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true) );
     } catch (error: any) {
       this.handleError(error);
     }
-    return response;
+    // let tableData = response.map((faq: UKK ) => (
+    //   {
+    //     id: faq.id,
+    //     otsikko: faq.otsikko,
+    //     aikaleima: faq.aikaleima,
+    //     tyyppi: faq. tyyppi,
+    //     tila: faq.tila
+    //   }
+    // ));
+    // Arkistoidut pois.
+    let tableData: UKK[] = response.filter((faq: UKK) => faq.tila !== 6);
+    return tableData;
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
@@ -248,7 +257,7 @@ export class TicketService {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
+  public async getTicketListOld(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
@@ -259,11 +268,44 @@ export class TicketService {
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
       console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
-      // Console.log ei toimi tässä, kun ei käytetä await:a.
     } catch (error: any) {
       this.handleError(error);
     }
     return response;
+  }
+
+
+  /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
+  opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
+  public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<SortableTicket[]> {
+    if (courseID === '') {
+      throw new Error('Ei kurssi ID:ä.');
+    }
+    const httpOptions = this.getHttpOptions();
+    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
+    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+      console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+
+    // Muutetaan taulukkoon sopivaan muotoon.
+    let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
+      {
+        tilaID: ticket.tila,
+        tila: this.getTicketState(ticket.tila),
+        id: ticket.id,
+        otsikko: ticket.otsikko,
+        aikaleima: ticket.aikaleima,
+        aloittajanNimi: ticket.aloittaja.nimi
+      }
+    ));
+    // Ei näytetä arkistoituja tikettejä.
+    sortableData = sortableData.filter(ticket => ticket.tilaID !== 6)
+    return sortableData;
   }
 
   // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
@@ -427,6 +469,15 @@ export interface TiketinPerustiedot {
   aikaleima: string;
   aloittaja: Kurssilainen;
   tila: number;
+}
+
+export interface SortableTicket {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittajanNimi: string
+  tilaID: number;
+  tila: string;
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
