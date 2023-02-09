@@ -100,18 +100,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
+    this.trackRouteParameters();
+  }
 
-    this.route.queryParams.subscribe(params => {
-      if (params['sessionID'] !== null && params['sessionID'] !== undefined) {
-        let sessionID = params['sessionID'];
-        console.log('Parametrit: ' + params['sessionID']);
-        const route = window.location.pathname + window.location.search;
-        console.log('URL on: ' + route);
-        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
-        this.authService.setSessionID(sessionID);
-      }
-    });
-
+  private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
@@ -136,7 +128,18 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Kun esim. headerin logoa klikataan.
+    this.trackMessages();
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      if (response) this.updateLoggedInView(this.courseID);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.ticket.untrackRefresh();
+  }
+
+  // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
+  private trackMessages() {
     this.ticket.trackRefresh().subscribe(response => {
       if (response) {
         this.isLoaded = false;
@@ -145,13 +148,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.fetchFAQ(this.courseID, true);
       }
     });
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      if (response) this.updateLoggedInView(this.courseID);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.ticket.untrackRefresh();
   }
 
   private updateLoggedInView(courseIDcandinate: string) {
@@ -295,6 +291,4 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }*/
   }
 
-  // ngOnDestroy(): void {
-  // }
 }
