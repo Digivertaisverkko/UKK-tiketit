@@ -3,6 +3,11 @@
 // Leveys on tässä näkymässä leveämpi kuin muilla taulukoiden vuoksi.
 section, app-error-card, .theme-actions { width: 103%; }
 
+#progress-bar {
+  position: absolute;
+  left: 0;
+}
+
 section, app-error-card, .theme-actions {
   margin-left: -15px;
 }

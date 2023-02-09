@@ -125,19 +125,24 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.authService.getUserName.length === 0) {
           this.authService.fetchUserInfo(courseID);
         }
-        this.updateLoggedInView(courseID);
+        // this.updateLoggedInView(courseID);
       }
-      this.isLoaded = true;
     });
   }
 
   ngAfterViewInit(): void {
+    // Kun esim. headerin logoa klikataan.
     this.ticket.trackRefresh().subscribe(response => {
       if (response) {
+        this.isLoaded = false;
+        setTimeout(() => this.isLoaded = true, 800);
         this.fetchQuestions(this.courseID);
-        this.showFAQ(this.courseID);
+        this.showFAQ(this.courseID, true);
       }
-      });
+    });
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      if (response) this.updateLoggedInView(this.courseID);
+    });
   }
 
   ngOnDestroy(): void {
@@ -165,13 +170,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
     }
     this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq');
-  }
-
-  private trackLoginState(courseIDcandinate: string) {
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      this.isLoaded = true;
-      if (response) this.updateLoggedInView(courseIDcandinate);
-    });
   }
 
   private updateLoggedInView(courseIDcandinate: string) {
@@ -231,16 +229,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.sort = this.sortQuestions;
         // this.dataSource.paginator = this.paginator;
       }
+    }).catch(error => {
+      this.handleError(error);
     });
-
   }
 
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
-    }).catch( () => {
-      this.courseName = '';
-    })
+    }).catch( () => this.courseName = '');
   }
 
   public setTicketListHeadline() {
@@ -269,7 +266,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       .map(cd => cd.def);
   }
 
-  private showFAQ(courseID: string) {
+  private showFAQ(courseID: string, refresh?: boolean) {
     this.ticket
       .getFAQ(courseID)
       .then(response => {
@@ -286,7 +283,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           // tableData = tableData.filter(ukk => ukk.tilaID !== 6);
           // this.dataSourceFAQ = new MatTableDataSource(tableData);
           // Tarvittaessa voi muokata, mitä tietoja halutaan näyttää.
-          // this.dataSourceFAQ = new MatTableDataSource(
           let tableData = response.map(({ id, otsikko, aikaleima, tyyppi, tila }) => ({
               id: id,
               otsikko: otsikko,
@@ -295,16 +291,19 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
               tila: tila
             }));
 
-          tableData = tableData.filter(faq => faq.tila !== 6)  
-          
+          tableData = tableData.filter(faq => faq.tila !== 6);
           this.dataSourceFAQ = new MatTableDataSource(tableData);
-
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
       })
-      .catch(error => this.handleError(error))
-      .finally(() => this.FAQisLoaded = true);
+      .catch(error => {
+          this.handleError(error)
+        })
+      .finally(() => {
+        this.FAQisLoaded = true;
+        if (refresh !== true) this.isLoaded = true;
+      });
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.
