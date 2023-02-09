@@ -26,7 +26,7 @@ export class SubmitFaqComponent implements OnInit {
   public errorMessage: string = '';
   // public user$ = this.authService.trackUserInfo();
   private courseID: string | null;
-  private ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
+  public ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -92,31 +92,8 @@ export class SubmitFaqComponent implements OnInit {
 
   // }
 
-  public getSenderTitle(name: string, role: string): string {
-    if (name === this.authService.getUserName()) {
-      return $localize`:@@Minä:Minä`
-    }
-    switch (role) {
-      case 'opiskelija':
-        return $localize`:@@Opiskelija:Opiskelija`;
-      case 'opettaja':
-        return $localize`:@@Opettaja:Opettaja`;
-      case 'admin':
-        return $localize`:@@Admin:Admin`;
-      default:
-        return '';
-    }
-  }
-
   private goBack(): void {
     this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
-  }
-
-  // Onko annettu aikaleima tänään.
-  public isToday(timestamp: string | Date): boolean {
-    let currentDate = new Date().toDateString();
-    let dateString = typeof timestamp === 'string' ? new Date(timestamp).toDateString() : timestamp.toDateString();
-    return dateString === currentDate ? true : false;
   }
 
   public sendFaq(): void {

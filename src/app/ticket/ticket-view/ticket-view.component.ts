@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
@@ -13,7 +13,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit {
-  
+
+  @Input() ticketIdFromParent: string | null = null;
+
   public courseName: string = '';
   public errorMessage: string = '';
   public isInIframe: boolean;
@@ -46,7 +48,9 @@ export class TicketViewComponent implements OnInit {
       this.commentText = '';
       this.isInIframe = getIsInIframe();
       this.isLoaded = false;
-      this.ticketID = String(this.route.snapshot.paramMap.get('id'));
+      this.ticketID = this.ticketIdFromParent !== null
+        ? this.ticketIdFromParent
+        : String(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
@@ -87,7 +91,7 @@ export class TicketViewComponent implements OnInit {
         }
       })
   }
-  
+
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
