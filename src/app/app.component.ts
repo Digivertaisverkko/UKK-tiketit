@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {  AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,8 @@ export class AppComponent implements OnInit  {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
 
   }
@@ -25,7 +26,23 @@ export class AppComponent implements OnInit  {
     this.isInIframe = this.testIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
-    this.authService.initialize();
+    this.checkForSessionID();
+    // this.authService.initialize();
+    this.trackLoginStatus();
+  }
+
+  private checkForSessionID() {
+    // Angular Routella parametrien haku ei onnistunut.
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionID = urlParams.get('sessionID');
+    if (sessionID !== undefined && sessionID !== null) {
+      console.log('Saatiin session ID URL:sta.');
+      this.authService.setSessionID(sessionID);
+    }
+  }
+  
+    
+  private trackLoginStatus() {
     this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response) {
         this.isLogged = true;
@@ -36,6 +53,17 @@ export class AppComponent implements OnInit  {
       }
     });
   }
+
+  // trackQueryParameters() {
+  //   this.route.queryParams.subscribe(params => {
+  //     if (params['sessionID'] !== null && params['sessionID'] !== undefined) {
+  //       let sessionID = params['sessionID'];
+  //       console.log('Parametrit: ' + params['sessionID']);
+  //       console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
+  //       this.authService.setSessionID(sessionID);
+  //     }
+  //   });
+  // }
 
   public logInOut() {
     if (this.isLogged) {
