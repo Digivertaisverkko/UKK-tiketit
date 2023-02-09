@@ -100,6 +100,18 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
+
+    this.route.queryParams.subscribe(params => {
+      if (params['sessionID'] !== null && params['sessionID'] !== undefined) {
+        let sessionID = params['sessionID'];
+        console.log('Parametrit: ' + params['sessionID']);
+        const route = window.location.pathname + window.location.search;
+        console.log('URL on: ' + route);
+        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
+        this.authService.setSessionID(sessionID);
+      }
+    });
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
@@ -109,14 +121,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.courseID = courseID;
       this.showCourseName(courseID);
-      var sessionID = paramMap.get('sessionID');
-      if (sessionID !== null) {
-        const route = window.location.pathname + window.location.search;
-        console.log('URL on: ' + route);
-        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
-        this.authService.setSessionID(sessionID);
-      }
-      this.showFAQ(courseID);
+      this.fetchFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
@@ -137,7 +142,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
         this.fetchQuestions(this.courseID);
-        this.showFAQ(this.courseID, true);
+        this.fetchFAQ(this.courseID, true);
       }
     });
     this.authService.onIsUserLoggedIn().subscribe(response => {
@@ -187,15 +192,33 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private fetchQuestions(courseID: string) {
-    this.ticket.getTicketList(courseID).then(tableData => {
+    this.ticket.getTicketList(courseID).then(response => {
         // Arkistoituja kysymyksiä ei näytetä.
-        if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
-        this.numberOfQuestions = tableData.length;
+        if (response.length > 0) this.dataSource = new MatTableDataSource(response);
+        this.numberOfQuestions = response.length;
         this.dataSource.sort = this.sortQuestions;
         // this.dataSource.paginator = this.paginator;
     }).catch(error => {
       this.handleError(error);
     });
+  }
+
+  private fetchFAQ(courseID: string, refresh?: boolean) {
+    this.ticket
+      .getFAQ(courseID)
+      .then(response => {
+        if (response.length > 0) {
+          this.numberOfFAQ = response.length;
+          this.dataSourceFAQ = new MatTableDataSource(response);
+          this.dataSourceFAQ.sort = this.sortFaq;
+          // this.dataSourceFAQ.paginator = this.paginatorFaq;
+        }
+      })
+      .catch(error => this.handleError(error))
+      .finally(() => {
+        this.FAQisLoaded = true;
+        if (refresh !== true) this.isLoaded = true;
+      });
   }
 
 
@@ -229,24 +252,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.columnDefinitions
       .filter(cd => !this.isPhonePortrait || cd.showMobile)
       .map(cd => cd.def);
-  }
-
-  private showFAQ(courseID: string, refresh?: boolean) {
-    this.ticket
-      .getFAQ(courseID)
-      .then(response => {
-        if (response.length > 0) {
-          this.numberOfFAQ = response.length;
-          this.dataSourceFAQ = new MatTableDataSource(response);
-          this.dataSourceFAQ.sort = this.sortFaq;
-          // this.dataSourceFAQ.paginator = this.paginatorFaq;
-        }
-      })
-      .catch(error => this.handleError(error))
-      .finally(() => {
-        this.FAQisLoaded = true;
-        if (refresh !== true) this.isLoaded = true;
-      });
   }
 
   public submit(linkEnding?: string) {
