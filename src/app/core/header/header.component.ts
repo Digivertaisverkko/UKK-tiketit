@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   public readonly maxUserLength = 40;
   public user: User = {} as User;
   public userRole: string = '';
-  public courseID: string | null = null;
+  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
 
   get language(): string {
     return this._language;
@@ -41,20 +41,24 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.trackCourseID();
     this.trackUserInfo();
+    console.log('header: kurssi id: ' + this.courseID);
     this.authService.onIsUserLoggedIn().subscribe(response => this.isLoggedIn = response);
     // Käyttäjätietojen päivitys.
-    // this.router.events.subscribe(event => {
-    //   if (event instanceof ActivationEnd) {
-    //     this.courseID = event.snapshot.paramMap.get('courseid');
-    //   } else if (event instanceof GuardsCheckStart) {
-    //     // Testataan, ollaanko kirjautuneina.
-    //     this.authService.getSessionID();
-    //     if (this.isLoggedIn === true && this.courseID !== null) {
-    //       this.authService.fetchUserInfo(this.courseID);
-    //     }
-    //   }
-    // });
+
+  }
+
+  private trackCourseID() {
+    this.router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        let courseID = event.snapshot.paramMap.get('courseid');
+        if (courseID !== this.courseID) {
+          console.log('updateUserInfo: saatiin kurssi ID ' +  courseID  +' url:sta');
+          this.courseID = courseID;
+        }
+      }
+    });
   }
 
   trackUserInfo() {

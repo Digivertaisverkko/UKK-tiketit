@@ -52,7 +52,7 @@ export class AuthService {
 
   public initialize() {
     this.checkIfSessionIdInURL();
-    this.checkSessionIDinStorage();
+    this.checkIfSessionIDinStorage();
     this.updateUserInfo()
     // this.trackRouteParameters();
     // this.trackCourseID();
@@ -73,19 +73,7 @@ export class AuthService {
     }
   }
 
-  private trackLoginStatus() {
-    this.onIsUserLoggedIn().subscribe(response => {
-      const courseID = this.courseID;
-      if (response == true) {
-        if (courseID !== null) {
-          console.log('trackLoginStatus: haetaan käyttäjätiedot.');
-          this.fetchUserInfo(courseID).then(response => this.setLoggedIn());
-        }
-      }
-    });
-  }
-
-  private checkSessionIDinStorage() {
+  private checkIfSessionIDinStorage() {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
       // TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saadaa palvelimelta hyväksytty vastaus?
@@ -102,16 +90,16 @@ export class AuthService {
             console.log('updateUserInfo: saatiin kurssi ID ' +  courseID  +' url:sta');
             this.setCourseID(courseID);
             if (this.getSessionID !== null) {
-              console.log('updateUserInfo(): haetaan käyttäjätiedot.');
+              console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
               this.fetchUserInfo(courseID);
             }
           }
         } else if (event instanceof GuardsCheckStart) {
           // if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
-            if (window.localStorage.getItem('SESSION_ID') !== undefined && this.courseID !== null) {
-            console.log('-- updateUserInfo: haetaan käyttäjätiedot: kurssi id: ' + this.courseID);
-            this.fetchUserInfo(this.courseID);
-          }
+          //   if (window.localStorage.getItem('SESSION_ID') !== undefined && this.courseID !== null) {
+          //   console.log('-- updateUserInfo 2: haetaan käyttäjätiedot: kurssi id: ' + this.courseID);
+          //   this.fetchUserInfo(this.courseID);
+          // }
         }
       });
   }
@@ -161,7 +149,17 @@ export class AuthService {
     }
   }
 
-
+  private trackLoginStatus() {
+    this.onIsUserLoggedIn().subscribe(response => {
+      const courseID = this.courseID;
+      if (response == true) {
+        if (courseID !== null) {
+          console.log('trackLoginStatus: haetaan käyttäjätiedot.');
+          this.fetchUserInfo(courseID).then(response => this.setLoggedIn());
+        }
+      }
+    });
+  }
 
   /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
     olla jo local storagessa. */
