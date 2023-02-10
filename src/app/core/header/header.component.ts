@@ -44,17 +44,17 @@ export class HeaderComponent implements OnInit {
     this.trackUserInfo();
     this.authService.onIsUserLoggedIn().subscribe(response => this.isLoggedIn = response);
     // Käyttäjätietojen päivitys.
-    this.router.events.subscribe(event => {
-      if (event instanceof ActivationEnd) {
-        this.courseID = event.snapshot.paramMap.get('courseid');
-      } else if (event instanceof GuardsCheckStart) {
-        // Testataan, ollaanko kirjautuneina.
-        this.authService.getSessionID();
-        if (this.isLoggedIn === true && this.courseID !== null) {
-          this.authService.fetchUserInfo(this.courseID);
-        }
-      }
-    });
+    // this.router.events.subscribe(event => {
+    //   if (event instanceof ActivationEnd) {
+    //     this.courseID = event.snapshot.paramMap.get('courseid');
+    //   } else if (event instanceof GuardsCheckStart) {
+    //     // Testataan, ollaanko kirjautuneina.
+    //     this.authService.getSessionID();
+    //     if (this.isLoggedIn === true && this.courseID !== null) {
+    //       this.authService.fetchUserInfo(this.courseID);
+    //     }
+    //   }
+    // });
   }
 
   trackUserInfo() {

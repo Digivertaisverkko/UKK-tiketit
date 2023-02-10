@@ -65,7 +65,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
-
   // private _liveAnnouncer: LiveAnnouncer,
 
   constructor(
@@ -123,13 +122,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       // this.trackLoginState(courseIDcandinate);
 
       // Käyttäjätietojen haku tarkoitus siirtää authServiceen.
-      if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
+      // if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
         // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
-        if (this.authService.getUserName.length === 0) {
-          this.authService.fetchUserInfo(courseID);
-        }
+        // if (this.authService.getUserName.length === 0) {
+        //   this.authService.fetchUserInfo(courseID);
+        // }
         // this.updateLoggedInView(courseID);
-      }
+      // }
     });
   }
 

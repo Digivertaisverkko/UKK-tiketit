@@ -8,7 +8,7 @@ import { ActivatedRoute, Router, ParamMap} from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit  {
-  private courseID: string | null;
+  private courseID: string | null = null;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
   // public isUserLoggedIn$: Observable<boolean>;
@@ -20,16 +20,17 @@ export class AppComponent implements OnInit  {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
   }
 
   ngOnInit(): void {
+    this.authService.initialize();
+    // this.trackForCourseID();
+    // this.courseID = this.route.snapshot.paramMap.get('courseid');
+    // console.log('app.component: saatiin kurssi id ' + this.courseID);
     //  this.trackForCourseID();
-    this.authService.checkIfSessionIdInURL();
     this.isInIframe = this.testIframe();
     console.log('app.component OnInit ajetaan: courseID snapshotilla: ' + this.courseID);
     // Ei toimi vielä.
-    // this.trackForCourseID();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     // this.authService.initialize();
@@ -44,7 +45,8 @@ export class AppComponent implements OnInit  {
   private trackForCourseID() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      console.log('app.component: trackForCourseID: kurssi ID, muuttunut:' + courseID);
+      // console.log('------ app.component: kurssi ID muuttunut:' + courseID);
+      // console.dir(paramMap);
       if (courseID !== null) {
         this.authService.setCourseID(courseID);
       }

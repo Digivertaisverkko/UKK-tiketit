@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 import { truncate } from '../utils/truncate';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap, ActivationEnd, GuardsCheckStart } from '@angular/router';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 import { ErrorService } from './error.service';
@@ -49,8 +49,15 @@ export class AuthService {
   }
 
 
+  public initialize() {
+    this.checkIfSessionIdInURL();
+    this.updateUserInfo()
+    // this.trackRouteParameters();
+    this.trackCourseID();
+  }
+
     // Ei käytössä enää, koska kurssi ID:ä ei tallenneta local storageen.
-    public async initialize() {
+    public async initializeOld() {
       console.log('auth init ajetaan');
       if (window.localStorage.getItem('SESSION_ID') == null) return
       const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
@@ -62,23 +69,6 @@ export class AuthService {
     } else {
       console.log('authService.initialize: ei kurssi ID:ä!');
     }
-  }
-
-  // Uudet metodit
-
-  public async newInitialize() {
-    this.checkIfSessionIdInURL();
-    this.trackCourseID();
-    // this.trackLoginStatus();
-    // const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-    // if (savedCourseID !== null) {
-      // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
-      // jotta ei ohjauduta loginiin page refresh:lla.
-    //   this.setLoggedIn();
-    //   this.fetchUserInfo(savedCourseID);
-    // } else {
-    //   console.log('authService.initialize: ei kurssi ID:ä!');
-    // }
   }
 
   private trackLoginStatus() {
@@ -93,9 +83,28 @@ export class AuthService {
     });
   }
 
+  private updateUserInfo() {
+      // Käyttäjätietojen päivitys.
+      this.router.events.subscribe(event => {
+        if (event instanceof ActivationEnd) {
+          let courseID = event.snapshot.paramMap.get('courseid');
+          if (courseID !== undefined && courseID !== null) {
+            this.setCourseID(courseID);
+          }
+        } else if (event instanceof GuardsCheckStart) {
+          // Testataan, ollaanko kirjautuneina.
+          this.getSessionID();
+          if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
+            console.log('updateUserInfo: haetaan käyttäjätiedot');
+            this.fetchUserInfo(this.courseID$.value);
+          }
+        }
+      });
+  }
+  
   private trackCourseID() {
     this.courseID$.subscribe(courseID => {
-      console.log('trackCourseID: saatiin kurssi ID: ' + courseID + ' session id on ' + this.getSessionID());
+      console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '. Session id on ' + this.getSessionID());
       if (this.getSessionID() !== null && courseID.length > 0 ) {
         this.fetchUserInfo(courseID).then( response => {
           this.setLoggedIn();
@@ -105,6 +114,18 @@ export class AuthService {
       }
     })
   }
+  private trackRouteParameters() {
+    const route = window.location.pathname + window.location.search;
+    console.log('auth service: route on '+ route);
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      var courseID: string | null = paramMap.get('courseid');
+      console.log('------ auth service: trackRouteParameters: saatiin kurssi ID:' + courseID);
+      console.dir(paramMap);
+      if (courseID !== null) {
+        this.setCourseID(courseID);
+      }
+    });
+  }
 
   public setCourseID(courseID: string) {
     console.log('setCourseID: asetettiin kurssi ID: ' + courseID);
@@ -113,7 +134,7 @@ export class AuthService {
     }
   }
   
-  public checkIfSessionIdInURL() {
+  private checkIfSessionIdInURL() {
     // Angular Routella parametrien haku ei onnistunut.
     const urlParams = new URLSearchParams(window.location.search);
     const sessionID = urlParams.get('sessionID');
@@ -317,7 +338,7 @@ export class AuthService {
       // TODO: Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko joka paikassa odottaa observablen arvoa?
       const userInfo = await this.getMyUserInfo(courseID);
       if (userInfo !== null && userInfo !== this.user$.value) {
-        console.log('nykyinen userinfo: ' + JSON.stringify(this.user$.value));
+        console.log('vanha userinfo: ' + JSON.stringify(this.user$.value));
         console.log('uusi userinfo: ' + JSON.stringify(userInfo));
         this.user$.next(userInfo);
       }
