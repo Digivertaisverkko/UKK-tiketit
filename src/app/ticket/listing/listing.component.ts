@@ -136,7 +136,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.trackMessages();
     this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('ngAfterViewInit: saatiin uusi login-tieto, päivitetään näkymä.');
+      console.log('ngAfterViewInit: saatiin tieto login-tilasta: ' + response);
       if (response) this.updateLoggedInView(this.courseID);
     });
   }

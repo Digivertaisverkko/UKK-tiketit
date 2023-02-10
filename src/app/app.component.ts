@@ -32,7 +32,7 @@ export class AppComponent implements OnInit  {
     // this.trackForCourseID();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
-    this.authService.initialize();
+    // this.authService.initialize();
     // if (this.courseID !== null) {
     //   this.authService.setCourseID(this.courseID);
     // }

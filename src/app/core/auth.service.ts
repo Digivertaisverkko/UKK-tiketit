@@ -48,10 +48,8 @@ export class AuthService {
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
-  // Ei tällä hetkellä tee käytännössä mitään, kun kurssi ID:ä ei tallenneta local storageen.
-  //
-  /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
-    olla jo local storagessa. */
+
+    // Ei käytössä enää, koska kurssi ID:ä ei tallenneta local storageen.
     public async initialize() {
       console.log('auth init ajetaan');
       if (window.localStorage.getItem('SESSION_ID') == null) return
@@ -339,7 +337,10 @@ export class AuthService {
     try {
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
       console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
-      this.setLoggedIn();
+      if (response?.id !== undefined && response?.id !== null) {
+        console.log('getMyUserInfo: asetettiin kirjautuminen.');
+        this.setLoggedIn(); 
+      }
     } catch (error: any) {
       this.handleError(error);
     }

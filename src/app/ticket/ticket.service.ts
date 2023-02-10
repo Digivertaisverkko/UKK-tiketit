@@ -15,6 +15,7 @@ export class TicketService {
 
   private refreshEmitter$ = new Subject<boolean>();
   private activeCourse: string | undefined = undefined;
+  private debug: boolean = false;
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
@@ -40,7 +41,7 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
-      console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true) );
+      if (this.debug) console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true) );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -287,7 +288,7 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
+      if (this.debug)  console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -341,8 +342,7 @@ export class TicketService {
       response = await firstValueFrom<Kommentti[]>(
         this.http.get<any>(url, httpOptions)
       );
-      console.log('Got from "' + url + '" response: ' + truncate(JSON.stringify(response), 300, true));
-      console.dir(response);
+      if (this.debug) console.log('Saatiin URL:sta "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -375,7 +375,7 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
       response = await firstValueFrom<Kentta[]>( this.http.get<any>(url, httpOptions) );
-      console.log('getFields: Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+      if (this.debug) console.log('getFields: Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
