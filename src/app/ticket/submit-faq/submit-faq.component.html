@@ -26,18 +26,6 @@
           required
         ></textarea>
       </mat-form-field>
-      <div class="user-info-block">
-        <div class="text-info">
-          <span class="theme-profile-name">{{ userName }}</span>
-          <div class="theme-label">
-            <span i18n="@@Minä">Minä</span>
-            -
-            <span i18n="@@Tänään">Tänään </span>
-            <span>{{ currentDate | date: 'shortTime' }}</span>
-          </div>
-        </div>
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
-      </div>
     </div>
 
     <section class="short-field-wrapper">
@@ -94,64 +82,7 @@
   <div *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
     <h2 class="main-header" i18n="@@Alkuperäinen kysymys">Alkuperäinen kysymys</h2>
-
-    <div class="ticket-header">
-      <h3 class="sub-header">{{ originalTicket.otsikko }}</h3>
-
-      <div class="spacer"></div>
-      <div class="user-info-block">
-        <div class="text-info">
-          <span class="theme-profile-name">{{ originalTicket.aloittaja.nimi }}</span>
-          <div class="theme-label">
-            <span>{{ getSenderTitle(originalTicket.aloittaja.nimi, originalTicket.aloittaja.asema) }} - </span>
-            <span *ngIf="isToday(originalTicket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
-            <ng-template #notToday>
-              <span>{{ originalTicket.aikaleima | date: 'shortDate' }}</span>
-            </ng-template>
-            <span>&nbsp;{{ originalTicket.aikaleima | date: 'shortTime' }}</span>
-          </div>
-        </div>
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
-      </div>
-    </div>
-
-    <div *ngIf="originalTicket.kentat !== undefined && originalTicket.kentat[0] !== null && originalTicket.kentat[0].arvo.length > 0">
-      <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
-      <p class="short-field-value">{{originalTicket.kentat[0].arvo }}</p>
-    </div>
-
-    <div *ngIf="originalTicket.kentat !== undefined && originalTicket.kentat[1] !== null && originalTicket.kentat[1].arvo.length > 0">
-      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
-      <p class="short-field-value">{{ originalTicket.kentat[1].arvo }}</p>
-    </div>
-
-    <p class="theme-label message-label" i18n="@@Viesti">Viesti</p>
-
-    <app-message [messageHtml]=originalTicket.viesti></app-message>
-    <hr class="theme-divider">
-
-    <h4 class="sub-header" i18n="@@Keskustelu">Keskustelu</h4>
-    
-    <mat-card appearance="outlined" class="answer" *ngFor="let comment of originalTicket.kommentit">
-      <mat-card-header>
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}>
-        <mat-card-title class="theme-profile-name">
-          {{ comment.lahettaja.nimi }}
-        </mat-card-title>
-        <mat-card-subtitle class="theme-label">
-          <span>{{ getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema) }} - </span>
-          <span *ngIf="isToday(comment.aikaleima)" i18n="@@Tänään">Tänään</span>
-          <span *ngIf="!isToday(comment.aikaleima)" >{{ comment.aikaleima | date: 'shortDate' }}</span>
-          {{ comment.aikaleima | date: 'shortTime' }}
-        </mat-card-subtitle>
-        <div class="spacer"></div>
-        <span class="ticket-state" *ngIf="comment.tila === 5" i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</span>
-      </mat-card-header>
-      <mat-card-content>
-        <app-message [messageHtml]=comment.viesti></app-message>
-      </mat-card-content>
-    </mat-card>
-
+    <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
   </div>
 
 </div>
