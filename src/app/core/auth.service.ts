@@ -89,7 +89,7 @@ export class AuthService {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
       // TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saadaa palvelimelta hyväksytty vastaus?
-      // this.setLoggedIn();
+      this.setLoggedIn();
     }
   }
 
