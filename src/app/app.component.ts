@@ -40,8 +40,6 @@ export class AppComponent implements OnInit  {
     this.trackLoginStatus();
   }
 
-
-  // Uusi
   private trackForCourseID() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');

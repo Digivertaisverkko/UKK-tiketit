@@ -39,7 +39,8 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
-  private courseID$ = new BehaviorSubject <string>('');
+  private courseID: string | null = null;
+  // private courseID$ = new BehaviorSubject <string>('');
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,
@@ -51,9 +52,10 @@ export class AuthService {
 
   public initialize() {
     this.checkIfSessionIdInURL();
+    this.checkSessionIDinStorage();
     this.updateUserInfo()
     // this.trackRouteParameters();
-    this.trackCourseID();
+    // this.trackCourseID();
   }
 
     // Ei käytössä enää, koska kurssi ID:ä ei tallenneta local storageen.
@@ -73,7 +75,7 @@ export class AuthService {
 
   private trackLoginStatus() {
     this.onIsUserLoggedIn().subscribe(response => {
-      const courseID = this.courseID$.value;
+      const courseID = this.courseID;
       if (response == true) {
         if (courseID !== null) {
           console.log('trackLoginStatus: haetaan käyttäjätiedot.');
@@ -83,37 +85,50 @@ export class AuthService {
     });
   }
 
+  private checkSessionIDinStorage() {
+    const savedSessionID = this.getSessionID();
+    if (savedSessionID !== null) {
+      // TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saadaa palvelimelta hyväksytty vastaus?
+      // this.setLoggedIn();
+    }
+  }
+
   private updateUserInfo() {
       // Käyttäjätietojen päivitys.
       this.router.events.subscribe(event => {
         if (event instanceof ActivationEnd) {
           let courseID = event.snapshot.paramMap.get('courseid');
           if (courseID !== undefined && courseID !== null) {
+            console.log('updateUserInfo: saatiin kurssi ID ' +  courseID  +' url:sta');
             this.setCourseID(courseID);
+            if (this.getSessionID !== null) {
+              console.log('updateUserInfo(): haetaan käyttäjätiedot.');
+              this.fetchUserInfo(courseID);
+            }
           }
         } else if (event instanceof GuardsCheckStart) {
-          // Testataan, ollaanko kirjautuneina.
-          this.getSessionID();
-          if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
-            console.log('updateUserInfo: haetaan käyttäjätiedot');
-            this.fetchUserInfo(this.courseID$.value);
+          // if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
+            if (window.localStorage.getItem('SESSION_ID') !== undefined && this.courseID !== null) {
+            console.log('-- updateUserInfo: haetaan käyttäjätiedot: kurssi id: ' + this.courseID);
+            this.fetchUserInfo(this.courseID);
           }
         }
       });
   }
   
-  private trackCourseID() {
-    this.courseID$.subscribe(courseID => {
-      console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '. Session id on ' + this.getSessionID());
-      if (this.getSessionID() !== null && courseID.length > 0 ) {
-        this.fetchUserInfo(courseID).then( response => {
-          this.setLoggedIn();
-        }).catch(error => {
-          this.handleError(error);
-        })
-      }
-    })
-  }
+  // private trackCourseID() {
+  //   this.courseID$.subscribe(courseID => {
+  //     console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '. Session id on ' + this.getSessionID());
+  //     if (this.getSessionID() !== null && courseID.length > 0 ) {
+  //       this.fetchUserInfo(courseID).then( response => {
+  //         this.setLoggedIn();
+  //       }).catch(error => {
+  //         this.handleError(error);
+  //       })
+  //     }
+  //   })
+  // }
+
   private trackRouteParameters() {
     const route = window.location.pathname + window.location.search;
     console.log('auth service: route on '+ route);
@@ -128,9 +143,11 @@ export class AuthService {
   }
 
   public setCourseID(courseID: string) {
-    console.log('setCourseID: asetettiin kurssi ID: ' + courseID);
-    if (courseID !== this.courseID$.value) {
-      this.courseID$.next(courseID);
+    console.log('setCourseID: asetetaan kurssi ID: ' + courseID);
+
+    if (courseID !== this.courseID) {
+      console.log('setCourseID: arvo on nyt ' + this.courseID);
+      this.courseID = courseID;
     }
   }
   
@@ -349,6 +366,9 @@ export class AuthService {
 
   // Hae omat kurssikohtaiset tiedot.
   private async getMyUserInfo(courseID: string): Promise<User> {
+    if (courseID === undefined || courseID === null || courseID === '') {
+      throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
+    }
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
     }
@@ -356,6 +376,7 @@ export class AuthService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
     try {
+      console.log('authService.getMyUserInfo: haetaan käyttäjätiedot');
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
       console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
       if (response?.id !== undefined && response?.id !== null) {

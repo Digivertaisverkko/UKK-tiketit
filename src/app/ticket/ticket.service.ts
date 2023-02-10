@@ -6,6 +6,7 @@ import '@angular/localize/init';
 import { truncate } from '../utils/truncate';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -41,7 +42,8 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
-      if (this.debug) console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true) );
+      if (this.debug) console.log( 'Saatiin GET-kutsusta URL:iin "' + url + 
+        '" vastaus: ' + truncate(JSON.stringify(response), 300, true) );
     } catch (error: any) {
       this.handleError(error);
     }
