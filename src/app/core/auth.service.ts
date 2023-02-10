@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 import { truncate } from '../utils/truncate';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 import { ErrorService } from './error.service';
@@ -39,19 +39,24 @@ export class AuthService {
   private codeChallengeMethod: string = 'S256';
   private responseType: string = 'code';
 
+  private courseID$ = new BehaviorSubject <string>('');
+
   constructor(private errorService: ErrorService,
               private http: HttpClient,
               private router: Router,
+              private route: ActivatedRoute,
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
+  // Ei tällä hetkellä tee käytännössä mitään, kun kurssi ID:ä ei tallenneta local storageen.
+  //
   /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
     olla jo local storagessa. */
-  public async initialize() {
-    if (window.localStorage.getItem('SESSION_ID') == null) return
-    const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-    if (savedCourseID !== null) {
-      // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
+    public async initialize() {
+      if (window.localStorage.getItem('SESSION_ID') == null) return
+      const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+      if (savedCourseID !== null) {
+            // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
       // jotta ei ohjauduta loginiin page refresh:lla.
       this.setLoggedIn();
       this.fetchUserInfo(savedCourseID);
@@ -59,6 +64,94 @@ export class AuthService {
       console.log('authService.initialize: ei kurssi ID:ä!');
     }
   }
+
+  // Uudet metodit
+
+  public async newInitialize() {
+    this.checkIfSessionIdInURL();
+    this.trackCourseID();
+    // this.trackLoginStatus();
+    // const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+    // if (savedCourseID !== null) {
+      // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
+      // jotta ei ohjauduta loginiin page refresh:lla.
+    //   this.setLoggedIn();
+    //   this.fetchUserInfo(savedCourseID);
+    // } else {
+    //   console.log('authService.initialize: ei kurssi ID:ä!');
+    // }
+  }
+
+  private trackLoginStatus() {
+    this.onIsUserLoggedIn().subscribe(response => {
+      const courseID = this.courseID$.value;
+      if (response == true) {
+        if (courseID !== null) {
+          console.log('trackLoginStatus: haetaan käyttäjätiedot.');
+          this.fetchUserInfo(courseID).then(response => this.setLoggedIn());
+        }
+      }
+    });
+  }
+
+  private trackCourseID() {
+    this.courseID$.subscribe(courseID => {
+      console.log('trackCourseID: saatiin kurssi ID: ' + courseID + ' session id on ' + this.getSessionID());
+      if (this.getSessionID() !== null && courseID.length > 0 ) {
+        this.fetchUserInfo(courseID).then( response => {
+          this.setLoggedIn();
+        }).catch(error => {
+          this.handleError(error);
+        })
+      }
+    })
+  }
+
+  public setCourseID(courseID: string) {
+    console.log('setCourseID: asetettiin kurssi ID: ' + courseID);
+    if (courseID !== this.courseID$.value) {
+      this.courseID$.next(courseID);
+    }
+  }
+  
+  private checkIfSessionIdInURL() {
+    // Angular Routella parametrien haku ei onnistunut.
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionID = urlParams.get('sessionID');
+    if (sessionID !== undefined && sessionID !== null) {
+      const courseID = this.courseID$.value;
+      console.log('Saatiin session ID URL:sta: ' + sessionID +'. kurssi ID: ' + courseID);
+      this.setSessionID(sessionID);
+      if (this !== null) this.fetchUserInfo(courseID);
+    }
+  }
+
+
+
+  /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
+    olla jo local storagessa. */
+  public async initialize2(courseID: string, sessionIDfromURL?: string) {
+    // if (window.localStorage.getItem('SESSION_ID') == null) return
+    var sessionID: string;
+    if (sessionIDfromURL === undefined) { 
+      const savedSessionID = this.getSessionID();
+      if (savedSessionID === null) {
+        console.warn('authService.initialize: Virhe: ei session ID:ä.');
+        return
+      } else {
+        sessionID = savedSessionID;
+      }
+    } else {
+      sessionID = sessionIDfromURL;
+    }
+    this.setSessionID(sessionID);
+    // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
+    // jotta ei ohjauduta loginiin page refresh:lla.
+    // this.setLoggedIn();
+    this.fetchUserInfo(courseID);
+  }
+
+  // ----- uudet metodit päättyvät
 
   public getDateFormat(): string {
     return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
@@ -145,7 +238,7 @@ export class AuthService {
 
   public setSessionID(newSessionID: string) {
     const oldSessionID =  window.localStorage.getItem('SESSION_ID');
-    if (oldSessionID !== undefined && oldSessionID !== newSessionID)
+    if (oldSessionID == undefined || oldSessionID !== newSessionID)
     window.localStorage.setItem('SESSION_ID', newSessionID);
   }
 
@@ -334,28 +427,23 @@ export class AuthService {
       this.handleError(error);
     }
     var loginResult: LoginResult;
-    if (response.success !== undefined && response.success == true) {
+    if (response?.success == true) {
       loginResult = { success: true };
-      if (window.localStorage.getItem('REDIRECT_URL') !== undefined) {
-        const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
-        if (redirectUrl !== null) {
-          loginResult.redirectUrl = redirectUrl;
-        }
+      const redirectUrl = window.localStorage.getItem('REDIRECT_URL')
+      if (redirectUrl !== undefined && redirectUrl !== null) {
+        loginResult.redirectUrl = redirectUrl;
+        window.localStorage.removeItem('REDIRECT_URL')
       }
-      window.localStorage.removeItem('REDIRECT_URL')
       // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
       // console.log('Vastaus: ' + JSON.stringify(response));
-      let sessionID = response['session-id'];
-      this.setLoggedIn();
+      const sessionID = response['session-id'];
       this.setSessionID(sessionID);
-      // Kurssi ID voi olla, jos ollaan tultu loggaamattomaan näkymään ensin.
-      const courseID: string | null = window.localStorage.getItem('COURSE_ID');
-      if (courseID !== null) {
-        // console.log('-- ajetaan saveUserInfo ----');
-        await this.fetchUserInfo(courseID);
-      } else {
-        // console.log('-- ei ajettu saveUserInfo: kurssi ID: ' + courseID + ' ----');
-      }
+      this.setLoggedIn();
+      // const courseID: string | null = window.localStorage.getItem('COURSE_ID');
+      // if (courseID !== null) {
+      //   // console.log('-- ajetaan saveUserInfo ----');
+      //   await this.fetchUserInfo(courseID);
+      // }
     } else {
       loginResult = { success: false };
       console.error(response.error);
