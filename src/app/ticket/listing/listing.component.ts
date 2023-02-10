@@ -105,18 +105,23 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      console.log('lista: huomattiin uudet route parametrit.');
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
         this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
+      // this.authService.setCourseID(courseID);
+      // this.authService.fetchUserInfo(courseID);
       this.courseID = courseID;
       this.showCourseName(courseID);
       this.fetchFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
+
+      // Käyttäjätietojen haku tarkoitus siirtää authServiceen.
       if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
         // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
         if (this.authService.getUserName.length === 0) {
@@ -130,6 +135,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.trackMessages();
     this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.log('ngAfterViewInit: saatiin uusi login-tieto, päivitetään näkymä.');
       if (response) this.updateLoggedInView(this.courseID);
     });
   }
@@ -141,6 +147,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages() {
     this.ticket.trackRefresh().subscribe(response => {
+      console.log('trackMessages: saatiin refresh pyyntö.');
       if (response) {
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
