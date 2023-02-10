@@ -24,13 +24,14 @@ export class AppComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    //  this.trackForCourseID();
+    this.authService.checkIfSessionIdInURL();
     this.isInIframe = this.testIframe();
-    console.log('app.component: courseID: ' + this.courseID);
+    console.log('app.component OnInit ajetaan: courseID snapshotilla: ' + this.courseID);
     // Ei toimi vielä.
     // this.trackForCourseID();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
-    this.checkForSessionID();
     this.authService.initialize();
     // if (this.courseID !== null) {
     //   this.authService.setCourseID(this.courseID);
@@ -38,21 +39,12 @@ export class AppComponent implements OnInit  {
     this.trackLoginStatus();
   }
 
-  private checkForSessionID() {
-    // Angular Routella parametrien haku ei onnistunut.
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionID = urlParams.get('sessionID');
-    if (sessionID !== undefined && sessionID !== null) {
-      console.log('Saatiin session ID URL:sta.');
-      this.authService.setSessionID(sessionID);
-    }
-  }
 
   // Uusi
   private trackForCourseID() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      console.log('app.component: trackForCourseID: saatiin kurssi ID: ' + courseID);
+      console.log('app.component: trackForCourseID: kurssi ID, muuttunut:' + courseID);
       if (courseID !== null) {
         this.authService.setCourseID(courseID);
       }

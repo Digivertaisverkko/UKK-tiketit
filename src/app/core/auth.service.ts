@@ -53,6 +53,7 @@ export class AuthService {
   /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
     olla jo local storagessa. */
     public async initialize() {
+      console.log('auth init ajetaan');
       if (window.localStorage.getItem('SESSION_ID') == null) return
       const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
       if (savedCourseID !== null) {
@@ -114,15 +115,13 @@ export class AuthService {
     }
   }
   
-  private checkIfSessionIdInURL() {
+  public checkIfSessionIdInURL() {
     // Angular Routella parametrien haku ei onnistunut.
     const urlParams = new URLSearchParams(window.location.search);
     const sessionID = urlParams.get('sessionID');
     if (sessionID !== undefined && sessionID !== null) {
-      const courseID = this.courseID$.value;
-      console.log('Saatiin session ID URL:sta: ' + sessionID +'. kurssi ID: ' + courseID);
+      console.log('auth.service: saatiin session ID URL:sta.');
       this.setSessionID(sessionID);
-      if (this !== null) this.fetchUserInfo(courseID);
     }
   }
 
@@ -245,7 +244,10 @@ export class AuthService {
   // Palauta session ID ja päivitä status kirjautumattomaksi, jos sitä ei ole.
   public getSessionID(): string | null {
     const sessionID = (window.localStorage.getItem('SESSION_ID'));
-    if (sessionID === undefined || sessionID === null) this.setNotLoggegIn();
+    if (sessionID === undefined || sessionID === null) {
+      console.log('otettiin session ID local storagesta.');
+      this.setNotLoggegIn();
+    }
     return sessionID;
   }
 

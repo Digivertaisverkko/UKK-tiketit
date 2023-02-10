@@ -115,6 +115,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       // this.authService.setCourseID(courseID);
       // this.authService.fetchUserInfo(courseID);
       this.courseID = courseID;
+      console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
       this.fetchFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
