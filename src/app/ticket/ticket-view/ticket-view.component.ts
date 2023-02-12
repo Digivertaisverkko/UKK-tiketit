@@ -64,6 +64,10 @@ export class TicketViewComponent implements OnInit {
     this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     });
+    this.pollTickets();
+  }
+
+  private pollTickets() {
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
     const MILLISECONDS_IN_MIN = 60000;
     interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
