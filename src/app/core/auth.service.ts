@@ -311,7 +311,7 @@ export class AuthService {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       // console.dir(httpOptions);
       response = await firstValueFrom(this.http.post<GenericResponse>(url, body));
-      console.log('authService: saatiin vastaus POST-kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
+      // console.log('authService: saatiin vastaus POST-kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -360,7 +360,7 @@ export class AuthService {
     try {
       console.warn('authService.getMyUserInfo: haetaan käyttäjätiedot');
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
-      console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
+      // console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
       if (response?.id !== undefined && response?.id !== null) {
         console.log('getMyUserInfo: asetettiin kirjautuminen.');
         this.setLoggedIn(); 
@@ -390,9 +390,9 @@ export class AuthService {
     };
     let response: any;
     try {
-      console.log('Lähetetään 1. kutsu');
+      // console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
+      // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -415,17 +415,16 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
-      console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
-      console.log(httpOptions.headers);
+      // console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-      console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
+      // console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
     if (response.success == true && response['login-code'] !== undefined) {
-      console.log(' login-code: ' + response['login-code']);
+      // console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
-      console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
+      // console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       return this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
       return { success: false };
@@ -447,7 +446,7 @@ export class AuthService {
       // console.log('Lähetetään auth-request headereilla (alla):');
       // console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
-      console.log('sendAuthRequest: saatiin vastaus: ' + JSON.stringify(response));
+      // console.log('sendAuthRequest: saatiin vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }

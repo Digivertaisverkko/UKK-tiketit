@@ -1,23 +1,28 @@
 /* singleton services and modules shared throughout the application. This module should
  * only be imported by app.module. */
 
+// Yleiset moduulit
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
+
+// Material moduulit
 import { MaterialModule } from '../shared/material.module';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterModule } from '@angular/router';
-
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
+// Servicet
 import { AuthService } from './auth.service';
+import { CustomHttpInterceptor } from './http-interceptor';
 
+// Komponentit
 import { HeaderComponent } from '../core/header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { SharedModule } from '../shared/shared.module';
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
@@ -41,7 +46,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     SharedModule,
   ],
   providers: [
-    AuthService
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}
   ],
   exports: [
     HeaderComponent,
