@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, throwError, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 import { truncate } from '../utils/truncate';
-import { ActivatedRoute, Router, ParamMap, ActivationEnd, GuardsCheckStart } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap, ActivationEnd } from '@angular/router';
 import * as shajs from 'sha.js';
 import cryptoRandomString from 'crypto-random-string';
 import { ErrorService } from './error.service';
@@ -16,20 +16,11 @@ import { Inject, LOCALE_ID } from '@angular/core';
 
 // Tämä service käsittelee käyttäjäautentikointia.
 export class AuthService {
-
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
   // Onko käyttäjä osallisena aktiivisella kurssilla.
   private isParticipant$ = new BehaviorSubject<boolean>(false);
   private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
-
-  // private activeCourse$ = new BehaviorSubject <Kurssi>({ id: '0', nimi: '' });
-
-  // Vanhat, vielä monessa paikkaa käytössä olevat:
-  // private userRole$ = new BehaviorSubject <string>('');
-  private userName$ = new BehaviorSubject <string>('');
-  // private userEmail$ = new BehaviorSubject <string>('');
-
   // TODO: nämä oAuth tiedot yhteen tietotyyppiin.
   private codeVerifier: string = '';
   private codeChallenge: string = '';
@@ -50,27 +41,13 @@ export class AuthService {
   }
 
 
-  public initialize() {
+  public initialize()
+  {
     this.checkIfSessionIdInURL();
     this.checkIfSessionIDinStorage();
     this.updateUserInfo()
     // this.trackRouteParameters();
     // this.trackCourseID();
-  }
-
-    // Ei käytössä enää, koska kurssi ID:ä ei tallenneta local storageen.
-    public async initializeOld() {
-      console.log('auth init ajetaan');
-      if (window.localStorage.getItem('SESSION_ID') == null) return
-      const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-      if (savedCourseID !== null) {
-            // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
-      // jotta ei ohjauduta loginiin page refresh:lla.
-      this.setLoggedIn();
-      this.fetchUserInfo(savedCourseID);
-    } else {
-      console.log('authService.initialize: ei kurssi ID:ä!');
-    }
   }
 
   private checkIfSessionIDinStorage() {
@@ -82,26 +59,26 @@ export class AuthService {
   }
 
   private updateUserInfo() {
-      // Käyttäjätietojen päivitys.
-      this.router.events.subscribe(event => {
-        if (event instanceof ActivationEnd) {
-          let courseID = event.snapshot.paramMap.get('courseid');
-          if (courseID !== undefined && courseID !== null) {
-            console.log('updateUserInfo: saatiin kurssi ID ' +  courseID  +' url:sta');
-            this.setCourseID(courseID);
-            if (this.getSessionID !== null) {
-              console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
-              this.fetchUserInfo(courseID);
-            }
+    this.router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        let courseID = event.snapshot.paramMap.get('courseid');
+        if (courseID !== undefined && courseID !== null) {
+          console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
+          this.setCourseID(courseID);
+          if (this.getSessionID !== null) {
+            console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
+            this.fetchUserInfo(courseID);
           }
-        } else if (event instanceof GuardsCheckStart) {
-          // if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
-          //   if (window.localStorage.getItem('SESSION_ID') !== undefined && this.courseID !== null) {
-          //   console.log('-- updateUserInfo 2: haetaan käyttäjätiedot: kurssi id: ' + this.courseID);
-          //   this.fetchUserInfo(this.courseID);
-          // }
         }
-      });
+      }
+      // } else if (event instanceof GuardsCheckStart) {
+      // if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
+      //   if (window.localStorage.getItem('SESSION_ID') !== undefined && this.courseID !== null) {
+      //   console.log('-- updateUserInfo 2: haetaan käyttäjätiedot: kurssi id: ' + this.courseID);
+      //   this.fetchUserInfo(this.courseID);
+      // }
+      // }
+    });
   }
   
   // private trackCourseID() {
@@ -122,8 +99,7 @@ export class AuthService {
     console.log('auth service: route on '+ route);
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      console.log('------ auth service: trackRouteParameters: saatiin kurssi ID:' + courseID);
-      console.dir(paramMap);
+      console.log(' auth service: trackRouteParameters: saatiin kurssi ID:' + courseID);
       if (courseID !== null) {
         this.setCourseID(courseID);
       }
@@ -131,10 +107,8 @@ export class AuthService {
   }
 
   public setCourseID(courseID: string) {
-    console.log('setCourseID: asetetaan kurssi ID: ' + courseID);
-
     if (courseID !== this.courseID) {
-      console.log('setCourseID: arvo on nyt ' + this.courseID);
+      console.log('setCourseID: asetetaan kurssi id: ' + this.courseID);
       this.courseID = courseID;
     }
   }
@@ -203,6 +177,21 @@ export class AuthService {
   public getIsParticipant(): boolean {
     return this.isParticipant$.value
   }
+
+
+  // Ei käytössä enää, koska kurssi ID:ä ei tallenneta local storageen.
+    //   public async initializeOld() {
+    //     if (window.localStorage.getItem('SESSION_ID') == null) return
+    //     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
+    //     if (savedCourseID !== null) {
+    //           // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
+    //     // jotta ei ohjauduta loginiin page refresh:lla.
+    //     this.setLoggedIn();
+    //     this.fetchUserInfo(savedCourseID);
+    //   } else {
+    //     console.log('authService.initialize: ei kurssi ID:ä!');
+    //   }
+    // }
 
   // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.
   // public setActiveCourse(courseID: string | null) {
@@ -327,14 +316,9 @@ export class AuthService {
       this.handleError(error);
     }
     // this.checkErrors(response);
-    if (response.success == true) {
+    return (response?.success === true) ? true : false;
       // this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@onnistui:onnistui` + '.');
-      return true;
-    } else {
       // this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@ei onnistunut:ei onnistunut` + '.');
-      return false;
-    }
-    
   }
 
   // Hae ja tallenna palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
@@ -374,7 +358,7 @@ export class AuthService {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
     try {
-      console.log('authService.getMyUserInfo: haetaan käyttäjätiedot');
+      console.warn('authService.getMyUserInfo: haetaan käyttäjätiedot');
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
       console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
       if (response?.id !== undefined && response?.id !== null) {
@@ -463,9 +447,7 @@ export class AuthService {
       // console.log('Lähetetään auth-request headereilla (alla):');
       // console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
-      console.log('sendAuthRequest: got response: ');
-      console.log(JSON.stringify(response));
-      console.dir(response);
+      console.log('sendAuthRequest: saatiin vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -489,7 +471,6 @@ export class AuthService {
       // }
     } else {
       loginResult = { success: false };
-      console.error(response.error);
     }
     return loginResult;
   }
@@ -518,18 +499,6 @@ export class AuthService {
       };
     }
     return options;
-  }
-
-  // Näytä sendAskLoginRequest:n liittyviä logeja.
-  private printAskLoginLog(response: any, loginUrl: string) {
-    console.log('Got response: ');
-    console.dir(response);
-    console.log('Response as string: ' + loginUrl);
-    if (isValidHttpUrl(loginUrl)) {
-      console.log('It seems valid url.');
-    } else {
-      console.log("It's not valid url.");
-    }
   }
 
   // Onko string muodoltaan HTTP URL.
@@ -590,7 +559,7 @@ export class AuthService {
     }
   }
 
-}
+} // End of class
 
 export interface LoginResponse {
   success: boolean,
