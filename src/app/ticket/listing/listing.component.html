@@ -52,7 +52,7 @@
       </th>
       <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
       <td mat-cell *matCellDef="let element" >
-        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
+        <a class="a-left-padding" [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
           {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
         '...':(element.otsikko) }}</a>
       </td>
@@ -173,10 +173,12 @@
 
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
   
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();" style="position: relative"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative">
+    <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
 
-  <!-- <div style="position: absolute; outline: red 1px solid; top: 0;left: 0; right: 0;"><a href="https://www.google.com" target="_blank"></a></div> -->
+  </tr>
 
+  
 </table>
 
   <!-- Kkun haku ei löydä mitään-->
