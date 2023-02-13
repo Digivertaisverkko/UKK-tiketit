@@ -57,7 +57,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public courseName: string = '';
   public errorMessage: string = '';
   public headline: string = '';
-  public me: string =  $localize`:@@Minä:Minä`;
   public ticketViewLink = '';
   public user: User = {} as User;
 

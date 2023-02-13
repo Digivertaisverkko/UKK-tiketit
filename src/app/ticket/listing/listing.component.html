@@ -66,7 +66,7 @@
       </th>
       <td class="cell-align-right" mat-cell *matCellDef="let element">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
-          {{ user.nimi === element.aloittajanNimi ? me : element.aloittajanNimi }}
+          {{ element.aloittajanNimi }}
         </a>
       </td>
     </ng-container>

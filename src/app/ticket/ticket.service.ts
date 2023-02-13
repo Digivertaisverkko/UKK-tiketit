@@ -295,6 +295,8 @@ export class TicketService {
     }
 
     // Muutetaan taulukkoon sopivaan muotoon.
+    const myName = this.auth.getUserInfo().nimi;
+    const me = $localize`:@@Minä:Minä`;
     let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
       {
         tilaID: ticket.tila,
@@ -302,7 +304,7 @@ export class TicketService {
         id: ticket.id,
         otsikko: ticket.otsikko,
         aikaleima: ticket.aikaleima,
-        aloittajanNimi: ticket.aloittaja.nimi
+        aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
       }
     ));
     // Ei näytetä arkistoituja tikettejä.
