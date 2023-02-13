@@ -29,7 +29,7 @@ table {
 
 a {
   color: unset;
-  display: inline-block;
+  display: block;
   text-decoration: none;
   width: 98%;
   padding-top: 0.6em;
@@ -73,7 +73,11 @@ a {
 .mat-column-aloittajanNimi { min-width: 11em; }
 
 // headereissa sorting-nuoli ottaa oikealta puolelta tilaa.
-.td-align-right { padding-right: 2.1rem; }
+.cell-align-right {
+  padding-right: 2.1rem;
+}
+
+
 
 // Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
 

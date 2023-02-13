@@ -29,6 +29,7 @@
         Tila
       </th>
       <td mat-cell *matCellDef="let element">
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
           <div class="state-wrapper">
             <div class="icon-wrapper" [ngSwitch]="element.tilaID">
               <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
@@ -40,6 +41,7 @@
             </div>
             <div>{{ element.tila }}</div>
           </div>
+        </a>
       </td>
     </ng-container>
 
@@ -49,8 +51,9 @@
         Otsikko
       </th>
       <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
-      <td mat-cell *matCellDef="let element" ><a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
-        {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
+      <td mat-cell *matCellDef="let element" >
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
+          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
         '...':(element.otsikko) }}</a>
       </td>
     </ng-container>
@@ -61,8 +64,10 @@
         i18n="@@Lähettäjä">
         Lähettäjä
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element">
-        {{ user.nimi === element.aloittajanNimi ? me : element.aloittajanNimi }}
+      <td class="cell-align-right" mat-cell *matCellDef="let element">
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
+          {{ user.nimi === element.aloittajanNimi ? me : element.aloittajanNimi }}
+        </a>
       </td>
     </ng-container>
 
@@ -72,13 +77,15 @@
         i18n="@@Luotu">
         Luotu
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element">
-        {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+      <td mat-cell *matCellDef="let element" class="cell-align-right">
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
+          {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+        </a>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"></tr>
 
     <!-- <tr *matNoDataRow>
       <td class="noData-td" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</td> -->
@@ -145,8 +152,10 @@
     <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
       Tyyppi
     </th>
-    <td class="td-align-right" mat-cell *matCellDef="let element">
-      {{ element.tyyppi }}
+    <td class="cell-align-right" mat-cell *matCellDef="let element">
+      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
+        {{ element.tyyppi }}
+      </a>
     </td>
   </ng-container>
 
@@ -155,13 +164,18 @@
       sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
       Päivämäärä
     </th>
-    <td class="td-align-right" mat-cell *matCellDef="let element">
-      {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+    <td class="cell-align-right" mat-cell *matCellDef="let element">
+      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
+        {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+      </a>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
+  
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();" style="position: relative"></tr>
+
+  <!-- <div style="position: absolute; outline: red 1px solid; top: 0;left: 0; right: 0;"><a href="https://www.google.com" target="_blank"></a></div> -->
 
 </table>
 
