@@ -6,7 +6,7 @@
   <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
     <span>{{courseName}}</span>
   </h2>
- 
+
   <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
 
   <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin hakukentälle tilaa. -->
@@ -167,8 +167,12 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative">  </tr>
-  <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
+
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative">
+    <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
+
+  </tr>
+
 
 </table>
 
@@ -193,3 +197,26 @@
 <!-- <div class="theme-actions">
   <button mat-raised-button *ngIf="isLoaded && isInIframe" color="primary" [routerLink]="'/submit/'">Avaa kurssinäkymä</button>
 </div> -->
+
+<!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. -->
+<section>
+  <h3 class="sub-header" i18n="@@Anna meille palautetta">Anna meille palautetta</h3>
+  <p>
+    Onko sinulla ongelmia tämän järjestelmän kanssa? Entä uusia ideoita, miten voisimme jatkokehittää tätä
+    järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?
+  </p>
+  <p>
+    Jos on, niin pyytäisimme sinua ystävällisestä jättämään meille palautetta alla olevan painikkeen kautta.
+    Palautteesi tulemme käsittelemään osana tämän järjestelmän kehitystyötä, joka on osa Digivertaisverkko hankkeen
+    toimenpiteitä. Palautelomakkeella pyydämme antamaan sen kurssin nimen, jonka yhteydessä käytit tätä järjestelmää.
+    Lisäksi pyydämme vapaamuotoista palautetta. Palaute käsitellään anonyymisti Digivertaisverkko hankkeen henkilöstön
+    toimesta.
+  </p>
+  <p>
+    Palautteen antaminen on täysin vapaaehtoista. Kiitos!
+  </p>
+  <div class="theme-actions" [ngStyle]="{ 'justify-content': 'flex-start' }">
+    <button mat-raised-button color="primary" onClick="window.open('https://link.webropolsurveys.com/S/6D1CD4B0D938E765')"
+      i18n="@@Anna meille palautetta">Anna meille palautetta</button>
+  </div>
+</section>
