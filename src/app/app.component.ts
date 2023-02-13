@@ -1,4 +1,4 @@
-import {  AfterViewInit, Component, OnInit } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 
@@ -24,19 +24,10 @@ export class AppComponent implements OnInit  {
 
   ngOnInit(): void {
     this.authService.initialize();
-    // this.trackForCourseID();
-    // this.courseID = this.route.snapshot.paramMap.get('courseid');
-    // console.log('app.component: saatiin kurssi id ' + this.courseID);
     //  this.trackForCourseID();
     this.isInIframe = this.testIframe();
-    console.log('app.component OnInit ajetaan: courseID snapshotilla: ' + this.courseID);
-    // Ei toimi vielä.
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
-    // this.authService.initialize();
-    // if (this.courseID !== null) {
-    //   this.authService.setCourseID(this.courseID);
-    // }
     this.trackLoginStatus();
   }
 
