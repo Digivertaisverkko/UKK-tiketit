@@ -14,7 +14,7 @@ import { Inject, LOCALE_ID } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 
-// Tämä service käsittelee käyttäjäautentikointia.
+// Luokka käsittelee käyttäjäautentikointiin liittyviä toimia.
 export class AuthService {
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
@@ -26,9 +26,9 @@ export class AuthService {
   private codeChallenge: string = '';
   private loginCode: string = '';
   // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
-  private oAuthState: string = '';
-  private codeChallengeMethod: string = 'S256';
-  private responseType: string = 'code';
+  // private oAuthState: string = '';
+  // private codeChallengeMethod: string = 'S256';
+  // private responseType: string = 'code';
 
   private courseID: string | null = null;
   // private courseID$ = new BehaviorSubject <string>('');
@@ -309,16 +309,11 @@ export class AuthService {
     let response: any;
     try {
       console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
-      // console.dir(httpOptions);
       response = await firstValueFrom(this.http.post<GenericResponse>(url, body));
-      // console.log('authService: saatiin vastaus POST-kutsuun URL:iin ' + url + ': ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return (response?.success === true) ? true : false;
-      // this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@onnistui:onnistui` + '.');
-      // this.sendErrorMessage($localize `:@@Käyttäjän rekisteröinti:Käyttäjän rekisteröinti` + ' ' + $localize `:@@ei onnistunut:ei onnistunut` + '.');
   }
 
   // Hae ja tallenna palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
@@ -360,7 +355,6 @@ export class AuthService {
     try {
       console.warn('authService.getMyUserInfo: haetaan käyttäjätiedot');
       response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
-      // console.log('Haettiin käyttäjätiedot URL:lla "' + url + '" vastaus: ' + JSON.stringify(response))
       if (response?.id !== undefined && response?.id !== null) {
         console.log('getMyUserInfo: asetettiin kirjautuminen.');
         this.setLoggedIn(); 
@@ -376,11 +370,10 @@ export class AuthService {
   public async sendAskLoginRequest(loginType: string) {
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
     this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
-    this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
+    // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
     // this.storage.set('codeVerifier', codeVerifier);
-    //this.logBeforeLogin();
     let url: string = environment.apiBaseUrl + '/login';
     const httpOptions =  {
       headers: new HttpHeaders({
@@ -392,7 +385,6 @@ export class AuthService {
     try {
       // console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-      // console.log('authService: saatiin vastaus 1. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -415,16 +407,13 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
-      // console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
       response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
-      // console.log('authService: saatiin vastaus 2. kutsuun: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
     if (response.success == true && response['login-code'] !== undefined) {
       // console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
-      // console.log(' lähetetään: this.sendAuthRequest( ' + this.codeVerifier + ' ' + this.loginCode);
       return this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
       return { success: false };
@@ -443,10 +432,7 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
-      // console.log('Lähetetään auth-request headereilla (alla):');
-      // console.dir(httpOptions);
       response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
-      // console.log('sendAuthRequest: saatiin vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -458,16 +444,9 @@ export class AuthService {
         loginResult.redirectUrl = redirectUrl;
         window.localStorage.removeItem('REDIRECT_URL')
       }
-      // console.log('sendAuthRequest: Got Session ID: ' + response['login-id']);
-      // console.log('Vastaus: ' + JSON.stringify(response));
       const sessionID = response['session-id'];
       this.setSessionID(sessionID);
       this.setLoggedIn();
-      // const courseID: string | null = window.localStorage.getItem('COURSE_ID');
-      // if (courseID !== null) {
-      //   // console.log('-- ajetaan saveUserInfo ----');
-      //   await this.fetchUserInfo(courseID);
-      // }
     } else {
       loginResult = { success: false };
     }
@@ -514,16 +493,6 @@ export class AuthService {
   // Lähetä muotoiltuvirheilmoitus consoleen, puutu ylemmän tason virheisiin kuten jos ei olle kirjautuneita.
   // Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
 
-
-  // Näytä client-side login tietoja ennen kirjautumisyritystä.
-  private logBeforeLogin() {
-    console.log('authService (before asking login):');
-    console.log('Response type: ' + this.responseType);
-    console.log('Code Verifier: ' + this.codeVerifier);
-    console.log('Code challenge : ' + this.codeChallenge);
-    console.log('oAuthState: ' + this.oAuthState);
-  }
-
   // Suorita uloskirjautuminen.
   public async logOut(): Promise<any> {
     const sessionID = this.getSessionID();
@@ -538,7 +507,6 @@ export class AuthService {
       try {
         console.log('Lähetettäisiin logout-kutsu, mutta ei ole tukea sille vielä.');
         // response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
-        // console.log('authService: saatiin vastaus logout kutsuun: ' + JSON.stringify(response));
       } catch (error: any) {
         this.handleError(error);
       } finally {

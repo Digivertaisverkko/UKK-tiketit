@@ -99,9 +99,7 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
     console.dir(httpOptions);
     try {
-      // console.log('addComment: lähetetään bodyssa: ' + JSON.stringify(body) + ' URL:iin ' + url);
       response = await firstValueFrom( this.http.post<object>(url, body, httpOptions) );
-      // console.log( 'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response) );
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -116,7 +114,6 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
     try {
       response = await firstValueFrom( this.http.get<KentanTiedot[]>(url, httpOptions) );
-      // console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -136,9 +133,7 @@ export class TicketService {
     }
     const body = newFaq;
     try {
-      // console.log('Yritetään lähettää body: ' + JSON.stringify(body) + '  URL:iin "' + url + '"');
       response = await firstValueFrom(this.http.post<UusiUKK>(url, body, httpOptions));
-      // console.log('saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -151,9 +146,7 @@ export class TicketService {
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      // console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' + url + '"');
       response = await firstValueFrom(this.http.post<UusiTiketti>(url, body, httpOptions));
-      // console.log('saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -179,9 +172,7 @@ export class TicketService {
     let response: any;
     const url = environment.apiBaseUrl + '/tiketti/' + String(ticketID) + '/arkistoiukk';
     try {
-      // console.log('Yritetään lähettää body {} POST-kutsu osoitteeseen ' + url);
       response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}, httpOptions));
-      // console.log('saatiin vastaus UKK poistamiseen: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -195,7 +186,6 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/kurssi/' + courseID;
     try {
       response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions) );
-      // console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response) );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -209,7 +199,6 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/kurssit';
     try {
       response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
-      // console.log( 'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response) );
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -224,7 +213,6 @@ export class TicketService {
       let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
       try {
         response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url, httpOptions));
-        // console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
         this.auth.setLoggedIn();
       } catch (error: any) {
         this.handleError(error);
@@ -269,7 +257,6 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      // console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -289,7 +276,6 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      // if (this.debug)  console.log('Saatiin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 200, true));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -320,7 +306,6 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url, httpOptions));
-      // console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response) + ' .');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -344,7 +329,6 @@ export class TicketService {
       response = await firstValueFrom<Kommentti[]>(
         this.http.get<any>(url, httpOptions)
       );
-      // if (this.debug) console.log('Saatiin URL:sta "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -377,7 +361,6 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
       response = await firstValueFrom<Kentta[]>( this.http.get<any>(url, httpOptions) );
-      // if (this.debug) console.log('getFields: Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
     } catch (error: any) {
       this.handleError(error);
     }
