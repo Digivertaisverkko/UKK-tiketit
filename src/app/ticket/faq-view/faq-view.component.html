@@ -2,7 +2,9 @@
 
 <div class="faq-view" *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer">
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+    <!-- Jos käytetään kirjautumisen tunnistinta. -->
+    <!-- <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer"> -->
     <span>{{ courseName }}</span>
   </h2>
 

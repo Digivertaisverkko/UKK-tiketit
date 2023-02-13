@@ -10,7 +10,7 @@
   <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
 
   <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin hakukentälle tilaa. -->
-  <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div>
+  <!-- <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div> -->
   <div class="input-field-wrapper">
     <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">{{headline}}</h3>
     <!--Hakutoiminto-->
@@ -50,7 +50,7 @@
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
         Otsikko
       </th>
-      <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
+      <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
       <td mat-cell *matCellDef="let element" >
         <a class="a-left-padding" [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
           {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
