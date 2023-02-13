@@ -25,6 +25,10 @@ export interface ColumnDefinition {
   showMobile: boolean;
 }
 
+enum IconFile {
+  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64", "Arkistoitu"
+}
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -41,6 +45,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public FAQisLoaded: boolean = false;
+  public iconFile: typeof IconFile = IconFile;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;

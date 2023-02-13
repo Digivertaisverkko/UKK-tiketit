@@ -31,14 +31,10 @@
       <td mat-cell *matCellDef="let element">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
           <div class="state-wrapper">
-            <div class="icon-wrapper" [ngSwitch]="element.tilaID">
-              <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="2" src="../../../assets/icons/Kasittelyssa.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="3" src="../../../assets/icons/Kysymys.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="4" src="../../../assets/icons/Kommentti.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="5" src="../../../assets/icons/Ratkaisu_64.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="6" src="../../../assets/icons/Arkistoitu.svg" height="100%" width="100%" alt="">
-            </div>
+            <div class="icon-wrapper">
+              <img class="icon" src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg" height="100%" width="100%" alt="">
+          </div>
+
             <div>{{ element.tila }}</div>
           </div>
         </a>
