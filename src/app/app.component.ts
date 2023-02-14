@@ -1,6 +1,7 @@
 import {  Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,9 @@ export class AppComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    if (environment.production === true) {
+      console.log('Production build');
+    }
     this.authService.initialize();
     //  this.trackForCourseID();
     this.isInIframe = this.testIframe();
