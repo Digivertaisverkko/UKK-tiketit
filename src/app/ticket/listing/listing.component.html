@@ -74,7 +74,7 @@
       </th>
       <td mat-cell *matCellDef="let element" class="cell-align-right">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
-          {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+          {{element.aikaleima | date: 'shortDate'}}
         </a>
       </td>
     </ng-container>
@@ -87,7 +87,7 @@
       <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
       <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
     <!-- </tr> -->
-´
+
       <!-- Kkun haku ei löydä mitään-->
 
   </table>
@@ -161,7 +161,7 @@
     </th>
     <td class="cell-align-right" mat-cell *matCellDef="let element">
       <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
-        {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+        {{element.aikaleima | date: 'shortDate'}}
       </a>
     </td>
   </ng-container>
