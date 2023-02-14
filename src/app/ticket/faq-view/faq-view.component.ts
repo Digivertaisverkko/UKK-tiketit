@@ -16,6 +16,7 @@ export class FaqViewComponent implements OnInit {
   public ticket: Tiketti = {} as Tiketti;
   public user: User = <User>{};
   public isArchivePressed: boolean = false;
+  public isCopyToClipboardPressed: boolean = false;
   private courseID: string | null;
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
