@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Subject, firstValueFrom, Observable } from 'rxjs';
 import '@angular/localize/init';
-import { truncate } from '../utils/truncate';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
   private refreshEmitter$ = new Subject<boolean>();
-  private activeCourse: string | undefined = undefined;
   private debug: boolean = false;
 
   constructor (private auth: AuthService,
@@ -41,8 +37,6 @@ export class TicketService {
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
-      if (this.debug) console.log( 'Saatiin GET-kutsusta URL:iin "' + url + 
-        '" vastaus: ' + truncate(JSON.stringify(response), 300, true) );
     } catch (error: any) {
       this.handleError(error);
     }

@@ -56,7 +56,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public courseID: string = '';
   // Ticket info polling rate in minutes.
-  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
+  private readonly TICKET_POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
+  private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
 
   // Merkkijonot
   public courseName: string = '';
@@ -97,13 +98,17 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.trackRouteParameters();
     // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
-    this.trackRouteParameters();
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.log('ngAfterViewInit: saatiin tieto login-tilasta: ' + response);
+      if (response) this.updateLoggedInView(this.courseID);
+    });
   }
 
   private trackRouteParameters() {
@@ -120,7 +125,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.courseID = courseID;
       console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
-      this.fetchFAQ(courseID);
+      this.pollFAQ(courseID);
       // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
       // this.authService.saveUserInfo(courseIDcandinate);
       // this.trackLoginState(courseIDcandinate);
@@ -137,11 +142,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+
     this.trackMessages();
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('ngAfterViewInit: saatiin tieto login-tilasta: ' + response);
-      if (response) this.updateLoggedInView(this.courseID);
-    });
   }
 
   ngOnDestroy(): void {
@@ -155,7 +157,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       if (response) {
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
-        this.fetchQuestions(this.courseID);
+        this.fetchTickets(this.courseID);
         this.fetchFAQ(this.courseID, true);
       }
     });
@@ -176,13 +178,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
+          this.pollTickets(this.courseID);
         }
       }
-    }).then(() => {
-      const MILLISECONDS_IN_MIN = 60000;
-      timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe( () => this.fetchQuestions(this.courseID) );
-    }
-    ).catch(error => this.handleError(error));
+    }).catch(error => this.handleError(error));
     // .finally(this.isLoaded = true) ei toiminut.
   }
 
@@ -198,22 +197,37 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private fetchQuestions(courseID: string) {
+  private pollTickets(courseID: string) {
+    const MILLISECONDS_IN_MIN = 60000;
+    timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe(() => {
+      this.fetchTickets(courseID);
+    });
+  }
+
+  private fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then(response => {
         // Arkistoituja kysymyksiä ei näytetä.
-        if (response.length > 0) this.dataSource = new MatTableDataSource(response);
-        this.numberOfQuestions = response.length;
-        this.dataSource.sort = this.sortQuestions;
+        if (response.length > 0) {
+          this.dataSource = new MatTableDataSource(response);
+          this.numberOfQuestions = response.length;
+          this.dataSource.sort = this.sortQuestions;
+        }
         // this.dataSource.paginator = this.paginator;
     }).catch(error => {
       this.handleError(error);
     });
   }
 
+  private pollFAQ(courseID: string) {
+    const MILLISECONDS_IN_MIN = 60000;
+    timer(0, this.FAQ_POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe(() => {
+      this.fetchFAQ(courseID);
+    });
+  }
+
+  // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
-    this.ticket
-      .getFAQ(courseID)
-      .then(response => {
+    this.ticket.getFAQ(courseID).then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
           this.dataSourceFAQ = new MatTableDataSource(response);
