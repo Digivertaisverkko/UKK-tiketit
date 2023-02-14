@@ -59,7 +59,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     ['bold', 'italic', 'underline', 'strike'],
     ['code', 'blockquote'],
     ['ordered_list', 'bullet_list'],
-    ['link'],
   ];
 
   @Input() editorContent: string = '';
