@@ -15,7 +15,7 @@
     <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">{{headline}}</h3>
     <!--Hakutoiminto-->
     <mat-form-field class="filteringField" *ngIf="numberOfQuestions !== 0">
-      <mat-label i18n="@@Hae kysymystä">Hae kysymystä</mat-label>
+      <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
       <input matInput (keyup)="applyFilter($event, true)" placeholder="" #input>
     </mat-form-field>
   </div>
@@ -92,7 +92,8 @@
 
   </table>
 
-    <p  *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
+    <p *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Ei tuloksia"
+      >Suodattimella ei löytynyt tuloksia.</p>
     <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
     <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
 
@@ -116,7 +117,7 @@
   <h3 class="sub-header" i18n="@@Usein kysytyt kysymykset">Usein kysytyt kysymykset</h3>
   <!--Hakutoiminto-->
   <mat-form-field class="filteringField filter-FAQ" *ngIf="numberOfFAQ !== 0">
-    <mat-label i18n="@@Hae kysymystä">Hae kysymystä</mat-label>
+    <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
     <input matInput (keyup)="applyFilter($event, false)" placeholder="" #input>
   </mat-form-field>
 </div>
@@ -171,8 +172,9 @@
 
 </table>
 
-  <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Haulla ei löytynyt tuloksia">
-    Haulla ei löytynyt tuloksia.</p>
+  <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Ei tuloksia">
+    Minkään kysymyksen tiedoissa ei ole merkkijonoa "{{dataSourceFAQ.filter}}".
+  </p>
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
         aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
