@@ -5,6 +5,10 @@ section, app-error-card, .theme-actions { width: 103%; }
 
 section, app-error-card, .theme-actions { margin-left: -15px; }
 
+.feedback { margin-left: 0;
+  h3 { margin-left: -1rem }
+}
+
 h2 { padding-right: 2rem; }
 
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
