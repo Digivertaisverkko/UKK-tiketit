@@ -258,6 +258,10 @@ export class AuthService {
     return this.user$.asObservable();
   }
 
+  public unTrackUserInfo(): void {
+    this.user$.unsubscribe();
+  }
+
   public setSessionID(newSessionID: string) {
     const oldSessionID =  window.localStorage.getItem('SESSION_ID');
     if (oldSessionID == undefined || oldSessionID !== newSessionID)
