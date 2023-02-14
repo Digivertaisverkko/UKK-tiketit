@@ -74,7 +74,7 @@
       </th>
       <td mat-cell *matCellDef="let element" class="cell-align-right">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
-          {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+          {{element.aikaleima | date: 'shortDate' }}
         </a>
       </td>
     </ng-container>
@@ -161,7 +161,7 @@
     </th>
     <td class="cell-align-right" mat-cell *matCellDef="let element">
       <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
-        {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+        {{element.aikaleima | date: 'shortDate'}}
       </a>
     </td>
   </ng-container>
@@ -177,7 +177,7 @@
 </table>
 
   <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Ei tuloksia">
-    Minkään kysymyksen tiedoissa ei ole merkkijonoa "{{dataSourceFAQ.filter}}".
+    Suodattimella ei löytynyt tuloksia.
   </p>
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
         aria-label="Valitse kysymysten sivu"></mat-paginator> -->
