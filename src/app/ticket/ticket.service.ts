@@ -37,7 +37,6 @@ export class TicketService {
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
-    // const httpOptions = this.getHttpOptions();
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
     let response: any;
     try {
@@ -47,6 +46,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
+    // Jos tarvitsee muokata dataa.
     // let tableData = response.map((faq: UKK ) => (
     //   {
     //     id: faq.id,
@@ -88,7 +88,7 @@ export class TicketService {
         throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
       }
     }
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     interface newComment {
       viesti: string;
       tila?: number;
@@ -97,9 +97,8 @@ export class TicketService {
     if (tila !== undefined) body.tila = tila
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
-    console.dir(httpOptions);
     try {
-      response = await firstValueFrom( this.http.post<object>(url, body, httpOptions) );
+      response = await firstValueFrom( this.http.post<object>(url, body ) );
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -109,11 +108,11 @@ export class TicketService {
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
     try {
-      response = await firstValueFrom( this.http.get<KentanTiedot[]>(url, httpOptions) );
+      response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -123,7 +122,7 @@ export class TicketService {
   /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
      Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
   public async sendFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url: string;
     if (editFaq?.toString() === 'true') {
@@ -133,7 +132,7 @@ export class TicketService {
     }
     const body = newFaq;
     try {
-      response = await firstValueFrom(this.http.post<UusiUKK>(url, body, httpOptions));
+      response = await firstValueFrom(this.http.post<UusiUKK>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -141,12 +140,12 @@ export class TicketService {
 
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
   public async addTicket(courseID: string, newTicket: UusiTiketti): Promise<boolean> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      response = await firstValueFrom(this.http.post<UusiTiketti>(url, body, httpOptions));
+      response = await firstValueFrom(this.http.post<UusiTiketti>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -168,11 +167,11 @@ export class TicketService {
 
   // Arkistoi (poista) UKK.
   public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     const url = environment.apiBaseUrl + '/tiketti/' + String(ticketID) + '/arkistoiukk';
     try {
-      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}, httpOptions));
+      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -181,11 +180,11 @@ export class TicketService {
 
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID;
     try {
-      response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions) );
+      response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -194,11 +193,11 @@ export class TicketService {
 
   // Palauta listan kaikista kursseista.
   public async getCourses(): Promise<Kurssi[]> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
-      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
+      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
@@ -208,11 +207,11 @@ export class TicketService {
 
     // Palauta listan kaikista kursseista, joilla käyttäjä on.
     public async getMyCourses(): Promise<Kurssini[]> {
-      const httpOptions = this.getHttpOptions();
+      //const httpOptions = this.getHttpOptions();;
       let response: any;
       let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
       try {
-        response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url, httpOptions));
+        response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
         this.auth.setLoggedIn();
       } catch (error: any) {
         this.handleError(error);
@@ -224,7 +223,7 @@ export class TicketService {
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   // public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
-  //   const httpOptions = this.getHttpOptions();
+  //   //const httpOptions = this.getHttpOptions();;
   //   let target: string;
   //   if (onlyOwn !== undefined && onlyOwn == true) {
   //     target = 'omat';
@@ -234,7 +233,7 @@ export class TicketService {
   //   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
   //   let response: any;
   //   try {
-  //     response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+  //     response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
   //     console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
   //     this.auth.setLoggedIn();
   //   } catch (error: any) {
@@ -251,12 +250,12 @@ export class TicketService {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let target = (onlyOwn == true) ? 'omat' : 'kaikki';
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -270,12 +269,12 @@ export class TicketService {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
-    const httpOptions = this.getHttpOptions();
+    // //const httpOptions = this.getHttpOptions();;
     let target = (onlyOwn == true) ? 'omat' : 'kaikki';
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -300,20 +299,20 @@ export class TicketService {
 
   // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     // ticketID = '2309483290';
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
-      response = await firstValueFrom(this.http.get<Tiketti>(url, httpOptions));
+      response = await firstValueFrom(this.http.get<Tiketti>(url));
     } catch (error: any) {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
     // TODO: Tee nämä kutsut rinnakkain.
-    response = await this.getFields(ticketID, httpOptions);
+    response = await this.getFields(ticketID);
     ticket.kentat = response;
-    response  = await this.getComments(ticketID, httpOptions);
+    response  = await this.getComments(ticketID);
     // Tiketin viestin sisältö on palautuksen ensimmäinen kommentti.
     ticket.viesti = response[0].viesti;
     response.shift();
@@ -322,12 +321,12 @@ export class TicketService {
   }
 
   // Palauta listan tiketin kommenteista.
-  private async getComments(ticketID: string, httpOptions: object): Promise<Kommentti[]>{
+  private async getComments(ticketID: string): Promise<Kommentti[]>{
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
     try {
       response = await firstValueFrom<Kommentti[]>(
-        this.http.get<any>(url, httpOptions)
+        this.http.get<any>(url)
       );
     } catch (error: any) {
       this.handleError(error);
@@ -356,48 +355,15 @@ export class TicketService {
   }
 
   // Hae lisäkentät
-  private async getFields(ticketID: string, httpOptions: object): Promise<Kentta[]> {
+  private async getFields(ticketID: string): Promise<Kentta[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
-      response = await firstValueFrom<Kentta[]>( this.http.get<any>(url, httpOptions) );
+      response = await firstValueFrom<Kentta[]>( this.http.get<any>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
     return response;
-  }
-
-    /* Aseta kurssi aktiiviseksi muistiin. Tarvitaan mm. käyttäjätietojen
-     hakemiseen */
-  // public getActiveCourse(): string {
-  //   var courseID: string = '';
-  //   if (this.activeCourse == undefined) {
-  //     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-  //     if (savedCourseID !== null) {
-  //         courseID = savedCourseID;
-  //       } else {
-  //         throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
-  //       }
-  //     } else {
-  //       courseID = String(this.activeCourse);
-  //     }
-  //   return courseID;
-  // }
-
-  // Palauta HttpOptions, johon on asetettu session-id headeriin.
-  private getHttpOptions(): object {
-    const SESSION_ID = window.localStorage.getItem('SESSION_ID');
-    // console.log('session id on: ' + sessionID);
-    // var sessionID = '123456789';
-
-    if (SESSION_ID === undefined || SESSION_ID === null) {
-      console.warn('getHttpOptions: ei session ID:ä.');
-      return {}
-    } else {
-      return  {
-        headers: new HttpHeaders({ 'session-id': SESSION_ID })
-      };
-    }
   }
 
   // logitukseen.

@@ -349,12 +349,12 @@ export class AuthService {
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
     }
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
     try {
-      console.warn('authService.getMyUserInfo: haetaan käyttäjätiedot');
-      response = await firstValueFrom<User>(this.http.get<any>(url, httpOptions));
+      console.log('authService.getMyUserInfo: haetaan käyttäjätiedot');
+      response = await firstValueFrom<User>(this.http.get<any>(url));
       if (response?.id !== undefined && response?.id !== null) {
         console.log('getMyUserInfo: asetettiin kirjautuminen.');
         this.setLoggedIn(); 
@@ -383,7 +383,6 @@ export class AuthService {
     };
     let response: any;
     try {
-      // console.log('Lähetetään 1. kutsu');
       response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
     } catch (error: any) {
       this.handleError(error);
@@ -459,26 +458,6 @@ export class AuthService {
     return this.isUserLoggedIn$.value;
   }
 
-  // Palauta HTTP-kutsuihin tarvittavat HTTP -options, joka sisältää headerit, joissa on session id jos sellainen on saatavilla.
-  private getHttpOptions(): object {
-    let sessionID = window.localStorage.getItem('SESSION_ID');
-    // if (sessionID == undefined) {
-    //   throw new Error('Session ID:ä ei ole asetettu. Ei olla kirjautuneita.');
-    // }
-    // console.log('session id on: ' + sessionID);
-    var options;
-    if (sessionID == null ) {
-      options = {};
-    } else {
-      options = {
-        headers: new HttpHeaders({
-          'session-id': sessionID
-        })
-      };
-    }
-    return options;
-  }
-
   // Onko string muodoltaan HTTP URL.
   isValidHttpUrl(testString: string): boolean {
     let url: URL;
@@ -501,7 +480,7 @@ export class AuthService {
       this.setNotLoggegIn();
       window.localStorage.clear();
     } else {
-      const httpOptions = this.getHttpOptions();
+      //const httpOptions = this.getHttpOptions();
       let response: any;
       let url = environment.apiBaseUrl + '/kirjaudu-ulos';
       try {
