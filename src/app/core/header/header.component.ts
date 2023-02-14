@@ -18,16 +18,6 @@ export class HeaderComponent implements OnInit {
   public userRole: string = '';
   public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
 
-  get language(): string {
-    return this._language;
-  }
-
-  set language(value: string) {
-    if (value !== this._language) {
-      localStorage.setItem('language', value);
-      window.location.reload();
-    }
-  }
   private _language!: string;
 
   constructor (
@@ -43,10 +33,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.trackCourseID();
     this.trackUserInfo();
-    console.log('header: kurssi id: ' + this.courseID);
     this.authService.onIsUserLoggedIn().subscribe(response => this.isLoggedIn = response);
-    // Käyttäjätietojen päivitys.
-
   }
 
   private trackCourseID() {
@@ -85,18 +72,14 @@ export class HeaderComponent implements OnInit {
   setUserRole(asema: string): void {
     let role: string = '';
       switch (asema) {
-        case 'opiskelija': {
+        case 'opiskelija':
           role = $localize`:@@Opiskelija:Opiskelija`; break;
-        }
-        case 'opettaja': {
+        case 'opettaja':
           role = $localize`:@@Opettaja:Opettaja`; break;
-        }
-        case 'admin': {
+        case 'admin':
           role = $localize`:@@Admin:Admin`; break;
-        }
-        default: {
+        default:
           role = '';
-        }
       }
       this.userRole = role;
   }
@@ -107,6 +90,17 @@ export class HeaderComponent implements OnInit {
 
   public toggleLanguage() {
     this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
+  }
+
+  get language(): string {
+    return this._language;
+  }
+
+  set language(value: string) {
+    if (value !== this._language) {
+      localStorage.setItem('language', value);
+      window.location.reload();
+    }
   }
 
   public goToFrontPage() {
