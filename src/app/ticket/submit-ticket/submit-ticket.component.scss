@@ -28,7 +28,16 @@ mat-form-field { min-width: 21rem; }
   margin-bottom: 3px;
 }
 
-mat-checkbox { margin-left: -10px; }
+.theme-actions {
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.file-input {
+  display: none;
+}
+
+// mat-checkbox { margin-left: -10px; }
 
 @media (min-width: $XSmall) {
   .submit-ticket { padding-right: $right-padding; }

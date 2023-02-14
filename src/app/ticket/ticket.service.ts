@@ -133,8 +133,11 @@ export class TicketService {
   }
 
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
-  public async addTicket(courseID: string, newTicket: UusiTiketti): Promise<boolean> {
-    //const httpOptions = this.getHttpOptions();;
+  public async addTicket(courseID: string, newTicket: UusiTiketti, attachments?: FormData | null): Promise<boolean> {
+    if (attachments) {
+      console.log('saatin liitetiedosto (alla):');
+      console.dir(attachments);
+    }
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;

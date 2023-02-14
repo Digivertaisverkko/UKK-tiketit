@@ -85,6 +85,14 @@
 
     <div class="theme-actions">
 
+      <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+      <button mat-mini-fab color="primary" (click)="fileUpload.click()">
+        <mat-icon>attach_file</mat-icon>
+      </button>
+  
+      <div class="filename">{{ fileName || noAttachmentsMessage }}</div>
+
       <div class="spacer"></div>
 
         <button
