@@ -34,6 +34,7 @@ enum IconFile {
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss'],
 })
+
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // dataSource = new MatTableDataSource<Sortable>();
   // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
@@ -50,7 +51,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
-  public localeDateFormat: string;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
@@ -79,7 +79,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private ticket: TicketService,
     private authService: AuthService
   ) {
-    this.localeDateFormat = this.authService.getDateFormat();
     this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
@@ -99,7 +98,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.trackRouteParameters();
-    // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.setTicketListHeadline();
