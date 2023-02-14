@@ -2,15 +2,12 @@
 
   <app-header *ngIf="!isInIframe">
     <span class="spacer"></span>
-    <!-- <button mat-icon-button class="search-icon" aria-label="Search">
-          <mat-icon>search</mat-icon>
-          </button> -->
   </app-header>
 
   <main>
-    <button mat-raised-button class="login-status" (click)="logInOut()" *ngIf="isInIframe">
+    <!-- <button mat-raised-button class="login-status" (click)="logInOut()" *ngIf="isInIframe">
       {{logButtonString}}
-    </button>
+    </button> -->
     <router-outlet></router-outlet>
   </main>
 

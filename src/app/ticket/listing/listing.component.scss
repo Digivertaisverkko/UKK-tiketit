@@ -1,38 +1,42 @@
 @import '/src/variables.scss';
 
 // Leveys on tässä näkymässä leveämpi kuin muilla taulukoiden vuoksi.
-section, app-error-card { width: 103%; }
+section, app-error-card, .theme-actions { width: 103%; }
 
-section, app-error-card {
-  margin-left: -15px;
-}
+section, app-error-card, .theme-actions { margin-left: -15px; }
+
+h2 { padding-right: 2rem; }
 
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
 h3 { padding-left: 20px; }
 
-h2 { padding-right: 2rem; }
+.vertical-spacer { height: 1.5rem; }
 
 .mdc-card__actions { min-height: 30px; }
 
 // -------- Table -----------
 
-table {
-  width: 100%;
-  line-height: 1.4rem;
-}
+table { width: 100%; line-height: 1.4rem; }
 
 .mat-mdc-header-row { background-color: #D3D3D3; }
+.mat-mdc-row:hover { background-color: #f2f2f2 !important; }
+
+// Jotta olisi enemmän klikattavaa aluetta. Lisää tarvittaessa anchoreihin tämän sijaan.
+.mdc-data-table__cell {
+  padding-left: 0;
+  padding-right: 0;
+}
 
 a {
   color: unset;
-  display: inline-block;
+  display: block;
   text-decoration: none;
   width: 98%;
   padding-top: 0.6em;
-  padding-bottom: 0.6em;
+  padding-bottom: 0.6em; 
 }
 
-.mat-mdc-row:hover { background-color: #f2f2f2 !important; }
+.a-left-padding { padding-left: 16px; }
 
 .state-wrapper {
   display: flex;
@@ -69,7 +73,7 @@ a {
 .mat-column-aloittajanNimi { min-width: 11em; }
 
 // headereissa sorting-nuoli ottaa oikealta puolelta tilaa.
-.td-align-right { padding-right: 2.1rem; }
+.cell-align-right { padding-right: 2.1rem; }
 
 // Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
 
@@ -91,18 +95,7 @@ a {
 
 [hidden] { display: none !important; }
 
-.theme-actions {
-  margin-right: -15px;
-}
-
-mat-card-actions {
-  padding-right: 0;
-  button {
-    margin-top: 1em;
-    margin-left: 1rem;
-    margin-right: 0;
-  }
-}
+button { margin-left: 1rem; margin-right: 0; }
 
 .input-field-wrapper {
   align-items: flex-end;
@@ -112,26 +105,22 @@ mat-card-actions {
   justify-content: space-between;
 }
 
-.filteringField {
-  align-self: flex-end;
-  max-width: 220px;
-  margin-top: 30px;
-}
+.filteringField { align-self: flex-end; max-width: 220px; }
+
+.filter-FAQ { margin-top: 1.8rem; }
 
 // .noData-td {
 //   padding-top: 1em;
 //   padding-bottom: 1em;
 // }
 
-.no-items-message {
-    // text-align: center;
-    // padding-top: 2.5rem;
-    // padding-bottom: 2rem;
-    // margin: 1rem;
-    margin-left: 1.3rem;
-}
+.no-items-message { margin-left: 1.3rem; }
 
 .mat-mdc-form-field { width: 97%; }
+
+// .theme-actions {
+//   align-self: flex-end;
+// }
 
 @media (min-width: $XSmall) {
 
@@ -146,12 +135,6 @@ mat-card-actions {
   mat-row > :last-child { padding-right: 50px; }
 
   .mdc-data-table__header-row { height: 3em; }
-
-  // Muuta anchorin kokoa tarvittaessa, mutta älä tätä.
-  // tr.mat-mdc-row > td {
-
-  // }
-
 }
 
 @media (max-width: $XSmall) {

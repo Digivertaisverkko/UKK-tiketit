@@ -1,17 +1,16 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 // import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Observable, Subscription, interval, startWith, switchMap } from 'rxjs';
+import { timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
-import { MatTab } from '@angular/material/tabs';
 
 export interface SortableTicket {
   id: number;
@@ -26,47 +25,51 @@ export interface ColumnDefinition {
   showMobile: boolean;
 }
 
+enum IconFile {
+  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64", "Arkistoitu"
+}
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss'],
 })
-export class ListingComponent implements OnInit, OnDestroy {
+export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // dataSource = new MatTableDataSource<Sortable>();
   // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
   // public isLoggedIn$: Observable<boolean>;
 
-  public readonly pollingRateMin: number;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public FAQisLoaded: boolean = false;
-  public isCourseIDvalid: boolean = false;
+  public iconFile: typeof IconFile = IconFile;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
+  public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
+  public localeDateFormat: string;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  public ticketMessageSub: Subscription;
-  private courseID: string | null = '';
+  public courseID: string = '';
+  // Ticket info polling rate in minutes.
+  private readonly TICKET_POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
+  private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
 
   // Merkkijonot
-
   public courseName: string = '';
   public errorMessage: string = '';
   public headline: string = '';
-  public readonly me: string =  $localize`:@@Minä:Minä`;
-  public readonly ticketViewLink: string = environment.apiBaseUrl + '/ticket-view/';
+  public ticketViewLink = '';
   public user: User = {} as User;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
-
   // private _liveAnnouncer: LiveAnnouncer,
 
   constructor(
@@ -76,12 +79,8 @@ export class ListingComponent implements OnInit, OnDestroy {
     private ticket: TicketService,
     private authService: AuthService
   ) {
-    this.pollingRateMin = (environment.production == true ) ? 1 : 15;
+    this.localeDateFormat = this.authService.getDateFormat();
     this.isInIframe = getIsInIframe();
-    this.ticketMessageSub = this.ticket.onMessages().subscribe(message =>
-      this.errorMessage = message ?? '');
-
-    // this.isLoggedIn$ = this.authService.onIsUserLoggedIn();
 
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
@@ -99,62 +98,68 @@ export class ListingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.trackRouteParameters();
     // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
-    this.route.queryParams.subscribe(params => {
-      var courseIDcandinate: string = params['courseID'];
-      if (courseIDcandinate === undefined) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.` + '.';
-        this.isLoaded = true;
-        throw new Error('Virhe: ei kurssi ID:ä.');
-      }
-      this.ticket.setActiveCourse(courseIDcandinate);
-      this.showCourseName(courseIDcandinate);
-
-      if (params['sessionID'] !== undefined) {
-        const route = window.location.pathname + window.location.search;
-        console.log('URL on: ' + route);
-        console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
-        this.authService.setSessionID(params['sessionID']);
-      }
-
-      this.showFAQ(courseIDcandinate);
-      // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
-      // this.authService.saveUserInfo(courseIDcandinate);
-      // this.trackLoginState(courseIDcandinate);
-      if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
-        // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
-        if (this.authService.getUserName.length === 0) {
-          this.authService.fetchUserInfo(courseIDcandinate);
-        }
-        this.updateLoggedInView(courseIDcandinate);
-      }
-      this.isLoaded = true;
+    this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.log('ngAfterViewInit: saatiin tieto login-tilasta: ' + response);
+      if (response) this.updateLoggedInView(this.courseID);
     });
   }
 
-  public submitTicket () {
-    if (this.authService.getIsUserLoggedIn() === false) {
-      window.localStorage.setItem('REDIRECT_URL', 'submit');
-    }
-    this.router.navigateByUrl('submit');
+  private trackRouteParameters() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      console.log('lista: huomattiin uudet route parametrit.');
+      var courseID: string | null = paramMap.get('courseid');
+      if (courseID === null) {
+        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
+        this.isLoaded = true;
+        throw new Error('Virhe: ei kurssi ID:ä.');
+      }
+      // this.authService.setCourseID(courseID);
+      // this.authService.fetchUserInfo(courseID);
+      this.courseID = courseID;
+      console.log('lista: otettiin kurssi ID URL:sta');
+      this.showCourseName(courseID);
+      this.pollFAQ(courseID);
+      // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
+      // this.authService.saveUserInfo(courseIDcandinate);
+      // this.trackLoginState(courseIDcandinate);
+
+      // Käyttäjätietojen haku tarkoitus siirtää authServiceen.
+      // if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
+        // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
+        // if (this.authService.getUserName.length === 0) {
+        //   this.authService.fetchUserInfo(courseID);
+        // }
+        // this.updateLoggedInView(courseID);
+      // }
+    });
   }
 
-  public submitFaq () {
-    if (this.authService.getIsUserLoggedIn() === false) {
-      window.localStorage.setItem('REDIRECT_URL', 'submit-faq');
-    }
-    this.router.navigateByUrl('submit-faq');
+  ngAfterViewInit(): void {
+
+    this.trackMessages();
   }
 
-  private trackLoginState(courseIDcandinate: string) {
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      this.isLoaded = true;
-      if (response) this.updateLoggedInView(courseIDcandinate);
+  ngOnDestroy(): void {
+    this.ticket.untrackRefresh();
+  }
+
+  // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
+  private trackMessages() {
+    this.ticket.trackRefresh().subscribe(response => {
+      console.log('trackMessages: saatiin refresh pyyntö.');
+      if (response) {
+        this.isLoaded = false;
+        setTimeout(() => this.isLoaded = true, 800);
+        this.fetchTickets(this.courseID);
+        this.fetchFAQ(this.courseID, true);
+      }
     });
   }
 
@@ -164,19 +169,20 @@ export class ListingComponent implements OnInit, OnDestroy {
         const myCourses: Kurssini[] = response;
         // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
         // Onko käyttäjä URL parametrilla saadulla kurssilla.
+        // Ei tarvitse olla enää osallistujana.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+          this.isParticipant = false;
+          this.authService.setIsParticipant(false);
           this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
         } else {
+          this.isParticipant = true;
+          this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
-          // Jotta header ja submit-view tietää tämän, kun käyttäjä klikkaa otsikkoa, koska on tikettilistan URL:ssa.
-          this.isCourseIDvalid = true;
-          this.ticket.setActiveCourse(this.courseID);
+          this.pollTickets(this.courseID);
         }
       }
-    }).then(() => this.pollQuestions()
-    ).catch(error => this.handleError(error));
+    }).catch(error => this.handleError(error));
     // .finally(this.isLoaded = true) ei toiminut.
-
   }
 
   private trackScreenSize(): void {
@@ -191,41 +197,56 @@ export class ListingComponent implements OnInit, OnDestroy {
     });
   }
 
-  private pollQuestions() {
-    interval(this.pollingRateMin * 60 * 1000)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.ticket.getOnQuestions(Number(this.courseID)))
-      ).subscribe(
-        response => {
-          if (response.length > 0) {
-            let tableData: SortableTicket[] = response.map(({ tila, id, otsikko, aikaleima, aloittaja }) => ({
-              tilaID: tila,
-              tila: this.ticket.getTicketState(tila),
-              id: id,
-              otsikko: otsikko,
-              aikaleima: aikaleima,
-              aloittajanNimi: aloittaja.nimi
-            }));
-            // Arkistoituja kysymyksiä ei näytetä.
-            tableData = tableData.filter(ticket => ticket.tilaID !== 6)
-            if (tableData !== null) this.dataSource = new MatTableDataSource(tableData);
-            this.numberOfQuestions = tableData.length;
-            this.dataSource.sort = this.sortQuestions;
-            // console.log('----- näytetään: ' + this.dataSource.data.values.length);
-            // console.log('------ data source : ' + this.dataSource.data.length);
-            // this.dataSource.paginator = this.paginator;
-          }
-        }
-      )
+  private pollTickets(courseID: string) {
+    const MILLISECONDS_IN_MIN = 60000;
+    timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe(() => {
+      this.fetchTickets(courseID);
+    });
   }
+
+  private fetchTickets(courseID: string) {
+    this.ticket.getTicketList(courseID).then(response => {
+        // Arkistoituja kysymyksiä ei näytetä.
+        if (response.length > 0) {
+          this.dataSource = new MatTableDataSource(response);
+          this.numberOfQuestions = response.length;
+          this.dataSource.sort = this.sortQuestions;
+        }
+        // this.dataSource.paginator = this.paginator;
+    }).catch(error => {
+      this.handleError(error);
+    });
+  }
+
+  private pollFAQ(courseID: string) {
+    const MILLISECONDS_IN_MIN = 60000;
+    timer(0, this.FAQ_POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe(() => {
+      this.fetchFAQ(courseID);
+    });
+  }
+
+  // refresh = Jos on saatu refresh-pyyntö muualta.
+  private fetchFAQ(courseID: string, refresh?: boolean) {
+    this.ticket.getFAQ(courseID).then(response => {
+        if (response.length > 0) {
+          this.numberOfFAQ = response.length;
+          this.dataSourceFAQ = new MatTableDataSource(response);
+          this.dataSourceFAQ.sort = this.sortFaq;
+          // this.dataSourceFAQ.paginator = this.paginatorFaq;
+        }
+      })
+      .catch(error => this.handleError(error))
+      .finally(() => {
+        this.FAQisLoaded = true;
+        if (refresh !== true) this.isLoaded = true;
+      });
+  }
+
 
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
-    }).catch( () => {
-      this.courseName = '';
-    })
+    }).catch( () => this.courseName = '');
   }
 
   public setTicketListHeadline() {
@@ -254,42 +275,12 @@ export class ListingComponent implements OnInit, OnDestroy {
       .map(cd => cd.def);
   }
 
-  private showFAQ(courseID: string) {
-    this.ticket
-      .getFAQ(Number(courseID))
-      .then(response => {
-        if (response.length > 0) {
-          this.numberOfFAQ = response.length;
-          // let tableData = (
-          //   response.map(({ id, otsikko, aikaleima, tyyppi }) => ({
-          //     id: id,
-          //     otsikko: otsikko,
-          //     aikaleima: aikaleima,
-          //     tyyppi: tyyppi
-          //   }))
-          // );
-          // tableData = tableData.filter(ukk => ukk.tilaID !== 6);
-          // this.dataSourceFAQ = new MatTableDataSource(tableData);
-          // Tarvittaessa voi muokata, mitä tietoja halutaan näyttää.
-          // this.dataSourceFAQ = new MatTableDataSource(
-          let tableData = response.map(({ id, otsikko, aikaleima, tyyppi, tila }) => ({
-              id: id,
-              otsikko: otsikko,
-              aikaleima: aikaleima,
-              tyyppi: tyyppi,
-              tila: tila
-            }));
-
-          tableData = tableData.filter(faq => faq.tila !== 6)  
-          
-          this.dataSourceFAQ = new MatTableDataSource(tableData);
-
-          this.dataSourceFAQ.sort = this.sortFaq;
-          // this.dataSourceFAQ.paginator = this.paginatorFaq;
-        }
-      })
-      .catch(error => this.handleError(error))
-      .finally(() => this.FAQisLoaded = true);
+  public submit(linkEnding?: string) {
+    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
+    if (this.authService.getIsUserLoggedIn() === false) {
+      window.localStorage.setItem('REDIRECT_URL', link);
+    }
+    this.router.navigateByUrl(link);
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.
@@ -325,7 +316,4 @@ export class ListingComponent implements OnInit, OnDestroy {
       }*/
   }
 
-  ngOnDestroy(): void {
-    this.ticketMessageSub.unsubscribe();
-  }
 }

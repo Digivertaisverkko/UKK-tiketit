@@ -1,7 +1,6 @@
-// $header-height: 120px;
-// $footer-height: 274px;
 @import '/src/variables.scss';
 
+// Jotta footer ei nouse sivun alaosasta.
 #app-wrapper {
   display: flex;
   flex-direction: column;
@@ -20,23 +19,16 @@ main {
   width: 1024px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
   // min-height: calc(100vh - $header-height - $footer-height);
-  // padding-top: 1em;
-  // padding-bottom: 1em;
-  // Vain alapalkilla
-  // min-height: calc(100vh - 128px);
   padding: 0 40px 50px 40px;
-  // padding: 50px 40px 90px 40px;
-  // padding: 3rem 40px 6rem 40px;
 }
 
 .login-status {
   display: inline-block;
-  // margin-top: 0.25rem;
-  // margin-right: 0;
   position: absolute;
   right: 0;
   font-size: 75%;
 }
+
 
   @media (max-width: 1024px) {
     main {

@@ -1,8 +1,10 @@
-<mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+<mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
 <div class="faq-view" *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer">
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+    <!-- Jos käytetään kirjautumisen tunnistinta. -->
+    <!-- <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer"> -->
     <span>{{ courseName }}</span>
   </h2>
 
@@ -12,20 +14,40 @@
 
   <div id="top-buttons" class="theme-actions">
     <app-to-beginning-button></app-to-beginning-button>
-      
-    <div class="edit-buttons-wrapper" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'">
-      <button mat-raised-button i18n="@@Muokkaa"
-        (click)="editFaq()">
-        Muokkaa
+
+    <!-- Tiketin tilan tarkastamalla tietää, saatiinko tiedot haettua. -->
+    <div class="edit-buttons-wrapper">
+      <div id="hidden-buttons-wrapper" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && ticket.tila > 0">
+        <button mat-raised-button i18n="@@Muokkaa"
+          (click)="editFaq()">
+          Muokkaa
+        </button>
+
+        <button mat-raised-button *ngIf="isArchivePressed === false" i18n="@@Poista" (click)="changeArchiveButton()">
+          Poista
+        </button>
+
+        <button mat-raised-button (click)="archiveFaq()" *ngIf="isArchivePressed === true" color="accent" i18n="@@Vahvista poisto">
+          Vahvista poisto
+        </button>
+      </div>
+
+      <button mat-raised-button
+              i18n="@@Kopioi linkki"
+              onclick="navigator.clipboard.writeText(window.location.href)"
+              *ngIf="isCopyToClipboardPressed === false"
+              (click)="isCopyToClipboardPressed = true"
+              >
+        Kopioi linkki
+      </button>
+      <button mat-raised-button
+              i18n="@@Kopioitu leikepöydälle"
+              onclick="navigator.clipboard.writeText(window.location.href)"
+              *ngIf="isCopyToClipboardPressed === true"
+              >
+        Kopioitu leikepöydälle
       </button>
 
-      <button mat-raised-button *ngIf="isArchivePressed === false" i18n="@@Poista" (click)="isArchivePressed = true">
-        Poista
-      </button>
-
-      <button mat-raised-button (click)="archiveFaq()" *ngIf="isArchivePressed === true" color="accent" i18n="@@Vahvista poisto">
-        Vahvista poisto
-      </button>
     </div>
 
   </div>

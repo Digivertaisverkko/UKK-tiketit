@@ -1,74 +1,58 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { firstValueFrom, Subject, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Subject, firstValueFrom, Observable } from 'rxjs';
 import '@angular/localize/init';
-import { truncate } from '../utils/truncate';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
-@Injectable({
-  providedIn: 'root',
-})
+
+@Injectable({ providedIn: 'root' })
 
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
-  private activeCourse: number | undefined = undefined;
-  private messages$ = new Subject<string>();
+  private refreshEmitter$ = new Subject<boolean>();
+  private debug: boolean = false;
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient) {}
 
-  // Ota vastaan viestejä tästä servicestä (subscribe vastaukseen).
-  public onMessages(): Observable<any> {
-    return this.messages$.asObservable();
+  // Voidaan lähettää tätä seuraaville komponenteille pyyntö päivittää näkymä.
+  public trackRefresh(): Observable<boolean> {
+    return this.refreshEmitter$.asObservable();
   }
 
-  // Lopeta viestien vastaanottaminen tästä servicestä.
-  public unsubscribeMessage(): void {
-    this.messages$.unsubscribe;
+  public sendRefresh(): void {
+    this.refreshEmitter$.next(true);
   }
 
-  public setActiveCourse(courseID: string | null) {
-    // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
-    if (courseID !== null && this.activeCourse !== Number(courseID)) {
-      window.localStorage.setItem('COURSE_ID', courseID);
-      this.activeCourse = Number(courseID);
-    }
+  public untrackRefresh(): void {
+    this.refreshEmitter$.unsubscribe;
   }
 
-  /* Aseta kurssi aktiiviseksi muistiin. Tarvitaan mm. käyttäjätietojen
-     hakemiseen */
-  public getActiveCourse(): string {
-    var courseID: string = '';
-    if (this.activeCourse == undefined) {
-      const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-      if (savedCourseID !== null) {
-          courseID = savedCourseID;
-        } else {
-          throw new Error('getActiveCourse(): Virhe: kurssi ID:ä ei löydetty.');
-        }
-      } else {
-        courseID = String(this.activeCourse);
-      }
-    return courseID;
-  }
-
-  // Hae kurssin UKK-kysymykset.
-  public async getFAQ(courseID: number): Promise<UKK[]> {
-    // const httpOptions = this.getHttpOptions();
+  // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
+  public async getFAQ(courseID: string): Promise<UKK[]> {
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true)
-      );
     } catch (error: any) {
       this.handleError(error);
     }
-    return response;
+    // Jos tarvitsee muokata dataa.
+    // let tableData = response.map((faq: UKK ) => (
+    //   {
+    //     id: faq.id,
+    //     otsikko: faq.otsikko,
+    //     aikaleima: faq.aikaleima,
+    //     tyyppi: faq. tyyppi,
+    //     tila: faq.tila
+    //   }
+    // ));
+    // Arkistoidut pois.
+    let tableData: UKK[] = response.filter((faq: UKK) => faq.tila !== 6);
+    return tableData;
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
@@ -98,63 +82,41 @@ export class TicketService {
         throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
       }
     }
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     interface newComment {
       viesti: string;
       tila?: number;
     }
     let body: newComment = { viesti: message }
-    if (tila !== undefined) {
-      body.tila = tila;
-    }
+    if (tila !== undefined) body.tila = tila
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
-    console.dir(httpOptions);
     try {
-      console.log('addComment: lähetetään bodyssa: ' + JSON.stringify(body) + ' URL:iin ' + url);
-      response = await firstValueFrom(
-        this.http.post<object>(url, body, httpOptions)
-      );
-      console.log(
-        'Saatiin POST-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom( this.http.post<object>(url, body ) );
       this.auth.setLoggedIn();
     } catch (error: any) {
-      console.log('service: napattiin: ' + JSON.stringify(error));
       this.handleError(error);
-     //  this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
     }
     return response;
-    // this.checkErrors(response);
-    // if (response.success !== undefined && response.success == true) {
-    //   this.sendMessage($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`)
-    //   return true;
-    // } else {
-    //   this.sendMessage($localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`)
-    //   return false;
-    // }
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
     try {
-      response = await firstValueFrom(
-        this.http.get<KentanTiedot[]>(url, httpOptions)
-      );
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+      response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response;
   }
 
-  // ID on kurssi ID tai UKK:n ID riippuen, lisätäänkö uusi vai muokataanko vanhaa UKK:a.
+  /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
+     Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
   public async sendFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url: string;
     if (editFaq?.toString() === 'true') {
@@ -164,30 +126,24 @@ export class TicketService {
     }
     const body = newFaq;
     try {
-      console.log('Yritetään lähettää body: ' + JSON.stringify(body) + '  URL:iin "' + url + '"');
-      response = await firstValueFrom(this.http.post<UusiUKK>(url, body, httpOptions));
-      console.log('saatiin vastaus UKK:n lisäämiseen: ' + JSON.stringify(response));
+      response = await firstValueFrom(this.http.post<UusiUKK>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
   }
 
-  // Lisää uusi tiketti. Palautusarvo kertoo, onnistuiko tiketin lisääminen.
-  public async addTicket(courseID: string, newTicket: UusiTiketti) {
-    const httpOptions = this.getHttpOptions();
+  // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
+  public async addTicket(courseID: string, newTicket: UusiTiketti): Promise<boolean> {
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
     try {
-      console.log('Yritetään lähettää tiketti: ' + JSON.stringify(newTicket) + '  URL:iin "' + url + '"');
-      response = await firstValueFrom(this.http.post<UusiTiketti>(url, body, httpOptions));
-      console.log('saatiin vastaus tiketin lisäämiseen: ' + JSON.stringify(response));
+      response = await firstValueFrom(this.http.post<UusiTiketti>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
-    let message: string = '';
-
-    // this.checkErrors(response);
+    return true
 
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
@@ -205,13 +161,11 @@ export class TicketService {
 
   // Arkistoi (poista) UKK.
   public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     const url = environment.apiBaseUrl + '/tiketti/' + String(ticketID) + '/arkistoiukk';
     try {
-      console.log('Yritetään lähettää body {} POST-kutsu osoitteeseen ' + url);
-      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}, httpOptions));
-      console.log('saatiin vastaus UKK poistamiseen: ' + JSON.stringify(response));
+      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -220,142 +174,154 @@ export class TicketService {
 
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID;
     try {
-      response = await firstValueFrom(
-        this.http.get<{'kurssi-nimi': string}[]>(url, httpOptions)
-      );
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response['nimi'];
   }
 
   // Palauta listan kaikista kursseista.
   public async getCourses(): Promise<Kurssi[]> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
-      console.dir(httpOptions);
-      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url, httpOptions));
-      console.log(
-        'Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response)
-      );
+      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response;
   }
 
     // Palauta listan kaikista kursseista, joilla käyttäjä on.
     public async getMyCourses(): Promise<Kurssini[]> {
-      const httpOptions = this.getHttpOptions();
+      //const httpOptions = this.getHttpOptions();;
       let response: any;
       let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
       try {
-        response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url, httpOptions));
-        console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+        response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
         this.auth.setLoggedIn();
       } catch (error: any) {
         this.handleError(error);
       }
-      // this.checkErrors(response);
       return response;
     }
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getQuestions(courseID: number, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
-    const httpOptions = this.getHttpOptions();
-    let target: string;
-    if (onlyOwn !== undefined && onlyOwn == true) {
-      target = 'omat';
-    } else {
-      target = 'kaikki';
-    }
-    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
-    let response: any;
-    try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url, httpOptions));
-      console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    // this.checkErrors(response);
-    return response;
-  }
+  // public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
+  //   //const httpOptions = this.getHttpOptions();;
+  //   let target: string;
+  //   if (onlyOwn !== undefined && onlyOwn == true) {
+  //     target = 'omat';
+  //   } else {
+  //     target = 'kaikki';
+  //   }
+  //   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
+  //   let response: any;
+  //   try {
+  //     response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
+  //     console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
+  //     this.auth.setLoggedIn();
+  //   } catch (error: any) {
+  //     this.handleError(error);
+  //   }
+  //   return response;
+  // }
 
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public getOnQuestions(courseID: number, onlyOwn?: boolean): Observable<TiketinPerustiedot[]> {
-    const httpOptions = this.getHttpOptions();
-    let target: string;
-    if (onlyOwn !== undefined && onlyOwn == true) {
-      target = 'omat';
-    } else {
-      target = 'kaikki';
+  public async getTicketListOld(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
+    if (courseID === '') {
+      throw new Error('Ei kurssi ID:ä.');
     }
+    //const httpOptions = this.getHttpOptions();;
+    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
-      response = this.http.get<TiketinPerustiedot[]>(url, httpOptions);
-
-      console.dir(response);
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
     } catch (error: any) {
       this.handleError(error);
     }
-    this.auth.setLoggedIn();
     return response;
+  }
+
+
+  /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
+  opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
+  public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<SortableTicket[]> {
+    if (courseID === '') {
+      throw new Error('Ei kurssi ID:ä.');
+    }
+    // //const httpOptions = this.getHttpOptions();;
+    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
+    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+
+    // Muutetaan taulukkoon sopivaan muotoon.
+    const myName = this.auth.getUserInfo().nimi;
+    const me = $localize`:@@Minä:Minä`;
+    let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
+      {
+        tilaID: ticket.tila,
+        tila: this.getTicketState(ticket.tila),
+        id: ticket.id,
+        otsikko: ticket.otsikko,
+        aikaleima: ticket.aikaleima,
+        aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
+      }
+    ));
+    // Ei näytetä arkistoituja tikettejä.
+    sortableData = sortableData.filter(ticket => ticket.tilaID !== 6)
+    return sortableData;
   }
 
   // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
-    const httpOptions = this.getHttpOptions();
+    //const httpOptions = this.getHttpOptions();;
     let response: any;
+    // ticketID = '2309483290';
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
-      response = await firstValueFrom(this.http.get<Tiketti>(url, httpOptions));
-      console.log('Saatiin "' + url + '" vastaus: ' + JSON.stringify(response) + ' . Vastaus myös alla.');
-      console.dir(response);
+      response = await firstValueFrom(this.http.get<Tiketti>(url));
     } catch (error: any) {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
-    response = await this.getFields(ticketID, httpOptions);
+    // TODO: Tee nämä kutsut rinnakkain.
+    response = await this.getFields(ticketID);
     ticket.kentat = response;
-    response  = await this.getComments(ticketID, httpOptions);
+    response  = await this.getComments(ticketID);
     // Tiketin viestin sisältö on palautuksen ensimmäinen kommentti.
     ticket.viesti = response[0].viesti;
     response.shift();
     ticket.kommentit = response;
-    // console.log('Lopullinen tiketti alla:');
-    // console.log(ticket);
     return ticket
   }
 
   // Palauta listan tiketin kommenteista.
-  private async getComments(ticketID: string, httpOptions: object): Promise<Kommentti[]>{
+  private async getComments(ticketID: string): Promise<Kommentti[]>{
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
     try {
       response = await firstValueFrom<Kommentti[]>(
-        this.http.get<any>(url, httpOptions)
+        this.http.get<any>(url)
       );
-      console.log('Got from "' + url + '" response: ' + truncate(JSON.stringify(response), 300, true));
-      console.dir(response);
     } catch (error: any) {
       this.handleError(error);
     }
@@ -383,40 +349,18 @@ export class TicketService {
   }
 
   // Hae lisäkentät
-  private async getFields(ticketID: string, httpOptions: object): Promise<Kentta[]> {
+  private async getFields(ticketID: string): Promise<Kentta[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
     try {
-      response = await firstValueFrom<Kentta[]>(
-        this.http.get<any>(url, httpOptions)
-      );
-      console.log('getFields: Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + JSON.stringify(response));
+      response = await firstValueFrom<Kentta[]>( this.http.get<any>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
-    // this.checkErrors(response);
     return response;
   }
 
-  // Palauta HttpOptions, johon on asetettu session-id headeriin.
-  private getHttpOptions(): object {
-    
-    var sessionID = window.localStorage.getItem('SESSION_ID');
-    // if (sessionID == undefined) {
-    //   throw new Error('getHttpOptions(): Virhe: ei session id:ä.');
-    // }
-    // console.log('session id on: ' + sessionID);
-    // sessionID = '123456789';
-
-    if (sessionID === undefined || sessionID === null) {
-      return {}
-    } else {
-      return  {
-        headers: new HttpHeaders({ 'session-id': sessionID })
-      };
-    }
-  }
-
+  // logitukseen.
   private getMethodName() {
     return this.getMethodName.caller.name
   }
@@ -470,6 +414,15 @@ export interface TiketinPerustiedot {
   aikaleima: string;
   aloittaja: Kurssilainen;
   tila: number;
+}
+
+export interface SortableTicket {
+  id: number;
+  otsikko: string;
+  aikaleima: string;
+  aloittajanNimi: string
+  tilaID: number;
+  tila: string;
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]

@@ -1,17 +1,21 @@
-<mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+<mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
-  <!-- -------- Tiketit --------- -->
+  <!----------- Tiketit ------------>
 
   <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName"><span>{{courseName}}</span></h2>
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
+    <span>{{courseName}}</span>
+  </h2>
 
-  <section *ngIf="isCourseIDvalid">
+  <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
 
+  <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin hakukentälle tilaa. -->
+  <!-- <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div> -->
   <div class="input-field-wrapper">
     <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">{{headline}}</h3>
     <!--Hakutoiminto-->
     <mat-form-field class="filteringField" *ngIf="numberOfQuestions !== 0">
-      <mat-label i18n="@@Hae kysymystä">Hae kysymystä</mat-label>
+      <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
       <input matInput (keyup)="applyFilter($event, true)" placeholder="" #input>
     </mat-form-field>
   </div>
@@ -25,17 +29,14 @@
         Tila
       </th>
       <td mat-cell *matCellDef="let element">
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
           <div class="state-wrapper">
-            <div class="icon-wrapper" [ngSwitch]="element.tilaID">
-              <img class="icon" *ngSwitchCase="1" src="../../../assets/icons/Lahetetty.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="2" src="../../../assets/icons/Kasittelyssa.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="3" src="../../../assets/icons/Kysymys.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="4" src="../../../assets/icons/Kommentti.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="5" src="../../../assets/icons/Ratkaisu_64.svg" height="100%" width="100%" alt="">
-              <img class="icon" *ngSwitchCase="6" src="../../../assets/icons/Arkistoitu.svg" height="100%" width="100%" alt="">
+            <div class="icon-wrapper">
+              <img class="icon" src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg" height="100%" width="100%" alt="">
             </div>
             <div>{{ element.tila }}</div>
           </div>
+        </a>
       </td>
     </ng-container>
 
@@ -44,9 +45,10 @@
         i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
         Otsikko
       </th>
-      <!-- <td mat-cell *matCellDef="let element" (click)="goTicketView(element.id)"> -->
-      <td mat-cell *matCellDef="let element" ><a [routerLink]="'/ticket-view/' + element.id">
-        {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
+      <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
+      <td mat-cell *matCellDef="let element" >
+        <a class="a-left-padding" [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
+          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) +
         '...':(element.otsikko) }}</a>
       </td>
     </ng-container>
@@ -57,8 +59,10 @@
         i18n="@@Lähettäjä">
         Lähettäjä
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element">
-        {{ user.nimi === element.aloittajanNimi ? me : element.aloittajanNimi }}
+      <td class="cell-align-right" mat-cell *matCellDef="let element">
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
+          {{ element.aloittajanNimi }}
+        </a>
       </td>
     </ng-container>
 
@@ -68,26 +72,28 @@
         i18n="@@Luotu">
         Luotu
       </th>
-      <td class="td-align-right" mat-cell *matCellDef="let element">
-        {{element.aikaleima | date: 'shortDate'}}
+      <td mat-cell *matCellDef="let element" class="cell-align-right">
+        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
+          {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+        </a>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn();"></tr>
-
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"></tr>
 
     <!-- <tr *matNoDataRow>
       <td class="noData-td" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</td> -->
       <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
       <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
     <!-- </tr> -->
-
+´
       <!-- Kkun haku ei löydä mitään-->
 
   </table>
 
-    <p  *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
+    <p *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Ei tuloksia"
+      >Suodattimella ei löytynyt tuloksia.</p>
     <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
     <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
 
@@ -95,12 +101,13 @@
   <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-</section>
+  </section>
 
-  <div class="theme-actions" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-    <button mat-raised-button color="primary" (click)="submitTicket()"
+  <div class="theme-actions" *ngIf="isParticipant" [ngStyle]="numberOfQuestions === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+    <button mat-raised-button color="primary" (click)="submit()"
       i18n="@@Kysy opettajilta">Kysy opettajilta</button>
   </div>
+
 
 <!------------ UKK ------------>
 
@@ -109,8 +116,8 @@
 <div class="input-field-wrapper">
   <h3 class="sub-header" i18n="@@Usein kysytyt kysymykset">Usein kysytyt kysymykset</h3>
   <!--Hakutoiminto-->
-  <mat-form-field class="filteringField" *ngIf="numberOfFAQ !== 0">
-    <mat-label i18n="@@Hae kysymystä">Hae kysymystä</mat-label>
+  <mat-form-field class="filteringField filter-FAQ" *ngIf="numberOfFAQ !== 0">
+    <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
     <input matInput (keyup)="applyFilter($event, false)" placeholder="" #input>
   </mat-form-field>
 </div>
@@ -129,8 +136,8 @@
       i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko">
       Otsikko
     </th>
-    <td mat-cell *matCellDef="let element" [routerLink]="'/faq-view/' + element.id">
-      <a [routerLink]="'/faq-view/' + element.id">
+    <td mat-cell *matCellDef="let element">
+      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
       </a>
     </td>
@@ -140,8 +147,10 @@
     <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
       Tyyppi
     </th>
-    <td class="td-align-right" mat-cell *matCellDef="let element">
-      {{ element.tyyppi }}
+    <td class="cell-align-right" mat-cell *matCellDef="let element">
+      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
+        {{ element.tyyppi }}
+      </a>
     </td>
   </ng-container>
 
@@ -150,21 +159,26 @@
       sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
       Päivämäärä
     </th>
-    <td class="td-align-right" mat-cell *matCellDef="let element">
-      {{element.aikaleima | date: 'shortDate' }}
+    <td class="cell-align-right" mat-cell *matCellDef="let element">
+      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
+        {{element.aikaleima | date: 'shortDate' : localeDateFormat}}
+      </a>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ();"></tr>
+
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative">
+    <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
+
+  </tr>
+
 
 </table>
 
-  <!-- Kkun haku ei löydä mitään-->
-    <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</p>
-    <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
-    <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
-
+  <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Ei tuloksia">
+    Minkään kysymyksen tiedoissa ei ole merkkijonoa "{{dataSourceFAQ.filter}}".
+  </p>
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
         aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
@@ -172,7 +186,7 @@
 
 <div class="theme-actions" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
 [ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submitFaq()"
+  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submit('-faq')"
     i18n="@@Uusi UKK">Uusi UKK</button>
 </div>
 
@@ -183,3 +197,18 @@
 <!-- <div class="theme-actions">
   <button mat-raised-button *ngIf="isLoaded && isInIframe" color="primary" [routerLink]="'/submit/'">Avaa kurssinäkymä</button>
 </div> -->
+
+<!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. -->
+<section>
+  <h3 class="sub-header" i18n="@@Onko sinulla ongelmia tämän järjestelmän kanssa?">Onko sinulla ongelmia tämän järjestelmän kanssa?</h3>
+  <p i18n="@@Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?">
+    Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?
+  </p>
+  <p i18n="@@Palautteen antaminen on täysin vapaaehtoista. Kiitos!">
+    Palautteen antaminen on täysin vapaaehtoista. Kiitos!
+  </p>
+  <div class="theme-actions" [ngStyle]="{ 'justify-content': 'flex-start' }">
+    <button mat-raised-button color="primary" onClick="window.open('https://link.webropolsurveys.com/S/6D1CD4B0D938E765')"
+      i18n="@@Anna meille palautetta">Anna meille palautetta</button>
+  </div>
+</section>

@@ -21,6 +21,7 @@
           cdkTextareaAutosize
           contenteditable
           matInput
+          maxlength="255"
           name="titleText"
           placeholder="Otsikko"
           i18n-placeholder="@@Otsikko"
@@ -75,6 +76,7 @@
 
     </section>
 
+    <h2 i18n="@@Viesti">Viesti</h2>
     <app-editor [(editorContent)]="message"></app-editor>
 
     <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"

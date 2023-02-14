@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/auth.service';
 })
 
 export class LoginComponent implements OnInit {
-  public courseID: number = 1;
+  public courseID: string = '1';
   public email: string = '';
   public isEmailValid: boolean = false;
   private loginID: string = '';
@@ -37,32 +37,36 @@ export class LoginComponent implements OnInit {
   public login(): void {
     this.isEmailValid = this.validateEmail(this.email);
     // Lisää ensin custom ErrorStateMatcher
-    console.log('login id: ' + this.loginID);
+    // console.log('login id: ' + this.loginID);
     this.authService.sendLoginRequest(this.email, this.password, this.loginID)
       .then(response => {
-        if (response.success == true) {
+        if (response?.success == true) {
           var redirectUrl: string;
           if (response.redirectUrl == undefined) {
             // redirectUrl = '/kurssi/' + this.courseID + '/list-tickets?courseID=' + this.courseID;
-            redirectUrl = '/list-tickets?courseID=' + this.courseID;
+            // TODO: Yritä session storagesta etsiä tallennettua?
+            // redirectUrl = '/list-tickets?courseID=' + this.courseID;
+            redirectUrl = 'course/' + this.courseID +  '/list-tickets';
           } else {
             redirectUrl = response.redirectUrl;
           }
           this.router.navigateByUrl(redirectUrl);
         }
       })
-      .catch(error => {
-        switch (error?.tunnus) {
-          case 1001:
-            this.errorMessage = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.'; break;
-          case 1002:
-            this.errorMessage = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.'; break;
-          case 1003:
-            this.errorMessage = $localize`:@@Ei oikeuksia:Ei ole tarvittavia käyttäjäoikeuksia` + '.'; break;
-          default:
-            this.errorMessage = $localize`:@@Kirjautuminen ei onnistunut:Kirjautuminen ei onnistunut` + '.'; break;
-        }
-      });
+      .catch(error => this.handleError(error));
+  }
+
+  private handleError(error: any) {
+    switch (error?.tunnus) {
+      case 1001:
+        this.errorMessage = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:Kirjautumispalveluun ei saatu yhteyttä` + '.'; break;
+      case 1002:
+        this.errorMessage = $localize`:@@Väärä käyttäjätunnus tai salasana:Virheellinen käyttäjätunnus tai salasana` + '.'; break;
+      case 1003:
+        this.errorMessage = $localize`:@@Ei oikeuksia:Ei ole tarvittavia käyttäjäoikeuksia` + '.'; break;
+      default:
+        this.errorMessage = $localize`:@@Kirjautuminen ei onnistunut:Kirjautuminen ei onnistunut` + '.'; break;
+    }
   }
 
   private setLoginID() {
@@ -73,7 +77,7 @@ export class LoginComponent implements OnInit {
           //console.log('loginComponent: asetettiin loginID: ' + this.loginID);
         }
       },
-      error: () => { }
+      error: () => {}
     });
   }
 

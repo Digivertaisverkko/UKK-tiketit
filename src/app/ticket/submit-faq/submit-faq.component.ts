@@ -1,9 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AuthService, User } from 'src/app/core/auth.service';
-import { UusiUKK, TicketService, Kommentti, Tiketti } from '../ticket.service';
+import { AuthService } from 'src/app/core/auth.service';
+import { UusiUKK, TicketService, Tiketti, Error } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
 
 @Component({
@@ -11,10 +9,12 @@ import { getIsInIframe } from '../functions/isInIframe';
   templateUrl: './submit-faq.component.html',
   styleUrls: ['./submit-faq.component.scss']
 })
-export class SubmitFaqComponent implements OnDestroy, OnInit {
+export class SubmitFaqComponent implements OnInit {
 
   public courseName: string = '';
   public currentDate = new Date();
+  public editExisting: boolean;
+  public errorMessage: string = '';
   public faqAnswer: string = '';
   public faqAssignment: string = '';
   public faqMessage: string = '';
@@ -22,31 +22,28 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
   public faqTitle: string = '';
   public isInIframe: boolean;
   public originalTicket: Tiketti | undefined;
+  public ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
   public userName: string = '';
-  public editExisting: boolean;
-  public errorMessage: string = '';
-  // public user$ = this.authService.trackUserInfo();
-
-  private courseId: string = this.ticketService.getActiveCourse();
-  private messageSubscription: Subscription;
-  private ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
+  private courseID: string | null;
 
   constructor(
-    private _snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private ticketService: TicketService,
+    private route: ActivatedRoute,
+    private ticketService: TicketService
     ) {
+      this.courseID = this.route.snapshot.paramMap.get('courseid');
       this.isInIframe = getIsInIframe();
-      this.messageSubscription = this.ticketService.onMessages().subscribe(
-        message => { this._snackBar.open(message, 'OK') });
       this.editExisting = window.history.state.editFaq ?? false;
   }
 
   ngOnInit(): void {
-    console.log('editoidaan UKK:a: '+ this.editExisting);
+    console.log('Editoidaanko?: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
+    if (this.courseID === null) {
+      throw new Error('Kurssi ID puuttuu URL:sta.');
+    }
     this.authService.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi;
     })
@@ -54,19 +51,18 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
           this.originalTicket = response;
-          // Valitaan oletusvastaukseksi ensimmäinen kommentti, jonka tila on "ratkaisuehdotus", eli tila 5.
+          // Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli "Ratkaisuehdotuksen" omaava kommentti
+          // oletusvastaukseksi. Lopputuloksena viimeinen ratkaisuehdotus jää oletusvastaukseksi.
           for (let comment of response.kommentit) {
             if (comment.tila === 5) {
               this.faqAnswer = comment.viesti;
             }
           }
-          if (String(response.kurssi) !== this.courseId) {
-            this.courseId = String(response.kurssi);
-            this.authService.fetchUserInfo(this.courseId);
-            this.ticketService.setActiveCourse(String(this.courseId));
-            this.ticketService.getCourseName(this.courseId)
-              .then( response => { this.courseName = response })
-              .catch( error => { console.error(error.message) });
+          if (String(response.kurssi) !== this.courseID) {
+            this.courseID = String(response.kurssi);
+            this.authService.fetchUserInfo(this.courseID);
+            this.ticketService.getCourseName(this.courseID)
+              .then( response => { this.courseName = response });
           }
           this.faqMessage = response.viesti;
           this.faqTitle = response.otsikko;
@@ -84,42 +80,12 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
           }
         });
     }
-    this.ticketService.getCourseName(this.courseId)
-      .then( response => { this.courseName = response })
-      .catch( error => { console.error(error.message) });
-  }
-
-  ngOnDestroy(): void {
-    this.messageSubscription.unsubscribe();
-  }
-
-  public getSenderTitle(name: string, role: string): string {
-    if (name === this.authService.getUserName()) {
-      return $localize`:@@Minä:Minä`
-    }
-    switch (role) {
-      case 'opiskelija':
-        return $localize`:@@Opiskelija:Opiskelija`;
-      case 'opettaja':
-        return $localize`:@@Opettaja:Opettaja`;
-      case 'admin':
-        return $localize`:@@Admin:Admin`;
-      default:
-        return '';
-    }
+    this.ticketService.getCourseName(this.courseID)
+      .then( response => { this.courseName = response });
   }
 
   private goBack(): void {
-    let url:string = '/list-tickets?courseID=' + this.courseId;
-    console.log('submit-ticket: url: ' + url);
-    this.router.navigateByUrl(url);
-  }
-
-  // Onko annettu aikaleima tänään.
-  public isToday(timestamp: string | Date): boolean {
-    let currentDate = new Date().toDateString();
-    let dateString = typeof timestamp === 'string' ? new Date(timestamp).toDateString() : timestamp.toDateString();
-    return dateString === currentDate ? true : false;
+    this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
   }
 
   public sendFaq(): void {
@@ -132,12 +98,16 @@ export class SubmitFaqComponent implements OnDestroy, OnInit {
       ],
       vastaus: this.faqAnswer,
     }
-    // console.log(newFaq);
-    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
+    if (this.courseID === null) throw new Error('Ei kurssi ID:ä.');
+    let id = this.editExisting ? this.ticketId ?? '' : this.courseID;
     this.ticketService.sendFaq(id, newFaq, this.editExisting)
       .then(() => { this.goBack() })
-      .catch(error => {
-        this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+      .catch( (error: Error) => {
+        if (error.tunnus == 1003) {
+          this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+        } else {
+          this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+        }
       });
   }
 

@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, Route  } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService, User } from '../auth.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, ParamMap, ActivationEnd  } from '@angular/router';
 import { TicketService } from 'src/app/ticket/ticket.service';
-import { environment } from 'src/environments/environment';
+import { AuthService, User } from '../auth.service';
 
 @Component({
   selector: 'app-header',
@@ -18,52 +16,37 @@ export class HeaderComponent implements OnInit {
   public readonly maxUserLength = 40;
   public user: User = {} as User;
   public userRole: string = '';
-  get language(): string {
-    return this._language;
-  }
+  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
 
-  set language(value: string) {
-    if (value !== this._language) {
-      localStorage.setItem('language', value);
-      window.location.reload();
-    }
-  }
   private _language!: string;
 
-  // private route: ActivatedRoute,
-
-  constructor(private authService: AuthService,
-    private activatedRoute: ActivatedRoute,
+  constructor (
+    private authService: AuthService,
+    private route: ActivatedRoute,
     private router: Router,
     private ticketService: TicketService)
     {
-    // this.isUserLoggedIn$ = this.authService.onIsUserLoggedIn();
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      this.isLoggedIn = response;
-      // console.log('header: asetettiin kirjautumisen tila: ' + this.isLoggedIn);
-    })
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     // this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
   }
 
   ngOnInit(): void {
+    this.trackCourseID();
     this.trackUserInfo();
-    this.router.events.subscribe(event => {
-      // console.log(JSON.stringify(event));
-      if (event instanceof GuardsCheckStart) {
-        // Testataan, ollaanko kirjautuneina.
-        this.authService.getSessionID();
-        let courseID: string | null = this.authService.getActiveCourse();
-        // console.log(`*** header: loggedin: ${this.isLoggedIn} kurssi-id: ${courseID} `);
-        if (this.isLoggedIn === true && courseID !== null && courseID.length > 0) {
+    this.authService.onIsUserLoggedIn().subscribe(response => this.isLoggedIn = response);
+  }
 
-          this.authService.fetchUserInfo(courseID);
+  private trackCourseID() {
+    this.router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        let courseID = event.snapshot.paramMap.get('courseid');
+        if (courseID !== this.courseID) {
+          console.log('updateUserInfo: saatiin kurssi ID ' +  courseID  +' url:sta');
+          this.courseID = courseID;
         }
       }
     });
   }
-
-  // (route.startsWith('/login') == false) {
 
   trackUserInfo() {
     this.authService.trackUserInfo().subscribe(response => {
@@ -89,36 +72,48 @@ export class HeaderComponent implements OnInit {
   setUserRole(asema: string): void {
     let role: string = '';
       switch (asema) {
-        case 'opiskelija': {
+        case 'opiskelija':
           role = $localize`:@@Opiskelija:Opiskelija`; break;
-        }
-        case 'opettaja': {
+        case 'opettaja':
           role = $localize`:@@Opettaja:Opettaja`; break;
-        }
-        case 'admin': {
+        case 'admin':
           role = $localize`:@@Admin:Admin`; break;
-        }
-        default: {
+        default:
           role = '';
-        }
       }
       this.userRole = role;
   }
-
 
   // public changeLanguage(language: 'en-US' | 'fi-FI') {
   //   this.language = language;
   // }
 
   public toggleLanguage() {
-    // console.log(' --- kieli: ' + this.language);
     this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
   }
 
+  get language(): string {
+    return this._language;
+  }
+
+  set language(value: string) {
+    if (value !== this._language) {
+      localStorage.setItem('language', value);
+      window.location.reload();
+    }
+  }
+
   public goToFrontPage() {
-    // const currentRoute = window.location.pathname + window.location.search;
-      const courseID = this.ticketService.getActiveCourse();
-      if (courseID !== null) this.router.navigateByUrl('/list-tickets?courseID=' + courseID);
+    if (this.courseID !== null) {
+      const currentRoute = window.location.pathname;
+      if (currentRoute.includes('/list-tickets')) {
+        this.ticketService.sendRefresh();
+      } else {
+        this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
+      }
+    } else {
+      console.error('Ei kurssi ID:ä.');
+    }
   }
 
   public login(): void{

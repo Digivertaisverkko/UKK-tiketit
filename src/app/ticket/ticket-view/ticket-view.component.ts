@@ -1,10 +1,11 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
 import { interval, startWith, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-ticket-view',
@@ -12,6 +13,9 @@ import { getIsInIframe } from '../functions/isInIframe';
   styleUrls: ['./ticket-view.component.scss']
 })
 export class TicketViewComponent implements OnInit {
+
+  @Input() ticketIdFromParent: string | null = null;
+
   public courseName: string = '';
   public errorMessage: string = '';
   public isInIframe: boolean;
@@ -22,7 +26,10 @@ export class TicketViewComponent implements OnInit {
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
-  private readonly currentDate = new Date().toDateString();
+  // Ticket info polling rate in minutes.
+  private courseID: string | null;
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
+  private readonly CURRENT_DATE = new Date().toDateString();
 
   public message: string = '';
   public userRole: string = '';
@@ -35,14 +42,15 @@ export class TicketViewComponent implements OnInit {
     private router: Router,
     private _snackBar: MatSnackBar
     ) {
+      this.courseID = this.route.snapshot.paramMap.get('courseid');
       this.ticket = {} as Tiketti;
       this.tila = '';
       this.commentText = '';
       this.isInIframe = getIsInIframe();
       this.isLoaded = false;
-      this.ticketID = String(this.route.snapshot.paramMap.get('id'));
-      // this.messageSubscription = this.ticketService.onMessages().subscribe(
-      //   (message) => { this._snackBar.open(message, 'OK') });
+      this.ticketID = this.ticketIdFromParent !== null
+        ? this.ticketIdFromParent
+        : String(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
@@ -50,27 +58,32 @@ export class TicketViewComponent implements OnInit {
         if (response.asema !== undefined ) this.userRole = response.asema;
         if (response.nimi !== undefined ) this.userName = response.nimi;
     });
+    if (this.courseID === null) {
+      throw new Error('Kurssi ID puuttuu URL:sta.');
+    }
+    this.ticketService.getCourseName(this.courseID).then(response => {
+      this.courseName = response;
+    });
+    this.pollTickets();
+  }
+
+  private pollTickets() {
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
-    interval(600000)
+    const MILLISECONDS_IN_MIN = 60000;
+    interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
       .pipe(
         startWith(0),
         switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
       ).subscribe({
         next: response => {
           this.ticket = response;
-          this.ticketService.setActiveCourse(String(this.ticket.kurssi));
           if (this.userName.length == 0) {
-            this.auth.fetchUserInfo(String(this.ticket.kurssi));
+            if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
-          this.ticketService.getCourseName(String(this.ticket.kurssi)).then(response => {
-            console.log(' saatiin vastaus: ' + response);
-            this.courseName = response;
-          });
           this.isLoaded = true;
         },
         error: error => {
-          // console.dir(error);
           switch (error.tunnus) {
             case 1003:
               this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
@@ -78,10 +91,17 @@ export class TicketViewComponent implements OnInit {
             default:
               this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:Kysymyksen näyttäminen epäonnistui`;
           }
-
           this.isLoaded = true;
         }
       })
+  }
+
+  public copyAsFAQ() {
+    // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
+    if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
+      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
+    }
+    this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq/' + this.ticketID);
   }
 
   public getSenderTitle(name: string, role: string): string {
@@ -106,7 +126,7 @@ export class TicketViewComponent implements OnInit {
       var dateString = timestamp.toDateString();
     }
     // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    return dateString == this.currentDate ? true : false
+    return dateString == this.CURRENT_DATE ? true : false
   }
 
   // private trackUserRole() {

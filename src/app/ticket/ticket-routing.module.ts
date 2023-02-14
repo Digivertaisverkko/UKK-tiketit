@@ -9,13 +9,14 @@ import { authGuard } from '../user-management/auth.guard';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
 
 const routes: Routes = [
-  { path: 'ticket-view/:id', component: TicketViewComponent, canActivate: [authGuard] },
-  { path: 'submit', component: SubmitTicketComponent, canActivate: [authGuard] },
-  { path: 'submit-faq', component: SubmitFaqComponent, canActivate: [authGuard] },
-  { path: 'submit-faq/:id', component: SubmitFaqComponent, canActivate: [authGuard] },
-  { path: 'faq-view/:id', component: FaqViewComponent },
-  { path: 'list-tickets', component: ListingComponent }
+  { path: 'course/:courseid/ticket-view/:id', component: TicketViewComponent, canActivate: [authGuard] },
+  { path: 'course/:courseid/submit', component: SubmitTicketComponent, canActivate: [authGuard] },
+  { path: 'course/:courseid/submit-faq', component: SubmitFaqComponent, canActivate: [authGuard] },
+  { path: 'course/:courseid/submit-faq/:id', component: SubmitFaqComponent, canActivate: [authGuard] },
+  { path: 'course/:courseid/faq-view/:id', component: FaqViewComponent },
+  { path: 'course/:courseid/list-tickets', component: ListingComponent },
 ];
+//   { path: 'list-tickets', component: ListingComponent }
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

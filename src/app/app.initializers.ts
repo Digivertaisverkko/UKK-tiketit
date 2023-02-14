@@ -1,34 +1,25 @@
 import { loadTranslations } from '@angular/localize';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
-import { ActivatedRoute } from '@angular/router';
 
 export const initializeLanguage = (): Promise<void> | void => {
 
   const language = getLanguage();
   localStorage.setItem('language', language);
   document.documentElement.lang = language;
-  // registerLocaleData(localeFi, 'fi-FI');
   if (language == 'en-US') {
     // Pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
       .then(response => response.json())
-      .then(response => {
-        console.log('ladataan kieli');
-        loadTranslations(response.translations);
-      })
-      .catch(() => {
-        console.log(`Kieltä ${language} ei löytynyt.`);
-      });
+      .then(response => loadTranslations(response.translations))
+      .catch(() => console.log(`Käännöstä "${language}" ei löytynyt.`));
   }
 };
 
 function getLanguage(): string {
-
   const url = new URL(window.location.href);
   var language: string;
   // console.log('urlLang: ' + urlLang);
-
   // Upotuksessa kieli tulee URL-parametrina.
   const urlLang = url.searchParams.get('lang');
   if (urlLang !== null) {
@@ -58,7 +49,6 @@ function getLanguage(): string {
       language = isInIframe() ? 'en-US' : 'fi-FI'; 
     }
   }
-
     // Jos haluaa käyttää selaimen kieltä.
     // language = navigator.language;
     // console.log('navigator.language -kieli: ' + language);
@@ -75,31 +65,29 @@ function getLanguage(): string {
 
 function isInIframe () {
   try {
-      return window.self !== window.top;
+    return window.self !== window.top;
   } catch (e) {
-      return true;
+    return true;
   }
 }
 
 export function changeToLang(newLang: 'en' | 'fi') {
-  var language: string;
-    if (newLang == 'en') {
-      language = 'en-US';
-    } else {
-      language = 'fi-FI';
-    }
-    const oldLang = localStorage.getItem('language');
-    if (language !== oldLang) {
-      localStorage.setItem('language', language);
+  const LANG = (newLang == 'en') ? 'en-US' : 'fi-FI';
+  const OLD_LANG = localStorage.getItem('language');
+    if (LANG !== OLD_LANG) {
+      localStorage.setItem('language', LANG);
       window.location.reload();
     }
 }
 
-// export const initializeSupportedLocales = () => {
-  // registerLocaleData(localeFi, 'fi-FI');
-  // const language = getLanguage();
-  // return language;
-// };
+// Jos haluaa kielen mukaan vaihtuvat lokaalit käyttöön.
+// Pitää laittaa app.module.ts: { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
+// ja import { initializeSupportedLocales } from './app.initializers';
+export const initializeSupportedLocales = () => {
+  registerLocaleData(localeFi, 'fi-FI');
+  const LANG = getLanguage();
+  return LANG;
+};
 
 function getBrowserLocales(options = {}): string[] | undefined {
   const defaultOptions = {

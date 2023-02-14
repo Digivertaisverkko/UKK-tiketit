@@ -1,8 +1,8 @@
-<mat-progress-bar mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+<mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
 
 <div *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
+  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe && !ticketIdFromParent">
     <span>{{ courseName }}</span>
   </h2>
 
@@ -10,10 +10,10 @@
     <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
 
     <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
-    <div id="top-buttons" class="theme-actions">
+    <div id="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent">
       <app-to-beginning-button></app-to-beginning-button>
       <button mat-raised-button i18n="@@Kopioi UKK" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole === 'admin')"
-         routerLink="/submit-faq/{{ticketID}}">
+        (click)="copyAsFAQ()">
         Kopioi UKK:ksi
       </button>
     </div>
@@ -45,19 +45,19 @@
 
   </div>
 
-    <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
       <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
         <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
     </div>
 
-    <div class="additional-field" *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
+    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
       <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
       <p class="short-field-value">{{ ticket.kentat[1].arvo }}</p>
     </div>
 
     <!-- TODO: Lisää tähän muiden kenttien näyttäminen. -->
 
-    <h4 class="sub-header" i18n="@@Viesti">Viesti</h4>
+    <p class="theme-label message-label" i18n="@@Viesti">Viesti</p>
 
     <app-message [messageHtml]=ticket.viesti></app-message>
 
@@ -96,7 +96,7 @@
 
   <div class="vertical-spacer"></div>
 
-  <app-editor *ngIf="ticket.tila > 0" [(editorContent)]="commentText"></app-editor>
+  <app-editor *ngIf="ticket.tila > 0 && !ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
@@ -107,7 +107,7 @@
     >
   </app-error-card>
 
-  <div class="theme-actions">
+  <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
     <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole ==='admin' && ticket.tila > 0)">
       <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
