@@ -4,6 +4,7 @@ import localeFi from '@angular/common/locales/fi';
 
 // Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
+  registerLocaleData(localeFi, 'fi-FI');  // Aina oletuslocale.
   const language = getLanguage();
   localStorage.setItem('language', language);
   document.documentElement.lang = language;
@@ -64,10 +65,10 @@ function getLanguage(): string {
   return language;
 }
 
-// Alusta oletus fi-FI -locale.
+// Alusta oletus fi-FI -locale. Ei toiminut.
 export const initializeLocale = () => {
   registerLocaleData(localeFi, 'fi-FI');
-  return 'fi-FI'
+  return 'fi-FI';
 };
 
 function isInIframe () {

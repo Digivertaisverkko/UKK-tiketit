@@ -12,7 +12,6 @@ import { UserManagementModule } from './user-management/user-management.module';
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
 import { initializeLanguage  } from "./app.initializers";
-import { initializeLocale } from './app.initializers';
 
 // AppRoutingModule pitää tulla viimeisimpänä ennen muita routingeja sisältäviä
 // moduuleja. Oletuksena käytetään aina fi-FI -localea.
@@ -31,7 +30,7 @@ import { initializeLocale } from './app.initializers';
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: () => initializeLanguage, multi: true },
-    { provide: LOCALE_ID, useFactory: () => initializeLocale, multi: true },
+    { provide: LOCALE_ID, useValue: 'fi' }
   ],
   bootstrap: [AppComponent],
   exports: []
@@ -41,4 +40,6 @@ export class AppModule { }
 
 // useFactory: initializeSupportedLocales
 // { provide: LOCALE_ID, useValue: 'fi' }
+
+// { provide: LOCALE_ID, useFactory: () => initializeLocale, multi: true },
 //  { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
