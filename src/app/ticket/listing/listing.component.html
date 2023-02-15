@@ -82,13 +82,11 @@
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
     <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"></tr>
 
-    <!-- <tr *matNoDataRow>
+    <!-- <tr *matNoDataRow> -->
       <td class="noData-td" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</td> -->
       <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
-      <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
-    <!-- </tr> -->
-´
-      <!-- Kkun haku ei löydä mitään-->
+      <!-- <td class="noData-td" colspan="3" ></td>
+    </tr> -->
 
   </table>
 
@@ -168,10 +166,8 @@
 
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
 
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative">
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative"> </tr>
     <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
-
-  </tr>
 
 
 </table>
