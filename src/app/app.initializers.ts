@@ -2,13 +2,13 @@ import { loadTranslations } from '@angular/localize';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 
+// Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
-
   const language = getLanguage();
   localStorage.setItem('language', language);
   document.documentElement.lang = language;
   if (language == 'en-US') {
-    // Pitää olla juuri tässä hakemistossa.
+    // Huom. tiedoston pitää olla juuri tässä hakemistossa.
     return fetch(`/assets/i18n/${language}.json`)
       .then(response => response.json())
       .then(response => loadTranslations(response.translations))
@@ -16,6 +16,7 @@ export const initializeLanguage = (): Promise<void> | void => {
   }
 };
 
+// Mikä kieli on käytössä.
 function getLanguage(): string {
   const url = new URL(window.location.href);
   var language: string;
@@ -63,6 +64,12 @@ function getLanguage(): string {
   return language;
 }
 
+// Alusta oletus fi-FI -locale.
+export const initializeLocale = () => {
+  registerLocaleData(localeFi, 'fi-FI');
+  return 'fi-FI'
+};
+
 function isInIframe () {
   try {
     return window.self !== window.top;
@@ -80,15 +87,7 @@ export function changeToLang(newLang: 'en' | 'fi') {
     }
 }
 
-// Jos haluaa kielen mukaan vaihtuvat lokaalit käyttöön.
-// Pitää laittaa app.module.ts: { provide: LOCALE_ID, useFactory: initializeSupportedLocales }
-// ja import { initializeSupportedLocales } from './app.initializers';
-export const initializeSupportedLocales = () => {
-  registerLocaleData(localeFi, 'fi-FI');
-  const LANG = getLanguage();
-  return LANG;
-};
-
+// Jos haluaa selaimen kielen mukaan valita lokalen.
 function getBrowserLocales(options = {}): string[] | undefined {
   const defaultOptions = {
     languageCodeOnly: false,
