@@ -37,6 +37,23 @@ mat-form-field { min-width: 21rem; }
   display: none;
 }
 
+.mat-mdc-list-item {
+  padding-left: 0;
+}
+
+.mdc-list-item.mdc-list-item--with-one-line {
+  height: 2.4rem;
+}
+
+.file-list {
+  margin-top: 0.8rem;
+  button {
+    margin-left: 0.8rem;
+    vertical-align: middle;
+  }
+}
+
+
 // mat-checkbox { margin-left: -10px; }
 
 @media (min-width: $XSmall) {

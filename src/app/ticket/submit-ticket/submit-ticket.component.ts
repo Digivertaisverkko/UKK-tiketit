@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Event, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/core/auth.service';
 import { UusiTiketti, TicketService } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-submit-ticket',
@@ -12,13 +12,12 @@ import { getIsInIframe } from '../functions/isInIframe';
   styleUrls: ['./submit-ticket.component.scss']
 })
 
-export class SubmitTicketComponent implements OnInit {
+export class SubmitTicketComponent implements OnInit, OnDestroy {
   // max pituus: 255.
   titleText: string = '';
   assignmentText: string = '';
   public courseName: string = '';
   public errorMessage: string = '';
-  public fileName: string = '';
   // public user: User;
   public isInIframe: boolean;
   problemText: string = '';
@@ -30,10 +29,19 @@ export class SubmitTicketComponent implements OnInit {
   public currentDate = new Date();
   // public user$ = this.auth.trackUserInfo();
   public message: string = '';
-  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
-  private attachments: FormData | null = null;
   private courseID: string | null;
 
+  // Liitetiedostot
+
+  public fileList: File[] = [];
+  public fileNameList: any = [];
+
+  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
+  private attachments: FormData | null = null;
+  public fileName: string = '';
+
+  // @ViewChild('attachments') attachment: any;
+  
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -57,7 +65,24 @@ export class SubmitTicketComponent implements OnInit {
     }).catch(() => {});
   }
 
-  public onFileSelected(event: any) {
+  public onFileChanged(event: any) {
+    for (var i = 0; i <= event.target.files.length - 1; i++) {
+      const selectedFile = event.target.files[i];
+      console.dir(event);
+      this.fileList.push(selectedFile);
+      this.fileNameList.push(selectedFile.name);
+    }
+    // this.attachment.nativeElement.value = '';
+    // console.log('Tiedostolista:');
+    // console.dir(this.fileList);
+  }
+
+  public removeSelectedFile(index: number) {
+    this.fileList.splice(index, 1);
+    this.fileNameList.splice(index, 1);
+  }
+
+  public onSingleFileSelected(event: any) {
     const file: File = event.target?.files[0];
     if (file) {
       this.fileName = file.name;
@@ -85,8 +110,8 @@ export class SubmitTicketComponent implements OnInit {
     this.router.navigateByUrl('course/' + this.courseID + '/list-tickets');
   }
 
-  // ngOnDestroy(): void {
-
-  // }
+  ngOnDestroy(): void {
+    this.auth.unTrackUserInfo();
+  }
 
 }

@@ -8,13 +8,20 @@ import { TicketViewComponent } from './ticket-view/ticket-view.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+
+// import { MatInputModule } from '@angular/material/input';
+// import { MatFormFieldModule } from '@angular/material/form-field';
+// MatFormFieldModule,
+// MatInputModule,
+
 
 // import { MatPaginatorIntl } from '@angular/material/paginator';
 // import { CustomPaginator } from './functions/CustomPaginator';
 import { FaqViewComponent } from './faq-view/faq-view.component';
 import { MessageComponent } from './message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
+import { MatIcon } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -22,7 +29,7 @@ import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
     TicketViewComponent,
     FaqViewComponent,
     MessageComponent,
-    SubmitFaqComponent
+    SubmitFaqComponent,
   ],
   imports: [
     CommonModule,
@@ -30,9 +37,7 @@ import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
     TicketRoutingModule,
     SharedModule,
     MatCardModule,
-  ],
-  providers: [
-    
+    MatListModule,
   ]
 })
 

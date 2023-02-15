@@ -85,13 +85,19 @@
 
     <div class="theme-actions">
 
-      <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+      <!-- Ei näytetä tätä vaan alla oleva nappi. -->
+      <!-- <input type="file" class="file-input" (click)="onFileSelected($event)" #singleFileUpload> -->
+      <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
 
-      <button mat-mini-fab color="primary" (click)="fileUpload.click()">
+      <!-- <mat-form-field> -->
+
+      <!-- <button mat-mini-fab (click)="singleFileUpload.click()">
         <mat-icon>attach_file</mat-icon>
-      </button>
-  
-      <div class="filename">{{ fileName || noAttachmentsMessage }}</div>
+      </button> -->
+
+      <button mat-raised-button (click)="fileUpload.click()">
+        Liitä tiedostoja
+      </button> 
 
       <div class="spacer"></div>
 
@@ -102,8 +108,17 @@
           i18n="@@Lähetä opettajille">
           Lähetä opettajille
         </button>
-
     </div>
+
+  <!-- <div *ngIf="selectedFiles !== undefined && selectedFiles.length > 1"> -->
+    <mat-list *ngIf="fileList !== null" class="file-list">
+      <mat-list-item *ngFor="let file of fileNameList;let index = index">
+        <span>{{file}}</span>
+        <button mat-icon-button (click)="removeSelectedFile(index)"><mat-icon>delete</mat-icon></button>
+      </mat-list-item>
+    </mat-list>
+
+  <!-- </div> --> 
 
   </form>
 
