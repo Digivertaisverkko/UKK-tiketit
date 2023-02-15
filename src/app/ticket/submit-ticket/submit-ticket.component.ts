@@ -66,11 +66,9 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
   }
 
   public onFileChanged(event: any) {
-    for (var i = 0; i <= event.target.files.length - 1; i++) {
-      const selectedFile = event.target.files[i];
-      console.dir(event);
-      this.fileList.push(selectedFile);
-      this.fileNameList.push(selectedFile.name);
+    for (let file of event.target.files) {
+      this.fileList.push(file);
+      this.fileNameList.push(file.name);
     }
     // this.attachment.nativeElement.value = '';
     // console.log('Tiedostolista:');
