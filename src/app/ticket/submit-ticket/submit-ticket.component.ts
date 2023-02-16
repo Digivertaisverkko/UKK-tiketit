@@ -34,7 +34,7 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
   // Liitetiedostot
 
   public fileList: File[] = [];
-  public fileNameList: any = [];
+  public fileNameList: any = ['Kommentti.svg', 'Kasittelyssa.svg', 'Ratkaisu_64.svg'];
 
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   private attachments: FormData | null = null;

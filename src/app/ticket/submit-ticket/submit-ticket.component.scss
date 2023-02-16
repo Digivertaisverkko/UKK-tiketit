@@ -42,14 +42,35 @@ mat-form-field { min-width: 21rem; }
 }
 
 .mdc-list-item.mdc-list-item--with-one-line {
-  height: 2.4rem;
+  height: 2.3rem;
+  background-color: #F5F5F5;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  position: relative;
+  max-width: 30rem;
+
 }
 
 .file-list {
   margin-top: 0.8rem;
   button {
-    margin-left: 0.8rem;
-    vertical-align: middle;
+    // align-items: center;
+    color: #7B7B7B;
+    height: 0.5rem;
+    width: 0.5rem;
+    position: absolute;
+    margin: auto 0.1rem auto;
+    // top: 0;
+    right: 0.2rem;
+    mat-icon {
+      font-size: 1rem;
+      position: absolute;
+      top: 35%;
+      bottom: 0;
+      left: 0;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
   }
 }
 

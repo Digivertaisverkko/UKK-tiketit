@@ -114,7 +114,7 @@
     <mat-list *ngIf="fileList !== null" class="file-list">
       <mat-list-item *ngFor="let file of fileNameList; let index = index">
         <span>{{file}}</span>
-        <button mat-icon-button (click)="removeSelectedFile(index)"><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
       </mat-list-item>
     </mat-list>
 
