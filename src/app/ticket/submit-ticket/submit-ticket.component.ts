@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./submit-ticket.component.scss']
 })
 
-export class SubmitTicketComponent implements OnInit, OnDestroy {
+export class SubmitTicketComponent implements OnInit {
   // max pituus: 255.
   titleText: string = '';
   assignmentText: string = '';
@@ -36,11 +36,7 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
   public fileList: File[] = [];
   public fileNameList: string[] = [];
   // public fileNameList: any = ['Kommentti.svg', 'Kasittelyssa.svg', 'Ratkaisu_64.svg'];
-
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
-  private attachments: FormData | null = null;
-  public fileName: string = '';
-
   // @ViewChild('attachments') attachment: any;
   
   constructor(
@@ -70,6 +66,7 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
     for (let file of event.target.files) {
       if (this.fileNameList.includes(file.name)) continue;
       this.fileList.push(file);
+      console.log(this.fileList);
       this.fileNameList.push(file.name);
     }
     // this.attachment.nativeElement.value = '';
@@ -82,15 +79,14 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
     this.fileNameList.splice(index, 1);
   }
 
-  public onSingleFileSelected(event: any) {
-    const file: File = event.target?.files[0];
-    if (file) {
-      this.fileName = file.name;
-      const formData = new FormData();
-      formData.append("attachment", file);
-      this.attachments = formData;
-    }
-  }
+  // public onSingleFileSelected(event: any) {
+  //   const file: File = event.target?.files[0];
+  //   if (file) {
+  //     this.fileName = file.name;
+  //     const formData = new FormData();
+  //     formData.append("attachment", file);
+  //   }
+  // }
 
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
@@ -98,7 +94,13 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
     this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
     console.log(this.newTicket);
     if (this.courseID == null) { throw new Error('Ei kurssi ID:ä.')}
-    this.ticketService.addTicket(this.courseID, this.newTicket, this.attachments)
+    var formData: FormData | null = null;
+    if (this.fileList.length > 0) {
+      formData = new FormData();
+      formData.append('tiedosto', this.fileList[0]);
+      // TODO: lisää useamman tiedoston lähetys.
+    }
+    this.ticketService.addTicket(this.courseID, this.newTicket, formData)
       .then(() => this.goBack()
       ).catch( error => {
         // TODO: lisää eri virhekoodeja?
@@ -108,10 +110,6 @@ export class SubmitTicketComponent implements OnInit, OnDestroy {
 
   private goBack() {
     this.router.navigateByUrl('course/' + this.courseID + '/list-tickets');
-  }
-
-  ngOnDestroy(): void {
-    this.auth.unTrackUserInfo();
   }
 
 }
