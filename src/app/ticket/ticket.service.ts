@@ -155,7 +155,11 @@ export class TicketService {
       return false
     }
     const ticketID = String(response.tiketti);
-    response = await this.sendFile(ticketID, formData[0]);
+    // FIXME: lähetä monta tiedostoa.
+   let sendFileResponse;
+    for (let file of formData) {
+      sendFileResponse = await this.sendFile(ticketID, file);
+    }
     return response
 
     // if (response.success == undefined) {
@@ -192,9 +196,7 @@ export class TicketService {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/liite/${fileID}/lataa`;
     const options = {
       responseType: 'blob' as 'json',
-      headers: new HttpHeaders({
-        'Content-Type': 'multipart/form-data'
-      })
+      headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
     };
     let response: any;
     try {
