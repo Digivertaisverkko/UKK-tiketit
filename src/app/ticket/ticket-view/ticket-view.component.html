@@ -63,7 +63,7 @@
 
     <div class="attachment-wrapper" *ngIf="ticket.liitteet.length > 0">
         <button class="attachment" *ngFor="let file of ticket.liitteet; let i = index" (click)="downloadFile(file.tiketti, file.tiedosto, file.nimi)">
-          Tiedosto {{file.nimi}}<mat-icon>download</mat-icon>
+          {{file.nimi}}<mat-icon>download</mat-icon>
         </button>
     </div>
 
