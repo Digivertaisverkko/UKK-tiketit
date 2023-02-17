@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
+
 export class TicketViewComponent implements OnInit {
 
   @Input() ticketIdFromParent: string | null = null;
@@ -26,14 +27,12 @@ export class TicketViewComponent implements OnInit {
   public isLoaded: boolean;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
-  // Ticket info polling rate in minutes.
-  private courseID: string | null;
-  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
-  private readonly CURRENT_DATE = new Date().toDateString();
-
   public message: string = '';
   public userRole: string = '';
   private userName: string = '';
+  private courseID: string | null;
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;   // Ticket info polling rate in minutes.
+  private readonly CURRENT_DATE = new Date().toDateString();
 
   constructor(
     private auth: AuthService,
@@ -41,22 +40,22 @@ export class TicketViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
-    ) {
-      this.courseID = this.route.snapshot.paramMap.get('courseid');
-      this.ticket = {} as Tiketti;
-      this.tila = '';
-      this.commentText = '';
-      this.isInIframe = getIsInIframe();
-      this.isLoaded = false;
-      this.ticketID = this.ticketIdFromParent !== null
-        ? this.ticketIdFromParent
-        : String(this.route.snapshot.paramMap.get('id'));
+  ) {
+    this.courseID = this.route.snapshot.paramMap.get('courseid');
+    this.ticket = {} as Tiketti;
+    this.tila = '';
+    this.commentText = '';
+    this.isInIframe = getIsInIframe();
+    this.isLoaded = false;
+    this.ticketID = this.ticketIdFromParent !== null
+      ? this.ticketIdFromParent
+      : String(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
-        if (response.asema !== undefined ) this.userRole = response.asema;
-        if (response.nimi !== undefined ) this.userName = response.nimi;
+      if (response.asema !== undefined ) this.userRole = response.asema;
+      if (response.nimi !== undefined ) this.userName = response.nimi;
     });
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -94,6 +93,21 @@ export class TicketViewComponent implements OnInit {
           this.isLoaded = true;
         }
       })
+  }
+
+  public downloadFile(ticketID: string, fileID: string, filename: string) {
+    this.ticketService.getFile(ticketID, fileID).then(response => {
+      const blob = new Blob([response], { type: 'application/octet-stream' }); 
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }).catch(error => {
+      this.errorMessage = "Tiedoston lataaminen epäonnistui";
+    })
   }
 
   public copyAsFAQ() {

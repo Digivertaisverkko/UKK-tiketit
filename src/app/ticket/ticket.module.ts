@@ -21,7 +21,7 @@ import { MatListModule } from '@angular/material/list';
 import { FaqViewComponent } from './faq-view/faq-view.component';
 import { MessageComponent } from './message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
-import { MatIcon } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [

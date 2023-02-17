@@ -186,6 +186,24 @@ export class TicketService {
     return (response?.success === true) ? true : false;
   }
 
+  // Lataa tiedosto.
+  public async getFile(ticketID: string, fileID: string): Promise<Blob> {
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/liite/${fileID}/lataa`;
+    const options = {
+      responseType: 'blob' as 'json',
+      headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data'
+      })
+    };
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.get<Blob>(url, options));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
   // Arkistoi (poista) UKK.
   public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
     //const httpOptions = this.getHttpOptions();;
@@ -226,19 +244,19 @@ export class TicketService {
     return response;
   }
 
-    // Palauta listan kaikista kursseista, joilla käyttäjä on.
-    public async getMyCourses(): Promise<Kurssini[]> {
-      //const httpOptions = this.getHttpOptions();;
-      let response: any;
-      let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
-      try {
-        response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
-        this.auth.setLoggedIn();
-      } catch (error: any) {
-        this.handleError(error);
-      }
-      return response;
+  // Palauta listan kaikista kursseista, joilla käyttäjä on.
+  public async getMyCourses(): Promise<Kurssini[]> {
+    //const httpOptions = this.getHttpOptions();;
+    let response: any;
+    let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
+    try {
+      response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
+      this.auth.setLoggedIn();
+    } catch (error: any) {
+      this.handleError(error);
     }
+    return response;
+  }
 
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
@@ -463,6 +481,13 @@ export interface Tiketti extends TiketinPerustiedot {
   ukk?: boolean;
   kentat?: Array<Kentta>;
   kommentit: Array<Kommentti>;
+  liitteet: Array<Liite>;
+}
+
+export interface Liite {
+  tiketti: string;
+  tiedosto: string;
+  nimi: string;
 }
 
 // Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/

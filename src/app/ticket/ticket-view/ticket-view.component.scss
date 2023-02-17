@@ -9,13 +9,37 @@
 
 .vertical-spacer { height: 18px; }
 
+.attachment-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-bottom: 0.5rem;
+}
+
+.attachment {
+  display: flex;
+  background-color: #F5F5F5;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem 1rem 0.6rem 1rem;
+  border: none;
+  font: unset;
+  outline: none;
+  cursor: pointer;
+  mat-icon {
+    font-size: 1.4rem;
+    // position: relative;
+    // padding-top: 0.5rem;
+    // padding-bottom: 0.5rem;
+    margin-left: 0.5rem;
+  }
+}
+
 // Muuten marginaalit menevät päällekkäin jostain syystä.
 // .short-vertical-spacer {
 //   height: 1px;
 // }
 
 .message-label {
-  // TODO: 
   margin-bottom: -0.8rem;
   + p {
     margin-top: -2rem;
