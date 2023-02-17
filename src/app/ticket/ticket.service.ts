@@ -133,8 +133,9 @@ export class TicketService {
   }
 
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
-  public async addTicket(courseID: string, newTicket: UusiTiketti, formData?: FormData | null): Promise<boolean> {
-
+  public async addTicket(courseID: string, newTicket: UusiTiketti, formData: FormData[]): Promise<boolean> {
+    console.log('formData lista (alla):');
+    console.dir(formData);
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
@@ -148,13 +149,13 @@ export class TicketService {
       this.handleError(error);
     }
     if (response?.success !== true) return false
-    if (formData == null ) return true
+    if (formData.length == 0 ) return true
     if (response?.tiketti == null) {
       console.error('addTicket: Ei saatu tiketin ID:ä, ei voida lähettää liitetiedostoa.');
       return false
     }
     const ticketID = String(response.tiketti);
-    response = await this.sendFile(ticketID, formData);
+    response = await this.sendFile(ticketID, formData[0]);
     return response
 
     // if (response.success == undefined) {
