@@ -33,7 +33,7 @@ export class TicketService {
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/ukk';
+    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk`;
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
@@ -90,7 +90,7 @@ export class TicketService {
     let body: newComment = { viesti: message }
     if (tila !== undefined) body.tila = tila
     let response: any;
-    let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/uusikommentti';
+    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
     try {
       response = await firstValueFrom( this.http.post<object>(url, body ) );
       this.auth.setLoggedIn();
@@ -104,7 +104,7 @@ export class TicketService {
   public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
     //const httpOptions = this.getHttpOptions();;
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti/kentat';
+    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti/kentat`;
     try {
       response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
     } catch (error: any) {
@@ -261,30 +261,6 @@ export class TicketService {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  // public async getQuestions(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
-  //   //const httpOptions = this.getHttpOptions();;
-  //   let target: string;
-  //   if (onlyOwn !== undefined && onlyOwn == true) {
-  //     target = 'omat';
-  //   } else {
-  //     target = 'kaikki';
-  //   }
-  //   let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/' + target;
-  //   let response: any;
-  //   try {
-  //     response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
-  //     console.log('Saatiin GET-kutsusta URL:iin "' + url + '" vastaus: ' + truncate(JSON.stringify(response), 300, true));
-  //     this.auth.setLoggedIn();
-  //   } catch (error: any) {
-  //     this.handleError(error);
-  //   }
-  //   return response;
-  // }
-
-
-  /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
-  Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
-  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   public async getTicketListOld(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
@@ -301,7 +277,6 @@ export class TicketService {
     return response;
   }
 
-
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<SortableTicket[]> {
@@ -317,7 +292,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-
     // Muutetaan taulukkoon sopivaan muotoon.
     const myName = this.auth.getUserInfo().nimi;
     const me = $localize`:@@Minä:Minä`;
