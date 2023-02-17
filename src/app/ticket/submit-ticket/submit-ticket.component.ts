@@ -92,14 +92,24 @@ export class SubmitTicketComponent implements OnInit {
     this.newTicket.otsikko = this.titleText;
     this.newTicket.viesti = this.message;
     this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
-    console.log(this.newTicket);
     if (this.courseID == null) { throw new Error('Ei kurssi ID:ä.')}
     var formData: FormData | null = null;
     if (this.fileList.length > 0) {
       formData = new FormData();
+      console.log('Liitetään tiedosto formDataan (alla): ');
+      console.dir(this.fileList[0]);
       formData.append('tiedosto', this.fileList[0]);
       // TODO: lisää useamman tiedoston lähetys.
     }
+    // console.log(JSON.stringify(formData));
+    // if (formData != null) {
+    //   console.log('formDatan iterointi:');
+    //   for (const [key, value] of formData.entries()) {
+    //     console.log(`${key}: ${value}`);
+    //   }
+    // } else {
+    //   console.error('formData on null');
+    // }
     this.ticketService.addTicket(this.courseID, this.newTicket, formData)
       .then(() => this.goBack()
       ).catch( error => {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Subject, firstValueFrom, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Subject, firstValueFrom, Observable, skip } from 'rxjs';
 import '@angular/localize/init';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -133,20 +133,29 @@ export class TicketService {
   }
 
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
-  public async addTicket(courseID: string, newTicket: UusiTiketti, attachments?: FormData | null): Promise<boolean> {
-    if (attachments) {
-      console.log('saatin liitetiedosto (alla):');
-      console.dir(attachments);
-    }
+  public async addTicket(courseID: string, newTicket: UusiTiketti, formData?: FormData | null): Promise<boolean> {
+
     let response: any;
-    const url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
+    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
+    interface AddTicketResponse {
+      success: Boolean;
+      tiketti: number;
+    }
     try {
       response = await firstValueFrom(this.http.post<UusiTiketti>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
-    return true
+    if (response?.success !== true) return false
+    if (formData == null ) return true
+    if (response?.tiketti == null) {
+      console.error('addTicket: Ei saatu tiketin ID:ä, ei voida lähettää liitetiedostoa.');
+      return false
+    }
+    const ticketID = String(response.tiketti);
+    response = await this.sendFile(ticketID, formData);
+    return response
 
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
@@ -160,6 +169,21 @@ export class TicketService {
     //     return false;
     //   }
     // }
+  }
+
+  // Lähetä liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
+  private async sendFile(ticketID: string, formData: FormData): Promise<boolean> {
+    console.log('ticketService: Yritetään lähettää formData:');
+    console.dir(formData);
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/liite`;
+    let response: any;
+    try {
+      // Ei toimi, jos asettaa headerin: 'Content-Type', 'multipart/form-data'
+      response = await firstValueFrom<any>(this.http.post(url, formData));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return (response?.success === true) ? true : false;
   }
 
   // Arkistoi (poista) UKK.

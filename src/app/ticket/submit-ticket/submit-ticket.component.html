@@ -6,7 +6,7 @@
 
   <app-to-beginning-button></app-to-beginning-button>
 
-  <form action="" #submitForm="ngForm">
+  <form action="" #submitForm="ngForm" enctype="multipart/form-data">
 
     <div class="ticket-header">
 
@@ -87,6 +87,7 @@
 
       <!-- Ei näytetä tätä vaan alla oleva nappi. -->
       <!-- <input type="file" class="file-input" (click)="onFileSelected($event)" #singleFileUpload> -->
+      <!-- <input type="file" class="file-input" (change)="singleFileChanged($event)" #fileUpload> -->
       <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
 
       <!-- <mat-form-field> -->
