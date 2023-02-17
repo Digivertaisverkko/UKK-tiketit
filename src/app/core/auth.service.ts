@@ -258,6 +258,7 @@ export class AuthService {
     return this.user$.asObservable();
   }
 
+  // Aiheutti errorin.
   public unTrackUserInfo(): void {
     this.user$.unsubscribe();
   }

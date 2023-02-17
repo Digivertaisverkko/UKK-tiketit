@@ -23,7 +23,8 @@ export class CustomHttpInterceptor implements HttpInterceptor {
         if (event instanceof HttpResponse) {
           const responseBody = JSON.stringify(event.body);
           console.log(`Tehtiin ${request.method}-pyyntö URL:iin "${request.url}". Tilakoodi ${event.status}. ` +
-            `Saatiin vastaukseksi "${truncate(responseBody, 200, true)}".`);
+          // `Saatiin vastaukseksi "${responseBody}".`);
+          `Saatiin vastaukseksi "${truncate(responseBody, 200, true)}".`);
           if (request.body != null) {
             const requestBody = JSON.stringify(request.body);
             console.log(`Pyynnön body: "$${truncate(requestBody, 200, true)}"`);

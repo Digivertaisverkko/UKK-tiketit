@@ -47,7 +47,7 @@ function getLanguage(): string {
         language = isInIframe() ? 'en-US' : 'fi-FI'; 
       }
     } else {
-      console.log('Ei kieltä tallennettuna tai URL:ssa, käytetään oletusta.');
+      console.log('Ei kieltä tallennettuna tai URL:ssa, käytetään oletusta: fi-FI');
       language = isInIframe() ? 'en-US' : 'fi-FI'; 
     }
   }
