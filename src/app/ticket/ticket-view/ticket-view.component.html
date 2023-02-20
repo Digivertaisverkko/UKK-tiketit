@@ -62,9 +62,10 @@
     <app-message [messageHtml]=ticket.viesti></app-message>
 
     <div class="attachment-wrapper" *ngIf="ticket.liitteet.length > 0">
-        <button class="attachment" *ngFor="let file of ticket.liitteet; let i = index" (click)="downloadFile(file.tiketti, file.tiedosto, file.nimi)">
+      <button class="attachment" *ngFor="let file of ticket.liitteet; let i = index"
+        (click)="downloadFile(file.tiketti, file.tiedosto, file.nimi)">
           {{file.nimi}}<mat-icon>download</mat-icon>
-        </button>
+      </button>
     </div>
 
     <hr class="theme-divider">
