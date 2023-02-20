@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
 import { TicketService, Liite } from '../../ticket.service';
 
 @Component({
@@ -11,6 +11,7 @@ export class AttachmentListComponent {
 
   @Input() files: Liite[] = [];
   @Input() ticketID: string = '';
+  @Output() errorMessage = new EventEmitter<string>();
 
   constructor(private ticketService: TicketService) {}
 
@@ -30,7 +31,8 @@ export class AttachmentListComponent {
       link.click();
       document.body.removeChild(link);
     }).catch(error => {
-      // this.errorMessage = "Tiedoston lataaminen epäonnistui";
+      const errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:Tiedoston lataaminen epäonnistui` + '.';
+      this.errorMessage.emit(errorMessage);
     })
   }
 

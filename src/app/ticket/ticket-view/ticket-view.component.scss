@@ -7,8 +7,6 @@
 
 .short-field-value:last-child { margin-bottom: 1.5rem; }
 
-.vertical-spacer { height: 18px; }
-
 // Muuten marginaalit menevät päällekkäin jostain syystä.
 // .short-vertical-spacer {
 //   height: 1px;
@@ -29,6 +27,8 @@ mat-card {
     margin-right: 1em;
   }
 }
+
+.vertical-spacer { height: 1rem; }
 
 mat-radio-button { margin: 3px 1.7rem 3px 0px; }
 

@@ -6,9 +6,6 @@
     <span>{{ courseName }}</span>
   </h2>
 
-
-    <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
-
     <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
     <div id="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent">
       <app-to-beginning-button></app-to-beginning-button>
@@ -62,7 +59,8 @@
     <app-message [messageHtml]=ticket.viesti></app-message>
 
     <!----- Liitteet ---->
-    <app-attachment-list *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet">
+    <app-attachment-list *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet"
+      (errorMessage)="errorMessage = $event">
     </app-attachment-list>
 
     <hr class="theme-divider">
@@ -101,6 +99,8 @@
   <div class="vertical-spacer"></div>
 
   <app-editor *ngIf="ticket.tila > 0 && !ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
+
+  <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
