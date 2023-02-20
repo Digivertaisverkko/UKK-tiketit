@@ -141,24 +141,24 @@ export class TicketService {
     const body = newTicket;
     interface AddTicketResponse {
       success: Boolean;
-      tiketti: number;
+      uusi: {
+        tiketti: string;
+        kommentti: string;
+      }
     }
     try {
-      response = await firstValueFrom(this.http.post<UusiTiketti>(url, body));
+      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
     if (response?.success !== true) return false
     if (formData.length == 0 ) return true
-    if (response?.tiketti == null) {
-      console.error('addTicket: Ei saatu tiketin ID:ä, ei voida lähettää liitetiedostoa.');
-      return false
-    }
-    const ticketID = String(response.tiketti);
+    const ticketID = String(response.uusi.tiketti);
+    const firstCommentID = String(response.uusi.kommentti);
     // FIXME: lähetä monta tiedostoa.
     let sendFileResponse;
     for (let file of formData) {
-      sendFileResponse = await this.sendFile(ticketID, file);
+      sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
     }
     return response
 
@@ -177,10 +177,10 @@ export class TicketService {
   }
 
   // Lähetä liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  private async sendFile(ticketID: string, formData: FormData): Promise<boolean> {
+  private async sendFile(ticketID: string, commentID: string, formData: FormData): Promise<boolean> {
     console.log('ticketService: Yritetään lähettää formData:');
     console.dir(formData);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/liite`;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
       // Ei toimi, jos asettaa headerin: 'Content-Type', 'multipart/form-data'
@@ -458,8 +458,9 @@ export interface Tiketti extends TiketinPerustiedot {
   ukk?: boolean;
   kentat?: Array<Kentta>;
   kommentit: Array<Kommentti>;
-  liitteet: Array<Liite>;
 }
+
+//   liitteet: Array<Liite>;
 
 export interface Liite {
   tiketti: string;
@@ -515,8 +516,10 @@ export interface KentanTiedot {
 // Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
 // TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
 export interface Kommentti {
-  aikaleima: Date;
+  id: string;
   lahettaja: Kurssilainen;
+  aikaleima: Date;
   tila: number;
   viesti: string;
+  liitteet: Array<Liite>;
 }
