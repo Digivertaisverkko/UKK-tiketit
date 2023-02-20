@@ -156,7 +156,7 @@ export class TicketService {
     }
     const ticketID = String(response.tiketti);
     // FIXME: lähetä monta tiedostoa.
-   let sendFileResponse;
+    let sendFileResponse;
     for (let file of formData) {
       sendFileResponse = await this.sendFile(ticketID, file);
     }
