@@ -62,12 +62,8 @@
     <app-message [messageHtml]=ticket.viesti></app-message>
 
     <!----- Liitteet ---->
-    <div class="attachment-wrapper" *ngIf="ticket.liitteet">
-      <button class="attachment" *ngFor="let file of ticket.liitteet; let i = index"
-        (click)="downloadFile(ticket.id, file.kommentti, file.tiedosto, file.nimi)">
-          {{file.nimi}}<mat-icon>download</mat-icon>
-      </button>
-    </div>
+    <app-attachment-list *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet">
+    </app-attachment-list>
 
     <hr class="theme-divider">
 
@@ -117,7 +113,8 @@
 
   <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole ==='admin' && ticket.tila > 0)">
+    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 &&
+      (userRole === 'opettaja' || userRole ==='admin' && ticket.tila > 0)">
       <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
       <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
       <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>

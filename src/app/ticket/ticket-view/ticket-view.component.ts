@@ -95,26 +95,6 @@ export class TicketViewComponent implements OnInit {
       })
   }
 
-  public downloadFile(ticketID: string, commentID: string, fileID: string, filename: string)
-  {
-    console.log(' tiketin ID: ' + ticketID);
-    console.log(' kommentti ID: ' + commentID);
-    console.log(' tiedoston ID: ' + fileID);
-    console.log(' tiedoston nimi: ' + filename);
-    this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
-      const blob = new Blob([response], { type: 'application/octet-stream' });
-      const downloadUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }).catch(error => {
-      this.errorMessage = "Tiedoston lataaminen epäonnistui";
-    })
-  }
-
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {

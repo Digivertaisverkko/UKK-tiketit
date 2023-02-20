@@ -1,0 +1,20 @@
+.attachment-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.attachment {
+  display: flex;
+  background-color: #F5F5F5;
+  padding: 0.6rem 1rem 0.6rem 1rem;
+  border: none;
+  font: unset;
+  outline: none;
+  cursor: pointer;
+  mat-icon {
+    font-size: 1.4rem;
+    margin-left: 0.5rem;
+  }
+}
