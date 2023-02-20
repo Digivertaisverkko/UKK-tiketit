@@ -1,8 +1,8 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Subject, firstValueFrom, Observable, skip } from 'rxjs';
 import '@angular/localize/init';
+import { firstValueFrom, Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 
@@ -192,8 +192,8 @@ export class TicketService {
   }
 
   // Lataa tiedosto.
-  public async getFile(ticketID: string, fileID: string): Promise<Blob> {
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/liite/${fileID}/lataa`;
+  public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}liite/${fileID}/lataa`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
@@ -329,8 +329,9 @@ export class TicketService {
     response = await this.getFields(ticketID);
     ticket.kentat = response;
     response  = await this.getComments(ticketID);
-    // Tiketin viestin sisältö on palautuksen ensimmäinen kommentti.
+    // Tiketin viestin sisältö on sen ensimmäinen kommentti.
     ticket.viesti = response[0].viesti;
+    ticket.liitteet = response[0].liitteet;
     response.shift();
     ticket.kommentit = response;
     return ticket
@@ -451,16 +452,16 @@ export interface SortableTicket {
   Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
   eri vaiheessa omilla kutsuillaan.
   Backend palauttaa 1. kommentissa tiketin viestin sisällön, josta
-  tulee rajapinnan jäsenmuuttujan "viesti" -sisältö. */
+  tulee jäsenmuuttujan "viesti" -sisältö. Vastaavasti 1. kommentin liitteet
+  ovat tiketin liitteitä. */
 export interface Tiketti extends TiketinPerustiedot {
   kurssi: number;
   viesti: string;
   ukk?: boolean;
   kentat?: Array<Kentta>;
   kommentit: Array<Kommentti>;
+  liitteet?: Array<Liite>;
 }
-
-//   liitteet: Array<Liite>;
 
 export interface Liite {
   tiketti: string;

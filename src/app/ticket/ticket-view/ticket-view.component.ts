@@ -96,8 +96,8 @@ export class TicketViewComponent implements OnInit {
   }
 
   public downloadFile(ticketID: string, fileID: string, filename: string) {
-    this.ticketService.getFile(ticketID, fileID).then(response => {
-      const blob = new Blob([response], { type: 'application/octet-stream' }); 
+    this.ticketService.getFile(ticketID, fileID, fileID).then(response => {
+      const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
