@@ -95,8 +95,13 @@ export class TicketViewComponent implements OnInit {
       })
   }
 
-  public downloadFile(ticketID: string, fileID: string, filename: string) {
-    this.ticketService.getFile(ticketID, fileID, fileID).then(response => {
+  public downloadFile(ticketID: string, commentID: string, fileID: string, filename: string)
+  {
+    console.log(' tiketin ID: ' + ticketID);
+    console.log(' kommentti ID: ' + commentID);
+    console.log(' tiedoston ID: ' + fileID);
+    console.log(' tiedoston nimi: ' + filename);
+    this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');

@@ -193,7 +193,7 @@ export class TicketService {
 
   // Lataa tiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}liite/${fileID}/lataa`;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
@@ -432,7 +432,7 @@ export interface Kurssilainen {
 // Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
 // Tikettilistan näyttämistä varten.
 export interface TiketinPerustiedot {
-  id: number;
+  id: string;
   otsikko: string;
   aikaleima: string;
   aloittaja: Kurssilainen;
@@ -464,7 +464,7 @@ export interface Tiketti extends TiketinPerustiedot {
 }
 
 export interface Liite {
-  tiketti: string;
+  kommentti: string;
   tiedosto: string;
   nimi: string;
 }
