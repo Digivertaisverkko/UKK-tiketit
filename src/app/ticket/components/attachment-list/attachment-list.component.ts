@@ -3,10 +3,18 @@ import { TicketService, Liite } from '../../ticket.service';
 
 @Component({
   selector: 'app-attachment-list',
-  templateUrl: './attachment-list.component.html',
+  template: `
+  <div class="attachment-wrapper">
+    <button class="attachment" *ngFor="let file of files; let i = index"
+      (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)">
+        {{file.nimi}}<mat-icon>download</mat-icon>
+    </button>
+  </div>`,
+
   styleUrls: ['./attachment-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class AttachmentListComponent {
 
   @Input() files: Liite[] = [];
