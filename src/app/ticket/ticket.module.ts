@@ -21,7 +21,8 @@ import { MatListModule } from '@angular/material/list';
 import { FaqViewComponent } from './faq-view/faq-view.component';
 import { MessageComponent } from './message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
-import { ViewAttachmentsComponent } from './components/attachment-list/view-attachments.component';
+import { ViewAttachmentsComponent } from './components/view-attachments/view-attachments.component';
+import { EditAttachmentsComponent } from './components/edit-attachments/edit-attachments.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ViewAttachmentsComponent } from './components/attachment-list/view-atta
     MessageComponent,
     SubmitFaqComponent,
     ViewAttachmentsComponent,
+    EditAttachmentsComponent,
   ],
   imports: [
     CommonModule,
