@@ -15,9 +15,9 @@
       </button>
     </div>
 
-    <section *ngIf="ticket.tila > 0">
+  <section *ngIf="ticket.tila > 0">
 
-    <!-------------- Kysymys ----------------------------------------->
+  <!-------------- Kysymys ----------------------------------------->
 
     <div class="ticket-header">
 
@@ -65,11 +65,9 @@
 
     <hr class="theme-divider">
 
-  </section>
-
   <!-------------- Keskustelu ----------------------------------------->
 
-  <h4 class="sub-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h4>
+  <h4 class="sub-header" i18n="@@Keskustelu">Keskustelu</h4>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 
@@ -96,11 +94,13 @@
       </mat-card-content>
     </mat-card>
 
-  <div class="vertical-spacer"></div>
+    <div class="vertical-spacer"></div>
 
-  <app-editor *ngIf="ticket.tila > 0 && !ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
+    <app-editor *ngIf="!ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
 
-  <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
+    </section>
+
+    <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
@@ -111,27 +111,39 @@
     >
   </app-error-card>
 
-  <div class="theme-actions" *ngIf="!ticketIdFromParent">
+  <section *ngIf="ticket.tila > 0">
 
-    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 &&
-      (userRole === 'opettaja' || userRole ==='admin' && ticket.tila > 0)">
-      <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
-      <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
-      <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
-    </mat-radio-group>
+    <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-    <div class="spacer"></div>
+      <button mat-raised-button class="attach-button" (click)="uploadClick.next()"><mat-icon>attach_file</mat-icon>
+        {{attachFilesText}}
+      </button>
 
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="commentText.length < 1"
-      *ngIf="ticket.tila > 0"
-      (click)="sendComment()"
-      i18n="@@Lähetä">
-      Lähetä
-    </button>
+      <div class="spacer" *ngIf="userRole === 'opettaja' || userRole ==='admin'; else spacerHere"></div>
 
-  </div>
+      <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opettaja' || userRole ==='admin'">
+        <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
+        <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
+        <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
+      </mat-radio-group>
+
+      <ng-template #spacerHere><div class="spacer"></div></ng-template>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="send-button"
+        [disabled]="commentText.length < 1"
+        (click)="sendComment()"
+        i18n="@@Lähetä">
+        Lähetä
+      </button>
+
+    </div>
+
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event">
+    </app-edit-attachments>
+
+  </section>
 
 </div>

@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/core/auth.service';
-import { interval, startWith, switchMap } from 'rxjs';
+import { interval, startWith, Subject, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
 
@@ -29,8 +29,11 @@ export class TicketViewComponent implements OnInit {
   public ticketID: string;
   public message: string = '';
   public userRole: string = '';
+  public attachFilesText: string = '';
   private userName: string = '';
   private courseID: string | null;
+  @Input() public fileList: File[] = [];
+  public uploadClick: Subject<void> = new Subject<void>();
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;   // Ticket info polling rate in minutes.
   private readonly CURRENT_DATE = new Date().toDateString();
 
@@ -56,6 +59,11 @@ export class TicketViewComponent implements OnInit {
     this.auth.trackUserInfo().subscribe(response => {
       if (response.asema !== undefined ) this.userRole = response.asema;
       if (response.nimi !== undefined ) this.userName = response.nimi;
+      if (this.userRole === 'opettaja' || this.userRole ==='admin') {
+        this.attachFilesText = 'Liitä';
+      } else {
+        this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
+      }
     });
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');

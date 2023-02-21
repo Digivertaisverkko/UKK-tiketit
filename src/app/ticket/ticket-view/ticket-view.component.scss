@@ -30,6 +30,10 @@ mat-card {
 
 .vertical-spacer { height: 1rem; }
 
+.theme-actions {
+  gap: 0.8rem;
+}
+
 mat-radio-button { margin: 3px 1.7rem 3px 0px; }
 
 .mdc-form-field > label { padding-left: 0; }
@@ -38,10 +42,14 @@ mat-radio-button { margin: 3px 1.7rem 3px 0px; }
 //   padding-bottom: 0 !important;
 // }
 
-@media (max-width: $XSmall) {
+
+@media (max-width: 775px) {
   // Välttämättä ei mene useammalle riville.
   // .user-info-block {
   //   order: -1;
   //   margin-bottom: -30px;
   // }
+  .attach-button { order: 1; }
+  .spacer { order: 2 }
+  .send-button { order: 3; }
 }
