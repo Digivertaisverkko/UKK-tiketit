@@ -128,21 +128,30 @@ export class TicketService {
 
   /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
      Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
-  public async sendFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
-    //const httpOptions = this.getHttpOptions();;
+
+  // FIXME: eri muotoinen nimi kuin esim. addTicket.
+  public async sendFaq(ID: string, newFaq: UusiUKK, fileList: File[], editFaq?: boolean) {
+    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;
+    url = environment.apiBaseUrl + url;
     let response: any;
-    let url: string;
-    if (editFaq?.toString() === 'true') {
-      url = `${environment.apiBaseUrl}/tiketti/${ID}/muokkaaukk`;
-    } else {
-      url = `${environment.apiBaseUrl}/kurssi/${ID}/ukk`;
-    }
     const body = newFaq;
     try {
       response = await firstValueFrom(this.http.post<UusiUKK>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
+    // Ei tätä kirjoittaessa tukea liitteiden lähettämiseen UKK:n.
+    // if (fileList?.length === 0 ) return
+    // const ticketID = String(response.uusi.tiketti);
+    // const firstCommentID = String(response.uusi.kommentti);
+    // let sendFileResponse: any;
+    // for (let file of fileList) {
+    //   try {
+    //     sendFileResponse = await this.sendFile(ID, firstCommentID, file);
+    //   } catch (error: any) {
+    //     this.handleError(error);
+    //   }
+    // }
   }
 
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.

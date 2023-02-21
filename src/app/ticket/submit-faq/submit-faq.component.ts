@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { UusiUKK, TicketService, Tiketti, Error } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-submit-faq',
@@ -24,6 +25,8 @@ export class SubmitFaqComponent implements OnInit {
   public originalTicket: Tiketti | undefined;
   public ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
   public userName: string = '';
+  @Input() public fileList: File[] = [];
+  public uploadClick: Subject<void> = new Subject<void>();
   private courseID: string | null;
 
   constructor(
@@ -100,7 +103,7 @@ export class SubmitFaqComponent implements OnInit {
     }
     if (this.courseID === null) throw new Error('Ei kurssi ID:ä.');
     let id = this.editExisting ? this.ticketId ?? '' : this.courseID;
-    this.ticketService.sendFaq(id, newFaq, this.editExisting)
+    this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
       .then(() => { this.goBack() })
       .catch( (error: Error) => {
         if (error.tunnus == 1003) {

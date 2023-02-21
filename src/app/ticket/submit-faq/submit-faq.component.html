@@ -66,6 +66,10 @@
     </app-error-card>
 
     <div class="theme-actions">
+      <button mat-raised-button (click)="uploadClick.next()">
+        <mat-icon>attach_file</mat-icon>Liitä tiedostoja
+      </button>
+
       <div class="spacer"></div>
         <button
           mat-raised-button color="primary"
@@ -75,6 +79,9 @@
           Julkaise
         </button>
     </div>
+
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event">
+    </app-edit-attachments>
 
   </form>
 

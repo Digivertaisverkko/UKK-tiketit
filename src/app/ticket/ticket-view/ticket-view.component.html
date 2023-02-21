@@ -101,9 +101,9 @@
 
     <app-editor *ngIf="!ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
 
-    </section>
+  </section>
 
-    <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
+  <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
