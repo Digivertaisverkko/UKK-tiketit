@@ -38,7 +38,7 @@ export class SubmitTicketComponent implements OnInit {
   // public fileNameList: any = ['Kommentti.svg', 'Kasittelyssa.svg', 'Ratkaisu_64.svg'];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   // @ViewChild('attachments') attachment: any;
-  
+
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -66,7 +66,6 @@ export class SubmitTicketComponent implements OnInit {
     for (let file of event.target.files) {
       if (this.fileNameList.includes(file.name)) continue;
       this.fileList.push(file);
-      console.log(this.fileList);
       this.fileNameList.push(file.name);
     }
     // this.attachment.nativeElement.value = '';

@@ -25,22 +25,22 @@
 
       <div class="spacer"></div>
 
-    <div class="user-info-block">
-      <div class="text-info">
-        <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
-        <div class="theme-label">
-          <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
-          <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
-          <ng-template #notToday>
-            <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
-          </ng-template>
-          <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
+      <div class="user-info-block">
+        <div class="text-info">
+          <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
+          <div class="theme-label">
+            <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
+            <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
+            <ng-template #notToday>
+              <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
+            </ng-template>
+            <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
+          </div>
         </div>
+        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
       </div>
-      <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
-    </div>
 
-  </div>
+    </div>
 
     <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
       <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
@@ -59,9 +59,9 @@
     <app-message [messageHtml]=ticket.viesti></app-message>
 
     <!----- Liitteet ---->
-    <app-attachment-list *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet"
+    <app-view-attachments *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet"
       (errorMessage)="errorMessage = $event">
-    </app-attachment-list>
+    </app-view-attachments>
 
     <hr class="theme-divider">
 

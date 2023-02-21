@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from 
 import { TicketService, Liite } from '../../ticket.service';
 
 @Component({
-  selector: 'app-attachment-list',
+  selector: 'app-view-attachments',
   template: `
   <div class="attachment-wrapper">
     <button class="attachment" *ngFor="let file of files; let i = index"
@@ -11,11 +11,11 @@ import { TicketService, Liite } from '../../ticket.service';
     </button>
   </div>`,
 
-  styleUrls: ['./attachment-list.component.scss'],
+  styleUrls: ['./view-attachments.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class AttachmentListComponent {
+export class ViewAttachmentsComponent {
 
   @Input() files: Liite[] = [];
   @Input() ticketID: string = '';
