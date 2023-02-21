@@ -108,6 +108,7 @@ $debug: false;
 .theme-actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   margin-top: 1.4rem;
 }
 
