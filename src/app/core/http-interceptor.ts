@@ -14,7 +14,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     if (SESSION_ID === undefined || SESSION_ID === null) {
       console.warn('getHttpOptions: ei session ID:ä.');
     } else {
-      request = request.clone({ 
+      request = request.clone({
         headers: request.headers.set('session-id', SESSION_ID),
       });
     }
@@ -24,10 +24,10 @@ export class CustomHttpInterceptor implements HttpInterceptor {
           const responseBody = JSON.stringify(event.body);
           console.log(`Tehtiin ${request.method}-pyyntö URL:iin "${request.url}". Tilakoodi ${event.status}. ` +
           // `Saatiin vastaukseksi "${responseBody}".`);
-          `Saatiin vastaukseksi "${truncate(responseBody, 200, true)}".`);
-          if (request.body != null) {
+          `Saatiin vastaukseksi "${truncate(responseBody, 500, true)}".`);
+          if (request.body != null && request.body.length > 0) {
             const requestBody = JSON.stringify(request.body);
-            console.log(`Pyynnön body: "$${truncate(requestBody, 200, true)}"`);
+            console.log(`Pyynnön body: "$${truncate(requestBody, 500, true)}"`);
           }
         }
       })
