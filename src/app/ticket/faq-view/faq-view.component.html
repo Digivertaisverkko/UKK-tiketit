@@ -75,6 +75,9 @@
 
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
+    <app-view-attachments *ngIf="ticket.liitteet" [ticketID]="ticket.id" [files]="ticket.liitteet">
+    </app-view-attachments>
+
     <hr class="theme-divider">
 
     <!----------- Vastaus ----------->
@@ -85,6 +88,8 @@
 
     <div *ngFor="let comment of ticket.kommentit">
         <app-message [messageHtml]=comment.viesti></app-message>
+        <app-view-attachments *ngIf="comment.liitteet" [ticketID]="ticket.id" [files]="comment.liitteet">
+      </app-view-attachments>
     </div>
 
   </section>
