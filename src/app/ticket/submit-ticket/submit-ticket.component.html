@@ -95,14 +95,15 @@
 
       <!-- <button mat-raised-button (click)="fileUpload.click()"> -->
 
-      <button mat-raised-button (click)="uploadClick.next()">
-        <mat-icon>attach_file</mat-icon>Liitä tiedostoja
+      <button mat-raised-button (click)="uploadClick.next()" i18n="@@Liitä tiedostoja"><mat-icon>attach_file</mat-icon>
+        Liitä tiedostoja
       </button>
 
       <div class="spacer"></div>
 
       <button
         mat-raised-button color="primary"
+        class="submit-button"
         [disabled]="submitForm.invalid"
         (click)="sendTicket()"
         i18n="@@Lähetä opettajille">

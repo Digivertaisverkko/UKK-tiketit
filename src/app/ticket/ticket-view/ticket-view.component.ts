@@ -60,7 +60,7 @@ export class TicketViewComponent implements OnInit {
       if (response.asema !== undefined ) this.userRole = response.asema;
       if (response.nimi !== undefined ) this.userName = response.nimi;
       if (this.userRole === 'opettaja' || this.userRole ==='admin') {
-        this.attachFilesText = 'Liitä';
+        this.attachFilesText = $localize `:@@Liitä:liitä`;
       } else {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
       }
