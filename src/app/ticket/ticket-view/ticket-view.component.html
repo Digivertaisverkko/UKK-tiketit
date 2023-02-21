@@ -91,6 +91,9 @@
 
       <mat-card-content>
         <app-message [messageHtml]=comment.viesti></app-message>
+        <app-view-attachments *ngIf="comment.liitteet" [ticketID]="ticketID" [files]="comment.liitteet"
+          (errorMessage)="errorMessage = $event">
+        </app-view-attachments>
       </mat-card-content>
     </mat-card>
 

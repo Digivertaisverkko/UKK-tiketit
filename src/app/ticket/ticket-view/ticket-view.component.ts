@@ -148,8 +148,8 @@ export class TicketViewComponent implements OnInit {
   }
 
   public sendComment(): void {
-    this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
-      .then((response) => {
+    this.ticketService.addComment(this.ticketID, this.commentText, this.fileList, this.newCommentState)
+      .then(response => {
         if (response?.success == true) {
           this.errorMessage = '';
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });

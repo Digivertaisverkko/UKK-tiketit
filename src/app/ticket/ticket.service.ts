@@ -72,8 +72,9 @@ export class TicketService {
     return verbal;
   }
 
+
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string, tila?: number): Promise<any> {
+  public async addComment(ticketID: string, message: string, fileList: File[], tila?: number): Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
@@ -82,7 +83,6 @@ export class TicketService {
         throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
       }
     }
-    //const httpOptions = this.getHttpOptions();;
     interface newComment {
       viesti: string;
       tila?: number;
@@ -92,12 +92,25 @@ export class TicketService {
     let response: any;
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
     try {
-      response = await firstValueFrom( this.http.post<object>(url, body ) );
+      response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
-    return response;
+    if (fileList.length == 0 ) return response;
+    const commentID = String(response?.kommentti);
+    if (commentID == null) {
+      throw new Error('addComment: ei liitteiden lisäämiseen tarvittavaa kommentin id:ä.');
+    }
+    let sendFileResponse: any;
+    for (let file of fileList) {
+      try {
+        sendFileResponse = await this.sendFile(ticketID, commentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
+    }
+    return response
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
@@ -153,12 +166,15 @@ export class TicketService {
     if (fileList.length == 0 ) return true
     const ticketID = String(response.uusi.tiketti);
     const firstCommentID = String(response.uusi.kommentti);
-    // FIXME: lähetä monta tiedostoa.
-    let sendFileResponse;
+    let sendFileResponse: any;
     for (let file of fileList) {
-      sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+      try {
+        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
     }
-    return response
+    return true
 
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
@@ -174,7 +190,7 @@ export class TicketService {
     // }
   }
 
-  // Lähetä liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
+  // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
@@ -211,7 +227,7 @@ export class TicketService {
   public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
     //const httpOptions = this.getHttpOptions();;
     let response: any;
-    const url = environment.apiBaseUrl + '/tiketti/' + String(ticketID) + '/arkistoiukk';
+    const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
     try {
       response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}));
     } catch (error: any) {
@@ -523,4 +539,10 @@ export interface Kommentti {
   tila: number;
   viesti: string;
   liitteet: Array<Liite>;
+}
+
+// Vastaus kommentin lisäämiseen.
+export interface NewCommentResponse {
+  success: boolean;
+  kommentti: string;
 }
