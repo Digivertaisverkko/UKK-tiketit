@@ -7,11 +7,11 @@ import { Editor } from 'ngx-editor';
 import { isNodeActive } from 'ngx-editor/helpers';
 
 @Component({
-  selector: 'app-custom-menu',
-  templateUrl: './custom-menu.component.html',
-  styleUrls: ['./custom-menu.component.scss'],
+  selector: 'app-menu-src',
+  templateUrl: './menu-src.component.html',
+  styleUrls: ['./menu-src.component.scss'],
 })
-export class CustomMenuComponent implements OnInit {
+export class MenuSrcComponent implements OnInit {
   @Input() editor!: Editor;
   isActive = false;
   isDisabled = false;
