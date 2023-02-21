@@ -18,14 +18,14 @@ import { Observable } from 'rxjs';
 export class EditAttachmentsComponent implements OnInit {
 
   @Output() fileListOutput = new EventEmitter<File[]>();
-  @Input() clicks: Observable<void> = new Observable();
+  @Input() uploadClicks: Observable<void> = new Observable();
   public fileList: File[] = [];
   public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
 
   ngOnInit() {
     const element: HTMLElement = document.querySelector('.file-input') as HTMLElement;
-    this.clicks.subscribe(() => element.click());
+    this.uploadClicks.subscribe(() => element.click());
   }
 
   public onFileChanged(event: any) {

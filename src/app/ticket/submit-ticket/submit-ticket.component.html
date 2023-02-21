@@ -110,7 +110,8 @@
       </button>
     </div>
 
-    <app-edit-attachments [clicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event"></app-edit-attachments>
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event">
+    </app-edit-attachments>
 
   <!-- </div> -->
 
