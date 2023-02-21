@@ -133,9 +133,7 @@ export class TicketService {
   }
 
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
-  public async addTicket(courseID: string, newTicket: UusiTiketti, formData: FormData[]): Promise<boolean> {
-    console.log('formData lista (alla):');
-    console.dir(formData);
+  public async addTicket(courseID: string, newTicket: UusiTiketti, fileList: File[]): Promise<boolean> {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
     const body = newTicket;
@@ -152,12 +150,12 @@ export class TicketService {
       this.handleError(error);
     }
     if (response?.success !== true) return false
-    if (formData.length == 0 ) return true
+    if (fileList.length == 0 ) return true
     const ticketID = String(response.uusi.tiketti);
     const firstCommentID = String(response.uusi.kommentti);
     // FIXME: lähetä monta tiedostoa.
     let sendFileResponse;
-    for (let file of formData) {
+    for (let file of fileList) {
       sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
     }
     return response
@@ -177,13 +175,15 @@ export class TicketService {
   }
 
   // Lähetä liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  private async sendFile(ticketID: string, commentID: string, formData: FormData): Promise<boolean> {
-    console.log('ticketService: Yritetään lähettää formData:');
-    console.dir(formData);
+  private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
+    let formData = new FormData();
+    formData.append('tiedosto', file);
+    // console.log('ticketService: Yritetään lähettää formData:');
+    // console.dir(formData);
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
-      // Ei toimi, jos asettaa headerin: 'Content-Type', 'multipart/form-data'
+      // Huom. Ei toimi, jos asettaa headerin: 'Content-Type: multipart/form-data'
       response = await firstValueFrom<any>(this.http.post(url, formData));
     } catch (error: any) {
       this.handleError(error);
