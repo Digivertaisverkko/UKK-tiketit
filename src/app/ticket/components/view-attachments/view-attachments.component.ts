@@ -4,12 +4,12 @@ import { TicketService, Liite } from '../../ticket.service';
 @Component({
   selector: 'app-view-attachments',
   template: `
-  <div class="attachment-wrapper">
-    <button class="attachment" *ngFor="let file of files; let i = index"
-      (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)">
-        {{file.nimi}}<mat-icon>download</mat-icon>
-    </button>
-  </div>`,
+    <div class="attachment-wrapper">
+      <button class="attachment" *ngFor="let file of files; let i = index"
+        (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)">
+          {{file.nimi}}<mat-icon>download</mat-icon>
+      </button>
+    </div>`,
 
   styleUrls: ['./view-attachments.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -87,16 +87,17 @@
       <!-- Ei näytetä tätä vaan alla oleva nappi. -->
       <!-- <input type="file" class="file-input" (click)="onFileSelected($event)" #singleFileUpload> -->
       <!-- <input type="file" class="file-input" (change)="singleFileChanged($event)" #fileUpload> -->
-      <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
 
       <!-- <mat-form-field> -->
       <!-- <button mat-mini-fab (click)="fileUpload.click()">
         <mat-icon>attach_file</mat-icon>
       </button> -->
 
-      <button mat-raised-button (click)="fileUpload.click()">
+      <!-- <button mat-raised-button (click)="fileUpload.click()"> -->
+
+      <button mat-raised-button (click)="uploadClick.next()">
         <mat-icon>attach_file</mat-icon>Liitä tiedostoja
-      </button> 
+      </button>
 
       <div class="spacer"></div>
 
@@ -109,15 +110,9 @@
       </button>
     </div>
 
-  <!-- <div *ngIf="selectedFiles !== undefined && selectedFiles.length > 1"> -->
-    <mat-list *ngIf="fileList !== null" class="file-list">
-      <mat-list-item *ngFor="let file of fileNameList; let index = index">
-        <span>{{file}}</span>
-        <button mat-icon-button (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
-      </mat-list-item>
-    </mat-list>
+    <app-edit-attachments [clicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event"></app-edit-attachments>
 
-  <!-- </div> --> 
+  <!-- </div> -->
 
   </form>
 

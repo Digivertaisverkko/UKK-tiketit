@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Event, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { UusiTiketti, TicketService } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-submit-ticket',
@@ -29,15 +29,9 @@ export class SubmitTicketComponent implements OnInit {
   public currentDate = new Date();
   // public user$ = this.auth.trackUserInfo();
   public message: string = '';
+  @Input() public fileList: File[] = [];
+  public uploadClick: Subject<void> = new Subject<void>();
   private courseID: string | null;
-
-  // Liitetiedostot
-
-  public fileList: File[] = [];
-  public fileNameList: string[] = [];
-  // public fileNameList: any = ['Kommentti.svg', 'Kasittelyssa.svg', 'Ratkaisu_64.svg'];
-  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
-  // @ViewChild('attachments') attachment: any;
 
   constructor(
     private auth: AuthService,
@@ -61,31 +55,6 @@ export class SubmitTicketComponent implements OnInit {
       this.courseName = response;
     }).catch(() => {});
   }
-
-  public onFileChanged(event: any) {
-    for (let file of event.target.files) {
-      if (this.fileNameList.includes(file.name)) continue;
-      this.fileList.push(file);
-      this.fileNameList.push(file.name);
-    }
-    // this.attachment.nativeElement.value = '';
-    // console.log('Tiedostolista:');
-    // console.dir(this.fileList);
-  }
-
-  public removeSelectedFile(index: number) {
-    this.fileList.splice(index, 1);
-    this.fileNameList.splice(index, 1);
-  }
-
-  // public onSingleFileSelected(event: any) {
-  //   const file: File = event.target?.files[0];
-  //   if (file) {
-  //     this.fileName = file.name;
-  //     const formData = new FormData();
-  //     formData.append("attachment", file);
-  //   }
-  // }
 
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
