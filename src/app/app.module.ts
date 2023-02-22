@@ -8,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { TicketModule } from './ticket/ticket.module';
 import { UserManagementModule } from './user-management/user-management.module';
+import { CourseModule } from './course/course.module';
 
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
@@ -26,6 +27,7 @@ import { initializeLanguage  } from "./app.initializers";
     SharedModule,
     TicketModule,
     UserManagementModule,
+    CourseModule,
     AppRoutingModule,
   ],
   providers: [
