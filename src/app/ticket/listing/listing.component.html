@@ -8,11 +8,10 @@
       <span>{{courseName}}</span>
     </h2>
 
-    <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant">
-      <a [routerLink]="'/course/' + courseID + '/settings'">
-        <mat-icon class="settings-icon">settings</mat-icon></a>
+    <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
+    [routerLink]="'/course/' + courseID + '/settings'"><mat-icon class="settings-icon">settings</mat-icon>
     </button>
-</div>
+  </div>
 
   <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
 
