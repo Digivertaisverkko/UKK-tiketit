@@ -30,6 +30,8 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
       // popups, forms, others...
       url: 'URL',
       text: $localize `:@@Teksti:Teksti`,
+      title: $localize `:@@Otsikko:Otsikko`,
+      altText: $localize `:@@Vaihtoehtoinen teksti:Vaihtoehtoinen teksti`,
       insert: $localize `:@@Lisää:Lisää`,
       remove: $localize `:@@Poista:Poista`,
     },
