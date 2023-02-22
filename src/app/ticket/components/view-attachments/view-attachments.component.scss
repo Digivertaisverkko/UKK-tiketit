@@ -1,3 +1,5 @@
+@import '/src/variables.scss';
+
 .attachment-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -9,6 +11,8 @@
   display: flex;
   background-color: #F5F5F5;
   padding: 0.6rem 1rem 0.6rem 1rem;
+  max-width: 49%;
+  overflow: hidden;
   border: none;
   font: unset;
   outline: none;
@@ -16,5 +20,11 @@
   mat-icon {
     font-size: 1.4rem;
     margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: $XSmall) {
+  .attachment {
+    max-width: 99%;
   }
 }
