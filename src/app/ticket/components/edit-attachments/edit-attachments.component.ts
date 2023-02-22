@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
     <mat-list *ngIf="fileList !== null" class="file-list">
       <mat-list-item *ngFor="let file of fileNameList; let index = index">
         <span>{{file}}</span>
-        <button mat-icon-button (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+        <button mat-icon-button (click)="removeSelectedFile(index)"
+          class="file-list-button"><mat-icon>close</mat-icon></button>
       </mat-list-item>
     </mat-list>`,
 

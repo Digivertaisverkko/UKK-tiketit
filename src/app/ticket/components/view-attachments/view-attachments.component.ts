@@ -4,10 +4,10 @@ import { TicketService, Liite } from '../../ticket.service';
 @Component({
   selector: 'app-view-attachments',
   template: `
-    <div class="attachment-wrapper">
+    <div class="attachments-wrapper">
       <button class="attachment" *ngFor="let file of files; let i = index"
         (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)">
-          {{file.nimi}}<mat-icon>download</mat-icon>
+          <div class="filename">{{file.nimi}}</div><mat-icon>download</mat-icon>
       </button>
     </div>`,
 

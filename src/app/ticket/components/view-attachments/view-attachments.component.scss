@@ -1,6 +1,6 @@
 @import '/src/variables.scss';
 
-.attachment-wrapper {
+.attachments-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -9,10 +9,10 @@
 
 .attachment {
   display: flex;
+  align-items: center;
   background-color: #F5F5F5;
-  padding: 0.6rem 1rem 0.6rem 1rem;
+  padding: 0.6rem 0.5rem 0.6rem 1rem;
   max-width: 49%;
-  overflow: hidden;
   border: none;
   font: unset;
   outline: none;
@@ -23,8 +23,23 @@
   }
 }
 
+  .filename {
+    // outline: gray 1px solid;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-width: 90%;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
 @media (max-width: $XSmall) {
   .attachment {
     max-width: 99%;
+  }
+  .filename {
+    max-width: 85%;
+    -webkit-line-clamp: 3;
   }
 }

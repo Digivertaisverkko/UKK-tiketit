@@ -13,12 +13,11 @@
   padding-left: 1rem;
   position: relative;
   max-width: 30rem;
-
 }
 
 .file-list {
   margin-top: 0.8rem;
-  button {
+  &-button {
     color: #7B7B7B;
     height: 0.5rem;
     width: 0.5rem;
