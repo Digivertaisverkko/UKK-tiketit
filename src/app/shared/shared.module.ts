@@ -26,13 +26,10 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
       strike: $localize `:@@Yliviivaa:Yliviivaa`,
       bullet_list: $localize `:@@Bullettilista:Bullettilista`,
       ordered_list: $localize `:@@Järjestetty lista:Järjestetty lista`,
-      insertLink: $localize `:@@Lisää linkki:Lisää linkki`,
-      removeLink: $localize `:@@Poista linkki:Poista linkki`,
 
       // popups, forms, others...
       url: 'URL',
       text: $localize `:@@Teksti:Teksti`,
-      openInNewTab: $localize `:@@Avaa uudessa välilehdessä:Avaa uudessa välilehdessä`,
       insert: $localize `:@@Lisää:Lisää`,
       remove: $localize `:@@Poista:Poista`,
     },
