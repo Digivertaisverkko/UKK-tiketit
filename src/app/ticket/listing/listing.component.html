@@ -2,10 +2,17 @@
 
   <!----------- Tiketit ------------>
 
-  <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-    <span>{{courseName}}</span>
-  </h2>
+  <div class="view-header">
+    <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
+    <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
+      <span>{{courseName}}</span>
+    </h2>
+
+    <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant">
+      <a [routerLink]="'/course/' + courseID + '/settings'">
+        <mat-icon class="settings-icon">settings</mat-icon></a>
+    </button>
+</div>
 
   <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
 

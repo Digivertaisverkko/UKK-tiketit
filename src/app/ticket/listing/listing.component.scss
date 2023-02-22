@@ -1,9 +1,33 @@
 @import '/src/variables.scss';
 
-// Leveys on tässä näkymässä leveämpi kuin muilla taulukoiden vuoksi.
+/* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
+   kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
 section, app-error-card, .theme-actions { width: 103%; }
 
 section, app-error-card, .theme-actions { margin-left: -15px; }
+
+.view-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.settings-button {
+  // align-self: flex-end;
+  font-size: 2rem;
+  width: 1em;
+  height: 1em;
+  margin-top: 2rem;
+  position: relative;
+  // margin-bottom: 1.3rem;
+  mat-icon {
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+  }
+}
 
 .feedback { margin-left: 0;
   h3 { margin-left: -1rem }
@@ -37,7 +61,7 @@ a {
   text-decoration: none;
   width: 98%;
   padding-top: 0.6em;
-  padding-bottom: 0.6em; 
+  padding-bottom: 0.6em;
 }
 
 .a-left-padding { padding-left: 16px; }
