@@ -25,6 +25,7 @@
 
 .filename {
   // outline: gray 1px solid;
+  // Rajoittaminen tiettyyn määrään rivejä.
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

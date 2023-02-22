@@ -7,7 +7,7 @@ import { TicketService, Liite } from '../../ticket.service';
     <div class="attachments-wrapper">
       <button class="attachment" *ngFor="let file of files; let i = index"
         (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
-        matTooltip="{{file.nimi}}" [matTooltipShowDelay]="600">
+          matTooltip="{{file.nimi}}" [matTooltipShowDelay]="600">
           <div class="filename">{{file.nimi}}</div><mat-icon>download</mat-icon>
       </button>
     </div>`,

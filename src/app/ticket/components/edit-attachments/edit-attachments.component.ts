@@ -5,13 +5,12 @@ import { Observable } from 'rxjs';
   selector: 'app-edit-attachments',
   template: `
     <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
-    <mat-list *ngIf="fileList !== null" class="file-list">
-      <mat-list-item *ngFor="let file of fileNameList; let index = index">
-        <span>{{file}}</span>
-        <button mat-icon-button (click)="removeSelectedFile(index)"
-          class="file-list-button"><mat-icon>close</mat-icon></button>
-      </mat-list-item>
-    </mat-list>`,
+    <div class="file-list" *ngIf="fileList !== null">
+      <div class="list-item" *ngFor="let file of fileNameList; let index = index">
+        <span class="filename" matTooltip="{{file}}" [matTooltipShowDelay]="600">{{file}}</span>
+        <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+      </div>
+    </div>`,
 
   styleUrls: ['./edit-attachments.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
