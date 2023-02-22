@@ -5,13 +5,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { ToBeginningButtonComponent } from './components/to-beginning-button/to-beginning-button.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
+import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
@@ -42,6 +43,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   declarations: [
     ErrorCardComponent,
     EditorComponent,
+    MenuLinkComponent,
     MenuSrcComponent,
     ToBeginningButtonComponent,
     SafeHtmlPipe
@@ -50,6 +52,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     CommonModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     MaterialModule,
     NgxEditorModule.forRoot(),
   ],
@@ -60,6 +63,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MaterialModule,
     ErrorCardComponent,
     EditorComponent,
+    MenuLinkComponent,
     MenuSrcComponent,
     ToBeginningButtonComponent,
     SafeHtmlPipe,
