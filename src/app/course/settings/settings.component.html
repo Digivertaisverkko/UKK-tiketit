@@ -16,9 +16,9 @@ class="theme-table mat-elevation-z1">
     <th mat-header-cell *matHeaderCellDef i18n="@@Otsikko">
       Nimi
     </th>
-    <td mat-cell *matCellDef="let element">
+    <td mat-cell *matCellDef="let element;let index = index">
       <!-- <mat-form-field> -->
-        <input class="text-input" maxlength="70" name="otsikko" placeholder="Nimi" [(ngModel)]="element.otsikko" matInput/>
+        <input class="text-input" matInput maxlength="70" name="otsikko-{{index}}" type="text" placeholder="Nimi" [(ngModel)]="element.otsikko"/>
       <!-- </mat-form-field> -->
     </td>
   </ng-container>
