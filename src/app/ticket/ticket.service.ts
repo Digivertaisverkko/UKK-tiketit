@@ -113,12 +113,21 @@ export class TicketService {
     return response
   }
 
+  // Dummy-data kurssin asetuksia varten.
+  public getTicketFieldInfoDummy(courseID: string): Kentta[] {
+    const response = [ { otsikko: 'Tehtävä', arvo: '', tyyppi: '1', ohje: 'Kirjoita tähän tehtävä.' },
+      { otsikko: 'Tyyppi', arvo: '', tyyppi: '1', ohje: 'Kirjoita tähän tyyppi.' }];
+    return response
+  }
+
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
     //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti/kentat`;
+    // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {
+      console.log('Lähetetään GET-pyyntö urliin: ' + url);
       response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
     } catch (error: any) {
       this.handleError(error);
@@ -536,6 +545,7 @@ export interface KentanTiedot {
   pakollinen: boolean;
   esitaytettava: boolean;
   esitäyttö: string;
+  valinnat: string[];
 }
 
 // Tiketin kommentti

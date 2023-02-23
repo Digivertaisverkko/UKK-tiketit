@@ -1,3 +1,12 @@
+
 <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
   <span>{{courseName}}</span>
 </h2>
+
+<app-to-beginning-button></app-to-beginning-button>
+
+<h3 class="sub-header">Tiketin tarkentavat kysymykset</h3>
+
+<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
+  message="{{ errorMessage }}" [styles]="{ margin: '3em 20% 1em 20%' }">
+</app-error-card>

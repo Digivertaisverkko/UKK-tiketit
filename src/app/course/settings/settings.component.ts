@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
-import { TicketService,  } from 'src/app/ticket/ticket.service';
+import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.service';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -9,6 +9,9 @@ import { TicketService,  } from 'src/app/ticket/ticket.service';
 })
 export class SettingsComponent implements OnInit {
 
+  public errorMessage: string = '';
+  public ticketFieldInfo: KentanTiedot[] = [];
+  public ticketFieldList: Kentta[] = [];
   public isInIframe: boolean;
   public courseID: string = '';
   public courseName: string = '';
@@ -28,16 +31,31 @@ export class SettingsComponent implements OnInit {
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      console.log('--- saatiin id ' + courseID);
       if (courseID === null) {
-        // this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
         // this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
       this.showCourseName(this.courseID);
+      // this.fetchTicketFieldInfo(courseID);
+      this.fetchTicketFieldInfoDummy(courseID);
     });
   }
+
+  private fetchTicketFieldInfoDummy(courseID: string) {
+    this.ticketFieldList = this.ticket.getTicketFieldInfoDummy(courseID);
+    console.log(this.ticketFieldList);
+  }
+
+  private fetchTicketFieldInfo(courseID: string) {
+    this.ticket.getTicketFieldInfo(courseID).then(response => {
+      if (response[0]?.otsikko != null) this.ticketFieldInfo = response;
+      console.dir(this.ticketFieldInfo);
+    }).catch(e => {
+      this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
+    });
+  }
+
 
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
