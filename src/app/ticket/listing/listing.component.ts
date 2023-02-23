@@ -118,24 +118,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
-      // this.authService.setCourseID(courseID);
-      // this.authService.fetchUserInfo(courseID);
       this.courseID = courseID;
       console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
       this.pollFAQ(courseID);
-      // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
-      // this.authService.saveUserInfo(courseIDcandinate);
-      // this.trackLoginState(courseIDcandinate);
-
-      // Käyttäjätietojen haku tarkoitus siirtää authServiceen.
-      // if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
-        // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
-        // if (this.authService.getUserName.length === 0) {
-        //   this.authService.fetchUserInfo(courseID);
-        // }
-        // this.updateLoggedInView(courseID);
-      // }
     });
   }
 
