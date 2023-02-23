@@ -1,19 +1,37 @@
-.NgxEditor__Seperator {
-	border-left: 1px solid #e0e0e0;
-}
-
 .NgxEditor__Wrapper {
-  border: 1px solid #e0e0e0;
+  --mdc-outlined-card-outline-color: #e0e0e0;
+  border-width: var(--mdc-outlined-card-outline-width, 1px) !important;
+  border-style: solid !important;
+  border-color: var(--mdc-outlined-card-outline-color, transparent) !important;
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px)) !important;
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12) !important;
+
+  .NgxEditor__Content {
+    min-height: 10em;
+    overflow: auto;
+
+    .cm-editor {
+      margin-bottom: 1em;
+      outline: 1px dotted #212121;
+    }
+  }
+
+  .NgxEditor__MenuBar {
+    border-bottom-width: var(--mdc-outlined-card-outline-width, 1px) !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: var(--mdc-outlined-card-outline-color, transparent) !important;
+  }
+
+  .NgxEditor__Seperator {
+    border-left-width: var(--mdc-outlined-card-outline-width, 1px) !important;
+    border-left-style: solid !important;
+    border-left-color: var(--mdc-outlined-card-outline-color, transparent) !important;
+  }
 }
 
-.NgxEditor__Wrapper .NgxEditor__MenuBar {
-  border-bottom: 1px solid #e0e0e0;
-}
 
-.NgxEditor__Content {
-  min-height: 10em;
-  overflow: auto;
-}
+
+/* ======== ProseMirror-gapcursor pluginin tyylit ======== */
 
 .ProseMirror-gapcursor {
   display: none;
@@ -41,7 +59,4 @@
   display: block;
 }
 
-.cm-editor {
-  margin-bottom: 1em;
-  outline: 1px dotted #212121;
-}
+/* ======== */
