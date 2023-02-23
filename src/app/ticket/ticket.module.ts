@@ -19,7 +19,7 @@ import { MatListModule } from '@angular/material/list';
 // import { MatPaginatorIntl } from '@angular/material/paginator';
 // import { CustomPaginator } from './functions/CustomPaginator';
 import { FaqViewComponent } from './faq-view/faq-view.component';
-import { MessageComponent } from './message/message.component';
+import { MessageComponent } from './components/message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
 import { ViewAttachmentsComponent } from './components/view-attachments/view-attachments.component';
 import { EditAttachmentsComponent } from './components/edit-attachments/edit-attachments.component';
