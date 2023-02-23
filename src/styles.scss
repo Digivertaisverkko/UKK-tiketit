@@ -167,6 +167,41 @@ $debug: false;
   }
 }
 
+.theme-table {
+  width: 100%; line-height: 1.4rem;
+
+  a {
+    color: unset;
+    display: block;
+    text-decoration: none;
+    width: 98%;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+  }
+
+  .a-left-padding { padding-left: 16px; }
+
+  .mat-mdc-header-row { background-color: #D3D3D3; }
+  .mat-mdc-row:hover { background-color: #f2f2f2 !important; }
+
+  // Jotta olisi enemmän klikattavaa aluetta. Lisää tarvittaessa anchoreihin tämän sijaan.
+  .mdc-data-table__cell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  :host ::ng-deep .mat-sort-header-content { color: #595959; }
+
+  @media (min-width: $XSmall) {
+
+    tr > :first-child { padding-left: 1.5em; }
+
+    .mdc-data-table__header-row { height: 3em; }
+
+  }
+
+}
+
 // ---- Utilityt---------------------
 
 // Ottaa horisontaalisesti käytettävissä olevan tilan.

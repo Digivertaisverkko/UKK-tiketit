@@ -1,0 +1,8 @@
+@import '/src/variables.scss';
+
+table, .theme-actions { width: 103%; }
+table, .theme-actions { margin-left: -15px; }
+
+@media (max-width: $XSmall) {
+  main { padding-right: 0; }
+}

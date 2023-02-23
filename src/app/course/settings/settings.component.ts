@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.service';
+import { MatTableDataSource } from '@angular/material/table';
+
+interface ColumnDefinition {
+  def: string;
+  showMobile: boolean;
+}
 
 @Component({
   templateUrl: './settings.component.html',
@@ -9,12 +15,16 @@ import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.servi
 })
 export class SettingsComponent implements OnInit {
 
+  public columnDefinitions: ColumnDefinition[];
   public errorMessage: string = '';
+  public dataSource = new MatTableDataSource<Kentta>();
   public ticketFieldInfo: KentanTiedot[] = [];
   public ticketFieldList: Kentta[] = [];
   public isInIframe: boolean;
+  public isPhonePortrait: boolean = false;
   public courseID: string = '';
   public courseName: string = '';
+
 
   constructor(
     private router: Router,
@@ -22,6 +32,12 @@ export class SettingsComponent implements OnInit {
     private ticket: TicketService
   ) {
     this.isInIframe = getIsInIframe();
+
+    this.columnDefinitions = [
+      { def: 'otsikko', showMobile: true },
+    ];
+
+    // { def: 'ohje', showMobile: true },
   }
 
   ngOnInit(): void {
@@ -43,8 +59,11 @@ export class SettingsComponent implements OnInit {
   }
 
   private fetchTicketFieldInfoDummy(courseID: string) {
-    this.ticketFieldList = this.ticket.getTicketFieldInfoDummy(courseID);
-    console.log(this.ticketFieldList);
+    const response = this.ticket.getTicketFieldInfoDummy(courseID);
+    if (response.length > 0) {
+      this.dataSource = new MatTableDataSource(response);
+    }
+    console.log(this.dataSource);
   }
 
   private fetchTicketFieldInfo(courseID: string) {
@@ -56,12 +75,16 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  public getDisplayedColumn(): string[] {
+    return this.columnDefinitions
+      .filter(cd => !this.isPhonePortrait || cd.showMobile)
+      .map(cd => cd.def);
+  }
 
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
   }
-
 
 }

@@ -27,7 +27,7 @@
   </div>
 
   <table mat-table [dataSource]="dataSource" [hidden]="dataSource.filteredData.length === 0" matSort matSortActive="aikaleima"
-    matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
+    matSortDirection="desc" #sortQuestions="matSort" class="theme-table mat-elevation-z1">
 
     <ng-container matColumnDef="tila">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan"
@@ -36,7 +36,7 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
-          <div class="state-wrapper">
+          <div class="ticket-state-wrapper">
             <div class="icon-wrapper">
               <img class="icon" src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg" height="100%" width="100%" alt="">
             </div>
@@ -124,7 +124,7 @@
   </p>
 <!-- </mat-card> -->
 
-<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="dataSourceFAQ.filteredData.length === 0"
+<table id="faqTable" mat-table class="theme-table mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="dataSourceFAQ.filteredData.length === 0"
   matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 
   <ng-container matColumnDef="otsikko">
