@@ -49,6 +49,17 @@ h3 { padding-left: 20px; }
 // .mat-mdc-header-row { background-color: #D3D3D3; }
 // .mat-mdc-row:hover { background-color: #f2f2f2 !important; }
 
+a {
+  color: unset;
+  display: block;
+  text-decoration: none;
+  width: 98%;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+}
+
+.a-left-padding { padding-left: 16px; }
+
 .ticket-state-wrapper {
   display: flex;
   gap: 0.7rem;
@@ -87,14 +98,13 @@ h3 { padding-left: 20px; }
 .cell-align-right { padding-right: 2.1rem; }
 
 // Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
-
+// :host ei toimi, jos on styles.scss.
 :host ::ng-deep .align-right > .mat-sort-header-container {
   justify-content: flex-end;
 }
 
-// :host ::ng-deep .mat-sort-header-content { color: #595959; }
+:host ::ng-deep .mat-sort-header-content { color: #595959; }
 
-// Ei toiminut jos oli styles.scss.
 :host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
   color: #5379FC;
 }
@@ -142,7 +152,7 @@ button { margin-left: 1rem; margin-right: 0; }
     padding-bottom: 2em;
   }
 
-  // tr > :first-child { padding-left: 25px; }
+  tr > :first-child { padding-left: 1.5em; }
 
   mat-row > :last-child { padding-right: 50px; }
 

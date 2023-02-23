@@ -63,7 +63,7 @@ export class SettingsComponent implements OnInit {
     if (response.length > 0) {
       this.dataSource = new MatTableDataSource(response);
     }
-    console.log(this.dataSource);
+    console.log('luettiin luettiin tiedot: ' + JSON.stringify(response));
   }
 
   private fetchTicketFieldInfo(courseID: string) {
