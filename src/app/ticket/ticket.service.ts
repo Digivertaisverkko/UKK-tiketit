@@ -203,8 +203,8 @@ export class TicketService {
   private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
-    // console.log('ticketService: Yritetään lähettää formData:');
-    // console.dir(formData);
+    console.log('ticketService: Yritetään lähettää formData:');
+    console.dir(formData);
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
@@ -396,7 +396,7 @@ export class TicketService {
     return commentsAscending;
   }
 
-  // Hae lisäkentät
+  // Hae listan tietyn tiketin lisäkentistä.
   private async getFields(ticketID: string): Promise<Kentta[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
