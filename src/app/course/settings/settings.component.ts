@@ -9,6 +9,10 @@ interface ColumnDefinition {
   showMobile: boolean;
 }
 
+interface TableData extends Kentta {
+  valittu: boolean;
+}
+
 @Component({
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
@@ -17,9 +21,9 @@ export class SettingsComponent implements OnInit {
 
   public columnDefinitions: ColumnDefinition[];
   public errorMessage: string = '';
-  public dataSource = new MatTableDataSource<Kentta>();
-  public ticketFieldInfo: KentanTiedot[] = [];
-  public ticketFieldList: Kentta[] = [];
+  public dataSource = new MatTableDataSource<TableData>();
+  // public ticketFieldInfo: KentanTiedot[] = [];
+  // public ticketFieldList: Kentta[] = [];
   public isInIframe: boolean;
   public isPhonePortrait: boolean = false;
   public courseID: string = '';
@@ -34,10 +38,10 @@ export class SettingsComponent implements OnInit {
     this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
+      { def: 'valittu', showMobile: true },
       { def: 'otsikko', showMobile: true },
+      { def: 'ohje', showMobile: true },
     ];
-
-    // { def: 'ohje', showMobile: true },
   }
 
   ngOnInit(): void {
@@ -61,15 +65,17 @@ export class SettingsComponent implements OnInit {
   private fetchTicketFieldInfoDummy(courseID: string) {
     const response = this.ticket.getTicketFieldInfoDummy(courseID);
     if (response.length > 0) {
-      this.dataSource = new MatTableDataSource(response);
+      const tableData = response.map(field => ({ valittu: false, ...field}));
+      this.dataSource = new MatTableDataSource(tableData);
     }
     console.dir(this.dataSource);
   }
 
   private fetchTicketFieldInfo(courseID: string) {
     this.ticket.getTicketFieldInfo(courseID).then(response => {
-      if (response[0]?.otsikko != null) this.ticketFieldInfo = response;
-      console.dir(this.ticketFieldInfo);
+      if (response[0]?.otsikko != null) {
+        // this.dataSource = new MatTableDataSource(response);
+      }
     }).catch(e => {
       this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
     });

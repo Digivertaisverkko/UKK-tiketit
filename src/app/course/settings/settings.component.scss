@@ -4,10 +4,10 @@ table, .theme-actions { width: 103%; }
 table, .theme-actions { margin-left: -15px; }
 
 table {
-  padding-top: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-.mat-mdc-header-cell {
+.mat-mdc-header-cell:first-child {
   padding-left: 1.8em !important;
 }
 

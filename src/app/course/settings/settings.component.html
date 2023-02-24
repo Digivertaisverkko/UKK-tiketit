@@ -12,13 +12,38 @@
 <table mat-table [dataSource]="dataSource" [hidden]="dataSource.filteredData.length === 0"
 class="theme-table mat-elevation-z1">
 
+  <ng-container matColumnDef="valittu">
+    <th mat-header-cell *matHeaderCellDef>
+
+    </th>
+    <td mat-cell *matCellDef="let element;let index = index">
+      <!-- <mat-form-field> -->
+        <mat-checkbox class="checkbox" name="valittu-{{index}}"
+          [(ngModel)]="element.valittu"/>
+      <!-- </mat-form-field> -->
+    </td>
+  </ng-container>
+
   <ng-container matColumnDef="otsikko">
     <th mat-header-cell *matHeaderCellDef i18n="@@Otsikko">
       Nimi
     </th>
     <td mat-cell *matCellDef="let element;let index = index">
       <!-- <mat-form-field> -->
-        <input class="text-input" matInput maxlength="70" name="otsikko-{{index}}" type="text" placeholder="Nimi" [(ngModel)]="element.otsikko"/>
+        <input class="text-input" matInput maxlength="70" name="otsikko-{{index}}" type="text" placeholder="Nimi"
+          [(ngModel)]="element.otsikko"/>
+      <!-- </mat-form-field> -->
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="ohje">
+    <th mat-header-cell *matHeaderCellDef i18n="@@OInfo-teksti">
+      Info-teksti
+    </th>
+    <td mat-cell *matCellDef="let element;let index = index">
+      <!-- <mat-form-field> -->
+        <input class="text-input" matInput maxlength="70" name="ohje-{{index}}" type="text" placeholder="Info-teksti"
+          [(ngModel)]="element.ohje"/>
       <!-- </mat-form-field> -->
     </td>
   </ng-container>
