@@ -130,14 +130,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ticket.untrackRefresh();
+    this.ticket.untrackMessages();
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages() {
-    this.ticket.trackRefresh().subscribe(response => {
-      console.log('trackMessages: saatiin refresh pyyntö.');
-      if (response) {
+    this.ticket.trackMessages().subscribe(response => {
+      if (response === 'refresh') {
+        console.log('trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
         this.fetchTickets(this.courseID);

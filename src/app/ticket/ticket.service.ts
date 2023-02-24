@@ -11,7 +11,7 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
-  private refreshEmitter$ = new Subject<boolean>();
+  private messageEmitter$ = new Subject<string>();
   private debug: boolean = false;
 
   constructor (private auth: AuthService,
@@ -19,16 +19,16 @@ export class TicketService {
     private http: HttpClient) {}
 
   // Voidaan lähettää tätä seuraaville komponenteille pyyntö päivittää näkymä.
-  public trackRefresh(): Observable<boolean> {
-    return this.refreshEmitter$.asObservable();
+  public trackMessages(): Observable<string> {
+    return this.messageEmitter$.asObservable();
   }
 
-  public sendRefresh(): void {
-    this.refreshEmitter$.next(true);
+  public sendMessage(message: string): void {
+    this.messageEmitter$.next(message);
   }
 
-  public untrackRefresh(): void {
-    this.refreshEmitter$.unsubscribe;
+  public untrackMessages(): void {
+    this.messageEmitter$.unsubscribe;
   }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.

@@ -107,7 +107,7 @@ export class HeaderComponent implements OnInit {
     if (this.courseID !== null) {
       const currentRoute = window.location.pathname;
       if (currentRoute.includes('/list-tickets')) {
-        this.ticketService.sendRefresh();
+        this.ticketService.sendMessage('refresh');
       } else {
         this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
       }
