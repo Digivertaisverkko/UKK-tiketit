@@ -30,29 +30,21 @@
     </div>
 
     <section class="short-field-wrapper">
-      <mat-form-field appearance="fill">
-        <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
-        <input
-          name="faqAssignment"
-          [(ngModel)]="faqAssignment"
-          matInput
-          maxlength="50"
-          placeholder=""
-          >
-      </mat-form-field>
-      <div class="characters-label"><span class="theme-label">{{ faqAssignment.length }} / 50</span></div>
 
-      <mat-form-field appearance="fill">
-        <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
-        <input
-          name="faqProblem"
-          [(ngModel)]="faqProblem"
-          matInput
-          maxlength="50"
-          placeholder=""
+      <div *ngFor="let kentta of ticketFields; let i = index">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ kentta.otsikko }}</mat-label>
+          <input
+            name="kentta.otsikko_{{i}}"
+            [(ngModel)]="ticketFields[i].arvo"
+            matInput
+            maxlength="50"
+            placeholder=""
           >
-      </mat-form-field>
-      <div class="characters-label"><span class="theme-label">{{ faqProblem.length }} / 50</span></div>
+        </mat-form-field>
+        <div class="characters-label"><span class="theme-label">{{ kentta.arvo.length }} / 50</span></div>
+      </div>
+
     </section>
 
     <h2 i18n="@@Kysymys">Kysymys</h2>

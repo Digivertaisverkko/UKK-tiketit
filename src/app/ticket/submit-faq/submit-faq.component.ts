@@ -1,9 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { UusiUKK, TicketService, Tiketti, Error } from '../ticket.service';
+import { UusiUKK, TicketService, Tiketti, Error, KentanTiedot } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
 import { Subject } from 'rxjs';
+
+interface TiketinKentat extends KentanTiedot {
+  arvo: string;
+}
 
 @Component({
   selector: 'app-submit-faq',
@@ -28,6 +32,7 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public fileList: File[] = [];
   public uploadClick: Subject<void> = new Subject<void>();
   private courseID: string | null;
+  public ticketFields: TiketinKentat[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -50,6 +55,12 @@ export class SubmitFaqComponent implements OnInit {
     this.authService.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi;
     })
+    this.ticketService.getTicketFieldInfo(this.courseID).then((response) => {
+      this.ticketFields = response as TiketinKentat[];
+      for (let field of this.ticketFields) {
+        field.arvo = '';
+      }
+    });
     if (this.ticketId !== null) {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
@@ -70,16 +81,15 @@ export class SubmitFaqComponent implements OnInit {
           this.faqMessage = response.viesti;
           this.faqTitle = response.otsikko;
           if (response.kentat !== undefined ) {
-            for (let kentta of response.kentat) {
-              switch (kentta.otsikko) {
-                case 'Ongelman tyyppi':
-                  this.faqProblem = kentta.arvo;
+            for (let tiketinKentta of response.kentat) {
+              for (let uusiKentta of this.ticketFields) {
+                if (tiketinKentta.otsikko === uusiKentta.otsikko) {
+                  uusiKentta.arvo = tiketinKentta.arvo;
                   break;
-                case 'Tehtävä':
-                  this.faqAssignment = kentta.arvo;
-                  break;
+                }
               }
             }
+            console.log(this.ticketFields)
           }
         });
     }
@@ -92,15 +102,15 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public sendFaq(): void {
-    const newFaq: UusiUKK = {
+    let newFaq: UusiUKK = {
       otsikko: this.faqTitle,
       viesti: this.faqMessage,
-      kentat: [
-        { id: 1, arvo: this.faqAssignment },
-        { id: 2, arvo: this.faqProblem }
-      ],
       vastaus: this.faqAnswer,
     }
+    newFaq.kentat = this.ticketFields.map((field) => {
+      return { id: Number(field.id), arvo: field.arvo }
+    });
+
     if (this.courseID === null) throw new Error('Ei kurssi ID:ä.');
     let id = this.editExisting ? this.ticketId ?? '' : this.courseID;
     this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
