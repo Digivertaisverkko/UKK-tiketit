@@ -103,6 +103,8 @@ a {
   justify-content: flex-end;
 }
 
+.mat-mdc-row:hover { background-color: #f2f2f2 !important }
+
 :host ::ng-deep .mat-sort-header-content { color: #595959; }
 
 :host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
