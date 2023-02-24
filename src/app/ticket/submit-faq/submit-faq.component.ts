@@ -89,7 +89,6 @@ export class SubmitFaqComponent implements OnInit {
                 }
               }
             }
-            console.log(this.ticketFields)
           }
         });
     }
