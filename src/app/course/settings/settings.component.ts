@@ -29,7 +29,6 @@ export class SettingsComponent implements OnInit {
   public courseID: string = '';
   public courseName: string = '';
 
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -46,6 +45,20 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.trackRouteParameters();
+  }
+
+  public isAllChecked(): boolean {
+    return this.dataSource.data.every(row => row.valittu === false)
+  }
+
+  public removeSelected() {
+    console.log('Ennen muutoksia');
+    console.dir(this.dataSource.data);
+    const tableData = this.dataSource.data.filter(row => row.valittu !== true);
+    // this.dataSource._updateChangeSubscription();
+    this.dataSource = new MatTableDataSource(tableData);
+    console.log('Muutosten jälkeen');
+    console.dir(this.dataSource.data);
   }
 
   private trackRouteParameters() {

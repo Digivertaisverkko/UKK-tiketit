@@ -55,6 +55,17 @@ class="theme-table mat-elevation-z1">
 
 </form>
 
+<div class="theme-actions">
+  <button *ngIf="dataSource.data.length > 0"
+    class="remove-button"
+    [disabled]="isAllChecked()"
+    mat-raised-button
+    (click)="removeSelected()"
+    i18n="@@Poista valitut">
+    Poista valitut
+  </button>
+</div>
+
 <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
   message="{{ errorMessage }}" [styles]="{ margin: '3em 20% 1em 20%' }">
 </app-error-card>

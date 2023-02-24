@@ -39,3 +39,11 @@ td {
 }
 
 tr > :first-child { padding-left: 1em; }
+
+.theme-actions {
+  justify-content: space-between;
+}
+
+.remove-button {
+  // align-self: flex-start;
+}
