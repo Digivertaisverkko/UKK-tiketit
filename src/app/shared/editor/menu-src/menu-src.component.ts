@@ -1,13 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EditorState, TextSelection, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { setBlockType } from 'prosemirror-commands';
-import { findWrapping } from 'prosemirror-transform';
-
-
-import { Editor, schema } from 'ngx-editor';
+import { Editor } from 'ngx-editor';
 import { isNodeActive } from 'ngx-editor/helpers';
+import { setBlockType } from 'prosemirror-commands';
 import { NodeType } from 'prosemirror-model';
+import { EditorState, Transaction } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
 
 @Component({
   selector: 'app-menu-src',
