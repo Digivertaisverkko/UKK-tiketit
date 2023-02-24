@@ -9,6 +9,7 @@ import { timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
+import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
 
@@ -76,6 +77,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private responsive: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private ticket: TicketService,
     private authService: AuthService
   ) {
@@ -130,12 +132,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ticket.untrackMessages();
+    this.store.untrackMessages();
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages() {
-    this.ticket.trackMessages().subscribe(response => {
+    this.store.trackMessages().subscribe(response => {
       if (response === 'refresh') {
         console.log('trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;

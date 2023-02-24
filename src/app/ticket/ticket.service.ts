@@ -11,25 +11,11 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
-  private messageEmitter$ = new Subject<string>();
   private debug: boolean = false;
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient) {}
-
-  // Voidaan lähettää tätä seuraaville komponenteille pyyntö päivittää näkymä.
-  public trackMessages(): Observable<string> {
-    return this.messageEmitter$.asObservable();
-  }
-
-  public sendMessage(message: string): void {
-    this.messageEmitter$.next(message);
-  }
-
-  public untrackMessages(): void {
-    this.messageEmitter$.unsubscribe;
-  }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {

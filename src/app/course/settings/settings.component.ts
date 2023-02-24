@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit {
       // this.fetchTicketFieldInfoDummy(courseID);
     });
   }
-  
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
   }
