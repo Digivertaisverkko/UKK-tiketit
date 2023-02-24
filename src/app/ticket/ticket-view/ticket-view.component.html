@@ -41,14 +41,9 @@
 
     </div>
 
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
-      <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
-        <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
-    </div>
-
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
-      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
-      <p class="short-field-value">{{ ticket.kentat[1].arvo }}</p>
+    <div *ngFor="let kentta of ticket.kentat">
+      <p class="theme-label" ><span i18n="@@Tehtävä">{{ kentta.otsikko }}</span></p>
+      <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
     <!-- TODO: Lisää tähän muiden kenttien näyttäminen. -->
