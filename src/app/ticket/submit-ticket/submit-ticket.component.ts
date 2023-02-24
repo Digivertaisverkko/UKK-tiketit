@@ -2,9 +2,13 @@ import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Event, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { UusiTiketti, TicketService } from '../ticket.service';
+import { UusiTiketti, TicketService, KentanTiedot } from '../ticket.service';
 import { getIsInIframe } from '../functions/isInIframe';
 import { Subject } from 'rxjs';
+
+interface TiketinKentat extends KentanTiedot {
+  arvo: string;
+}
 
 @Component({
   selector: 'app-submit-ticket',
@@ -33,6 +37,8 @@ export class SubmitTicketComponent implements OnInit {
   public uploadClick: Subject<void> = new Subject<void>();
   private courseID: string | null;
 
+  public ticketFields: TiketinKentat[] = [];
+
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -54,12 +60,21 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     }).catch(() => {});
+    this.ticketService.getTicketFieldInfo(this.courseID).then((response) => {
+      this.ticketFields = response as TiketinKentat[];
+      for (let field of this.ticketFields) {
+        field.arvo = '';
+      }
+    });
   }
 
   public sendTicket(): void {
     this.newTicket.otsikko = this.titleText;
     this.newTicket.viesti = this.message;
-    this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
+    this.newTicket.kentat = this.ticketFields.map((field) => {
+      return { id: Number(field.id), arvo: field.arvo }
+    });
+
     if (this.courseID == null) { throw new Error('Ei kurssi ID:ä.')}
     this.ticketService.addTicket(this.courseID, this.newTicket, this.fileList)
       .then(() => this.goBack()
