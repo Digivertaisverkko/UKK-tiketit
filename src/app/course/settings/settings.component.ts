@@ -52,13 +52,20 @@ export class SettingsComponent implements OnInit {
   }
 
   public removeSelected() {
-    console.log('Ennen muutoksia');
-    console.dir(this.dataSource.data);
     const tableData = this.dataSource.data.filter(row => row.valittu !== true);
-    // this.dataSource._updateChangeSubscription();
-    this.dataSource = new MatTableDataSource(tableData);
-    console.log('Muutosten jälkeen');
-    console.dir(this.dataSource.data);
+    this.dataSource.data = tableData;
+  }
+  public addField() {
+    const newField: TableData = {
+        otsikko: '',
+        arvo: '',
+        tyyppi: '',
+        ohje: '',
+        valittu: false
+    }
+    const tableData: TableData[] = this.dataSource.data;
+    tableData.push(newField);
+    this.dataSource.data = tableData;
   }
 
   private trackRouteParameters() {

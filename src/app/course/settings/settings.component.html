@@ -64,6 +64,15 @@ class="theme-table mat-elevation-z1">
     i18n="@@Poista valitut">
     Poista valitut
   </button>
+
+  <button
+    class="add-button"
+    color="primary"
+    mat-raised-button
+    (click)="addField()"
+    i18n="@@Lisää">
+    Lisää
+  </button>
 </div>
 
 <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
