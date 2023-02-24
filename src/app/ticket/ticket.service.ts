@@ -122,10 +122,9 @@ export class TicketService {
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
-    //const httpOptions = this.getHttpOptions();;
     let response: any;
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti/kentat`;
-    // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
+    // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti/kentat`;
+    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {
       console.log('Lähetetään GET-pyyntö urliin: ' + url);
       response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
@@ -133,6 +132,20 @@ export class TicketService {
       this.handleError(error);
     }
     return response;
+  }
+
+  // Luo uudet kentät tikettipohjalle.
+  public async setTicketFieldInfo(courseID: string, fields: KentanTiedot[]) {
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
+    let response: any;
+    const body = fields;
+    try {
+      console.log('Lähetetään GET-pyyntö urliin: ' + url);
+      response = await firstValueFrom( this.http.put(url, body) );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return (response?.success === true) ? true : false;
   }
 
   /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
@@ -536,16 +549,17 @@ export interface Kentta {
   ohje?: string;
 }
 
-// Metodi: getTicketFieldInfo
-// API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
-// api/kurssi/:kurssi-id/tiketinkentat/
+/* Metodi: getTicketFieldInfo
+  API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
+  api/kurssi/:kurssi-id/tiketinkentat/
+  id vapaaehtoinen, koska lähetettäessä sitä ei ole. */
 export interface KentanTiedot {
-  id: string;
+  id?: string;
   otsikko: string;
   pakollinen: boolean;
   esitaytettava: boolean;
-  esitäyttö: string;
-  valinnat: string[];
+  ohje: string;
+  valinnat: string[] | null;
 }
 
 // Tiketin kommentti

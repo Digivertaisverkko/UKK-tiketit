@@ -9,7 +9,7 @@ interface ColumnDefinition {
   showMobile: boolean;
 }
 
-interface TableData extends Kentta {
+interface TableData extends KentanTiedot {
   valittu: boolean;
 }
 
@@ -24,6 +24,7 @@ export class SettingsComponent implements OnInit {
   public dataSource = new MatTableDataSource<TableData>();
   // public ticketFieldInfo: KentanTiedot[] = [];
   // public ticketFieldList: Kentta[] = [];
+  public inviteEmail: string = '';
   public isInIframe: boolean;
   public isPhonePortrait: boolean = false;
   public courseID: string = '';
@@ -52,15 +53,17 @@ export class SettingsComponent implements OnInit {
   }
 
   public removeSelected() {
-    const tableData = this.dataSource.data.filter(row => row.valittu !== true);
+    const tableData = this.dataSource.data.filter(row => row.valittu === false);
     this.dataSource.data = tableData;
   }
+
   public addField() {
     const newField: TableData = {
         otsikko: '',
-        arvo: '',
-        tyyppi: '',
+        pakollinen: false,
+        esitaytettava: false,
         ohje: '',
+        valinnat: null,
         valittu: false
     }
     const tableData: TableData[] = this.dataSource.data;
@@ -77,24 +80,25 @@ export class SettingsComponent implements OnInit {
       }
       this.courseID = courseID;
       this.showCourseName(this.courseID);
-      // this.fetchTicketFieldInfo(courseID);
-      this.fetchTicketFieldInfoDummy(courseID);
+      this.fetchTicketFieldInfo(courseID);
+      // this.fetchTicketFieldInfoDummy(courseID);
     });
   }
 
   private fetchTicketFieldInfoDummy(courseID: string) {
-    const response = this.ticket.getTicketFieldInfoDummy(courseID);
-    if (response.length > 0) {
-      const tableData = response.map(field => ({ valittu: false, ...field}));
-      this.dataSource = new MatTableDataSource(tableData);
-    }
-    console.dir(this.dataSource);
+    // const response = this.ticket.getTicketFieldInfoDummy(courseID);
+    // if (response.length > 0) {
+    //   const tableData = response.map(field => ({ valittu: false, ...field}));
+    //   this.dataSource = new MatTableDataSource(tableData);
+    // }
+    // console.dir(this.dataSource);
   }
 
   private fetchTicketFieldInfo(courseID: string) {
     this.ticket.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.otsikko != null) {
-        // this.dataSource = new MatTableDataSource(response);
+        const tableData = response.map(field => ({ valittu: false, ...field}));
+        this.dataSource = new MatTableDataSource(tableData);
       }
     }).catch(e => {
       this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
