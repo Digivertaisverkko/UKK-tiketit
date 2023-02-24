@@ -179,9 +179,8 @@ $debug: false;
     padding-right: 0;
   }
 
-  @media (min-width: $XSmall) {
-    .mdc-data-table__header-row { height: 3em; }
-  }
+  .mdc-data-table__header-row { height: 3em; }
+
 }
 
 // ---- Utilityt---------------------
