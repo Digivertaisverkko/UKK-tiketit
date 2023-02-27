@@ -11,13 +11,14 @@ interface FileInfo {
   template: `
     <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
 
-    <div class="file-list" *ngIf="fileList !== null">
-      <div *ngFor="let file of fileInfoList; let index = index">
+    <div class="file-list-wrapper" *ngIf="fileList !== null">
+      <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
           <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
         <!-- <mat-error>Virheilmoitukset tähän.</mat-error> -->
+        <div matError *ngIf="file.error">{{file.error}}</div>
       </div>
     </div>`,
   styleUrls: ['./edit-attachments.component.scss'],
@@ -43,8 +44,14 @@ export class EditAttachmentsComponent implements OnInit {
       console.log('file: ' + file);
       // if (this.fileInfoList.filename.includes(file)) continue;
       if (this.fileInfoList.some(fileinfo => fileinfo.filename === file.name)) continue
-      this.fileList.push(file);
-      this.fileInfoList.push({filename: file.name });
+      let fileinfo: FileInfo = { filename: file.name };
+      if (file.size > 10000000) {
+        console.log('liian iso tiedosto');
+        fileinfo.error = 'Virhe: Tiedoston koko ylittää 10mt rajan.';
+      } else {
+        this.fileList.push(file);
+      }
+      this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileList);
       console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
     }
