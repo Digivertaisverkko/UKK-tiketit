@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 interface FileInfo {
   filename: string;
   error?: string;
+  errorToolTip?: string;
 }
 
 @Component({
@@ -15,10 +16,11 @@ interface FileInfo {
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
+          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
+          <mat-icon>warning</mat-icon>{{file.error}}</div>
           <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
         <!-- <mat-error>Virheilmoitukset tähän.</mat-error> -->
-        <div matError *ngIf="file.error">{{file.error}}</div>
       </div>
     </div>`,
   styleUrls: ['./edit-attachments.component.scss'],
@@ -29,6 +31,7 @@ export class EditAttachmentsComponent implements OnInit {
 
   @Output() fileListOutput = new EventEmitter<File[]>();
   @Input() uploadClicks: Observable<void> = new Observable();
+  @Output() attachmentsHasErrors = new EventEmitter<boolean>;
   public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
   // public fileNameList: string[] = [];
@@ -37,17 +40,19 @@ export class EditAttachmentsComponent implements OnInit {
   ngOnInit() {
     const element: HTMLElement = document.querySelector('.file-input') as HTMLElement;
     this.uploadClicks.subscribe(() => element.click());
+    // this.fileInfoList = [{filename: "tiedoston nimi", error: "Liian iso"}]
   }
 
   public onFileChanged(event: any) {
     for (let file of event.target.files) {
       console.log('file: ' + file);
       // if (this.fileInfoList.filename.includes(file)) continue;
-      if (this.fileInfoList.some(fileinfo => fileinfo.filename === file.name)) continue
+      if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let fileinfo: FileInfo = { filename: file.name };
       if (file.size > 10000000) {
-        console.log('liian iso tiedosto');
-        fileinfo.error = 'Virhe: Tiedoston koko ylittää 10mt rajan.';
+        fileinfo.error = 'Liian iso';
+        fileinfo.errorToolTip = "Tiedosto ylittää 10mt kokorajoituksen.";
+        this.attachmentsHasErrors.emit(true);
       } else {
         this.fileList.push(file);
       }
@@ -60,6 +65,7 @@ export class EditAttachmentsComponent implements OnInit {
   public removeSelectedFile(index: number) {
     this.fileList.splice(index, 1);
     this.fileInfoList.splice(index, 1);
+    this.attachmentsHasErrors.emit(this.fileInfoList.some(item => item.error));
     this.fileListOutput.emit(this.fileList);
   }
 

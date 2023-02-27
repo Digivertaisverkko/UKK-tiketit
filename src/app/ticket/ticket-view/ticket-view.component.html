@@ -130,7 +130,7 @@
         mat-raised-button
         color="primary"
         class="send-button"
-        [disabled]="commentText.length < 1"
+        [disabled]="commentText.length < 1 || attachmentsHasErrors === true"
         (click)="sendComment()"
         i18n="@@Lähetä">
         Lähetä
@@ -138,7 +138,8 @@
 
     </div>
 
-    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event">
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (attachmentsHasErrors)="attachmentsHasErrors = $event"
+      (fileListOutput)="fileList = $event">
     </app-edit-attachments>
 
   </section>

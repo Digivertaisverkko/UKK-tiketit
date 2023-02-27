@@ -39,6 +39,19 @@
   // max-width: 96%;
 }
 
+.file-error-message {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  // outline: blue 1px solid;
+  mat-icon {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0.2em;
+  }
+}
+
 .remove-file-button {
   color: #7B7B7B;
   height: 0.5rem;

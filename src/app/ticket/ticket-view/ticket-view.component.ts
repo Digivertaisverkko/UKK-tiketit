@@ -16,6 +16,8 @@ import { environment } from 'src/environments/environment';
 export class TicketViewComponent implements OnInit {
 
   @Input() ticketIdFromParent: string | null = null;
+  @Input() public fileList: File[] = [];
+  @Input() public attachmentsHasErrors: boolean = false;
 
   public courseName: string = '';
   public errorMessage: string = '';
@@ -32,7 +34,6 @@ export class TicketViewComponent implements OnInit {
   public attachFilesText: string = '';
   private userName: string = '';
   private courseID: string | null;
-  @Input() public fileList: File[] = [];
   public uploadClick: Subject<void> = new Subject<void>();
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;   // Ticket info polling rate in minutes.
   private readonly CURRENT_DATE = new Date().toDateString();
