@@ -1,64 +1,87 @@
 @import '/src/variables.scss';
 
-.table-header {margin-bottom: 2.2rem}
+// ----- Lista --------------------------
 
-.table-form {
-  margin-bottom: 2rem;
+.container {
+  // display: block;
+  // padding: 0.7rem;
+  // justify-items: start;
+  margin-top: 3rem;
+  max-width: 100%;
+  border: solid 1px #ccc;
+  min-height: 55px;
+  border-radius: 3px;
+  overflow: hidden;
 }
 
-// Taulukko ---------------------
-
-table { width: 103% }
-table { margin-left: -15px }
-
-table {
-  margin-top: 1.5rem;
+.list-row {
+  display: grid;
+  grid-template-columns: 3fr 4fr 2rem 2rem;
+  padding: 1rem 0 1rem 1.4rem;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  // display: flex;
+  // flex-direction: row;
+  // align-items: center;
+  // justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
 }
 
-.mat-mdc-header-cell:first-child {
-  padding-left: 1.8em !important;
+.title-column {
+  // display: inline-block;
+  // width: 20em;
 }
 
-.mat-column-valittu {
-  width: 2.2rem;
-  padding-right: 1rem;
+.info-text-column {
+  // display: inline-block;
+  // left: 45%;
 }
 
-td {
-  padding-top: 0.6em;
-  padding-bottom: 0.6em
+.resize-icon {
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 2;
 }
 
-.text-input {
-  width: 90%;
-  height: 2.5em;
-  padding-left: 1em;
-  padding-right: 1em;
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 3px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.list-row:last-child {
   border: none;
-  border-bottom: 1px #8e8e8e solid;
-  background-color: #f5f5f5;
 }
 
-:host ::ng-deep .mat-mdc-header-cell { color: #595959; }
-:host ::ng-deep .mat-sort-header-content { color: #595959; }
-
-:host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
-  color: #5379FC;
+.container.cdk-drop-list-dragging .list-row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-tr > :first-child { padding-left: 1em; }
-
-// ---------------------
+// --------------------------------
 
 .theme-actions {
   justify-content: space-between;
   margin-right: -0.7rem;
+  margin-bottom: 1rem;
 }
 
 .vertical-spacer {
   height: 10px;
+}
+
+.invite-form {
+  margin-top: 2rem;
 }
 
 .invite-wrapper {
@@ -73,11 +96,11 @@ tr > :first-child { padding-left: 1em; }
 }
 
 @media (max-width: $XSmall) {
-  table {width: 106% }
   .text-input { width: 85%; }
   .invite-wrapper {
     flex-wrap: wrap;
   }
+
   .invite-button {
 
   }

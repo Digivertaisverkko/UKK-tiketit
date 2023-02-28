@@ -7,81 +7,44 @@
 
 <h3 class="sub-header table-header">Tiketin tarkentavat kysymykset</h3>
 
-<form class="table-form">
-
-<table mat-table [dataSource]="dataSource" [hidden]="dataSource.filteredData.length === 0"
-class="theme-table mat-elevation-z1">
-
-  <ng-container matColumnDef="valittu">
-    <th mat-header-cell *matHeaderCellDef>
-
-    </th>
-    <td mat-cell *matCellDef="let element;let index = index">
-      <!-- <mat-form-field> -->
-        <mat-checkbox class="checkbox" name="valittu-{{index}}"
-          [(ngModel)]="element.valittu"/>
-      <!-- </mat-form-field> -->
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="otsikko">
-    <th mat-header-cell *matHeaderCellDef i18n="@@Otsikko">
-      Nimi
-    </th>
-    <td mat-cell *matCellDef="let element;let index = index">
-      <!-- <mat-form-field> -->
-        <input class="text-input" matInput maxlength="70" name="otsikko-{{index}}" type="text" placeholder="Nimi"
-          [(ngModel)]="element.otsikko"/>
-      <!-- </mat-form-field> -->
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="ohje">
-    <th mat-header-cell *matHeaderCellDef i18n="@@Info-teksti">
-      Info-teksti
-    </th>
-    <td mat-cell *matCellDef="let element;let index = index">
-      <!-- <mat-form-field> -->
-        <input class="text-input" matInput maxlength="70" name="ohje-{{index}}" type="text" placeholder="Info-teksti"
-          [(ngModel)]="element.ohje"/>
-      <!-- </mat-form-field> -->
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"></tr>
-
-</table>
+<div class="container" cdkDropList (cdkDropListDropped)="drop($event)">
+  <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
+    <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
+    <div class="title-column">{{field.otsikko}}</div>
+    <div class="info-text-column">{{field.ohje}}</div>
+    <mat-icon class="edit-icon">edit_indicator</mat-icon>
+    <mat-icon class="resize-icon">drag_indicator</mat-icon>
+  </div>
+</div>
 
 <div class="theme-actions">
-  <button *ngIf="dataSource.data.length > 0"
-    class="remove-button"
-    [disabled]="isAllChecked()"
-    mat-raised-button
-    (click)="removeSelected()"
-    i18n="@@Poista valitut">
-    Poista valitut
-  </button>
 
   <button
     class="add-button"
-    color="primary"
     mat-raised-button
     (click)="addField()"
-    i18n="@@Lisää">
-    Lisää
+    i18n="@@Lisää kenttä">
+    Lisää kenttä
   </button>
-</div>
 
-</form>
+  <button
+  class="save-button"
+  color="primary"
+  mat-raised-button
+  (click)="addField()"
+  i18n="@@Save">
+  Tallenna
+</button>
+</div>
 
 <div class="vertical-spacer"></div>
 
-<h3 class="sub-header">Kutsu ulkopuolisia kurssille</h3>
+<form class="invite-form">
 
-<p>Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.</p>
+  <h3 class="sub-header">Kutsu ulkopuolisia kurssille</h3>
 
-<form>
+  <p>Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.</p>
+
   <div class="invite-wrapper">
     <mat-form-field class="invite-field">
       <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>

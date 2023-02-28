@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.service';
-import { MatTableDataSource } from '@angular/material/table';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
 
-interface TableData extends KentanTiedot {
-  valittu: boolean;
-}
+// interface TableData extends KentanTiedot {
+//   valittu: boolean;
+// }
 
 @Component({
   templateUrl: './settings.component.html',
@@ -21,7 +21,8 @@ export class SettingsComponent implements OnInit {
 
   public columnDefinitions: ColumnDefinition[];
   public errorMessage: string = '';
-  public dataSource = new MatTableDataSource<TableData>();
+  // public dataSource = new MatTableDataSource<TableData>();
+  public fieldList: KentanTiedot[] = [];
   // public ticketFieldInfo: KentanTiedot[] = [];
   // public ticketFieldList: Kentta[] = [];
   public inviteEmail: string = '';
@@ -48,27 +49,21 @@ export class SettingsComponent implements OnInit {
     this.trackRouteParameters();
   }
 
-  public isAllChecked(): boolean {
-    return this.dataSource.data.every(row => row.valittu === false)
-  }
-
-  public removeSelected() {
-    const tableData = this.dataSource.data.filter(row => row.valittu === false);
-    this.dataSource.data = tableData;
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
   }
 
   public addField() {
-    const newField: TableData = {
+    const newField: KentanTiedot = {
         otsikko: '',
         pakollinen: false,
         esitaytettava: false,
         ohje: '',
-        valinnat: null,
-        valittu: false
+        valinnat: null
     }
-    const tableData: TableData[] = this.dataSource.data;
-    tableData.push(newField);
-    this.dataSource.data = tableData;
+    // const tableData: TableData[] = this.dataSource.data;
+    // tableData.push(newField);
+    this.fieldList.push(newField);
   }
 
   private trackRouteParameters() {
@@ -97,9 +92,11 @@ export class SettingsComponent implements OnInit {
   private fetchTicketFieldInfo(courseID: string) {
     this.ticket.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.otsikko != null) {
-        const tableData = response.map(field => ({ valittu: false, ...field}));
-        this.dataSource = new MatTableDataSource(tableData);
+        this.fieldList = response;
       }
+      console.dir(this.fieldList);
+      this.fieldList[0].ohje = "Mihin kohtitehtävän kysymys liittyy?";
+      this.fieldList[1].ohje = "Mihin kysymys liittyy?";
     }).catch(e => {
       this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
     });
