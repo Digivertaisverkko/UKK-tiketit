@@ -557,7 +557,7 @@ export interface KentanTiedot {
   pakollinen: boolean;
   esitaytettava: boolean;
   ohje: string;
-  valinnat: string[] | null;
+  valinnat: string[];
 }
 
 // Tiketin kommentti

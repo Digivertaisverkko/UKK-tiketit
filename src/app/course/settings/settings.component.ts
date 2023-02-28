@@ -68,7 +68,7 @@ export class SettingsComponent implements OnInit {
   }
 
   public sendFields() {
-    
+
   }
 
   public addField() {
@@ -77,7 +77,7 @@ export class SettingsComponent implements OnInit {
         pakollinen: false,
         esitaytettava: false,
         ohje: '',
-        valinnat: null
+        valinnat: []
     }
     // const tableData: TableData[] = this.dataSource.data;
     // tableData.push(newField);

@@ -14,6 +14,7 @@ export class EditFieldComponent implements OnInit {
   public isInIframe: boolean;
   public courseID: string = '';
   public courseName: string = '';
+  public multipleSelection: boolean = false;
   private fieldID: string | null = this.route.snapshot.paramMap.get('fieldid');
 
   constructor(
@@ -43,6 +44,10 @@ export class EditFieldComponent implements OnInit {
       this.ticketService.getTicketFieldInfo(courseID, this.fieldID).then(response => {
         if (response[0].id) {
           this.fieldInfo = response[0];
+          console.log(this.fieldInfo.valinnat);
+          this.multipleSelection = this.fieldInfo.valinnat[0].length === 0 ? false : true;
+          console.log(this.fieldInfo.valinnat[0].length);
+          console.log(this.multipleSelection);
           console.log('Kentän tiedot: ' + JSON.stringify(this.fieldInfo));
         } 
       })
