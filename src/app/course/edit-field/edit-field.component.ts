@@ -1,22 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
-import { TicketService } from 'src/app/ticket/ticket.service';
+import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 
 
 @Component({
   templateUrl: './edit-field.component.html',
   styleUrls: ['./edit-field.component.scss']
 })
+
 export class EditFieldComponent implements OnInit {
+  public fieldInfo: KentanTiedot = {} as KentanTiedot;
   public isInIframe: boolean;
   public courseID: string = '';
   public courseName: string = '';
+  private fieldID: string | null = this.route.snapshot.paramMap.get('fieldid');
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ticket: TicketService
+    private ticketService: TicketService
   ) {
     this.isInIframe = getIsInIframe();
   }
@@ -34,11 +37,20 @@ export class EditFieldComponent implements OnInit {
       }
       this.courseID = courseID;
       this.showCourseName(this.courseID);
+      if (this.fieldID == null) {
+        throw new Error('Virhe: ei tiketin kentän ID:ä.');
+      }
+      this.ticketService.getTicketFieldInfo(courseID, this.fieldID).then(response => {
+        if (response[0].id) {
+          this.fieldInfo = response[0];
+          console.log('Kentän tiedot: ' + JSON.stringify(this.fieldInfo));
+        } 
+      })
     });
   }
 
   private showCourseName(courseID: string) {
-    this.ticket.getCourseName(courseID).then(response => {
+    this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
   }

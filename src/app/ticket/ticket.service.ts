@@ -119,7 +119,7 @@ export class TicketService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
-  public async getTicketFieldInfo(courseID: string): Promise<KentanTiedot[]> {
+  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise<KentanTiedot[]> {
     let response: any;
     // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti/kentat`;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
@@ -128,6 +128,9 @@ export class TicketService {
       response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
     } catch (error: any) {
       this.handleError(error);
+    }
+    if (fieldID) {
+      response = response.filter((field: KentanTiedot) => field.id == fieldID);
     }
     return response;
   }
