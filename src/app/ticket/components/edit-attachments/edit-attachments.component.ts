@@ -44,14 +44,15 @@ export class EditAttachmentsComponent implements OnInit {
   }
 
   public onFileChanged(event: any) {
+    const MEGABYTE = 1000000;
     for (let file of event.target.files) {
       console.log('file: ' + file);
       // if (this.fileInfoList.filename.includes(file)) continue;
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let fileinfo: FileInfo = { filename: file.name };
-      if (file.size > 10000000) {
-        fileinfo.error = 'Liian iso';
-        fileinfo.errorToolTip = "Tiedosto ylittää 10mt kokorajoituksen.";
+      if (file.size > 10 * MEGABYTE) {
+        fileinfo.error = $localize `:@@Liian iso:Liian iso`;
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää 10 megatavun rajoituksen` + '.';
         this.attachmentsHasErrors.emit(true);
       } else {
         this.fileList.push(file);
