@@ -49,8 +49,26 @@ export class SettingsComponent implements OnInit {
     this.trackRouteParameters();
   }
 
+  private trackRouteParameters() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      var courseID: string | null = paramMap.get('courseid');
+      if (courseID === null) {
+        // this.isLoaded = true;
+        throw new Error('Virhe: ei kurssi ID:ä.');
+      }
+      this.courseID = courseID;
+      this.showCourseName(this.courseID);
+      this.fetchTicketFieldInfo(courseID);
+      // this.fetchTicketFieldInfoDummy(courseID);
+    });
+  }
+  
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
+  }
+
+  public sendFields() {
+    
   }
 
   public addField() {
@@ -65,21 +83,6 @@ export class SettingsComponent implements OnInit {
     // tableData.push(newField);
     this.fieldList.push(newField);
   }
-
-  private trackRouteParameters() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) {
-        // this.isLoaded = true;
-        throw new Error('Virhe: ei kurssi ID:ä.');
-      }
-      this.courseID = courseID;
-      this.showCourseName(this.courseID);
-      this.fetchTicketFieldInfo(courseID);
-      // this.fetchTicketFieldInfoDummy(courseID);
-    });
-  }
-
   private fetchTicketFieldInfoDummy(courseID: string) {
     // const response = this.ticket.getTicketFieldInfoDummy(courseID);
     // if (response.length > 0) {

@@ -38,9 +38,12 @@
   // left: 45%;
 }
 
-.resize-icon {
+a, mat-icon {
   margin-top: auto;
-  margin-bottom: auto;
+  margin-bottom: auto;  
+}
+
+mat-icon {
   font-size: 2;
 }
 
