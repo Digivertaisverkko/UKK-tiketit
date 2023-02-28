@@ -50,9 +50,7 @@ export class TicketService {
     //     tila: faq.tila
     //   }
     // ));
-    // Arkistoidut pois.
-    let tableData: UKK[] = response.filter((faq: UKK) => faq.tila !== 6);
-    return tableData;
+    return response;
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
@@ -355,8 +353,6 @@ export class TicketService {
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
       }
     ));
-    // Ei näytetä arkistoituja tikettejä.
-    sortableData = sortableData.filter(ticket => ticket.tilaID !== 6)
     return sortableData;
   }
 
