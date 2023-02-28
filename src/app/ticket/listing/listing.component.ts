@@ -90,8 +90,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.columnDefinitionsFAQ = [
       { def: 'otsikko', showMobile: true },
-      { def: 'aikaleima', showMobile: false },
-      { def: 'tyyppi', showMobile: true }
+      { def: 'aikaleima', showMobile: false }
     ];
 
   }

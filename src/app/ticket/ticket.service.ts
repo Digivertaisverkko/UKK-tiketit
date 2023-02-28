@@ -517,7 +517,6 @@ export interface UKK {
   id: number;
   otsikko: string;
   aikaleima: string;
-  tyyppi: string;
   tila: number;
 }
 

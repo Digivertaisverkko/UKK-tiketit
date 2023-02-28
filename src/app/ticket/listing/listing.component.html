@@ -139,17 +139,6 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="tyyppi">
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
-      Tyyppi
-    </th>
-    <td class="cell-align-right" mat-cell *matCellDef="let element">
-      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
-        {{ element.tyyppi }}
-      </a>
-    </td>
-  </ng-container>
-
   <ng-container matColumnDef="aikaleima" i18n-sortActionDescription="@@Järjestä päivämäärän mukaan">
     <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
       sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
