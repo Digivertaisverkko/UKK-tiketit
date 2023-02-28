@@ -1,8 +1,19 @@
-
 <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-    <span>{{courseName}}</span>
+  <span>{{courseName}}</span>
 </h2>
-  
+
 <app-to-beginning-button></app-to-beginning-button>
 <h3 class="sub-header">Tikettipohjan tarkentava kysymys</h3>
 
+<form action="" #submitForm="ngForm" accept-charset="UTF-8">
+
+  <mat-form-field class="title" appearance="fill">
+    <!-- <mat-label>{{ fieldInfo.otsikko }}</mat-label> -->
+    <input name="kentta.otsikko" [(ngModel)]="fieldInfo.otsikko" matInput maxlength="256" placeholder="Kentän nimi">
+  </mat-form-field>
+
+  <div class="checkbox-wrapper">
+    <mat-checkbox [(ngModel)]="fieldInfo.pakollinen" name="checkbox" i18n="@@MPakollinen">Pakollinen</mat-checkbox>
+  </div>
+
+</form>

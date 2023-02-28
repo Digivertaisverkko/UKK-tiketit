@@ -1,0 +1,17 @@
+@import '/src/variables.scss';
+
+
+.title {
+  margin-top: 1rem;
+  min-width: 23em;
+}
+
+.checkbox-wrapper {
+  margin-left: -0.7rem;
+}
+
+@media (max-width: $XSmall) {
+  .title {
+    width: 97%; 
+  }  
+}
