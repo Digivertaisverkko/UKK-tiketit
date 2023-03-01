@@ -2,6 +2,7 @@
 
 .field-title {
   min-width: 23em;
+  margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -10,17 +11,29 @@
   margin-bottom: 1rem;
 }
 
-.mandatory-wrapper {
-  margin-top: 0.6rem;
-}
-
 .info-text-label {
   margin-bottom: 0.4em;
 }
 
+.bottom-buttons {
+  padding-top: 1rem;
+  display: flex;
+  gap: 5%;
+  justify-content: space-between;
+
+}
+
+.spacer { flex-grow: 2 }
+
 
 @media (max-width: $XSmall) {
+
   .title {
-    width: 97%; 
-  }  
+    width: 97%;
+  }
+
+  .bottom-buttons {
+    gap: 2.5%;
+  }
+
 }

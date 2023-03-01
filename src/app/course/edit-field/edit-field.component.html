@@ -16,11 +16,21 @@
     <mat-checkbox [checked]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
   </div>
 
-  <p class="theme-label info-text-label">Info-teksti</p>
+  <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
   <app-editor [(editorContent)]="fieldInfo.ohje"></app-editor>
 
-  <div class="mandatory-wrapper">
-    <mat-checkbox [checked]="fieldInfo.pakollinen" name="checkbox" i18n="@@MPakollinen">Pakollinen</mat-checkbox>
+  <div class="bottom-buttons">
+    <mat-checkbox [checked]="fieldInfo.pakollinen" name="checkbox" i18n="@@Pakollinen">Pakollinen</mat-checkbox>
+    <mat-checkbox [checked]="fieldInfo.esitaytettava" name="checkbox" i18n="@@Esitäytettävä">Esitäytettävä</mat-checkbox>
+    <div class="spacer"></div>
+    <button
+    class="send-button"
+    color="primary"
+    mat-raised-button
+    i18n="@@Lähetä">
+    Lähetä
+  </button>
+
   </div>
 
 </form>
