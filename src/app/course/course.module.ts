@@ -5,7 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { SettingsComponent } from './settings/settings.component';
-import { EditFieldComponent } from './edit-field/edit-field.component'; 
+import { EditFieldComponent } from './edit-field/edit-field.component';
 
 @NgModule({
   declarations: [
