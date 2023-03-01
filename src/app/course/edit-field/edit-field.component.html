@@ -19,7 +19,7 @@
 
 <h3 class="sub-header">Tikettipohjan tarkentava kysymys</h3>
 
-<form action="" #submitForm="ngForm" accept-charset="UTF-8">
+<!-- <form action="" #submitForm="ngForm" accept-charset="UTF-8"> -->
 
   <mat-form-field class="field-title" appearance="fill">
     <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
@@ -27,7 +27,7 @@
   </mat-form-field>
 
   <div class="multiple-selection-wrapper">
-    <mat-checkbox [checked]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
+    <mat-checkbox [(ngModel)]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
   </div>
 
   <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
@@ -43,8 +43,8 @@
   </app-error-card>
 
   <div class="bottom-buttons-wrapper">
-    <mat-checkbox class="mandatory-checkbox" [checked]="field.pakollinen" name="checkbox" i18n="@@Pakollinen">Pakollinen</mat-checkbox>
-    <mat-checkbox class="prefillable-checkbox"[checked]="field.esitaytettava" name="checkbox" i18n="@@Esitäytettävä">Esitäytettävä</mat-checkbox>
+    <mat-checkbox class="mandatory-checkbox" [(ngModel)]="field.pakollinen" [checked]="field.pakollinen" name="checkbox" i18n="@@Pakollinen">Pakollinen</mat-checkbox>
+    <mat-checkbox class="prefillable-checkbox" [(ngModel)]="field.esitaytettava" [checked]="field.esitaytettava" name="checkbox" i18n="@@Esitäytettävä">Esitäytettävä</mat-checkbox>
 
     <div class="spacer bottom-spacer"></div>
 
@@ -67,4 +67,4 @@
 
   </div>
 
-</form>
+<!-- </form> -->
