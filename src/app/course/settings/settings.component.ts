@@ -20,13 +20,10 @@ interface ColumnDefinition {
 export class SettingsComponent implements OnInit {
 
   public errorMessage: string = '';
-  // public dataSource = new MatTableDataSource<TableData>();
+  public message = '';
   public fieldList: KentanTiedot[] = [];
-  // public ticketFieldInfo: KentanTiedot[] = [];
-  // public ticketFieldList: Kentta[] = [];
   public inviteEmail: string = '';
   public isInIframe: boolean;
-  public isPhonePortrait: boolean = false;
   public courseID: string = '';
   public courseName: string = '';
 
@@ -60,13 +57,21 @@ export class SettingsComponent implements OnInit {
   }
 
   public saveFields() {
-    console.log('Ei vielä toteutettu');
+    this.ticketService.setTicketFieldInfo(this.courseID, this.fieldList).then(response => {
+      if (response === true ) {
+        this.message = "Tallennus onnistui.";
+      } else {
+        this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
+      }
+    }).catch (error => {
+      this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
+    })
   }
 
-  public htmlToText(html: string) {
+  public htmlToText(html: string): string {
     const div = document.createElement("div");
     div.innerHTML = html;
-    const text = div.textContent || div.innerText || "";
+    const text = div.textContent || div.innerText || html;
     return text;
   }
 

@@ -17,6 +17,12 @@
   </div>
 </div>
 
+<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
+  message="{{ errorMessage }}" [styles]="{ margin: '3em 20% 1em 20%' }">
+</app-error-card>
+
+<p *ngIf="message.length >0" class="message">{{message}}</p>
+
 <div class="theme-actions">
 
   <button
@@ -62,8 +68,3 @@
 
   </div>
 </form>
-
-
-<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-  message="{{ errorMessage }}" [styles]="{ margin: '3em 20% 1em 20%' }">
-</app-error-card>

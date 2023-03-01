@@ -86,15 +86,18 @@ export class EditFieldComponent implements OnInit {
     }).catch( () => this.courseName = '');
   }
 
-  public sendField(remove?: boolean): void {
-    if (this.fieldID !== null) {
-      console.log('ennen filtteröintiä:');
-      console.dir(this.allFields);
-      this.allFields = this.allFields.filter(field => field.id !== this.fieldID);
-      console.log('filtteröinnin jälkeen:');
-      console.dir(this.allFields);
+  public sendField(removeExisting?: boolean): void {
+    if (this.fieldID == null) {   // Ellei ole uusi kenttä.
+      this.allFields.push(this.field);
+    } else {
+      const index = this.allFields.findIndex(field => field.id == this.fieldID);
+      if (removeExisting) {
+        this.allFields.splice(index, 1);
+      } else {
+        this.allFields.splice(index, 1, this.field)
+      }
+      // this.allFields = this.allFields.filter(field => field.id !== this.fieldID);
     }
-    if (remove !== true) this.allFields.push(this.field);
     this.ticketService.setTicketFieldInfo(this.courseID, this.allFields).then(response => {
       if (response === true ) {
         this.router.navigateByUrl('/course/' + this.courseID + '/settings');
