@@ -19,7 +19,6 @@ interface ColumnDefinition {
 })
 export class SettingsComponent implements OnInit {
 
-  public columnDefinitions: ColumnDefinition[];
   public errorMessage: string = '';
   // public dataSource = new MatTableDataSource<TableData>();
   public fieldList: KentanTiedot[] = [];
@@ -37,12 +36,6 @@ export class SettingsComponent implements OnInit {
     private ticketService: TicketService
   ) {
     this.isInIframe = getIsInIframe();
-
-    this.columnDefinitions = [
-      { def: 'valittu', showMobile: true },
-      { def: 'otsikko', showMobile: true },
-      { def: 'ohje', showMobile: true },
-    ];
   }
 
   ngOnInit(): void {
@@ -59,7 +52,6 @@ export class SettingsComponent implements OnInit {
       this.courseID = courseID;
       this.showCourseName(this.courseID);
       this.fetchTicketFieldInfo(courseID);
-      // this.fetchTicketFieldInfoDummy(courseID);
     });
   }
 
@@ -71,23 +63,22 @@ export class SettingsComponent implements OnInit {
     console.log('Ei vielä toteutettu');
   }
 
+  public htmlToText(html: string) {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const text = div.textContent || div.innerText || "";
+    return text;
+  }
+
   private fetchTicketFieldInfo(courseID: string) {
     this.ticketService.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.otsikko != null) {
         this.fieldList = response;
       }
       console.dir(this.fieldList);
-      // this.fieldList[0].ohje = "Mihin kohtitehtävän kysymys liittyy?";
-      // this.fieldList[1].ohje = "Mihin kysymys liittyy?";
     }).catch(e => {
       this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
     });
-  }
-
-  public getDisplayedColumn(): string[] {
-    return this.columnDefinitions
-      .filter(cd => !this.isPhonePortrait || cd.showMobile)
-      .map(cd => cd.def);
   }
 
   private showCourseName(courseID: string) {
