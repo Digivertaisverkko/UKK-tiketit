@@ -1,7 +1,8 @@
 @import '/src/variables.scss';
 
-.top-button {
+.top-buttons {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
 }
 
@@ -30,7 +31,12 @@
 
 .send-button { order: 5 }
 
-.bottom-spacer { flex-grow: 2 }
+.top-spacer {
+  display: inline-block;
+  flex: 1 1 auto;
+}
+
+// .bottom-spacer { flex-grow: 2 }
 
 
 @media (max-width: $XSmall) {
