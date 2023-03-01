@@ -22,7 +22,7 @@
   <button
     class="add-button"
     mat-raised-button
-    (click)="addField()"
+    [routerLink]="'/course/' + this.courseID + '/settings/field'"
     i18n="@@Lisää kenttä">
     Lisää kenttä
   </button>
@@ -31,8 +31,8 @@
   class="save-button"
   color="primary"
   mat-raised-button
-  (click)="addField()"
-  i18n="@@Save">
+  (click)="saveFields()"
+  i18n="@@Tallenna">
   Tallenna
 </button>
 </div>
@@ -46,10 +46,12 @@
   <p>Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.</p>
 
   <div class="invite-wrapper">
+
     <mat-form-field class="invite-field">
       <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
       <input matInput (value)="inviteEmail">
     </mat-form-field>
+
     <button
       class="invite-button"
       color="primary"
@@ -57,6 +59,7 @@
       i18n="@@Kutsu">
       Kutsu
     </button>
+
   </div>
 </form>
 

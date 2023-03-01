@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ticket: TicketService
+    private ticketService: TicketService
   ) {
     this.isInIframe = getIsInIframe();
 
@@ -67,39 +67,18 @@ export class SettingsComponent implements OnInit {
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
   }
 
-  public sendFields() {
-
-  }
-
-  public addField() {
-    const newField: KentanTiedot = {
-        otsikko: '',
-        pakollinen: false,
-        esitaytettava: false,
-        ohje: '',
-        valinnat: []
-    }
-    // const tableData: TableData[] = this.dataSource.data;
-    // tableData.push(newField);
-    this.fieldList.push(newField);
-  }
-  private fetchTicketFieldInfoDummy(courseID: string) {
-    // const response = this.ticket.getTicketFieldInfoDummy(courseID);
-    // if (response.length > 0) {
-    //   const tableData = response.map(field => ({ valittu: false, ...field}));
-    //   this.dataSource = new MatTableDataSource(tableData);
-    // }
-    // console.dir(this.dataSource);
+  public saveFields() {
+    console.log('Ei vielä toteutettu');
   }
 
   private fetchTicketFieldInfo(courseID: string) {
-    this.ticket.getTicketFieldInfo(courseID).then(response => {
+    this.ticketService.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.otsikko != null) {
         this.fieldList = response;
       }
       console.dir(this.fieldList);
-      this.fieldList[0].ohje = "Mihin kohtitehtävän kysymys liittyy?";
-      this.fieldList[1].ohje = "Mihin kysymys liittyy?";
+      // this.fieldList[0].ohje = "Mihin kohtitehtävän kysymys liittyy?";
+      // this.fieldList[1].ohje = "Mihin kysymys liittyy?";
     }).catch(e => {
       this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
     });
@@ -112,7 +91,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private showCourseName(courseID: string) {
-    this.ticket.getCourseName(courseID).then(response => {
+    this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
   }
