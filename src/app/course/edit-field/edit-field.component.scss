@@ -1,5 +1,10 @@
 @import '/src/variables.scss';
 
+.top-button {
+  display: flex;
+  justify-content: space-between;
+}
+
 .field-title {
   min-width: 23em;
   margin-top: 1rem;
@@ -15,25 +20,36 @@
   margin-bottom: 0.4em;
 }
 
-.bottom-buttons {
+.bottom-buttons-wrapper {
   padding-top: 1rem;
   display: flex;
+  flex-wrap: wrap;
   gap: 5%;
   justify-content: space-between;
-
 }
 
-.spacer { flex-grow: 2 }
+.send-button { order: 5 }
+
+.bottom-spacer { flex-grow: 2 }
 
 
 @media (max-width: $XSmall) {
-
   .title {
     width: 97%;
   }
+}
 
-  .bottom-buttons {
-    gap: 2.5%;
+@media (max-width: 760px) {
+  .bottom-spacer { display: none }
+  .bottom-buttons-wrapper { gap: 2.5% }
+}
+
+@media (max-width: 660px) {
+  .bottom-buttons-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
   }
-
+  // .spacer { order: 2 }
+  // .cancel-button { order: 3 }
+  // .prefillable-checkbox { order: 4 }
 }

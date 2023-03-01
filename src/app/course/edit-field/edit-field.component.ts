@@ -10,12 +10,14 @@ import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 })
 
 export class EditFieldComponent implements OnInit {
-  public fieldInfo: KentanTiedot = {} as KentanTiedot;
+  public allFields: KentanTiedot[] = [];
+  public field: KentanTiedot;;
+  public errorMessage: string = '';
   public isInIframe: boolean;
   public courseID: string = '';
   public courseName: string = '';
   public multipleSelection: boolean = false;
-  private fieldID: string | null = this.route.snapshot.paramMap.get('fieldid');
+  public fieldID: string | null = null;
 
   constructor(
     private router: Router,
@@ -23,6 +25,13 @@ export class EditFieldComponent implements OnInit {
     private ticketService: TicketService
   ) {
     this.isInIframe = getIsInIframe();
+    this.field = {
+      otsikko: '',
+      pakollinen: false,
+      esitaytettava: false,
+      ohje: '',
+      valinnat: []
+    }
   }
 
   ngOnInit(): void {
@@ -36,28 +45,65 @@ export class EditFieldComponent implements OnInit {
         // this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
+      this.fieldID  = paramMap.get('fieldid');
       this.courseID = courseID;
       this.showCourseName(this.courseID);
-      if (this.fieldID == null) {
-        throw new Error('Virhe: ei tiketin kentän ID:ä.');
-      }
-      this.ticketService.getTicketFieldInfo(courseID, this.fieldID).then(response => {
-        if (response[0].id) {
-          this.fieldInfo = response[0];
-          console.log(this.fieldInfo.valinnat);
-          this.multipleSelection = this.fieldInfo.valinnat[0].length === 0 ? false : true;
-          console.log(this.fieldInfo.valinnat[0].length);
-          console.log(this.multipleSelection);
-          console.log('Kentän tiedot: ' + JSON.stringify(this.fieldInfo));
-        } 
-      })
+      // Kentän id on uudella kentällä null.
+      this.getFieldInfo(courseID, this.fieldID);
     });
+  }
+
+  private getFieldInfo(courseID: string, fieldID: string | null) {
+    this.ticketService.getTicketFieldInfo(courseID).then(response => {
+      if (response[0].id) {
+        this.allFields = response.map(field => {
+          return {
+            ...field, id: field.id?.toString()
+          }
+        });
+        if (fieldID != null) {
+          let matchingField = response.filter((field: KentanTiedot) => String(field.id) == fieldID);
+          if (matchingField == null) {
+            console.error('Virhe: ei oikeutta kentän tietoihin.');
+          } else {
+            this.field = matchingField[0];
+            this.multipleSelection = this.field.valinnat[0].length === 0 ? false : true;
+          }
+        }
+        // console.log(this.field.valinnat);
+        // console.log(this.field.valinnat[0].length);
+        // console.log(this.multipleSelection);
+        console.log('Kentän tiedot: ' + JSON.stringify(this.field));
+      }
+    }).catch(error => {
+      this.errorMessage = "Ei saatu luettua kentän tietoja.";
+    })
   }
 
   private showCourseName(courseID: string) {
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
+  }
+
+  public sendField(remove?: boolean): void {
+    if (this.fieldID !== null) {
+      console.log('ennen filtteröintiä:');
+      console.dir(this.allFields);
+      this.allFields = this.allFields.filter(field => field.id !== this.fieldID);
+      console.log('filtteröinnin jälkeen:');
+      console.dir(this.allFields);
+    }
+    if (remove !== true) this.allFields.push(this.field);
+    this.ticketService.setTicketFieldInfo(this.courseID, this.allFields).then(response => {
+      if (response === true ) {
+        this.router.navigateByUrl('/course/' + this.courseID + '/settings');
+      } else {
+        console.log('Tikettipohjan muuttaminen epäonnistui.');
+      }
+    }).catch (error => {
+      this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
+    })
   }
 
 }

@@ -1,15 +1,30 @@
+
 <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
   <span>{{courseName}}</span>
 </h2>
 
-<app-to-beginning-button></app-to-beginning-button>
+<div class="top-buttons">
+  <app-to-beginning-button></app-to-beginning-button>
+  <div class="spacer"></div>
+
+  <button
+    class="remove-button"
+    (click)="sendField(true)"
+    *ngIf="fieldID !== null"
+    mat-raised-button
+    i18n="@@Poista">
+    Poista
+  </button>
+
+</div>
+
 <h3 class="sub-header">Tikettipohjan tarkentava kysymys</h3>
 
 <form action="" #submitForm="ngForm" accept-charset="UTF-8">
 
   <mat-form-field class="field-title" appearance="fill">
-    <!-- <mat-label>{{ fieldInfo.otsikko }}</mat-label> -->
-    <input name="kentta.otsikko" [(ngModel)]="fieldInfo.otsikko" matInput maxlength="256" placeholder="Kentän nimi">
+    <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
+    <input name="kentta.otsikko" [(ngModel)]="field.otsikko" matInput maxlength="256" placeholder="Kentän nimi">
   </mat-form-field>
 
   <div class="multiple-selection-wrapper">
@@ -17,19 +32,39 @@
   </div>
 
   <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
-  <app-editor [(editorContent)]="fieldInfo.ohje"></app-editor>
+  <app-editor [(editorContent)]="field.ohje"></app-editor>
 
-  <div class="bottom-buttons">
-    <mat-checkbox [checked]="fieldInfo.pakollinen" name="checkbox" i18n="@@Pakollinen">Pakollinen</mat-checkbox>
-    <mat-checkbox [checked]="fieldInfo.esitaytettava" name="checkbox" i18n="@@Esitäytettävä">Esitäytettävä</mat-checkbox>
-    <div class="spacer"></div>
+  <app-error-card
+    *ngIf="errorMessage.length > 0"
+    i18n-title="@@Virhe"
+    title="Virhe"
+    message="{{ errorMessage }}"
+    [styles]="{ margin: '1rem 1rem' }"
+  >
+  </app-error-card>
+
+  <div class="bottom-buttons-wrapper">
+    <mat-checkbox class="mandatory-checkbox" [checked]="field.pakollinen" name="checkbox" i18n="@@Pakollinen">Pakollinen</mat-checkbox>
+    <mat-checkbox class="prefillable-checkbox"[checked]="field.esitaytettava" name="checkbox" i18n="@@Esitäytettävä">Esitäytettävä</mat-checkbox>
+
+    <div class="spacer bottom-spacer"></div>
+
     <button
-    class="send-button"
-    color="primary"
-    mat-raised-button
-    i18n="@@Lähetä">
-    Lähetä
-  </button>
+      class="cancel-button"
+      [routerLink]="'/course/' + courseID + '/settings'"
+      mat-raised-button
+      i18n="@@Peru">
+      Peru
+    </button>
+
+    <button
+      class="send-button"
+      (click)="sendField()"
+      color="primary"
+      mat-raised-button
+      i18n="@@Lähetä">
+      Lähetä
+    </button>
 
   </div>
 
