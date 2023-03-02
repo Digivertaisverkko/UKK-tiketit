@@ -63,10 +63,10 @@ export class AuthService {
       if (event instanceof ActivationEnd) {
         let courseID = event.snapshot.paramMap.get('courseid');
         if (courseID !== undefined && courseID !== null) {
-          console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
+          // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
           this.setCourseID(courseID);
           if (this.getSessionID !== null) {
-            console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
+            // console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
             this.fetchUserInfo(courseID);
           }
         }
@@ -337,7 +337,7 @@ export class AuthService {
       // TODO: Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko joka paikassa odottaa observablen arvoa?
       const userInfo = await this.getMyUserInfo(courseID);
       if (userInfo !== null && userInfo !== this.user$.value) {
-        console.log('vanha userinfo: ' + JSON.stringify(this.user$.value));
+        // console.log('vanha userinfo: ' + JSON.stringify(this.user$.value));
         console.log('uusi userinfo: ' + JSON.stringify(userInfo));
         this.user$.next(userInfo);
       }

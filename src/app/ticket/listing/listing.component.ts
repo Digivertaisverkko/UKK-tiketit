@@ -105,14 +105,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.trackScreenSize();
     this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('ngAfterViewInit: saatiin tieto login-tilasta: ' + response);
       if (response) this.updateLoggedInView(this.courseID);
     });
   }
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      console.log('lista: huomattiin uudet route parametrit.');
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
         this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
