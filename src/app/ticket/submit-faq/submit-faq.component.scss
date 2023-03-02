@@ -29,6 +29,10 @@ mat-form-field { min-width: 21rem; }
   margin-bottom: -20px;
 }
 
+.bottom-buttons-wrapper {
+  gap: 1.5rem;
+}
+
 @media (min-width: $XSmall) {
   .submit-faq { padding-right: $right-padding; }
 }
@@ -37,4 +41,8 @@ mat-form-field { min-width: 21rem; }
   .user-info-block { display: none; }
 
   mat-form-field { min-width: 95%; }
+
+  .bottom-buttons-wrapper {
+    gap: 1rem;
+  }
 }

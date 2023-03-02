@@ -31,7 +31,7 @@ export class SubmitFaqComponent implements OnInit {
   public userName: string = '';
   @Input() public fileList: File[] = [];
   public uploadClick: Subject<void> = new Subject<void>();
-  private courseID: string | null;
+  public courseID: string | null;
   public ticketFields: TiketinKentat[] = [];
 
   constructor(

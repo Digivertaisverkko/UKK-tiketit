@@ -57,19 +57,30 @@
       message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
     </app-error-card>
 
-    <div class="theme-actions">
-      <button mat-raised-button (click)="uploadClick.next()">
+    <div class="theme-actions bottom-buttons-wrapper">
+      <button mat-raised-button (click)="uploadClick.next()" i18n="@@Liitä tiedostoja">
         <mat-icon>attach_file</mat-icon>Liitä tiedostoja
       </button>
 
       <div class="spacer"></div>
-        <button
-          mat-raised-button color="primary"
-          [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
-          (click)="sendFaq()"
-          i18n="@@Julkaise">
-          Julkaise
-        </button>
+
+      <button
+        class="cancel-button"
+        [routerLink]="'/course/' + courseID + '/faq-view/' + ticketId"
+        *ngIf="editExisting"
+        mat-raised-button
+        i18n="@@Peru">
+        Peru
+      </button>
+
+      <button
+        mat-raised-button color="primary"
+        [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
+        (click)="sendFaq()"
+        i18n="@@Julkaise">
+        Julkaise
+      </button>
+
     </div>
 
     <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event">
