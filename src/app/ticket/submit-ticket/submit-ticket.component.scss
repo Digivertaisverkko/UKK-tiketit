@@ -17,6 +17,8 @@ mat-form-field { min-width: 21rem; }
 .short-field-wrapper {
   margin-bottom: 6px;
   width: 24em;
+
+  mat-form-field { margin-top: 2px; }
 }
 
 .theme-actions {
