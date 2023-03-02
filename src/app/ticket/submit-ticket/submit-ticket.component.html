@@ -52,7 +52,7 @@
     <section class="short-field-wrapper">
 
       <ng-container *ngFor="let kentta of ticketFields">
-        <mat-form-field appearance="fill" class="additional-field">
+        <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
           <input  [matAutocomplete]="auto"
                   matInput
