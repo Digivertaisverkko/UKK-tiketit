@@ -8,11 +8,16 @@
 
   <button
     class="remove-button"
-    (click)="sendField(true)"
-    *ngIf="fieldID !== null"
+    (click)="changeRemoveButton()"
+    *ngIf="fieldID !== null && isRemovePressed === false"
     mat-raised-button
     i18n="@@Poista">
     Poista
+  </button>
+
+  <button mat-raised-button (click)="sendField(true)"
+    *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto">
+    Vahvista poisto
   </button>
 
 </div>

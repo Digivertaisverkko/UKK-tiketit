@@ -14,6 +14,7 @@ export class EditFieldComponent implements OnInit {
   public field: KentanTiedot;;
   public errorMessage: string = '';
   public isInIframe: boolean;
+  public isRemovePressed: boolean = false;
   public courseID: string = '';
   public courseName: string = '';
   public multipleSelection: boolean = false;
@@ -107,6 +108,10 @@ export class EditFieldComponent implements OnInit {
     }).catch (error => {
       this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
     })
+  }
+
+   public changeRemoveButton() {
+    setTimeout(() => this.isRemovePressed = true, 300);
   }
 
 }
