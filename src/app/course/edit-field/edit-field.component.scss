@@ -15,26 +15,33 @@
 .multiple-selection-wrapper {
   margin-left: -0.7rem;
   margin-bottom: 1rem;
+  mat-checkbox {
+    padding-right: 1rem;
+  }
 }
 
 .info-text-label {
   margin-bottom: 0.4em;
 }
 
+.text-area-wrapper {
+  width: 100%;
+}
+
 textarea {
   font-size: 110%;
-  line-height: 1.6em;
-  padding: 0.5em;
-  width: calc(100% - 1rem);
-  border: 1px solid #e0e0e0; 
+  // line-height: 1.6em;
+  // padding: 0.5em;
+ 
+  // border: 1px solid #e0e0e0; 
 }
 
 .bottom-buttons-wrapper {
-  padding-top: 1rem;
   display: flex;
   flex-wrap: wrap;
   gap: 5%;
   justify-content: space-between;
+  margin-top: 0.5rem;
 }
 
 .send-button { order: 5 }
