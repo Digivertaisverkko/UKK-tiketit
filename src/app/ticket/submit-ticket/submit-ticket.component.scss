@@ -15,7 +15,6 @@ mat-form-field { min-width: 21rem; }
 }
 
 .short-field-wrapper {
-  margin-bottom: 6px;
   width: 24em;
 
   mat-form-field { margin-top: 2px; }
@@ -27,9 +26,9 @@ mat-form-field { min-width: 21rem; }
 }
 
 @media (min-width: $XSmall) {
-  .submit-ticket { padding-right: $right-padding }
+  .submit-ticket { padding-right: $right-padding; }
 }
 
 @media (max-width: $XSmall) {
-  .user-info-block, .mat-mdc-card-avatar { display: none }
+  .user-info-block, .mat-mdc-card-avatar { display: none; }
 }
