@@ -11,7 +11,7 @@
   <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
     <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
     <div class="title-column">{{field.otsikko}}</div>
-    <div class="info-text-column" [innerHTML]="htmlToText(field.ohje) | safeHtml"></div>
+    <div class="info-text-column">{{field.ohje}}</div>
     <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" ><mat-icon class="edit-icon">edit_indicator</mat-icon></a>
     <mat-icon class="resize-icon">drag_indicator</mat-icon>
   </div>
@@ -34,13 +34,13 @@
   </button>
 
   <button
-  class="save-button"
-  color="primary"
-  mat-raised-button
-  (click)="saveFields()"
-  i18n="@@Tallenna">
-  Tallenna
-</button>
+    class="save-button"
+    color="primary"
+    mat-raised-button
+    (click)="saveFields()"
+    i18n="@@Tallenna">
+    Tallenna
+  </button>
 </div>
 
 <div class="vertical-spacer"></div>

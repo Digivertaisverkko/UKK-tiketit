@@ -3,6 +3,9 @@
   <span>{{courseName}}</span>
 </h2>
 
+
+<div class="view-wrapper">
+
 <div class="top-buttons">
   <app-to-beginning-button></app-to-beginning-button>
 
@@ -36,7 +39,21 @@
   </div>
 
   <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
-  <app-editor [(editorContent)]="field.ohje"></app-editor>
+
+  <textarea
+    [(ngModel)]="field.ohje"
+    #autosize="cdkTextareaAutosize"
+    autocomplete="off"
+    cdkAutosizeMaxRows="5"
+    cdkAutosizeMinRows="3"
+    cdkTextareaAutosize
+    contenteditable
+    matInput
+    maxlength="255"
+    name="infoText"
+    placeholder="Info-teksti"
+    i18n-placeholder="@@Infoteksti"
+  ></textarea>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
@@ -71,5 +88,7 @@
     </button>
 
   </div>
+
+</div>
 
 <!-- </form> -->

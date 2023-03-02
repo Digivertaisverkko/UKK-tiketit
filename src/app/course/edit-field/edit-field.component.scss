@@ -21,6 +21,10 @@
   margin-bottom: 0.4em;
 }
 
+textarea {
+  width: 99.5%;
+}
+
 .bottom-buttons-wrapper {
   padding-top: 1rem;
   display: flex;
@@ -58,4 +62,8 @@
   // .spacer { order: 2 }
   // .cancel-button { order: 3 }
   // .prefillable-checkbox { order: 4 }
+}
+
+@media (min-width: $XSmall) {
+  .view-wrapper{ padding-right: $right-padding }
 }

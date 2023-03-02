@@ -36,11 +36,11 @@ mat-form-field { min-width: 21rem; }
 // mat-checkbox { margin-left: -10px; }
 
 @media (min-width: $XSmall) {
-  .submit-ticket { padding-right: $right-padding; }
+  .submit-ticket { padding-right: $right-padding }
 }
 
 @media (max-width: $XSmall) {
-  .user-info-block, .mat-mdc-card-avatar { display: none; }
+  .user-info-block, .mat-mdc-card-avatar { display: none }
 
-  mat-form-field { min-width: 95%; }
+  mat-form-field { min-width: 95% }
 }
