@@ -52,13 +52,32 @@
     <section class="short-field-wrapper">
 
       <ng-container *ngFor="let kentta of ticketFields">
-        <mat-form-field class="additional-field" appearance="fill">
+        <mat-form-field appearance="fill" class="additional-field">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  matInput
+          <input  [matAutocomplete]="auto"
+                  matInput
                   maxlength="50"
                   name="kentta.otsikko"
                   [(ngModel)]="kentta.arvo"
                   placeholder="Kentän nimi">
+
+          <mat-icon matSuffix
+                    *ngIf="kentta.valinnat[0] !== ''"
+                    [ngStyle]="{ 'color': '#000000' }">
+            keyboard_arrow_down
+          </mat-icon>
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <!-- Jos lisäkenttä ei sisällä valintoja, niin kentta.valinnat[0]
+                  sisältää tyhjän merkkijonon, eikä suinkaan ole tyhjä. -->
+            <ng-container *ngIf="kentta.valinnat[0] !== ''">
+              <mat-option *ngFor="let valinta of kentta.valinnat"
+                          [value]="valinta">
+                {{ valinta }}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+
           <mat-hint align="end">{{ kentta.arvo.length }} / 50</mat-hint>
         </mat-form-field>
 
