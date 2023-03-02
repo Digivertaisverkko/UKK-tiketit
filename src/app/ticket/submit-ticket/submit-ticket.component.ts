@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Event, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
-import { UusiTiketti, TicketService, KentanTiedot } from '../ticket.service';
-import { getIsInIframe } from '../functions/isInIframe';
+import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+
+import { AuthService } from 'src/app/core/auth.service';
+import { KentanTiedot, TicketService, UusiTiketti } from 'src/app/ticket/ticket.service';
+import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
@@ -17,50 +17,34 @@ interface TiketinKentat extends KentanTiedot {
 })
 
 export class SubmitTicketComponent implements OnInit {
-  // max pituus: 255.
-  titleText: string = '';
-  assignmentText: string = '';
-  public courseName: string = '';
-  public errorMessage: string = '';
-  // public user: User;
-  public isInIframe: boolean;
-  problemText: string = '';
-  newTicket: UusiTiketti = {} as UusiTiketti;
-  public userName: string | null = '';
-  userRole: string = '';
-  answer: string = '';
-  sendingIsAllowed: boolean = false;
-  public currentDate = new Date();
-  // public user$ = this.auth.trackUserInfo();
-  public message: string = '';
   @Input() public fileList: File[] = [];
-  public uploadClick: Subject<void> = new Subject<void>();
-  private courseID: string | null;
-
+  private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
+  public courseName: string = '';
+  public currentDate = new Date();
+  public errorMessage: string = '';
+  public isInIframe: boolean = getIsInIframe();
+  public message: string = '';
+  private newTicket: UusiTiketti = {} as UusiTiketti;
   public ticketFields: TiketinKentat[] = [];
+  public title: string = '';
+  public uploadClick: Subject<void> = new Subject<void>();
+  public userName: string | null = '';
 
-  constructor(
-    private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private ticketService: TicketService,
-    private _snackBar: MatSnackBar
-    ) {
-      this.courseID = this.route.snapshot.paramMap.get('courseid');
-      this.isInIframe = getIsInIframe();
-    }
+  constructor(private auth: AuthService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private ticketService: TicketService) {}
 
   ngOnInit(): void {
-    if (this.courseID === null) { throw new Error('Ei kurssi ID:ä.')}
-    this.auth.fetchUserInfo(this.courseID);
+    if (this.courseId === null) { throw new Error('Ei kurssi ID:ä.') }
+    this.auth.fetchUserInfo(this.courseId);
     this.auth.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi ?? '';
-      this.userRole = response?.asema ?? '';
-    })
-    this.ticketService.getCourseName(this.courseID).then(response => {
+    });
+    this.ticketService.getCourseName(this.courseId).then(response => {
       this.courseName = response;
     }).catch(() => {});
-    this.ticketService.getTicketFieldInfo(this.courseID).then((response) => {
+    this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
       this.ticketFields = response as TiketinKentat[];
       for (let field of this.ticketFields) {
         field.arvo = '';
@@ -68,24 +52,23 @@ export class SubmitTicketComponent implements OnInit {
     });
   }
 
+  private goBack() {
+    this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
+  }
+
   public sendTicket(): void {
-    this.newTicket.otsikko = this.titleText;
+    this.newTicket.otsikko = this.title;
     this.newTicket.viesti = this.message;
     this.newTicket.kentat = this.ticketFields.map((field) => {
       return { id: Number(field.id), arvo: field.arvo }
     });
 
-    if (this.courseID == null) { throw new Error('Ei kurssi ID:ä.')}
-    this.ticketService.addTicket(this.courseID, this.newTicket, this.fileList)
+    if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
+    this.ticketService.addTicket(this.courseId, this.newTicket, this.fileList)
       .then(() => this.goBack()
       ).catch( error => {
         // TODO: lisää eri virhekoodeja?
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
   }
-
-  private goBack() {
-    this.router.navigateByUrl('course/' + this.courseID + '/list-tickets');
-  }
-
 }
