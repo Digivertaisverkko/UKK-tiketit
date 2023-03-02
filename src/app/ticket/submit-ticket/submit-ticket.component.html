@@ -59,10 +59,8 @@
                   name="kentta.otsikko"
                   [(ngModel)]="kentta.arvo"
                   placeholder="Kentän nimi">
+          <mat-hint align="end">{{ kentta.arvo.length }} / 50</mat-hint>
         </mat-form-field>
-        <div class="characters-label">
-          <span class="theme-label">{{ kentta.arvo.length }} / 50</span>
-        </div>
       </ng-container>
 
     </section>

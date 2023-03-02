@@ -2,6 +2,7 @@
 
 form { margin-top: -6px; }
 mat-form-field { min-width: 21rem; }
+mat-hint { color: #757575; }
 
 .vertical-spacer { height: 1rem; }
 
@@ -17,14 +18,6 @@ mat-form-field { min-width: 21rem; }
 .short-field-wrapper {
   margin-bottom: 6px;
   width: 21em;
-
-  .additional-field { margin-bottom: -18px; }
-
-  .characters-label {
-    margin-bottom: 3px;
-    margin-top: -6px;
-    text-align: right;
-  }
 }
 
 .theme-actions {
