@@ -11,8 +11,6 @@ import { EditorView } from 'prosemirror-view';
 
 import type { Dispatch } from 'ngx-editor/lib/commands/types';
 
-import Icon from '../icons';
-
 @Component({
   selector: 'app-menu-link',
   templateUrl: './menu-link.component.html',
@@ -25,10 +23,6 @@ export class MenuLinkComponent implements OnInit {
   public isActive = false;
   public isDisabled = false;
   public showPopup = false;
-
-  public get icon(): string {
-    return Icon.get(this.isActive ? 'unlink' : 'link');
-  }
 
   public get title(): string {
     return this.isActive
