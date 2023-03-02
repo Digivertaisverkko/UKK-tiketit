@@ -2,10 +2,11 @@
   <div class="NgxEditor__MenuItem--IconContainer"
     [class.NgxEditor__MenuItem--Active]="isActive || showPopup"
     [class.NgxEditor--Disabled]="isDisabled"
-    [innerHTML]="icon | safeHtml"
     (mousedown)="onClick($event)"
     [title]="title"
     >
+    <mat-icon *ngIf="!isActive">link</mat-icon>
+    <mat-icon *ngIf="isActive">link_off</mat-icon>
   </div>
 
   <!-- popup -->
