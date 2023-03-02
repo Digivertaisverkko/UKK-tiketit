@@ -12,7 +12,7 @@ import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 
 export class EditFieldComponent implements OnInit {
   public allFields: KentanTiedot[] = [];
-  public field: KentanTiedot;;
+  public field: KentanTiedot;
   public errorMessage: string = '';
   public isInIframe: boolean;
   public isRemovePressed: boolean = false;
