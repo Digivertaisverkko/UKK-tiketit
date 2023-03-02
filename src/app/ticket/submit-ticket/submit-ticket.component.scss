@@ -17,7 +17,7 @@ mat-hint { color: #757575; }
 
 .short-field-wrapper {
   margin-bottom: 6px;
-  width: 21em;
+  width: 24em;
 }
 
 .theme-actions {
@@ -31,6 +31,4 @@ mat-hint { color: #757575; }
 
 @media (max-width: $XSmall) {
   .user-info-block, .mat-mdc-card-avatar { display: none }
-
-  mat-form-field { min-width: 95% }
 }
