@@ -96,7 +96,7 @@ $debug: false;
 // Pieni harmaa teksti.
 .theme-label {
   color: #757575;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 0.9rem;
   margin-bottom: 0.2rem;
   + p {
@@ -110,6 +110,10 @@ $debug: false;
   justify-content: flex-end;
   flex-wrap: wrap;
   margin-top: 1.4rem;
+}
+
+mat-hint {
+  color: #757575;
 }
 
 .theme-progress-bar{
