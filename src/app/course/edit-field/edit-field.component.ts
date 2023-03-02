@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
-
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -19,6 +20,8 @@ export class EditFieldComponent implements OnInit {
   public courseName: string = '';
   public multipleSelection: boolean = false;
   public fieldID: string | null = null;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  public addOnBlur = true;
 
   constructor(
     private router: Router,
@@ -54,9 +57,39 @@ export class EditFieldComponent implements OnInit {
     });
   }
 
+  public add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+    if (value) this.field.valinnat.push(value);
+    event.chipInput!.clear();
+  }
+
+  public remove(valinta: string): void {
+    const index = this.field.valinnat.indexOf(valinta);
+
+    if (index >= 0) {
+      this.field.valinnat.splice(index, 1);
+    }
+  }
+
+  public edit(valinta: string, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+
+    if (!value) {
+      this.remove(valinta);
+      return;
+    }
+
+    // Edit existing fruit
+    const index = this.field.valinnat.indexOf(valinta);
+    if (index >= 0) {
+      this.field.valinnat[index] = value;
+    }
+  }
+
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.ticketService.getTicketFieldInfo(courseID).then(response => {
       if (response[0].id) {
+        // Tarvitaan tietojen lähettämiseen.
         this.allFields = response.map(field => {
           return {
             ...field, id: field.id?.toString()
@@ -68,7 +101,13 @@ export class EditFieldComponent implements OnInit {
             console.error('Virhe: ei oikeutta kentän tietoihin.');
           } else {
             this.field = matchingField[0];
-            this.multipleSelection = this.field.valinnat[0].length === 0 ? false : true;
+             // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden alkion: "", mitä ei haluta.
+            if (this.field.valinnat[0].length === 0) {
+              this.field.valinnat = [];
+              this.multipleSelection = false;
+            } else {
+              this.multipleSelection = true;
+            }
           }
         }
         // console.log(this.field.valinnat);

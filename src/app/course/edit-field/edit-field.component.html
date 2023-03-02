@@ -37,11 +37,26 @@
   <div class="multiple-selection-wrapper">
     <mat-checkbox [(ngModel)]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
 
-    <mat-label>Valinnat</mat-label>
-    <!-- <mat-chip-grid #chipGrid aria-label="Enter additional fields">
-
-      
-    </mat-chip-grid> -->
+    <mat-form-field class="chip-list-form-field" appearance="fill">
+      <mat-label>Monivalinnan vaihtoehdot</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Enter multiple choise fields" [disabled]="!multipleSelection">
+        <mat-chip-row *ngFor="let valinta of field.valinnat"
+          [editable]="true"
+          (edited)="edit(valinta, $event)"
+          (removed)="remove(valinta)" 
+          [aria-description]="'press enter to edit ' + valinta">
+          {{valinta}}
+          <button matChipRemove [attr.aria-label]="'remove ' + valinta">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+        <input placeholder="Uusi valinta"
+        [matChipInputFor]="chipGrid"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="addOnBlur"
+        (matChipInputTokenEnd)="add($event)"/>
+      </mat-chip-grid>
+    </mat-form-field>
     
   </div>
 

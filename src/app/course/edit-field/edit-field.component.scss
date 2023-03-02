@@ -13,27 +13,20 @@
 }
 
 .multiple-selection-wrapper {
-  margin-left: -0.7rem;
   margin-bottom: 1rem;
   mat-checkbox {
     padding-right: 1rem;
   }
 }
 
-.info-text-label {
-  margin-bottom: 0.4em;
-}
-
-.text-area-wrapper {
+.chip-list-form-field {
   width: 100%;
 }
 
-textarea {
-  font-size: 110%;
-  // line-height: 1.6em;
-  // padding: 0.5em;
- 
-  // border: 1px solid #e0e0e0; 
+.info-text-label { margin-bottom: 0.4em }
+
+.text-area-wrapper {
+  width: 100%;
 }
 
 .bottom-buttons-wrapper {
@@ -55,9 +48,7 @@ textarea {
 
 
 @media (max-width: $XSmall) {
-  .title {
-    width: 97%;
-  }
+  .title { width: 97% }
 }
 
 @media (max-width: 760px) {
