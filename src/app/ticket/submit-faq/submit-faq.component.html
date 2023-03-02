@@ -1,49 +1,54 @@
-<h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe"><span>{{ courseName }}</span></h2>
+<h2 class="main-header"
+    *ngIf="courseName.length > 0 && !isInIframe">
+  <span>{{ courseName }}</span>
+</h2>
 
 <div class="submit-faq">
 
-  <div id="top-buttons" class="theme-actions">
-    <app-to-beginning-button></app-to-beginning-button>
-  </div>
+  <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <form action="" #submitForm="ngForm" accept-charset="UTF-8">
+  <app-to-beginning-button></app-to-beginning-button>
+
+  <form accept-charset="UTF-8"
+        action=""
+        enctype="multipart/form-data"
+        #submitForm="ngForm">
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea
-          [(ngModel)]="faqTitle"
-          class="sub-header"
-          #autosize="cdkTextareaAutosize"
-          autocomplete="off"
-          cdkAutosizeMaxRows="3"
-          cdkAutosizeMinRows="1"
-          cdkTextareaAutosize
-          contenteditable
-          matInput
-          maxlength="255"
-          name="faqTitle"
-          placeholder="Otsikko"
-          i18n-placeholder="@@Otsikko"
-          required
-        ></textarea>
+        <textarea autocomplete="off"
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMaxRows="3"
+                  cdkAutosizeMinRows="1"
+                  cdkTextareaAutosize
+                  contenteditable
+                  class="sub-header"
+                  i18n-placeholder="@@Otsikko"
+                  matInput
+                  maxlength="255"
+                  name="titleText"
+                  [(ngModel)]="title"
+                  placeholder="Otsikko"
+                  required>
+          </textarea>
       </mat-form-field>
     </div>
 
     <section class="short-field-wrapper">
 
-      <div *ngFor="let kentta of ticketFields; let i = index">
+      <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input
-            name="kentta.otsikko_{{i}}"
-            [(ngModel)]="ticketFields[i].arvo"
-            matInput
-            maxlength="50"
-            placeholder=""
-          >
+          <input  matInput
+                  maxlength="50"
+                  name="kentta.otsikko_{{i}}"
+                  [(ngModel)]="ticketFields[i].arvo"
+                  placeholder="">
         </mat-form-field>
-        <div class="characters-label"><span class="theme-label">{{ kentta.arvo.length }} / 50</span></div>
-      </div>
+        <div class="characters-label">
+          <span class="theme-label">{{ kentta.arvo.length }} / 50</span>
+        </div>
+      </ng-container>
 
     </section>
 
@@ -53,47 +58,59 @@
     <h2 i18n="@@Vastaus">Vastaus</h2>
     <app-editor [(editorContent)]="faqAnswer"></app-editor>
 
-    <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-      message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+    <app-error-card i18n-title="@@Virhe"
+                    message="{{ errorMessage }}"
+                    *ngIf="errorMessage.length > 0"
+                    [styles]="{ margin: '1em 20% 1em 20%' }"
+                    title="Virhe">
     </app-error-card>
 
-    <div class="theme-actions bottom-buttons-wrapper">
-      <button mat-raised-button (click)="uploadClick.next()" i18n="@@Liitä tiedostoja">
-        <mat-icon>attach_file</mat-icon>Liitä tiedostoja
+    <div class="theme-actions">
+
+      <button (click)="uploadClick.next()"
+              i18n="@@Liitä tiedostoja"
+              mat-raised-button>
+        <mat-icon>attach_file</mat-icon>
+        Liitä tiedostoja
       </button>
 
       <div class="spacer"></div>
 
-      <button
-        class="cancel-button"
-        [routerLink]="'/course/' + courseID + '/faq-view/' + ticketId"
-        *ngIf="editExisting"
-        mat-raised-button
-        i18n="@@Peru">
+      <button class="cancel-button"
+              i18n="@@Peru"
+              mat-raised-button
+              *ngIf="editExisting"
+              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId">
         Peru
       </button>
 
-      <button
-        mat-raised-button color="primary"
-        [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
-        (click)="sendFaq()"
-        i18n="@@Julkaise">
+      <button class="submit-button"
+              (click)="sendFaq()"
+              color="primary"
+              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
+              i18n="@@Julkaise"
+              mat-raised-button>
         Julkaise
       </button>
 
     </div>
 
-    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (fileListOutput)="fileList = $event">
+    <app-edit-attachments
+        (fileListOutput)="fileList = $event"
+        [uploadClicks]="uploadClick.asObservable()">
     </app-edit-attachments>
 
   </form>
 
   <!-------------- Alkuperäinen kysymys ----------------------------------------->
 
-  <div *ngIf="originalTicket !== undefined && !editExisting">
+  <ng-container *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
-    <h2 class="main-header" i18n="@@Alkuperäinen kysymys">Alkuperäinen kysymys</h2>
+    <h2 class="main-header"
+        i18n="@@Alkuperäinen kysymys">
+      Alkuperäinen kysymys
+    </h2>
     <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
-  </div>
+  </ng-container>
 
 </div>
