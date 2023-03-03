@@ -30,31 +30,34 @@
 
   <mat-form-field class="field-title" appearance="fill">
     <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
-    <input name="kentta.otsikko" [(ngModel)]="field.otsikko" matInput maxlength="255" placeholder="Kentän nimi">
-    <mat-hint align="end">{{field.otsikko.length}} / 255</mat-hint>
+    <input name="kentta.otsikko" [(ngModel)]="field.otsikko" matInput maxlength="50" placeholder="Kentän nimi" i18n-placeholder="@@Kentän nimi">
+    <mat-hint align="end">{{field.otsikko.length}} / 50</mat-hint>
   </mat-form-field>
 
   <div class="multiple-selection-wrapper">
     <mat-checkbox [(ngModel)]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
 
     <mat-form-field class="chip-list-form-field" appearance="fill">
-      <mat-label>Monivalinnan vaihtoehdot</mat-label>
-      <mat-chip-grid #chipGrid aria-label="Enter multiple choise fields">
+      <mat-label i18n="@@Monivalinnan vaihtoehdot">Monivalinnan vaihtoehdot</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Valitse monivalinnan vaihtoehtoja">
+
         <mat-chip-row *ngFor="let valinta of field.valinnat"
           [editable]="true"
           (edited)="edit(valinta, $event)"
           (removed)="remove(valinta)" 
-          [aria-description]="'press enter to edit ' + valinta">
+          [aria-description]="'paina enter muokataksesi valintaa ' + valinta">
           {{valinta}}
-          <button matChipRemove [attr.aria-label]="'remove ' + valinta">
+          <button matChipRemove [attr.aria-label]="'poista valinta ' + valinta">
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-chip-row>
+
         <input placeholder="Uusi valinta"
-        [matChipInputFor]="chipGrid"
-        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        [matChipInputAddOnBlur]="addOnBlur"
-        (matChipInputTokenEnd)="add($event)"/>
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="add($event)"/>
+
       </mat-chip-grid>
     </mat-form-field>
     
