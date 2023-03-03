@@ -66,6 +66,7 @@
     "Kysymyksen lähettäminen epäonnistui": "Sending a question failed",
     "Kysymys lisättiin onnistuneesti": "The question was added successfully",
     "Kysymyksen näyttäminen epäonnistui": "Failed to display the question",
+    "Kysymyksen poistaminen ei onnistunut": "Failed to delete the question",
     "Kysymys": "Question",
     "Kysymysten lisäkentät": "Additional fields for questions",
     "Lähdekoodi": "Source code",

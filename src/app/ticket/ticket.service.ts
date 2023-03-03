@@ -198,6 +198,18 @@ export class TicketService {
     // }
   }
 
+  public async removeTicket(ticketID: string): Promise<boolean> {
+    let response: any;
+    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    try {
+      response = await firstValueFrom(this.http.delete(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response?.success === true ? true : false;
+
+  }
+
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();

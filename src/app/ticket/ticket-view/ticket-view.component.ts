@@ -106,7 +106,19 @@ export class TicketViewComponent implements OnInit {
   }
 
   public removeTicket() {
-
+    this.ticketService.removeTicket(this.ticketID).then(response => {
+      if (response === false ) {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:Kysymyksen poistaminen ei onnistunut.`;
+      } else {
+        this.router.navigateByUrl('/course/' + this.courseID + '/list-tickets');
+      }
+    }).catch(error => {
+      if (error?.tunnus == 1003) {
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+      } else {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:Kysymyksen poistaminen ei onnistunut.`;
+      }
+    })
   }
 
   changeRemoveButton() {
