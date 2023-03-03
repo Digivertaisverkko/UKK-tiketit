@@ -59,7 +59,9 @@
                   maxlength="50"
                   name="kentta.otsikko_{{i}}"
                   [(ngModel)]="ticketFields[i].arvo"
-                  placeholder="">
+                  placeholder=""
+                  [required]="kentta.pakollinen"
+                  >
 
           <mat-icon matSuffix
                     *ngIf="kentta.valinnat[0] !== ''"
