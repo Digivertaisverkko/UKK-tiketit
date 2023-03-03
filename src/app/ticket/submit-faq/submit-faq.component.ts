@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
-import { UusiUKK, TicketService, Tiketti, Error, KentanTiedot } from '../ticket.service';
-import { getIsInIframe } from '../functions/isInIframe';
 import { Subject } from 'rxjs';
+
+import { AuthService } from 'src/app/core/auth.service';
+import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK } from 'src/app/ticket/ticket.service';
+import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
@@ -15,47 +16,32 @@ interface TiketinKentat extends KentanTiedot {
   styleUrls: ['./submit-faq.component.scss']
 })
 export class SubmitFaqComponent implements OnInit {
-
+  @Input() public fileList: File[] = [];
+  public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
-  public currentDate = new Date();
-  public editExisting: boolean;
+  public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public faqAnswer: string = '';
-  public faqAssignment: string = '';
   public faqMessage: string = '';
-  public faqProblem: string = '';
-  public faqTitle: string = '';
-  public isInIframe: boolean;
+  public isInIframe: boolean = getIsInIframe();
   public originalTicket: Tiketti | undefined;
-  public ticketId: string | null = this.activatedRoute.snapshot.paramMap.get('id');
-  public userName: string = '';
-  @Input() public fileList: File[] = [];
-  public uploadClick: Subject<void> = new Subject<void>();
-  public courseID: string | null;
   public ticketFields: TiketinKentat[] = [];
+  public ticketId: string | null = this.route.snapshot.paramMap.get('id');
+  public title: string = '';
+  public uploadClick: Subject<void> = new Subject<void>();
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private ticketService: TicketService
-    ) {
-      this.courseID = this.route.snapshot.paramMap.get('courseid');
-      this.isInIframe = getIsInIframe();
-      this.editExisting = window.history.state.editFaq ?? false;
-  }
+  constructor(private auth: AuthService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private ticketService: TicketService) {}
 
   ngOnInit(): void {
     console.log('Editoidaanko?: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
-    if (this.courseID === null) {
+    if (this.courseId === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
-    this.authService.trackUserInfo().subscribe(response => {
-      this.userName = response?.nimi;
-    })
-    this.ticketService.getTicketFieldInfo(this.courseID).then((response) => {
+    this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
       this.ticketFields = response as TiketinKentat[];
       for (let field of this.ticketFields) {
         field.arvo = '';
@@ -72,14 +58,14 @@ export class SubmitFaqComponent implements OnInit {
               this.faqAnswer = comment.viesti;
             }
           }
-          if (String(response.kurssi) !== this.courseID) {
-            this.courseID = String(response.kurssi);
-            this.authService.fetchUserInfo(this.courseID);
-            this.ticketService.getCourseName(this.courseID)
+          if (String(response.kurssi) !== this.courseId) {
+            this.courseId = String(response.kurssi);
+            this.auth.fetchUserInfo(this.courseId);
+            this.ticketService.getCourseName(this.courseId)
               .then( response => { this.courseName = response });
           }
           this.faqMessage = response.viesti;
-          this.faqTitle = response.otsikko;
+          this.title = response.otsikko;
           if (response.kentat !== undefined ) {
             for (let tiketinKentta of response.kentat) {
               for (let uusiKentta of this.ticketFields) {
@@ -92,17 +78,17 @@ export class SubmitFaqComponent implements OnInit {
           }
         });
     }
-    this.ticketService.getCourseName(this.courseID)
+    this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response });
   }
 
   private goBack(): void {
-    this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
+    this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
   }
 
   public sendFaq(): void {
     let newFaq: UusiUKK = {
-      otsikko: this.faqTitle,
+      otsikko: this.title,
       viesti: this.faqMessage,
       vastaus: this.faqAnswer,
     }
@@ -110,8 +96,8 @@ export class SubmitFaqComponent implements OnInit {
       return { id: Number(field.id), arvo: field.arvo }
     });
 
-    if (this.courseID === null) throw new Error('Ei kurssi ID:ä.');
-    let id = this.editExisting ? this.ticketId ?? '' : this.courseID;
+    if (this.courseId === null) throw new Error('Ei kurssi ID:ä.');
+    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
       .then(() => { this.goBack() })
       .catch( (error: Error) => {
@@ -122,5 +108,4 @@ export class SubmitFaqComponent implements OnInit {
         }
       });
   }
-
 }

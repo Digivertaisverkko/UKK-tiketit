@@ -51,15 +51,15 @@
 
     <section class="short-field-wrapper">
 
-      <ng-container *ngFor="let kentta of ticketFields">
+      <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
           <input  [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
-                  name="kentta.otsikko"
-                  [(ngModel)]="kentta.arvo"
-                  placeholder="Kentän nimi">
+                  name="kentta.otsikko_{{i}}"
+                  [(ngModel)]="ticketFields[i].arvo"
+                  placeholder="">
 
           <mat-icon matSuffix
                     *ngIf="kentta.valinnat[0] !== ''"
@@ -117,9 +117,10 @@
 
       <button class="submit-button"
               (click)="sendTicket()"
+              color="primary"
               [disabled]="submitForm.invalid"
               i18n="@@Lähetä opettajille"
-              mat-raised-button color="primary">
+              mat-raised-button>
         Lähetä opettajille
       </button>
 
