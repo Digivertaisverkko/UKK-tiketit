@@ -46,7 +46,9 @@
           [editable]="true"
           (edited)="edit(valinta, $event)"
           (removed)="remove(valinta)" 
-          [aria-description]="'paina enter muokataksesi valintaa ' + valinta">
+          [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
+          class="chipRow"
+          >
           {{valinta}}
           <button matChipRemove [attr.aria-label]="'poista valinta ' + valinta">
             <mat-icon>cancel</mat-icon>
@@ -57,7 +59,9 @@
           [matChipInputFor]="chipGrid"
           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           [matChipInputAddOnBlur]="addOnBlur"
-          (matChipInputTokenEnd)="add($event)"/>
+          (matChipInputTokenEnd)="add($event)"
+          (keydown.arrowleft)="onArrowLeft($event)"
+        />
 
       </mat-chip-grid>
     </mat-form-field>

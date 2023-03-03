@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
+import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid} from '@angular/material/chips';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -23,6 +23,7 @@ export class EditFieldComponent implements OnInit {
   public fieldID: string | null = null;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public addOnBlur = true;
+  @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
 
   constructor(
     private router: Router,
@@ -78,6 +79,14 @@ export class EditFieldComponent implements OnInit {
     }
     const index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat[index] = value;
+  }
+  
+  onArrowLeft(event: any) {
+    console.log('Vasen nuoli painettu');
+    // event.target === this.input.nativeElement && 
+    if (event.key === 'ArrowLeft' && event.target.selectionStart === 0) {
+      // if (this.chipGrid != null) this.chipGrid.last.focus();
+    }
   }
 
   private getFieldInfo(courseID: string, fieldID: string | null) {
