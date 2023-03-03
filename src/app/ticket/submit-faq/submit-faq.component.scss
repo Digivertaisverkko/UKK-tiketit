@@ -13,13 +13,7 @@ mat-form-field { min-width: 21rem; }
 .short-field-wrapper {
   width: 21em;
 
-  .characters-label {
-    display: block;
-    margin-bottom: -20px;
-    position: relative;
-    text-align: right;
-    top: -24px;
-  }
+  mat-form-field { margin-top: 2px; }
 }
 
 .theme-actions {
