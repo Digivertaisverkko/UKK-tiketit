@@ -10,10 +10,10 @@ export const authGuard: CanActivateFn = async () => {
   // const location = inject(Location);
 
   if (authService.getIsUserLoggedIn()) {
-    console.log('authGuard: olet kirjautunut.');
+    // console.log('authGuard: olet kirjautunut.');
     return true
   } else {
-    console.log('authGuard: et ole kirjautunut.');
+    // console.log('authGuard: et ole kirjautunut.');
     // authService.onIsUserLoggedIn().subscribe(response => {
       /* Tämän sovelluksen oma kirjautumistapa on oletus ennen kuin käyttäjä valitsee kirjautumisruudussa
         jonkin muun tavan. Ei siirrytä suoraan /login, koska palvelimelta saatava
