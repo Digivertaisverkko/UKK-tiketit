@@ -46,6 +46,16 @@
                   placeholder="">
         <mat-hint align="end">{{ kentta.arvo.length }} / 50</mat-hint>
         </mat-form-field>
+
+        <mat-icon (click)="tooltip.toggle()"
+                  matTooltip="{{ kentta.ohje }}"
+                  matTooltipPosition="after"
+                  *ngIf="kentta.ohje.length > 0"
+                  [ngStyle]="{ 'padding-left': '15px' }"
+                  #tooltip="matTooltip">
+          help_outline
+        </mat-icon>
+
       </ng-container>
 
     </section>
