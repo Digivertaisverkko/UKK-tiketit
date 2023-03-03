@@ -82,7 +82,7 @@ export class EditFieldComponent implements OnInit {
 
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.ticketService.getTicketFieldInfo(courseID).then(response => {
-      if (response[0].id) {
+      if (response[0]?.id) {
         // Tarvitaan tietojen lähettämiseen.
         this.allFields = response.map(field => {
           return {
@@ -107,7 +107,7 @@ export class EditFieldComponent implements OnInit {
         console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
       }
     }).catch(error => {
-      this.errorMessage = "Ei saatu luettua kentän tietoja.";
+      this.errorMessage = $localize `@@Lisäkentän tietojen haku epäonnistui:Lisäkentän tietojen haku epäonnistui` + '.';
     })
   }
 
