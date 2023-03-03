@@ -26,6 +26,7 @@ export class SettingsComponent implements OnInit {
   public isInIframe: boolean;
   public courseID: string = '';
   public courseName: string = '';
+  private delayFetching: string = window.history.state.delayFetching ?? false;
 
   constructor(
     private router: Router,
@@ -48,7 +49,12 @@ export class SettingsComponent implements OnInit {
       }
       this.courseID = courseID;
       this.showCourseName(this.courseID);
+      // FIXME: Palvelin voi palauttaa tyhjän taulun, niin väliaikainen fiksi.
+      if (this.delayFetching == 'true') {
+        setTimeout(() => { this.fetchTicketFieldInfo(this.courseID) }, 200);
+      } else {
       this.fetchTicketFieldInfo(courseID);
+      }
     });
   }
 
