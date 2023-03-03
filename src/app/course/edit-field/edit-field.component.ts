@@ -15,6 +15,7 @@ export class EditFieldComponent implements OnInit {
   public field: KentanTiedot;
   public errorMessage: string = '';
   public isInIframe: boolean;
+  public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
   public courseID: string = '';
   public courseName: string = '';
@@ -54,6 +55,7 @@ export class EditFieldComponent implements OnInit {
       this.showCourseName(this.courseID);
       // Kentän id on uudella kentällä null.
       this.getFieldInfo(courseID, this.fieldID);
+      this.isLoaded = true;
     });
   }
 

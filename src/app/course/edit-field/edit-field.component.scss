@@ -67,5 +67,5 @@
 }
 
 @media (min-width: $XSmall) {
-  .view-wrapper{ padding-right: $right-padding }
+  .view-wrapper, .top-buttons{ padding-right: $right-padding }
 }
