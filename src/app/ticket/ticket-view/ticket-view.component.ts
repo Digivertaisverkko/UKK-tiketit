@@ -27,6 +27,7 @@ export class TicketViewComponent implements OnInit {
   public newCommentState: 3 | 4 | 5 = 4;
   public commentText: string;
   public isLoaded: boolean;
+  public isRemovePressed: boolean = false;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
   public message: string = '';
@@ -102,6 +103,14 @@ export class TicketViewComponent implements OnInit {
           this.isLoaded = true;
         }
       })
+  }
+
+  public removeTicket() {
+
+  }
+
+  changeRemoveButton() {
+    setTimeout(() => this.isRemovePressed = true, 300);
   }
 
   public copyAsFAQ() {
