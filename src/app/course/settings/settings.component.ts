@@ -76,13 +76,6 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  public htmlToText(html: string): string {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    const text = div.textContent || div.innerText || html;
-    return text;
-  }
-
   private fetchTicketFieldInfo(courseID: string) {
     this.ticketService.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.otsikko != null) {
@@ -90,7 +83,7 @@ export class SettingsComponent implements OnInit {
       }
       console.dir(this.fieldList);
     }).catch(e => {
-      this.errorMessage = "Ei saatu haettua tiketin kenttien tietoja."
+      this.errorMessage = $localize `@@Kysymysten lisäkenttien haku epäonnistui:Kysymysten lisäkenttien haku epäonnistui.`;
     });
   }
 

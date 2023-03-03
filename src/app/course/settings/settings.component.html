@@ -9,7 +9,7 @@
 
   <h3 class="sub-header table-header" i18n="@@Kysymysten lisäkentät">Kysymysten lisäkentät</h3>
 
-  <div class="container" cdkDropList (cdkDropListDropped)="drop($event)">
+  <div class="container" *ngIf="errorMessage.length === 0" cdkDropList (cdkDropListDropped)="drop($event)">
     <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
       <div class="title-column">{{field.otsikko}}</div>
@@ -17,7 +17,8 @@
       <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" ><mat-icon class="edit-icon">edit_indicator</mat-icon></a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
     </div>
-    <p *ngIf="fieldList.length === 0" class="no-fields-p" i18n="@@Yhtään lisäkenttää ei ole lisätty">Yhtään lisäkenttää ei ole lisätty.</p>
+    <p *ngIf="fieldList.length === 0" class="no-fields-p" i18n="@@Yhtään lisäkenttää ei ole lisätty">
+      Yhtään lisäkenttää ei ole lisätty.</p>
   </div>
 
 </div>
@@ -28,7 +29,7 @@
 
 <p *ngIf="message.length >0" class="message">{{message}}</p>
 
-<div class="theme-actions">
+<div class="theme-actions" *ngIf="errorMessage.length === 0">
 
   <button
     class="add-button"

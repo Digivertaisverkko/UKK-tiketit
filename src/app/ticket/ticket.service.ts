@@ -63,9 +63,7 @@ export class TicketService {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
     if (tila !== undefined) {
-      if (tila  < 0 || tila > 6) {
-        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
-      }
+      if (tila  < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
     }
     interface newComment {
       viesti: string;
@@ -97,42 +95,27 @@ export class TicketService {
     return response
   }
 
-  // Dummy-data kurssin asetuksia varten.
-  public getTicketFieldInfoDummy(courseID: string): Kentta[] {
-    const response = [ { otsikko: 'Tehtävä', arvo: '', tyyppi: '1', ohje: 'Kirjoita tähän tehtävä.' },
-      { otsikko: 'Tyyppi', arvo: '', tyyppi: '1', ohje: 'Kirjoita tähän tyyppi.' }];
-    return response
-  }
-
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise <KentanTiedot[]> {
     let response: any;
-    // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti/kentat`;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {
-      console.log('Lähetetään GET-pyyntö urliin: ' + url);
       response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
     } catch (error: any) {
       this.handleError(error);
     }
-    if (fieldID) {
-      response = response.filter((field: KentanTiedot) => field.id == fieldID);
-    }
+    if (fieldID) response = response.filter((field: KentanTiedot) => field.id == fieldID);
     return response;
   }
 
   // Luo uudet kentät tikettipohjalle.
   public async setTicketFieldInfo(courseID: string, fields: KentanTiedot[]) {
-
     for (let field of fields) {
       if (field.id != null) delete field.id;
     }
-
     const url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     let response: any;
     const body = { kentat: fields };
-    console.log('Lähetetään body:');
-    console.dir(body);
     try {
       console.log('Lähetetään GET-pyyntö urliin: ' + url);
       response = await firstValueFrom( this.http.put(url, body) );
