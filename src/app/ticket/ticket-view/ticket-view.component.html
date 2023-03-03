@@ -13,7 +13,7 @@
 
       <div class="spacer"></div>
 
-      <button mat-raised-button i18n="@@Muokkaa"
+      <button *ngIf="isEditable" mat-raised-button i18n="@@Muokkaa"
         (click)="editTicket()">
         Muokkaa
       </button>

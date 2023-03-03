@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { KentanTiedot, TicketService, UusiTiketti } from 'src/app/ticket/ticket.service';
+import { KentanTiedot, TicketService, Tiketti, UusiTiketti} from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 
 interface TiketinKentat extends KentanTiedot {
@@ -21,12 +21,13 @@ export class SubmitTicketComponent implements OnInit {
   private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public currentDate = new Date();
+  public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
   public message: string = '';
-  private newTicket: UusiTiketti = {} as UusiTiketti;
-  public ticketFields: TiketinKentat[] = [];
   public title: string = '';
+  public ticketFields: TiketinKentat[] = [];
+  public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public uploadClick: Subject<void> = new Subject<void>();
   public userName: string | null = '';
 
@@ -50,6 +51,27 @@ export class SubmitTicketComponent implements OnInit {
         field.arvo = '';
       }
     });
+    if (this.ticketId != null) this.fetchTicketInfo();
+  }
+
+  private fetchTicketInfo() {
+    if (this.ticketId == null) return 
+    this.ticketService.getTicketInfo(this.ticketId).then(response => {
+      if (response?.id) {
+        this.title = response.otsikko;
+        this.message = response.viesti;
+        if (response.kentat !== undefined ) {
+          for (let tiketinKentta of response.kentat) {
+            for (let uusiKentta of this.ticketFields) {
+              if (tiketinKentta.otsikko === uusiKentta.otsikko) {
+                uusiKentta.arvo = tiketinKentta.arvo;
+                break;
+              }
+            }
+          }
+        }
+      }
+    }).catch(e => {})
   }
 
   private goBack() {
@@ -57,14 +79,15 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public sendTicket(): void {
-    this.newTicket.otsikko = this.title;
-    this.newTicket.viesti = this.message;
-    this.newTicket.kentat = this.ticketFields.map((field) => {
+    let ticket: UusiTiketti = {} as UusiTiketti;
+    ticket.otsikko = this.title;
+    ticket.viesti = this.message;
+    ticket.kentat = this.ticketFields.map((field) => {
       return { id: Number(field.id), arvo: field.arvo }
     });
 
     if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
-    this.ticketService.addTicket(this.courseId, this.newTicket, this.fileList)
+    this.ticketService.addTicket(this.courseId, ticket, this.fileList)
       .then(() => this.goBack()
       ).catch( error => {
         // TODO: lisää eri virhekoodeja?

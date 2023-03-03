@@ -11,6 +11,7 @@ import { ListingComponent } from './listing/listing.component';
 const routes: Routes = [
   { path: 'course/:courseid/ticket-view/:id', component: TicketViewComponent, canActivate: [authGuard] },
   { path: 'course/:courseid/submit', component: SubmitTicketComponent, canActivate: [authGuard] },
+  { path: 'course/:courseid/submit/:id', component: SubmitTicketComponent, canActivate: [authGuard] },
   { path: 'course/:courseid/submit-faq', component: SubmitFaqComponent, canActivate: [authGuard] },
   { path: 'course/:courseid/submit-faq/:id', component: SubmitFaqComponent, canActivate: [authGuard] },
   { path: 'course/:courseid/faq-view/:id', component: FaqViewComponent },

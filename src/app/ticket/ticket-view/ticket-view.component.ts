@@ -28,6 +28,7 @@ export class TicketViewComponent implements OnInit {
   public commentText: string;
   public isLoaded: boolean;
   public isRemovePressed: boolean = false;
+  public isEditable: boolean = false;
   public isRemovable: boolean = false;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
@@ -93,9 +94,11 @@ export class TicketViewComponent implements OnInit {
             if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
-          if (this.ticket.aloittaja.id === this.user.id && this.ticket.kommentit.length === 0) {
-            this.isRemovable = true;
+          if (this.ticket.aloittaja.id === this.user.id) {
+            this.isEditable = true;
+            if (this.ticket.kommentit.length === 0) this.isRemovable = true;
           }
+          console.log(' onko editoitavissa: ' + this.isEditable);
           this.isLoaded = true;
         },
         error: error => {
