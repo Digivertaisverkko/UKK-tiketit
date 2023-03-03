@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 import { interval, startWith, Subject, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
@@ -28,11 +28,13 @@ export class TicketViewComponent implements OnInit {
   public commentText: string;
   public isLoaded: boolean;
   public isRemovePressed: boolean = false;
+  public isRemovable: boolean = false;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public ticketID: string;
   public message: string = '';
   public userRole: string = '';
   public attachFilesText: string = '';
+  public user: User = {} as User;
   private userName: string = '';
   private courseID: string | null;
   public uploadClick: Subject<void> = new Subject<void>();
@@ -59,6 +61,7 @@ export class TicketViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
+      if (response.id != null) this.user = response;
       if (response.asema !== undefined ) this.userRole = response.asema;
       if (response.nimi !== undefined ) this.userName = response.nimi;
       if (this.userRole === 'opettaja' || this.userRole ==='admin') {
@@ -90,6 +93,9 @@ export class TicketViewComponent implements OnInit {
             if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
+          if (this.ticket.aloittaja.id === this.user.id && this.ticket.kommentit.length === 0) {
+            this.isRemovable = true;
+          }
           this.isLoaded = true;
         },
         error: error => {
@@ -103,6 +109,11 @@ export class TicketViewComponent implements OnInit {
           this.isLoaded = true;
         }
       })
+  }
+
+  public editTicket() {
+    let url = '/course/' + this.courseID + '/submit/' + this.ticketID;
+    this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 
   public removeTicket() {

@@ -6,18 +6,25 @@
     <span>{{ courseName }}</span>
   </h2>
 
-    <div id="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent && (userRole === 'opettaja' || userRole === 'admin')
-      && ticket.tila > 0">
+  <app-to-beginning-button *ngIf="ticket.tila === undefined"></app-to-beginning-button>
+
+    <div id="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent && ticket.tila > 0">
       <app-to-beginning-button></app-to-beginning-button>
 
       <div class="spacer"></div>
 
+      <button mat-raised-button i18n="@@Muokkaa"
+        (click)="editTicket()">
+        Muokkaa
+      </button>
+
       <button mat-raised-button i18n="@@Kopioi UKK"
-        (click)="copyAsFAQ()">
+        (click)="copyAsFAQ()"
+        *ngIf="(userRole === 'opettaja' || userRole === 'admin')">
         Kopioi UKK:ksi
       </button>
 
-      <button mat-raised-button *ngIf="isRemovePressed === false"
+      <button mat-raised-button *ngIf="isRemovable && isRemovePressed === false"
         i18n="@@Poista" (click)="changeRemoveButton()">
         Poista
       </button>
