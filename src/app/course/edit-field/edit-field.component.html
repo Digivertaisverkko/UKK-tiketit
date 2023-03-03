@@ -37,9 +37,9 @@
   <div class="multiple-selection-wrapper">
     <mat-checkbox [(ngModel)]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
 
-    <mat-form-field class="chip-list-form-field" appearance="fill">
+    <mat-form-field class="chip-list-form-field" appearance="fill" >
       <mat-label i18n="@@Monivalinnan vaihtoehdot">Monivalinnan vaihtoehdot</mat-label>
-      <mat-chip-grid #chipGrid aria-label="Valitse monivalinnan vaihtoehtoja">
+      <mat-chip-grid #chipGrid aria-label="Valitse monivalinnan vaihtoehtoja" [disabled]="!multipleSelection">
 
         <mat-chip-row *ngFor="let valinta of field.valinnat"
           [editable]="true"

@@ -65,25 +65,17 @@ export class EditFieldComponent implements OnInit {
 
   public remove(valinta: string): void {
     const index = this.field.valinnat.indexOf(valinta);
-
-    if (index >= 0) {
-      this.field.valinnat.splice(index, 1);
-    }
+    if (index >= 0) this.field.valinnat.splice(index, 1);
   }
 
   public edit(valinta: string, event: MatChipEditedEvent) {
     const value = event.value.trim();
-
     if (!value) {
       this.remove(valinta);
       return;
     }
-
-    // Edit existing fruit
     const index = this.field.valinnat.indexOf(valinta);
-    if (index >= 0) {
-      this.field.valinnat[index] = value;
-    }
+    if (index >= 0) this.field.valinnat[index] = value;
   }
 
   private getFieldInfo(courseID: string, fieldID: string | null) {
@@ -101,7 +93,7 @@ export class EditFieldComponent implements OnInit {
             console.error('Virhe: ei oikeutta kentän tietoihin.');
           } else {
             this.field = matchingField[0];
-             // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden alkion: "", mitä ei haluta.
+             // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden alkion "", mitä ei haluta.
             if (this.field.valinnat[0].length === 0) {
               this.field.valinnat = [];
               this.multipleSelection = false;
@@ -110,10 +102,7 @@ export class EditFieldComponent implements OnInit {
             }
           }
         }
-        // console.log(this.field.valinnat);
-        // console.log(this.field.valinnat[0].length);
-        // console.log(this.multipleSelection);
-        console.log('Kentän tiedot: ' + JSON.stringify(this.field));
+        console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
       }
     }).catch(error => {
       this.errorMessage = "Ei saatu luettua kentän tietoja.";
@@ -127,6 +116,7 @@ export class EditFieldComponent implements OnInit {
   }
 
   public sendField(removeExisting?: boolean): void {
+    if (this.multipleSelection === false) this.field.valinnat = [];
     if (this.fieldID == null) {   // Ellei ole uusi kenttä.
       this.allFields.push(this.field);
     } else {
@@ -140,7 +130,6 @@ export class EditFieldComponent implements OnInit {
     }
     this.ticketService.setTicketFieldInfo(this.courseID, this.allFields).then(response => {
       if (response === true ) {
-
         this.router.navigate(['/course/' + this.courseID + '/settings'], { state: { delayFetching: 'true' } });
       } else {
         console.log('Tikettipohjan muuttaminen epäonnistui.');
@@ -150,7 +139,7 @@ export class EditFieldComponent implements OnInit {
     })
   }
 
-   public changeRemoveButton() {
+  public changeRemoveButton() {
     setTimeout(() => this.isRemovePressed = true, 300);
   }
 
