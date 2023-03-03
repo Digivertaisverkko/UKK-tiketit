@@ -146,6 +146,7 @@
     "Virheilmoitus": "Error message",
     "Virhetila": "Error state",
     "Yhteydenotto palvelimeen ei onnistunut.": "The connection to the server failed.",
+    "Yhtään lisäkenttää ei ole lisätty": "No additional fields have been added.",
     "Yliviivaa": "Strike-through"
   }
 }

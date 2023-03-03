@@ -24,6 +24,7 @@ export class SettingsComponent implements OnInit {
   public fieldList: KentanTiedot[] = [];
   public inviteEmail: string = '';
   public isInIframe: boolean;
+  public isLoaded: boolean = false;
   public courseID: string = '';
   public courseName: string = '';
   private delayFetching: string = window.history.state.delayFetching ?? false;
@@ -55,6 +56,7 @@ export class SettingsComponent implements OnInit {
       } else {
       this.fetchTicketFieldInfo(courseID);
       }
+      this.isLoaded = true;
     });
   }
 
