@@ -83,7 +83,7 @@ export class SettingsComponent implements OnInit {
       }
       console.dir(this.fieldList);
     }).catch(e => {
-      this.errorMessage = $localize `@@Kysymysten lisäkenttien haku epäonnistui:Kysymysten lisäkenttien haku epäonnistui.`;
+      this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:Kysymysten lisäkenttien haku epäonnistui` + '.';
     });
   }
 
