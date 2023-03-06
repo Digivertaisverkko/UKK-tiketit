@@ -8,6 +8,8 @@
       <span>{{courseName}}</span>
     </h2>
 
+    <div class="spacer"></div>
+
     <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
     [routerLink]="'/course/' + courseID + '/settings'"><mat-icon class="settings-icon">settings</mat-icon>
     </button>
