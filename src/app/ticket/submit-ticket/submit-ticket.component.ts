@@ -28,7 +28,7 @@ export class SubmitTicketComponent implements OnInit {
   public title: string = '';
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
-  public uploadClick: Subject<void> = new Subject<void>();
+  public uploadClick: Subject<string> = new Subject<string>();
   public userName: string | null = '';
 
   constructor(private auth: AuthService,
