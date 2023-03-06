@@ -139,21 +139,20 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // Ei tätä kirjoittaessa tukea liitteiden lähettämiseen UKK:n.
-    // if (fileList?.length === 0 ) return
-    // const ticketID = String(response.uusi.tiketti);
-    // const firstCommentID = String(response.uusi.kommentti);
-    // let sendFileResponse: any;
-    // for (let file of fileList) {
-    //   try {
-    //     sendFileResponse = await this.sendFile(ID, firstCommentID, file);
-    //   } catch (error: any) {
-    //     this.handleError(error);
-    //   }
-    // }
+    if (fileList?.length === 0 ) return
+    const ticketID = String(response.uusi.tiketti);
+    const firstCommentID = String(response.uusi.kommentti);
+    let sendFileResponse: any;
+    for (let file of fileList) {
+      try {
+        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
+    }
   }
 
-  public async editTicket(ticketID: string, ticket: UusiTiketti): Promise<boolean> {
+  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]): Promise<boolean> {
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
     const body = ticket;
@@ -164,7 +163,16 @@ export class TicketService {
       this.handleError(error);
     }
     if (response?.success !== true) return false
-    // ! Ei vielä tiedostojen lähettämistä.
+    if (fileList?.length == 0 || !fileList ) return true
+    const firstCommentID = String(response.uusi.kommentti);
+    let sendFileResponse: any;
+    for (let file of fileList) {
+      try {
+        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
+    }
     return true
   }
 
