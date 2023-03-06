@@ -29,7 +29,7 @@ export class SubmitFaqComponent implements OnInit {
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
   public uploadClick: Subject<void> = new Subject<void>();
-
+ 
   constructor(private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
@@ -101,7 +101,7 @@ export class SubmitFaqComponent implements OnInit {
     this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
       .then(() => { this.goBack() })
       .catch( (error: Error) => {
-        if (error.tunnus == 1003) {
+        if (error?.tunnus == 1003) {
           this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
         } else {
           this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
