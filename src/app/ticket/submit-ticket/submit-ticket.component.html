@@ -108,7 +108,9 @@
 
     <div class="theme-actions">
 
+       <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next()"
+              *ngIf="!editExisting"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
         <mat-icon>attach_file</mat-icon>
@@ -130,7 +132,8 @@
 
     <app-edit-attachments
         (fileListOutput)="fileList = $event"
-        [uploadClicks]="uploadClick.asObservable()">
+        [uploadClicks]="uploadClick.asObservable()"
+        >
     </app-edit-attachments>
 
   </form>

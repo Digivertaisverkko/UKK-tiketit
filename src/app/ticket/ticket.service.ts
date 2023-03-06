@@ -153,10 +153,25 @@ export class TicketService {
     // }
   }
 
+  public async editTicket(ticketID: string, ticket: UusiTiketti): Promise<boolean> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    const body = ticket;
+    try {
+      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
+      response = await firstValueFrom(this.http.put(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response?.success !== true) return false
+    // ! Ei vielä tiedostojen lähettämistä.
+    return true
+  }
+
   // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
   public async addTicket(courseID: string, newTicket: UusiTiketti, fileList: File[]): Promise<boolean> {
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/uusitiketti';
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
     const body = newTicket;
     interface AddTicketResponse {
       success: Boolean;
@@ -349,9 +364,7 @@ export class TicketService {
 
   // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
   public async getTicketInfo(ticketID: string): Promise<Tiketti> {
-    //const httpOptions = this.getHttpOptions();;
     let response: any;
-    // ticketID = '2309483290';
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url));

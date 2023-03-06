@@ -60,6 +60,7 @@ export class SubmitTicketComponent implements OnInit {
       if (response?.id) {
         this.title = response.otsikko;
         this.message = response.viesti;
+        
         if (response.kentat !== undefined ) {
           for (let tiketinKentta of response.kentat) {
             for (let uusiKentta of this.ticketFields) {
@@ -87,11 +88,20 @@ export class SubmitTicketComponent implements OnInit {
     });
 
     if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
+
+    if (this.ticketId != null) {
+      this.ticketService.editTicket(this.ticketId, ticket)
+        .then( () => this.goBack()
+        ).catch(error => {
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+        })
+    } else {
     this.ticketService.addTicket(this.courseId, ticket, this.fileList)
       .then(() => this.goBack()
       ).catch( error => {
         // TODO: lisää eri virhekoodeja?
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
+    }
   }
 }

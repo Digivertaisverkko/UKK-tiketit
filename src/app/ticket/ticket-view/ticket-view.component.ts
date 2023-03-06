@@ -18,27 +18,28 @@ export class TicketViewComponent implements OnInit {
   @Input() ticketIdFromParent: string | null = null;
   @Input() public fileList: File[] = [];
   @Input() public attachmentsHasErrors: boolean = false;
+  @Input() public clearList: boolean = false;
+  public uploadClick: Subject<void> = new Subject<void>();
 
+  public attachFilesText: string = '';
+  public commentText: string;
   public courseName: string = '';
   public errorMessage: string = '';
-  public isInIframe: boolean;
-  public ticket: Tiketti;
-  public tila: string;
-  public newCommentState: 3 | 4 | 5 = 4;
-  public commentText: string;
-  public isLoaded: boolean;
-  public isRemovePressed: boolean = false;
   public isEditable: boolean = false;
+  public isInIframe: boolean;
+  public isLoaded: boolean;
   public isRemovable: boolean = false;
-  public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
-  public ticketID: string;
+  public isRemovePressed: boolean = false;
   public message: string = '';
-  public userRole: string = '';
-  public attachFilesText: string = '';
+  public newCommentState: 3 | 4 | 5 = 4;
+  public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
+  public ticket: Tiketti;
+  public ticketID: string;
+  public tila: string;
   public user: User = {} as User;
+  public userRole: string = '';
   private userName: string = '';
   private courseID: string | null;
-  public uploadClick: Subject<void> = new Subject<void>();
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;   // Ticket info polling rate in minutes.
   private readonly CURRENT_DATE = new Date().toDateString();
 
@@ -96,7 +97,7 @@ export class TicketViewComponent implements OnInit {
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
           if (this.ticket.aloittaja.id === this.user.id) {
             this.isEditable = true;
-            if (this.ticket.kommentit.length === 0) this.isRemovable = true;
+            this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
           }
           console.log(' onko editoitavissa: ' + this.isEditable);
           this.isLoaded = true;
@@ -195,9 +196,14 @@ export class TicketViewComponent implements OnInit {
           console.log(response);
         }
       })
-      .then( () => { this.commentText = '' } )
+      .then( () => {
+        this.commentText = '';
+        this.fileList = [];
+      })
       .catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+      }).finally(() => {
+
       });
   }
 
