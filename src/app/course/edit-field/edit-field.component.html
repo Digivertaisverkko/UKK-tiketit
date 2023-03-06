@@ -4,7 +4,10 @@
   <span>{{courseName}}</span>
 </h2>
 
+<div class="vertical-spacer" *ngIf="isInIframe"></div>
+
 <div class="top-buttons">
+  
   <app-to-beginning-button></app-to-beginning-button>
 
   <button
