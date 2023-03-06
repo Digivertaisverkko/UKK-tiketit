@@ -28,7 +28,7 @@ export class SubmitFaqComponent implements OnInit {
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
-  public uploadClick: Subject<void> = new Subject<void>();
+  public uploadClick: Subject<string> = new Subject<string>();
  
   constructor(private auth: AuthService,
               private router: Router,

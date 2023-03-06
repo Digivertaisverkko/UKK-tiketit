@@ -137,7 +137,7 @@
 
     <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-      <button mat-raised-button class="attach-button" (click)="uploadClick.next()"><mat-icon>attach_file</mat-icon>
+      <button mat-raised-button class="attach-button" (click)="uploadClick.next('add')"><mat-icon>attach_file</mat-icon>
         {{attachFilesText}}
       </button>
 

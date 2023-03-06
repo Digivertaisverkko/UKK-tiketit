@@ -109,7 +109,7 @@
     <div class="theme-actions">
 
        <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
-      <button (click)="uploadClick.next()"
+      <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>

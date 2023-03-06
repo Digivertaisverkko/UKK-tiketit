@@ -19,7 +19,7 @@ export class TicketViewComponent implements OnInit {
   @Input() public fileList: File[] = [];
   @Input() public attachmentsHasErrors: boolean = false;
   @Input() public clearList: boolean = false;
-  public uploadClick: Subject<void> = new Subject<void>();
+  public uploadClick: Subject<string> = new Subject<string>();
 
   public attachFilesText: string = '';
   public cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.';

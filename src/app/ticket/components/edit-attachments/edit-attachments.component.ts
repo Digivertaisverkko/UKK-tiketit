@@ -30,7 +30,9 @@ interface FileInfo {
 export class EditAttachmentsComponent implements OnInit {
 
   @Output() fileListOutput = new EventEmitter<File[]>();
-  @Input() uploadClicks: Observable<void> = new Observable();
+  @Input() uploadClicks: Observable<string> = new Observable();
+  // @Input() fileListInput  
+
   @Output() attachmentsHasErrors = new EventEmitter<boolean>;
   public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
@@ -39,7 +41,11 @@ export class EditAttachmentsComponent implements OnInit {
 
   ngOnInit() {
     const element: HTMLElement = document.querySelector('.file-input') as HTMLElement;
-    this.uploadClicks.subscribe(() => element.click());
+    this.uploadClicks.subscribe(event => {
+      console.log('saatiin event:');
+      console.dir(event);
+      element.click()
+    });
     // this.fileInfoList = [{filename: "tiedoston nimi", error: "Liian iso"}]
   }
 

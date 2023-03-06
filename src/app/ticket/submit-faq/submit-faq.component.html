@@ -97,7 +97,7 @@
     <div class="theme-actions">
 
       <!-- ! Tällä hetkellä ei tueta liitetiedostojen editointia. -->
-      <button (click)="uploadClick.next()"
+      <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
