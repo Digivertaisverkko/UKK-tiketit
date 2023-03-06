@@ -24,17 +24,15 @@
         Kopioi UKK:ksi
       </button>
 
-        <!-- matTooltipDisabled -->
-
-
-      <button mat-raised-button *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
-        i18n="@@Poista" (click)="changeRemoveButton()"
-        [disabled]="!isRemovable"
-        matTooltip="Terve"
-        [matTooltipDisabled]="isRemovable"
-        >
-        Poista
-      </button>
+      <div
+        matTooltip="{{cantRemoveTicket}}"
+        [matTooltipDisabled]="isRemovable">
+        <button mat-raised-button *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
+          i18n="@@Poista" (click)="changeRemoveButton()"
+          [disabled]="!isRemovable">
+          Poista
+        </button>
+      </div>
 
       <button mat-raised-button (click)="removeTicket()" *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto">
         Vahvista poisto

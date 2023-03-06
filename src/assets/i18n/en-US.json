@@ -24,6 +24,7 @@
     "Suodata kysymyksiä": "Filter questions",
     "Ei tuloksia": "No results with filter.",
     "Ei liitetiedostoa": "No file attachment",
+    "Ei voi poistaa kysymystä": "A question cannot be removed if there are comments on it",
     "Esitäytettävä": "Pre-fillable",
     "Infoteksti": "Info text",
     "Järjestä lähettäjän mukaan": "Sort by sender",
