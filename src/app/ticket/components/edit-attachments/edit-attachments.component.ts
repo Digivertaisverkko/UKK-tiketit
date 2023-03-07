@@ -12,6 +12,9 @@ interface FileInfo {
   template: `
     <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
 
+    <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
+      (change)="onFileChanged($event)" #fileUpload> -->
+
     <div class="file-list-wrapper" *ngIf="fileList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
@@ -23,8 +26,7 @@ interface FileInfo {
         <!-- <mat-error>Virheilmoitukset tähän.</mat-error> -->
       </div>
     </div>`,
-  styleUrls: ['./edit-attachments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./edit-attachments.component.scss']
 })
 
 export class EditAttachmentsComponent implements OnInit {
@@ -36,6 +38,7 @@ export class EditAttachmentsComponent implements OnInit {
   @Output() attachmentsHasErrors = new EventEmitter<boolean>;
   public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
+  // public url: string = '';
   // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
 
@@ -53,10 +56,9 @@ export class EditAttachmentsComponent implements OnInit {
   }
 
   public onFileChanged(event: any) {
+    console.log('edit-attachments: event saatu.');
     const MEGABYTE = 1000000;
     for (let file of event.target.files) {
-      console.log('file: ' + file);
-      // if (this.fileInfoList.filename.includes(file)) continue;
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let fileinfo: FileInfo = { filename: file.name };
       if (file.size > 10 * MEGABYTE) {
@@ -69,6 +71,8 @@ export class EditAttachmentsComponent implements OnInit {
       this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileList);
       console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
+      console.log('filelist:');
+      console.dir(this.fileList);
     }
   }
 
