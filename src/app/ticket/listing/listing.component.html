@@ -10,8 +10,13 @@
 
     <div class="spacer"></div>
 
+      <button mat-raised-button class="embedded-button" (click)="openInNewTab()" *ngIf="isInIframe"><a target="_blank"
+        i18n="@@Avaa uuteen välilehteen">
+        Avaa uuteen välilehteen</a>
+      </button>
+
     <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
-    [routerLink]="'/course/' + courseID + '/settings'"><mat-icon class="settings-icon">settings</mat-icon>
+      [routerLink]="'/course/' + courseID + '/settings'"><mat-icon class="settings-icon">settings</mat-icon>
     </button>
   </div>
 

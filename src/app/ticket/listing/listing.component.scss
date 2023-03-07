@@ -11,12 +11,18 @@ section, app-error-card, .theme-actions { margin-left: -15px; }
   justify-content: space-between;
 }
 
+.embedded-button {
+  font-size: 85%;
+  margin-top: 1rem;
+  white-space: nowrap;
+}
+
 .settings-button {
-  // align-self: flex-end;
+  align-self: center;
   font-size: 2rem;
   width: 1em;
   height: 1em;
-  margin-top: 2rem;
+  margin-top: 1rem;
   position: relative;
   // margin-bottom: 1.3rem;
   mat-icon {

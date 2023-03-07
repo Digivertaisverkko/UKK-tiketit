@@ -44,15 +44,12 @@ export class AppComponent implements OnInit  {
     }
     this.authService.initialize();
     //  this.trackForCourseID();
+
     this.isInIframe = this.testIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackLoginStatus();
     // this.trackCourseID();
-  }
-
-  public openInNewTab() {
-    window.open(window.location.href, '_blank');
   }
 
   // private trackCourseID() {
