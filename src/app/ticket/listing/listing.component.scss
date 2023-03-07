@@ -148,9 +148,9 @@ button { margin-left: 1rem; margin-right: 0; }
 
 .mat-mdc-form-field { width: 97%; }
 
-// .theme-actions {
-//   align-self: flex-end;
-// }
+button {
+  white-space: nowrap;
+}
 
 @media (min-width: $XSmall) {
 
