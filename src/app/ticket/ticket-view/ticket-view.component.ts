@@ -1,11 +1,12 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { interval, startWith, Subject, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
+import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
 @Component({
   selector: 'app-ticket-view',
@@ -18,10 +19,10 @@ export class TicketViewComponent implements OnInit {
   @Input() ticketIdFromParent: string | null = null;
   @Input() public fileList: File[] = [];
   @Input() public attachmentsHasErrors: boolean = false;
-  @Input() public clearList: boolean = false;
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public uploadClick: Subject<string> = new Subject<string>();
-
   public attachFilesText: string = '';
+
   public cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.';
   public commentText: string;
   public courseName: string = '';
@@ -199,12 +200,11 @@ export class TicketViewComponent implements OnInit {
       })
       .then( () => {
         this.commentText = '';
-        this.fileList = [];
       })
       .catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
       }).finally(() => {
-
+        this.attachments.clear();
       });
   }
 

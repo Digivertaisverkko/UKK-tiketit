@@ -31,7 +31,7 @@ export class EditAttachmentsComponent implements OnInit {
 
   @Output() fileListOutput = new EventEmitter<File[]>();
   @Input() uploadClicks: Observable<string> = new Observable();
-  // @Input() fileListInput  
+  // @Input() fileListInput
 
   @Output() attachmentsHasErrors = new EventEmitter<boolean>;
   public fileList: File[] = [];
@@ -41,12 +41,15 @@ export class EditAttachmentsComponent implements OnInit {
 
   ngOnInit() {
     const element: HTMLElement = document.querySelector('.file-input') as HTMLElement;
-    this.uploadClicks.subscribe(event => {
-      console.log('saatiin event:');
-      console.dir(event);
-      element.click()
+    this.uploadClicks.subscribe(action => {
+        element.click()
     });
     // this.fileInfoList = [{filename: "tiedoston nimi", error: "Liian iso"}]
+  }
+
+  public clear() {
+    this.fileInfoList = [];
+    this.fileList = [];
   }
 
   public onFileChanged(event: any) {
