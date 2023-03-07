@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -6,8 +6,15 @@ import { AuthService } from 'src/app/core/auth.service';
 import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK } from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 
+
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
+}
+
+interface FileInfo {
+  filename: string;
+  error?: string;
+  errorToolTip?: string;
 }
 
 @Component({
@@ -15,8 +22,10 @@ interface TiketinKentat extends KentanTiedot {
   templateUrl: './submit-faq.component.html',
   styleUrls: ['./submit-faq.component.scss']
 })
+
 export class SubmitFaqComponent implements OnInit {
   @Input() public fileList: File[] = [];
+  // @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -29,6 +38,12 @@ export class SubmitFaqComponent implements OnInit {
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
+
+  attachmentsHasErrors: boolean = false;
+  public fileInfoList: FileInfo[] = [];
+  public url: string = '';
+  // public fileNameList: string[] = [];
+  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
  
   constructor(private auth: AuthService,
               private router: Router,
@@ -82,6 +97,28 @@ export class SubmitFaqComponent implements OnInit {
       .then( response => { this.courseName = response });
   }
 
+  public onFileChanged(event: any) {
+    const MEGABYTE = 1000000;
+    for (let file of event.target.files) {
+      if (this.fileInfoList.some(item => item.filename === file.name)) continue
+      let fileinfo: FileInfo = { filename: file.name };
+      if (file.size > 10 * MEGABYTE) {
+        fileinfo.error = $localize `:@@Liian iso:Liian iso`;
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää 10 megatavun rajoituksen` + '.';
+        this.attachmentsHasErrors = true;
+      } else {
+        this.fileList.push(file);
+      }
+      this.fileInfoList.push(fileinfo);
+    }
+  }
+
+  public removeSelectedFile(index: number) {
+    this.fileList.splice(index, 1);
+    this.fileInfoList.splice(index, 1);
+    this.attachmentsHasErrors = (this.fileInfoList.some(item => item.error));
+  }
+
   private goBack(): void {
     this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
   }
@@ -95,7 +132,6 @@ export class SubmitFaqComponent implements OnInit {
     newFaq.kentat = this.ticketFields.map((field) => {
       return { id: Number(field.id), arvo: field.arvo }
     });
-
     if (this.courseId === null) throw new Error('Ei kurssi ID:ä.');
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
