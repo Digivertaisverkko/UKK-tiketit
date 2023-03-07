@@ -1,0 +1,120 @@
+@import '/src/variables.scss';
+
+.vertical-spacer { height: 1rem; }
+
+// ----- Lista --------------------------
+
+.container {
+  // display: block;
+  // padding: 0.7rem;
+  // justify-items: start;
+  margin-top: 3rem;
+  max-width: 100%;
+  border: solid 1px #ccc;
+  min-height: 55px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.list-row {
+  display: grid;
+  grid-template-columns: 3fr 4fr 2rem 2rem;
+  padding: 1rem 0 1rem 1.4rem;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  // display: flex;
+  // flex-direction: row;
+  // align-items: center;
+  // justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+}
+
+.title-column {
+  // display: inline-block;
+  // width: 20em;
+}
+
+
+a, mat-icon {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+mat-icon {
+  font-size: 2;
+}
+
+.no-fields-p {
+  text-align: center;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 3px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.list-row:last-child {
+  border: none;
+}
+
+.container.cdk-drop-list-dragging .list-row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// --------------------------------
+
+.message {
+  padding: 1rem;
+  background-color: #C8E6C9;
+  border-radius: 4px;
+  text-align: center;
+
+}
+
+.theme-actions {
+  justify-content: space-between;
+  margin-right: -0.7rem;
+  margin-bottom: 1rem;
+}
+
+.vertical-spacer {
+  height: 10px;
+}
+
+.invite-form {
+  margin-top: 2rem;
+}
+
+.invite-wrapper {
+  display: flex;
+  align-items:baseline;
+  gap: 1rem;
+}
+
+.invite-field {
+  margin-top: 1em;
+  width: 22em;
+}
+
+@media (max-width: $XSmall) {
+  .text-input { width: 85%; }
+  .invite-wrapper {
+    flex-wrap: wrap;
+  }
+
+  .invite-button {
+
+  }
+}

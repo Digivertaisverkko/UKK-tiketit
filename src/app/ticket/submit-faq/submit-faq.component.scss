@@ -1,32 +1,23 @@
 @import "/src/variables.scss";
 
-#top-buttons {
-  justify-content: flex-start;
-  gap: 4rem;
-}
-
 form { margin-top: -6px; }
-
 mat-form-field { min-width: 21rem; }
 
+.vertical-spacer { height: 1rem; }
+
 .ticket-header {
-  mat-form-field { flex-grow: 3; }
   margin-bottom: -20px;
+  mat-form-field { flex-grow: 3; }
 }
 
 .short-field-wrapper {
-  width: 21em;
-  // margin-bottom: 6px;
+  width: 24em;
+
+  mat-form-field { margin-top: 2px; }
 }
 
-.characters-label {
-  text-align: right;
-  // Angular varaa formin kenttien alle vertikaalista tilaa, mutta sijoitetaan kenttien merkkimäärät sinne
-  // oikeaan reunaan.
-  display: block;
-  position: relative;
-  top: -24px;
-  margin-bottom: -20px;
+.theme-actions {
+  gap: 1.5rem;
 }
 
 @media (min-width: $XSmall) {
@@ -34,7 +25,7 @@ mat-form-field { min-width: 21rem; }
 }
 
 @media (max-width: $XSmall) {
-  .user-info-block { display: none; }
-
-  mat-form-field { min-width: 95%; }
+  .theme-actions {
+    gap: 1rem;
+  }
 }

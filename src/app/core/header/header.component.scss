@@ -15,18 +15,18 @@
     align-items: center;
     font-size: $icon-size;
     height: $icon-size;
-    margin-bottom: auto;
     margin-top: auto;
+    margin-bottom: auto;
     position: relative;
     width: $icon-size;
 
     mat-icon {
       // border: solid green 1px;
       font-size: $icon-size;
-      height: auto;
-      left: 0;
       position: absolute;
       top: 0;
+      left: 0;
+      height: auto;
       width: auto;
     }
   }

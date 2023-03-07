@@ -1,10 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+
 import { AuthService } from 'src/app/core/auth.service';
-import { UusiTiketti, TicketService } from '../ticket.service';
-import { getIsInIframe } from '../functions/isInIframe';
+import { KentanTiedot, TicketService, Tiketti, UusiTiketti} from 'src/app/ticket/ticket.service';
+import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
+
+interface TiketinKentat extends KentanTiedot {
+  arvo: string;
+}
 
 @Component({
   selector: 'app-submit-ticket',
@@ -13,67 +17,91 @@ import { getIsInIframe } from '../functions/isInIframe';
 })
 
 export class SubmitTicketComponent implements OnInit {
-  // max pituus: 255.
-  titleText: string = '';
-  assignmentText: string = '';
+  @Input() public fileList: File[] = [];
+  private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
-  public errorMessage: string = '';
-  // public user: User;
-  public isInIframe: boolean;
-  problemText: string = '';
-  newTicket: UusiTiketti = {} as UusiTiketti;
-  public userName: string | null = '';
-  userRole: string = '';
-  answer: string = '';
-  sendingIsAllowed: boolean = false;
   public currentDate = new Date();
-  // public user$ = this.auth.trackUserInfo();
+  public editExisting: boolean = window.history.state.editTicket ?? false;
+  public errorMessage: string = '';
+  public isInIframe: boolean = getIsInIframe();
   public message: string = '';
-  private courseID: string | null;
+  public title: string = '';
+  public ticketFields: TiketinKentat[] = [];
+  public ticketId: string | null = this.route.snapshot.paramMap.get('id');
+  public uploadClick: Subject<string> = new Subject<string>();
+  public userName: string | null = '';
 
-  constructor(
-    private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private ticketService: TicketService,
-    private _snackBar: MatSnackBar
-    ) {
-      this.courseID = this.route.snapshot.paramMap.get('courseid');
-      this.isInIframe = getIsInIframe();
-    }
+  constructor(private auth: AuthService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private ticketService: TicketService) {}
 
   ngOnInit(): void {
-    if (this.courseID === null) { throw new Error('Ei kurssi ID:ä.')}
-    this.auth.fetchUserInfo(this.courseID);
+    if (this.courseId === null) { throw new Error('Ei kurssi ID:ä.') }
+    this.auth.fetchUserInfo(this.courseId);
     this.auth.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi ?? '';
-      this.userRole = response?.asema ?? '';
-    })
-    this.ticketService.getCourseName(this.courseID).then(response => {
+    });
+    this.ticketService.getCourseName(this.courseId).then(response => {
       this.courseName = response;
     }).catch(() => {});
+    this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
+      this.ticketFields = response as TiketinKentat[];
+      for (let field of this.ticketFields) {
+        field.arvo = '';
+      }
+    });
+    if (this.ticketId != null) this.fetchTicketInfo();
   }
 
-  goBack() {
-    this.router.navigateByUrl('course/' + this.courseID + '/list-tickets');
+  private fetchTicketInfo() {
+    if (this.ticketId == null) return 
+    this.ticketService.getTicketInfo(this.ticketId).then(response => {
+      if (response?.id) {
+        this.title = response.otsikko;
+        this.message = response.viesti;
+        
+        if (response.kentat !== undefined ) {
+          for (let tiketinKentta of response.kentat) {
+            for (let uusiKentta of this.ticketFields) {
+              if (tiketinKentta.otsikko === uusiKentta.otsikko) {
+                uusiKentta.arvo = tiketinKentta.arvo;
+                break;
+              }
+            }
+          }
+        }
+      }
+    }).catch(e => {})
+  }
+
+  private goBack() {
+    this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
   }
 
   public sendTicket(): void {
-    this.newTicket.otsikko = this.titleText;
-    this.newTicket.viesti = this.message;
-    this.newTicket.kentat = [{ id: 1, arvo: this.assignmentText }, { id: 2, arvo: this.problemText }];
-    console.log(this.newTicket);
-    if (this.courseID === null) { throw new Error('Ei kurssi ID:ä.')}
-    this.ticketService.addTicket(this.courseID, this.newTicket)
+    let ticket: UusiTiketti = {} as UusiTiketti;
+    ticket.otsikko = this.title;
+    ticket.viesti = this.message;
+    ticket.kentat = this.ticketFields.map((field) => {
+      return { id: Number(field.id), arvo: field.arvo }
+    });
+
+    if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
+
+    if (this.ticketId != null) {
+      this.ticketService.editTicket(this.ticketId, ticket)
+        .then( () => this.goBack()
+        ).catch(error => {
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+        })
+    } else {
+    this.ticketService.addTicket(this.courseId, ticket, this.fileList)
       .then(() => this.goBack()
       ).catch( error => {
         // TODO: lisää eri virhekoodeja?
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
+    }
   }
-
-  // ngOnDestroy(): void {
-
-  // }
-
 }

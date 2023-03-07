@@ -10,5 +10,8 @@
 </div>
 
 <ng-template #customMenu>
-  <app-custom-menu [editor]="editor"></app-custom-menu>
+  <div class="NgxEditor__Seperator"></div>
+  <app-menu-link [editor]="editor"></app-menu-link>
+  <div class="NgxEditor__Seperator"></div>
+  <app-menu-src [editor]="editor"></app-menu-src>
 </ng-template>

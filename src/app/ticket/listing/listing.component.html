@@ -2,10 +2,18 @@
 
   <!----------- Tiketit ------------>
 
-  <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-    <span>{{courseName}}</span>
-  </h2>
+  <div class="view-header">
+    <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
+    <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
+      <span>{{courseName}}</span>
+    </h2>
+
+    <div class="spacer"></div>
+
+    <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
+    [routerLink]="'/course/' + courseID + '/settings'"><mat-icon class="settings-icon">settings</mat-icon>
+    </button>
+  </div>
 
   <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
 
@@ -21,7 +29,7 @@
   </div>
 
   <table mat-table [dataSource]="dataSource" [hidden]="dataSource.filteredData.length === 0" matSort matSortActive="aikaleima"
-    matSortDirection="desc" #sortQuestions="matSort" class="mat-elevation-z1">
+    matSortDirection="desc" #sortQuestions="matSort" class="theme-table mat-elevation-z1">
 
     <ng-container matColumnDef="tila">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Järjestä tilan mukaan"
@@ -30,7 +38,7 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
-          <div class="state-wrapper">
+          <div class="ticket-state-wrapper">
             <div class="icon-wrapper">
               <img class="icon" src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg" height="100%" width="100%" alt="">
             </div>
@@ -74,7 +82,7 @@
       </th>
       <td mat-cell *matCellDef="let element" class="cell-align-right">
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id" class="cell-align-right">
-          {{element.aikaleima | date: 'shortDate'}}
+          {{element.aikaleima | date: 'shortDate' }}
         </a>
       </td>
     </ng-container>
@@ -82,20 +90,10 @@
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
     <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"></tr>
 
-    <!-- <tr *matNoDataRow>
-      <td class="noData-td" colspan="3" i18n="@@Haulla ei löytynyt tuloksia">Haulla ei löytynyt tuloksia.</td> -->
-      <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
-      <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
-    <!-- </tr> -->
-
-      <!-- Kkun haku ei löydä mitään-->
-
   </table>
 
-    <p *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Ei tuloksia"
-      >Suodattimella ei löytynyt tuloksia.</p>
-    <!-- Ei toimi, kun pitää hakukenttä olla näyttämättä, jos ei ole yhtään UKK:a. -->
-    <!-- <td class="noData-td" colspan="3" >Hakutekstillä "{{input.value}} ei löytynyt tuloksia."</td> -->
+  <p *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0" class="no-items-message" i18n="@@Ei tuloksia"
+    >Suodattimella ei löytynyt tuloksia.</p>
 
   <!-- Jos halutaan paginator -->
   <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10" #paginatorQuestions showFirstLastButtons
@@ -128,7 +126,7 @@
   </p>
 <!-- </mat-card> -->
 
-<table id="faqTable" mat-table class="mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="dataSourceFAQ.filteredData.length === 0"
+<table id="faqTable" mat-table class="theme-table mat-elevation-z1" [dataSource]="dataSourceFAQ" [hidden]="dataSourceFAQ.filteredData.length === 0"
   matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 
   <ng-container matColumnDef="otsikko">
@@ -139,17 +137,6 @@
     <td mat-cell *matCellDef="let element">
       <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
-      </a>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="tyyppi">
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@Tyyppi">
-      Tyyppi
-    </th>
-    <td class="cell-align-right" mat-cell *matCellDef="let element">
-      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
-        {{ element.tyyppi }}
       </a>
     </td>
   </ng-container>
@@ -168,16 +155,14 @@
 
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
 
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative">
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()" style="position: relative"> </tr>
     <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
-
-  </tr>
 
 
 </table>
 
   <p *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0" class="no-items-message" i18n="@@Ei tuloksia">
-    Minkään kysymyksen tiedoissa ei ole merkkijonoa "{{dataSourceFAQ.filter}}".
+    Suodattimella ei löytynyt tuloksia.
   </p>
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10" showFirstLastButtons
         aria-label="Valitse kysymysten sivu"></mat-paginator> -->

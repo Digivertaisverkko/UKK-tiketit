@@ -1,0 +1,73 @@
+@import '/src/variables.scss';
+
+.top-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.vertical-spacer { height: 1rem; }
+
+.field-title {
+  min-width: 23em;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.multiple-selection-wrapper {
+  margin-bottom: 1rem;
+  mat-checkbox {
+    padding-right: 1rem;
+  }
+}
+
+.chip-list-form-field {
+  width: 100%;
+}
+
+.info-text-label { margin-bottom: 0.4em }
+
+.text-area-wrapper {
+  width: 100%;
+}
+
+.bottom-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5%;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.send-button { order: 5 }
+
+.top-spacer {
+  display: inline-block;
+  flex: 1 1 auto;
+}
+
+// .bottom-spacer { flex-grow: 2 }
+
+
+@media (max-width: $XSmall) {
+  .title { width: 97% }
+}
+
+@media (max-width: 760px) {
+  .bottom-spacer { display: none }
+  .bottom-buttons-wrapper { gap: 2.5% }
+}
+
+@media (max-width: 660px) {
+  .bottom-buttons-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+  // .spacer { order: 2 }
+  // .cancel-button { order: 3 }
+  // .prefillable-checkbox { order: 4 }
+}
+
+@media (min-width: $XSmall) {
+  .view-wrapper, .top-buttons{ padding-right: $right-padding }
+}

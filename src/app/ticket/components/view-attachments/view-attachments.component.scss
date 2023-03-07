@@ -1,0 +1,50 @@
+@import '/src/variables.scss';
+
+.attachments-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.attachment {
+  display: flex;
+  align-items: center;
+  background-color: #F5F5F5;
+  padding: 0.6rem 0.5rem 0.6rem 1rem;
+  max-width: 49%;
+  border: none;
+  font: unset;
+  outline: none;
+  cursor: pointer;
+  mat-icon {
+    font-size: 1.4rem;
+    margin-left: 0.5rem;
+  }
+}
+
+.filename {
+  // outline: gray 1px solid;
+  // Rajoittaminen tiettyyn määrään rivejä.
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-width: 90%;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+@media (max-width: $XSmall) {
+  .attachment {
+    max-width: 99%;
+  }
+  .filename {
+    max-width: 85%;
+    -webkit-line-clamp: 3;
+  }
+}

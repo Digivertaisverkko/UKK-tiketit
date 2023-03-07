@@ -9,6 +9,7 @@ import { timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
+import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
 
@@ -34,6 +35,7 @@ enum IconFile {
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.scss'],
 })
+
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // dataSource = new MatTableDataSource<Sortable>();
   // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
@@ -50,7 +52,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
-  public localeDateFormat: string;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
@@ -76,10 +77,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private responsive: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private ticket: TicketService,
     private authService: AuthService
   ) {
-    this.localeDateFormat = this.authService.getDateFormat();
     this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
@@ -91,53 +92,35 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.columnDefinitionsFAQ = [
       { def: 'otsikko', showMobile: true },
-      { def: 'aikaleima', showMobile: false },
-      { def: 'tyyppi', showMobile: true }
+      { def: 'aikaleima', showMobile: false }
     ];
 
   }
 
   ngOnInit() {
     this.trackRouteParameters();
-    // Jos haki tavallisella metodilla, ehti hakea ennen kuin se ehdittiin loginissa hakea.
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
     this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('ngAfterViewInit: saatiin tieto login-tilasta: ' + response);
       if (response) this.updateLoggedInView(this.courseID);
     });
   }
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      console.log('lista: huomattiin uudet route parametrit.');
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
         this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
-      // this.authService.setCourseID(courseID);
-      // this.authService.fetchUserInfo(courseID);
       this.courseID = courseID;
       console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
       this.pollFAQ(courseID);
-      // Voi olla 1. näkymä, jolloin on kurssi ID tiedossa.
-      // this.authService.saveUserInfo(courseIDcandinate);
-      // this.trackLoginState(courseIDcandinate);
-
-      // Käyttäjätietojen haku tarkoitus siirtää authServiceen.
-      // if (this.authService.getIsUserLoggedIn() === true || this.authService.getSessionID() !== null) {
-        // Kirjautumisen jälkeen jos käyttäjätietoja ei ole haettu, koska kurssi ID:ä ei silloin tiedossa.
-        // if (this.authService.getUserName.length === 0) {
-        //   this.authService.fetchUserInfo(courseID);
-        // }
-        // this.updateLoggedInView(courseID);
-      // }
     });
   }
 
@@ -147,14 +130,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ticket.untrackRefresh();
+    this.store.untrackMessages();
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages() {
-    this.ticket.trackRefresh().subscribe(response => {
-      console.log('trackMessages: saatiin refresh pyyntö.');
-      if (response) {
+    this.store.trackMessages().subscribe(response => {
+      if (response === 'refresh') {
+        console.log('trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
         this.fetchTickets(this.courseID);

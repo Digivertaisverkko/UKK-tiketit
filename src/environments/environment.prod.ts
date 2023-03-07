@@ -8,8 +8,5 @@ export const environment = {
   production: true,
   clientID: 'angularApp',
   productName: 'UKK-Tiketit',
-  apiBaseUrl: baseUrl,
-  ownAskLoginUrl: baseUrl + '/login',
-  ownTokenUrl: baseUrl + '/authtoken',
-  ownLoginUrl: baseUrl + '/omalogin',
+  apiBaseUrl: baseUrl
 };

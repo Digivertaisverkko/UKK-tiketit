@@ -10,6 +10,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { TicketModule } from './ticket/ticket.module';
 import { UserManagementModule } from './user-management/user-management.module';
+import { CourseModule } from './course/course.module';
 
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
@@ -20,7 +21,7 @@ registerLocaleData(localeFi);
 registerLocaleData(localeEn);
 
 // AppRoutingModule pitää tulla viimeisimpänä ennen muita routingeja sisältäviä
-// moduuleja.
+// moduuleja. Oletuksena käytetään aina fi-FI -localea.
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +33,7 @@ registerLocaleData(localeEn);
     SharedModule,
     TicketModule,
     UserManagementModule,
+    CourseModule,
     AppRoutingModule,
   ],
   providers: [
@@ -46,4 +48,6 @@ export class AppModule { }
 
 // useFactory: initializeSupportedLocales
 // { provide: LOCALE_ID, useValue: 'fi' }
+
+// { provide: LOCALE_ID, useFactory: () => initializeLocale, multi: true },
 //  { provide: LOCALE_ID, useFactory: initializeSupportedLocales }

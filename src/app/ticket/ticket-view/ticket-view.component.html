@@ -6,21 +6,42 @@
     <span>{{ courseName }}</span>
   </h2>
 
+  <app-to-beginning-button *ngIf="ticket.tila === undefined"></app-to-beginning-button>
 
-    <!-- <div class="vertical-spacer" *ngIf="courseName.length === 0"></div> -->
-
-    <!-- TODO: Näytä virhetilassa taaksepäin-nappi, jos on aktiivinen kurssi asetettu. -->
-    <div id="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent">
+    <div id="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent && ticket.tila > 0">
       <app-to-beginning-button></app-to-beginning-button>
-      <button mat-raised-button i18n="@@Kopioi UKK" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole === 'admin')"
-        (click)="copyAsFAQ()">
+
+      <div class="spacer"></div>
+
+      <button *ngIf="isEditable" mat-raised-button i18n="@@Muokkaa"
+        (click)="editTicket()">
+        Muokkaa
+      </button>
+
+      <button mat-raised-button i18n="@@Kopioi UKK"
+        (click)="copyAsFAQ()"
+        *ngIf="(userRole === 'opettaja' || userRole === 'admin')">
         Kopioi UKK:ksi
+      </button>
+
+      <div
+        matTooltip="{{cantRemoveTicket}}"
+        [matTooltipDisabled]="isRemovable">
+        <button mat-raised-button *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
+          i18n="@@Poista" (click)="changeRemoveButton()"
+          [disabled]="!isRemovable">
+          Poista
+        </button>
+      </div>
+
+      <button mat-raised-button (click)="removeTicket()" *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto">
+        Vahvista poisto
       </button>
     </div>
 
-    <section *ngIf="ticket.tila > 0">
+  <section *ngIf="ticket.tila > 0">
 
-    <!-------------- Kysymys ----------------------------------------->
+  <!-------------- Kysymys ----------------------------------------->
 
     <div class="ticket-header">
 
@@ -28,31 +49,26 @@
 
       <div class="spacer"></div>
 
-    <div class="user-info-block">
-      <div class="text-info">
-        <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
-        <div class="theme-label">
-          <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
-          <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
-          <ng-template #notToday>
-            <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
-          </ng-template>
-          <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
+      <div class="user-info-block">
+        <div class="text-info">
+          <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
+          <div class="theme-label">
+            <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
+            <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
+            <ng-template #notToday>
+              <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
+            </ng-template>
+            <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
+          </div>
         </div>
+        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
       </div>
-      <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+
     </div>
 
-  </div>
-
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[0] !== null && ticket.kentat[0].arvo.length > 0">
-      <p class="theme-label" ><span i18n="@@Tehtävä">Tehtävä</span></p>
-        <p class="short-field-value">{{ticket.kentat[0].arvo }}</p>
-    </div>
-
-    <div *ngIf="ticket.kentat !== undefined && ticket.kentat[1] !== null && ticket.kentat[1].arvo.length > 0">
-      <p class="theme-label" i18n="@@Tyyppi">Tyyppi</p>
-      <p class="short-field-value">{{ ticket.kentat[1].arvo }}</p>
+    <div *ngFor="let kentta of ticket.kentat">
+      <p class="theme-label" >{{ kentta.otsikko }}</p>
+      <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
     <!-- TODO: Lisää tähän muiden kenttien näyttäminen. -->
@@ -61,13 +77,16 @@
 
     <app-message [messageHtml]=ticket.viesti></app-message>
 
-  <hr class="theme-divider">
+    <!----- Liitteet ---->
+    <app-view-attachments *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet"
+      (errorMessage)="errorMessage = $event">
+    </app-view-attachments>
 
-  </section>
+    <hr class="theme-divider">
 
   <!-------------- Keskustelu ----------------------------------------->
 
-  <h4 class="sub-header" *ngIf="ticket.tila > 0" i18n="@@Keskustelu">Keskustelu</h4>
+  <h4 class="sub-header" i18n="@@Keskustelu">Keskustelu</h4>
 
     <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
 
@@ -91,12 +110,19 @@
 
       <mat-card-content>
         <app-message [messageHtml]=comment.viesti></app-message>
+        <app-view-attachments *ngIf="comment.liitteet" [ticketID]="ticketID" [files]="comment.liitteet"
+          (errorMessage)="errorMessage = $event">
+        </app-view-attachments>
       </mat-card-content>
     </mat-card>
 
-  <div class="vertical-spacer"></div>
+    <div class="vertical-spacer"></div>
 
-  <app-editor *ngIf="ticket.tila > 0 && !ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
+    <app-editor *ngIf="!ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
+
+  </section>
+
+  <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
   <app-error-card
     *ngIf="errorMessage.length > 0"
@@ -107,26 +133,40 @@
     >
   </app-error-card>
 
-  <div class="theme-actions" *ngIf="!ticketIdFromParent">
+  <section *ngIf="ticket.tila > 0">
 
-    <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="ticket.tila > 0 && (userRole === 'opettaja' || userRole ==='admin' && ticket.tila > 0)">
-      <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
-      <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
-      <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
-    </mat-radio-group>
+    <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-    <div class="spacer"></div>
+      <button mat-raised-button class="attach-button" (click)="uploadClick.next('add')"><mat-icon>attach_file</mat-icon>
+        {{attachFilesText}}
+      </button>
 
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="commentText.length < 1"
-      *ngIf="ticket.tila > 0"
-      (click)="sendComment()"
-      i18n="@@Lähetä">
-      Lähetä
-    </button>
+      <div class="spacer" *ngIf="userRole === 'opettaja' || userRole ==='admin'; else spacerHere"></div>
 
-  </div>
+      <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opettaja' || userRole ==='admin'">
+        <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
+        <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
+        <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
+      </mat-radio-group>
+
+      <ng-template #spacerHere><div class="spacer"></div></ng-template>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="send-button"
+        [disabled]="commentText.length < 1 || attachmentsHasErrors === true"
+        (click)="sendComment()"
+        i18n="@@Lähetä">
+        Lähetä
+      </button>
+
+    </div>
+
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (attachmentsHasErrors)="attachmentsHasErrors = $event"
+      (fileListOutput)="fileList = $event">
+    </app-edit-attachments>
+
+  </section>
 
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ResolveEnd, GuardsCheckStart, Router, ParamMap, ActivationEnd  } from '@angular/router';
+import { StoreService } from '../store.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { AuthService, User } from '../auth.service';
 
@@ -24,7 +25,7 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private ticketService: TicketService)
+    private store: StoreService)
     {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     // this.sliderChecked = (window.sessionStorage.getItem('IN-IFRAME') == 'true') ? true : false;
@@ -107,7 +108,7 @@ export class HeaderComponent implements OnInit {
     if (this.courseID !== null) {
       const currentRoute = window.location.pathname;
       if (currentRoute.includes('/list-tickets')) {
-        this.ticketService.sendRefresh();
+        this.store.sendMessage('refresh');
       } else {
         this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
       }

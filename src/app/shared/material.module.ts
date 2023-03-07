@@ -18,6 +18,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const materialModules = [
   MatInputModule,
@@ -34,7 +36,9 @@ const materialModules = [
   MatPaginatorModule,
   MatProgressBarModule,
   MatDividerModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTooltipModule,
+  MatAutocompleteModule
 ];
 
 @NgModule({

@@ -1,4 +1,7 @@
-<h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe"><span>{{courseName}}</span></h2>
+<h2 class="main-header"
+    *ngIf="courseName.length > 0 && !isInIframe">
+  <span>{{ courseName }}</span>
+</h2>
 
 <div class="submit-ticket">
 
@@ -6,96 +9,132 @@
 
   <app-to-beginning-button></app-to-beginning-button>
 
-  <form action="" #submitForm="ngForm">
+  <form accept-charset="UTF-8"
+        action=""
+        enctype="multipart/form-data"
+        #submitForm="ngForm">
 
     <div class="ticket-header">
 
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea
-          [(ngModel)]="titleText"
-          class="sub-header"
-          #autosize="cdkTextareaAutosize"
-          autocomplete="off"
-          cdkAutosizeMaxRows="3"
-          cdkAutosizeMinRows="1"
-          cdkTextareaAutosize
-          contenteditable
-          matInput
-          maxlength="255"
-          name="titleText"
-          placeholder="Otsikko"
-          i18n-placeholder="@@Otsikko"
-          required
-        ></textarea>
+        <textarea autocomplete="off"
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMaxRows="3"
+                  cdkAutosizeMinRows="1"
+                  cdkTextareaAutosize
+                  contenteditable
+                  class="sub-header"
+                  i18n-placeholder="@@Otsikko"
+                  matInput
+                  maxlength="255"
+                  name="titleText"
+                  [(ngModel)]="title"
+                  placeholder="Otsikko"
+                  required>
+          </textarea>
       </mat-form-field>
-
-      <!-- <div class="spacer"></div> -->
 
       <div class="user-info-block">
         <div class="text-info">
           <span class="theme-profile-name">{{ userName }}</span>
-          <!-- <span class="theme-profile-name">{{ userName }}</span> -->
           <div class="theme-label">
             <span i18n="@@Minä">Minä</span>
             -
             <span i18n="@@Tänään">Tänään </span>
             <span>{{ currentDate | date: 'shortTime' }}</span>
           </div>
-
         </div>
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+        <img alt="" mat-card-avatar src="../../../assets/logos/UniOulu.png">
       </div>
 
     </div>
 
     <section class="short-field-wrapper">
 
-      <mat-form-field class="additional-field" appearance="fill">
-        <mat-label i18n="@@Tehtävä">Tehtävä</mat-label>
-        <input
-          name="assignmentText"
-          [(ngModel)]="assignmentText"
-          matInput
-          maxlength="50"
-          placeholder=""
-        >
-      </mat-form-field>
-      <div class="characters-label"><span class="theme-label">{{assignmentText.length}} / 50</span></div>
+      <ng-container *ngFor="let kentta of ticketFields; let i = index">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ kentta.otsikko }}</mat-label>
+          <input  [matAutocomplete]="auto"
+                  matInput
+                  maxlength="50"
+                  name="kentta.otsikko_{{i}}"
+                  [(ngModel)]="ticketFields[i].arvo"
+                  placeholder=""
+                  [required]="kentta.pakollinen"
+                  >
 
-      <mat-form-field class="additional-field" appearance="fill">
-        <mat-label i18n="@@Ongelman tyyppi">Ongelman tyyppi</mat-label>
-        <input
-          name="problemText"
-          [(ngModel)]="problemText"
-          matInput
-          maxlength="50"
-          placeholder=""
-        >
-      </mat-form-field>
-      <div class="characters-label"><span class="theme-label">{{problemText.length}} / 50</span></div>
+          <mat-icon matSuffix
+                    *ngIf="kentta.valinnat[0] !== ''"
+                    [ngStyle]="{ 'color': '#000000' }">
+            keyboard_arrow_down
+          </mat-icon>
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <!-- Jos lisäkenttä ei sisällä valintoja, niin kentta.valinnat[0]
+                  sisältää tyhjän merkkijonon, eikä suinkaan ole tyhjä. -->
+            <ng-container *ngIf="kentta.valinnat[0] !== ''">
+              <mat-option *ngFor="let valinta of kentta.valinnat"
+                          [value]="valinta">
+                {{ valinta }}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+
+          <mat-hint align="end">{{ kentta.arvo.length }} / 50</mat-hint>
+        </mat-form-field>
+
+        <mat-icon (click)="tooltip.toggle()"
+                  matTooltip="{{ kentta.ohje }}"
+                  matTooltipPosition="after"
+                  *ngIf="kentta.ohje.length > 0"
+                  [ngStyle]="{ 'padding-left': '15px' }"
+                  #tooltip="matTooltip">
+          help_outline
+        </mat-icon>
+
+      </ng-container>
 
     </section>
 
     <h2 i18n="@@Viesti">Viesti</h2>
     <app-editor [(editorContent)]="message"></app-editor>
 
-    <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-      message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+    <app-error-card i18n-title="@@Virhe"
+                    message="{{ errorMessage }}"
+                    *ngIf="errorMessage.length > 0"
+                    [styles]="{ margin: '1em 20% 1em 20%' }"
+                    title="Virhe">
     </app-error-card>
 
     <div class="theme-actions">
 
+       <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
+      <button (click)="uploadClick.next('add')"
+              *ngIf="!editExisting"
+              i18n="@@Liitä tiedostoja"
+              mat-raised-button>
+        <mat-icon>attach_file</mat-icon>
+        Liitä tiedostoja
+      </button>
+
       <div class="spacer"></div>
 
-        <button
-          mat-raised-button color="primary"
-          [disabled]="submitForm.invalid"
-          (click)="sendTicket()"
-          i18n="@@Lähetä opettajille">
-          Lähetä opettajille
-        </button>
+      <button class="submit-button"
+              (click)="sendTicket()"
+              color="primary"
+              [disabled]="submitForm.invalid"
+              i18n="@@Lähetä opettajille"
+              mat-raised-button>
+        Lähetä opettajille
+      </button>
 
     </div>
+
+    <app-edit-attachments
+        (fileListOutput)="fileList = $event"
+        [uploadClicks]="uploadClick.asObservable()"
+        >
+    </app-edit-attachments>
 
   </form>
 

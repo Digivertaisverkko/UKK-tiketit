@@ -1,39 +1,49 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TicketService, Tiketti } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'src/app/core/auth.service';
-import { interval, startWith, switchMap } from 'rxjs';
+import { AuthService, User } from 'src/app/core/auth.service';
+import { interval, startWith, Subject, switchMap } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
+import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
+
 export class TicketViewComponent implements OnInit {
 
   @Input() ticketIdFromParent: string | null = null;
+  @Input() public fileList: File[] = [];
+  @Input() public attachmentsHasErrors: boolean = false;
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+  public uploadClick: Subject<string> = new Subject<string>();
+  public attachFilesText: string = '';
 
+  public cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.';
+  public commentText: string;
   public courseName: string = '';
   public errorMessage: string = '';
+  public isEditable: boolean = false;
   public isInIframe: boolean;
-  public ticket: Tiketti;
-  public tila: string;
-  public newCommentState: 3 | 4 | 5 = 4;
-  public commentText: string;
   public isLoaded: boolean;
-  public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
-  public ticketID: string;
-  // Ticket info polling rate in minutes.
-  private courseID: string | null;
-  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
-  private readonly CURRENT_DATE = new Date().toDateString();
-
+  public isRemovable: boolean = false;
+  public isRemovePressed: boolean = false;
   public message: string = '';
+  public newCommentState: 3 | 4 | 5 = 4;
+  public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
+  public ticket: Tiketti;
+  public ticketID: string;
+  public tila: string;
+  public user: User = {} as User;
   public userRole: string = '';
   private userName: string = '';
+  private courseID: string | null;
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;   // Ticket info polling rate in minutes.
+  private readonly CURRENT_DATE = new Date().toDateString();
 
   constructor(
     private auth: AuthService,
@@ -41,22 +51,28 @@ export class TicketViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
-    ) {
-      this.courseID = this.route.snapshot.paramMap.get('courseid');
-      this.ticket = {} as Tiketti;
-      this.tila = '';
-      this.commentText = '';
-      this.isInIframe = getIsInIframe();
-      this.isLoaded = false;
-      this.ticketID = this.ticketIdFromParent !== null
-        ? this.ticketIdFromParent
-        : String(this.route.snapshot.paramMap.get('id'));
+  ) {
+    this.courseID = this.route.snapshot.paramMap.get('courseid');
+    this.ticket = {} as Tiketti;
+    this.tila = '';
+    this.commentText = '';
+    this.isInIframe = getIsInIframe();
+    this.isLoaded = false;
+    this.ticketID = this.ticketIdFromParent !== null
+      ? this.ticketIdFromParent
+      : String(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
-        if (response.asema !== undefined ) this.userRole = response.asema;
-        if (response.nimi !== undefined ) this.userName = response.nimi;
+      if (response.id != null) this.user = response;
+      if (response.asema !== undefined ) this.userRole = response.asema;
+      if (response.nimi !== undefined ) this.userName = response.nimi;
+      if (this.userRole === 'opettaja' || this.userRole ==='admin') {
+        this.attachFilesText = $localize `:@@Liitä:liitä`;
+      } else {
+        this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
+      }
     });
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -81,6 +97,11 @@ export class TicketViewComponent implements OnInit {
             if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
           }
           this.tila = this.ticketService.getTicketState(this.ticket.tila);
+          if (this.ticket.aloittaja.id === this.user.id) {
+            this.isEditable = true;
+            this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
+          }
+          console.log(' onko editoitavissa: ' + this.isEditable);
           this.isLoaded = true;
         },
         error: error => {
@@ -94,6 +115,31 @@ export class TicketViewComponent implements OnInit {
           this.isLoaded = true;
         }
       })
+  }
+
+  public editTicket() {
+    let url = '/course/' + this.courseID + '/submit/' + this.ticketID;
+    this.router.navigate([url], { state: { editTicket: 'true' } });
+  }
+
+  public removeTicket() {
+    this.ticketService.removeTicket(this.ticketID).then(response => {
+      if (response === false ) {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:Kysymyksen poistaminen ei onnistunut.`;
+      } else {
+        this.router.navigateByUrl('/course/' + this.courseID + '/list-tickets');
+      }
+    }).catch(error => {
+      if (error?.tunnus == 1003) {
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+      } else {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:Kysymyksen poistaminen ei onnistunut.`;
+      }
+    })
+  }
+
+  changeRemoveButton() {
+    setTimeout(() => this.isRemovePressed = true, 300);
   }
 
   public copyAsFAQ() {
@@ -141,8 +187,8 @@ export class TicketViewComponent implements OnInit {
   }
 
   public sendComment(): void {
-    this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
-      .then((response) => {
+    this.ticketService.addComment(this.ticketID, this.commentText, this.fileList, this.newCommentState)
+      .then(response => {
         if (response?.success == true) {
           this.errorMessage = '';
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
@@ -152,9 +198,13 @@ export class TicketViewComponent implements OnInit {
           console.log(response);
         }
       })
-      .then( () => { this.commentText = '' } )
+      .then( () => {
+        this.commentText = '';
+      })
       .catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+      }).finally(() => {
+        this.attachments.clear();
       });
   }
 

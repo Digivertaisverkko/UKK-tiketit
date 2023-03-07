@@ -96,7 +96,7 @@ $debug: false;
 // Pieni harmaa teksti.
 .theme-label {
   color: #757575;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 0.9rem;
   margin-bottom: 0.2rem;
   + p {
@@ -108,7 +108,12 @@ $debug: false;
 .theme-actions {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
   margin-top: 1.4rem;
+}
+
+mat-hint {
+  color: #757575;
 }
 
 .theme-progress-bar{
@@ -166,6 +171,21 @@ $debug: false;
   }
 }
 
+.theme-table {
+  width: 100%; line-height: 1.4rem;
+
+  .mat-mdc-header-row { background-color: #D3D3D3; }
+
+  // Jotta olisi enemmän klikattavaa aluetta. Lisää tarvittaessa anchoreihin tämän sijaan.
+  .mdc-data-table__cell {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .mdc-data-table__header-row { height: 3em; }
+
+}
+
 // ---- Utilityt---------------------
 
 // Ottaa horisontaalisesti käytettävissä olevan tilan.
@@ -188,11 +208,11 @@ $debug: false;
     line-height: 1;
   }
 
-  .theme-header-text { font-size: 1.25rem; }
+  .theme-header-text { font-size: 1.25rem }
 
-  .theme-header-text-small { font-size: 1rem; }
+  .theme-header-text-small { font-size: 1rem }
 
-  .ticket-header { flex-wrap: wrap; }
+  .ticket-header { flex-wrap: wrap }
 }
 
 // -----------------------------------

@@ -57,8 +57,7 @@ export class FaqViewComponent implements OnInit {
   }
 
   editFaq() {
-    let url:string = '/course/' + this.courseID + '/submit-faq/' + this.faqID;
-    console.log('submit-faq: url: ' + url);
+    let url = '/course/' + this.courseID + '/submit-faq/' + this.faqID;
     this.router.navigate([url], { state: { editFaq: 'true' } });
   }
 
