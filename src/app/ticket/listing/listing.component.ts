@@ -124,6 +124,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  public openInNewTab() {
+    window.open(window.location.href, '_blank');
+  }
+
   ngAfterViewInit(): void {
 
     this.trackMessages();
