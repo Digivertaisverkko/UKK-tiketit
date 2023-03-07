@@ -2,6 +2,8 @@ import {  Component, OnInit } from '@angular/core';
 import { AuthService } from './core/auth.service';
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 import { environment } from 'src/environments/environment';
+// import { StoreService } from './core/store.service';
+// import { TicketService } from './ticket/ticket.service';
 
 @Component({
   selector: 'app-root',
@@ -9,21 +11,34 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit  {
+  public courseName: string = '';
   private courseID: string | null = null;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
+  public isLoaded: boolean = false;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
+
   private isLogged: boolean = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    // private store: StoreService,
+    // private ticket: TicketService
   ) {
   }
 
   ngOnInit(): void {
+    // this.store.trackIsLoaded().subscribe(response => {
+    //   if (response === true) {
+    //     this.isLoaded = true;
+    //   } else if (response === false) {
+    //     this.isLoaded = false;
+    //   }
+    // })
+
     if (environment.production === true) {
       console.log('Production build');
     }
@@ -33,18 +48,23 @@ export class AppComponent implements OnInit  {
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackLoginStatus();
+    // this.trackCourseID();
   }
 
-  private trackForCourseID() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      // console.log('------ app.component: kurssi ID muuttunut:' + courseID);
-      // console.dir(paramMap);
-      if (courseID !== null) {
-        this.authService.setCourseID(courseID);
-      }
-    });
+  public openInNewTab() {
+    window.open(window.location.href, '_blank');
   }
+
+  // private trackCourseID() {
+  //   this.route.paramMap.subscribe((paramMap: ParamMap) => {
+  //     var courseID: string | null = paramMap.get('courseid');
+  //     // console.log('------ app.component: kurssi ID muuttunut:' + courseID);
+  //     // console.dir(paramMap);
+  //     if (courseID !== null) {
+  //       this.ticket.getCourseName(courseID).then(response => this.courseName = response)
+  //     }
+  //   });
+  // }
 
   private trackLoginStatus() {
     this.authService.onIsUserLoggedIn().subscribe(response => {
@@ -81,6 +101,7 @@ export class AppComponent implements OnInit  {
   }
 
   private testIframe () {
+    // return true
     try {
       return window.self !== window.top;
     } catch (e) {
