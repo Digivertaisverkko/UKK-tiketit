@@ -42,8 +42,8 @@ export class AuthService {
 
   public initialize()
   {
-    this.checkIfSessionIdInURL();
     this.checkIfSessionIDinStorage();
+    this.checkIfSessionIdInURL();
     this.updateUserInfo()
     // this.trackRouteParameters();
     // this.trackCourseID();
@@ -52,8 +52,19 @@ export class AuthService {
   private checkIfSessionIDinStorage() {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
+      console.log('Session ID on tallennettuna.');
       // TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saadaa palvelimelta hyväksytty vastaus?
       this.setLoggedIn();
+    }
+  }
+
+  private checkIfSessionIdInURL() {
+    // Angular Routella parametrien haku ei onnistunut.
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionID = urlParams.get('sessionID');
+    if (sessionID !== undefined && sessionID !== null) {
+      console.log('auth.service: saatiin session ID URL:sta.');
+      this.setSessionID(sessionID);
     }
   }
 
@@ -109,16 +120,6 @@ export class AuthService {
     if (courseID !== this.courseID) {
       console.log('setCourseID: asetetaan kurssi id: ' + this.courseID);
       this.courseID = courseID;
-    }
-  }
-
-  private checkIfSessionIdInURL() {
-    // Angular Routella parametrien haku ei onnistunut.
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionID = urlParams.get('sessionID');
-    if (sessionID !== undefined && sessionID !== null) {
-      console.log('auth.service: saatiin session ID URL:sta.');
-      this.setSessionID(sessionID);
     }
   }
 
