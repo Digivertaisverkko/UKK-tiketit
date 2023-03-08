@@ -18,7 +18,7 @@ mat-form-field { min-width: 21rem; }
 }
 
 .theme-actions {
-  gap: 1.5rem;
+  gap: $button-gap;
 }
 
 @media (min-width: $XSmall) {
