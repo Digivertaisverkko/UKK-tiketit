@@ -43,8 +43,8 @@ export class AuthService {
 
   public initialize()
   {
-    this.checkIfSessionIdInURL();
     this.checkIfSessionIDinStorage();
+    this.checkIfSessionIdInURL();
     this.updateUserInfo()
     // this.trackRouteParameters();
     // this.trackCourseID();
@@ -53,8 +53,19 @@ export class AuthService {
   private checkIfSessionIDinStorage() {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
+      console.log('Session ID on tallennettuna.');
       // TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saadaa palvelimelta hyväksytty vastaus?
       this.setLoggedIn();
+    }
+  }
+
+  private checkIfSessionIdInURL() {
+    // Angular Routella parametrien haku ei onnistunut.
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionID = urlParams.get('sessionID');
+    if (sessionID !== undefined && sessionID !== null) {
+      console.log('auth.service: saatiin session ID URL:sta.');
+      this.setSessionID(sessionID);
     }
   }
 
@@ -80,7 +91,7 @@ export class AuthService {
       // }
     });
   }
-  
+
   // private trackCourseID() {
   //   this.courseID$.subscribe(courseID => {
   //     console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '. Session id on ' + this.getSessionID());
@@ -112,16 +123,6 @@ export class AuthService {
       this.courseID = courseID;
     }
   }
-  
-  private checkIfSessionIdInURL() {
-    // Angular Routella parametrien haku ei onnistunut.
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionID = urlParams.get('sessionID');
-    if (sessionID !== undefined && sessionID !== null) {
-      console.log('auth.service: saatiin session ID URL:sta.');
-      this.setSessionID(sessionID);
-    }
-  }
 
   private trackLoginStatus() {
     this.onIsUserLoggedIn().subscribe(response => {
@@ -140,7 +141,7 @@ export class AuthService {
   public async initialize2(courseID: string, sessionIDfromURL?: string) {
     // if (window.localStorage.getItem('SESSION_ID') == null) return
     var sessionID: string;
-    if (sessionIDfromURL === undefined) { 
+    if (sessionIDfromURL === undefined) {
       const savedSessionID = this.getSessionID();
       if (savedSessionID === null) {
         console.warn('authService.initialize: Virhe: ei session ID:ä.');
@@ -362,7 +363,7 @@ export class AuthService {
       response = await firstValueFrom<User>(this.http.get<any>(url));
       if (response?.id !== undefined && response?.id !== null) {
         console.log('getMyUserInfo: asetettiin kirjautuminen.');
-        this.setLoggedIn(); 
+        this.setLoggedIn();
       }
     } catch (error: any) {
       this.handleError(error);
