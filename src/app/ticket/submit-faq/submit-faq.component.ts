@@ -51,7 +51,6 @@ export class SubmitFaqComponent implements OnInit {
               private ticketService: TicketService) {}
 
   ngOnInit(): void {
-    console.log('Editoidaanko?: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
     if (this.courseId === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');

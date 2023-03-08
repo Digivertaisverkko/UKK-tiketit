@@ -40,7 +40,6 @@ export class AuthService {
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
-
   public initialize()
   {
     this.checkIfSessionIdInURL();
@@ -80,7 +79,7 @@ export class AuthService {
       // }
     });
   }
-  
+
   // private trackCourseID() {
   //   this.courseID$.subscribe(courseID => {
   //     console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '. Session id on ' + this.getSessionID());
@@ -112,7 +111,7 @@ export class AuthService {
       this.courseID = courseID;
     }
   }
-  
+
   private checkIfSessionIdInURL() {
     // Angular Routella parametrien haku ei onnistunut.
     const urlParams = new URLSearchParams(window.location.search);
@@ -140,7 +139,7 @@ export class AuthService {
   public async initialize2(courseID: string, sessionIDfromURL?: string) {
     // if (window.localStorage.getItem('SESSION_ID') == null) return
     var sessionID: string;
-    if (sessionIDfromURL === undefined) { 
+    if (sessionIDfromURL === undefined) {
       const savedSessionID = this.getSessionID();
       if (savedSessionID === null) {
         console.warn('authService.initialize: Virhe: ei session ID:ä.');
@@ -362,7 +361,7 @@ export class AuthService {
       response = await firstValueFrom<User>(this.http.get<any>(url));
       if (response?.id !== undefined && response?.id !== null) {
         console.log('getMyUserInfo: asetettiin kirjautuminen.');
-        this.setLoggedIn(); 
+        this.setLoggedIn();
       }
     } catch (error: any) {
       this.handleError(error);
