@@ -1,22 +1,25 @@
+@import '/src/variables.scss';
 
-h1 {
-    margin: 2em 0 2em 2em;
+.top-buttons-wrapper {
+  // Käytetään, vaikka ei olisi upotuksessa.
+  margin-top: var(--margin-top-embedded);
 }
 
-#buttonArea {
-    display: flex;
-    // border-radius: 1px;
-    // border-color: red;
-    // border-style: solid;
-    margin-top: 2em;
-    padding-right: 3em;
+.button-wrapper {
+  display: flex;
+  margin-top: 2em;
+  padding-right: 3em;
 }
 
 .spacer {
-    display: block;
-    flex: 1 1 auto;
+  display: block;
+  flex: 1 1 auto;
 }
 
 button {
-    min-width: 8em;
+  min-width: 8em
 }
+
+h2 { margin-top: 3rem }
+
+h3 { margin-bottom: 2.5rem }
