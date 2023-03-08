@@ -104,7 +104,7 @@ export class SubmitFaqComponent implements OnInit {
       let fileinfo: FileInfo = { filename: file.name };
       if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää 10 megatavun rajoituksen` + '.';
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsHasErrors = true;
       } else {
         this.fileList.push(file);
