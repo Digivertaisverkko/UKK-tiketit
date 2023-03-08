@@ -55,12 +55,12 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private fetchTicketInfo() {
-    if (this.ticketId == null) return 
+    if (this.ticketId == null) return
     this.ticketService.getTicketInfo(this.ticketId).then(response => {
       if (response?.id) {
         this.title = response.otsikko;
         this.message = response.viesti;
-        
+
         if (response.kentat !== undefined ) {
           for (let tiketinKentta of response.kentat) {
             for (let uusiKentta of this.ticketFields) {
@@ -99,7 +99,7 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.addTicket(this.courseId, ticket, this.fileList)
       .then(() => this.goBack()
       ).catch( error => {
-        // TODO: lisää eri virhekoodeja?
+        // ? lisää eri virhekoodeja?
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
