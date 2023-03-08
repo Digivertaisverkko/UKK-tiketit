@@ -38,6 +38,7 @@ export class EditAttachmentsComponent implements OnInit {
   @Output() attachmentsHasErrors = new EventEmitter<boolean>;
   public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
+  public readonly MAX_FILE_SIZE_MB=100;
   // public url: string = '';
   // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
@@ -61,9 +62,9 @@ export class EditAttachmentsComponent implements OnInit {
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let fileinfo: FileInfo = { filename: file.name };
-      if (file.size > 10 * MEGABYTE) {
+      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää 10 megatavun rajoituksen` + '.';
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsHasErrors.emit(true);
       } else {
         this.fileList.push(file);
