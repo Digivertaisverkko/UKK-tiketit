@@ -38,20 +38,20 @@ export class SubmitFaqComponent implements OnInit {
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
+  public readonly MAX_FILE_SIZE_MB=100;
 
   attachmentsHasErrors: boolean = false;
   public fileInfoList: FileInfo[] = [];
   public url: string = '';
   // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
- 
+
   constructor(private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
               private ticketService: TicketService) {}
 
   ngOnInit(): void {
-    console.log('Editoidaanko?: '+ this.editExisting);
     this.isInIframe = getIsInIframe();
     if (this.courseId === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -102,9 +102,9 @@ export class SubmitFaqComponent implements OnInit {
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let fileinfo: FileInfo = { filename: file.name };
-      if (file.size > 10 * MEGABYTE) {
+      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää 10 megatavun rajoituksen` + '.';
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsHasErrors = true;
       } else {
         this.fileList.push(file);

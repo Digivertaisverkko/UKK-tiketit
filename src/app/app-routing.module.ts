@@ -7,6 +7,7 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 // courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
 const routes: Routes = [
   { path: '', redirectTo: '/course/1/list-tickets', pathMatch: 'full' },
+  { path: 'course/:courseid', pathMatch: 'full', redirectTo: '/course/:courseid/list-tickets' },
   { path: 'course/:courseid/:any',  component: PageNotFoundComponent },
   { path: 'course/:courseid/:any/:any',  component: PageNotFoundComponent },
   { path: 'course/:courseid/:any/:any/:any',  component: PageNotFoundComponent },

@@ -129,7 +129,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-
     this.trackMessages();
   }
 
@@ -200,9 +199,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataSource.sort = this.sortQuestions;
         }
         // this.dataSource.paginator = this.paginator;
-    }).catch(error => {
-      this.handleError(error);
-    });
+    }).catch(error => this.handleError(error));
   }
 
   private pollFAQ(courseID: string) {

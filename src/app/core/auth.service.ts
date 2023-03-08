@@ -40,7 +40,6 @@ export class AuthService {
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
-
   public initialize()
   {
     this.checkIfSessionIDinStorage();

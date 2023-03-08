@@ -4,17 +4,11 @@
 // Material teeman määrittely:
 @import '/src/styles/custom-theme.scss';
 
-// $displayFont: Montserrat;
-// $textFont: Roboto;
-
-html { font-family: $textFont; }
+html { font-family: $textFont }
 
 :root { --margin-top-embedded: 1.5rem }
 
-body {
-  line-height: 1.45;
-  margin: 0;
-}
+body { line-height: 1.45; margin: 0 }
 
 .theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
 

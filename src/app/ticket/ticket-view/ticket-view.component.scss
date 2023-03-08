@@ -1,11 +1,11 @@
 @import '/src/variables.scss';
 
-#top-buttons {
+.top-buttons {
   justify-content: space-between;
   gap: $button-gap;
 }
 
-.short-field-value:last-child { margin-bottom: 1.5rem; }
+.short-field-value:last-child { margin-bottom: 1.5rem }
 
 // Muuten marginaalit menevät päällekkäin jostain syystä.
 // .short-vertical-spacer {
@@ -28,15 +28,13 @@ mat-card {
   }
 }
 
-.vertical-spacer { height: 1rem; }
+.vertical-spacer { height: 1rem }
 
-.theme-actions {
-  gap: 0.8rem;
-}
+.theme-actions { gap: 0.8rem }
 
-mat-radio-button { margin: 3px 1.7rem 3px 0px; }
+mat-radio-button { margin: 3px 1.7rem 3px 0px }
 
-.mdc-form-field > label { padding-left: 0; }
+.mdc-form-field > label { padding-left: 0 }
 
 // ::ng-deep .mat-mdc-card-content:last-child {
 //   padding-bottom: 0 !important;
