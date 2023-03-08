@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
-import { firstValueFrom, Observable, Subject } from 'rxjs';
+import { firstValueFrom, Observable, catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -181,13 +181,6 @@ export class TicketService {
     let response: any;
     const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
     const body = newTicket;
-    interface AddTicketResponse {
-      success: Boolean;
-      uusi: {
-        tiketti: string;
-        kommentti: string;
-      }
-    }
     try {
       response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
     } catch (error: any) {
@@ -206,6 +199,31 @@ export class TicketService {
       }
     }
     return true
+  }
+
+  // Lisää tiketti ilman tiedostoja.
+  public async addOnlyTicket(courseID: string, newTicket: UusiTiketti): Promise<AddTicketResponse> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
+    const body = newTicket;
+    try {
+      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  public async addFiles(ticketID: string, commentID: string, fileList: File[]) {
+    let sendFileResponse: any;
+    for (let file of fileList) {
+      try {
+        sendFileResponse = await this.sendFile(ticketID, commentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
+    }
+  }
 
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
@@ -219,19 +237,7 @@ export class TicketService {
     //     return false;
     //   }
     // }
-  }
 
-  public async removeTicket(ticketID: string): Promise<boolean> {
-    let response: any;
-    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
-    try {
-      response = await firstValueFrom(this.http.delete(url));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response?.success === true ? true : false;
-
-  }
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
@@ -250,6 +256,21 @@ export class TicketService {
     return (response?.success === true) ? true : false;
   }
 
+  // Vastaava kuin yllä, mutta progress baria varten.
+  public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+    let formData = new FormData();
+    formData.append('tiedosto', file);
+    console.log('ticketService: Yritetään lähettää formData:');
+    console.dir(formData);
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+      .pipe(catchError(error => {
+        console.log(error);
+        return throwError(() => new Error(error));
+      }
+    ));
+  }
+
   // Lataa tiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
@@ -264,6 +285,17 @@ export class TicketService {
       this.handleError(error);
     }
     return response
+  }
+
+  public async removeTicket(ticketID: string): Promise<boolean> {
+    let response: any;
+    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    try {
+      response = await firstValueFrom(this.http.delete(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response?.success === true ? true : false;
   }
 
   // Arkistoi (poista) UKK.
@@ -537,6 +569,14 @@ export interface UusiTiketti {
   otsikko: string;
   viesti: string;
   kentat?: Array<{ id: number, arvo: string }>;
+}
+
+interface AddTicketResponse {
+  success: Boolean;
+  uusi: {
+    tiketti: string;
+    kommentti: string;
+  }
 }
 
 // Metodi: sendFaq. API: /api/kurssi/:kurssi-id/ukk/
