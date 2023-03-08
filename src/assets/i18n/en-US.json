@@ -2,7 +2,8 @@
   "locale": "fi",
   "translations": {
     "404-otsikko": "Page not found",
-    "404": "The page you are trying to access does not exist.",
+    "404": "You're looking for a page that never existed, no longer exists or our server is messing up on its own.",
+    "404-2": "Probably the first.",
     "Admin": "Admin",
     "Alkuun": "To beginning",
     "Alkuperäinen kysymys": "Original question",

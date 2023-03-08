@@ -1,19 +1,56 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
-  templateUrl: './page-not-found.component.html',
-  styleUrls: ['./page-not-found.component.scss']
+  template: `
+
+    <div *ngIf="courseID" class="top-buttons-wrapper">
+      <app-to-beginning-button></app-to-beginning-button>
+    </div>
+
+    <h2 class="main-header"><span>404</span></h2>
+
+    <h3 i18n="@@404-otsikko" class="sub-header">Sivua ei löytynyt</h3>
+
+    <div class="button-wrapper" *ngIf="!isLoggedIn">
+      <div class="spacer"></div>
+      <button align="end"
+      mat-raised-button color="primary" id="submitButton"
+      (click)="goToLogin()"
+      i18n="@@Kirjaudu sisään">
+      Kirjaudu sisään
+        </button>
+    </div>
+    <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
+      ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.</p>
+    <p i18n="@@404-2">Todennäköisesti ensimmäinen.</p>
+    `,
+    styleUrls: ['./page-not-found.component.scss']
 })
-export class PageNotFoundComponent {
-  public errorMessage: string = $localize `:@@404:Osoitteessa määriteltyä sivua ei ole olemassa.`;
+export class PageNotFoundComponent implements OnInit {
   public isLoggedIn: Boolean = false;
+  public courseID: string | null = null;
 
   constructor(
     private authService: AuthService,
-    private router: Router) {
+    private router: Router,
+    private route: ActivatedRoute) {
       this.isLoggedIn = this.authService.getIsUserLoggedIn();
+      console.log(this.courseID);
+  }
+
+  ngOnInit(): void {
+    this.courseID = this.route.snapshot.paramMap.get('courseid');
+    this.trackRouteParameters();
+  }
+
+  private trackRouteParameters() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      var courseID: string | null = paramMap.get('courseid');
+      console.log(courseID);
+      this.courseID = courseID;
+    });
   }
 
   public async goToLogin() {
