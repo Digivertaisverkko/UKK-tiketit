@@ -6,7 +6,7 @@
   justify-content: space-between;
 }
 
-.vertical-spacer { height: 1rem; }
+.vertical-spacer { height: var(--margin-top-embedded) }
 
 .field-title {
   min-width: 23em;
