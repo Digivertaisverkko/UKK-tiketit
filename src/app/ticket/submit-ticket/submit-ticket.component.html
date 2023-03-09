@@ -121,11 +121,21 @@
 
       <button class="submit-button"
               (click)="sendTicket()"
+              *ngIf="!sendingFiles"
               color="primary"
               [disabled]="submitForm.invalid"
               i18n="@@Lähetä opettajille"
               mat-raised-button>
         Lähetä opettajille
+      </button>
+
+      <button class="submit-button"
+        *ngIf="sendingFiles"
+        (click)="goBack()"
+        color="primary"
+        [disabled]="submitForm.invalid"
+        mat-raised-button>
+        OK
       </button>
 
     </div>

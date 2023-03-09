@@ -27,6 +27,7 @@ export class SubmitTicketComponent implements OnInit {
   public errorMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
   public message: string = '';
+  public sendingFiles: boolean = false;
   public title: string = '';
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
@@ -77,7 +78,7 @@ export class SubmitTicketComponent implements OnInit {
     }).catch(e => {})
   }
 
-  private goBack() {
+  public goBack() {
     this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
   }
 
@@ -110,8 +111,8 @@ export class SubmitTicketComponent implements OnInit {
         response = response as AddTicketResponse;
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
-        this.attachments.sendFiles(ticketID, commentID)
-
+        this.sendingFiles = true;
+        this.attachments.sendFiles(ticketID, commentID);
       }).catch( error => {
         // ? lisää eri virhekoodeja?
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'

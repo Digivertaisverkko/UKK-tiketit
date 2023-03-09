@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
-import { firstValueFrom, Observable, catchError, throwError } from 'rxjs';
+import { firstValueFrom, Observable, catchError, throwError, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -11,11 +11,16 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
+  public $messages = new Subject<string>();
   private debug: boolean = false;
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient) {}
+
+  trackMessages(): Observable<string> {
+    return this.$messages.asObservable();
+  }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
@@ -237,9 +242,10 @@ export class TicketService {
     //   }
     // }
 
+  
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
+  public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
     console.log('ticketService: Yritetään lähettää formData:');
