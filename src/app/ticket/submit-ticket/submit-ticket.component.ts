@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { KentanTiedot, TicketService, Tiketti, UusiTiketti} from 'src/app/ticket/ticket.service';
+import { KentanTiedot, TicketService, Tiketti, UusiTiketti, AddTicketResponse } from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
+import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
@@ -17,6 +18,7 @@ interface TiketinKentat extends KentanTiedot {
 })
 
 export class SubmitTicketComponent implements OnInit {
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   @Input() public fileList: File[] = [];
   private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
@@ -86,9 +88,7 @@ export class SubmitTicketComponent implements OnInit {
     ticket.kentat = this.ticketFields.map((field) => {
       return { id: Number(field.id), arvo: field.arvo }
     });
-
     if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
-
     if (this.ticketId != null) {
       this.ticketService.editTicket(this.ticketId, ticket)
         .then( () => this.goBack()
@@ -96,12 +96,34 @@ export class SubmitTicketComponent implements OnInit {
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
         })
     } else {
-    this.ticketService.addTicket(this.courseId, ticket, this.fileList)
-      .then(() => this.goBack()
-      ).catch( error => {
+    this.ticketService.addOnlyTicket(this.courseId, ticket)
+      .then(response => {
+        if (this.fileList.length === 0) this.goBack()
+        if (response?.success !== true) {
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+          throw new Error('Kysymyksen lähettäminen epäonnistui.');
+        }
+        if (response == null || response?.uusi == null) {
+          this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+          throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+        }
+        response = response as AddTicketResponse;
+        const ticketID = response.uusi.tiketti;
+        const commentID = response.uusi.kommentti;
+        this.attachments.sendFiles(ticketID, commentID)
+
+      }).catch( error => {
         // ? lisää eri virhekoodeja?
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
+    
+    //   this.ticketService.addTicket(this.courseId, ticket, this.fileList)
+    //   .then(() => this.goBack()
+    //   ).catch( error => {
+    //     // ? lisää eri virhekoodeja?
+    //     this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+    //   });
+    // }
   }
 }

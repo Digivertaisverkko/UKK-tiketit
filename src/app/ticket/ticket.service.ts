@@ -56,14 +56,13 @@ export class TicketService {
     return verbal;
   }
 
-
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
   public async addComment(ticketID: string, message: string, fileList: File[], tila?: number): Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
     if (tila !== undefined) {
-      if (tila  < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      if (tila < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
     }
     interface newComment {
       viesti: string;
@@ -214,7 +213,7 @@ export class TicketService {
     return response
   }
 
-  public async addFiles(ticketID: string, commentID: string, fileList: File[]) {
+  public async uploadFiles(ticketID: string, commentID: string, fileList: File[]) {
     let sendFileResponse: any;
     for (let file of fileList) {
       try {
@@ -315,7 +314,7 @@ export class TicketService {
   public async getCourseName(courseID: string): Promise<string> {
     //const httpOptions = this.getHttpOptions();;
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID;
+    let url = `${environment.apiBaseUrl}/kurssi/${courseID}`;
     try {
       response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url) );
     } catch (error: any) {
@@ -571,7 +570,7 @@ export interface UusiTiketti {
   kentat?: Array<{ id: number, arvo: string }>;
 }
 
-interface AddTicketResponse {
+export interface AddTicketResponse {
   success: Boolean;
   uusi: {
     tiketti: string;

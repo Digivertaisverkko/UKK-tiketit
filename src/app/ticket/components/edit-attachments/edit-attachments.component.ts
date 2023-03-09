@@ -5,6 +5,7 @@ interface FileInfo {
   filename: string;
   error?: string;
   errorToolTip?: string;
+
 }
 
 @Component({
@@ -75,6 +76,10 @@ export class EditAttachmentsComponent implements OnInit {
       console.log('filelist:');
       console.dir(this.fileList);
     }
+  }
+
+  public sendFiles(ticketID: string, commentID: string) {
+    console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
   }
 
   public removeSelectedFile(index: number) {

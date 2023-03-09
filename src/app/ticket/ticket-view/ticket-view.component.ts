@@ -147,6 +147,7 @@ export class TicketViewComponent implements OnInit {
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
       this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
+    this.attachments.clear();
     this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq/' + this.ticketID);
   }
 
