@@ -99,7 +99,9 @@
     </section>
 
     <h2 i18n="@@Viesti">Viesti</h2>
-    <app-editor [(editorContent)]="message"></app-editor>
+    <app-editor [disabled]="sendingFiles"
+                [(editorContent)]="message">
+    </app-editor>
 
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
