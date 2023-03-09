@@ -132,6 +132,20 @@ export class TicketService {
   /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
      Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
 
+  // Sama kuin alla, mutta ei uppaa tiedostoja.
+  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
+    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;
+    url = environment.apiBaseUrl + url;
+    let response: any;
+    const body = newFaq;
+    try {
+      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
   // FIXME: eri muotoinen nimi kuin esim. addTicket.
   public async sendFaq(ID: string, newFaq: UusiUKK, fileList: File[], editFaq?: boolean) {
     let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;

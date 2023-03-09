@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK } from 'src/app/ticket/ticket.service';
+import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse } from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
-
+import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
@@ -15,6 +15,7 @@ interface FileInfo {
   filename: string;
   error?: string;
   errorToolTip?: string;
+  progress?: number;
 }
 
 @Component({
@@ -25,7 +26,7 @@ interface FileInfo {
 
 export class SubmitFaqComponent implements OnInit {
   @Input() public fileList: File[] = [];
-  // @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -34,6 +35,7 @@ export class SubmitFaqComponent implements OnInit {
   public faqMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
   public originalTicket: Tiketti | undefined;
+  public sendingFiles: boolean = false;
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
@@ -119,7 +121,7 @@ export class SubmitFaqComponent implements OnInit {
     this.attachmentsHasErrors = (this.fileInfoList.some(item => item.error));
   }
 
-  private goBack(): void {
+  public goBack(): void {
     this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
   }
 
@@ -134,8 +136,25 @@ export class SubmitFaqComponent implements OnInit {
     });
     if (this.courseId === null) throw new Error('Ei kurssi ID:ä.');
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
-    this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
-      .then(() => { this.goBack() })
+
+    this.ticketService.addFaq(id, newFaq, this.editExisting)
+      .then(response => {
+        console.log(' saatiin response: ' + JSON.stringify(response));
+        if (this.fileList.length === 0) this.goBack()
+        if (response?.success !== true) {
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+          throw new Error('Kysymyksen lähettäminen epäonnistui.');
+        }
+        if (response == null || response?.uusi == null) {
+          this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+          throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+        }
+        response = response as AddTicketResponse;
+        const ticketID = response.uusi.tiketti;
+        const commentID = response.uusi.kommentti;
+        this.sendingFiles = true;
+        this.sendFiles(ticketID, commentID);
+      })
       .catch( (error: Error) => {
         if (error?.tunnus == 1003) {
           this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
@@ -143,5 +162,29 @@ export class SubmitFaqComponent implements OnInit {
           this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
         }
       });
+    // this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
+    //   .then(() => { this.goBack() })
+    //   .catch( (error: Error) => {
+    //     if (error?.tunnus == 1003) {
+    //       this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+    //     } else {
+    //       this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+    //     }
+    //   });
   }
+
+  public sendFiles(ticketID: string, commentID: string) {
+    console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
+    for (let [index, file] of this.fileList.entries()) {
+      try {
+        this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
+          if (progress > 0 ) this.fileInfoList[index].progress = progress;
+        })
+      } catch (error: any) {
+        
+      }
+    }
+  }
+
+
 }

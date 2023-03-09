@@ -16,7 +16,8 @@
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea autocomplete="off"
+        <textarea [disabled]="sendingFiles"
+                  autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
@@ -39,7 +40,8 @@
       <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  [matAutocomplete]="auto"
+          <input  [disabled]="sendingFiles"
+                  [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
                   name="kentta.otsikko_{{i}}"
@@ -59,7 +61,8 @@
             <!-- Jos lisäkenttä ei sisällä valintoja, niin kentta.valinnat[0]
                   sisältää tyhjän merkkijonon, eikä suinkaan ole tyhjä. -->
             <ng-container *ngIf="kentta.valinnat[0] !== ''">
-              <mat-option *ngFor="let valinta of kentta.valinnat"
+              <mat-option [disabled]="sendingFiles"
+                          *ngFor="let valinta of kentta.valinnat"
                           [value]="valinta">
                 {{ valinta }}
               </mat-option>
@@ -100,6 +103,7 @@
       <!-- ! Tällä hetkellä ei tueta liitetiedostojen editointia. -->
       <button (click)="fileUpload.click()"
               *ngIf="!editExisting"
+              [disabled]="sendingFiles"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
         <mat-icon>attach_file</mat-icon>
@@ -109,6 +113,7 @@
       <div class="spacer"></div>
 
       <button class="cancel-button"
+              [disabled]="sendingFiles"
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
@@ -117,27 +122,44 @@
       </button>
 
       <button class="submit-button"
+              *ngIf="!sendingFiles"
               (click)="sendFaq()"
               color="primary"
               [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
               i18n="@@Julkaise"
-              mat-raised-button>
+              mat-raised-button
+              >
         Julkaise
+      </button>
+
+      <button class="submit-button"
+        *ngIf="sendingFiles === true"
+        (click)="goBack()"
+        color="primary"
+        [disabled]="!sendingFiles"
+        mat-raised-button>
+        OK
       </button>
 
     </div>
 
     <!-- ! (event) ei toiminut, jos käytti tähän omaa child komponenttia ja tuli Muokkaa-napin kautta. -->
-    <input mat-input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
+    <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
+
+    <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
+      (change)="onFileChanged($event)" #fileUpload> -->
+
     <div class="file-list-wrapper" *ngIf="fileList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
           <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
           <mat-icon>warning</mat-icon>{{file.error}}</div>
-          <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
-        <!-- <mat-error>Virheilmoitukset tähän.</mat-error> -->
+        <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
+        <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
+        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100 ></mat-progress-bar>
       </div>
     </div>
 
