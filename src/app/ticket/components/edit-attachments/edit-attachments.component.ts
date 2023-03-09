@@ -7,7 +7,7 @@ interface FileInfo {
   filename: string;
   error?: string;
   errorToolTip?: string;
-
+  progress?: number;
 }
 
 @Component({
@@ -24,9 +24,11 @@ interface FileInfo {
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
           <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
           <mat-icon>warning</mat-icon>{{file.error}}</div>
-          <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
-        <!-- <mat-error>Virheilmoitukset tähän.</mat-error> -->
+        <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
+        <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
+        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100 ></mat-progress-bar>
       </div>
     </div>`,
   styleUrls: ['./edit-attachments.component.scss']
@@ -41,7 +43,6 @@ export class EditAttachmentsComponent implements OnInit {
   @Output() attachmentsHasErrors = new EventEmitter<boolean>;
   public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
-  public progress: number = 0;
   public readonly MAX_FILE_SIZE_MB=100;
   // public url: string = '';
   // public fileNameList: string[] = [];
@@ -55,13 +56,6 @@ export class EditAttachmentsComponent implements OnInit {
     this.uploadClicks.subscribe(action => {
         element.click()
     });
-    this.trackMessages();
-  }
-
-  private trackMessages() {
-    this.ticketService.trackMessages().subscribe(message => {
-
-    })
   }
 
   public clear() {
@@ -92,31 +86,11 @@ export class EditAttachmentsComponent implements OnInit {
 
   public sendFiles(ticketID: string, commentID: string) {
     console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
-    for (let file of this.fileList) {
+    for (let [index, file] of this.fileList.entries()) {
       try {
-        this.ticketService.uploadFile(ticketID, commentID, file).subscribe((event: HttpEvent<any>) => {
-          
-          switch (event.type) {
-            case HttpEventType.Sent:
-              console.log('Request has been made!');
-              break;
-            case HttpEventType.ResponseHeader:
-              console.log('Response header has been received!');
-              break;
-            case HttpEventType.UploadProgress:
-              if (event.total !== undefined) {
-                this.progress = Math.round(event.loaded / event.total * 100);
-              }
-              console.log(`Uploaded! ${this.progress}%`);
-              break;
-            case HttpEventType.Response:
-              console.log('User successfully created!', event.body);
-              setTimeout(() => {
-                this.progress = 0;
-              }, 1500);
-            break;
-            default:
-          }
+        this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
+          if (progress > 0 ) this.fileInfoList[index].progress = progress;
+          console.log('index: ' + index + '  progress: ' + progress);
         })
       } catch (error: any) {
         this.attachmentsHasErrors.emit(true);

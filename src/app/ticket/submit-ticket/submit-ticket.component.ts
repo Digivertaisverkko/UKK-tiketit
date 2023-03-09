@@ -118,7 +118,6 @@ export class SubmitTicketComponent implements OnInit {
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
-    
     //   this.ticketService.addTicket(this.courseId, ticket, this.fileList)
     //   .then(() => this.goBack()
     //   ).catch( error => {

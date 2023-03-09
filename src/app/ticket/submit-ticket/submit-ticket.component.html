@@ -17,7 +17,8 @@
     <div class="ticket-header">
 
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea autocomplete="off"
+        <textarea [disabled]="sendingFiles"
+                  autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
@@ -54,7 +55,8 @@
       <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  [matAutocomplete]="auto"
+          <input  [disabled]="sendingFiles"
+                  [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
                   name="kentta.otsikko_{{i}}"
@@ -111,6 +113,7 @@
        <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
+              [disabled]="sendingFiles"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
         <mat-icon>attach_file</mat-icon>
@@ -130,7 +133,7 @@
       </button>
 
       <button class="submit-button"
-        *ngIf="sendingFiles"
+        *ngIf="sendingFiles === true"
         (click)="goBack()"
         color="primary"
         [disabled]="submitForm.invalid"

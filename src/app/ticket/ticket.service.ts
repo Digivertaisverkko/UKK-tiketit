@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
-import { firstValueFrom, Observable, catchError, throwError, Subject } from 'rxjs';
+import { firstValueFrom, map, Observable, catchError, throwError, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -269,11 +269,19 @@ export class TicketService {
     console.dir(formData);
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-      .pipe(catchError(error => {
-        console.log(error);
-        return throwError(() => new Error(error));
-      }
-    ));
+      .pipe(map(event => {
+        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+          const progress = Math.round(100 * event.loaded / event.total);
+          return progress;
+        } else return -1
+      })
+    );
+    // return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+    //   .pipe(catchError(error => {
+    //     console.log(error);
+    //     return throwError(() => new Error(error));
+    //   }
+    // ));
   }
 
   // Lataa tiedosto.

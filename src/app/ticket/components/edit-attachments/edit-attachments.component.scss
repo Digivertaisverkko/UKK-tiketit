@@ -74,3 +74,12 @@
     margin-bottom: auto;
   }
 }
+
+.ok-icon, error-icon {
+  min-height: 2rem;
+  min-width: 2rem;
+}
+
+.ok-icon { color: green }
+
+.error-icon { color: #B00020 }
