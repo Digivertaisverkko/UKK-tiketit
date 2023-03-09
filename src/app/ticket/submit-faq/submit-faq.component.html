@@ -86,10 +86,10 @@
     </section>
 
     <h2 i18n="@@Kysymys">Kysymys</h2>
-    <app-editor [(editorContent)]="faqMessage"></app-editor>
+    <app-editor [disabled]="sendingFiles" [(editorContent)]="faqMessage"></app-editor>
 
     <h2 i18n="@@Vastaus">Vastaus</h2>
-    <app-editor [(editorContent)]="faqAnswer"></app-editor>
+    <app-editor [disabled]="sendingFiles" [(editorContent)]="faqAnswer"></app-editor>
 
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
