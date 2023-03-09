@@ -40,6 +40,7 @@ export class AuthService {
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
+
   public initialize()
   {
     this.checkIfSessionIDinStorage();
@@ -321,54 +322,56 @@ export class AuthService {
     return (response?.success === true) ? true : false;
   }
 
-  // Hae ja tallenna palvelimelta käyttöjätiedot paikallisesti käytettäviksi. Tarvitsee, että session id on asetettu.
-  // Tästä luovutaan. Jatkossa yksi käyttäjäobjekti on vain auth.service:ssä.
+  // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin käytettäviksi.
   public async fetchUserInfo(courseID: string) {
-    if (window.localStorage.getItem('SESSION_ID') == null) {
-      console.warn('Virhe: fetchUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.');
-      this.setNotLoggegIn();
-      return
-    }
-    if (courseID === null) {
-      console.error('Virhe: fetchUserInfo(): Kurssi ID:ä, ei voida hakea tietoja.');
-      return
-    }
-    try {
-      // TODO: Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko joka paikassa odottaa observablen arvoa?
-      const userInfo = await this.getMyUserInfo(courseID);
-      if (userInfo !== null && userInfo !== this.user$.value) {
-        // console.log('vanha userinfo: ' + JSON.stringify(this.user$.value));
-        console.log('uusi userinfo: ' + JSON.stringify(userInfo));
-        this.user$.next(userInfo);
-      }
-    } catch (error: any) {
-      this.handleError(error);
-    }
-  }
-
-  // Hae omat kurssikohtaiset tiedot.
-  private async getMyUserInfo(courseID: string): Promise<User> {
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
     }
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
     }
-    //const httpOptions = this.getHttpOptions();
+    if (window.localStorage.getItem('SESSION_ID') == null) {
+      this.setNotLoggegIn();
+      throw new Error(('Virhe: fetchUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.'));
+    }
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID + '/oikeudet';
     try {
-      console.log('authService.getMyUserInfo: haetaan käyttäjätiedot');
+      // ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko joka paikassa odottaa observablen arvoa?
+      const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
       response = await firstValueFrom<User>(this.http.get<any>(url));
-      if (response?.id !== undefined && response?.id !== null) {
-        console.log('getMyUserInfo: asetettiin kirjautuminen.');
-        this.setLoggedIn();
-      }
     } catch (error: any) {
       this.handleError(error);
     }
-    return response;
+    if (response == null || response?.id == null) {
+      throw new Error('fetchUserInfo: ei saatu käyttäjätietoja.');
+    }
+    if (response === this.user$.value) {
+      console.log('Jatketaan samalla käyttäjällä.');
+      return
+    }
+    console.log('fetchUserInfo: Asetetaan uusi userinfo: ' + JSON.stringify(response));
+    this.setLoggedIn();
+    this.user$.next(response);
   }
+
+  // Hae omat kurssikohtaiset tiedot.
+  // private async getMyUserInfo(courseID: string): Promise<User> {
+    // //const httpOptions = this.getHttpOptions();
+    // let response: any;
+    // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
+    // try {
+    //   response = await firstValueFrom<User>(this.http.get<any>(url));
+    //   if (response?.id !== undefined && response?.id !== null) {
+    //     console.log('getMyUserInfo: asetettiin kirjautuminen.');
+    //     this.setLoggedIn();
+    //   } else {
+    //     throw new Error('Saatiin oikeuksien hakemiseen vastaus: ' + response);
+    //   }
+    // } catch (error: any) {
+    //   this.handleError(error);
+    // }
+    // return response;
+  // }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
