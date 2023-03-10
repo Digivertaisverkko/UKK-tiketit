@@ -56,7 +56,7 @@ export class EditAttachmentsComponent implements OnInit {
   ngOnInit() {
     const element: HTMLElement = document.querySelector('.file-input') as HTMLElement;
     this.uploadClicks.subscribe(action => {
-        element.click()
+      element.click()
     });
   }
 
@@ -87,20 +87,24 @@ export class EditAttachmentsComponent implements OnInit {
   }
 
   public sendFiles(ticketID: string, commentID: string): Promise<boolean> {
-    console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
-    for (let [index, file] of this.fileList.entries()) {
-      try {
-        this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
+    return new Promise((resolve, reject) => {
+      console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
+      for (let [index, file] of this.fileList.entries()) {
+        try {
+          this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
 
-          if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
-          console.log('index: ' + index + '  progress: ' + progress);
-        })
-      } catch (error: any) {
-        this.attachmentsHasErrors.emit(true);
-        return new Promise(reject => reject(false));
+            if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
+            console.log('index: ' + index + '  progress: ' + progress);
+            if (progress === 100) {
+              if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
+            }
+          })
+        } catch (error: any) {
+          this.attachmentsHasErrors.emit(true);
+          reject(false);
+        }
       }
-    }
-    return new Promise(resolve => resolve(true));
+    });
   }
 
   public removeSelectedFile(index: number) {
