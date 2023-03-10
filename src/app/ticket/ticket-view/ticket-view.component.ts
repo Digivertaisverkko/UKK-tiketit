@@ -35,7 +35,7 @@ export class TicketViewComponent implements OnInit {
   public message: string = '';
   public newCommentState: 3 | 4 | 5 = 4;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
-  public sendingFiles: boolean = false;
+  public state: 'editing' | 'sending' | 'done' = 'editing';
   public ticket: Tiketti;
   public ticketID: string;
   public tila: string;
@@ -189,6 +189,7 @@ export class TicketViewComponent implements OnInit {
   }
 
   public sendComment(): void {
+    this.state = 'sending';
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
     .then(response => {
       if (response == null || response?.success !== true) {
@@ -198,26 +199,26 @@ export class TicketViewComponent implements OnInit {
       if (this.fileList.length === 0) return
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
-      this.sendingFiles = true;
-      console.log(' tiketti ja kommentti id: ' + this.ticketID, commentID);
-      this.attachments.sendFiles(this.ticketID, commentID).then((response: boolean) => {
-        if (response) {
+      this.attachments.sendFiles(this.ticketID, commentID).then(response => {
+        if (response === true) {
+          // console.log('saatiin vastaus: ' + response);
+          // console.log(typeof response);
           this.fileList = [];
           this.attachments.clear();
-        }
+        } else throw new Error()
         // console.log(' saatiin response: ' + response);
         // console.log(typeof response);
         // console.dir(response);
-      }).catch(() => {})
+      }).catch(() => {
+        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
+      })
     })
     .then(() => {
-      console.log('haetaan tiketin tiedot.');
-        this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-        // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
+      this.state = 'editing';
+      this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+      // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
     })
-    .then( () => {
-      this.commentText = '';
-    })
+    .then( () => this.commentText = '' )
     .catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
     }).finally(() => {
