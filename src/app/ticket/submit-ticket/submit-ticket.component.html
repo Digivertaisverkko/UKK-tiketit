@@ -7,7 +7,7 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button [disabled]="state!=='editing'"></app-to-beginning-button>
+  <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
 
   <form accept-charset="UTF-8"
         action=""
