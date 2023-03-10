@@ -62,7 +62,7 @@ export class TicketService {
   }
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string, fileList: File[], tila?: number): Promise<NewCommentResponse> {
+  public async addComment(ticketID: string, message: string, tila?: number): Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
@@ -83,21 +83,23 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (fileList.length == 0 ) return response;
-    const commentID = String(response?.kommentti);
-    if (commentID == null) {
-      throw new Error('addComment: ei liitteiden lisäämiseen tarvittavaa kommentin id:ä.');
-    }
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, commentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
     return response
   }
+
+    // if (fileList.length == 0 ) return response;
+    // const commentID = String(response?.kommentti);
+    // if (commentID == null) {
+    //   throw new Error('addComment: ei liitteiden lisäämiseen tarvittavaa kommentin id:ä.');
+    // }
+    // let sendFileResponse: any;
+    // for (let file of fileList) {
+    //   try {
+    //     sendFileResponse = await this.sendFile(ticketID, commentID, file);
+    //   } catch (error: any) {
+    //     this.handleError(error);
+    //   }
+    // }
+    // return response
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
   public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise <KentanTiedot[]> {
@@ -256,7 +258,7 @@ export class TicketService {
     //   }
     // }
 
-  
+
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {

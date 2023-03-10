@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit
 import { Observable } from 'rxjs';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { TicketService } from '../../ticket.service';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
+import { Resolve } from '@angular/router';
 
 interface FileInfo {
   filename: string;
@@ -84,19 +86,21 @@ export class EditAttachmentsComponent implements OnInit {
     }
   }
 
-  public sendFiles(ticketID: string, commentID: string) {
+  public sendFiles(ticketID: string, commentID: string): Promise<boolean> {
     console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
     for (let [index, file] of this.fileList.entries()) {
       try {
         this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
-          if (progress > 0 ) this.fileInfoList[index].progress = progress;
+
+          if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
           console.log('index: ' + index + '  progress: ' + progress);
         })
       } catch (error: any) {
         this.attachmentsHasErrors.emit(true);
+        return new Promise(reject => reject(false));
       }
     }
-
+    return new Promise(resolve => resolve(true));
   }
 
   public removeSelectedFile(index: number) {

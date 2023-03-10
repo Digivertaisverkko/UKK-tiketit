@@ -100,11 +100,11 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.addOnlyTicket(this.courseId, ticket)
       .then(response => {
         if (this.fileList.length === 0) this.goBack()
-        if (response?.success !== true) {
+        if (response == null || response?.success !== true) {
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
           throw new Error('Kysymyksen lähettäminen epäonnistui.');
         }
-        if (response == null || response?.uusi == null) {
+        if (response?.uusi == null) {
           this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
           throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
         }

@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { TicketService, Tiketti } from '../ticket.service';
+import { Component, Input, OnDestroy, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
+import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { interval, startWith, Subject, switchMap } from 'rxjs';
@@ -35,6 +35,7 @@ export class TicketViewComponent implements OnInit {
   public message: string = '';
   public newCommentState: 3 | 4 | 5 = 4;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
+  public sendingFiles: boolean = false;
   public ticket: Tiketti;
   public ticketID: string;
   public tila: string;
@@ -188,25 +189,40 @@ export class TicketViewComponent implements OnInit {
   }
 
   public sendComment(): void {
-    this.ticketService.addComment(this.ticketID, this.commentText, this.fileList, this.newCommentState)
-      .then(response => {
-        if (response?.success == true) {
-          this.errorMessage = '';
-          this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-          // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
-        } else {
-          this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
-          console.log(response);
-        }
-      })
-      .then( () => {
-        this.commentText = '';
-      })
-      .catch(error => {
+    this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
+    .then(response => {
+      if (response == null || response?.success !== true) {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
-      }).finally(() => {
-        this.attachments.clear();
-      });
+        throw new Error('Kommentin lähettäminen epäonnistui.');
+      }
+      if (this.fileList.length === 0) return
+      response = response as NewCommentResponse;
+      const commentID = response.kommentti;
+      this.sendingFiles = true;
+      console.log(' tiketti ja kommentti id: ' + this.ticketID, commentID);
+      this.attachments.sendFiles(this.ticketID, commentID).then((response: boolean) => {
+        if (response) {
+          this.fileList = [];
+          this.attachments.clear();
+        }
+        // console.log(' saatiin response: ' + response);
+        // console.log(typeof response);
+        // console.dir(response);
+      }).catch(() => {})
+    })
+    .then(() => {
+      console.log('haetaan tiketin tiedot.');
+        this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+        // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
+    })
+    .then( () => {
+      this.commentText = '';
+    })
+    .catch(error => {
+      this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+    }).finally(() => {
+
+    });
   }
 
   // public goSubmitFaqWithId(): void {
