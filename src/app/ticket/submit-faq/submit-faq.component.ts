@@ -26,7 +26,7 @@ interface FileInfo {
 
 export class SubmitFaqComponent implements OnInit {
   @Input() public fileList: File[] = [];
-  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+  // @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -35,7 +35,7 @@ export class SubmitFaqComponent implements OnInit {
   public faqMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
   public originalTicket: Tiketti | undefined;
-  public sendingFiles: boolean = false;
+  public state: 'editing' | 'sending' | 'done' = 'editing';
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
@@ -112,6 +112,9 @@ export class SubmitFaqComponent implements OnInit {
         this.fileList.push(file);
       }
       this.fileInfoList.push(fileinfo);
+      console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
+      console.log('filelist:');
+      console.dir(this.fileList);
     }
   }
 
@@ -152,10 +155,15 @@ export class SubmitFaqComponent implements OnInit {
         response = response as AddTicketResponse;
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
-        this.sendingFiles = true;
-        this.sendFiles(ticketID, commentID);
+        this.state = 'sending';
+        this.sendFiles(ticketID, commentID).then(response => {
+          this.state = "editing";
+          this.goBack();
+        })
       })
       .catch( (error: Error) => {
+        this.state = 'done';
+        console.log(error);
         if (error?.tunnus == 1003) {
           this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
         } else {
@@ -174,17 +182,23 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public sendFiles(ticketID: string, commentID: string) {
-    console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
-    for (let [index, file] of this.fileList.entries()) {
-      try {
-        this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
-          if (progress > 0 ) this.fileInfoList[index].progress = progress;
-        })
-      } catch (error: any) {
-        
+    return new Promise((resolve, reject) => {
+      console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
+      for (let [index, file] of this.fileList.entries()) {
+        try {
+          this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
+            if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
+            console.log('index: ' + index + '  progress: ' + progress);
+            if (progress === 100) {
+              if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
+            }
+          })
+        } catch (error: any) {
+          this.attachmentsHasErrors = true;
+          reject(false);
+        }
       }
-    }
+    });
   }
-
 
 }
