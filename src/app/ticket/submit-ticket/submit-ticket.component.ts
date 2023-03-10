@@ -97,6 +97,7 @@ export class SubmitTicketComponent implements OnInit {
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
         })
     } else {
+    this.state = 'sending';
     this.ticketService.addOnlyTicket(this.courseId, ticket)
       .then(response => {
         if (this.fileList.length === 0) this.goBack()
@@ -111,10 +112,16 @@ export class SubmitTicketComponent implements OnInit {
         response = response as AddTicketResponse;
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
-        this.state = 'sending';
         this.attachments.sendFiles(ticketID, commentID).then(response => {
+          if (response === true) {
           this.state = "editing";
           this.goBack();
+        } else {
+          throw new Error
+        }
+        }).catch(error => {
+          this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
+
         })
       }).catch( error => {
         // ? lisää eri virhekoodeja?

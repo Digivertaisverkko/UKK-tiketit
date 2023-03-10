@@ -70,7 +70,7 @@ export class EditAttachmentsComponent implements OnInit {
     const MEGABYTE = 1000000;
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
-      let fileinfo: FileInfo = { filename: file.name };
+      let fileinfo: FileInfo = { filename: file.name, progress: 0 };
       if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
@@ -92,12 +92,14 @@ export class EditAttachmentsComponent implements OnInit {
       for (let [index, file] of this.fileList.entries()) {
         try {
           this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
-
+            if (progress?.success === true) {
+              if (this.fileInfoList.every(fileinfo => fileinfo.progress === 100)) {
+                console.log('kaikki lähetetty');
+                resolve(true);
+              }
+            }
             if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
             console.log('index: ' + index + '  progress: ' + progress);
-            if (progress === 100) {
-              if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
-            }
           })
         } catch (error: any) {
           this.attachmentsHasErrors.emit(true);
