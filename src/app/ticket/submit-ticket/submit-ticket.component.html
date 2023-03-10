@@ -7,7 +7,7 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button></app-to-beginning-button>
+  <app-to-beginning-button [disabled]="state!=='editing'"></app-to-beginning-button>
 
   <form accept-charset="UTF-8"
         action=""
@@ -17,7 +17,7 @@
     <div class="ticket-header">
 
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea [disabled]="sendingFiles"
+        <textarea [disabled]="state!=='editing'"
                   autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
@@ -55,7 +55,7 @@
       <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  [disabled]="sendingFiles"
+          <input  [disabled]="state!=='editing'"
                   [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
@@ -99,7 +99,7 @@
     </section>
 
     <h2 i18n="@@Viesti">Viesti</h2>
-    <app-editor [disabled]="sendingFiles"
+    <app-editor [disabled]="state!=='editing'"
                 [(editorContent)]="message">
     </app-editor>
 
@@ -115,7 +115,7 @@
        <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
-              [disabled]="sendingFiles"
+              [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
         <mat-icon>attach_file</mat-icon>
@@ -126,7 +126,7 @@
 
       <button class="submit-button"
               (click)="sendTicket()"
-              *ngIf="!sendingFiles"
+              *ngIf="state==='editing'"
               color="primary"
               [disabled]="submitForm.invalid"
               i18n="@@Lähetä opettajille"
@@ -135,7 +135,7 @@
       </button>
 
       <button class="submit-button"
-        *ngIf="sendingFiles === true"
+        *ngIf="state==='done'"
         (click)="goBack()"
         color="primary"
         [disabled]="submitForm.invalid"
@@ -144,6 +144,9 @@
       </button>
 
     </div>
+
+    <p class="status-message-p" *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
+      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
 
     <app-edit-attachments
         (fileListOutput)="fileList = $event"
