@@ -26,7 +26,7 @@ interface FileInfo {
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
           <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
           <mat-icon>warning</mat-icon>{{file.error}}</div>
-          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+          <button mat-icon-button [disabled]="file.progress !== 0" class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
         <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
         <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
