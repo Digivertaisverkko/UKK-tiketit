@@ -203,6 +203,7 @@ export class TicketViewComponent implements OnInit {
         if (response === true) {
           // console.log('saatiin vastaus: ' + response);
           // console.log(typeof response);
+          console.log('Liitteet lähetetty');
           this.fileList = [];
           this.attachments.clear();
         } else throw new Error()
@@ -214,7 +215,6 @@ export class TicketViewComponent implements OnInit {
       })
     })
     .then(() => {
-      this.state = 'editing';
       this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
       // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
     })
@@ -222,7 +222,7 @@ export class TicketViewComponent implements OnInit {
     .catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
     }).finally(() => {
-
+      this.state = 'editing';
     });
   }
 
