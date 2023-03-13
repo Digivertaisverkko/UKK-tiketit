@@ -446,7 +446,6 @@ export class TicketService {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
-    // TODO: Tee nämä kutsut rinnakkain.
     response = await this.getFields(ticketID);
     ticket.kentat = response;
     response  = await this.getComments(ticketID);
