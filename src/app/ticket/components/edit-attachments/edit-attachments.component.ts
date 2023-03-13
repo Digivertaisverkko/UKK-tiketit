@@ -23,14 +23,20 @@ interface FileInfo {
     <div class="file-list-wrapper" *ngIf="fileList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
-          <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
-          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
-          <mat-icon>warning</mat-icon>{{file.error}}</div>
-          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+          <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">
+            {{file.filename}}</span>
+          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}"
+            [matTooltipShowDelay]="600"><mat-icon>warning</mat-icon>{{file.error}}
+          </div>
+          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button"
+            (click)="removeSelectedFile(index)">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
         <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
         <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
-        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100 ></mat-progress-bar>
+        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100 >
+        </mat-progress-bar>
       </div>
     </div>`,
   styleUrls: ['./edit-attachments.component.scss']
@@ -73,16 +79,17 @@ export class EditAttachmentsComponent implements OnInit {
       let fileinfo: FileInfo = { filename: file.name };
       if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää
+          ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsHasErrors.emit(true);
       } else {
         this.fileList.push(file);
       }
       this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileList);
-      console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
-      console.log('filelist:');
-      console.dir(this.fileList);
+      // console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
+      // console.log('filelist:');
+      // console.dir(this.fileList);
     }
   }
 
@@ -94,9 +101,9 @@ export class EditAttachmentsComponent implements OnInit {
           this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
 
             if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
-            console.log('index: ' + index + '  progress: ' + progress);
+            // console.log('index: ' + index + '  progress: ' + progress);
             if (progress === 100) {
-              if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
+              if (this.fileInfoList.every(file => file.progress === 100)) return resolve(true);
             }
           })
         } catch (error: any) {

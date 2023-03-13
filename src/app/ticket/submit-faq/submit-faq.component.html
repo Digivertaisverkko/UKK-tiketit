@@ -155,13 +155,17 @@
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
-          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
-          <mat-icon>warning</mat-icon>{{file.error}}</div>
-          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" 
+            [matTooltipShowDelay]="600">
+            <mat-icon>warning</mat-icon>{{file.error}}
+          </div>
+          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button"
+            (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
         <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
         <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
-        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100 ></mat-progress-bar>
+        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100>
+        </mat-progress-bar>
       </div>
     </div>
 
@@ -171,8 +175,7 @@
 
   <ng-container *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
-    <h2 class="main-header"
-        i18n="@@Alkuperäinen kysymys">
+    <h2 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
     </h2>
     <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
