@@ -13,8 +13,11 @@ mat-form-field { min-width: 21rem; }
 
 .short-field-wrapper {
   width: 24em;
-
   mat-form-field { margin-top: 2px; }
+}
+
+.status-message-p {
+  text-align: center;
 }
 
 .theme-actions {
