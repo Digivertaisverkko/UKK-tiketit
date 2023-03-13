@@ -147,10 +147,8 @@
 
     <!-- ! (event) ei toiminut, jos käytti tähän omaa child komponenttia ja tuli Muokkaa-napin kautta. -->
     <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
-
     <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
       (change)="onFileChanged($event)" #fileUpload> -->
-
     <div class="file-list-wrapper" *ngIf="fileList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
@@ -168,6 +166,14 @@
         </mat-progress-bar>
       </div>
     </div>
+
+    <!-- Ylläoleva lapsikomponenttina -->
+    <!-- <app-edit-attachments
+    (fileListOutput)="fileList = $event"
+    [uploadClicks]="uploadClick.asObservable()"
+    >
+    </app-edit-attachments> -->
+
 
   </form>
 
