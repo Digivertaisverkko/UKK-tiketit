@@ -198,32 +198,33 @@ export class TicketViewComponent implements OnInit {
       }
       if (this.fileList.length === 0) return
       response = response as NewCommentResponse;
-      const commentID = response.kommentti;
-      this.attachments.sendFiles(this.ticketID, commentID).then(response => {
+      const commentID = response.kommentti
+      this.state = 'sending';
+      this.attachments.sendFiles(this.ticketID, commentID).then(response =>{
         if (response === true) {
           // console.log('saatiin vastaus: ' + response);
           // console.log(typeof response);
           console.log('Liitteet lähetetty');
           this.fileList = [];
           this.attachments.clear();
+          return true
         } else throw new Error()
-        // console.log(' saatiin response: ' + response);
-        // console.log(typeof response);
-        // console.dir(response);
+      }).then(response => {
+        this.commentText = ''
+        console.log('vastaus: ' + response );
+        this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+        this.state = 'editing';
+
+      }).then(response => {
+        // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
       }).catch(() => {
+        this.state = 'done';
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
       })
     })
-    .then(() => {
-      this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-      // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
-    })
-    .then( () => this.commentText = '' )
     .catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
-    }).finally(() => {
-      this.state = 'editing';
-    });
+    })
   }
 
   // public goSubmitFaqWithId(): void {
