@@ -234,16 +234,16 @@ export class TicketService {
     return response
   }
 
-  public async uploadFiles(ticketID: string, commentID: string, fileList: File[]) {
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, commentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-  }
+  // public async uploadFiles(ticketID: string, commentID: string, fileList: File[]) {
+  //   let sendFileResponse: any;
+  //   for (let file of fileList) {
+  //     try {
+  //       sendFileResponse = await this.sendFile(ticketID, commentID, file);
+  //     } catch (error: any) {
+  //       this.handleError(error);
+  //     }
+  //   }
+  // }
 
     // if (response.success == undefined) {
     //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
@@ -286,9 +286,17 @@ export class TicketService {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
       .pipe(map(event => {
+        // console.log(event);
+        // console.dir(event);
+        // console.log('type: ' + event.type)
         if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
           const progress = Math.round(100 * event.loaded / event.total);
           return progress;
+<<<<<<< HEAD
+=======
+        } else if (event.type === HttpEventType.Response) {
+          return event.body  // pitäisi palauttaa onnistuessa { success: true }
+>>>>>>> 3ff424b69730fa39948c124943ec2b6c94354612
         } else return -1  // Ei huomioida näkymäss.
       })
     );

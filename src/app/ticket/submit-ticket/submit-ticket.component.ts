@@ -113,8 +113,15 @@ export class SubmitTicketComponent implements OnInit {
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
         this.attachments.sendFiles(ticketID, commentID).then(response => {
+          if (response === true) {
           this.state = "editing";
           this.goBack();
+        } else {
+          throw new Error
+        }
+        }).catch(error => {
+          this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
+
         })
       }).catch( error => {
         // ? lisää eri virhekoodeja?

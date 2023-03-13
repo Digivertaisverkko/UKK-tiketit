@@ -189,7 +189,6 @@ export class TicketViewComponent implements OnInit {
   }
 
   public sendComment(): void {
-    this.state = 'sending';
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
     .then(response => {
       if (response == null || response?.success !== true) {
@@ -198,9 +197,9 @@ export class TicketViewComponent implements OnInit {
       }
       if (this.fileList.length === 0) return
       response = response as NewCommentResponse;
-      const commentID = response.kommentti
+      const commentID = response.kommentti;
       this.state = 'sending';
-      this.attachments.sendFiles(this.ticketID, commentID).then(response =>{
+      this.attachments.sendFiles(this.ticketID, commentID).then(response => {
         if (response === true) {
           // console.log('saatiin vastaus: ' + response);
           // console.log(typeof response);
