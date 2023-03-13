@@ -289,8 +289,6 @@ export class TicketService {
         if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
           const progress = Math.round(100 * event.loaded / event.total);
           return progress;
-        } else if (event.type === HttpEventType.Response) {
-          return 100
         } else return -1  // Ei huomioida näkymäss.
       })
     );
