@@ -195,33 +195,29 @@ export class TicketViewComponent implements OnInit {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
         throw new Error('Kommentin lähettäminen epäonnistui.');
       }
-      if (this.fileList.length === 0) return
+      if (this.fileList.length === 0) {
+        return true
+      }
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
       this.state = 'sending';
-      this.attachments.sendFiles(this.ticketID, commentID).then(response => {
+      return this.attachments.sendFiles(this.ticketID, commentID).then(response => {
         if (response === true) {
-          // console.log('saatiin vastaus: ' + response);
-          // console.log(typeof response);
           console.log('Liitteet lähetetty');
           this.fileList = [];
           this.attachments.clear();
-          return true
-        } else throw new Error()
-      }).then(response => {
-        this.commentText = ''
-        console.log('vastaus: ' + response );
-        this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-        this.state = 'editing';
-
-      }).then(response => {
-        // this._snackBar.open($localize `:@@Kommentin lisääminen:Kommentin lisääminen tikettiin onnistui.`, 'OK');
+        }
       }).catch(() => {
         this.state = 'done';
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
+        return false
       })
-    })
-    .catch(error => {
+    }).then(response => {
+    this.commentText = ''
+    console.log('vastaus: ' + response );
+    this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+    this.state = 'editing';
+    }).catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
     })
   }
