@@ -145,13 +145,11 @@
 
     </div>
 
-    <p class="status-message-p" *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
-      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
-
     <app-edit-attachments
-        (fileListOutput)="fileList = $event"
-        [uploadClicks]="uploadClick.asObservable()"
-        >
+      (fileListOutput)="fileList = $event"
+      [uploadClicks]="uploadClick.asObservable()"
+      (attachmentsMessages)="attachmentsMessages = $event"
+    >
     </app-edit-attachments>
 
   </form>

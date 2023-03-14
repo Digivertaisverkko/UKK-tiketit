@@ -18,7 +18,7 @@ export class TicketViewComponent implements OnInit {
 
   @Input() ticketIdFromParent: string | null = null;
   @Input() public fileList: File[] = [];
-  @Input() public attachmentsHasErrors: boolean = false;
+  @Input() public attachmentsMessages: boolean = false;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public uploadClick: Subject<string> = new Subject<string>();
   public attachFilesText: string = '';

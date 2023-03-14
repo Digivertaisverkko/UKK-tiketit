@@ -20,6 +20,7 @@ interface TiketinKentat extends KentanTiedot {
 export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   @Input() public fileList: File[] = [];
+  @Input() public attachmentsMessages: boolean = false;
   private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public currentDate = new Date();
@@ -113,12 +114,14 @@ export class SubmitTicketComponent implements OnInit {
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
         this.attachments.sendFiles(ticketID, commentID).then(response => {
+          this.state = "done";
           if (response === true) {
-          this.state = "editing";
-          this.goBack();
-        } else {
-          throw new Error
-        }
+            console.log('Kaikkien tiedostojen lähetys onnistui.');
+          // this.goBack();
+          } else {
+            console.log('Kaikkien tiedostojen lähetys ei onnistunut.');
+          }
+
         }).catch(error => {
           this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
 
