@@ -233,11 +233,10 @@ export class TicketService {
     return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
       .pipe(
         map(event => {
-
-          let random = this.getRandomInt(1,15);
-          if (random == 3) {
-            throw new Error
-          }
+          // let random = this.getRandomInt(1,15);
+          // if (random == 3) {
+          //   throw new Error
+          // }
           // console.log(event);
           // console.dir(event);
           // console.log('type: ' + event.type)
@@ -260,6 +259,33 @@ export class TicketService {
     //   }
     // ));
   }
+
+    // Lähetä tiedosto palauttaen edistymistietoja.
+    // public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+    //   let formData = new FormData();
+    //   formData.append('tiedosto', file);
+    //   const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    //   return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+    //     .pipe(
+    //       map(event => {
+
+    //         let random = this.getRandomInt(1,15);
+    //         if (random == 3) {
+    //           throw new Error
+    //         }
+    //         if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+    //           const progress = Math.round(100 * event.loaded / event.total);
+    //           return progress;
+    //         } else if (event.type === HttpEventType.Response) {
+    //           return event.body  // pitäisi palauttaa onnistuessa { success: true }
+    //         } else return -1  // Ei huomioida näkymäss.
+    //       }
+    //     ),
+    //     catchError(() => {
+    //       throw { success: false }
+    //     })
+    //   );
+    // }
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
