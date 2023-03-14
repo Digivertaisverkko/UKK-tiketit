@@ -201,24 +201,23 @@ export class TicketViewComponent implements OnInit {
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
       this.state = 'sending';
-      return this.attachments.sendFiles(this.ticketID, commentID).then(response => {
-        if (response === true) {
-          console.log('Liitteet lähetetty');
-          this.fileList = [];
-          this.attachments.clear();
-        }
+      return this.attachments.sendFiles(this.ticketID, commentID).then(() => {
       }).catch(() => {
         this.state = 'done';
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
         return false
+      }).finally(() => {
+        this.fileList = [];
+        this.attachments.clear();
+        return true
       })
     }).then(response => {
-    this.commentText = ''
-    console.log('vastaus: ' + response );
-    this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-    this.state = 'editing';
+      this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+      this.state = 'editing';
     }).catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+    }).finally(() => {
+      this.commentText = '';
     })
   }
 
