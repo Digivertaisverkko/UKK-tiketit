@@ -34,7 +34,7 @@ interface FileInfo {
             [matTooltipShowDelay]="600"><mat-icon>warning</mat-icon>{{file.error}}
           </div>
 
-          <button mat-icon-button [disabled]="state !== 'adding'" class="remove-file-button"
+          <button mat-icon-button [disabled]="isEditingDisabled" class="remove-file-button"
             (click)="removeSelectedFile(index)">
             <mat-icon>close</mat-icon>
           </button>
@@ -56,9 +56,10 @@ export class EditAttachmentsComponent implements OnInit {
   @Input() uploadClicks: Observable<string> = new Observable();
   // @Input() fileListInput
 
-  @Output() attachmentsMessages = new EventEmitter<boolean>;
+  @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
   public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
+  public isEditingDisabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
   public userMessage: string = '';
   public state: 'adding' | 'sending' | 'done' = 'adding';
@@ -91,7 +92,7 @@ export class EditAttachmentsComponent implements OnInit {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää
           ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
-        this.attachmentsMessages.emit(true);
+        this.attachmentsMessages.emit('faulty');
       } else {
         this.fileList.push(file);
       }
@@ -104,7 +105,7 @@ export class EditAttachmentsComponent implements OnInit {
   }
 
   public sendFiles(ticketID: string, commentID: string): Promise<boolean> {
-    this.state = 'sending';
+    this.isEditingDisabled = true;
     this.userMessage = $localize `:@@ähetetään liitetiedostoja:Lähetetään liitetiedostoja, ole hyvä ja odota hetki...`;
     // Koko transaktio.
     return new Promise((resolve, reject) => {
@@ -112,12 +113,13 @@ export class EditAttachmentsComponent implements OnInit {
       for (let [index, file] of this.fileList.entries()) {
           this.ticketService.uploadFile(ticketID, commentID, file).subscribe({
           next: (progress) => {
+            // Progress barin päivitys.
             if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
           },
           error: (error) => {
             this.fileInfoList[index].done = true;
             console.log('saatiin virhe: ' + error);
-            this.attachmentsMessages.emit(true);
+            this.attachmentsMessages.emit('errors');
             console.error('tämä epäonnistui: ' + this.fileInfoList[index].filename);
             this.fileInfoList[index].uploadError = "Tiedoston lähettäminen ei onnistunut.";
           },
@@ -136,17 +138,15 @@ export class EditAttachmentsComponent implements OnInit {
               }
               if (this.fileInfoList.every(fileinfo => (fileinfo?.done === true))) {
                 console.log('kaikki lähetetty');
-                this.state = 'done';
                 this.userMessage = "Valmista!";
                 if (this.fileInfoList.some(fileinfo => fileinfo.uploadError)) {
                   this.userMessage += ' Kaikkien tiedostojen lähettäminen ei onnistunut.';
-                  resolve
+                  this.attachmentsMessages.emit('errors');
                 } else {
-                  reject
+                  this.attachmentsMessages.emit('done');
                 }
               }
             // }
-
           }
         }); // Subscribe
       }  // For
@@ -155,7 +155,11 @@ export class EditAttachmentsComponent implements OnInit {
   public removeSelectedFile(index: number) {
     this.fileList.splice(index, 1);
     this.fileInfoList.splice(index, 1);
-    this.attachmentsMessages.emit(this.fileInfoList.some(item => item.error));
+    if (this.fileInfoList.some(item => item.error)) {
+      this.attachmentsMessages.emit('errors');
+    } else {
+      this.attachmentsMessages.emit('');
+    }
     this.fileListOutput.emit(this.fileList);
   }
 

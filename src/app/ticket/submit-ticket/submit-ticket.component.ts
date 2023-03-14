@@ -20,7 +20,7 @@ interface TiketinKentat extends KentanTiedot {
 export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   @Input() public fileList: File[] = [];
-  @Input() public attachmentsMessages: boolean = false;
+  @Input() public attachmentsMessages: string = '';
   private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public currentDate = new Date();

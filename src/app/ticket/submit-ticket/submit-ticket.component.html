@@ -135,7 +135,7 @@
       </button>
 
       <button class="submit-button"
-        *ngIf="state==='done'"
+        *ngIf="attachmentsMessages === ('errors' || 'done')"
         (click)="goBack()"
         color="primary"
         [disabled]="submitForm.invalid"
