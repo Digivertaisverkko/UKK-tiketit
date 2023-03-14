@@ -7,7 +7,10 @@
 
 .vertical-spacer { height: 1rem; }
 
-#top-buttons { justify-content: space-between; }
+#top-buttons {
+  display: flex;
+  justify-content: space-between;
+}
 
 .edit-buttons-wrapper {
   display: flex;
