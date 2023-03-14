@@ -1,5 +1,7 @@
 @import '/src/variables.scss';
 
+.vertical-spacer { height: var(--margin-top-embedded) }
+
 .top-buttons {
   display: flex;
   justify-content: space-between;

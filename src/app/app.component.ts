@@ -45,6 +45,9 @@ export class AppComponent implements OnInit  {
     this.authService.initialize();
     //  this.trackForCourseID();
 
+    // Upotuksen testaamisen uncomment alla oleva ja
+    // kommentoi sen alla oleva rivi.
+    // this.isInIframe = true;
     this.isInIframe = this.testIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());

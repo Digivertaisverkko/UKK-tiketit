@@ -6,6 +6,8 @@
     <span>{{ courseName }}</span>
   </h2>
 
+  <div class="vertical-spacer" *ngIf="isInIframe"></div>
+
   <app-to-beginning-button *ngIf="ticket.tila === undefined" [disabled]="state==='sending'"></app-to-beginning-button>
 
     <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">

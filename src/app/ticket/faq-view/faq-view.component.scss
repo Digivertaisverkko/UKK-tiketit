@@ -5,7 +5,7 @@
   margin-bottom: 0.5em;
 }
 
-.vertical-spacer { height: 1rem; }
+.vertical-spacer { height: var(--margin-top-embedded) }
 
 #top-buttons {
   display: flex;
