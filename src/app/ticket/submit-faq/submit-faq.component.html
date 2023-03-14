@@ -104,7 +104,7 @@
     <div class="theme-actions">
 
       <!-- ! Tällä hetkellä ei tueta liitetiedostojen editointia. -->
-      <button (click)="fileUpload.click()"
+      <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
@@ -146,14 +146,15 @@
     </div>
 
     <!-- ! (event) ei toiminut, jos käytti tähän omaa child komponenttia ja tuli Muokkaa-napin kautta. -->
-    <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
+    <!-- <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload> -->
     <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
       (change)="onFileChanged($event)" #fileUpload> -->
-    <div class="file-list-wrapper" *ngIf="fileList !== null">
+
+<!--     <div class="file-list-wrapper" *ngIf="fileList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
-          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" 
+          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}"
             [matTooltipShowDelay]="600">
             <mat-icon>warning</mat-icon>{{file.error}}
           </div>
@@ -165,14 +166,14 @@
         <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100>
         </mat-progress-bar>
       </div>
-    </div>
+    </div> -->
 
     <!-- Ylläoleva lapsikomponenttina -->
-    <!-- <app-edit-attachments
+    <app-edit-attachments
     (fileListOutput)="fileList = $event"
     [uploadClicks]="uploadClick.asObservable()"
     >
-    </app-edit-attachments> -->
+    </app-edit-attachments>
 
 
   </form>

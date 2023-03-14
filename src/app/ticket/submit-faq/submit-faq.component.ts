@@ -26,7 +26,7 @@ interface FileInfo {
 
 export class SubmitFaqComponent implements OnInit {
   @Input() public fileList: File[] = [];
-  // @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -99,30 +99,30 @@ export class SubmitFaqComponent implements OnInit {
       .then( response => { this.courseName = response });
   }
 
-  public onFileChanged(event: any) {
-    const MEGABYTE = 1000000;
-    for (let file of event.target.files) {
-      if (this.fileInfoList.some(item => item.filename === file.name)) continue
-      let fileinfo: FileInfo = { filename: file.name };
-      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
-        fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
-        this.attachmentsHasErrors = true;
-      } else {
-        this.fileList.push(file);
-      }
-      this.fileInfoList.push(fileinfo);
-      console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
-      console.log('filelist:');
-      console.dir(this.fileList);
-    }
-  }
+  // public onFileChanged(event: any) {
+  //   const MEGABYTE = 1000000;
+  //   for (let file of event.target.files) {
+  //     if (this.fileInfoList.some(item => item.filename === file.name)) continue
+  //     let fileinfo: FileInfo = { filename: file.name };
+  //     if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
+  //       fileinfo.error = $localize `:@@Liian iso:Liian iso`;
+  //       fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+  //       this.attachmentsHasErrors = true;
+  //     } else {
+  //       this.fileList.push(file);
+  //     }
+  //     this.fileInfoList.push(fileinfo);
+  //     console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
+  //     console.log('filelist:');
+  //     console.dir(this.fileList);
+  //   }
+  // }
 
-  public removeSelectedFile(index: number) {
-    this.fileList.splice(index, 1);
-    this.fileInfoList.splice(index, 1);
-    this.attachmentsHasErrors = (this.fileInfoList.some(item => item.error));
-  }
+  // public removeSelectedFile(index: number) {
+  //   this.fileList.splice(index, 1);
+  //   this.fileInfoList.splice(index, 1);
+  //   this.attachmentsHasErrors = (this.fileInfoList.some(item => item.error));
+  // }
 
   public goBack(): void {
     this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
@@ -156,7 +156,7 @@ export class SubmitFaqComponent implements OnInit {
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
-        this.sendFiles(ticketID, commentID).then(response => {
+        this.attachments.sendFiles(ticketID, commentID).then(response => {
           this.state = "editing";
           this.goBack();
         })
@@ -181,24 +181,24 @@ export class SubmitFaqComponent implements OnInit {
     //   });
   }
 
-  public sendFiles(ticketID: string, commentID: string) {
-    return new Promise((resolve, reject) => {
-      console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
-      for (let [index, file] of this.fileList.entries()) {
-        try {
-          this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
-            if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
-            console.log('index: ' + index + '  progress: ' + progress);
-            if (progress === 100) {
-              if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
-            }
-          })
-        } catch (error: any) {
-          this.attachmentsHasErrors = true;
-          reject(false);
-        }
-      }
-    });
-  }
+  // public sendFiles(ticketID: string, commentID: string) {
+  //   return new Promise((resolve, reject) => {
+  //     console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
+  //     for (let [index, file] of this.fileList.entries()) {
+  //       try {
+  //         this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
+  //           if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
+  //           console.log('index: ' + index + '  progress: ' + progress);
+  //           if (progress === 100) {
+  //             if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
+  //           }
+  //         })
+  //       } catch (error: any) {
+  //         this.attachmentsHasErrors = true;
+  //         reject(false);
+  //       }
+  //     }
+  //   });
+  // }
 
 }

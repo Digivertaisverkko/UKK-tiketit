@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { TicketService } from '../../ticket.service';
@@ -17,7 +17,7 @@ interface FileInfo {
 @Component({
   selector: 'app-edit-attachments',
   template: `
-    <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
+    <input type="file" class="file-input" #fileInput multiple (change)="onFileChanged($event)" #fileUpload>
 
     <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
       (change)="onFileChanged($event)" #fileUpload> -->
@@ -52,6 +52,7 @@ interface FileInfo {
 
 export class EditAttachmentsComponent implements OnInit {
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @Output() fileListOutput = new EventEmitter<File[]>();
   @Input() uploadClicks: Observable<string> = new Observable();
   // @Input() fileListInput
@@ -67,13 +68,16 @@ export class EditAttachmentsComponent implements OnInit {
   // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
 
-  constructor(private ticketService: TicketService) {
+  constructor(private ticketService: TicketService,
+    private renderer: Renderer2) {
   }
 
   ngOnInit() {
-    const element: HTMLElement = document.querySelector('.file-input') as HTMLElement;
+    // const element: HTMLElement = document.querySelector() as HTMLElement;
     this.uploadClicks.subscribe(action => {
-      element.click()
+      if (action === 'add') {
+        this.renderer.selectRootElement(this.fileInput.nativeElement).click();
+      }
     });
   }
 
@@ -115,6 +119,7 @@ export class EditAttachmentsComponent implements OnInit {
           next: (progress) => {
             // Progress barin päivitys.
             if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
+            if (progress === 100) this.fileInfoList[index].done = true;
           },
           error: (error) => {
             this.fileInfoList[index].done = true;
@@ -136,7 +141,9 @@ export class EditAttachmentsComponent implements OnInit {
               for (let file of this.fileInfoList) {
                 console.log('Tiedosto: ' + file.filename + '  valmis? ' + file.done ?? '');
               }
-              if (this.fileInfoList.every(fileinfo => (fileinfo?.done === true))) {
+              if (this.fileInfoList.every(fileinfo => {
+                fileinfo?.done === true || fileinfo.progress == 100
+              })) {
                 console.log('kaikki lähetetty');
                 this.userMessage = "Valmista!";
                 if (this.fileInfoList.some(fileinfo => fileinfo.uploadError)) {
