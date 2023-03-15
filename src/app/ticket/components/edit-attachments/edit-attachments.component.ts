@@ -115,20 +115,25 @@ export class EditAttachmentsComponent implements OnInit {
 
   private makeRequestChain(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).pipe(
-        tap((progress) => {
-          console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '): ' + progress);
-          this.fileInfoList[index].progress = progress;
-          // console.dir(event)
-          // if (event.type === HttpEventType.UploadProgress) {
-          //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
-          // }
-        }),
-        catchError((error) => {
-          this.fileInfoList[index].uploadError = `@@:Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-          return of(error)
-        })
-      )
+      try {
+        return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).pipe(
+          tap((progress) => {
+            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '): ' + progress);
+            this.fileInfoList[index].progress = progress;
+            // console.dir(event)
+            // if (event.type === HttpEventType.UploadProgress) {
+            //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
+            // }
+          }),
+          catchError((error) => {
+            this.fileInfoList[index].uploadError = `@@:Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            return of(error)
+          })
+        )
+      } catch {
+        this.fileInfoList[index].uploadError = `@@:Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+        throw new Error
+      }
     });
   }
 
