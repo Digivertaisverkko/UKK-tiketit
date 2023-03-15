@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
-import { firstValueFrom, map, Observable, catchError, throwError, Subject } from 'rxjs';
+import { firstValueFrom, map, Observable, catchError, Subject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -220,12 +220,35 @@ export class TicketService {
   }
 
   private getRandomInt(min: number, max: number) {
-    return Math.floor(Math.random() * max) + min; // The maximum is exclusive and the minimum is inclusive
+    return Math.floor(Math.random() * max) + min;
+  }
+
+  // Lähetä tiedosto palauttaen edistymistietoja.
+  public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+    let formData = new FormData();
+    formData.append('tiedosto', file);
+    console.log("Tiedosto:");
+    console.dir(file);
+    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name);
+    const progress = new Subject<number>();
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    // const req = new HttpRequest('POST', url, formData, { reportProgress: true, observe: 'events' });
+
+    this.http.post(url, formData, { reportProgress: true, observe: 'events' }).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+        const percentDone = Math.round(100 * event.loaded / event.total);
+        progress.next(percentDone);
+      } else if (event.type === HttpEventType.Response) {
+        progress.complete();
+      }
+    })
+
+    return progress.asObservable()
   }
 
 
   // Lähetä tiedosto palauttaen edistymistietoja.
-  public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+/*   public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name);
@@ -240,6 +263,7 @@ export class TicketService {
           // console.log(event);
           // console.dir(event);
           // console.log('type: ' + event.type)
+          return event
           if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
             const progress = Math.round(100 * event.loaded / event.total);
             return progress;
@@ -258,34 +282,34 @@ export class TicketService {
     //     return throwError(() => new Error(error));
     //   }
     // ));
-  }
+  } */
 
     // Lähetä tiedosto palauttaen edistymistietoja.
-    // public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
-    //   let formData = new FormData();
-    //   formData.append('tiedosto', file);
-    //   const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    //   return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-    //     .pipe(
-    //       map(event => {
+    public uploadFileExample(ticketID: string, commentID: string, file: File): Observable<any>{
+      let formData = new FormData();
+      formData.append('tiedosto', file);
+      const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+      return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+        .pipe(
+          map(event => {
 
-    //         let random = this.getRandomInt(1,15);
-    //         if (random == 3) {
-    //           throw new Error
-    //         }
-    //         if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-    //           const progress = Math.round(100 * event.loaded / event.total);
-    //           return progress;
-    //         } else if (event.type === HttpEventType.Response) {
-    //           return event.body  // pitäisi palauttaa onnistuessa { success: true }
-    //         } else return -1  // Ei huomioida näkymäss.
-    //       }
-    //     ),
-    //     catchError(() => {
-    //       throw { success: false }
-    //     })
-    //   );
-    // }
+            let random = this.getRandomInt(1,15);
+            if (random == 3) {
+              throw new Error
+            }
+            if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+              const progress = Math.round(100 * event.loaded / event.total);
+              return progress;
+            } else if (event.type === HttpEventType.Response) {
+              return event.body  // pitäisi palauttaa onnistuessa { success: true }
+            } else return -1  // Ei huomioida näkymäss.
+          }
+        ),
+        catchError(() => {
+          throw { success: false }
+        })
+      );
+    }
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {

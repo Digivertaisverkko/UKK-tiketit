@@ -145,8 +145,9 @@
 
     </div>
 
+    <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments
-      (fileListOutput)="fileList = $event"
+
       [uploadClicks]="uploadClick.asObservable()"
       (attachmentsMessages)="attachmentsMessages = $event"
     >

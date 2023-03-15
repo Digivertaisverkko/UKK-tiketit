@@ -113,19 +113,24 @@ export class SubmitTicketComponent implements OnInit {
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
-        this.attachments.sendFiles(ticketID, commentID).then(response => {
+        this.attachments.sendFiles(ticketID, commentID).subscribe(response => {
           this.state = "done";
-          if (response === true) {
-            console.log('Kaikkien tiedostojen lähetys onnistui.');
-          // this.goBack();
-          } else {
-            console.log('Kaikkien tiedostojen lähetys ei onnistunut.');
-          }
-
-        }).catch(error => {
-          this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
-
+          console.log(response);
+          console.dir(response);
+          console.log(typeof response);
         })
+        // this.attachments.sendFiles(ticketID, commentID).then(response => {
+        //   this.state = "done";
+        //   if (response === true) {
+        //     console.log('Kaikkien tiedostojen lähetys onnistui.');
+        //   // this.goBack();
+        //   } else {
+        //     console.log('Kaikkien tiedostojen lähetys ei onnistunut.');
+        //   }
+
+        // }).catch(error => {
+        //   this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
+        // })
       }).catch( error => {
         // ? lisää eri virhekoodeja?
         this.state = 'done';

@@ -156,10 +156,10 @@ export class SubmitFaqComponent implements OnInit {
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
-        this.attachments.sendFiles(ticketID, commentID).then(response => {
-          this.state = "editing";
-          this.goBack();
-        })
+        // this.attachments.sendFiles(ticketID, commentID).then(response => {
+        //   this.state = "editing";
+        //   this.goBack();
+        // })
       })
       .catch( (error: Error) => {
         this.state = 'done';

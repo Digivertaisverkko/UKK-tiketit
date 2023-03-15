@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable, pipe, map } from 'rxjs';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { TicketService } from '../../ticket.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
@@ -7,6 +7,7 @@ import { Resolve } from '@angular/router';
 
 interface FileInfo {
   filename: string;
+  file: File;
   error?: string;
   errorToolTip?: string;
   progress?: number;
@@ -24,7 +25,7 @@ interface FileInfo {
 
     <p class="status-message-p" *ngIf="userMessage">{{userMessage}}</p>
 
-    <div class="file-list-wrapper" *ngIf="fileList !== null">
+    <div class="file-list-wrapper" *ngIf="fileInfoList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
 
         <div class="list-item">
@@ -53,12 +54,12 @@ interface FileInfo {
 export class EditAttachmentsComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  @Output() fileListOutput = new EventEmitter<File[]>();
+  @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @Input() uploadClicks: Observable<string> = new Observable();
   // @Input() fileListInput
 
   @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
-  public fileList: File[] = [];
+  // public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
@@ -83,7 +84,7 @@ export class EditAttachmentsComponent implements OnInit {
 
   public clear() {
     this.fileInfoList = [];
-    this.fileList = [];
+    // this.fileList = [];
   }
 
   public onFileChanged(event: any) {
@@ -91,30 +92,57 @@ export class EditAttachmentsComponent implements OnInit {
     const MEGABYTE = 1000000;
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
-      let fileinfo: FileInfo = { filename: file.name, progress: 0 };
+      let fileinfo: FileInfo = { file: file, filename: file.name, progress: 0 };
       if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää
           ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsMessages.emit('faulty');
-      } else {
-        this.fileList.push(file);
       }
+      // this.fileList.push(file);
+      // console.log('saatiin fileinfo (alla):');
+      // console.dir(fileinfo);
+      // console.log('koko lista:');
+      // console.dir(this.fileInfoList);
       this.fileInfoList.push(fileinfo);
-      this.fileListOutput.emit(this.fileList);
+      this.fileListOutput.emit(this.fileInfoList);
       // console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
       // console.log('filelist:');
       // console.dir(this.fileList);
     }
   }
 
-  public sendFiles(ticketID: string, commentID: string): Promise<boolean> {
+  public sendFiles(ticketID: string, commentID: string): Observable<any> {
+
+    const uploadObservables = this.fileInfoList.map((fileinfo, index) => {
+      this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).subscribe({
+        next: (progress) => {
+          console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '):');
+          this.fileInfoList[index].progress = progress;
+          // console.dir(event)
+          // if (event.type === HttpEventType.UploadProgress) {
+          //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
+          // }
+        }
+      })
+    });
+
+    return forkJoin(uploadObservables)
+      .pipe(
+        map(results => {
+          console.log('forkjoin: saatiin tulokset:');
+          return results
+        })
+      );
+  }
+
+ /*  public sendFiles(ticketID: string, commentID: string): Promise<boolean> {
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@ähetetään liitetiedostoja:Lähetetään liitetiedostoja, ole hyvä ja odota hetki...`;
     // Koko transaktio.
     return new Promise((resolve, reject) => {
       console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
-      for (let [index, file] of this.fileList.entries()) {
+      for (let [index, file] of this.fileInfoList.entries()) {
           this.ticketService.uploadFile(ticketID, commentID, file).subscribe({
           next: (progress) => {
             // Progress barin päivitys.
@@ -158,16 +186,17 @@ export class EditAttachmentsComponent implements OnInit {
         }); // Subscribe
       }  // For
     }) // Promise
-  }
+  } */
+
   public removeSelectedFile(index: number) {
-    this.fileList.splice(index, 1);
+    // this.fileList.splice(index, 1);
     this.fileInfoList.splice(index, 1);
     if (this.fileInfoList.some(item => item.error)) {
       this.attachmentsMessages.emit('errors');
     } else {
       this.attachmentsMessages.emit('');
     }
-    this.fileListOutput.emit(this.fileList);
+    this.fileListOutput.emit(this.fileInfoList);
   }
 
 }

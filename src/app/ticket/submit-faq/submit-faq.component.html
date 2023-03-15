@@ -168,11 +168,13 @@
       </div>
     </div> -->
 
+    <!-- (fileListOutput)="fileList = $event" -->
+
     <!-- Ylläoleva lapsikomponenttina -->
     <app-edit-attachments
-    (fileListOutput)="fileList = $event"
-    [uploadClicks]="uploadClick.asObservable()"
-    >
+
+      [uploadClicks]="uploadClick.asObservable()"
+      >
     </app-edit-attachments>
 
 

@@ -8,6 +8,16 @@ import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
+interface FileInfo {
+  filename: string;
+  file: File;
+  error?: string;
+  errorToolTip?: string;
+  progress?: number;
+  uploadError?: string;
+  done?: boolean;
+}
+
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',
@@ -17,7 +27,7 @@ import { EditAttachmentsComponent } from '../components/edit-attachments/edit-at
 export class TicketViewComponent implements OnInit {
 
   @Input() ticketIdFromParent: string | null = null;
-  @Input() public fileList: File[] = [];
+  @Input() public fileInfoList: FileInfo[] = [];
   @Input() public attachmentsMessages: string = '';
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public uploadClick: Subject<string> = new Subject<string>();
@@ -195,25 +205,35 @@ export class TicketViewComponent implements OnInit {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
         throw new Error('Kommentin lähettäminen epäonnistui.');
       }
-      if (this.fileList.length === 0) {
-        return true
+      if (this.fileInfoList.length === 0) {
+          this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+          this.state = 'editing';
       }
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
       this.state = 'sending';
-      return this.attachments.sendFiles(this.ticketID, commentID).then(() => {
-      }).catch(() => {
-        this.state = 'done';
-        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
-        return false
-      }).finally(() => {
-        this.fileList = [];
-        this.attachments.clear();
-        return true
+      this.attachments.sendFiles(this.ticketID, commentID).subscribe({
+        next: (res) => {
+          console.log('komponentti: saatiin vastaus: ' + res);
+        },
+        complete: () => {
+          console.log('Komponentti: Kaikki valmiita!');
+          this.state = 'done';
+          this.fileInfoList = [];
+          this.attachments.clear();
+          this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+          this.state = 'editing';
+        },
       })
-    }).then(response => {
-      this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-      this.state = 'editing';
+      // }).catch(() => {
+      //   this.state = 'done';
+      //   this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
+      //   return false
+      // }).finally(() => {
+      //   this.fileList = [];
+      //   this.attachments.clear();
+      //   return true
+      // })
     }).catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
     }).finally(() => {
