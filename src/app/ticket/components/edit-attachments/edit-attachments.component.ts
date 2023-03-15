@@ -5,6 +5,7 @@ import { TicketService } from '../../ticket.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { Resolve } from '@angular/router';
 
+// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError lähetysvaiheessa.
 interface FileInfo {
   filename: string;
   file: File;
@@ -116,7 +117,7 @@ export class EditAttachmentsComponent implements OnInit {
     return this.fileInfoList.map((fileinfo, index) => {
       return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).pipe(
         tap((progress) => {
-          console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '):');
+          console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '): ' + progress);
           this.fileInfoList[index].progress = progress;
           // console.dir(event)
           // if (event.type === HttpEventType.UploadProgress) {
@@ -124,7 +125,7 @@ export class EditAttachmentsComponent implements OnInit {
           // }
         }),
         catchError((error) => {
-          this.fileInfoList[index].uploadError = "Tiedoston lähettäminen ei onnistunut.";
+          this.fileInfoList[index].uploadError = `@@:Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
           return of(error)
         })
       )

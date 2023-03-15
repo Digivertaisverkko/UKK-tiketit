@@ -234,16 +234,38 @@ export class TicketService {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     // const req = new HttpRequest('POST', url, formData, { reportProgress: true, observe: 'events' });
 
-    this.http.post(url, formData, { reportProgress: true, observe: 'events' }).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-        const percentDone = Math.round(100 * event.loaded / event.total);
-        progress.next(percentDone);
-      } else if (event.type === HttpEventType.Response) {
-        progress.complete();
-      }
+/*     let post;
+    if (this.getRandomInt(1,2) === 2) {
+      post = this.testPost;
+      console.log('pitäisi feilata');
+    } else {
+      post = this.http.post;
+      console.log('pitäisi onnistua');
+    } */
+    this.http.post(url, formData, { reportProgress: true, observe: 'events' }).subscribe({
+      next: (event) => {
+        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+          const percentDone = Math.round(100 * event.loaded / event.total);
+          progress.next(percentDone);
+        } else if (event.type === HttpEventType.Response) {
+          progress.complete();
+        }
+      }/* , error: (error) => {
+        console.error('Saatiin virhe');
+        console.dir(error);
+      } */
     })
-
     return progress.asObservable()
+  }
+
+
+  public testPost(url: string, data: any, options?: any): Observable<any> {
+    const errorResponse = new HttpErrorResponse({
+      error: 'File upload failed',
+      status: 400,
+      statusText: 'Bad Request',
+    });
+    return of(errorResponse);
   }
 
 
