@@ -13,9 +13,12 @@ interface TiketinKentat extends KentanTiedot {
 
 interface FileInfo {
   filename: string;
+  file: File;
   error?: string;
   errorToolTip?: string;
   progress?: number;
+  uploadError?: string;
+  done?: boolean;
 }
 
 @Component({
@@ -25,7 +28,7 @@ interface FileInfo {
 })
 
 export class SubmitFaqComponent implements OnInit {
-  @Input() public fileList: File[] = [];
+  @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
@@ -43,7 +46,6 @@ export class SubmitFaqComponent implements OnInit {
   public readonly MAX_FILE_SIZE_MB=100;
 
   attachmentsHasErrors: boolean = false;
-  public fileInfoList: FileInfo[] = [];
   public url: string = '';
   // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
@@ -143,7 +145,7 @@ export class SubmitFaqComponent implements OnInit {
     this.ticketService.addFaq(id, newFaq, this.editExisting)
       .then(response => {
         console.log(' saatiin response: ' + JSON.stringify(response));
-        if (this.fileList.length === 0) this.goBack()
+        if (this.attachments.fileInfoList.length === 0) this.goBack()
         if (response?.success !== true) {
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
           throw new Error('Kysymyksen lähettäminen epäonnistui.');
@@ -156,6 +158,21 @@ export class SubmitFaqComponent implements OnInit {
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
+        this.attachments.sendFiles(ticketID, commentID).subscribe({
+          next: (res) => {
+            console.log('komponentti: saatiin vastaus: ' + res);
+          },
+          error: (error) => {
+            console.log('komponentti: saatiin virhe: ' + error);
+          },
+          complete: () => {
+            console.log('Komponentti: Kaikki valmiita!');
+            this.state = 'editing';
+            this.fileInfoList = [];
+            this.attachments.clear();
+            this.goBack();
+          },
+        })
         // this.attachments.sendFiles(ticketID, commentID).then(response => {
         //   this.state = "editing";
         //   this.goBack();

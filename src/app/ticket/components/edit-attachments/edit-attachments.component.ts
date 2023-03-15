@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { forkJoin, Observable, pipe, map } from 'rxjs';
+import { forkJoin, Observable, pipe, map, tap, catchError, of } from 'rxjs';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { TicketService } from '../../ticket.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
@@ -112,28 +112,38 @@ export class EditAttachmentsComponent implements OnInit {
     }
   }
 
-  public sendFiles(ticketID: string, commentID: string): Observable<any> {
-
-    const uploadObservables = this.fileInfoList.map((fileinfo, index) => {
-      this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).subscribe({
-        next: (progress) => {
+  private makeRequestChain(ticketID: string, commentID: string): any {
+    return this.fileInfoList.map((fileinfo, index) => {
+      return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).pipe(
+        tap((progress) => {
           console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '):');
           this.fileInfoList[index].progress = progress;
           // console.dir(event)
           // if (event.type === HttpEventType.UploadProgress) {
           //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
           // }
-        }
-      })
-    });
-
-    return forkJoin(uploadObservables)
-      .pipe(
-        map(results => {
-          console.log('forkjoin: saatiin tulokset:');
-          return results
+        }),
+        catchError((error) => {
+          this.fileInfoList[index].uploadError = "Tiedoston lähettäminen ei onnistunut.";
+          return of(error)
         })
-      );
+      )
+    });
+  }
+
+  // public sendFiles(ticketID: string, commentID: string): Observable<any> {
+  //   forkJoin(uploadObservables)
+  //     .pipe(
+  //       map(results => {
+  //         console.log('forkjoin: saatiin tulokset:');
+  //         return results
+  //       })
+  //     );
+  // }
+
+  public sendFiles(ticketID: string, commentID: string) {
+    let requestChain = this.makeRequestChain(ticketID, commentID);
+    return forkJoin(requestChain)
   }
 
  /*  public sendFiles(ticketID: string, commentID: string): Promise<boolean> {

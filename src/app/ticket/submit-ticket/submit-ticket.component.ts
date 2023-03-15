@@ -11,6 +11,16 @@ interface TiketinKentat extends KentanTiedot {
   arvo: string;
 }
 
+interface FileInfo {
+  filename: string;
+  file: File;
+  error?: string;
+  errorToolTip?: string;
+  progress?: number;
+  uploadError?: string;
+  done?: boolean;
+}
+
 @Component({
   selector: 'app-submit-ticket',
   templateUrl: './submit-ticket.component.html',
@@ -19,7 +29,7 @@ interface TiketinKentat extends KentanTiedot {
 
 export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
-  @Input() public fileList: File[] = [];
+  @Input() public fileInfo: FileInfo[] = [];
   @Input() public attachmentsMessages: string = '';
   private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
@@ -100,7 +110,7 @@ export class SubmitTicketComponent implements OnInit {
     } else {
     this.ticketService.addOnlyTicket(this.courseId, ticket)
       .then(response => {
-        if (this.fileList.length === 0) this.goBack()
+        if (this.attachments.fileInfoList.length === 0) this.goBack()
         if (response == null || response?.success !== true) {
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
           throw new Error('Kysymyksen lähettäminen epäonnistui.');
@@ -113,11 +123,25 @@ export class SubmitTicketComponent implements OnInit {
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
-        this.attachments.sendFiles(ticketID, commentID).subscribe(response => {
-          this.state = "done";
-          console.log(response);
-          console.dir(response);
-          console.log(typeof response);
+        // this.attachments.sendFiles(ticketID, commentID).subscribe(response => {
+        //   this.state = "done";
+        //   console.log(response);
+        //   console.dir(response);
+        //   console.log(typeof response);
+        // })
+        this.attachments.sendFiles(ticketID, commentID).subscribe({
+          next: (res) => {
+            console.log('komponentti: saatiin vastaus: ' + res);
+          },
+          error: (error) => {
+            console.log('komponentti: saatiin virhe: ' + error);
+          },
+          complete: () => {
+            console.log('Komponentti: Kaikki valmiita!');
+            this.state = 'done';
+            this.attachments.clear();
+            this.goBack();
+          },
         })
         // this.attachments.sendFiles(ticketID, commentID).then(response => {
         //   this.state = "done";

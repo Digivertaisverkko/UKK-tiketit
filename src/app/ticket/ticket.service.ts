@@ -227,9 +227,9 @@ export class TicketService {
   public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
-    console.log("Tiedosto:");
+/*     console.log("Tiedosto:");
     console.dir(file);
-    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name);
+    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name); */
     const progress = new Subject<number>();
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     // const req = new HttpRequest('POST', url, formData, { reportProgress: true, observe: 'events' });

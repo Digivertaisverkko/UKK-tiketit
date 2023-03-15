@@ -216,6 +216,9 @@ export class TicketViewComponent implements OnInit {
         next: (res) => {
           console.log('komponentti: saatiin vastaus: ' + res);
         },
+        error: (error) => {
+          console.log('komponentti: saatiin virhe: ' + error);
+        },
         complete: () => {
           console.log('Komponentti: Kaikki valmiita!');
           this.state = 'done';
