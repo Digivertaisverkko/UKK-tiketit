@@ -14,6 +14,18 @@ export class UserManagementService {
               private errorService: ErrorService,
               private http: HttpClient) { }
 
+  // /api/gdpr - GDPR data
+  public async getGdprData(): Promise<any> {
+    let response: any;
+    let url = environment.apiBaseUrl + '/minun/gdpr';
+    try {
+      response = await firstValueFrom(this.http.get<any>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
   // /api/minun - profiilitiedot
   public async getPersonalInfo(): Promise<Minun> {
     let response: any;
