@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { forkJoin, Observable, pipe, map, tap, catchError, of } from 'rxjs';
+import { forkJoin, Observable, pipe, map, tap, catchError, of, throwError } from 'rxjs';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { TicketService } from '../../ticket.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
@@ -115,9 +115,9 @@ export class EditAttachmentsComponent implements OnInit {
 
   private makeRequestChain(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      try {
         return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).pipe(
-          tap((progress) => {
+          // return this.ticketService.uploadError(ticketID, commentID, fileinfo.file).pipe(
+          tap(progress => {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename + '): ' + progress);
             this.fileInfoList[index].progress = progress;
             // console.dir(event)
@@ -125,15 +125,15 @@ export class EditAttachmentsComponent implements OnInit {
             //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
             // }
           }),
-          catchError((error) => {
-            this.fileInfoList[index].uploadError = `@@:Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            return of(error)
+          catchError((error: any) => {
+            console.log('makeRequestChain: catchError: error napattu');
+            // console.log(' errorin index: ');
+            // console.log(fileinfo);
+            // Tämä virhe tulee vain 1. tiedoston kohdalla.
+            // this.fileInfoList[index].uploadError = $localize `:@@Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            return throwError( () => new Error(error) );
           })
         )
-      } catch {
-        this.fileInfoList[index].uploadError = `@@:Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-        throw new Error
-      }
     });
   }
 
@@ -148,6 +148,7 @@ export class EditAttachmentsComponent implements OnInit {
   // }
 
   public sendFiles(ticketID: string, commentID: string) {
+    this.isEditingDisabled = true;
     let requestChain = this.makeRequestChain(ticketID, commentID);
     return forkJoin(requestChain)
   }

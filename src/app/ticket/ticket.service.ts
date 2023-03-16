@@ -250,16 +250,33 @@ export class TicketService {
         } else if (event.type === HttpEventType.Response) {
           progress.complete();
         }
-      }/* , error: (error) => {
-        console.error('Saatiin virhe');
-        console.dir(error);
-      } */
+      },
+      error: (error) => {
+        console.error('ticketService.newUploadFile: saatiin virhe.');
+        this.handleError(error);
+        progress.error(error);
+      }
     })
     return progress.asObservable()
   }
 
+  fakeHttpPost(url: any, formData: any, options?: any): Observable<any> {
+    const errorResponse = new HttpErrorResponse({
+      error: 'File upload failed',
+      status: 400,
+      statusText: 'Bad Request',
+    });
 
-  public testPost(url: string, data: any, options?: any): Observable<any> {
+    const fakePost = new Observable(subscriber => {
+      subscriber.error(errorResponse);
+    })
+
+    return fakePost
+  }
+
+
+  // Testaamista varten.
+  public getError(x: any, y : any, z: any): Observable<any> {
     const errorResponse = new HttpErrorResponse({
       error: 'File upload failed',
       status: 400,
@@ -276,26 +293,17 @@ export class TicketService {
     console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name);
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-      .pipe(
-        map(event => {
-          // let random = this.getRandomInt(1,15);
-          // if (random == 3) {
-          //   throw new Error
-          // }
-          // console.log(event);
-          // console.dir(event);
-          // console.log('type: ' + event.type)
-          return event
-          if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-            const progress = Math.round(100 * event.loaded / event.total);
-            return progress;
-          } else if (event.type === HttpEventType.Response) {
-            return event.body  // pitäisi palauttaa onnistuessa { success: true }
-          } else return -1  // Ei huomioida näkymäss.
-        }
-      ),
-      catchError(() => {
-        throw { success: false }
+      .pipe(map(event => {
+        // console.log(event);
+        // console.dir(event);
+        // console.log('type: ' + event.type)
+
+        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+          const progress = Math.round(100 * event.loaded / event.total);
+          return progress;
+        } else if (event.type === HttpEventType.Response) {
+          return event.body  // pitäisi palauttaa onnistuessa { success: true }
+        } else return -1  // Ei huomioida näkymäss.
       })
     );
     // return this.http.post(url, formData, { reportProgress: true, observe: 'events' })

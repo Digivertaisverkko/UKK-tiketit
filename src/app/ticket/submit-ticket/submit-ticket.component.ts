@@ -112,6 +112,7 @@ export class SubmitTicketComponent implements OnInit {
       .then(response => {
         if (this.attachments.fileInfoList.length === 0) this.goBack()
         if (response == null || response?.success !== true) {
+          this.state = 'editing';
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
           throw new Error('Kysymyksen lähettäminen epäonnistui.');
         }
@@ -131,11 +132,12 @@ export class SubmitTicketComponent implements OnInit {
         // })
         this.attachments.sendFiles(ticketID, commentID).subscribe({
           next: (res) => {
-            console.log('komponentti: saatiin vastaus: ' + res);
+            console.log('komponentti: saatiin vastaus: ');
+            console.dir(res);
           },
           error: (error) => {
-            this.errorMessage = $localize `@@:Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-            console.log('komponentti: saatiin virhe: ' + error);
+            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+            console.log('submit-ticket: saatiin virhe: ' + error);
             this.state = 'done';
           },
           complete: () => {

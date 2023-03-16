@@ -112,13 +112,13 @@
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
                     *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 20% 1em 20%' }"
+                    [styles]="{ margin: '1em 0 1em 0;' }"
                     title="Virhe">
     </app-error-card>
 
     <div class="theme-actions">
 
-       <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
+      <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
               [disabled]="state!=='editing'"
@@ -141,7 +141,7 @@
       </button>
 
       <button class="submit-button"
-        *ngIf="attachmentsMessages === 'errors'|| attachmentsMessages === 'done'"
+        *ngIf="state==='done'"
         (click)="goBack()"
         color="primary"
         [disabled]="submitForm.invalid"
