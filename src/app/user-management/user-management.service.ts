@@ -14,7 +14,7 @@ export class UserManagementService {
               private errorService: ErrorService,
               private http: HttpClient) { }
 
-  // /api/gdpr - GDPR data
+  // GET /api/gdpr - GDPR data
   public async getGdprData(): Promise<any> {
     let response: any;
     let url = environment.apiBaseUrl + '/minun/gdpr';
@@ -26,7 +26,7 @@ export class UserManagementService {
     return response;
   }
 
-  // /api/minun - profiilitiedot
+  // GET /api/minun - profiilitiedot
   public async getPersonalInfo(): Promise<Minun> {
     let response: any;
     let url = environment.apiBaseUrl + '/minun';
@@ -47,7 +47,7 @@ export class UserManagementService {
     }
   }
 
-  // /api/minun - poista käyttäjä
+  // DELETE /api/minun - poista käyttäjä
   public async removeUser(): Promise<boolean> {
     let user: User = this.authService.getUserInfo();
     const options = {
