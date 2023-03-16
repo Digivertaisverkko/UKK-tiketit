@@ -45,10 +45,10 @@ export class TicketViewComponent implements OnInit {
   public message: string = '';
   public newCommentState: 3 | 4 | 5 = 4;
   public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
-  public state: 'editing' | 'sending' | 'done' = 'editing';
+  public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public ticket: Tiketti;
   public ticketID: string;
-  public tila: string;
+  public tila: string;  // Tiketin tila
   public user: User = {} as User;
   public userRole: string = '';
   private userName: string = '';
@@ -212,9 +212,11 @@ export class TicketViewComponent implements OnInit {
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
       this.state = 'sending';
-      this.attachments.sendFiles(this.ticketID, commentID).subscribe({
+      // this.attachments.sendFiles(this.ticketID, commentID).subscribe({
+        this.attachments.sendFiles(this.ticketID, commentID).subscribe({
         next: (res) => {
-          console.log('komponentti: saatiin vastaus: ' + res);
+          console.log('komponentti: saatiin vastaus (alla): ');
+          console.dir(res);
         },
         error: (error) => {
           console.log('komponentti: saatiin virhe: ' + error);
