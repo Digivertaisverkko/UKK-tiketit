@@ -23,7 +23,7 @@ export class UserManagementService {
     } catch (error: any) {
       this.handleError(error);
     }
-    return response
+    return response;
   }
 
   // /api/minun - profiilitiedot
@@ -35,7 +35,7 @@ export class UserManagementService {
     } catch (error: any) {
       this.handleError(error);
     }
-    return response
+    return response;
   }
 
   private handleError(error: HttpErrorResponse) {
