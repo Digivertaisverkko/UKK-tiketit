@@ -164,11 +164,12 @@ export class SubmitFaqComponent implements OnInit {
           },
           error: (error) => {
             console.log('komponentti: saatiin virhe: ' + error);
-            this.errorMessage = $localize `@@:Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut.`;
+            this.state = 'done';
           },
           complete: () => {
             console.log('Komponentti: Kaikki valmiita!');
-            this.state = 'editing';
+            this.state = 'done';
             this.fileInfoList = [];
             this.attachments.clear();
             this.goBack();
