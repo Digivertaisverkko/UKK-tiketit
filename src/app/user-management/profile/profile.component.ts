@@ -1,5 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/core/auth.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { UserManagementService } from 'src/app/user-management/user-management.service';
@@ -20,7 +21,8 @@ export class ProfileComponent implements OnInit {
   public userEmail: string = '';
   public userName: string = '';
 
-  constructor(private renderer: Renderer2,
+  constructor(private authService: AuthService,
+              private renderer: Renderer2,
               private route: ActivatedRoute,
               private ticketService: TicketService,
               private userManagementService: UserManagementService) {
@@ -63,7 +65,15 @@ export class ProfileComponent implements OnInit {
   }
 
   public removeProfile(): void {
-    console.log("Profiilin poistoa pyydetty");
+    this.userManagementService.removeUser().then(response => {
+      if (response) {
+        this.authService.handleNotLoggedIn();
+      } else {
+        throw new Error;
+      }
+    }).catch(error => {
+      this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:Profiilin poistaminen epäonnistui` + '.';
+    });
   }
 
 }
