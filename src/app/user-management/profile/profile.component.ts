@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService } from 'src/app/ticket/ticket.service';
+import { UserManagementService } from 'src/app/user-management/user-management.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,10 +19,9 @@ export class ProfileComponent implements OnInit {
   public userEmail: string = '';
   public userName: string = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private ticketService: TicketService
-  ) {
+  constructor(private route: ActivatedRoute,
+              private ticketService: TicketService,
+              private userManagementService: UserManagementService) {
     this.courseId = this.route.snapshot.paramMap.get('courseid');
   }
 
@@ -33,6 +33,10 @@ export class ProfileComponent implements OnInit {
     } else {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
+    this.userManagementService.getPersonalInfo().then(response => {
+      this.userName = response.nimi;
+      this.userEmail = response.sposti;
+    });
     this.isLoaded = true;
   }
 
