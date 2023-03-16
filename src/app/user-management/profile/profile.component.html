@@ -124,4 +124,11 @@
 
   </section>
 
+  <app-error-card i18n-title="@@Virhe"
+                  message="{{ errorMessage }}"
+                  *ngIf="errorMessage.length > 0"
+                  [styles]="{ margin: '0' }"
+                  title="Virhe">
+  </app-error-card>
+
 </div>

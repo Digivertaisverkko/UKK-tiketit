@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService } from 'src/app/ticket/ticket.service';
@@ -13,13 +13,15 @@ export class ProfileComponent implements OnInit {
 
   private courseId: string | null;
   public courseName: string = '';
+  public errorMessage: string = '';
   public isLoaded: boolean = false;
   public isInIframe: boolean = getIsInIframe();
   public isRemovePressed: boolean = false;
   public userEmail: string = '';
   public userName: string = '';
 
-  constructor(private route: ActivatedRoute,
+  constructor(private renderer: Renderer2,
+              private route: ActivatedRoute,
               private ticketService: TicketService,
               private userManagementService: UserManagementService) {
     this.courseId = this.route.snapshot.paramMap.get('courseid');
@@ -45,7 +47,19 @@ export class ProfileComponent implements OnInit {
   }
 
   public downloadPersonalData(): void {
-    console.log("Datan lataaminen pyydetty");
+    this.userManagementService.getGdprData().then(response => {
+      let gdprData = JSON.stringify(response, null, 2);
+      const link = this.renderer.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute(
+          'href',
+          "data:text/json;charset=UTF-8," + encodeURIComponent(gdprData));
+      link.setAttribute('download', 'datadump.json');
+      link.click();
+      link.remove();
+    }).catch(error => {
+      this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:Tiedoston lataaminen epäonnistui` + '.';
+    });
   }
 
   public removeProfile(): void {
