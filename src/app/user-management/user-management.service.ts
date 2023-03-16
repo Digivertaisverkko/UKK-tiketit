@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { environment } from 'src/environments/environment';
 
@@ -45,6 +45,25 @@ export class UserManagementService {
     } else {
       this.errorService.handleServerError(error);
     }
+  }
+
+  // /api/minun - poista käyttäjä
+  public async removeUser(): Promise<boolean> {
+    let user: User = this.authService.getUserInfo();
+    const options = {
+      body: {
+        id: user.id,
+        sposti: user.sposti,
+      },
+    };
+    let response: any;
+    let url = `${environment.apiBaseUrl}/minun`;
+    try {
+      response = await firstValueFrom(this.http.delete(url, options));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response?.success === true ? true : false;
   }
 
 }
