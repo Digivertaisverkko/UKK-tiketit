@@ -152,16 +152,19 @@ export class EditAttachmentsComponent implements OnInit {
   public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
     this.isEditingDisabled = true;
     let requestChain = this.makeRequestChain(ticketID, commentID)
-    var result: any;
     return new Promise((resolve, reject) => {
       forkJoin(requestChain).subscribe({
-        next: (res) => {
+        next: (res: any) => {
           console.log('sendFilesPromise: saatiin vastaus: ' + res );
-          resolve(res)
+          if (res.some((result: unknown) => result === 'error' )) {
+            reject(res)
+          } else {
+            resolve(res)
+          }
         },
         error: (error) => {
           console.log('sendFilesPromise: saatiin virhe: ' + error );
-          return('error')
+          reject('error')
         }
       });
     })
@@ -170,7 +173,6 @@ export class EditAttachmentsComponent implements OnInit {
   public sendFiles(ticketID: string, commentID: string) {
     this.isEditingDisabled = true;
     let requestChain = this.makeRequestChain(ticketID, commentID)
-
   //   .pipe(result:any) => {
   //     if (this.fileInfoList.some(fileInfo => fileInfo.uploadError)) {
   //       return throwError( () => new Error(result) );

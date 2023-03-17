@@ -216,18 +216,10 @@ export class TicketViewComponent implements OnInit {
         this.attachments.sendFilesPromise(this.ticketID, commentID)
           .then((res:any) => {
             console.log('ticket view: vastaus: ' + res);
-            if (res.some((submit: any) => submit === 'error' )) {
-              console.log('huomattiin virhe');
-              this.state = 'editing';
-              this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-              console.log('komponentti: saatiin virhe:' + res);
-            }
           })
           .catch((res:any) => {
-            console.log('ticket view: error: ' + res);
-            this.state = 'editing';
+            console.log('ticket view: napattiin virhe: ' + res);
             this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-            console.log('komponentti: saatiin virhe:' + res);
           })
           .finally(() => {
             console.log('kaikki valmista');

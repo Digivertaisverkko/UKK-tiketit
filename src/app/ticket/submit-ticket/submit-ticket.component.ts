@@ -130,23 +130,22 @@ export class SubmitTicketComponent implements OnInit {
         //   console.dir(response);
         //   console.log(typeof response);
         // })
-        this.attachments.sendFiles(ticketID, commentID).subscribe({
-          next: (res) => {
+        this.attachments.sendFilesPromise(ticketID, commentID).
+          then((res) => {
             console.log('komponentti: saatiin vastaus: ');
             console.dir(res);
-          },
-          error: (error) => {
+          })
+          .catch((res: any) => {
             this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-            console.log('submit-ticket: saatiin virhe: ' + error);
-            this.state = 'done';
-          },
-          complete: () => {
+            console.log('submit-ticket: saatiin virhe: ' + res);
+          })
+          .finally(() => {
             console.log('Komponentti: Kaikki valmiita!');
             this.state = 'done';
+            // Kommentoi alla olevat, jos haluat, että jää näkyviin.
             this.attachments.clear();
             this.goBack();
-          },
-        })
+          })
         // this.attachments.sendFiles(ticketID, commentID).then(response => {
         //   this.state = "done";
         //   if (response === true) {
