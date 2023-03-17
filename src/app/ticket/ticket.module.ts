@@ -9,6 +9,7 @@ import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { NgxFilesizeModule } from 'ngx-filesize';
 
 // import { MatInputModule } from '@angular/material/input';
 // import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,6 +43,7 @@ import { EditAttachmentsComponent } from './components/edit-attachments/edit-att
     SharedModule,
     MatCardModule,
     MatListModule,
+    NgxFilesizeModule
   ]
 })
 

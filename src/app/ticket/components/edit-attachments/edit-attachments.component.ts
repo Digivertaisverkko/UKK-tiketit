@@ -5,10 +5,12 @@ import { TicketService } from '../../ticket.service';
 import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 import { Resolve } from '@angular/router';
 
+
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError lähetysvaiheessa.
 interface FileInfo {
   filename: string;
   file: File;
+  filesize: number;
   error?: string;
   errorToolTip?: string;
   progress?: number;
@@ -32,6 +34,7 @@ interface FileInfo {
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">
             {{file.filename}}</span>
+            <span style="font-weight: 300">&nbsp;({{file.filesize | filesize }})</span>
           <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}"
             [matTooltipShowDelay]="600"><mat-icon>warning</mat-icon>{{file.error}}
           </div>
@@ -92,7 +95,14 @@ export class EditAttachmentsComponent implements OnInit {
     const MEGABYTE = 1000000;
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
-      let fileinfo: FileInfo = { file: file, filename: file.name, progress: 0 };
+      let filesizeNumber = Number(file.size);
+      console.log('Tallennetaan ' + filesizeNumber);
+      let fileinfo: FileInfo = {
+        file: file,
+        filename: file.name,
+        filesize: filesizeNumber,
+        progress: 0
+      };
       if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää
