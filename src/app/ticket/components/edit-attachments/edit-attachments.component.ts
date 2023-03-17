@@ -130,8 +130,10 @@ export class EditAttachmentsComponent implements OnInit {
             // console.log(' errorin index: ');
             // console.log(fileinfo);
             // Tämä virhe tulee vain 1. tiedoston kohdalla.
-            // this.fileInfoList[index].uploadError = $localize `:@@Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            return throwError( () => new Error(error) );
+            console.log('indeksi: ' + index);
+            this.fileInfoList[index].uploadError = $localize `:@@Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            return of('error');
+            // return throwError( () => new Error(error) );
           })
         )
     });
@@ -147,9 +149,35 @@ export class EditAttachmentsComponent implements OnInit {
   //     );
   // }
 
+  public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
+    this.isEditingDisabled = true;
+    let requestChain = this.makeRequestChain(ticketID, commentID)
+    var result: any;
+    return new Promise((resolve, reject) => {
+      forkJoin(requestChain).subscribe({
+        next: (res) => {
+          console.log('sendFilesPromise: saatiin vastaus: ' + res );
+          resolve(res)
+        },
+        error: (error) => {
+          console.log('sendFilesPromise: saatiin virhe: ' + error );
+          return('error')
+        }
+      });
+    })
+  }
+
   public sendFiles(ticketID: string, commentID: string) {
     this.isEditingDisabled = true;
-    let requestChain = this.makeRequestChain(ticketID, commentID);
+    let requestChain = this.makeRequestChain(ticketID, commentID)
+
+  //   .pipe(result:any) => {
+  //     if (this.fileInfoList.some(fileInfo => fileInfo.uploadError)) {
+  //       return throwError( () => new Error(result) );
+  //     }
+  //     return of(result)
+  //   }
+  // );
     return forkJoin(requestChain)
   }
 

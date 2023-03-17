@@ -213,25 +213,52 @@ export class TicketViewComponent implements OnInit {
       const commentID = response.kommentti;
       this.state = 'sending';
       // this.attachments.sendFiles(this.ticketID, commentID).subscribe({
-        this.attachments.sendFiles(this.ticketID, commentID).subscribe({
-        next: (res) => {
-          console.log('komponentti: saatiin vastaus (alla): ');
-          console.dir(res);
-        },
-        error: (error) => {
-          console.log('komponentti: saatiin virhe: ' + error);
-          this.state = 'editing';
-          this.errorMessage = $localize `@@:Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-        },
-        complete: () => {
-          console.log('Komponentti: Kaikki valmiita!');
-          this.state = 'done';
-          this.fileInfoList = [];
-          this.attachments.clear();
-          this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-          this.state = 'editing';
-        },
-      })
+        this.attachments.sendFilesPromise(this.ticketID, commentID)
+          .then((res:any) => {
+            console.log('ticket view: vastaus: ' + res);
+            if (res.some((submit: any) => submit === 'error' )) {
+              console.log('huomattiin virhe');
+              this.state = 'editing';
+              this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+              console.log('komponentti: saatiin virhe:' + res);
+            }
+          })
+          .catch((res:any) => {
+            console.log('ticket view: error: ' + res);
+            this.state = 'editing';
+            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+            console.log('komponentti: saatiin virhe:' + res);
+          })
+          .finally(() => {
+            console.log('kaikki valmista');
+            this.state = 'done';
+            this.fileInfoList = [];
+            this.attachments.clear();
+            this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+            this.state = 'editing';
+          })
+
+        if (false) {
+          this.attachments.sendFiles(this.ticketID, commentID).subscribe({
+          next: (res) => {
+            console.log('komponentti: saatiin vastaus (alla): ');
+            console.dir(res);
+          },
+          error: (error) => {
+            console.log('komponentti: saatiin virhe: ' + error);
+            this.state = 'editing';
+            this.errorMessage = $localize `@@:Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+          },
+          complete: () => {
+            console.log('Komponentti: Kaikki valmiita!');
+            this.state = 'done';
+            this.fileInfoList = [];
+            this.attachments.clear();
+            this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+            this.state = 'editing';
+          },
+        })
+        }
       // }).catch(() => {
       //   this.state = 'done';
       //   this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
