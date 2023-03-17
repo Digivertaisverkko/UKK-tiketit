@@ -1,5 +1,7 @@
 @import '/src/variables.scss';
 
+.vertical-spacer { height: var(--margin-top-embedded) }
+
 .personal-info {
   width: 24em;
   mat-form-field {
