@@ -134,7 +134,7 @@
               (click)="sendTicket()"
               *ngIf="state==='editing'"
               color="primary"
-              [disabled]="submitForm.invalid"
+              [disabled]="submitForm.invalid || attachmentsMessages === 'faulty'"
               i18n="@@Lähetä opettajille"
               mat-raised-button>
         Lähetä opettajille
