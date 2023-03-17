@@ -332,7 +332,7 @@ export class AuthService {
     }
     if (window.localStorage.getItem('SESSION_ID') == null) {
       this.setNotLoggegIn();
-      throw new Error(('Virhe: fetchUserInfo(): ei session id:ä, ei voida hakea ja tallentaa tietoja.'));
+      return
     }
     let response: any;
     try {
