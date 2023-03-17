@@ -253,7 +253,7 @@ export class TicketService {
       },
       error: (error) => {
         console.error('ticketService.newUploadFile: saatiin virhe.');
-        this.handleError(error);
+        // this.handleError(error);
         progress.error(error);
       }
     })
@@ -266,11 +266,9 @@ export class TicketService {
       status: 400,
       statusText: 'Bad Request',
     });
-
     const fakePost = new Observable(subscriber => {
       subscriber.error(errorResponse);
     })
-
     return fakePost
   }
 
