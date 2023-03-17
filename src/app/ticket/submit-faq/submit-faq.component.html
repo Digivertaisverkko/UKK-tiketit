@@ -17,6 +17,7 @@
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
         <textarea [disabled]="state!=='editing'"
+                  aria-label="Otsikko"
                   autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
