@@ -30,6 +30,7 @@ interface FileInfo {
 export class SubmitFaqComponent implements OnInit {
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+  @Input() public attachmentsMessages: string = '';
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;

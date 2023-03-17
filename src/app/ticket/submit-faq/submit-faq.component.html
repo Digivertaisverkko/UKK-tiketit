@@ -131,7 +131,7 @@
               *ngIf="state==='editing'"
               (click)="sendFaq()"
               color="primary"
-              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
+              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0 || attachmentsMessages === 'faulty'"
               i18n="@@Julkaise"
               mat-raised-button
               >
