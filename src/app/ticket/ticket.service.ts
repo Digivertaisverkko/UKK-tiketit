@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
-import { firstValueFrom, Observable, catchError, throwError } from 'rxjs';
+import { firstValueFrom, map, Observable, catchError, Subject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -11,11 +11,16 @@ import { ErrorService } from '../core/error.service';
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
+  public $messages = new Subject<string>();
   private debug: boolean = false;
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient) {}
+
+  trackMessages(): Observable<string> {
+    return this.$messages.asObservable();
+  }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
@@ -56,14 +61,13 @@ export class TicketService {
     return verbal;
   }
 
-
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string, fileList: File[], tila?: number): Promise<NewCommentResponse> {
+  public async addComment(ticketID: string, message: string, tila?: number): Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
     if (tila !== undefined) {
-      if (tila  < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      if (tila < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
     }
     interface newComment {
       viesti: string;
@@ -78,19 +82,6 @@ export class TicketService {
       this.auth.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
-    }
-    if (fileList.length == 0 ) return response;
-    const commentID = String(response?.kommentti);
-    if (commentID == null) {
-      throw new Error('addComment: ei liitteiden lisäämiseen tarvittavaa kommentin id:ä.');
-    }
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, commentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
     }
     return response
   }
@@ -127,6 +118,20 @@ export class TicketService {
 
   /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
      Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
+
+  // Sama kuin alla, mutta ei uppaa tiedostoja.
+  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
+    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;
+    url = environment.apiBaseUrl + url;
+    let response: any;
+    const body = newFaq;
+    try {
+      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
 
   // FIXME: eri muotoinen nimi kuin esim. addTicket.
   public async sendFaq(ID: string, newFaq: UusiUKK, fileList: File[], editFaq?: boolean) {
@@ -214,33 +219,130 @@ export class TicketService {
     return response
   }
 
-  public async addFiles(ticketID: string, commentID: string, fileList: File[]) {
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, commentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
+  private getRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * max) + min;
   }
 
-    // if (response.success == undefined) {
-    //   this.sendMessage($localize `:@@Kysymyksen lisäämisestä ei vahvistusta:Kysymyksen lisäämisen onnistumisesta ei saatu vahvistusta.`)
-    //   return false;
-    // } else {
-    //   if (response.success == true) {
-    //     this.sendMessage($localize `:@@Kysymys lisättiin onnistuneesti:Kysymys lisättiin onnistuneesti`);
-    //     return true;
-    //   } else {
-    //     this.sendMessage($localize `:@@Kysymys lisääminen epäonnistui:Kysymys lisääminen epäonnistui`);
-    //     return false;
-    //   }
-    // }
+  // Lähetä tiedosto palauttaen edistymistietoja.
+  public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+    let formData = new FormData();
+    formData.append('tiedosto', file);
+/*     console.log("Tiedosto:");
+    console.dir(file);
+    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name); */
+    const progress = new Subject<number>();
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    // const req = new HttpRequest('POST', url, formData, { reportProgress: true, observe: 'events' });
 
+/*     let post;
+    if (this.getRandomInt(1,2) === 2) {
+      post = this.testPost;
+      console.log('pitäisi feilata');
+    } else {
+      post = this.http.post;
+      console.log('pitäisi onnistua');
+    } */
+    // Virheiden testaukseen vaihda http.post -> fakeHttpPost
+    this.http.post(url, formData, { reportProgress: true, observe: 'events' }, ).subscribe({
+      next: (event) => {
+        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+          const percentDone = Math.round(100 * event.loaded / event.total);
+          progress.next(percentDone);
+        } else if (event.type === HttpEventType.Response) {
+          progress.complete();
+        }
+      },
+      error: (error) => {
+        console.error('ticketService.newUploadFile: saatiin virhe.');
+        // this.handleError(error);
+        progress.error(error);
+      }
+    })
+    return progress.asObservable()
+  }
+
+  // Tiedoston lähetyksen testaamisessa voi http.post korvata tällä, niin saa virheitä.
+  fakeHttpPost(url: any, formData: any, options?: any): Observable<any> {
+    const errorResponse = new HttpErrorResponse({
+      error: 'File upload failed',
+      status: 400,
+      statusText: 'Bad Request',
+    });
+    const fakePost = new Observable(observer => {
+      observer.error(errorResponse);
+    })
+    return fakePost
+  }
+
+
+  // Testaamista varten.
+  public getError(x: any, y : any, z: any): Observable<any> {
+    const errorResponse = new HttpErrorResponse({
+      error: 'File upload failed',
+      status: 400,
+      statusText: 'Bad Request',
+    });
+    return of(errorResponse);
+  }
+
+
+  // Lähetä tiedosto palauttaen edistymistietoja.
+/*   public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+    let formData = new FormData();
+    formData.append('tiedosto', file);
+    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name);
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+      .pipe(map(event => {
+        // console.log(event);
+        // console.dir(event);
+        // console.log('type: ' + event.type)
+
+        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+          const progress = Math.round(100 * event.loaded / event.total);
+          return progress;
+        } else if (event.type === HttpEventType.Response) {
+          return event.body  // pitäisi palauttaa onnistuessa { success: true }
+        } else return -1  // Ei huomioida näkymäss.
+      })
+    );
+    // return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+    //   .pipe(catchError(error => {
+    //     console.log(error);
+    //     return throwError(() => new Error(error));
+    //   }
+    // ));
+  } */
+
+    // Lähetä tiedosto palauttaen edistymistietoja.
+    public uploadFileExample(ticketID: string, commentID: string, file: File): Observable<any>{
+      let formData = new FormData();
+      formData.append('tiedosto', file);
+      const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+      return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
+        .pipe(
+          map(event => {
+
+            let random = this.getRandomInt(1,15);
+            if (random == 3) {
+              throw new Error
+            }
+            if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+              const progress = Math.round(100 * event.loaded / event.total);
+              return progress;
+            } else if (event.type === HttpEventType.Response) {
+              return event.body  // pitäisi palauttaa onnistuessa { success: true }
+            } else return -1  // Ei huomioida näkymäss.
+          }
+        ),
+        catchError(() => {
+          throw { success: false }
+        })
+      );
+    }
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  private async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
+  public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
     console.log('ticketService: Yritetään lähettää formData:');
@@ -254,21 +356,6 @@ export class TicketService {
       this.handleError(error);
     }
     return (response?.success === true) ? true : false;
-  }
-
-  // Vastaava kuin yllä, mutta progress baria varten.
-  public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
-    let formData = new FormData();
-    formData.append('tiedosto', file);
-    console.log('ticketService: Yritetään lähettää formData:');
-    console.dir(formData);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-      .pipe(catchError(error => {
-        console.log(error);
-        return throwError(() => new Error(error));
-      }
-    ));
   }
 
   // Lataa tiedosto.
@@ -315,7 +402,7 @@ export class TicketService {
   public async getCourseName(courseID: string): Promise<string> {
     //const httpOptions = this.getHttpOptions();;
     let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/' + courseID;
+    let url = `${environment.apiBaseUrl}/kurssi/${courseID}`;
     try {
       response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url) );
     } catch (error: any) {
@@ -412,7 +499,6 @@ export class TicketService {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
-    // TODO: Tee nämä kutsut rinnakkain.
     response = await this.getFields(ticketID);
     ticket.kentat = response;
     response  = await this.getComments(ticketID);
@@ -571,7 +657,7 @@ export interface UusiTiketti {
   kentat?: Array<{ id: number, arvo: string }>;
 }
 
-interface AddTicketResponse {
+export interface AddTicketResponse {
   success: Boolean;
   uusi: {
     tiketti: string;

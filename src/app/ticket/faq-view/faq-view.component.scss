@@ -5,9 +5,12 @@
   margin-bottom: 0.5em;
 }
 
-.vertical-spacer { height: 1rem; }
+.vertical-spacer { height: var(--margin-top-embedded) }
 
-#top-buttons { justify-content: space-between; }
+#top-buttons {
+  display: flex;
+  justify-content: space-between;
+}
 
 .edit-buttons-wrapper {
   display: flex;

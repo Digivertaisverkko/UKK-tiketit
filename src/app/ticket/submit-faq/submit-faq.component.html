@@ -7,7 +7,7 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button></app-to-beginning-button>
+  <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
 
   <form accept-charset="UTF-8"
         action=""
@@ -16,7 +16,8 @@
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea autocomplete="off"
+        <textarea [disabled]="state!=='editing'"
+                  autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
@@ -39,7 +40,8 @@
       <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  [matAutocomplete]="auto"
+          <input  [disabled]="state==='sending'"
+                  [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
                   name="kentta.otsikko_{{i}}"
@@ -59,7 +61,8 @@
             <!-- Jos lisäkenttä ei sisällä valintoja, niin kentta.valinnat[0]
                   sisältää tyhjän merkkijonon, eikä suinkaan ole tyhjä. -->
             <ng-container *ngIf="kentta.valinnat[0] !== ''">
-              <mat-option *ngFor="let valinta of kentta.valinnat"
+              <mat-option [disabled]="state==='sending'"
+                          *ngFor="let valinta of kentta.valinnat"
                           [value]="valinta">
                 {{ valinta }}
               </mat-option>
@@ -83,23 +86,30 @@
     </section>
 
     <h2 i18n="@@Kysymys">Kysymys</h2>
-    <app-editor [(editorContent)]="faqMessage"></app-editor>
+    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqMessage"></app-editor>
 
     <h2 i18n="@@Vastaus">Vastaus</h2>
-    <app-editor [(editorContent)]="faqAnswer"></app-editor>
+    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer"></app-editor>
+
+    <!-- Kun lähetetään liitetiedostoja -->
+    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message" i18n="@@UKK lähettäminen onnistui">Uuden usein kysytyn kysymyksen lähettäminen onnistui.</p>
+
+    <p class='attachments-message' *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
+      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
 
     <app-error-card i18n-title="@@Virhe"
-                    message="{{ errorMessage }}"
-                    *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 20% 1em 20%' }"
-                    title="Virhe">
+      message="{{ errorMessage }}"
+      *ngIf="errorMessage.length > 0"
+      [styles]="{ margin: '1em 0 1em 0' }"
+      title="Virhe">
     </app-error-card>
 
     <div class="theme-actions">
 
       <!-- ! Tällä hetkellä ei tueta liitetiedostojen editointia. -->
-      <button (click)="fileUpload.click()"
+      <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
+              [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
         <mat-icon>attach_file</mat-icon>
@@ -109,6 +119,7 @@
       <div class="spacer"></div>
 
       <button class="cancel-button"
+              [disabled]="state!=='editing'"
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
@@ -117,29 +128,58 @@
       </button>
 
       <button class="submit-button"
+              *ngIf="state==='editing'"
               (click)="sendFaq()"
               color="primary"
-              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0"
+              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0 || attachmentsMessages === 'faulty'"
               i18n="@@Julkaise"
-              mat-raised-button>
+              mat-raised-button
+              >
         Julkaise
+      </button>
+
+      <button class="submit-button"
+        *ngIf="state==='done'"
+        (click)="goBack()"
+        color="primary"
+        mat-raised-button>
+        OK
       </button>
 
     </div>
 
     <!-- ! (event) ei toiminut, jos käytti tähän omaa child komponenttia ja tuli Muokkaa-napin kautta. -->
-    <input mat-input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload>
-    <div class="file-list-wrapper" *ngIf="fileList !== null">
+    <!-- <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload> -->
+    <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
+      (change)="onFileChanged($event)" #fileUpload> -->
+
+<!--     <div class="file-list-wrapper" *ngIf="fileList !== null">
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
         <div class="list-item">
           <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
-          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
-          <mat-icon>warning</mat-icon>{{file.error}}</div>
-          <button mat-icon-button class="remove-file-button" (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
+          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}"
+            [matTooltipShowDelay]="600">
+            <mat-icon>warning</mat-icon>{{file.error}}
+          </div>
+          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button"
+            (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
         </div>
-        <!-- <mat-error>Virheilmoitukset tähän.</mat-error> -->
+        <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
+        <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
+        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100>
+        </mat-progress-bar>
       </div>
-    </div>
+    </div> -->
+
+    <!-- (fileListOutput)="fileList = $event" -->
+
+    <!-- Ylläoleva lapsikomponenttina -->
+    <app-edit-attachments
+
+      [uploadClicks]="uploadClick.asObservable()"
+      >
+    </app-edit-attachments>
+
 
   </form>
 
@@ -147,8 +187,7 @@
 
   <ng-container *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
-    <h2 class="main-header"
-        i18n="@@Alkuperäinen kysymys">
+    <h2 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
     </h2>
     <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>

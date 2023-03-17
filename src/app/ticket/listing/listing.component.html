@@ -18,6 +18,10 @@
     <button mat-icon-button class="settings-button" *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
       [routerLink]="'/course/' + courseID + '/settings'"><mat-icon class="settings-icon">settings</mat-icon>
     </button>
+
+    <button mat-icon-button class="settings-button" *ngIf="isParticipant && isInIframe"
+      [routerLink]="'/course/' + courseID + '/profile'"><mat-icon class="settings-icon">account_circle</mat-icon>
+    </button>
   </div>
 
   <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->

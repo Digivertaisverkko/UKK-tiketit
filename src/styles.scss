@@ -100,7 +100,7 @@ $debug: false;
   }
 }
 
-// Nappien asemoiminen ja tarvittavan tilan ottaminen.
+// Näkymän alaosassa olevien nappien asemoiminen ja tarvittavan tilan ottaminen.
 .theme-actions {
   display: flex;
   justify-content: flex-end;
@@ -180,6 +180,13 @@ $debug: false;
 
   .mdc-data-table__header-row { height: 3em; }
 
+}
+
+.theme-success-message {
+  padding: 1rem;
+  background-color: #C8E6C9;
+  border-radius: 4px;
+  text-align: center;
 }
 
 // ---- Utilityt---------------------

@@ -62,6 +62,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     ['image']
   ];
 
+  @Input() disabled: boolean = false;
   @Input() editorContent: string = '';
   @Output() editorContentChange = new EventEmitter<string>();
 

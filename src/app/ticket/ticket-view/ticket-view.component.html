@@ -6,21 +6,24 @@
     <span>{{ courseName }}</span>
   </h2>
 
-  <app-to-beginning-button *ngIf="ticket.tila === undefined"></app-to-beginning-button>
+  <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-    <div class="top-buttons" class="theme-actions" *ngIf="!ticketIdFromParent && ticket.tila > 0">
-      <app-to-beginning-button></app-to-beginning-button>
+  <app-to-beginning-button *ngIf="ticket.tila === undefined" [disabled]="state==='sending'"></app-to-beginning-button>
+
+    <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
+      <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
 
       <div class="spacer"></div>
 
-      <button *ngIf="isEditable" mat-raised-button i18n="@@Muokkaa"
+      <button *ngIf="isEditable" [disabled]="state==='sending'" mat-raised-button i18n="@@Muokkaa"
         (click)="editTicket()">
         Muokkaa
       </button>
 
       <button mat-raised-button i18n="@@Kopioi UKK"
         (click)="copyAsFAQ()"
-        *ngIf="(userRole === 'opettaja' || userRole === 'admin')">
+        *ngIf="(userRole === 'opettaja' || userRole === 'admin')"
+        [disabled]="state==='sending'">
         Kopioi UKK:ksi
       </button>
 
@@ -29,12 +32,13 @@
         [matTooltipDisabled]="isRemovable">
         <button mat-raised-button *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
           i18n="@@Poista" (click)="changeRemoveButton()"
-          [disabled]="!isRemovable">
+          [disabled]="!isRemovable || state==='sending'">
           Poista
         </button>
       </div>
 
-      <button mat-raised-button (click)="removeTicket()" *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto">
+      <button mat-raised-button (click)="removeTicket()" *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto"
+        [disabled]="state==='sending'">
         Vahvista poisto
       </button>
     </div>
@@ -71,8 +75,6 @@
       <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
-    <!-- TODO: Lisää tähän muiden kenttien näyttäminen. -->
-
     <p class="theme-label message-label" i18n="@@Viesti">Viesti</p>
 
     <app-message [messageHtml]=ticket.viesti></app-message>
@@ -100,7 +102,7 @@
         <mat-card-subtitle class="theme-label">
           <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}} - </span>
           <span *ngIf="isToday(comment.aikaleima)" i18n="@@Tänään">Tänään</span>
-          <span *ngIf="!isToday(comment.aikaleima)" >{{ comment.aikaleima | date: 'shortDate' }}</span>
+          <span *ngIf="!isToday(comment.aikaleima)">{{ comment.aikaleima | date: 'shortDate' }}</span>
           {{ comment.aikaleima | date: 'shortTime' }}
         </mat-card-subtitle>
         <div class="spacer"></div>
@@ -118,7 +120,7 @@
 
     <div class="vertical-spacer"></div>
 
-    <app-editor *ngIf="!ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
+    <app-editor [disabled]="state==='sending'" *ngIf="!ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
 
   </section>
 
@@ -137,13 +139,14 @@
 
     <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-      <button mat-raised-button class="attach-button" (click)="uploadClick.next('add')"><mat-icon>attach_file</mat-icon>
-        {{attachFilesText}}
+      <button mat-raised-button class="attach-button" (click)="uploadClick.next('add')" [disabled]="state==='sending'">
+        <mat-icon>attach_file</mat-icon>{{attachFilesText}}
       </button>
 
       <div class="spacer" *ngIf="userRole === 'opettaja' || userRole ==='admin'; else spacerHere"></div>
 
-      <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opettaja' || userRole ==='admin'">
+      <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opettaja' || userRole ==='admin'"
+        [disabled]="state==='sending'">
         <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
         <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
         <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
@@ -155,7 +158,7 @@
         mat-raised-button
         color="primary"
         class="send-button"
-        [disabled]="commentText.length < 1 || attachmentsHasErrors === true"
+        [disabled]="commentText.length < 1 || attachmentsMessages === 'faulty' || state==='sending'"
         (click)="sendComment()"
         i18n="@@Lähetä">
         Lähetä
@@ -163,8 +166,9 @@
 
     </div>
 
-    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()" (attachmentsHasErrors)="attachmentsHasErrors = $event"
-      (fileListOutput)="fileList = $event">
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()"
+      (attachmentsMessages)="attachmentsMessages = $event"
+      (fileListOutput)="fileInfoList = $event">
     </app-edit-attachments>
 
   </section>

@@ -16,6 +16,10 @@
     }
   }
 
+  .NgxEditor__Content--Disabled {
+    background-color: #fafafa;
+  }
+
   .NgxEditor__MenuBar {
     border-bottom-width: var(--mdc-outlined-card-outline-width, 1px) !important;
     border-bottom-style: solid !important;

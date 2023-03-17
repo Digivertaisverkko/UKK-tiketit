@@ -1,0 +1,35 @@
+@import '/src/variables.scss';
+
+.personal-info {
+  width: 24em;
+  mat-form-field {
+    margin-top: 2px;
+    min-width: 21rem;
+  }
+}
+
+.e-mail-settings {
+  display: none;
+  //display: table;
+  mat-checkbox {
+    display: table-row;
+  }
+}
+
+.personal-data {
+  .personal-data-row {
+    display: table;
+
+    button {
+      display: table-cell;
+      margin-right: 15px;
+      vertical-align: middle;
+      width: 19em;
+    }
+
+    span {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+}

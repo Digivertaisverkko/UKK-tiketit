@@ -1,6 +1,9 @@
 @import '/src/variables.scss';
 
+.vertical-spacer { height: var(--margin-top-embedded) }
+
 .top-buttons {
+  display: flex;
   justify-content: space-between;
   gap: $button-gap;
 }
@@ -28,8 +31,6 @@ mat-card {
   }
 }
 
-.vertical-spacer { height: 1rem }
-
 .theme-actions { gap: 0.8rem }
 
 mat-radio-button { margin: 3px 1.7rem 3px 0px }
@@ -39,7 +40,6 @@ mat-radio-button { margin: 3px 1.7rem 3px 0px }
 // ::ng-deep .mat-mdc-card-content:last-child {
 //   padding-bottom: 0 !important;
 // }
-
 
 @media (max-width: 775px) {
   // Välttämättä ei mene useammalle riville.

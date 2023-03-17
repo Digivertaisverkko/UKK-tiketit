@@ -7,7 +7,7 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button></app-to-beginning-button>
+  <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
 
   <form accept-charset="UTF-8"
         action=""
@@ -17,7 +17,8 @@
     <div class="ticket-header">
 
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea autocomplete="off"
+        <textarea [disabled]="state!=='editing'"
+                  autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
@@ -54,7 +55,8 @@
       <ng-container *ngFor="let kentta of ticketFields; let i = index">
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  [matAutocomplete]="auto"
+          <input  [disabled]="state!=='editing'"
+                  [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
                   name="kentta.otsikko_{{i}}"
@@ -97,20 +99,29 @@
     </section>
 
     <h2 i18n="@@Viesti">Viesti</h2>
-    <app-editor [(editorContent)]="message"></app-editor>
+    <app-editor [disabled]="state!=='editing'"
+                [(editorContent)]="message">
+    </app-editor>
+
+    <!-- Kun lähetetään liitetiedostoja -->
+    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message" i18n="@@Uuden kysymyksen lähettäminen onnistui">Uuden kysymyksen lähettäminen onnistui.</p>
+    
+    <p class='attachments-message' *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
+      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
 
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
                     *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 20% 1em 20%' }"
+                    [styles]="{ margin: '1em 0 1em 0;' }"
                     title="Virhe">
     </app-error-card>
 
     <div class="theme-actions">
 
-       <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
+      <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
+              [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
         <mat-icon>attach_file</mat-icon>
@@ -121,19 +132,31 @@
 
       <button class="submit-button"
               (click)="sendTicket()"
+              *ngIf="state==='editing'"
               color="primary"
-              [disabled]="submitForm.invalid"
+              [disabled]="submitForm.invalid || attachmentsMessages === 'faulty'"
               i18n="@@Lähetä opettajille"
               mat-raised-button>
         Lähetä opettajille
       </button>
 
+      <button class="submit-button"
+        *ngIf="state==='done'"
+        (click)="goBack()"
+        color="primary"
+        [disabled]="submitForm.invalid"
+        mat-raised-button>
+        OK
+      </button>
+
     </div>
 
+    <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments
-        (fileListOutput)="fileList = $event"
-        [uploadClicks]="uploadClick.asObservable()"
-        >
+
+      [uploadClicks]="uploadClick.asObservable()"
+      (attachmentsMessages)="attachmentsMessages = $event"
+    >
     </app-edit-attachments>
 
   </form>

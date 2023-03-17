@@ -13,11 +13,17 @@ export class ErrorService {
     // setTimeout( () => this.auth = injector.get(AuthService));
   }
 
-  public handleServerError(error: any) {
-
-    var logMessage: string;
+  /* Käsittellään virheet ensin yleisellä tasolla, jonka jälkeen heitetään ne eteenpäin.
+     Käsittely sisältää lähinnä virheen logituksen consoleen.
+  */
+  public handleServerError(error: any): never {
+    var logMessage: string; // Pastetaan consoleen.
     var backendResponse = error?.error;
     var backendError = backendResponse?.error;
+
+    // console.log('errori:');
+    // console.dir(error);
+
     if (error.status === 0) {
       // A client-side or network error occurred.
       logMessage = 'Saatiin virhe statuskoodilla 0. Yleensä tapahtuu, kun palvelimeen ei saada yhteyttä.';
@@ -30,6 +36,10 @@ export class ErrorService {
       if (error.status !== undefined) {
         logMessage += "HTTP-tilakoodilla " + error.status;
       }
+    }
+
+    if (error.message != undefined) {
+      logMessage += ", viestillä: " + error.message;
     }
   
     if (backendError !== undefined) {       
@@ -45,8 +55,14 @@ export class ErrorService {
     }
     
     console.error(logMessage + ". Alkuperäinen vastaus alla.");
-    console.dir(backendError);
-    throw backendError;
+
+    if (backendError !== undefined) {  
+      console.dir(backendError);
+      throw backendError;
+    } else {
+      console.dir(error);
+      throw error;
+    }
     // return throwError(() => new Error(error));
   }
 

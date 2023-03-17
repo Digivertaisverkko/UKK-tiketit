@@ -8,11 +8,9 @@
     <span>{{ courseName }}</span>
   </h2>
 
-  <ng-template #verticalSpacer>
-    <div class="vertical-spacer"></div>
-  </ng-template>
+  <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <div id="top-buttons" class="theme-actions">
+  <div id="top-buttons">
     <app-to-beginning-button></app-to-beginning-button>
 
     <!-- Tiketin tilan tarkastamalla tietää, saatiinko tiedot haettua. -->

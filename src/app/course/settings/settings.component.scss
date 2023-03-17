@@ -1,6 +1,6 @@
 @import '/src/variables.scss';
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+.top-vertical-spacer { height: var(--margin-top-embedded) }
 
 // ----- Lista --------------------------
 
@@ -74,14 +74,6 @@ mat-icon {
 }
 
 // --------------------------------
-
-.message {
-  padding: 1rem;
-  background-color: #C8E6C9;
-  border-radius: 4px;
-  text-align: center;
-
-}
 
 .theme-actions {
   justify-content: space-between;
