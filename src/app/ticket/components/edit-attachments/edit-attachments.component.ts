@@ -85,7 +85,6 @@ export class EditAttachmentsComponent implements OnInit {
 
   public clear() {
     this.fileInfoList = [];
-    // this.fileList = [];
   }
 
   public onFileChanged(event: any) {
@@ -113,7 +112,7 @@ export class EditAttachmentsComponent implements OnInit {
     }
   }
 
-  private makeRequestChain(ticketID: string, commentID: string): any {
+  private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
         return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file).pipe(
           // return this.ticketService.uploadError(ticketID, commentID, fileinfo.file).pipe(
@@ -127,11 +126,8 @@ export class EditAttachmentsComponent implements OnInit {
           }),
           catchError((error: any) => {
             console.log('makeRequestChain: catchError: error napattu');
-            // console.log(' errorin index: ');
-            // console.log(fileinfo);
-            // Tämä virhe tulee vain 1. tiedoston kohdalla.
-            console.log('indeksi: ' + index);
             this.fileInfoList[index].uploadError = $localize `:@@Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            // Koko upload loppuu kaikkien tiedostojen kohdalla jos heitetään virhe.
             return of('error');
             // return throwError( () => new Error(error) );
           })
@@ -151,9 +147,9 @@ export class EditAttachmentsComponent implements OnInit {
 
   public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
     this.isEditingDisabled = true;
-    let requestChain = this.makeRequestChain(ticketID, commentID)
+    let requestArray = this.makeRequestArray(ticketID, commentID)
     return new Promise((resolve, reject) => {
-      forkJoin(requestChain).subscribe({
+      forkJoin(requestArray).subscribe({
         next: (res: any) => {
           console.log('sendFilesPromise: saatiin vastaus: ' + res );
           if (res.some((result: unknown) => result === 'error' )) {
@@ -170,9 +166,10 @@ export class EditAttachmentsComponent implements OnInit {
     })
   }
 
+  // Ei käytössä atm.
   public sendFiles(ticketID: string, commentID: string) {
     this.isEditingDisabled = true;
-    let requestChain = this.makeRequestChain(ticketID, commentID)
+    let requestChain = this.makeRequestArray(ticketID, commentID)
   //   .pipe(result:any) => {
   //     if (this.fileInfoList.some(fileInfo => fileInfo.uploadError)) {
   //       return throwError( () => new Error(result) );

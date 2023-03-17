@@ -242,7 +242,8 @@ export class TicketService {
       post = this.http.post;
       console.log('pitäisi onnistua');
     } */
-    this.http.post(url, formData, { reportProgress: true, observe: 'events' }).subscribe({
+    // Virheiden testaukseen vaihda http.post -> fakeHttpPost
+    this.http.post(url, formData, { reportProgress: true, observe: 'events' }, ).subscribe({
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
           const percentDone = Math.round(100 * event.loaded / event.total);
