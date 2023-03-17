@@ -208,6 +208,7 @@ export class TicketViewComponent implements OnInit {
       if (this.fileInfoList.length === 0) {
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
           this.state = 'editing';
+          return
       }
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
