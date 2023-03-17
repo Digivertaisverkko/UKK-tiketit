@@ -158,23 +158,41 @@ export class SubmitFaqComponent implements OnInit {
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.state = 'sending';
-        this.attachments.sendFiles(ticketID, commentID).subscribe({
-          next: (res) => {
-            console.log('komponentti: saatiin vastaus: ' + res);
-          },
-          error: (error) => {
-            console.log('komponentti: saatiin virhe: ' + error);
-            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut.`;
-            this.state = 'done';
-          },
-          complete: () => {
+        this.attachments.sendFilesPromise(ticketID, commentID).
+          then((res) => {
+            console.log('komponentti: saatiin vastaus: ');
+            console.dir(res);
+            this.goBack();
+          })
+          .catch((res: any) => {
+            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+            console.log('submit-ticket: saatiin virhe: ' + res);
+          })
+          .finally(() => {
             console.log('Komponentti: Kaikki valmiita!');
             this.state = 'done';
-            this.fileInfoList = [];
-            this.attachments.clear();
-            this.goBack();
-          },
-        })
+            // Kommentoi alla olevat, jos haluat, että jää näkyviin.
+            // this.attachments.clear();
+          })
+        if (false) {
+          this.attachments.sendFiles(ticketID, commentID).subscribe({
+            next: (res) => {
+              console.log('komponentti: saatiin vastaus: ' + res);
+            },
+            error: (error) => {
+              console.log('komponentti: saatiin virhe: ' + error);
+              this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut.`;
+              this.state = 'done';
+            },
+            complete: () => {
+              console.log('Komponentti: Kaikki valmiita!');
+              this.state = 'done';
+              this.fileInfoList = [];
+              this.attachments.clear();
+              this.goBack();
+            },
+          })
+        }
         // this.attachments.sendFiles(ticketID, commentID).then(response => {
         //   this.state = "editing";
         //   this.goBack();
