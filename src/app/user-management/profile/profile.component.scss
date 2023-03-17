@@ -9,7 +9,8 @@
 }
 
 .e-mail-settings {
-  display: table;
+  display: none;
+  //display: table;
   mat-checkbox {
     display: table-row;
   }
