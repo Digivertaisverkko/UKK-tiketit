@@ -260,14 +260,15 @@ export class TicketService {
     return progress.asObservable()
   }
 
+  // Tiedoston lähetyksen testaamisessa voi http.post korvata tällä, niin saa virheitä.
   fakeHttpPost(url: any, formData: any, options?: any): Observable<any> {
     const errorResponse = new HttpErrorResponse({
       error: 'File upload failed',
       status: 400,
       statusText: 'Bad Request',
     });
-    const fakePost = new Observable(subscriber => {
-      subscriber.error(errorResponse);
+    const fakePost = new Observable(observer => {
+      observer.error(errorResponse);
     })
     return fakePost
   }

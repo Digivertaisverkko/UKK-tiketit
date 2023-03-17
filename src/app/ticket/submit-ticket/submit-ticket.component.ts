@@ -134,6 +134,7 @@ export class SubmitTicketComponent implements OnInit {
           then((res) => {
             console.log('komponentti: saatiin vastaus: ');
             console.dir(res);
+            this.goBack();
           })
           .catch((res: any) => {
             this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
@@ -143,8 +144,7 @@ export class SubmitTicketComponent implements OnInit {
             console.log('Komponentti: Kaikki valmiita!');
             this.state = 'done';
             // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-            this.attachments.clear();
-            this.goBack();
+            // this.attachments.clear();
           })
         // this.attachments.sendFiles(ticketID, commentID).then(response => {
         //   this.state = "done";
