@@ -3,7 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse } from 'src/app/ticket/ticket.service';
+import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse 
+          } from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
@@ -102,24 +103,25 @@ export class SubmitFaqComponent implements OnInit {
       .then( response => { this.courseName = response });
   }
 
-  // public onFileChanged(event: any) {
-  //   const MEGABYTE = 1000000;
-  //   for (let file of event.target.files) {
-  //     if (this.fileInfoList.some(item => item.filename === file.name)) continue
-  //     let fileinfo: FileInfo = { filename: file.name };
-  //     if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
-  //       fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-  //       fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
-  //       this.attachmentsHasErrors = true;
-  //     } else {
-  //       this.fileList.push(file);
-  //     }
-  //     this.fileInfoList.push(fileinfo);
-  //     console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
-  //     console.log('filelist:');
-  //     console.dir(this.fileList);
-  //   }
-  // }
+/*   public onFileChanged(event: any) {
+    const MEGABYTE = 1000000;
+    for (let file of event.target.files) {
+      if (this.fileInfoList.some(item => item.filename === file.name)) continue
+      let fileinfo: FileInfo = { filename: file.name };
+      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
+        fileinfo.error = $localize `:@@Liian iso:Liian iso`;
+        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
+        Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+        this.attachmentsHasErrors = true;
+      } else {
+        this.fileList.push(file);
+      }
+      this.fileInfoList.push(fileinfo);
+      console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
+      console.log('filelist:');
+      console.dir(this.fileList);
+    }
+  } */
 
   // public removeSelectedFile(index: number) {
   //   this.fileList.splice(index, 1);
@@ -145,98 +147,51 @@ export class SubmitFaqComponent implements OnInit {
 
     this.ticketService.addFaq(id, newFaq, this.editExisting)
       .then(response => {
-        console.log(' saatiin response: ' + JSON.stringify(response));
         if (this.attachments.fileInfoList.length === 0) this.goBack()
         if (response?.success !== true) {
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+              Kysymyksen lähettäminen epäonnistui` + '.'
           throw new Error('Kysymyksen lähettäminen epäonnistui.');
         }
         if (response == null || response?.uusi == null) {
           this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
           throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-        }
+        }        
         response = response as AddTicketResponse;
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
-        this.state = 'sending';
-        this.attachments.sendFilesPromise(ticketID, commentID).
-          then((res) => {
-            console.log('komponentti: saatiin vastaus: ');
-            console.dir(res);
-            this.goBack();
-          })
-          .catch((res: any) => {
-            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-            console.log('submit-ticket: saatiin virhe: ' + res);
-          })
-          .finally(() => {
-            console.log('Komponentti: Kaikki valmiita!');
-            this.state = 'done';
-            // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-            // this.attachments.clear();
-          })
-        if (false) {
-          this.attachments.sendFiles(ticketID, commentID).subscribe({
-            next: (res) => {
-              console.log('komponentti: saatiin vastaus: ' + res);
-            },
-            error: (error) => {
-              console.log('komponentti: saatiin virhe: ' + error);
-              this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut.`;
-              this.state = 'done';
-            },
-            complete: () => {
-              console.log('Komponentti: Kaikki valmiita!');
-              this.state = 'done';
-              this.fileInfoList = [];
-              this.attachments.clear();
-              this.goBack();
-            },
-          })
-        }
-        // this.attachments.sendFiles(ticketID, commentID).then(response => {
-        //   this.state = "editing";
-        //   this.goBack();
-        // })
+        this.sendfiles(ticketID, commentID);
       })
-      .catch( (error: Error) => {
+      .catch((error: Error) => {
         this.state = 'done';
         console.log(error);
         if (error?.tunnus == 1003) {
-          this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+          this.errorMessage = $localize`:@@Ei oikeuksia:Sinulla ei ole riittäviä
+              käyttäjäoikeuksia` + '.';
         } else {
-          this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+          this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
+              Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
         }
       });
-    // this.ticketService.sendFaq(id, newFaq, this.fileList, this.editExisting)
-    //   .then(() => { this.goBack() })
-    //   .catch( (error: Error) => {
-    //     if (error?.tunnus == 1003) {
-    //       this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
-    //     } else {
-    //       this.errorMessage = $localize `:@@UKK lisääminen epäonnistui:Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
-    //     }
-    //   });
   }
 
-  // public sendFiles(ticketID: string, commentID: string) {
-  //   return new Promise((resolve, reject) => {
-  //     console.log('edit-attachments: ticketID: ' + ticketID + ' commentID: ' + commentID);
-  //     for (let [index, file] of this.fileList.entries()) {
-  //       try {
-  //         this.ticketService.uploadFile(ticketID, commentID, file).subscribe(progress => {
-  //           if (progress > 0 && this.fileInfoList[index]) this.fileInfoList[index].progress = progress;
-  //           console.log('index: ' + index + '  progress: ' + progress);
-  //           if (progress === 100) {
-  //             if (this.fileInfoList.every(file => file.progress === 100)) resolve(true);
-  //           }
-  //         })
-  //       } catch (error: any) {
-  //         this.attachmentsHasErrors = true;
-  //         reject(false);
-  //       }
-  //     }
-  //   });
-  // }
+  private sendfiles(ticketID: string, commentID:string) {
+    this.state = 'sending';
+    this.attachments.sendFilesPromise(ticketID, commentID).
+      then(res => {
+        console.log('komponentti: saatiin vastaus: ');
+        console.dir(res);
+        this.goBack();
+      })
+      .catch((res: any) => {
+        this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen
+            ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+        console.log('submit-ticket: saatiin virhe: ' + res);
+      })
+      .finally(() => {
+        console.log('Komponentti: Kaikki valmiita!');
+        this.state = 'done';
+      })
+  }
 
 }
