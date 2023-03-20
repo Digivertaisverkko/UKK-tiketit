@@ -10,13 +10,14 @@ html { font-family: $textFont }
 
 body { line-height: 1.45; margin: 0 }
 
-.theme-footer { background-color: mat.get-color-from-palette($custom-primary-palette, 500); }
+.theme-footer {
+  background-color: mat.get-color-from-palette($custom-primary-palette, 500);
+}
 
 .theme-header-text, .theme-header-text-small, .main-header, .sub-header {
   font-family: $displayFont;
 }
 
-// FIXME: Jos tässä määritelee font-weightin, niin ei tee mitään. On nyt määritelty templateissa.
 // Käytetään headerin käyttäjän nimessä.
 .theme-header-text {
   font-weight: 700;
@@ -32,8 +33,9 @@ body { line-height: 1.45; margin: 0 }
 // Jos haluat divejä näkyviin.
 $debug: false;
 
-// Yläotsikko, jossa punainen viiva. Käytetään esim: <h2 class="main-header"><span>Otsikko</span</h2>
-// Vaatii <span> elementit.
+/* Yläotsikko, jossa punainen viiva. Käytetään esim:
+  <h2 class="main-header"><span>Otsikko</span</h2>
+*/
 .main-header  {
   // font-family: mat.font-family($custom-typography-config, 'headline-3');
   font-size: 2.5rem;
@@ -129,7 +131,8 @@ mat-hint {
 // Testaamiseen jos haluaa osan block-elementeistä näkyviin.
 $debug: false;
 
-// käytetään ticket-view ja submit-ticket -komponenteissa tiketin otsakkeessa. Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni.
+/* käytetään ticket-view ja submit-ticket -komponenteissa tiketin otsakkeessa.
+Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
 .ticket-header {
   display: flex;
   align-items: flex-center;
@@ -142,7 +145,8 @@ $debug: false;
     align-self: flex-start;
     flex-shrink: 0;
     gap: inherit;
-    margin-top: 1.3rem;   // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    // H2 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+    margin-top: 1.3rem;
     // height: 100%;
     .text-info {        // Käyttäjätiedot
       @if $debug { border: 1px solid gray; }

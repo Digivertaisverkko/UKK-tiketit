@@ -92,10 +92,15 @@
     <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer"></app-editor>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message" i18n="@@UKK lähettäminen onnistui">Uuden usein kysytyn kysymyksen lähettäminen onnistui.</p>
+    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message"
+      i18n="@@UKK lähettäminen onnistui">
+      Uuden usein kysytyn kysymyksen lähettäminen onnistui.
+    </p>
 
-    <p class='attachments-message' *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
-      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
+    <p class='attachments-message' *ngIf="state==='sending'"
+      i18n="@@Lähetetään liitetiedostoja">
+      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
+    </p>
 
     <app-error-card i18n-title="@@Virhe"
       message="{{ errorMessage }}"
@@ -131,7 +136,8 @@
               *ngIf="state==='editing'"
               (click)="sendFaq()"
               color="primary"
-              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0 || attachmentsMessages === 'faulty'"
+              [disabled]="submitForm.invalid || this.faqMessage.length === 0 ||
+                this.faqAnswer.length === 0 || attachmentsMessages === 'faulty'"
               i18n="@@Julkaise"
               mat-raised-button
               >
@@ -139,11 +145,11 @@
       </button>
 
       <button class="submit-button"
-        *ngIf="state==='done'"
-        (click)="goBack()"
-        color="primary"
-        mat-raised-button>
-        OK
+              *ngIf="state==='done'"
+              (click)="goBack()"
+              color="primary"
+              mat-raised-button>
+              OK
       </button>
 
     </div>
@@ -174,16 +180,12 @@
     <!-- (fileListOutput)="fileList = $event" -->
 
     <!-- Ylläoleva lapsikomponenttina -->
-    <app-edit-attachments
-
-      [uploadClicks]="uploadClick.asObservable()"
-      >
+    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()">
     </app-edit-attachments>
-
 
   </form>
 
-  <!-------------- Alkuperäinen kysymys ----------------------------------------->
+<!--------------- Alkuperäinen kysymys ---------------------------------------->
 
   <ng-container *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
