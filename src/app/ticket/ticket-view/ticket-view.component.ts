@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, Input, OnDestroy, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
@@ -33,7 +33,7 @@ export class TicketViewComponent implements OnInit {
   public uploadClick: Subject<string> = new Subject<string>();
   public attachFilesText: string = '';
 
-  public cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.';
+  public cantRemoveTicket: string;
   public commentText: string;
   public courseName: string = '';
   public errorMessage: string = '';
@@ -53,7 +53,7 @@ export class TicketViewComponent implements OnInit {
   public userRole: string = '';
   private userName: string = '';
   private courseID: string | null;
-  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;   // Ticket info polling rate in minutes.
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private readonly CURRENT_DATE = new Date().toDateString();
 
   constructor(
@@ -72,6 +72,8 @@ export class TicketViewComponent implements OnInit {
     this.ticketID = this.ticketIdFromParent !== null
       ? this.ticketIdFromParent
       : String(this.route.snapshot.paramMap.get('id'));
+    this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
+        Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
   }
 
   ngOnInit(): void {
@@ -118,10 +120,12 @@ export class TicketViewComponent implements OnInit {
         error: error => {
           switch (error.tunnus) {
             case 1003:
-              this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+              this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:
+                  Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
               break;
             default:
-              this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:Kysymyksen näyttäminen epäonnistui`;
+              this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:
+                  Kysymyksen näyttäminen epäonnistui`;
           }
           this.isLoaded = true;
         }
@@ -136,15 +140,18 @@ export class TicketViewComponent implements OnInit {
   public removeTicket() {
     this.ticketService.removeTicket(this.ticketID).then(response => {
       if (response === false ) {
-        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:Kysymyksen poistaminen ei onnistunut.`;
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
+            Kysymyksen poistaminen ei onnistunut.`;
       } else {
         this.router.navigateByUrl('/course/' + this.courseID + '/list-tickets');
       }
     }).catch(error => {
       if (error?.tunnus == 1003) {
-        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä
+            käyttäjäoikeuksia` + '.';
       } else {
-        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:Kysymyksen poistaminen ei onnistunut.`;
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
+            Kysymyksen poistaminen ei onnistunut.`;
       }
     })
   }
@@ -156,10 +163,11 @@ export class TicketViewComponent implements OnInit {
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
-      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
+      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia
+          käyttäjäoikeuksia` + '.';
     }
     this.attachments.clear();
-    this.router.navigateByUrl('/course/' + this.courseID + '/submit-faq/' + this.ticketID);
+    this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
   }
 
   public getSenderTitle(name: string, role: string): string {
@@ -187,13 +195,6 @@ export class TicketViewComponent implements OnInit {
     return dateString == this.CURRENT_DATE ? true : false
   }
 
-  // private trackUserRole() {
-  //   this.auth.onGetUserRole().subscribe(response => {
-  //     // console.log('saatiin rooli: ' + response);
-  //     this.userRole = response;
-  //   })
-  // }
-
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila);
   }
@@ -202,75 +203,49 @@ export class TicketViewComponent implements OnInit {
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
     .then(response => {
       if (response == null || response?.success !== true) {
-        this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+        this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
+            Kommentin lisääminen tikettiin epäonnistui.`;
         throw new Error('Kommentin lähettäminen epäonnistui.');
       }
       if (this.fileInfoList.length === 0) {
-          this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-          this.state = 'editing';
-          return
+        this.ticketService.getTicketInfo(this.ticketID).then(response => {
+          this.ticket = response
+        });
+        this.state = 'editing';
+        return
       }
       response = response as NewCommentResponse;
       const commentID = response.kommentti;
-      this.state = 'sending';
-      // this.attachments.sendFiles(this.ticketID, commentID).subscribe({
-        this.attachments.sendFilesPromise(this.ticketID, commentID)
-          .then((res:any) => {
-            console.log('ticket view: vastaus: ' + res);
-          })
-          .catch((res:any) => {
-            console.log('ticket view: napattiin virhe: ' + res);
-            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-          })
-          .finally(() => {
-            console.log('kaikki valmista');
-            this.state = 'done';
-            this.fileInfoList = [];
-            this.attachments.clear();
-            this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-            this.state = 'editing';
-          })
-
-        if (false) {
-          this.attachments.sendFiles(this.ticketID, commentID).subscribe({
-          next: (res) => {
-            console.log('komponentti: saatiin vastaus (alla): ');
-            console.dir(res);
-          },
-          error: (error) => {
-            console.log('komponentti: saatiin virhe: ' + error);
-            this.state = 'editing';
-            this.errorMessage = $localize `@@:Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-          },
-          complete: () => {
-            console.log('Komponentti: Kaikki valmiita!');
-            this.state = 'done';
-            this.fileInfoList = [];
-            this.attachments.clear();
-            this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
-            this.state = 'editing';
-          },
-        })
-        }
-      // }).catch(() => {
-      //   this.state = 'done';
-      //   this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
-      //   return false
-      // }).finally(() => {
-      //   this.fileList = [];
-      //   this.attachments.clear();
-      //   return true
-      // })
+      this.sendFiles(this.ticketID, commentID);
     }).catch(error => {
-      this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
+      this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
+          Kommentin lisääminen tikettiin epäonnistui.`;
     }).finally(() => {
       this.commentText = '';
     })
   }
 
-  // public goSubmitFaqWithId(): void {
-  //   let url:string = '/submit-faq/' + this.ticketID;
-  //   console.log('submit-faq: url: ' + url);
-  //   this.router.navigateByUrl(url);
-  // }
+  private sendFiles(ticketID: string, commentID: string) {
+    this.state = 'sending';
+    this.attachments.sendFilesPromise(ticketID, commentID)
+      .then((res:any) => {
+        console.log('ticket view: vastaus: ' + res);
+      })
+      .catch((res:any) => {
+        console.log('ticket view: napattiin virhe: ' + res);
+        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
+            ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+      })
+      .finally(() => {
+        console.log('kaikki valmista');
+        this.state = 'done';
+        this.fileInfoList = [];
+        this.attachments.clear();
+        this.ticketService.getTicketInfo(this.ticketID).then(response => {
+          this.ticket = response;
+        });
+        this.state = 'editing';
+      })
+  }
+
 }
