@@ -105,10 +105,15 @@
     </app-editor>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message" i18n="@@Uuden kysymyksen lähettäminen onnistui">Uuden kysymyksen lähettäminen onnistui.</p>
-    
-    <p class='attachments-message' *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
-      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
+    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message"
+        i18n="@@Uuden kysymyksen lähettäminen onnistui">
+            Uuden kysymyksen lähettäminen onnistui.
+    </p>
+
+    <p class='attachments-message' *ngIf="state==='sending'"
+        i18n="@@Lähetetään liitetiedostoja">
+          Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
+    </p>
 
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
@@ -154,10 +159,8 @@
 
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments
-
       [uploadClicks]="uploadClick.asObservable()"
-      (attachmentsMessages)="attachmentsMessages = $event"
-    >
+      (attachmentsMessages)="attachmentsMessages = $event">
     </app-edit-attachments>
 
   </form>

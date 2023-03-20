@@ -113,7 +113,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
+        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa
+            ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
@@ -159,7 +160,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
-          this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana tällä kurssilla` + '.';
+          this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana
+            tällä kurssilla` + '.';
         } else {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
@@ -185,9 +187,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private pollTickets(courseID: string) {
     const MILLISECONDS_IN_MIN = 60000;
-    timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe(() => {
-      this.fetchTickets(courseID);
-    });
+    timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+      .subscribe(() => this.fetchTickets(courseID));
   }
 
   private fetchTickets(courseID: string) {
@@ -237,11 +238,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     // let userRole = this.authService.getUserRole();
     switch (this.user.asema) {
       case 'opettaja':
-        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
+        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+        break;
       case 'admin':
-        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`; break;
+        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+        break;
       case 'opiskelija':
-        this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`; break;
+        this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`;
+        break;
       default:
         this.headline = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
     }

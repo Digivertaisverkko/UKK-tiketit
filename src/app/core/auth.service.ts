@@ -54,7 +54,8 @@ export class AuthService {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
       console.log('Session ID on tallennettuna.');
-      // TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saadaa palvelimelta hyväksytty vastaus?
+      /* TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saada
+      palvelimelta hyväksytty vastaus? */
       this.setLoggedIn();
     }
   }
@@ -94,7 +95,8 @@ export class AuthService {
 
   // private trackCourseID() {
   //   this.courseID$.subscribe(courseID => {
-  //     console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '. Session id on ' + this.getSessionID());
+  //     console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '.
+  //        Session id on ' + this.getSessionID());
   //     if (this.getSessionID() !== null && courseID.length > 0 ) {
   //       this.fetchUserInfo(courseID).then( response => {
   //         this.setLoggedIn();
@@ -285,14 +287,16 @@ export class AuthService {
   }
 
   public async handleNotLoggedIn() {
-    console.log('authService.handleNotLoggedIn(): et ole kirjaunut, ohjataan kirjautumiseen.');
+    console.log('authService.handleNotLoggedIn(): et ole kirjaunut,' +
+          'ohjataan kirjautumiseen.');
     this.setNotLoggegIn();
     window.localStorage.clear();
     const loginUrl = await this.sendAskLoginRequest('own');
     // console.log('Tallennettiin redirect URL: ' + window.location.pathname);
     const currentRoute = window.location.pathname + window.location.search;
     if (currentRoute.startsWith('/login') == false) {
-      window.localStorage.setItem('REDIRECT_URL', window.location.pathname + window.location.search);
+      window.localStorage.setItem('REDIRECT_URL', window.location.pathname +
+        window.location.search);
     }
     this.router.navigateByUrl(loginUrl);
   }
@@ -322,7 +326,8 @@ export class AuthService {
     return (response?.success === true) ? true : false;
   }
 
-  // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin käytettäviksi.
+  // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
+  // käytettäviksi.
   public async fetchUserInfo(courseID: string) {
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
@@ -336,7 +341,8 @@ export class AuthService {
     }
     let response: any;
     try {
-      // ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko joka paikassa odottaa observablen arvoa?
+      /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
+      joka paikassa odottaa observablen arvoa? */
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
       response = await firstValueFrom<User>(this.http.get<any>(url));
     } catch (error: any) {
@@ -391,7 +397,8 @@ export class AuthService {
     };
     let response: any;
     try {
-      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      response = await firstValueFrom(this.http.post<{'login-url': string}>
+          (url, null, httpOptions));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -403,7 +410,8 @@ export class AuthService {
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
-  public async sendLoginRequest(email: string, password: string, loginID: string): Promise<LoginResult> {
+  public async sendLoginRequest(email: string, password: string, loginID: string):
+    Promise<LoginResult> {
     const httpOptions =  {
       headers: new HttpHeaders({
         'ktunnus': email,
@@ -414,7 +422,9 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
-      response = await firstValueFrom(this.http.post<LoginResponse>(url, null, httpOptions));
+      response = await firstValueFrom(
+        this.http.post<LoginResponse>(url, null, httpOptions)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -428,7 +438,8 @@ export class AuthService {
   }
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
-  private async sendAuthRequest(codeVerifier: string, loginCode: string): Promise<LoginResult> {
+  private async sendAuthRequest(codeVerifier: string, loginCode: string):
+      Promise<LoginResult> {
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': 'own',
@@ -439,7 +450,9 @@ export class AuthService {
     const url = environment.apiBaseUrl + '/authtoken';
     let response: any;
     try {
-      response = await firstValueFrom(this.http.get<AuthRequestResponse>(url, httpOptions));
+      response = await firstValueFrom(
+        this.http.get<AuthRequestResponse>(url, httpOptions)
+      );
     } catch (error: any) {
       this.handleError(error);
     }
@@ -477,9 +490,10 @@ export class AuthService {
     return url.protocol === "http:" || url.protocol === "https:";
   }
 
-  // Lähetä muotoiltuvirheilmoitus consoleen, puutu ylemmän tason virheisiin kuten jos ei olle kirjautuneita.
-  // Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
-
+  /*  Lähetä muotoiltuvirheilmoitus consoleen, puutu ylemmän tason virheisiin
+      kuten jos ei olle kirjautuneita.
+      Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
+  */
   // Suorita uloskirjautuminen.
   public async logOut(): Promise<any> {
     const sessionID = this.getSessionID();
@@ -493,7 +507,8 @@ export class AuthService {
       let url = environment.apiBaseUrl + '/kirjaudu-ulos';
       try {
         console.log('Lähetettäisiin logout-kutsu, mutta ei ole tukea sille vielä.');
-        // response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+        // response = await firstValueFrom(this.http.post<{'login-url': string}>
+       // (url, null, httpOptions));
       } catch (error: any) {
         this.handleError(error);
       } finally {
@@ -503,7 +518,8 @@ export class AuthService {
     }
   }
 
-  // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan virheen käsittelyä.
+  // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
+  // virheen käsittelyä.
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
         console.log('Virhe, et ole kirjautunut. Ohjataan kirjautumiseen.');
