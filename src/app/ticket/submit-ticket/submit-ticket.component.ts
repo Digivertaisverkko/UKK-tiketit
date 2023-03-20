@@ -3,7 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { KentanTiedot, TicketService, Tiketti, UusiTiketti, AddTicketResponse } from 'src/app/ticket/ticket.service';
+import { KentanTiedot, TicketService, UusiTiketti, AddTicketResponse
+        } from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
@@ -93,6 +94,17 @@ export class SubmitTicketComponent implements OnInit {
     this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
   }
 
+  // public focusNext(nextInput: ElementRef) {
+  //   nextInput.nativeElement.focus()
+  // }
+
+  public focusNext() {
+    // element.dispatchEvent(new KeyboardEvent('keydown', {altKey: true}))
+/*     var form = event.target.closest('form');
+    var index = Array.prototype.indexOf.call(form, event.target);
+    form.elements[index + 1].focus(); */
+  }
+
   public sendTicket(): void {
     let ticket: UusiTiketti = {} as UusiTiketti;
     ticket.otsikko = this.title;
@@ -105,71 +117,63 @@ export class SubmitTicketComponent implements OnInit {
       this.ticketService.editTicket(this.ticketId, ticket)
         .then( () => this.goBack()
         ).catch(error => {
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+              Kysymyksen lähettäminen epäonnistui` + '.'
         })
     } else {
-    this.ticketService.addOnlyTicket(this.courseId, ticket)
-      .then(response => {
-        if (this.attachments.fileInfoList.length === 0) this.goBack()
-        if (response == null || response?.success !== true) {
-          this.state = 'editing';
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
-          throw new Error('Kysymyksen lähettäminen epäonnistui.');
-        }
-        if (response?.uusi == null) {
-          this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
-          throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-        }
-        response = response as AddTicketResponse;
-        const ticketID = response.uusi.tiketti;
-        const commentID = response.uusi.kommentti;
-        this.state = 'sending';
-        // this.attachments.sendFiles(ticketID, commentID).subscribe(response => {
-        //   this.state = "done";
-        //   console.log(response);
-        //   console.dir(response);
-        //   console.log(typeof response);
-        // })
-        this.attachments.sendFilesPromise(ticketID, commentID).
-          then((res) => {
-            console.log('komponentti: saatiin vastaus: ');
-            console.dir(res);
-            this.goBack();
-          })
-          .catch((res: any) => {
-            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-            console.log('submit-ticket: saatiin virhe: ' + res);
-          })
-          .finally(() => {
-            console.log('Komponentti: Kaikki valmiita!');
-            this.state = 'done';
-            // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-            // this.attachments.clear();
-          })
-        // this.attachments.sendFiles(ticketID, commentID).then(response => {
-        //   this.state = "done";
-        //   if (response === true) {
-        //     console.log('Kaikkien tiedostojen lähetys onnistui.');
-        //   // this.goBack();
-        //   } else {
-        //     console.log('Kaikkien tiedostojen lähetys ei onnistunut.');
-        //   }
-
-        // }).catch(error => {
-        //   this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
-        // })
+      this.ticketService.addTicket(this.courseId, ticket)
+        .then(response => {
+          if (this.attachments.fileInfoList.length === 0) this.goBack()
+          if (response == null || response?.success !== true) {
+            this.state = 'editing';
+            this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+                Kysymyksen lähettäminen epäonnistui` + '.'
+            throw new Error('Kysymyksen lähettäminen epäonnistui.');
+          }
+          if (response?.uusi == null) {
+            this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+            throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+          }
+          response = response as AddTicketResponse;
+          const ticketID = response.uusi.tiketti;
+          const commentID = response.uusi.kommentti;
+          this.sendFiles(ticketID, commentID);
       }).catch( error => {
         // ? lisää eri virhekoodeja?
         this.state = 'done';
-        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+            Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
-    //   this.ticketService.addTicket(this.courseId, ticket, this.fileList)
-    //   .then(() => this.goBack()
-    //   ).catch( error => {
-    //     // ? lisää eri virhekoodeja?
-    //     this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
-    //   });
-    // }
+/*       this.ticketService.addTicket(this.courseId, ticket, this.fileList)
+      .then(() => this.goBack()
+      ).catch( error => {
+        // ? lisää eri virhekoodeja?
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+        Kysymyksen lähettäminen epäonnistui` + '.'
+      });
+    } */
+
+  }
+
+  private sendFiles(ticketID: string, commentID: string) {
+    this.state = 'sending';
+    this.attachments.sendFilesPromise(ticketID, commentID).
+    then((res) => {
+      console.log('komponentti: saatiin vastaus: ');
+      console.dir(res);
+      this.goBack();
+    })
+    .catch((res: any) => {
+      this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
+          ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+      console.log('submit-ticket: saatiin virhe: ' + res);
+    })
+    .finally(() => {
+      console.log('Komponentti: Kaikki valmiita!');
+      this.state = 'done';
+      // Kommentoi alla olevat, jos haluat, että jää näkyviin.
+      // this.attachments.clear();
+    })
   }
 }
