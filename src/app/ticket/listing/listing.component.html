@@ -68,8 +68,7 @@
     <ng-container matColumnDef="otsikko">
       <th mat-header-cell *matHeaderCellDef mat-sort-header
           i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-          sortActionDescription="Järjestä otsikon mukaan"
-      >
+          sortActionDescription="Järjestä otsikon mukaan">
         Otsikko
       </th>
       <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
@@ -127,10 +126,17 @@
 
   </section>
 
-  <div class="theme-actions" *ngIf="isParticipant" [ngStyle]="numberOfQuestions === 0 ?
+  <div class="theme-actions" *ngIf="isParticipant"
+      [ngStyle]="numberOfQuestions === 0 ?
       {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-    <button mat-raised-button color="primary" class="button" (click)="submit()"
-      i18n="@@Kysy opettajilta">Kysy opettajilta</button>
+    <button
+        (click)="saveRedirectUrl()"
+        mat-raised-button color="primary" class="button"
+        i18n="@@Kysy opettajilta">
+      <a [routerLink]="'/course/' + this.courseID + '/submit'">
+        Kysy opettajilta
+      </a>
+    </button>
   </div>
 
 
@@ -176,7 +182,8 @@
       Päivämäärä
     </th>
     <td class="cell-align-right" mat-cell *matCellDef="let element">
-      <a [routerLink]="'/course/' + courseID + '/faq-view/' + element.id" class="cell-align-right">
+      <a class="cell-align-right"
+        [routerLink]="'/course/' + courseID + '/faq-view/' + element.id">
         {{element.aikaleima | date: 'shortDate'}}
       </a>
     </td>
@@ -202,9 +209,17 @@
 </section>
 
 <div class="theme-actions" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
-[ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-  <button mat-raised-button color="primary" justify-content="flex-end" (click)="submit('-faq')"
-    i18n="@@Uusi UKK">Uusi UKK</button>
+    [ngStyle]="numberOfFAQ === 0 ?
+        {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+  <button (click)="saveRedirectUrl('-faq')" 
+          color="primary"
+          i18n="@@Uusi UKK"
+          justify-content="flex-end"
+          mat-raised-button>
+    <a [routerLink]="'/course/' + this.courseID + '/submit-faq'">
+      Uusi UKK
+    </a>
+  </button>
 </div>
 
 <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"

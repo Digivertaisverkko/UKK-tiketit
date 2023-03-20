@@ -58,7 +58,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public courseID: string = '';
   // Ticket info polling rate in minutes.
-  private readonly TICKET_POLLING_RATE_MIN = (environment.production == true ) ? 1 : 15;
+  private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
 
   // Merkkijonot
@@ -267,12 +267,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       .map(cd => cd.def);
   }
 
-  public submit(linkEnding?: string) {
+  // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
+  public saveRedirectUrl(linkEnding?: string): void {
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     if (this.authService.getIsUserLoggedIn() === false) {
+      console.log('tallennettu URL: ' + link);
       window.localStorage.setItem('REDIRECT_URL', link);
     }
-    this.router.navigateByUrl(link);
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.
