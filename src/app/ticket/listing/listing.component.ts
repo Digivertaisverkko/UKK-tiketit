@@ -27,7 +27,8 @@ export interface ColumnDefinition {
 }
 
 enum IconFile {
-  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64", "Arkistoitu"
+  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
+  "Arkistoitu"
 }
 
 @Component({
@@ -154,7 +155,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ticket.getMyCourses().then(response => {
       if (response[0].kurssi !== undefined) {
         const myCourses: Kurssini[] = response;
-        // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: ' + courseIDcandinate);
+        // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: 
+        //  + courseIDcandinate);
         // Onko käyttäjä URL parametrilla saadulla kurssilla.
         // Ei tarvitse olla enää osallistujana.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
@@ -238,10 +240,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     // let userRole = this.authService.getUserRole();
     switch (this.user.asema) {
       case 'opettaja':
-        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla
+            esitetyt kysymykset`;
         break;
       case 'admin':
-        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla
+            esitetyt kysymykset`;
         break;
       case 'opiskelija':
         this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`;
