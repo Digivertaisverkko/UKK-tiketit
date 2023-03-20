@@ -42,6 +42,7 @@
         <mat-form-field appearance="fill">
           <mat-label>{{ kentta.otsikko }}</mat-label>
           <input  [disabled]="state==='sending'"
+                  (keydown.enter)="$event.preventDefault()"
                   [matAutocomplete]="auto"
                   matInput
                   maxlength="50"

@@ -40,8 +40,7 @@
         <div class="text-info">
           <span class="theme-profile-name">{{ userName }}</span>
           <div class="theme-label">
-            <span i18n="@@Minä">Minä</span>
-            -
+            <span i18n="@@Minä">Minä</span>-
             <span i18n="@@Tänään">Tänään </span>
             <span>{{ currentDate | date: 'shortTime' }}</span>
           </div>
@@ -64,6 +63,7 @@
                   [(ngModel)]="ticketFields[i].arvo"
                   placeholder=""
                   [required]="kentta.pakollinen"
+                  (keydown.enter)="$event.preventDefault()"
                   >
 
           <mat-icon matSuffix
@@ -124,12 +124,13 @@
 
     <div class="theme-actions">
 
-      <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
+<!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next('add')"
               *ngIf="!editExisting"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
-              mat-raised-button>
+              mat-raised-button
+              >
         <mat-icon>attach_file</mat-icon>
         Liitä tiedostoja
       </button>
@@ -147,11 +148,11 @@
       </button>
 
       <button class="submit-button"
-        *ngIf="state==='done'"
-        (click)="goBack()"
-        color="primary"
-        [disabled]="submitForm.invalid"
-        mat-raised-button>
+              *ngIf="state==='done'"
+              (click)="goBack()"
+              color="primary"
+              [disabled]="submitForm.invalid"
+              mat-raised-button>
         OK
       </button>
 
