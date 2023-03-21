@@ -33,21 +33,20 @@ export class AuthService {
               private router: Router,
               private route: ActivatedRoute,
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
+    
   }
 
   public initialize() {
     this.checkIfSessionIDinStorage();
     this.checkIfSessionIdInURL();
     this.updateUserInfo()
-    // this.trackRouteParameters();
-    // this.trackCourseID();
   }
 
   private checkIfSessionIDinStorage() {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
       console.log('Session ID on tallennettuna.');
-      /* TODO Muuta myöhemmin, että asetetaan kirjautuneeksi vasta, kun saada
+      /* ? Muuta, että asetetaan kirjautuneeksi vasta, kun saada
       palvelimelta hyväksytty vastaus? */
       this.setLoggedIn();
     }
@@ -66,7 +65,7 @@ export class AuthService {
   private updateUserInfo() {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
-        let courseID = event.snapshot.paramMap.get('courseid');
+        const courseID = event.snapshot.paramMap.get('courseid');
         if (courseID !== undefined && courseID !== null) {
           // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
           this.setCourseID(courseID);
@@ -76,13 +75,6 @@ export class AuthService {
           }
         }
       }
-      // } else if (event instanceof GuardsCheckStart) {
-      // if (this.isUserLoggedIn$.value === true && this.courseID$.value !== null) {
-      //   if (window.localStorage.getItem('SESSION_ID') !== undefined && this.courseID !== null) {
-      //   console.log('-- updateUserInfo 2: haetaan käyttäjätiedot: kurssi id: ' + this.courseID);
-      //   this.fetchUserInfo(this.courseID);
-      // }
-      // }
     });
   }
 
@@ -289,18 +281,45 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response == null || response?.id == null) {
-      console.log('fetchUserInfo: Et ole kirjautunut.');
-      this.setNotLoggegIn();
-      return
+    let newUserInfo: any;
+    if (response != null && response?.id != null)  {
+      newUserInfo = response;
+    } else {
+      console.log('saatiin vastaus null');
+      // Tarkistetaan, onko kirjautuneena eri kurssille.
+      const response = await this.fetchVisitorInfo();
+      if (response?.nimi != null) {
+        console.log('fetchUserInfo: olet kirjautunut eri kurssille');
+        newUserInfo = response ;
+        newUserInfo.asema = '';
+      } else {
+        this.setNotLoggegIn();
+        return
+      }
     }
-    if (response === this.user$.value) {
+    if (newUserInfo === this.user$.value) {
       console.log('fetchUserInfo: Jatketaan samalla käyttäjällä.');
       return
     }
     console.log('fetchUserInfo: Asetetaan uusi userinfo.');
     this.setLoggedIn();
-    this.user$.next(response);
+    this.user$.next(newUserInfo);
+  }
+
+  // Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
+  // kirjautunut, mutta ei näkymän kurssille.
+  private async fetchVisitorInfo(): Promise<{nimi: string, sposti: string | null}> {
+    let response: any;
+    try {
+      /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
+      joka paikassa odottaa observablen arvoa? */
+      const url = `${environment.apiBaseUrl}/minun`;
+      console.log('fetchVisitorInfo: koitetaan hakea tiedot');
+      response = await firstValueFrom<any>(this.http.get<any>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
@@ -470,9 +489,9 @@ export interface AuthRequestResponse {
   error: string,
   'session-id': string
 }
-
+// Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
 export interface User {
-  id: number,
+  id?: number,
   nimi: string,
   sposti: string,
   asema: 'opettaja' | 'opiskelija' | 'admin' | ''
