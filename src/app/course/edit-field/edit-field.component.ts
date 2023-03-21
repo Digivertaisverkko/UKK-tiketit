@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid} from '@angular/material/chips';
+import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }from '@angular/material/chips';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -99,12 +99,15 @@ export class EditFieldComponent implements OnInit {
           }
         });
         if (fieldID != null) {
-          let matchingField = response.filter((field: KentanTiedot) => String(field.id) == fieldID);
+          let matchingField = response.filter((field: KentanTiedot) => {
+            String(field.id) == fieldID
+          });
           if (matchingField == null) {
             console.error('Virhe: ei oikeutta kentän tietoihin.');
           } else {
             this.field = matchingField[0];
-             // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden alkion "", mitä ei haluta.
+             // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
+             // alkion "", mitä ei haluta.
             if (this.field.valinnat[0].length === 0) {
               this.field.valinnat = [];
               this.multipleSelection = false;
@@ -116,7 +119,8 @@ export class EditFieldComponent implements OnInit {
         console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
       }
     }).catch(error => {
-      this.errorMessage = $localize `@@Lisäkentän tietojen haku epäonnistui:Lisäkentän tietojen haku epäonnistui` + '.';
+      this.errorMessage = $localize `@@Lisäkentän tietojen haku epäonnistui:
+          Lisäkentän tietojen haku epäonnistui` + '.';
     })
   }
 
@@ -137,11 +141,13 @@ export class EditFieldComponent implements OnInit {
       } else {
         this.allFields.splice(index, 1, this.field)
       }
-      // this.allFields = this.allFields.filter(field => field.id !== this.fieldID);
+    // this.allFields = this.allFields.filter(field => field.id !== this.fieldID);
     }
-    this.ticketService.setTicketFieldInfo(this.courseID, this.allFields).then(response => {
+    this.ticketService.setTicketFieldInfo(this.courseID, this.allFields)
+    .then(response => {
       if (response === true ) {
-        this.router.navigate(['/course/' + this.courseID + '/settings'], { state: { delayFetching: 'true' } });
+        this.router.navigate(['/course/' + this.courseID + '/settings'],
+            { state: { delayFetching: 'true' } });
       } else {
         console.log('Tikettipohjan muuttaminen epäonnistui.');
       }
