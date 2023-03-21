@@ -178,23 +178,11 @@ export class TicketService {
   public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
-/*     console.log("Tiedosto:");
+/*  console.log("Tiedosto:");
     console.dir(file);
     console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name); */
     const progress = new Subject<number>();
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-
-    // const req = new HttpRequest('POST', url, formData,
-    // { reportProgress: true, observe: 'events' });
-
-/*     let post;
-    if (this.getRandomInt(1,2) === 2) {
-      post = this.testPost;
-      console.log('pitäisi feilata');
-    } else {
-      post = this.http.post;
-      console.log('pitäisi onnistua');
-    } */
     // Virheiden testaukseen vaihda http.post -> fakeHttpPost
     this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
       .subscribe({
@@ -424,7 +412,8 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
-      response = await firstValueFrom(this.http.get<Tiketti>(url));
+      //  response = await firstValueFrom(this.http.get<Tiketti>(url));
+      throw new Error
     } catch (error: any) {
       this.handleError(error);
     }
@@ -451,8 +440,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // if (Object.keys(response).length === 0) {
-    // }
     let comments: Kommentti[];
     comments = this.arrangeComments(response);
     return comments
