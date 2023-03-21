@@ -3,8 +3,6 @@ import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit
 import { forkJoin, Observable, pipe, map, tap, catchError, of, throwError } from 'rxjs';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { TicketService } from '../../ticket.service';
-import { throwToolbarMixedModesError } from '@angular/material/toolbar';
-import { Resolve } from '@angular/router';
 
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError lähetysvaiheessa.

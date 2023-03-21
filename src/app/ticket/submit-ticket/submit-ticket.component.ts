@@ -145,7 +145,7 @@ export class SubmitTicketComponent implements OnInit {
             Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
-/*       this.ticketService.addTicket(this.courseId, ticket, this.fileList)
+/*      this.ticketService.addTicket(this.courseId, ticket, this.fileList)
       .then(() => this.goBack()
       ).catch( error => {
         // ? lisää eri virhekoodeja?
@@ -176,4 +176,5 @@ export class SubmitTicketComponent implements OnInit {
       // this.attachments.clear();
     })
   }
+
 }

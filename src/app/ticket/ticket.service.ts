@@ -95,6 +95,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
+    if (response === null) response = [];
     if (fieldID) response = response.filter((field: KentanTiedot) => field.id == fieldID);
     return response;
   }
@@ -108,7 +109,6 @@ export class TicketService {
     let response: any;
     const body = { kentat: fields };
     try {
-      console.log('Lähetetään GET-pyyntö urliin: ' + url);
       response = await firstValueFrom( this.http.put(url, body) );
     } catch (error: any) {
       this.handleError(error);

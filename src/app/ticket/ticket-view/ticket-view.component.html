@@ -135,6 +135,9 @@
     >
   </app-error-card>
 
+  <!-- Kun lähetetään liitetiedostoja -->
+  <p *ngIf="state==='sending'" class="theme-success-message" i18n="@@Uuden kysymyksen lähettäminen onnistui">Uuden kysymyksen lähettäminen onnistui.</p>
+
   <section *ngIf="ticket.tila > 0">
 
     <div class="theme-actions" *ngIf="!ticketIdFromParent">
