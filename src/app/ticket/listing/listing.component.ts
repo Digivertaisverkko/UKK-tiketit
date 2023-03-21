@@ -1,7 +1,6 @@
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-// import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -72,7 +71,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
-  // private _liveAnnouncer: LiveAnnouncer,
 
   constructor(
     private responsive: BreakpointObserver,
@@ -110,6 +108,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.trackMessages();
+  }
+
+  ngOnDestroy(): void {
+    this.store.untrackMessages();
+  }
+
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
@@ -130,14 +136,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     window.open(window.location.href, '_blank');
   }
 
-  ngAfterViewInit(): void {
-    this.trackMessages();
-  }
-
-  ngOnDestroy(): void {
-    this.store.untrackMessages();
-  }
-
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages() {
     this.store.trackMessages().subscribe(response => {
@@ -155,10 +153,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ticket.getMyCourses().then(response => {
       if (response[0].kurssi !== undefined) {
         const myCourses: Kurssini[] = response;
-        // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero: 
+        // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero:
         //  + courseIDcandinate);
-        // Onko käyttäjä URL parametrilla saadulla kurssilla.
-        // Ei tarvitse olla enää osallistujana.
+        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
@@ -229,7 +226,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
@@ -283,20 +279,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
-  //   if (sortState.direction) {
-  //     this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-  //   } else {
-  //     this._liveAnnouncer.announce('Sorting cleared');
-  //   }
-  // }
-
   //hakutoiminto, jossa paginointi kommentoitu pois
-  applyFilter(event: Event, isTicket: boolean ){
+  public applyFilter(event: Event, isTicket: boolean ){
     let filterValue = (event.target as HTMLInputElement).value;
     filterValue = filterValue.trim().toLowerCase();
     if (isTicket) {
