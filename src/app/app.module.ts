@@ -13,6 +13,11 @@ import { CourseModule } from './course/course.module';
 import { AppComponent } from './app.component';
 import { ListingComponent } from './ticket/listing/listing.component';
 import { initializeLanguage  } from "./app.initializers";
+import { registerLocaleData } from '@angular/common';
+import localeFi from '@angular/common/locales/fi';
+// import localeFrCaExtra from '@angular/common/locales/extra/fr-CA';
+
+registerLocaleData(localeFi, 'fi');  // Aina oletuslocale.
 
 // AppRoutingModule pitää tulla viimeisimpänä ennen muita routingeja sisältäviä
 // moduuleja. Oletuksena käytetään aina fi-FI -localea.
@@ -37,6 +42,7 @@ import { initializeLanguage  } from "./app.initializers";
   bootstrap: [AppComponent],
   exports: []
 })
+
 
 export class AppModule { }
 

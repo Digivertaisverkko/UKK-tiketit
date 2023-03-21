@@ -4,6 +4,7 @@ import localeFi from '@angular/common/locales/fi';
 
 // Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
+  console.log('------ Ladataan kieli ----------');
   registerLocaleData(localeFi, 'fi-FI');  // Aina oletuslocale.
   const language = getLanguage();
   localStorage.setItem('language', language);
@@ -41,9 +42,11 @@ function getLanguage(): string {
       if (savedlanguage === 'en-US' || savedlanguage === "fi-FI") {
         language = savedlanguage;
       } else {
-        console.error('app.initializers.ts: Tuntematon tallennettu kieli: ' + savedlanguage);
+        console.error('app.initializers.ts: Tuntematon tallennettu kieli: ' +
+            savedlanguage);
         console.log('Käytetään oletuskieltä');
-        // Oletus on upotuksessa englanti, koska käyttäjä ei voi vaihtaa kieltä toisin kuin normaalinäkymässä.
+        // Oletus on upotuksessa englanti, koska käyttäjä ei voi vaihtaa kieltä
+        // toisin kuin normaalinäkymässä.
         language = isInIframe() ? 'en-US' : 'fi-FI'; 
       }
     } else {
@@ -55,13 +58,9 @@ function getLanguage(): string {
     // language = navigator.language;
     // console.log('navigator.language -kieli: ' + language);
 
-  // if (language === undefined || language === null ) {
-  //   const browserLanguages: string[] | undefined = getBrowserLocales();
-  //   console.log('Saatiin kielet: ' + browserLanguages);
-
-  // if (language !== 'fi-FI') {
-    // language = 'en-US';
-  // }
+    // if (language === undefined || language === null ) {
+    //   const browserLanguages: string[] | undefined = getBrowserLocales();
+    //   console.log('Saatiin kielet: ' + browserLanguages);
   return language;
 }
 
