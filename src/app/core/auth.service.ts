@@ -25,13 +25,8 @@ export class AuthService {
   private codeVerifier: string = '';
   private codeChallenge: string = '';
   private loginCode: string = '';
-  // Sisältyy oAuth -tunnistautumiseen, mutta ei ole (vielä) käytössä.
-  // private oAuthState: string = '';
-  // private codeChallengeMethod: string = 'S256';
-  // private responseType: string = 'code';
 
   private courseID: string | null = null;
-  // private courseID$ = new BehaviorSubject <string>('');
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,
@@ -40,9 +35,7 @@ export class AuthService {
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
   }
 
-
-  public initialize()
-  {
+  public initialize() {
     this.checkIfSessionIDinStorage();
     this.checkIfSessionIdInURL();
     this.updateUserInfo()
@@ -93,20 +86,6 @@ export class AuthService {
     });
   }
 
-  // private trackCourseID() {
-  //   this.courseID$.subscribe(courseID => {
-  //     console.log('trackCourseID: saatiin kurssi ID: ' + courseID + '.
-  //        Session id on ' + this.getSessionID());
-  //     if (this.getSessionID() !== null && courseID.length > 0 ) {
-  //       this.fetchUserInfo(courseID).then( response => {
-  //         this.setLoggedIn();
-  //       }).catch(error => {
-  //         this.handleError(error);
-  //       })
-  //     }
-  //   })
-  // }
-
   private trackRouteParameters() {
     const route = window.location.pathname + window.location.search;
     console.log('auth service: route on '+ route);
@@ -138,8 +117,8 @@ export class AuthService {
     });
   }
 
-  /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot voivat
-    olla jo local storagessa. */
+  /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot
+    voivat olla jo local storagessa. */
   public async initialize2(courseID: string, sessionIDfromURL?: string) {
     // if (window.localStorage.getItem('SESSION_ID') == null) return
     var sessionID: string;
@@ -161,8 +140,6 @@ export class AuthService {
     this.fetchUserInfo(courseID);
   }
 
-  // ----- uudet metodit päättyvät
-
   public getDateFormat(): string {
     return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
@@ -180,33 +157,6 @@ export class AuthService {
   public getIsParticipant(): boolean {
     return this.isParticipant$.value
   }
-
-
-  // Ei käytössä enää, koska kurssi ID:ä ei tallenneta local storageen.
-    //   public async initializeOld() {
-    //     if (window.localStorage.getItem('SESSION_ID') == null) return
-    //     const savedCourseID: string | null = window.localStorage.getItem('COURSE_ID');
-    //     if (savedCourseID !== null) {
-    //           // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
-    //     // jotta ei ohjauduta loginiin page refresh:lla.
-    //     this.setLoggedIn();
-    //     this.fetchUserInfo(savedCourseID);
-    //   } else {
-    //     console.log('authService.initialize: ei kurssi ID:ä!');
-    //   }
-    // }
-
-  // Aseta aktiivinen kurssi ja päivitä lokaalit käyttäjätiedot, jos niitä ei ole haettu.
-  // public setActiveCourse(courseID: string | null) {
-    // Tallennetaan kurssi-ID sessioon, jos se on vaihtunut.
-    // if (courseID !== null && this.activeCourse$.value.id !== courseID) {
-    // if (courseID !== null) {
-    //   window.localStorage.setItem('COURSE_ID', courseID);
-      // Nimi ei vielä käytössä.
-      // this.activeCourse$.next({ id: courseID, nimi: ''});
-  //     if (this.user$.value.id === 0) this.getUserInfo();
-  //   }
-  // }
 
   // Aseta tila kirjautuneeksi.
   public setLoggedIn() {
@@ -245,15 +195,6 @@ export class AuthService {
 
   public getUserInfo(): User {
     const user: User | null = this.user$.value;
-    // Hae käyttäjätiedot jos niitä ei ole?
-    // if (user == null || user.nimi.length == 0) {
-    //   const courseID: string = this.ticketService.getActiveCourse();
-    //   this.getMyUserInfo(courseID).then( response => {
-    //     this.user$.next(response)
-    //   }).catch(error => {
-    //     console.log("getUserInfo(): Virhe: ei saatu haettua käyttäjän tietoja");
-    //   })
-    // }
     return user;
   }
 
@@ -328,7 +269,7 @@ export class AuthService {
 
   // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
   // käytettäviksi.
-  public async fetchUserInfo(courseID: string) {
+  public async fetchUserInfo(courseID: string): Promise<void> {
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
     }
@@ -349,35 +290,18 @@ export class AuthService {
       this.handleError(error);
     }
     if (response == null || response?.id == null) {
-      throw new Error('fetchUserInfo: ei saatu käyttäjätietoja.');
-    }
-    if (response === this.user$.value) {
-      console.log('Jatketaan samalla käyttäjällä.');
+      console.log('fetchUserInfo: Et ole kirjautunut.');
+      this.setNotLoggegIn();
       return
     }
-    console.log('fetchUserInfo: Asetetaan uusi userinfo: ' + JSON.stringify(response));
+    if (response === this.user$.value) {
+      console.log('fetchUserInfo: Jatketaan samalla käyttäjällä.');
+      return
+    }
+    console.log('fetchUserInfo: Asetetaan uusi userinfo.');
     this.setLoggedIn();
     this.user$.next(response);
   }
-
-  // Hae omat kurssikohtaiset tiedot.
-  // private async getMyUserInfo(courseID: string): Promise<User> {
-    // //const httpOptions = this.getHttpOptions();
-    // let response: any;
-    // let url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
-    // try {
-    //   response = await firstValueFrom<User>(this.http.get<any>(url));
-    //   if (response?.id !== undefined && response?.id !== null) {
-    //     console.log('getMyUserInfo: asetettiin kirjautuminen.');
-    //     this.setLoggedIn();
-    //   } else {
-    //     throw new Error('Saatiin oikeuksien hakemiseen vastaus: ' + response);
-    //   }
-    // } catch (error: any) {
-    //   this.handleError(error);
-    // }
-    // return response;
-  // }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
@@ -507,8 +431,8 @@ export class AuthService {
       let url = environment.apiBaseUrl + '/kirjaudu-ulos';
       try {
         console.log('Lähetettäisiin logout-kutsu, mutta ei ole tukea sille vielä.');
-        // response = await firstValueFrom(this.http.post<{'login-url': string}>
-       // (url, null, httpOptions));
+      //   response = await firstValueFrom(this.http.post<{'login-url': string}>
+      //  (url, null, httpOptions));
       } catch (error: any) {
         this.handleError(error);
       } finally {
