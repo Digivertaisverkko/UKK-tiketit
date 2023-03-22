@@ -20,6 +20,7 @@ export interface SortableTicket {
   tilaID: number;
   tila: string;
 }
+
 export interface ColumnDefinition {
   def: string;
   showMobile: boolean;
@@ -37,13 +38,11 @@ enum IconFile {
 })
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
-  // dataSource = new MatTableDataSource<Sortable>();
-  // dataSourceFAQ = {} as MatTableDataSource<FAQ>;
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
-  // public isLoggedIn$: Observable<boolean>;
 
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
+  public courseID: string = '';
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public FAQisLoaded: boolean = false;
@@ -55,30 +54,30 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  public courseID: string = '';
   // Ticket info polling rate in minutes.
-  private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
+  private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
 
   // Merkkijonot
   public courseName: string = '';
   public errorMessage: string = '';
   public headline: string = '';
+  public notParticipant;
   public ticketViewLink = '';
   public user: User = {} as User;
 
-  @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
+  @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
   constructor(
+    private authService: AuthService,
     private responsive: BreakpointObserver,
-    private router: Router,
     private route: ActivatedRoute,
+    private router: Router,
     private store: StoreService,
     private ticket: TicketService,
-    private authService: AuthService
   ) {
     this.isInIframe = getIsInIframe();
 
@@ -93,6 +92,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false }
     ];
+
+    this.notParticipant = {
+      title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+      message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
+          tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+    }
 
   }
 
@@ -153,14 +158,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ticket.getMyCourses().then(response => {
       if (response[0].kurssi !== undefined) {
         const myCourses: Kurssini[] = response;
-        // console.log('kurssit: ' + JSON.stringify(myCourses) + ' urli numero:
-        //  + courseIDcandinate);
         // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
-          this.errorMessage = $localize`:@@Et ole kurssilla:Et ole osallistujana
-            tällä kurssilla` + '.';
         } else {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);

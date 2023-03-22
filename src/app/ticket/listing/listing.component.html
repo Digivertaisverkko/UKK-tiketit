@@ -1,35 +1,46 @@
 <mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded">
 </mat-progress-bar>
 
-  <!----------- Tiketit ------------>
+  <!----------- Tiketit ------------------------------------------------------->
 
   <div class="view-header">
     <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-    <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
+    <h2 class="main-header"
+        id="courseName"
+        *ngIf="courseName.length > 0 && !isInIframe">
       <span>{{courseName}}</span>
     </h2>
 
     <div class="spacer"></div>
 
-      <button mat-raised-button class="embedded-button" (click)="openInNewTab()"
-          *ngIf="isInIframe"><a target="_blank" i18n="@@Avaa uuteen välilehteen">
-        Avaa uuteen välilehteen</a>
+      <button (click)="openInNewTab()"
+          class="embedded-button"
+          mat-raised-button
+          *ngIf="isInIframe">
+        <a target="_blank" i18n="@@Avaa uuteen välilehteen">
+          Avaa uuteen välilehteen
+        </a>
       </button>
 
-    <button mat-icon-button class="settings-button" [routerLink]="'/course/' + courseID + '/settings'"
-      *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant">
+    <button class="settings-button"
+        mat-icon-button
+        *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant">
+        [routerLink]="'/course/' + courseID + '/settings'"
       <mat-icon class="settings-icon">settings</mat-icon>
     </button>
 
-    <button mat-icon-button class="settings-button" *ngIf="isParticipant && isInIframe"
-      [routerLink]="'/course/' + courseID + '/profile'">
+    <button class="settings-button"
+        mat-icon-button
+        *ngIf="isParticipant && isInIframe"
+        [routerLink]="'/course/' + courseID + '/profile'">
       <mat-icon class="settings-icon">account_circle</mat-icon>
     </button>
   </div>
 
-  <section *ngIf="isParticipant">  <!-- Kysymysosio ovat nähtävissä vain osallistujille. -->
+  <section *ngIf="isParticipant; else notParticipantNotice">
 
-  <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin hakukentälle tilaa. -->
+  <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
+    hakukentälle tilaa. -->
   <!-- <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div> -->
   <div class="input-field-wrapper">
     <h3 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">
@@ -56,8 +67,12 @@
         <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
           <div class="ticket-state-wrapper">
             <div class="icon-wrapper">
-              <img class="icon" src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
-                  height="100%" width="100%" alt="">
+              <img alt=""
+                  class="icon"
+                  height="100%"
+                  src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
+                  width="100%"
+              >
             </div>
             <div>{{ element.tila }}</div>
           </div>
@@ -128,6 +143,15 @@
 
   </section>
 
+  <ng-template #notParticipantNotice>
+    <app-error-card
+      i18n-title="{{notParticipant.title}}"
+      message="{{ notParticipant.message }}"
+      title="{{notParticipant.title}}"
+    >
+    </app-error-card>
+  </ng-template>
+
   <div class="theme-actions" *ngIf="isParticipant"
       [ngStyle]="numberOfQuestions === 0 ?
       {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
@@ -142,7 +166,7 @@
   </div>
 
 
-<!------------ UKK ------------>
+<!------------ UKK:t ---------------------------------------------------------->
 
 <section *ngIf="FAQisLoaded">
 
@@ -196,7 +220,7 @@
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()"
     style="position: relative">
   </tr>
-    <!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
+<!-- <div style="position: absolute; background-color: gray; top: 0; left: 0; z-index: 1"></div> -->
 
 
 </table>
@@ -229,7 +253,8 @@
 </app-error-card>
 
 <!-- <div class="theme-actions">
-  <button mat-raised-button *ngIf="isLoaded && isInIframe" color="primary" [routerLink]="'/submit/'">Avaa kurssinäkymä</button>
+  <button mat-raised-button *ngIf="isLoaded && isInIframe" color="primary"
+  [routerLink]="'/submit/'">Avaa kurssinäkymä</button>
 </div> -->
 
 <!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. -->
