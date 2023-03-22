@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest 
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
+import { Router } from '@angular/router';
 import { firstValueFrom, map, Observable, catchError, Subject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
@@ -17,7 +18,8 @@ export class TicketService {
 
   constructor (private auth: AuthService,
     private errorService: ErrorService,
-    private http: HttpClient) {}
+    private http: HttpClient,
+    private router: Router) {}
 
   trackMessages(): Observable<string> {
     return this.$messages.asObservable();
@@ -89,7 +91,7 @@ export class TicketService {
     return response
   }
 
-  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
+  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
   public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise<KentanTiedot[]> {
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
@@ -366,7 +368,7 @@ export class TicketService {
   /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
   Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
   onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketListOld(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
+  public async getTicketListOld(courseID: string,onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
@@ -419,7 +421,7 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url));
-      // throw new Error
+      // throw new Error  // debuggaukseen.
     } catch (error: any) {
       this.handleError(error);
     }
@@ -486,8 +488,9 @@ export class TicketService {
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
-        console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
-        this.auth.handleNotLoggedIn();
+      this.router.navigateByUrl
+      console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
+      this.auth.handleNotLoggedIn();
     } else {
       this.errorService.handleServerError(error);
     }
@@ -502,6 +505,7 @@ export class TicketService {
 export interface Error {
   tunnus: number;
   virheilmoitus: string;
+  originaali?: string;
 }
 
 // Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
