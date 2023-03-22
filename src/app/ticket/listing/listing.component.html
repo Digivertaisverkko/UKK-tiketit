@@ -14,30 +14,31 @@
     <div class="spacer"></div>
 
       <button (click)="openInNewTab()"
-          class="embedded-button"
-          mat-raised-button
-          *ngIf="isInIframe">
+              class="embedded-button"
+              mat-raised-button
+              *ngIf="isInIframe">
         <a target="_blank" i18n="@@Avaa uuteen välilehteen">
           Avaa uuteen välilehteen
         </a>
       </button>
 
     <button class="settings-button"
-        mat-icon-button
-        *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant">
-        [routerLink]="'/course/' + courseID + '/settings'"
+            mat-icon-button
+            *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
+            [routerLink]="'/course/' + courseID + '/settings'"
+    >
       <mat-icon class="settings-icon">settings</mat-icon>
     </button>
 
     <button class="settings-button"
-        mat-icon-button
-        *ngIf="isParticipant && isInIframe"
-        [routerLink]="'/course/' + courseID + '/profile'">
+            mat-icon-button
+            *ngIf="isParticipant && isInIframe"
+            [routerLink]="'/course/' + courseID + '/profile'">
       <mat-icon class="settings-icon">account_circle</mat-icon>
     </button>
   </div>
 
-  <section *ngIf="isParticipant; else notParticipantNotice">
+  <section *ngIf="isLoaded && isParticipant; else notParticipantNotice">
 
   <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
     hakukentälle tilaa. -->
@@ -141,30 +142,32 @@
           #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-  </section>
-
-  <ng-template #notParticipantNotice>
-    <app-error-card
-      i18n-title="{{notParticipant.title}}"
-      message="{{ notParticipant.message }}"
-      title="{{notParticipant.title}}"
-    >
-    </app-error-card>
-  </ng-template>
-
-  <div class="theme-actions" *ngIf="isParticipant"
+  <div class="theme-actions"
       [ngStyle]="numberOfQuestions === 0 ?
       {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
-    <button
-        (click)="saveRedirectUrl()"
-        mat-raised-button color="primary" class="button"
-        i18n="@@Kysy opettajilta">
+    <button class="button"
+            (click)="saveRedirectUrl()"
+            color="primary"
+            mat-raised-button
+            i18n="@@Kysy opettajilta"
+    >
       <a [routerLink]="'/course/' + this.courseID + '/submit'">
         Kysy opettajilta
       </a>
     </button>
   </div>
 
+  </section>
+
+  <ng-template #notParticipantNotice>
+    <app-error-card
+      i18n-title="{{notParticipant.title}}"
+      message="{{ notParticipant.message }}"
+      ngIf="isLoaded"
+      title="{{notParticipant.title}}"
+    >
+    </app-error-card>
+  </ng-template>
 
 <!------------ UKK:t ---------------------------------------------------------->
 
@@ -235,8 +238,8 @@
 </section>
 
 <div class="theme-actions" *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
-    [ngStyle]="numberOfFAQ === 0 ?
-        {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}">
+    [ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} :
+        {'justify-content': 'flex-end'}">
   <button (click)="saveRedirectUrl('-faq')"
           color="primary"
           i18n="@@Uusi UKK"
