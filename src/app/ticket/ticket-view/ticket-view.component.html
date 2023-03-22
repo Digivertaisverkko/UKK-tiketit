@@ -39,9 +39,8 @@
         Kopioi UKK:ksi
       </button>
 
-      <div
-        matTooltip="{{cantRemoveTicket}}"
-        [matTooltipDisabled]="isRemovable">
+      <div matTooltip="{{cantRemoveTicket}}"
+          [matTooltipDisabled]="isRemovable">
         <button [disabled]="!isRemovable || state==='sending'"
             i18n="@@Poista" (click)="changeRemoveButton()"
             mat-raised-button
@@ -120,7 +119,8 @@
 
         <img alt={{comment.lahettaja.nimi}}
             mat-card-avatar
-            src="../../../assets/logos/UniOulu.png">
+            src="../../../assets/logos/UniOulu.png"
+        >
         <mat-card-title class="theme-profile-name">
           {{ comment.lahettaja.nimi }}
         </mat-card-title>
@@ -129,7 +129,9 @@
           <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}}
             -
           </span>
-          <span *ngIf="isToday(comment.aikaleima)" i18n="@@Tänään">Tänään</span>
+          <span i18n="@@Tänään" *ngIf="isToday(comment.aikaleima)" >
+            Tänään
+          </span>
           <span *ngIf="!isToday(comment.aikaleima)">
             {{ comment.aikaleima | date: 'shortDate' }}
           </span>
@@ -206,16 +208,16 @@
   <app-error-card
       *ngIf="errorMessage.length > 0"
       i18n-title="@@Virhe"
-      title="Virhe"
       message="{{ errorMessage }}"
       [styles]="{ margin: '0' }"
+      title="Virhe"
   >
   </app-error-card>
 
   <!-- Kun lähetetään liitetiedostoja -->
   <p class="theme-success-message"
       i18n="@@Uuden kysymyksen lähettäminen onnistui"
-      *ngIf="state==='sending'" >
+      *ngIf="state==='sending'">
     Uuden kysymyksen lähettäminen onnistui.
   </p>
 
@@ -238,7 +240,8 @@
       <mat-radio-group align="start"
           *ngIf="userRole === 'opettaja' || userRole ==='admin'"
           [(ngModel)]="newCommentState"
-          [disabled]="state==='sending'">
+          [disabled]="state==='sending'"
+      >
         <mat-radio-button [value]=4 i18n="@@Kommentti">
           Kommentti
         </mat-radio-button>
@@ -265,9 +268,10 @@
 
     </div>
 
-    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()"
-        (attachmentsMessages)="attachmentsMessages = $event"
-        (fileListOutput)="fileInfoList = $event">
+    <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+        [uploadClicks]="uploadClick.asObservable()"
+        (fileListOutput)="fileInfoList = $event"
+    >
     </app-edit-attachments>
 
   </section>
