@@ -26,13 +26,11 @@ interface FileInfo {
 
 export class TicketViewComponent implements OnInit {
 
-  @Input() ticketIdFromParent: string | null = null;
-  @Input() public fileInfoList: FileInfo[] = [];
   @Input() public attachmentsMessages: string = '';
+  @Input() public fileInfoList: FileInfo[] = [];
+  @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
-  public uploadClick: Subject<string> = new Subject<string>();
   public attachFilesText: string = '';
-
   public cantRemoveTicket: string;
   public commentText: string;
   public courseName: string = '';
@@ -49,31 +47,32 @@ export class TicketViewComponent implements OnInit {
   public ticket: Tiketti;
   public ticketID: string;
   public tila: string;  // Tiketin tila
+  public uploadClick: Subject<string> = new Subject<string>();
   public user: User = {} as User;
   public userRole: string = '';
   private userName: string = '';
   private courseID: string | null;
-  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private readonly CURRENT_DATE = new Date().toDateString();
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
 
   constructor(
     private auth: AuthService,
-    private ticketService: TicketService,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private ticketService: TicketService,
   ) {
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.ticket = {} as Tiketti;
-    this.tila = '';
-    this.commentText = '';
-    this.isInIframe = getIsInIframe();
-    this.isLoaded = false;
-    this.ticketID = this.ticketIdFromParent !== null
-      ? this.ticketIdFromParent
-      : String(this.route.snapshot.paramMap.get('id'));
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
+    this.commentText = '';
+    this.courseID = this.route.snapshot.paramMap.get('courseid');
+    this.isInIframe = getIsInIframe();
+    this.isLoaded = false;
+    this.ticket = {} as Tiketti;
+    this.ticketID = this.ticketIdFromParent !== null
+    ? this.ticketIdFromParent
+    : String(this.route.snapshot.paramMap.get('id'));
+    this.tila = '';
   }
 
   ngOnInit(): void {
