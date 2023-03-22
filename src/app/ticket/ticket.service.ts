@@ -1,4 +1,5 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest }
+    from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
 import { firstValueFrom, map, Observable, catchError, Subject, of } from 'rxjs';
@@ -67,7 +68,9 @@ export class TicketService {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
     if (tila !== undefined) {
-      if (tila < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      if (tila < 0 || tila > 6) {
+        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      }
     }
     interface newComment {
       viesti: string;
@@ -87,7 +90,7 @@ export class TicketService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
-  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise <KentanTiedot[]> {
+  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise<KentanTiedot[]> {
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {
@@ -121,7 +124,8 @@ export class TicketService {
 
   // Sama kuin alla, mutta ei uppaa tiedostoja.
   public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
-    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;
+    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` :
+        `/kurssi/${ID}/ukk`;
     url = environment.apiBaseUrl + url;
     let response: any;
     const body = newFaq;
@@ -133,7 +137,8 @@ export class TicketService {
     return response
   }
 
-  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]): Promise<boolean> {
+  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]):
+      Promise<boolean> {
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
     const body = ticket;
@@ -158,7 +163,8 @@ export class TicketService {
   }
 
   // Lisää tiketti ilman tiedostoja.
-  public async addTicket(courseID: string, newTicket: UusiTiketti): Promise<AddTicketResponse> {
+  public async addTicket(courseID: string, newTicket: UusiTiketti):
+      Promise<AddTicketResponse> {
     let response: any;
     const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
     const body = newTicket;
@@ -272,7 +278,7 @@ export class TicketService {
   }
 
   // Lataa tiedosto.
-  public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
+  public async getFile(ticketID: string,commentID: string, fileID: string):Promise<Blob> {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/
         ${commentID}/liite/${fileID}/lataa`;
     const options = {
@@ -412,8 +418,8 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
-      //  response = await firstValueFrom(this.http.get<Tiketti>(url));
-      throw new Error
+      response = await firstValueFrom(this.http.get<Tiketti>(url));
+      // throw new Error
     } catch (error: any) {
       this.handleError(error);
     }
