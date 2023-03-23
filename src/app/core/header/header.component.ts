@@ -110,7 +110,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public logout() {
-    this.authService.logOut();
+    this.authService.logout();
     this.authService.sendAskLoginRequest('own').then((response: any) => {
         this.router.navigateByUrl(response);
     }).catch (error => {})

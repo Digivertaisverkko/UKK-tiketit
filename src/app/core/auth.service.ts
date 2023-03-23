@@ -160,12 +160,10 @@ export class AuthService {
 
   // Aseta tila kirjautumattomaksi.
   public setNotLoggegIn() {
-    // console.log('--- Not logged ---');
     if (this.isUserLoggedIn$.value === true) {
       this.isUserLoggedIn$.next(false);
     }
     if (this.user$.value.nimi !== '') {
-      // console.log('lähetetään tyhjä user');
       this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
     }
   }
@@ -354,13 +352,13 @@ export class AuthService {
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
   public async sendLoginRequest(email: string, password: string, loginID: string):
-    Promise<LoginResult> {
-    const httpOptions =  {
-      headers: new HttpHeaders({
-        'ktunnus': email,
-        'salasana': password,
-        'login-id': loginID
-      })
+      Promise<LoginResult> {
+        const httpOptions =  {
+          headers: new HttpHeaders({
+            'ktunnus': email,
+            'salasana': password,
+            'login-id': loginID
+          })
     }
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
@@ -438,20 +436,17 @@ export class AuthService {
       Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
   */
   // Suorita uloskirjautuminen.
-  public async logOut(): Promise<any> {
+  public async logout(): Promise<any> {
     const sessionID = this.getSessionID();
     if (sessionID == undefined) {
-      console.error('authService.logout: ei session ID:ä.');
       this.setNotLoggegIn();
       window.localStorage.clear();
     } else {
-      //const httpOptions = this.getHttpOptions();
       let response: any;
       let url = environment.apiBaseUrl + '/kirjaudu-ulos';
+
       try {
-        console.log('Lähetettäisiin logout-kutsu, mutta ei ole tukea sille vielä.');
-      //   response = await firstValueFrom(this.http.post<{'login-url': string}>
-      //  (url, null, httpOptions));
+        response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null));
       } catch (error: any) {
         this.handleError(error);
       } finally {
