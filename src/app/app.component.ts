@@ -91,7 +91,7 @@ export class AppComponent implements OnInit  {
 
   public logInOut() {
     if (this.isLogged) {
-      this.authService.logOut();
+      this.authService.logout();
       this.authService.sendAskLoginRequest('own').then((response: any) => {
         this.router.navigateByUrl(response);
       }).catch ( () => {})
