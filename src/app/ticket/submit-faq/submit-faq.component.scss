@@ -1,19 +1,30 @@
 @import "/src/variables.scss";
 @import "../components/edit-attachments/edit-attachments.component.scss";
 
-form { margin-top: -6px; }
-mat-form-field { min-width: 21rem; }
+form {
+  margin-top: -6px;
+}
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+mat-form-field {
+  min-width: 21rem;
+}
+
+.vertical-spacer {
+  height: var(--margin-top-embedded);
+}
 
 .ticket-header {
   margin-bottom: -20px;
-  mat-form-field { flex-grow: 3; }
+  mat-form-field {
+    flex-grow: 3;
+  }
 }
 
 .short-field-wrapper {
   width: 24em;
-  mat-form-field { margin-top: 2px; }
+  mat-form-field {
+    margin-top: 2px;
+  }
 }
 
 .status-message-p {
@@ -25,7 +36,13 @@ mat-form-field { min-width: 21rem; }
 }
 
 @media (min-width: $XSmall) {
-  .submit-faq { padding-right: $right-padding; }
+  .submit-faq {
+    padding-right: $right-padding;
+  }
+
+  .required-span {
+    margin-right: 1rem;
+  }
 }
 
 @media (max-width: $XSmall) {

@@ -16,8 +16,7 @@
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea [disabled]="state!=='editing'"
-                  aria-label="Otsikko"
+        <textarea aria-label="Otsikko"
                   autocomplete="off"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
@@ -25,12 +24,13 @@
                   cdkTextareaAutosize
                   contenteditable
                   class="sub-header"
+                  [disabled]="state!=='editing'"
                   i18n-placeholder="@@Otsikko"
                   matInput
                   maxlength="255"
                   name="titleText"
                   [(ngModel)]="title"
-                  placeholder="Otsikko"
+                  [placeholder]="titlePlaceholder"
                   required>
           </textarea>
       </mat-form-field>
@@ -87,10 +87,10 @@
 
     </section>
 
-    <h2 i18n="@@Kysymys">Kysymys</h2>
+    <h2 i18n="@@Kysymys">Kysymys<span>*</span></h2>
     <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqMessage"></app-editor>
 
-    <h2 i18n="@@Vastaus">Vastaus</h2>
+    <h2 i18n="@@Vastaus">Vastaus<span>*</span></h2>
     <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer"></app-editor>
 
     <!-- Kun lähetetään liitetiedostoja -->
@@ -133,6 +133,10 @@
               [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId">
         Peru
       </button>
+
+      <div class="required-span">*&nbsp;
+        <span i18n="@@Pakollinen">Pakollinen</span>
+      </div>
 
       <button class="submit-button"
               *ngIf="state==='editing'"

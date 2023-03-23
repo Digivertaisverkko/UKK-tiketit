@@ -44,6 +44,7 @@ export class SubmitFaqComponent implements OnInit {
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public title: string = '';
+  public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
   public readonly MAX_FILE_SIZE_MB=100;
 
@@ -55,9 +56,11 @@ export class SubmitFaqComponent implements OnInit {
   constructor(private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
-              private ticketService: TicketService) {}
+              private ticketService: TicketService) {
+  }
 
   ngOnInit(): void {
+    this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     this.isInIframe = getIsInIframe();
     if (this.courseId === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
