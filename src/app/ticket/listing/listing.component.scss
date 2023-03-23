@@ -3,8 +3,7 @@
 /* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
    kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
 section,
-app-error-card,
-.theme-actions {
+app-error-card {
   width: 103%;
 }
 
