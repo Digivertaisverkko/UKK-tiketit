@@ -34,6 +34,7 @@ export class TicketViewComponent implements OnInit {
   public cantRemoveTicket: string;
   public commentText: string;
   public courseName: string = '';
+  public editingComment: string | null = null;
   public errorMessage: string = '';
   public isEditable: boolean = false;
   public isInIframe: boolean;
@@ -42,7 +43,7 @@ export class TicketViewComponent implements OnInit {
   public isRemovePressed: boolean = false;
   public message: string = '';
   public newCommentState: 3 | 4 | 5 = 4;
-  public proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
+  public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public ticket: Tiketti;
   public ticketID: string;
@@ -95,6 +96,10 @@ export class TicketViewComponent implements OnInit {
     this.pollTickets();
   }
 
+  public editComment(commentID: string) {
+    this.editingComment = commentID;
+  }
+
   private pollTickets() {
     // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
     const MILLISECONDS_IN_MIN = 60000;
@@ -113,7 +118,6 @@ export class TicketViewComponent implements OnInit {
             this.isEditable = true;
             this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
           }
-          console.log(' onko editoitavissa: ' + this.isEditable);
           this.isLoaded = true;
         },
         error: error => {
@@ -162,8 +166,7 @@ export class TicketViewComponent implements OnInit {
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
     if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
-      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia
-          käyttäjäoikeuksia` + '.';
+      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
     this.attachments.clear();
     this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
@@ -196,6 +199,10 @@ export class TicketViewComponent implements OnInit {
 
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila);
+  }
+
+  public sendEditedComment() {
+    console.log('sending');
   }
 
   public sendComment(): void {

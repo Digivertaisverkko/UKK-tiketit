@@ -141,18 +141,20 @@
           {{proposedSolution}}
         </span>
 
-        <button (click)="editTicket()"
+        <button (click)="editComment(comment.id)"
                 i18n="@@Muokkaa"
                 mat-raised-button
-                *ngIf="comment.lahettaja.id === user?.id"
-        >
-        Muokkaa
-      </button>
+                *ngIf="(comment.lahettaja.id === user?.id) && (editingComment !==
+                    comment.id)"
+                >
+          Muokkaa
+        </button>
 
       </mat-card-header>
 
       <mat-card-content>
-        <app-message [messageHtml]=comment.viesti></app-message>
+        <app-message [messageHtml]=comment.viesti
+          *ngIf="editingComment !== comment.id; else commentEditing"></app-message>
         <app-view-attachments (errorMessage)="errorMessage = $event"
             [files]="comment.liitteet"
             *ngIf="comment.liitteet"
@@ -160,6 +162,24 @@
         >
         </app-view-attachments>
       </mat-card-content>
+
+      <ng-template #commentEditing>
+        <app-editor [disabled]="state==='sending'"
+            [(editorContent)]="comment.viesti"
+            *ngIf="!ticketIdFromParent && editingComment === comment.id"
+        >
+        </app-editor>
+        <div class="theme-actions">
+          <button class="send-button"
+                  (click)="sendEditedComment()"
+                  color="primary"
+                  mat-raised-button
+          >
+            OK
+          </button>
+        </div>
+      </ng-template>
+
     </mat-card>
 
     <div class="vertical-spacer"></div>
