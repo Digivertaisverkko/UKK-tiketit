@@ -92,32 +92,30 @@ export class EditFieldComponent implements OnInit {
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.ticketService.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.id) {
-        // Tarvitaan tietojen lähettämiseen.
-        this.allFields = response.map(field => {
-          return {
-            ...field, id: field.id?.toString()
-          }
-        });
-        if (fieldID != null) {
-          let matchingField = response.filter((field: KentanTiedot) => {
-            String(field.id) == fieldID
-          });
-          if (matchingField == null) {
-            console.error('Virhe: ei oikeutta kentän tietoihin.');
-          } else {
-            this.field = matchingField[0];
-             // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
-             // alkion "", mitä ei haluta.
-            if (this.field.valinnat[0].length === 0) {
-              this.field.valinnat = [];
-              this.multipleSelection = false;
-            } else {
-              this.multipleSelection = true;
-            }
-          }
-        }
-        console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
+        throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
+      // Tarvitaan tietojen lähettämiseen.
+      this.allFields = response.map(field => {
+        return {
+          ...field, id: field.id?.toString()
+        }
+      });
+      let matchingField = response.filter(field => {
+        return String(field.id) === fieldID
+      });
+      if (matchingField == null) {
+        throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+      }
+      this.field = matchingField[0];
+        // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
+        // alkion "", mitä ei haluta.
+      if (this.field.valinnat[0].length === 0) {
+        this.field.valinnat = [];
+        this.multipleSelection = false;
+      } else {
+        this.multipleSelection = true;
+      }
+      console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
     }).catch(error => {
       this.errorMessage = $localize `@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
