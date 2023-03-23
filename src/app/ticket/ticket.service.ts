@@ -21,8 +21,116 @@ export class TicketService {
     private http: HttpClient,
     private router: Router) {}
 
-  trackMessages(): Observable<string> {
-    return this.$messages.asObservable();
+  // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
+  public async addComment(ticketID: string, message: string, tila?: number):
+      Promise<NewCommentResponse> {
+    if (isNaN(Number(ticketID))) {
+      throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
+    }
+    if (tila !== undefined) {
+      if (tila < 0 || tila > 6) {
+        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      }
+    }
+    interface newComment {
+      viesti: string;
+      tila?: number;
+    }
+    let body: newComment = { viesti: message }
+    if (tila !== undefined) body.tila = tila
+    let response: any;
+    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
+    try {
+      response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
+      this.auth.setLoggedIn();
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  // Sama kuin alla, mutta ei uppaa tiedostoja.
+  // editFaq: editoidaanko olemassa olevaa UKK:a.
+  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
+    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` :
+      `/kurssi/${ID}/ukk`;
+    url = environment.apiBaseUrl + url;
+    let response: any;
+    const body = newFaq;
+    try {
+      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  // Lisää tiketti ilman tiedostoja.
+  public async addTicket(courseID: string, newTicket: UusiTiketti):
+      Promise<AddTicketResponse> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
+    const body = newTicket;
+    try {
+      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  public async editComment(ticketID: string, commentID: string, comment: string):
+        Promise<boolean> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const body = comment;
+    try {
+      // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
+      response = await firstValueFrom(this.http.put(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return (response?.success === true) ? true : false;
+  }
+
+
+  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]):
+      Promise<boolean> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    const body = ticket;
+    try {
+      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
+      response = await firstValueFrom(this.http.put(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response?.success !== true) return false
+    if (fileList?.length == 0 || !fileList ) return true
+    const firstCommentID = String(response.uusi.kommentti);
+    let sendFileResponse: any;
+    for (let file of fileList) {
+      try {
+        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
+    }
+    return true
+  }
+
+  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
+  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise<KentanTiedot[]> {
+    let response: any;
+    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
+    try {
+      response = await firstValueFrom(this.http.get<KentanTiedot[]>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response === null) response = [];
+    if (fieldID) response = response.filter((field: KentanTiedot) => field.id == fieldID);
+    return response;
   }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
@@ -51,131 +159,17 @@ export class TicketService {
   public getTicketState(numericalState: number): string {
     let verbal: string;
     switch (numericalState) {
-      case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
-      case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
-      case 2: verbal = $localize `:@@Luettu:Luettu`; break;
-      case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
-      case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
-      case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
-      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`; break;
+      case 0: verbal = $localize`:@@Virhetila:Virhetila`; break;
+      case 1: verbal = $localize`:@@Lähetetty:Lähetetty`; break;
+      case 2: verbal = $localize`:@@Luettu:Luettu`; break;
+      case 3: verbal = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+      case 4: verbal = $localize`:@@Kommentoitu:Kommentoitu`; break;
+      case 5: verbal = $localize`:@@Ratkaistu:Ratkaistu`; break;
+      case 6: verbal = $localize`:@@Arkistoitu:Arkistoitu`; break;
       default:
         throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
     }
     return verbal;
-  }
-
-  // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string, tila?: number): Promise<NewCommentResponse> {
-    if (isNaN(Number(ticketID))) {
-      throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
-    }
-    if (tila !== undefined) {
-      if (tila < 0 || tila > 6) {
-        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
-      }
-    }
-    interface newComment {
-      viesti: string;
-      tila?: number;
-    }
-    let body: newComment = { viesti: message }
-    if (tila !== undefined) body.tila = tila
-    let response: any;
-    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
-    try {
-      response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response
-  }
-
-  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise<KentanTiedot[]> {
-    let response: any;
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
-    try {
-      response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (response === null) response = [];
-    if (fieldID) response = response.filter((field: KentanTiedot) => field.id == fieldID);
-    return response;
-  }
-
-  // Luo uudet kentät tikettipohjalle.
-  public async setTicketFieldInfo(courseID: string, fields: KentanTiedot[]) {
-    for (let field of fields) {
-      if (field.id != null) delete field.id;
-    }
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
-    let response: any;
-    const body = { kentat: fields };
-    try {
-      response = await firstValueFrom( this.http.put(url, body) );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
-  }
-
-  /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
-     Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
-
-  // Sama kuin alla, mutta ei uppaa tiedostoja.
-  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
-    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` :
-        `/kurssi/${ID}/ukk`;
-    url = environment.apiBaseUrl + url;
-    let response: any;
-    const body = newFaq;
-    try {
-      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response
-  }
-
-  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]):
-      Promise<boolean> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
-    const body = ticket;
-    try {
-      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
-      response = await firstValueFrom(this.http.put(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (response?.success !== true) return false
-    if (fileList?.length == 0 || !fileList ) return true
-    const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-    return true
-  }
-
-  // Lisää tiketti ilman tiedostoja.
-  public async addTicket(courseID: string, newTicket: UusiTiketti):
-      Promise<AddTicketResponse> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
-    const body = newTicket;
-    try {
-      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response
   }
 
   private getRandomInt(min: number, max: number) {
@@ -494,6 +488,26 @@ export class TicketService {
     } else {
       this.errorService.handleServerError(error);
     }
+  }
+
+  // Luo uudet kentät tikettipohjalle.
+  public async setTicketFieldInfo(courseID: string, fields: KentanTiedot[]) {
+    for (let field of fields) {
+      if (field.id != null) delete field.id;
+    }
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
+    let response: any;
+    const body = { kentat: fields };
+    try {
+      response = await firstValueFrom( this.http.put(url, body) );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return (response?.success === true) ? true : false;
+  }
+
+  trackMessages(): Observable<string> {
+    return this.$messages.asObservable();
   }
 
 }
