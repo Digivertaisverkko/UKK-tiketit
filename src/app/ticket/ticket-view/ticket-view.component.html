@@ -141,14 +141,22 @@
           {{proposedSolution}}
         </span>
 
+        <button (click)="editTicket()"
+                i18n="@@Muokkaa"
+                mat-raised-button
+                *ngIf="comment.lahettaja.id === user?.id"
+        >
+        Muokkaa
+      </button>
+
       </mat-card-header>
 
       <mat-card-content>
         <app-message [messageHtml]=comment.viesti></app-message>
         <app-view-attachments (errorMessage)="errorMessage = $event"
-          [files]="comment.liitteet"
-          *ngIf="comment.liitteet"
-          [ticketID]="ticketID"
+            [files]="comment.liitteet"
+            *ngIf="comment.liitteet"
+            [ticketID]="ticketID"
         >
         </app-view-attachments>
       </mat-card-content>
@@ -156,19 +164,23 @@
 
     <div class="vertical-spacer"></div>
 
-    <app-editor [disabled]="state==='sending'" *ngIf="!ticketIdFromParent"[(editorContent)]="commentText"></app-editor>
+    <app-editor [disabled]="state==='sending'"
+        [(editorContent)]="commentText"
+        *ngIf="!ticketIdFromParent"
+    >
+    </app-editor>
 
   </section>
 
   <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
   <app-error-card
-    *ngIf="errorMessage.length > 0"
-    i18n-title="@@Virhe"
-    title="Virhe"
-    message="{{ errorMessage }}"
-    [styles]="{ margin: '0' }"
-    >
+      *ngIf="errorMessage.length > 0"
+      i18n-title="@@Virhe"
+      title="Virhe"
+      message="{{ errorMessage }}"
+      [styles]="{ margin: '0' }"
+  >
   </app-error-card>
 
   <!-- Kun lähetetään liitetiedostoja -->
@@ -186,7 +198,7 @@
           (click)="uploadClick.next('add')"
           [disabled]="state==='sending'"
           mat-raised-button
-          >
+      >
         <mat-icon>attach_file</mat-icon>{{attachFilesText}}
       </button>
 
@@ -225,8 +237,8 @@
     </div>
 
     <app-edit-attachments [uploadClicks]="uploadClick.asObservable()"
-      (attachmentsMessages)="attachmentsMessages = $event"
-      (fileListOutput)="fileInfoList = $event">
+        (attachmentsMessages)="attachmentsMessages = $event"
+        (fileListOutput)="fileInfoList = $event">
     </app-edit-attachments>
 
   </section>

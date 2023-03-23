@@ -50,8 +50,8 @@ export class TicketViewComponent implements OnInit {
   public uploadClick: Subject<string> = new Subject<string>();
   public user: User = {} as User;
   public userRole: string = '';
-  private userName: string = '';
   private courseID: string | null;
+  private userName: string = '';
   private readonly CURRENT_DATE = new Date().toDateString();
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
 
