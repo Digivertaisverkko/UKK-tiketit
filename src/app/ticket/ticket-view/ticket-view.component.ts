@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { interval, startWith, Subject, switchMap } from 'rxjs';
+import { interval, startWith, Subject, switchMap, timer } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
@@ -93,7 +93,7 @@ export class TicketViewComponent implements OnInit {
     this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     });
-    this.pollTickets();
+    this.pollTickets(this.courseID);
   }
 
   public cancelCommentEditing() {
@@ -104,39 +104,38 @@ export class TicketViewComponent implements OnInit {
     this.editingComment = commentID;
   }
 
-  private pollTickets() {
-    // FIXME: kasvatettu pollausväliä, muuta ennen käyttäjätestausta.
+  private pollTickets(courseID: string) {
     const MILLISECONDS_IN_MIN = 60000;
-    interval(this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.ticketService.getTicketInfo(this.ticketID))
-      ).subscribe({
-        next: response => {
-          this.ticket = response;
-          if (this.userName.length == 0) {
-            if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
-          }
-          this.tila = this.ticketService.getTicketState(this.ticket.tila);
-          if (this.ticket.aloittaja.id === this.user.id) {
-            this.isEditable = true;
-            this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
-          }
-          this.isLoaded = true;
-        },
-        error: error => {
-          switch (error.tunnus) {
-            case 1003:
-              this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:
-                  Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
-              break;
-            default:
-              this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:
-                  Kysymyksen näyttäminen epäonnistui`;
-          }
-          this.isLoaded = true;
-        }
-      })
+    timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+      .subscribe(() => {
+        if (this.courseID) this.fetchTickets(courseID)}
+      );
+  }
+
+  private fetchTickets(courseID: string | null) {
+    this.ticketService.getTicketInfo(this.ticketID).then(response => {
+      this.ticket = response;
+      if (this.userName.length == 0) {
+        if (courseID !== null) this.auth.fetchUserInfo(courseID);
+      }
+      this.tila = this.ticketService.getTicketState(this.ticket.tila);
+      if (this.ticket.aloittaja.id === this.user.id) {
+        this.isEditable = true;
+        this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
+      }
+      this.isLoaded = true;
+    }).catch(error => {
+      switch (error.tunnus) {
+        case 1003:
+          this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:
+              Sinulla ei ole lukuoikeutta tähän kysymykseen.`;
+          break;
+        default:
+          this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:
+              Kysymyksen näyttäminen epäonnistui`;
+      }
+      this.isLoaded = true;
+    });
   }
 
   public editTicket() {
@@ -212,6 +211,7 @@ export class TicketViewComponent implements OnInit {
         console.log('Kommentin muokkaaminen epäonnistui.');
       }).finally(() => {
         this.editingComment = null;
+        this.fetchTickets(this.courseID);
       })
     console.log('sending');
   }
