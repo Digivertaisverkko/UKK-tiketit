@@ -105,7 +105,9 @@ export class SubmitTicketComponent implements OnInit {
       this.ticketService.editTicket(this.ticketId, ticket)
         .then( () => this.goBack()
         ).catch(error => {
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+              Kysymyksen lähettäminen epäonnistui` + '.'
+          this.state = 'editing';
         })
     } else {
     this.ticketService.addOnlyTicket(this.courseId, ticket)
@@ -160,16 +162,32 @@ export class SubmitTicketComponent implements OnInit {
         // })
       }).catch( error => {
         // ? lisää eri virhekoodeja?
-        this.state = 'done';
-        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
+        this.state = 'editing';
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+            Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
-    //   this.ticketService.addTicket(this.courseId, ticket, this.fileList)
-    //   .then(() => this.goBack()
-    //   ).catch( error => {
-    //     // ? lisää eri virhekoodeja?
-    //     this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
-    //   });
-    // }
   }
+
+  private sendFiles(ticketID: string, commentID: string) {
+    this.state = 'sending';
+    this.attachments.sendFilesPromise(ticketID, commentID).
+    then((res) => {
+      console.log('komponentti: saatiin vastaus: ');
+      console.dir(res);
+      this.goBack();
+    })
+    .catch((res: any) => {
+      this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
+          ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+      console.log('submit-ticket: saatiin virhe: ' + res);
+      this.state = 'editing';
+    })
+    .finally(() => {
+      console.log('Komponentti: Kaikki valmiita!');
+      // Kommentoi alla olevat, jos haluat, että jää näkyviin.
+      // this.attachments.clear();
+    })
+  }
+
 }
