@@ -224,6 +224,7 @@ export class TicketViewComponent implements OnInit {
               Kommentin lisääminen tikettiin epäonnistui.`;
           throw new Error('Kommentin lähettäminen epäonnistui.');
         }
+        this.commentText = '';
         if (this.fileInfoList.length === 0) {
           this.ticketService.getTicketInfo(this.ticketID).then(response => {
             this.ticket = response
@@ -237,8 +238,6 @@ export class TicketViewComponent implements OnInit {
       }).catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
             Kommentin lisääminen tikettiin epäonnistui.`;
-      }).finally(() => {
-        this.commentText = '';
       })
   }
 
