@@ -37,15 +37,7 @@ export class ErrorService {
     }
 
     if (backendError !== undefined) {
-      logMessage += ", palvelimen tilakoodilla " + backendError.tunnus;
-      if (backendError.virheilmoitus?.length > 1) {
-        logMessage += " ja viestillä: " + backendError.virheilmoitus;
-      } else {
-        logMessage += ".";
-      }
-      if (backendError.originaali && backendError.originaali.length > 1) {
-        logMessage += " Alkuperäinen virheilmoitus: " + backendError.originaali;
-      }
+      logMessage += this.getBackendErrorLog(backendError, logMessage);
     }
 
     console.error(logMessage + ". Alkuperäinen vastaus alla.");
@@ -56,14 +48,35 @@ export class ErrorService {
       console.dir(error);
     }
 
-    if (backendError?.tunnus && backendError?.tunnus === 1003) {
-      const courseID = this.route.snapshot.paramMap.get('courseid')
-      console.log('***** courseID: ' + courseID);
-      const baseRoute = courseID ? '/course/:courseid' : '';
-      this.router.navigateByUrl(baseRoute + '/forbidden');
+    const eiOikeuksia = 1003;
+    if (backendError?.tunnus && backendError?.tunnus === eiOikeuksia) {
+      this.routeToNoPrivileges();
     }
 
     throw (backendError !== undefined) ? backendError : error;
+  }
+
+  private getBackendErrorLog(backendError: Error, logMessage: string): string {
+    logMessage += ", palvelimen tilakoodilla " + backendError.tunnus;
+    if (backendError.virheilmoitus?.length > 1) {
+      logMessage += " ja viestillä: " + backendError.virheilmoitus;
+    } else {
+      logMessage += ".";
+    }
+    if (backendError.originaali && backendError.originaali.length > 1) {
+      logMessage += " Alkuperäinen virheilmoitus: " + backendError.originaali;
+    }
+    return logMessage
+  }
+
+  private routeToNoPrivileges() {
+    // Ei toimi tässä this.route.snapshot.paramMap.get('courseid').
+    const pathArray = window.location.pathname.split('/');
+    let baseRoute = '';
+    if (pathArray[1] === 'course' && pathArray[2] != null)  {
+      baseRoute = '/course/' + pathArray[2];
+    }
+    this.router.navigateByUrl(baseRoute + '/forbidden');
   }
 }
 
