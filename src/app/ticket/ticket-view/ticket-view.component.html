@@ -35,7 +35,7 @@
           i18n="@@Kopioi UKK"
           mat-raised-button
           *ngIf="(userRole === 'opettaja' || userRole === 'admin')"
-        >
+          >
         Kopioi UKK:ksi
       </button>
 
@@ -45,7 +45,7 @@
             i18n="@@Poista" (click)="changeRemoveButton()"
             mat-raised-button
             *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
-        >
+            >
           Poista
         </button>
       </div>
@@ -177,6 +177,7 @@
           <div class="spacer"></div>
           <button class="send-button"
                   (click)="cancelCommentEditing()"
+                  i18n="@@Peru"
                   mat-raised-button
                   >
           Peru
@@ -198,9 +199,9 @@
   <!-------------- Uuden kommentin tekeminen ---------------------------------->
 
     <app-editor [disabled]="state==='sending'"
-        [(editorContent)]="commentText"
-        *ngIf="!ticketIdFromParent"
-    >
+                [(editorContent)]="commentText"
+                *ngIf="!ticketIdFromParent"
+                >
     </app-editor>
 
   </section>
@@ -229,11 +230,11 @@
 
       <!-- Nimi sidottu muuttujaan, koska eri rooleilla on eri teksti. -->
       <button class="attach-button"
-          (click)="uploadClick.next('add')"
-          [disabled]="state==='sending'"
-          [attr.aria-label]="attachFilesText"
-          mat-raised-button="attachFilesText"
-          >
+              (click)="uploadClick.next('add')"
+              [disabled]="state==='sending'"
+              [attr.aria-label]="attachFilesText"
+              mat-raised-button="attachFilesText"
+              >
         <mat-icon>attach_file</mat-icon>{{attachFilesText}}
       </button>
 
