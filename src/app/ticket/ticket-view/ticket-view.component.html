@@ -117,9 +117,9 @@
 
       <mat-card-header>
 
-        <img alt={{comment.lahettaja.nimi}}
-            mat-card-avatar
-            src="../../../assets/logos/UniOulu.png"
+        <img  alt=''
+              mat-card-avatar
+              src="../../../assets/logos/UniOulu.png"
         >
         <mat-card-title class="theme-profile-name">
           {{ comment.lahettaja.nimi }}
@@ -143,11 +143,13 @@
           {{proposedSolution}}
         </span>
 
+        <!-- Kommentin muokkaaminen -->
         <button (click)="editComment(comment.id)"
-                i18n="@@Muokkaa"
+                aria-label="Muokkaa kommenttia"
+                i18n-aria-label="@@Muokkaa kommenttia"
                 mat-icon-button
-                *ngIf="(comment.lahettaja.id === user?.id) && (editingComment !==
-                    comment.id)"
+                *ngIf="(comment.lahettaja.id === user?.id) &&
+                    (editingComment !== comment.id)"
                 >
           <mat-icon>edit</mat-icon>
         </button>
@@ -225,11 +227,13 @@
 
     <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
+      <!-- Nimi sidottu muuttujaan, koska eri rooleilla on eri teksti. -->
       <button class="attach-button"
           (click)="uploadClick.next('add')"
           [disabled]="state==='sending'"
-          mat-raised-button
-      >
+          [attr.aria-label]="attachFilesText"
+          mat-raised-button="attachFilesText"
+          >
         <mat-icon>attach_file</mat-icon>{{attachFilesText}}
       </button>
 
@@ -241,7 +245,7 @@
           *ngIf="userRole === 'opettaja' || userRole ==='admin'"
           [(ngModel)]="newCommentState"
           [disabled]="state==='sending'"
-      >
+          >
         <mat-radio-button [value]=4 i18n="@@Kommentti">
           Kommentti
         </mat-radio-button>
@@ -256,13 +260,14 @@
       <ng-template #spacerHere><div class="spacer"></div></ng-template>
 
       <button class="send-button"
-          (click)="sendComment()"
-          color="primary"
-          [disabled]="commentText.length < 1 || attachmentsMessages === 'faulty' ||
-              state==='sending'"
-          i18n="@@Lähetä"
-          mat-raised-button
-      >
+              (click)="sendComment()"
+              color="primary"
+              [disabled]="commentText.length < 1 ||
+                  attachmentsMessages === 'faulty' ||
+                  state === 'sending'"
+              i18n="@@Lähetä"
+              mat-raised-button
+              >
         Lähetä
       </button>
 
@@ -271,7 +276,7 @@
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
         [uploadClicks]="uploadClick.asObservable()"
         (fileListOutput)="fileInfoList = $event"
-    >
+        >
     </app-edit-attachments>
 
   </section>
