@@ -80,10 +80,10 @@ export class EditFieldComponent implements OnInit {
     const index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat[index] = value;
   }
-  
+
   onArrowLeft(event: any) {
     console.log('Vasen nuoli painettu');
-    // event.target === this.input.nativeElement && 
+    // event.target === this.input.nativeElement &&
     if (event.key === 'ArrowLeft' && event.target.selectionStart === 0) {
       // if (this.chipGrid != null) this.chipGrid.last.focus();
     }
@@ -91,7 +91,7 @@ export class EditFieldComponent implements OnInit {
 
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.ticketService.getTicketFieldInfo(courseID).then(response => {
-      if (response[0]?.id) {
+      if (!response[0]?.id) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
@@ -117,7 +117,8 @@ export class EditFieldComponent implements OnInit {
       }
       console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
     }).catch(error => {
-      this.errorMessage = $localize `@@Lisäkentän tietojen haku epäonnistui:
+      console.dir(error);
+      this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
     })
   }
