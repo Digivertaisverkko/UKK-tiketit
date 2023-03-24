@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse 
+import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse
           } from 'src/app/ticket/ticket.service';
 import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
@@ -159,14 +159,14 @@ export class SubmitFaqComponent implements OnInit {
         if (response == null || response?.uusi == null) {
           this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
           throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-        }        
+        }
         response = response as AddTicketResponse;
         const ticketID = response.uusi.tiketti;
         const commentID = response.uusi.kommentti;
         this.sendfiles(ticketID, commentID);
       })
       .catch((error: Error) => {
-        this.state = 'done';
+        this.state = 'editing';
         console.log(error);
         if (error?.tunnus == 1003) {
           this.errorMessage = $localize`:@@Ei oikeuksia:Sinulla ei ole riittäviä
