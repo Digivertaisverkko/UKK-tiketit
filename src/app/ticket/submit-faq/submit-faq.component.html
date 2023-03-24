@@ -7,7 +7,8 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
+  <app-to-beginning-button [disabled]="state==='sending'">
+  </app-to-beginning-button>
 
   <form accept-charset="UTF-8"
         action=""
@@ -87,11 +88,13 @@
 
     </section>
 
-    <h2 i18n="@@Kysymys">Kysymys<span>*</span></h2>
-    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqMessage"></app-editor>
+    <h2><span i18n="@@Kysymys">Kysymys</span><span>*</span></h2>
+    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqMessage">
+    </app-editor>
 
-    <h2 i18n="@@Vastaus">Vastaus<span>*</span></h2>
-    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer"></app-editor>
+    <h2><span i18n="@@Vastaus">Vastaus</span><span>*</span></h2>
+    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer">
+    </app-editor>
 
     <!-- Kun lähetetään liitetiedostoja -->
     <p *ngIf="state==='sending' || state==='done'" class="theme-success-message"

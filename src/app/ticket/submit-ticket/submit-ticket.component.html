@@ -31,7 +31,7 @@
                   maxlength="255"
                   name="titleText"
                   [(ngModel)]="title"
-                  placeholder="Otsikko"
+                  [placeholder]="titlePlaceholder"
                   required>
           </textarea>
       </mat-form-field>
@@ -99,7 +99,7 @@
 
     </section>
 
-    <h2 i18n="@@Viesti">Viesti</h2>
+    <h3 class="sub-header"><span i18n="@@Viesti">Viesti</span><span>*</span></h3>
     <app-editor [disabled]="state!=='editing'"
                 [(editorContent)]="message">
     </app-editor>

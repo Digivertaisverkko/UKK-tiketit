@@ -43,6 +43,7 @@ export class SubmitTicketComponent implements OnInit {
   public title: string = '';
   public ticketFields: TiketinKentat[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
+  public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
   public userName: string | null = '';
 
@@ -52,6 +53,7 @@ export class SubmitTicketComponent implements OnInit {
               private ticketService: TicketService) {}
 
   ngOnInit(): void {
+    this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     if (this.courseId === null) { throw new Error('Ei kurssi ID:ä.') }
     this.auth.fetchUserInfo(this.courseId);
     this.auth.trackUserInfo().subscribe(response => {
