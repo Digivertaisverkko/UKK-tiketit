@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -105,32 +105,6 @@ export class SubmitFaqComponent implements OnInit {
     this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response });
   }
-
-/*   public onFileChanged(event: any) {
-    const MEGABYTE = 1000000;
-    for (let file of event.target.files) {
-      if (this.fileInfoList.some(item => item.filename === file.name)) continue
-      let fileinfo: FileInfo = { filename: file.name };
-      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
-        fileinfo.error = $localize `:@@Liian iso:Liian iso`;
-        fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
-        Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
-        this.attachmentsHasErrors = true;
-      } else {
-        this.fileList.push(file);
-      }
-      this.fileInfoList.push(fileinfo);
-      console.log('fileinfolist ' + JSON.stringify(this.fileInfoList));
-      console.log('filelist:');
-      console.dir(this.fileList);
-    }
-  } */
-
-  // public removeSelectedFile(index: number) {
-  //   this.fileList.splice(index, 1);
-  //   this.fileInfoList.splice(index, 1);
-  //   this.attachmentsHasErrors = (this.fileInfoList.some(item => item.error));
-  // }
 
   public goBack(): void {
     this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
