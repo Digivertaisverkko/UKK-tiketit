@@ -96,6 +96,10 @@ export class TicketViewComponent implements OnInit {
     this.pollTickets();
   }
 
+  public cancelCommentEditing() {
+    this.editingComment = null;
+  }
+
   public editComment(commentID: string) {
     this.editingComment = commentID;
   }
@@ -201,34 +205,41 @@ export class TicketViewComponent implements OnInit {
     return this.ticketService.getTicketState(tila);
   }
 
-  public sendEditedComment() {
+  public sendEditedComment(commentID: string, commentText: string) {
+    this.ticketService.editComment(this.ticketID, commentID, commentText)
+      .then(response => {
+      }).catch(err => {
+        console.log('Kommentin muokkaaminen epäonnistui.');
+      }).finally(() => {
+        this.editingComment = null;
+      })
     console.log('sending');
   }
 
   public sendComment(): void {
     this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
-    .then(response => {
-      if (response == null || response?.success !== true) {
+      .then(response => {
+        if (response == null || response?.success !== true) {
+          this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
+              Kommentin lisääminen tikettiin epäonnistui.`;
+          throw new Error('Kommentin lähettäminen epäonnistui.');
+        }
+        if (this.fileInfoList.length === 0) {
+          this.ticketService.getTicketInfo(this.ticketID).then(response => {
+            this.ticket = response
+          });
+          this.state = 'editing';
+          return
+        }
+        response = response as NewCommentResponse;
+        const commentID = response.kommentti;
+        this.sendFiles(this.ticketID, commentID);
+      }).catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
             Kommentin lisääminen tikettiin epäonnistui.`;
-        throw new Error('Kommentin lähettäminen epäonnistui.');
-      }
-      if (this.fileInfoList.length === 0) {
-        this.ticketService.getTicketInfo(this.ticketID).then(response => {
-          this.ticket = response
-        });
-        this.state = 'editing';
-        return
-      }
-      response = response as NewCommentResponse;
-      const commentID = response.kommentti;
-      this.sendFiles(this.ticketID, commentID);
-    }).catch(error => {
-      this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
-          Kommentin lisääminen tikettiin epäonnistui.`;
-    }).finally(() => {
-      this.commentText = '';
-    })
+      }).finally(() => {
+        this.commentText = '';
+      })
   }
 
   private sendFiles(ticketID: string, commentID: string) {

@@ -61,7 +61,7 @@
 
   <section *ngIf="ticket.tila > 0">
 
-  <!-------------- Kysymys ----------------------------------------->
+  <!-------------- Kysymys ---------------------------------------------------->
 
     <div class="ticket-header">
 
@@ -109,7 +109,7 @@
 
     <hr class="theme-divider">
 
-  <!-------------- Keskustelu ----------------------------------------->
+  <!-------------- Keskustelu ------------------------------------------------->
 
   <h4 class="sub-header" i18n="@@Keskustelu">Keskustelu</h4>
 
@@ -143,11 +143,11 @@
 
         <button (click)="editComment(comment.id)"
                 i18n="@@Muokkaa"
-                mat-raised-button
+                mat-icon-button
                 *ngIf="(comment.lahettaja.id === user?.id) && (editingComment !==
                     comment.id)"
                 >
-          Muokkaa
+          <mat-icon>edit</mat-icon>
         </button>
 
       </mat-card-header>
@@ -170,8 +170,15 @@
         >
         </app-editor>
         <div class="theme-actions">
+          <div class="spacer"></div>
           <button class="send-button"
-                  (click)="sendEditedComment()"
+                  (click)="cancelCommentEditing()"
+                  mat-raised-button
+                  >
+          Peru
+        </button>
+          <button class="send-button"
+                  (click)="sendEditedComment(comment.id, comment.viesti)"
                   color="primary"
                   mat-raised-button
           >
@@ -183,6 +190,8 @@
     </mat-card>
 
     <div class="vertical-spacer"></div>
+
+  <!-------------- Uuden kommentin tekeminen ---------------------------------->
 
     <app-editor [disabled]="state==='sending'"
         [(editorContent)]="commentText"

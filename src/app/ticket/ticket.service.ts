@@ -83,7 +83,7 @@ export class TicketService {
         Promise<boolean> {
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
-    const body = comment;
+    const body = { viesti: comment }
     try {
       // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
