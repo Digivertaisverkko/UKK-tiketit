@@ -11,18 +11,18 @@ import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }from '@angular/mate
 })
 
 export class EditFieldComponent implements OnInit {
+  public addOnBlur = true;
   public allFields: KentanTiedot[] = [];
-  public field: KentanTiedot;
+  public courseID: string = '';
+  public courseName: string = '';
   public errorMessage: string = '';
+  public field: KentanTiedot;
+  public fieldID: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
-  public courseID: string = '';
-  public courseName: string = '';
   public multipleSelection: boolean = false;
-  public fieldID: string | null = null;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  public addOnBlur = true;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
 
   constructor(
