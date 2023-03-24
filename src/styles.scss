@@ -4,10 +4,13 @@
 // Material teeman määrittely:
 @import '/src/styles/custom-theme.scss';
 
-html { font-family: $textFont }
+html {
+  font-family: $textFont
+}
 
-:root { --margin-top-embedded: 1.5rem }
-
+:root {
+  --margin-top-embedded: 1.5rem
+}
 body {
   line-height: 1.45;
   margin: 0;
@@ -177,17 +180,21 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
 .theme-table {
   width: 100%; line-height: 1.4rem;
 
-  .mat-mdc-header-row { background-color: #D3D3D3; }
+  .mat-mdc-header-row {
+      background-color: #D3D3D3;
+    }
 
-  // Jotta olisi enemmän klikattavaa aluetta. Lisää tarvittaessa anchoreihin tämän sijaan.
-  .mdc-data-table__cell {
-    padding-left: 0;
-    padding-right: 0;
+    // Jotta olisi enemmän klikattavaa aluetta. Lisää tarvittaessa anchoreihin tämän sijaan.
+    .mdc-data-table__cell {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .mdc-data-table__header-row {
+      height: 3em;
+    }
+
   }
-
-  .mdc-data-table__header-row { height: 3em; }
-
-}
 
 .theme-success-message {
   padding: 1rem;
@@ -218,11 +225,17 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
     line-height: 1;
   }
 
-  .theme-header-text { font-size: 1.25rem }
+  .theme-header-text {
+    font-size: 1.25rem
+  }
 
-  .theme-header-text-small { font-size: 1rem }
+  .theme-header-text-small {
+    font-size: 1rem
+  }
 
-  .ticket-header { flex-wrap: wrap }
+  .ticket-header {
+    flex-wrap: wrap
+  }
 }
 
 // -----------------------------------
