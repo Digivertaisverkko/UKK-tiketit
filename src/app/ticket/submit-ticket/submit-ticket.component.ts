@@ -121,6 +121,7 @@ export class SubmitTicketComponent implements OnInit {
         ).catch(error => {
           this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
               Kysymyksen lähettäminen epäonnistui` + '.'
+          this.state = 'editing';
         })
     } else {
       this.ticketService.addTicket(this.courseId, ticket)
@@ -142,20 +143,11 @@ export class SubmitTicketComponent implements OnInit {
           this.sendFiles(ticketID, commentID);
       }).catch( error => {
         // ? lisää eri virhekoodeja?
-        this.state = 'done';
+        this.state = 'editing';
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
             Kysymyksen lähettäminen epäonnistui` + '.'
       });
     }
-/*      this.ticketService.addTicket(this.courseId, ticket, this.fileList)
-      .then(() => this.goBack()
-      ).catch( error => {
-        // ? lisää eri virhekoodeja?
-        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-        Kysymyksen lähettäminen epäonnistui` + '.'
-      });
-    } */
-
   }
 
   private sendFiles(ticketID: string, commentID: string) {
@@ -170,10 +162,10 @@ export class SubmitTicketComponent implements OnInit {
       this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
           ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
       console.log('submit-ticket: saatiin virhe: ' + res);
+      this.state = 'editing';
     })
     .finally(() => {
       console.log('Komponentti: Kaikki valmiita!');
-      this.state = 'done';
       // Kommentoi alla olevat, jos haluat, että jää näkyviin.
       // this.attachments.clear();
     })
