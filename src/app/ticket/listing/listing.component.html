@@ -22,15 +22,19 @@
         </a>
       </button>
 
-    <button class="settings-button"
+    <button aria-label="Kurssin asetukset"
+            i18n-aria-label="@@Kurssin asetukset"
+            class="settings-button"
             mat-icon-button
             *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
             [routerLink]="'/course/' + courseID + '/settings'"
-    >
+            >
       <mat-icon class="settings-icon">settings</mat-icon>
     </button>
 
-    <button class="settings-button"
+    <button aria-label="Profiili"
+            i18n-aria-label="@@Profiili"
+            class="settings-button"
             mat-icon-button
             *ngIf="isParticipant && isInIframe"
             [routerLink]="'/course/' + courseID + '/profile'">
@@ -138,7 +142,7 @@
   </p>
 
   <!-- Jos halutaan paginator -->
-  <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10
+  <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10"
           #paginatorQuestions showFirstLastButtons
       aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
@@ -150,7 +154,7 @@
             color="primary"
             mat-raised-button
             i18n="@@Kysy opettajilta"
-    >
+            >
       <a [routerLink]="'/course/' + this.courseID + '/submit'">
         Kysy opettajilta
       </a>
@@ -190,7 +194,7 @@
   </p>
 <!-- </mat-card> -->
 
-<table id="faqTable" [dataSource]="dataSourceFAQ" mat-table class="theme-table mat-elevation-z1"
+<table id="faqTable" mat-table class="theme-table mat-elevation-z1" [dataSource]="dataSourceFAQ"
     [hidden]="dataSourceFAQ.filteredData.length === 0"
     matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 

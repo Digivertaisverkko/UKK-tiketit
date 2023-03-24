@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { interval, startWith, Subject, switchMap, timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
