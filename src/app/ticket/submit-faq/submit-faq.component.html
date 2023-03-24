@@ -128,6 +128,10 @@
 
       <div class="spacer"></div>
 
+      <div class="required-span">*&nbsp;
+        <span i18n="@@Pakollinen">Pakollinen</span>
+      </div>
+
       <button class="cancel-button"
               [disabled]="state!=='editing'"
               i18n="@@Peru"
@@ -136,10 +140,6 @@
               [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId">
         Peru
       </button>
-
-      <div class="required-span">*&nbsp;
-        <span i18n="@@Pakollinen">Pakollinen</span>
-      </div>
 
       <button class="submit-button"
               *ngIf="state==='editing'"
@@ -162,31 +162,6 @@
       </button>
 
     </div>
-
-    <!-- ! (event) ei toiminut, jos käytti tähän omaa child komponenttia ja tuli Muokkaa-napin kautta. -->
-    <!-- <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload> -->
-    <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
-      (change)="onFileChanged($event)" #fileUpload> -->
-
-<!--     <div class="file-list-wrapper" *ngIf="fileList !== null">
-      <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
-        <div class="list-item">
-          <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
-          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}"
-            [matTooltipShowDelay]="600">
-            <mat-icon>warning</mat-icon>{{file.error}}
-          </div>
-          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button"
-            (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
-        </div>
-        <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
-        <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
-        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100>
-        </mat-progress-bar>
-      </div>
-    </div> -->
-
-    <!-- (fileListOutput)="fileList = $event" -->
 
     <!-- Ylläoleva lapsikomponenttina -->
     <app-edit-attachments [uploadClicks]="uploadClick.asObservable()">
