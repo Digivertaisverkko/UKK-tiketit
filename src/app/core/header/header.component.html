@@ -38,6 +38,7 @@
   </section>
 
   <button aria-label="Tili"
+          i18n-aria-label="@@Tili"
           class="material-symbols-outlined"
           (click)="updateMenu()"
           id="account-icon-button"
@@ -50,7 +51,7 @@
 
 <mat-menu #accountMenu="matMenu">
 
-  <button mat-menu-item 
+  <button mat-menu-item
           (click)="toggleLanguage()"
           [disabled]="disableLangSelect"
           i18n="@@vaihda kieli">
