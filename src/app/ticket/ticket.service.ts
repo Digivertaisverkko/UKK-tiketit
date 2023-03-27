@@ -16,7 +16,8 @@ export class TicketService {
   public $messages = new Subject<string>();
   private debug: boolean = false;
 
-  constructor (private auth: AuthService,
+  constructor (
+    private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient,
     private router: Router) {}
@@ -53,7 +54,7 @@ export class TicketService {
   // editFaq: editoidaanko olemassa olevaa UKK:a.
   public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
     let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` :
-      `/kurssi/${ID}/ukk`;
+        `/kurssi/${ID}/ukk`;
     url = environment.apiBaseUrl + url;
     let response: any;
     const body = newFaq;
@@ -180,9 +181,6 @@ export class TicketService {
   public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
-/*  console.log("Tiedosto:");
-    console.dir(file);
-    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name); */
     const progress = new Subject<number>();
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     // Virheiden testaukseen vaihda http.post -> fakeHttpPost
