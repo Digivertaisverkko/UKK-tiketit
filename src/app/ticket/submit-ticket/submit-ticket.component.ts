@@ -141,10 +141,10 @@ export class SubmitTicketComponent implements OnInit {
           .catch((res: any) => {
             this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
             console.log('submit-ticket: saatiin virhe: ' + res);
+            this.state = 'editing';
           })
           .finally(() => {
             console.log('Komponentti: Kaikki valmiita!');
-            this.state = 'done';
             // Kommentoi alla olevat, jos haluat, että jää näkyviin.
             // this.attachments.clear();
           })
