@@ -55,17 +55,6 @@ export class AppComponent implements OnInit  {
     // this.trackCourseID();
   }
 
-  // private trackCourseID() {
-  //   this.route.paramMap.subscribe((paramMap: ParamMap) => {
-  //     var courseID: string | null = paramMap.get('courseid');
-  //     // console.log('------ app.component: kurssi ID muuttunut:' + courseID);
-  //     // console.dir(paramMap);
-  //     if (courseID !== null) {
-  //       this.ticket.getCourseName(courseID).then(response => this.courseName = response)
-  //     }
-  //   });
-  // }
-
   private trackLoginStatus() {
     this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response) {
@@ -77,17 +66,6 @@ export class AppComponent implements OnInit  {
       }
     });
   }
-
-  // trackQueryParameters() {
-  //   this.route.queryParams.subscribe(params => {
-  //     if (params['sessionID'] !== null && params['sessionID'] !== undefined) {
-  //       let sessionID = params['sessionID'];
-  //       console.log('Parametrit: ' + params['sessionID']);
-  //       console.log('huomattu session id url:ssa, tallennetaan ja käytetään sitä.');
-  //       this.authService.setSessionID(sessionID);
-  //     }
-  //   });
-  // }
 
   public logInOut() {
     if (this.isLogged) {
@@ -101,7 +79,6 @@ export class AppComponent implements OnInit  {
   }
 
   private testIframe () {
-    // return true
     try {
       return window.self !== window.top;
     } catch (e) {
