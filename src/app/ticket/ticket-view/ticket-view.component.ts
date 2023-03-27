@@ -1,9 +1,9 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { Subject, timer } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { getIsInIframe } from '../functions/isInIframe';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
@@ -18,13 +18,15 @@ interface FileInfo {
   done?: boolean;
 }
 
+const MILLISECONDS_IN_MIN = 60000;
+
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',
   styleUrls: ['./ticket-view.component.scss']
 })
 
-export class TicketViewComponent implements OnInit {
+export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
   @Input() public fileInfoList: FileInfo[] = [];
@@ -51,10 +53,11 @@ export class TicketViewComponent implements OnInit {
   public uploadClick: Subject<string> = new Subject<string>();
   public user: User = {} as User;
   public userRole: string = '';
+  private fetchTicketsSub: Subscription | null = null;
   private courseID: string | null;
   private userName: string = '';
   private readonly CURRENT_DATE = new Date().toDateString();
-  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 0.5;
 
   constructor(
     private auth: AuthService,
@@ -93,7 +96,13 @@ export class TicketViewComponent implements OnInit {
     this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     });
-    this.pollTickets(this.courseID);
+    this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+        .subscribe(() => this.fetchTickets(this.courseID));
+  }
+
+  ngOnDestroy(): void {
+    this.fetchTicketsSub?.unsubscribe();
+    this.auth.unTrackUserInfo();
   }
 
   public cancelCommentEditing() {
@@ -102,14 +111,6 @@ export class TicketViewComponent implements OnInit {
 
   public editComment(commentID: string) {
     this.editingComment = commentID;
-  }
-
-  private pollTickets(courseID: string) {
-    const MILLISECONDS_IN_MIN = 60000;
-    timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
-      .subscribe(() => {
-        if (this.courseID) this.fetchTickets(courseID)}
-      );
   }
 
   private fetchTickets(courseID: string | null) {
