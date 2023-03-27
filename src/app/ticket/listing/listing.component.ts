@@ -1,16 +1,25 @@
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap, NavigationStart } from '@angular/router';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { timer } from 'rxjs';
+import { Subject, Subscription, takeUntil, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
+
+enum IconFile {
+  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
+  "Arkistoitu"
+}
+export interface ColumnDefinition {
+  def: string;
+  showMobile: boolean;
+}
 
 export interface SortableTicket {
   id: number;
@@ -21,15 +30,7 @@ export interface SortableTicket {
   tila: string;
 }
 
-export interface ColumnDefinition {
-  def: string;
-  showMobile: boolean;
-}
-
-enum IconFile {
-  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
-  "Arkistoitu"
-}
+const MILLISECONDS_IN_MIN = 60000;
 
 @Component({
   selector: 'app-listing',
@@ -54,7 +55,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  // Ticket info polling rate in minutes.
+  private fetchTicketsSub: Subscription | null = null;
+  private fetchFAQsSub: Subscription | null = null;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
 
@@ -98,7 +100,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
           tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
     }
-
   }
 
   ngOnInit() {
@@ -118,6 +119,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.fetchFAQsSub?.unsubscribe();
+    this.fetchTicketsSub?.unsubscribe();
     this.store.untrackMessages();
   }
 
@@ -133,7 +136,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.courseID = courseID;
       console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
-      this.pollFAQ(courseID);
+      this.fetchFAQsSub = timer(0, this.FAQ_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+        .subscribe(() => this.fetchFAQ(this.courseID));
     });
   }
 
@@ -166,7 +170,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
-          this.pollTickets(this.courseID);
+          this.fetchTicketsSub = timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+              .subscribe(() => this.fetchTickets(this.courseID));
         }
       }
     }).catch(error => this.handleError(error));
@@ -185,12 +190,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private pollTickets(courseID: string) {
-    const MILLISECONDS_IN_MIN = 60000;
-    timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
-      .subscribe(() => this.fetchTickets(courseID));
-  }
-
   private fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then(response => {
         // Arkistoituja kysymyksiä ei näytetä.
@@ -201,13 +200,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         // this.dataSource.paginator = this.paginator;
     }).catch(error => this.handleError(error));
-  }
-
-  private pollFAQ(courseID: string) {
-    const MILLISECONDS_IN_MIN = 60000;
-    timer(0, this.FAQ_POLLING_RATE_MIN * MILLISECONDS_IN_MIN).subscribe(() => {
-      this.fetchFAQ(courseID);
-    });
   }
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
