@@ -1,11 +1,12 @@
 import { loadTranslations } from '@angular/localize';
 import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
+import localeEn from '@angular/common/locales/en';
 
 // Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
-  console.log('------ Ladataan kieli ----------');
-  registerLocaleData(localeFi, 'fi-FI');  // Aina oletuslocale.
+  registerLocaleData(localeFi);  // Aina oletuslocale.
+  registerLocaleData(localeEn);
   const language = getLanguage();
   localStorage.setItem('language', language);
   document.documentElement.lang = language;
