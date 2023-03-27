@@ -5,7 +5,6 @@ import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
 import { node as codeMirrorNode, CodeMirrorView } from 'prosemirror-codemirror-6';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
-import { Plugin, PluginKey } from "prosemirror-state";
 import { EditorView } from 'prosemirror-view';
 
 const nodes = {
@@ -19,7 +18,9 @@ const schema = new Schema({
 });
 
 const nodeViews = {
-  code_mirror: (node: ProseMirrorNode, view: EditorView, getPos: () => number): CodeMirrorView => {
+  code_mirror: (node: ProseMirrorNode,
+                view: EditorView,
+                getPos: () => number): CodeMirrorView => {
     return new CodeMirrorView({
       node,
       view,
@@ -33,19 +34,6 @@ const nodeViews = {
     });
   },
 };
-
-// Tämä plugin sanitoi liitetyn tekstin ja palauttaa ainoastaan tesktin ilman mitään muotoiluja
-// TODO: rivinvaihdot pitäisi kuitenkin saada asianmukaisesti <br > tageina
-const sanitizePastedHTMLPlugin = new Plugin({
-  key: new PluginKey("PastePlugin"),
-  props: {
-    transformPastedHTML(inputHtml: string): string {
-      let tempDivElement = document.createElement("div");
-      tempDivElement.innerHTML = inputHtml;
-      return tempDivElement.textContent || tempDivElement.innerText || "";
-    },
-  },
-});
 
 @Component({
   selector: 'app-editor',
