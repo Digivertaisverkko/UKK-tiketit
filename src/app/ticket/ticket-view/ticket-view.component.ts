@@ -97,12 +97,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.courseName = response;
     });
     this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
-        .subscribe(() => this.fetchTickets(this.courseID));
+        .subscribe(() => this.fetchTicket(this.courseID));
   }
 
   ngOnDestroy(): void {
     this.fetchTicketsSub?.unsubscribe();
-    this.auth.unTrackUserInfo();
   }
 
   public cancelCommentEditing() {
@@ -113,7 +112,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.editingComment = commentID;
   }
 
-  private fetchTickets(courseID: string | null) {
+  private fetchTicket(courseID: string | null) {
     this.ticketService.getTicketInfo(this.ticketID).then(response => {
       this.ticket = response;
       if (this.userName.length == 0) {
@@ -212,7 +211,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         console.log('Kommentin muokkaaminen epäonnistui.');
       }).finally(() => {
         this.editingComment = null;
-        this.fetchTickets(this.courseID);
+        this.fetchTicket(this.courseID);
       })
     console.log('sending');
   }
