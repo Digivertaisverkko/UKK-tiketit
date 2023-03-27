@@ -205,6 +205,7 @@ export class TicketViewComponent implements OnInit {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
         throw new Error('Kommentin lähettäminen epäonnistui.');
       }
+      this.commentText = '';
       if (this.fileInfoList.length === 0) {
           this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
           this.state = 'editing';
@@ -217,18 +218,18 @@ export class TicketViewComponent implements OnInit {
         this.attachments.sendFilesPromise(this.ticketID, commentID)
           .then((res:any) => {
             console.log('ticket view: vastaus: ' + res);
-          })
-          .catch((res:any) => {
-            console.log('ticket view: napattiin virhe: ' + res);
-            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-          })
-          .finally(() => {
-            console.log('kaikki valmista');
             this.state = 'done';
             this.fileInfoList = [];
             this.attachments.clear();
             this.ticketService.getTicketInfo(this.ticketID).then(response => { this.ticket = response });
+          })
+          .catch((res:any) => {
+            console.log('ticket view: napattiin virhe: ' + res);
+            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
             this.state = 'editing';
+          })
+          .finally(() => {
+            console.log('kaikki valmista');
           })
 
         if (false) {
@@ -264,7 +265,7 @@ export class TicketViewComponent implements OnInit {
     }).catch(error => {
       this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:Kommentin lisääminen tikettiin epäonnistui.`;
     }).finally(() => {
-      this.commentText = '';
+
     })
   }
 
