@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit,
+import { Component, Input, Output, EventEmitter, OnInit,
         ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { forkJoin, Observable, pipe, map, tap, catchError, of, throwError } from 'rxjs';
-import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { forkJoin, Observable, pipe, map, tap, catchError, of } from 'rxjs';
 import { TicketService } from '../../ticket.service';
 
-
-// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError lähetysvaiheessa.
+// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError 
+// lähetysvaiheessa.
 interface FileInfo {
   filename: string;
   file: File;
@@ -20,8 +19,13 @@ interface FileInfo {
 @Component({
   selector: 'app-edit-attachments',
   template: `
-    <input class="file-input" (change)="onFileChanged($event)" #fileInput #fileUpload
-        type="file" multiple>
+    <input  (change)="onFileChanged($event)"
+            class="file-input"
+            #fileInput
+            #fileUpload
+            multiple
+            type="file"
+            >
 
     <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
        name="file-input-{{url}}"
@@ -33,16 +37,24 @@ interface FileInfo {
       <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
 
         <div class="list-item">
-          <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">
-            {{file.filename}}</span>
-            <span style="font-weight: 300">&nbsp;({{file.filesize | filesize }})</span>
+          <span class="filename"
+                matTooltip="{{file.filename}}"
+                [matTooltipShowDelay]="600">
+            {{file.filename}}
+          </span>
+            <span style="font-weight: 300">
+              &nbsp;({{file.filesize | filesize }})
+            </span>
           <div class="file-error-message" matError *ngIf="file.error"
               matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
               <mat-icon>warning</mat-icon>{{file.error}}
           </div>
 
-          <button mat-icon-button [disabled]="isEditingDisabled" class="remove-file-button"
-            (click)="removeSelectedFile(index)">
+          <button class="remove-file-button"
+                  (click)="removeSelectedFile(index)"
+                  mat-icon-button
+                  [disabled]="isEditingDisabled"
+                  >
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -111,7 +123,7 @@ export class EditAttachmentsComponent implements OnInit {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
             Tiedoston koko ylittää
-          ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+            ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsMessages.emit('faulty');
       }
       this.fileInfoList.push(fileinfo);
@@ -122,26 +134,26 @@ export class EditAttachmentsComponent implements OnInit {
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
       return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file)
-      .pipe(
-        // return this.ticketService.uploadError(ticketID, commentID, fileinfo.file).pipe(
-        tap(progress => {
-          console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +
-              '): ' + progress);
-          this.fileInfoList[index].progress = progress;
-          // console.dir(event)
-          // if (event.type === HttpEventType.UploadProgress) {
-          //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
-          // }
-        }),
-        catchError((error: any) => {
-          console.log('makeRequestChain: catchError: error napattu');
-          this.fileInfoList[index].uploadError = $localize `:@@Liitteen
-              lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-          // Koko upload loppuu kaikkien tiedostojen kohdalla jos heitetään virhe.
-          return of('error');
-          // return throwError( () => new Error(error) );
-        })
-      )
+        .pipe(
+          // return this.ticketService.uploadError(ticketID, commentID, fileinfo.file).pipe(
+          tap(progress => {
+            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +
+                '): ' + progress);
+            this.fileInfoList[index].progress = progress;
+            // console.dir(event)
+            // if (event.type === HttpEventType.UploadProgress) {
+            //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
+            // }
+          }),
+          catchError((error: any) => {
+            console.log('makeRequestChain: catchError: error napattu');
+            this.fileInfoList[index].uploadError = $localize `:@@Liitteen
+                lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            // Koko upload loppuu kaikkien tiedostojen kohdalla jos heitetään virhe.
+            return of('error');
+            // return throwError( () => new Error(error) );
+          })
+        )
     });
   }
 
