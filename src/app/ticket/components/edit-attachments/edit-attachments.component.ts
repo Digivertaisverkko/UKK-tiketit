@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter, OnInit,
 import { forkJoin, Observable, pipe, map, tap, catchError, of } from 'rxjs';
 import { TicketService } from '../../ticket.service';
 
-// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError 
+// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
 // lähetysvaiheessa.
 interface FileInfo {
   filename: string;
@@ -19,7 +19,8 @@ interface FileInfo {
 @Component({
   selector: 'app-edit-attachments',
   template: `
-    <input  (change)="onFileChanged($event)"
+    <input  aria-disabled="true"
+            (change)="onFileChanged($event)"
             class="file-input"
             #fileInput
             #fileUpload
@@ -28,7 +29,7 @@ interface FileInfo {
             >
 
     <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
-       name="file-input-{{url}}"
+      name="file-input-{{url}}"
       (change)="onFileChanged($event)" #fileUpload> -->
 
     <p class="status-message-p" *ngIf="userMessage">{{userMessage}}</p>
@@ -74,20 +75,15 @@ interface FileInfo {
 export class EditAttachmentsComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @Input() uploadClicks: Observable<string> = new Observable();
-  // @Input() fileListInput
-
+  @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
-  // public fileList: File[] = [];
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
-  public readonly MAX_FILE_SIZE_MB=100;
-  public userMessage: string = '';
-  public state: 'adding' | 'sending' | 'done' = 'adding';
-  // public url: string = '';
-  // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
+  public readonly MAX_FILE_SIZE_MB=100;
+  public state: 'adding' | 'sending' | 'done' = 'adding';
+  public userMessage: string = '';
 
   constructor(private ticketService: TicketService,
     private renderer: Renderer2) {
@@ -135,15 +131,11 @@ export class EditAttachmentsComponent implements OnInit {
     return this.fileInfoList.map((fileinfo, index) => {
       return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file)
         .pipe(
-          // return this.ticketService.uploadError(ticketID, commentID, fileinfo.file).pipe(
           tap(progress => {
-            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +
-                '): ' + progress);
+            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
+                progress);
             this.fileInfoList[index].progress = progress;
-            // console.dir(event)
-            // if (event.type === HttpEventType.UploadProgress) {
-            //   this.fileInfoList[index].progress = Math.round(100 * event.loaded / event.total);
-            // }
+
           }),
           catchError((error: any) => {
             console.log('makeRequestChain: catchError: error napattu');
