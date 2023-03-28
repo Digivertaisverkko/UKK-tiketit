@@ -1,4 +1,4 @@
-@import '/src/variables.scss';
+@import "/src/variables.scss";
 
 .top-buttons {
   display: flex;
@@ -6,12 +6,14 @@
   justify-content: space-between;
 }
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+.vertical-spacer {
+  height: var(--margin-top-embedded);
+}
 
 .field-title {
   min-width: 23em;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .multiple-selection-wrapper {
@@ -25,7 +27,9 @@
   width: 100%;
 }
 
-.info-text-label { margin-bottom: 0.4em }
+.info-text-label {
+  margin-bottom: 0.4em;
+}
 
 .text-area-wrapper {
   width: 100%;
@@ -34,28 +38,36 @@
 .bottom-buttons-wrapper {
   display: flex;
   flex-wrap: wrap;
-  gap: 5%;
+  gap: 1rem;
   justify-content: space-between;
-  margin-top: 0.5rem;
+  mat-checkbox {
+    // Tarkoituksella vähemmän kuin buttoneilla.
+    margin-top: 0.4rem;
+  }
+  button {
+    margin-top: 0.5rem;
+  }
 }
 
-.send-button { order: 5 }
-
-.top-spacer {
-  display: inline-block;
-  flex: 1 1 auto;
+.send-button {
+  order: 5;
 }
 
 // .bottom-spacer { flex-grow: 2 }
 
-
 @media (max-width: $XSmall) {
-  .title { width: 97% }
+  .title {
+    width: 97%;
+  }
 }
 
 @media (max-width: 760px) {
-  .bottom-spacer { display: none }
-  .bottom-buttons-wrapper { gap: 2.5% }
+  .bottom-spacer {
+    display: none;
+  }
+  .bottom-buttons-wrapper {
+    gap: 2.5%;
+  }
 }
 
 @media (max-width: 660px) {
@@ -69,5 +81,8 @@
 }
 
 @media (min-width: $XSmall) {
-  .view-wrapper, .top-buttons{ padding-right: $right-padding }
+  .view-wrapper,
+  .top-buttons {
+    padding-right: $right-padding;
+  }
 }

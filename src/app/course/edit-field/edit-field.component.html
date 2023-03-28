@@ -2,13 +2,13 @@
   class="theme-progress-bar"
   mode="indeterminate"
   *ngIf="!isLoaded"
-></mat-progress-bar>
+  >
+</mat-progress-bar>
 
-<h1
-  class="main-header"
-  *ngIf="courseName.length > 0 && !isInIframe"
-  id="courseName"
->
+<h1 class="main-header"
+    *ngIf="courseName.length > 0 && !isInIframe"
+    id="courseName"
+    >
   <span>{{ courseName }}</span>
 </h1>
 
@@ -23,7 +23,7 @@
     *ngIf="fieldID !== null && isRemovePressed === false"
     mat-raised-button
     i18n="@@Poista"
-  >
+    >
     Poista
   </button>
 
@@ -33,7 +33,7 @@
     *ngIf="isRemovePressed === true"
     color="accent"
     i18n="@@Vahvista poisto"
-  >
+    > 
     Vahvista poisto
   </button>
 </div>
@@ -136,14 +136,13 @@
 
     <div class="bottom-buttons-wrapper">
       <mat-checkbox
-        class="mandatory-checkbox"
         [(ngModel)]="field.pakollinen"
         name="checkbox-mandatory"
         i18n="@@Pakollinen"
         >Pakollinen</mat-checkbox
       >
+
       <mat-checkbox
-        class="prefillable-checkbox"
         style="display: none"
         [(ngModel)]="field.esitaytettava"
         name="checkbox-prefillable"
