@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
     <div class="border-area">
       <div class="headline-wrapper">
       <mat-icon fontIcon="warning_amber"></mat-icon>
-        <h4 class="h4">{{ title }}</h4>
+        <h3 class="h3">{{ title }}</h3>
       </div>
       <p>{{ message }}</p>
     </div>
