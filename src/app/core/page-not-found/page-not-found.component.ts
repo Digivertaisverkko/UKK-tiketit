@@ -11,7 +11,7 @@ import { AuthService } from '../auth.service';
 
     <h1 class="main-header"><span>404</span></h1>
 
-    <h3 i18n="@@404-otsikko" class="sub-header">Sivua ei löytynyt</h3>
+    <h2 i18n="@@404-otsikko" class="sub-header">Sivua ei löytynyt</h2>
 
     <div class="button-wrapper" *ngIf="!isLoggedIn">
       <div class="spacer"></div>
