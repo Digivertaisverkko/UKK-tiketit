@@ -26,6 +26,7 @@ import { FooterComponent } from './footer/footer.component';
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
+import { DataConsentComponent } from './data-consent/data-consent.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
     FooterComponent,
     PrivacyModalComponent,
     PageNotFoundComponent,
-    NoPrivilegesComponent
+    NoPrivilegesComponent,
+    DataConsentComponent
   ],
   imports: [
     CommonModule,

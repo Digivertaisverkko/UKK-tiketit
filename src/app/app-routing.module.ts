@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from './user-management/auth.guard';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 import { NoPrivilegesComponent } from './core/no-privileges/no-privileges.component';
+import { DataConsentComponent } from './core/data-consent/data-consent.component';
 
 // ? viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
 // courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
 const routes: Routes = [
   { path: '', redirectTo: '/course/1/list-tickets', pathMatch: 'full' },
+  { path: 'data-consent', component: DataConsentComponent},
   { path: 'forbidden', component: NoPrivilegesComponent },
   { path: 'course/:courseid/forbidden', component: NoPrivilegesComponent },
   { path: 'course/:courseid', pathMatch: 'full', redirectTo: '/course/:courseid/list-tickets' },
