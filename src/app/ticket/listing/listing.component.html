@@ -69,7 +69,11 @@
         Tila
       </th>
       <td mat-cell *matCellDef="let element">
-        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
+        <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
+        <a aria-disabled="true"
+          [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+          tabindex="-1"
+          >
           <div class="ticket-state-wrapper">
             <div class="icon-wrapper">
               <img alt=""
@@ -109,8 +113,11 @@
         Lähettäjä
       </th>
       <td class="cell-align-right" mat-cell *matCellDef="let element">
-        <a [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-            class="cell-align-right">
+        <a  aria-disabled="true" disabled
+            class="cell-align-right"
+            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+            tabindex="-1"
+            >
           {{ element.aloittajanNimi }}
         </a>
       </td>
@@ -124,21 +131,29 @@
         Luotu
       </th>
       <td mat-cell *matCellDef="let element" class="cell-align-right">
-        <a  class="cell-align-right" [routerLink]="'/course/' + courseID +
-            '/ticket-view/' + element.id">
+        <a  aria-disabled="true"
+            class="cell-align-right"
+            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+            tabindex="-1"
+            >
           {{element.aikaleima | date: 'shortDate' }}
         </a>
       </td>
     </ng-container>
 
+    <!------- Rivit ------->
+
     <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()">
+      <!-- <a [routerLink]="'/course/' + courseID + '/ticket-view/' + row.id"></a> -->
+    </tr>
 
   </table>
 
-  <p class="no-items-message" i18n="@@Ei tuloksia"
-      *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0"
-    >Suodattimella ei löytynyt tuloksia.
+  <p  class="no-items-message" i18n="@@Ei tuloksia"
+      *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0">
+    Suodattimella ei löytynyt tuloksia.
   </p>
 
   <!-- Jos halutaan paginator -->
@@ -202,7 +217,7 @@
     <th mat-header-cell *matHeaderCellDef mat-sort-header
       i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
       sortActionDescription="Järjestä otsikon mukaan"
-    >
+      >
       Otsikko
     </th>
     <td mat-cell *matCellDef="let element">
@@ -221,7 +236,9 @@
     </th>
     <td class="cell-align-right" mat-cell *matCellDef="let element">
       <a class="cell-align-right"
-        [routerLink]="'/course/' + courseID + '/faq-view/' + element.id">
+        [routerLink]="'/course/' + courseID + '/faq-view/' + element.id"
+        tabindex="-1"
+        >
         {{element.aikaleima | date: 'shortDate'}}
       </a>
     </td>
@@ -230,7 +247,7 @@
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>
 
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()"
-    style="position: relative">
+    >
   </tr>
 
 </table>
@@ -250,7 +267,8 @@
             color="primary"
             i18n="@@Uusi UKK"
             justify-content="flex-end"
-            mat-raised-button>
+            mat-raised-button
+            >
       <a [routerLink]="'/course/' + this.courseID + '/submit-faq'">
         Uusi UKK
       </a>
@@ -260,7 +278,7 @@
 </section>
 
 <app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-  message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+    message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
 </app-error-card>
 
 <!-- <div class="theme-actions">
