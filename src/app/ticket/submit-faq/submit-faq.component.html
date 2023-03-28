@@ -1,7 +1,7 @@
-<h2 class="main-header"
+<h1 class="main-header"
     *ngIf="courseName.length > 0 && !isInIframe">
   <span>{{ courseName }}</span>
-</h2>
+</h1>
 
 <div class="submit-faq">
 
@@ -88,11 +88,11 @@
 
     </section>
 
-    <h2><span i18n="@@Kysymys">Kysymys</span><span>*</span></h2>
+    <h1><span i18n="@@Kysymys">Kysymys</span><span>*</span></h1>
     <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqMessage">
     </app-editor>
 
-    <h2><span i18n="@@Vastaus">Vastaus</span><span>*</span></h2>
+    <h1><span i18n="@@Vastaus">Vastaus</span><span>*</span></h1>
     <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer">
     </app-editor>
 
@@ -173,9 +173,9 @@
 
   <ng-container *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
-    <h2 class="main-header" i18n="@@Alkuperäinen kysymys">
+    <h1 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
-    </h2>
+    </h1>
     <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
   </ng-container>
 

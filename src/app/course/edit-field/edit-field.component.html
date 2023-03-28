@@ -4,13 +4,13 @@
   *ngIf="!isLoaded"
 ></mat-progress-bar>
 
-<h2
+<h1
   class="main-header"
   *ngIf="courseName.length > 0 && !isInIframe"
   id="courseName"
 >
   <span>{{ courseName }}</span>
-</h2>
+</h1>
 
 <div class="vertical-spacer" *ngIf="isInIframe"></div>
 

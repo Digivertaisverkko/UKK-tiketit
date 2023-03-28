@@ -9,9 +9,9 @@ import { AuthService } from '../auth.service';
       <app-to-beginning-button></app-to-beginning-button>
     </div>
 
-    <h2 class="main-header">
+    <h1 class="main-header">
       <span i18n="@@Tästä ei pääse">Tästä ei pääse</span>
-    </h2>
+    </h1>
 
     <div class="button-wrapper" *ngIf="!isLoggedIn">
       <div class="spacer"></div>

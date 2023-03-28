@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
       <app-to-beginning-button></app-to-beginning-button>
     </div>
 
-    <h2 class="main-header"><span>404</span></h2>
+    <h1 class="main-header"><span>404</span></h1>
 
     <h3 i18n="@@404-otsikko" class="sub-header">Sivua ei löytynyt</h3>
 
