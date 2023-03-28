@@ -33,7 +33,7 @@ export class AuthService {
               private router: Router,
               private route: ActivatedRoute,
               @Inject( LOCALE_ID ) private localeDateFormat: string ) {
-    
+
   }
 
   public initialize() {
@@ -78,58 +78,11 @@ export class AuthService {
     });
   }
 
-  private trackRouteParameters() {
-    const route = window.location.pathname + window.location.search;
-    console.log('auth service: route on '+ route);
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      console.log(' auth service: trackRouteParameters: saatiin kurssi ID:' + courseID);
-      if (courseID !== null) {
-        this.setCourseID(courseID);
-      }
-    });
-  }
-
   public setCourseID(courseID: string) {
     if (courseID !== this.courseID) {
       console.log('setCourseID: asetetaan kurssi id: ' + this.courseID);
       this.courseID = courseID;
     }
-  }
-
-  private trackLoginStatus() {
-    this.onIsUserLoggedIn().subscribe(response => {
-      const courseID = this.courseID;
-      if (response == true) {
-        if (courseID !== null) {
-          console.log('trackLoginStatus: haetaan käyttäjätiedot.');
-          this.fetchUserInfo(courseID).then(response => this.setLoggedIn());
-        }
-      }
-    });
-  }
-
-  /* Alustetaan ohjelman tila huomioiden, että kirjautumiseen liittyvät tiedot
-    voivat olla jo local storagessa. */
-  public async initialize2(courseID: string, sessionIDfromURL?: string) {
-    // if (window.localStorage.getItem('SESSION_ID') == null) return
-    var sessionID: string;
-    if (sessionIDfromURL === undefined) {
-      const savedSessionID = this.getSessionID();
-      if (savedSessionID === null) {
-        console.warn('authService.initialize: Virhe: ei session ID:ä.');
-        return
-      } else {
-        sessionID = savedSessionID;
-      }
-    } else {
-      sessionID = sessionIDfromURL;
-    }
-    this.setSessionID(sessionID);
-    // session id voi olla vanhentunut, mutta asetetaan kirjautuneeksi,
-    // jotta ei ohjauduta loginiin page refresh:lla.
-    // this.setLoggedIn();
-    this.fetchUserInfo(courseID);
   }
 
   public getDateFormat(): string {
