@@ -43,7 +43,7 @@ interface FileInfo {
                 [matTooltipShowDelay]="600">
             {{file.filename}}
           </span>
-            <span style="font-weight: 300">
+            <span class="filesize">
               &nbsp;({{file.filesize | filesize }})
             </span>
           <div class="file-error-message" matError *ngIf="file.error"
