@@ -164,7 +164,7 @@
   <table class="theme-table mat-elevation-z1" mat-table [dataSource]="dataSourceArchived"
     [hidden]="dataSourceArchived.filteredData.length === 0" matSort matSortActive="aikaleima"
     matSortDirection="desc"
-    #sortQuestions="matSort">
+    #sortArchived="matSort">
 
 <ng-container matColumnDef="tila">
   <th mat-header-cell *matHeaderCellDef mat-sort-header
