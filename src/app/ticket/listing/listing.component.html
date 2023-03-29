@@ -168,9 +168,12 @@
             (click)="saveRedirectUrl()"
             color="primary"
             mat-raised-button
-            i18n="@@Kysy opettajilta"
+            [routerLink]="'/course/' + this.courseID + '/submit'"
+            tabindex="-1"
+            target="_blank"
             >
-      <a [routerLink]="'/course/' + this.courseID + '/submit'">
+      <a  i18n="@@Kysy opettajilta"
+          [routerLink]="'/course/' + this.courseID + '/submit'">
         Kysy opettajilta
       </a>
     </button>
@@ -265,11 +268,12 @@
           {'justify-content': 'flex-end'}">
     <button (click)="saveRedirectUrl('-faq')"
             color="primary"
-            i18n="@@Uusi UKK"
             justify-content="flex-end"
             mat-raised-button
+            tabindex="-1"
             >
-      <a [routerLink]="'/course/' + this.courseID + '/submit-faq'">
+      <a  i18n="@@Uusi UKK"
+          [routerLink]="'/course/' + this.courseID + '/submit-faq'">
         Uusi UKK
       </a>
     </button>

@@ -1,10 +1,10 @@
-import { ActivatedRoute, Router, ParamMap, NavigationStart } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
@@ -137,7 +137,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
       this.fetchFAQsSub = timer(0, this.FAQ_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
-        .subscribe(() => this.fetchFAQ(this.courseID));
+          .subscribe(() => this.fetchFAQ(this.courseID));
     });
   }
 
