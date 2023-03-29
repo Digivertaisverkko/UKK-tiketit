@@ -39,29 +39,44 @@
         Kopioi UKK:ksi
       </button>
 
-      <button (click)="archiveTicket()"
+
+      <button (click)="changeArchiveButton()"
+              i18n="@@Arkistoi"
               mat-raised-button
-              *ngIf="ticket.arkistoitava === true"
+              *ngIf="ticket.arkistoitava === true && !isArchivePressed"
               [disabled]="state==='sending'"
               >
         Arkistoi
       </button>
 
+      <button (click)="archiveTicket()"
+              color="accent"
+              i18n="@@Vahvista"
+              mat-raised-button
+              *ngIf="isArchivePressed"
+              [disabled]="state==='sending'"
+              >
+        Vahvista
+      </button>
+
       <div matTooltip="{{cantRemoveTicket}}"
           [matTooltipDisabled]="isRemovable">
         <button [disabled]="!isRemovable || state==='sending'"
-            i18n="@@Poista" (click)="changeRemoveButton()"
-            mat-raised-button
-            *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
-            >
+                i18n="@@Poista" (click)="changeRemoveButton()"
+                mat-raised-button
+                *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
+                >
           Poista
         </button>
       </div>
 
       <button (click)="removeTicket()"
-          mat-raised-button
-          *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto"
-          [disabled]="state==='sending'">
+              color="accent"
+              [disabled]="state==='sending'"
+              i18n="@@Vahvista poisto"
+              mat-raised-button
+              *ngIf="isRemovePressed === true"
+              >
         Vahvista poisto
       </button>
     </div>

@@ -38,6 +38,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public courseName: string = '';
   public editingComment: string | null = null;
   public errorMessage: string = '';
+  public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
   public isInIframe: boolean;
   public isLoaded: boolean;
@@ -177,6 +178,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
             Kysymyksen poistaminen ei onnistunut.`;
       }
     })
+  }
+
+  changeArchiveButton() {
+    setTimeout(() => this.isArchivePressed = true, 300);
   }
 
   changeRemoveButton() {
