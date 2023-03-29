@@ -125,7 +125,8 @@ a {
 }
 
 :host ::ng-deep .mat-sort-header-sorted>.mat-sort-header-content {
-  color: #5379FC;
+  color: #3F55A6;
+  // color: #5379FC;
 }
 
 // ------------------------
@@ -138,7 +139,9 @@ a {
 button {
   margin-left: 1rem;
   margin-right: 0;
+  white-space: nowrap;
 }
+
 
 .input-field-wrapper {
   align-items: flex-end;
@@ -165,8 +168,15 @@ button {
   width: 97%;
 }
 
-button {
-  white-space: nowrap;
+.submit-faq-btn {
+
+  a {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-right: 1em;
+    padding-left: 1em;
+  }
 }
 
 @media (min-width: $XSmall) {
