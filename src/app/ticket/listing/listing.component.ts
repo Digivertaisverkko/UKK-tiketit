@@ -11,6 +11,8 @@ import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { getIsInIframe } from '../functions/isInIframe';
+import { Title } from '@angular/platform-browser';
+import { Constants } from 'src/app/shared/constants';
 
 enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
@@ -80,7 +82,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private store: StoreService,
     private ticket: TicketService,
+    private title: Title
   ) {
+    this.title.setTitle(Constants.productName + ' - ' +
+        $localize `:@@Otsikko-Kysymykset:Kysymykset`);
     this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
