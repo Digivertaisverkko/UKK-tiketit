@@ -117,11 +117,11 @@
         cdkAutosizeMinRows="3"
         cdkTextareaAutosize
         contenteditable
+        i18n-placeholder="@@Infoteksti"
         matInput
         maxlength="255"
         name="infoText"
         placeholder="Info-teksti"
-        i18n-placeholder="@@Infoteksti"
       ></textarea>
 
       <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
@@ -156,9 +156,9 @@
 
       <button
         class="cancel-button"
-        [routerLink]="'/course/' + courseID + '/settings'"
-        mat-raised-button
         i18n="@@Peru"
+        mat-raised-button
+        [routerLink]="'/course/' + courseID + '/settings'"
       >
         Peru
       </button>
@@ -167,8 +167,8 @@
         class="send-button"
         (click)="sendField()"
         color="primary"
-        mat-raised-button
         i18n="@@Lähetä"
+        mat-raised-button
       >
         Lähetä
       </button>
