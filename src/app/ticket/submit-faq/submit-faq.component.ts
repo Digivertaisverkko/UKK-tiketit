@@ -64,7 +64,6 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleServ.setTitle(Constants.baseTitle + "UKK");
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     this.isInIframe = getIsInIframe();
     if (this.courseId === null) {
@@ -80,6 +79,7 @@ export class SubmitFaqComponent implements OnInit {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
           this.originalTicket = response;
+          this.titleServ.setTitle(Constants.baseTitle + this.originalTicket.otsikko);
           // Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli "Ratkaisuehdotuksen" omaava kommentti
           // oletusvastaukseksi. Lopputuloksena viimeinen ratkaisuehdotus jää oletusvastaukseksi.
           for (let comment of response.kommentit) {
@@ -106,6 +106,8 @@ export class SubmitFaqComponent implements OnInit {
             }
           }
         });
+    } else {
+      this.titleServ.setTitle(Constants.baseTitle + 'Uusi UKK');
     }
     this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response });

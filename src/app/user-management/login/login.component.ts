@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-// import { environment } from 'src/environments/environment';
-// import { ForwardRefHandling } from '@angular/compiler';
+import { Constants } from '../../shared/utils';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-login',
@@ -24,11 +25,14 @@ export class LoginComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private titleServ: Title
   ) {
   }
 
   ngOnInit(): void {
+    this.titleServ.setTitle(Constants.baseTitle +
+        $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
     this.setLoginID();
   }
 
