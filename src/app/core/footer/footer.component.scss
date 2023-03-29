@@ -30,81 +30,83 @@ footer {
     width: 100%;
   }
 
-    img {
-      display: block;
-      height: 100%;
-      margin-left: 10px;
-      margin-right: 10px;
-      // padding-top: 1em;
-      // padding-bottom: 1em
-      @if $debug { border: dashed green 1px; }
-    }
+  img {
+    display: block;
+    height: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    // padding-top: 1em;
+    // padding-bottom: 1em
+    @if $debug { border: dashed green 1px; }
+  }
 
-    #yo-logo {
-      height: 80px;
-      // margin-bottom:
-      padding-bottom: 22px;;
-      padding-left: 5px;
-      // width: 200px;
-    }
+  #yo-logo {
+    height: 80px;
+    // margin-bottom:
+    padding-bottom: 22px;;
+    padding-left: 5px;
+    // width: 200px;
+  }
 
-    #oamk-logo {
-      height: 70px;
-      margin-left: 0;
-      margin-right: 0;
-      padding-top: 4px;
-      padding-bottom: 15px;
-    }
+  #oamk-logo {
+    height: 70px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 4px;
+    padding-bottom: 15px;
+  }
 
-    #vipuvoimaa-logo {
-      height: 80px;
-      padding-bottom: 15px;
-      // padding-right: 8px;
-      // padding-left: 8px;
-    }
+  #vipuvoimaa-logo {
+    height: 80px;
+    padding-bottom: 15px;
+    // padding-right: 8px;
+    // padding-left: 8px;
+  }
 
-    #eu-logo {
-      height: 80px;
-      padding: 12px 16px 12px 16px;
-    }
+  #eu-logo {
+    height: 80px;
+    padding: 12px 16px 12px 16px;
+  }
 
-    mat-nav-list {
-      // flex-grow: 5;
-      // display: block;§
-      padding: 18px 0 10px 0;
-      max-width: 16em;
-      text-align: right;
-      // max-width: 220px;
-      @if $debug {
-        border: {
-          style: dashed;
-          color: gray;
-          width: 1px;
-        }
+  mat-nav-list {
+    // flex-grow: 5;
+    // display: block;§
+    padding: 18px 0 10px 0;
+    max-width: 16em;
+    text-align: right;
+    // max-width: 220px;
+    @if $debug {
+      border: {
+        style: dashed;
+        color: gray;
+        width: 1px;
       }
     }
+  }
 
-    .spacer {
-      display: block;
-      flex: 3 0 auto;
-      @if $debug { border: solid yellow 1px;  }
-    }
+  .spacer {
+    display: block;
+    flex: 3 0 auto;
+    @if $debug { border: solid yellow 1px;  }
+  }
 
-    #about-software {
-      align-self: flex-start;
-      box-sizing: border-box;
-      color: var(--contrast-color);
-      display: block;
-      max-width: 445px;
-      padding: 16px 13px 14px 18px;
-      @if $debug { border: dashed gray 1px; }
-    }
+  #about-software {
+    align-self: flex-start;
+    box-sizing: border-box;
+    color: var(--contrast-color);
+    display: block;
+    max-width: 445px;
+    padding: 16px 13px 14px 18px;
+    @if $debug { border: dashed gray 1px; }
+  }
 
-    a { height: 22px; }
+  a {
+    height: 22px;
+  }
 
-    ::ng-deep .mdc-list-item__primary-text {
-      color: var(--contrast-color) !important;
-    }
+  ::ng-deep .mdc-list-item__primary-text {
+    color: var(--contrast-color) !important;
+  }
 
 }
 
