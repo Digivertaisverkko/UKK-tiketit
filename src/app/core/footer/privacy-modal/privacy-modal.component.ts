@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component  } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Renderer2,
+        ViewChild  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -7,13 +8,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./privacy-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PrivacyModalComponent {
+export class PrivacyModalComponent implements AfterViewInit {
 
-  constructor(
-    public modalRef: MatDialogRef<PrivacyModalComponent>
-  ) { }
+  @ViewChild('dialogContent') dialogContent!: ElementRef;
 
-  closeModal() {
+  constructor (public modalRef: MatDialogRef<PrivacyModalComponent>) {
+  }
+
+  ngAfterViewInit(): void {
+    this.dialogContent.nativeElement.scrollTop = 0;
+  }
+
+  public closeModal() {
     this.modalRef.close();
   }
 

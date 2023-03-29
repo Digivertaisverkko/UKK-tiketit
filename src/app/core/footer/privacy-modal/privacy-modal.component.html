@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>Tietosuojaseloste</h1>
 
-<mat-dialog-content>
+<mat-dialog-content #dialogContent>
 
-  <p cdkFocusInitial>
+  <p>
     Tämä on UKK-Tiketit järjestelmän EU:n yleisen tietosuoja-asetuksen (GDPR)
     ja tietosuojalain (1050/2018) mukainen tietosuojaseloste.
   </p>
@@ -152,7 +152,11 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button (click)="closeModal()" color="primary" mat-raised-button>
+  <button color="primary"
+          (click)="closeModal()"
+          i18n="@@Sulje"
+          mat-raised-button
+          >
     Sulje
   </button>
 </mat-dialog-actions>

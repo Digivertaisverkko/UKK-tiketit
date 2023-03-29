@@ -149,6 +149,7 @@
     "Salasanan pituus": "A least {$INTERPOLATION} characters long password is required. ",
     "Salasanat eivät täsmää.": " Passwords do not match. ",
     "Sisäänkirjautuminen": "Login",
+    "Sulje": "Close",
     "Tallennamme seuraavat tiedot": "We store the following information from Moodle in our database:",
     "Tietojenkäyttösuostumus": "This is the ticketing system built by the Diginet project for discussion and questions between teachers and students in the course. To work, the software needs to know who you are, what course you are in and what you are doing in the course. Therefore, we ask you for your permission to provide this information for the use of the ticketing system. If you are interested in how how we handle your data, you can read our privacy statement.",
     "tai": "or",

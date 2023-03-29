@@ -9,11 +9,11 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 // Material moduulit
+import { MatDialogConfig, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
 import { MaterialModule } from '../shared/material.module';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRippleModule } from '@angular/material/core';
 // import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 // Servicet
@@ -21,21 +21,21 @@ import { AuthService } from './auth.service';
 import { CustomHttpInterceptor } from './http-interceptor';
 
 // Komponentit
-import { HeaderComponent } from '../core/header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
 import { DataConsentComponent } from './data-consent/data-consent.component';
+import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from '../core/header/header.component';
+import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
+    DataConsentComponent,
     FooterComponent,
-    PrivacyModalComponent,
-    PageNotFoundComponent,
+    HeaderComponent,
     NoPrivilegesComponent,
-    DataConsentComponent
+    PageNotFoundComponent,
+    PrivacyModalComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +50,10 @@ import { DataConsentComponent } from './data-consent/data-consent.component';
   ],
   providers: [
     AuthService,
-    { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true},
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue:
+        { autoFocus: 'dialog' } as MatDialogConfig }
+
   ],
   exports: [
     HeaderComponent,
