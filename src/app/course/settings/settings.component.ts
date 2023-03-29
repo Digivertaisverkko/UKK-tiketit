@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.service';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Title } from '@angular/platform-browser';
 
 interface ColumnDefinition {
   def: string;
@@ -32,12 +33,14 @@ export class SettingsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ticketService: TicketService
+    private ticketService: TicketService,
+    private titleServ: Title
   ) {
     this.isInIframe = getIsInIframe();
   }
 
   ngOnInit(): void {
+    this.titleServ.setTitle(Constants.baseTitle + 'Kurssin asetukset');
     this.trackRouteParameters();
   }
 

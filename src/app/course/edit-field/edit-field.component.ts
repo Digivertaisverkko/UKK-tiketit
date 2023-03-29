@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }from '@angular/material/chips';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -28,7 +29,8 @@ export class EditFieldComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ticketService: TicketService
+    private ticketService: TicketService,
+    private titleServ: Title
   ) {
     this.isInIframe = getIsInIframe();
     this.field = {
@@ -115,6 +117,7 @@ export class EditFieldComponent implements OnInit {
       } else {
         this.multipleSelection = true;
       }
+      this.titleServ.setTitle(Constants.baseTitle +' Lisäkenttä - ' + this.field.otsikko);
       console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
     }).catch(error => {
       console.dir(error);

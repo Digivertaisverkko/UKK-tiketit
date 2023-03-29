@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { TicketService, Tiketti, Error } from '../ticket.service';
+import { Constants } from '../../shared/utils';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -25,6 +28,7 @@ export class FaqViewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private ticketService: TicketService,
+    private titleServ: Title
   ) {
     this.courseID = this.route.snapshot.paramMap.get('courseid');
     this.auth.trackUserInfo().subscribe(response => this.user = response);
@@ -42,6 +46,7 @@ export class FaqViewComponent implements OnInit {
       this.ticketService.getTicketInfo(this.faqID)
         .then((response) => {
           this.ticket = response;
+          this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
           if (this.auth.getUserName.length == 0) {
             try {
               if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
