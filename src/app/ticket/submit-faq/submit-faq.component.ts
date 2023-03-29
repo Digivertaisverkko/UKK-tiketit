@@ -1,12 +1,14 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse
           } from 'src/app/ticket/ticket.service';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
+import { Title } from '@angular/platform-browser';
+
 
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
@@ -56,10 +58,13 @@ export class SubmitFaqComponent implements OnInit {
   constructor(private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
-              private ticketService: TicketService) {
+              private ticketService: TicketService,
+              private titleServ: Title
+              ) {
   }
 
   ngOnInit(): void {
+    this.titleServ.setTitle(Constants.baseTitle + "UKK");
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     this.isInIframe = getIsInIframe();
     if (this.courseId === null) {

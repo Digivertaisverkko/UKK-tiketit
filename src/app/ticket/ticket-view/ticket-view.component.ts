@@ -4,9 +4,11 @@ import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { Subject, Subscription, timer } from 'rxjs';
-import { getIsInIframe } from '../functions/isInIframe';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
+import { Title } from '@angular/platform-browser';
+
 
 interface FileInfo {
   filename: string;
@@ -66,6 +68,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private router: Router,
     private _snackBar: MatSnackBar,
     private ticketService: TicketService,
+    private titleServ: Title
   ) {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
@@ -141,6 +144,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.isEditable = true;
         this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
       }
+      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
       this.isLoaded = true;
     }).catch(error => {
       switch (error.tunnus) {

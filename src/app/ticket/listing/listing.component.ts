@@ -10,9 +10,8 @@ import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { getIsInIframe } from '../functions/isInIframe';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
-import { Constants } from 'src/app/shared/constants';
 
 enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
@@ -31,8 +30,6 @@ export interface SortableTicket {
   tilaID: number;
   tila: string;
 }
-
-const MILLISECONDS_IN_MIN = 60000;
 
 @Component({
   selector: 'app-listing',
@@ -84,7 +81,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private ticket: TicketService,
     private title: Title
   ) {
-    this.title.setTitle(Constants.productName + ' - ' +
+    this.title.setTitle(Constants.baseTitle +
         $localize `:@@Otsikko-Kysymykset:Kysymykset`);
     this.isInIframe = getIsInIframe();
 
@@ -141,7 +138,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.courseID = courseID;
       console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
-      this.fetchFAQsSub = timer(0, this.FAQ_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+      this.fetchFAQsSub = timer(0, this.FAQ_POLLING_RATE_MIN *
+          Constants.MILLISECONDS_IN_MIN)
           .subscribe(() => this.fetchFAQ(this.courseID));
     });
   }
@@ -175,7 +173,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
-          this.fetchTicketsSub = timer(0, this.TICKET_POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+          this.fetchTicketsSub = timer(0, this.TICKET_POLLING_RATE_MIN *
+              Constants.MILLISECONDS_IN_MIN)
               .subscribe(() => this.fetchTickets(this.courseID));
         }
       }

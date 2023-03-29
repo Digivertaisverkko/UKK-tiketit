@@ -5,8 +5,9 @@ import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/core/auth.service';
 import { KentanTiedot, TicketService, UusiTiketti, AddTicketResponse
         } from 'src/app/ticket/ticket.service';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
+import { Title } from '@angular/platform-browser';
 
 interface TiketinKentat extends KentanTiedot {
   arvo: string;
@@ -50,11 +51,15 @@ export class SubmitTicketComponent implements OnInit {
   constructor(private auth: AuthService,
               private router: Router,
               private route: ActivatedRoute,
-              private ticketService: TicketService) {}
+              private ticketService: TicketService,
+              private titleServ: Title
+              )
+  {}
 
   ngOnInit(): void {
+    this.titleServ.setTitle(Constants.baseTitle + "Uusi kysymys");
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
-    if (this.courseId === null) { throw new Error('Ei kurssi ID:ä.') }
+    if (this.courseId === null) throw new Error('Ei kurssi ID:ä.');
     this.auth.fetchUserInfo(this.courseId);
     this.auth.trackUserInfo().subscribe(response => {
       this.userName = response?.nimi ?? '';
