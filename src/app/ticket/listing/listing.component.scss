@@ -129,11 +129,16 @@ a {
   // color: #5379FC;
 }
 
+
 // ------------------------
 
 
 [hidden] {
   display: none !important;
+}
+
+.buttons-wrapper {
+  justify-content: space-between;
 }
 
 button {

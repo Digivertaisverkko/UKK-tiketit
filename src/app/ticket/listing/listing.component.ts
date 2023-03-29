@@ -40,10 +40,12 @@ export interface SortableTicket {
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
 
+  public archivedCount: number = 0;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
   public courseID: string = '';
   public dataSource = new MatTableDataSource<SortableTicket>();
+  public dataSourceArchived = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
   public FAQisLoaded: boolean = false;
   public iconFile: typeof IconFile = IconFile;
@@ -67,8 +69,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public ticketViewLink = '';
   public user: User = {} as User;
 
-  @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
+  @ViewChild('sortArchived', {static: false}) sortArchived = new MatSort();
+  @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
@@ -194,9 +197,18 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  public fetchArchivedTickets() {
+    this.ticket.getTicketList(this.courseID, { option: 'archived' }).then(response => {
+      if (response.length > 0) {
+        this.dataSourceArchived = new MatTableDataSource(response);
+        this.archivedCount = response.length;
+        this.dataSourceArchived.sort = this.sortArchived;
+      }
+    }).catch(error => this.handleError(error));
+  }
+
   private fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then(response => {
-        // Arkistoituja kysymyksiä ei näytetä.
         if (response.length > 0) {
           this.dataSource = new MatTableDataSource(response);
           this.numberOfQuestions = response.length;
@@ -221,6 +233,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.FAQisLoaded = true;
         if (refresh !== true) this.isLoaded = true;
       });
+  }
+
+  public hideArchived() {
+    this.dataSourceArchived = new MatTableDataSource();
+    this.archivedCount = 0;
   }
 
   private showCourseName(courseID: string) {

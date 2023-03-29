@@ -390,12 +390,25 @@ export class TicketService {
 
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<SortableTicket[]> {
+  public async getTicketList(courseID: string, option?: GetTicketsOption) {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
-    // //const httpOptions = this.getHttpOptions();;
-    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
+    console.log('optio: ' + option);
+    typeof(option);
+    console.dir(option);
+    let target;
+    switch (option?.option ?? '') {
+      case 'onlyOwn':
+        target = 'omat'; break;
+      case "archived":
+        target = "arkistoidut";
+        console.log('---- Haetaan arkistoidut ----');
+        break;
+      default:
+        console.log('---- Haetaan kaikki ----');
+        target = "kaikki"
+    }
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
@@ -664,4 +677,8 @@ export interface Kommentti {
 export interface NewCommentResponse {
   success: boolean;
   kommentti: string;
+}
+
+interface GetTicketsOption {
+  option: 'onlyOwn' | 'archived';
 }
