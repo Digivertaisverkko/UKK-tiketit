@@ -90,8 +90,9 @@ footer {
     @if $debug { border: solid yellow 1px;  }
   }
 
-  #about-software {
+  .about-software {
     align-self: flex-start;
+    font-weight: 500;
     box-sizing: border-box;
     color: var(--contrast-color);
     display: block;
