@@ -16,7 +16,7 @@
         *ngIf="ticket.tila === undefined" >
   </app-to-beginning-button>
 
-    <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
+  <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
       <app-to-beginning-button [disabled]="state==='sending'">
       </app-to-beginning-button>
 
@@ -37,6 +37,14 @@
           *ngIf="(userRole === 'opettaja' || userRole === 'admin')"
           >
         Kopioi UKK:ksi
+      </button>
+
+      <button (click)="archiveTicket()"
+              mat-raised-button
+              *ngIf="ticket.arkistoitava === true"
+              [disabled]="state==='sending'"
+              >
+        Arkistoi
       </button>
 
       <div matTooltip="{{cantRemoveTicket}}"

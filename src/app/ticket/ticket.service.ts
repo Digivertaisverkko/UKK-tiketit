@@ -301,9 +301,21 @@ export class TicketService {
 
   // Arkistoi (poista) UKK.
   public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
-    //const httpOptions = this.getHttpOptions();;
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.post<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  public async archiveTicket(ticketID: string): Promise<{ success: boolean }> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/valmis`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.post<{ success: boolean }>(url, {})
@@ -571,6 +583,7 @@ export interface Tiketti extends TiketinPerustiedot {
   kurssi: number;
   viesti: string;
   ukk?: boolean;
+  arkistoitava: boolean;
   kentat?: Array<Kentta>;
   kommentit: Array<Kommentti>;
   liitteet?: Array<Liite>;

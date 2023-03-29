@@ -104,6 +104,23 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.fetchTicketsSub?.unsubscribe();
   }
 
+  public archiveTicket() {
+    this.ticketService.archiveTicket(this.ticketID).then(response => {
+      if (response?.success === true) {
+        this.router.navigateByUrl('/course/' + this.courseID + '/list-tickets');
+      } else {
+        throw Error
+      }
+    }).catch(error => {
+      if (error?.tunnus == 1003) {
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä
+            käyttäjäoikeuksia` + '.';
+      } else {
+        this.errorMessage = "Kysymyksen arkistointi ei onnistunut.";
+      }
+    })
+  }
+
   public cancelCommentEditing() {
     this.editingComment = null;
   }
