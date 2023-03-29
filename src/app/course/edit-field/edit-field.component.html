@@ -33,14 +33,14 @@
     *ngIf="isRemovePressed === true"
     color="accent"
     i18n="@@Vahvista poisto"
-    > 
+    >
     Vahvista poisto
   </button>
 </div>
 
 <div class="view-wrapper" *ngIf="isLoaded">
-  <h2 class="sub-header" i18n="@@Kysymysten lisäkentät">
-    Kysymysten lisäkentät
+  <h2 class="sub-header" i18n="@@Kysymysten lisäkenttä">
+    Kysymysten lisäkenttä
   </h2>
 
   <form action="" #submitForm="ngForm" accept-charset="UTF-8">
@@ -62,8 +62,9 @@
         [(ngModel)]="multipleSelection"
         name="checkbox"
         i18n="@@Monivalinta"
-        >Monivalinta</mat-checkbox
-      >
+        >
+        Monivalinta
+      </mat-checkbox>
 
       <mat-form-field class="chip-list-form-field" appearance="fill">
         <mat-label i18n="@@Monivalinnan vaihtoehdot"
