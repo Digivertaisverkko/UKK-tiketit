@@ -121,7 +121,7 @@ export class TicketService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise<KentanTiedot[]> {
+  public async getTicketFieldInfo(courseID: string, fieldID?: string | null): Promise<KentanTiedot[]> {
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {
@@ -394,19 +394,14 @@ export class TicketService {
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
-    console.log('optio: ' + option);
-    typeof(option);
-    console.dir(option);
     let target;
     switch (option?.option ?? '') {
       case 'onlyOwn':
         target = 'omat'; break;
       case "archived":
         target = "arkistoidut";
-        console.log('---- Haetaan arkistoidut ----');
         break;
       default:
-        console.log('---- Haetaan kaikki ----');
         target = "kaikki"
     }
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
