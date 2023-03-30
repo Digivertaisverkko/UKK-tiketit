@@ -60,7 +60,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private courseID: string | null;
   private userName: string = '';
   private readonly CURRENT_DATE = new Date().toDateString();
-  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 0.5;
+  private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
 
   constructor(
     private auth: AuthService,
