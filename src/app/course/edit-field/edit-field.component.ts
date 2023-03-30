@@ -54,11 +54,19 @@ export class EditFieldComponent implements OnInit {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.fieldID  = paramMap.get('fieldid');
+      console.log('fieldID tyyppi:');
+      console.log(typeof this.fieldID);
+      console.dir(this.fieldID);
       this.courseID = courseID;
       this.showCourseName(this.courseID);
       // Kentän id on uudella kentällä null.
+      if  (!this.fieldID) {
+        this.titleServ.setTitle(Constants.baseTitle + 'Uusi lisäkenttä');
+      }
+      // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
+      // uusi kenttä.
       this.getFieldInfo(courseID, this.fieldID);
-      this.isLoaded = true;
+        this.isLoaded = true;
     });
   }
 
@@ -91,12 +99,14 @@ export class EditFieldComponent implements OnInit {
     }
   }
 
+  // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
-    this.ticketService.getTicketFieldInfo(courseID).then(response => {
-      if (!response[0]?.id) {
-        throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
-      }
+    this.ticketService.getTicketFieldInfo(courseID, fieldID).then(response => {
+      // if (!response[0]?.id) {
+      //   throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+      // }
       // Tarvitaan tietojen lähettämiseen.
+
       this.allFields = response.map(field => {
         return {
           ...field, id: field.id?.toString()
