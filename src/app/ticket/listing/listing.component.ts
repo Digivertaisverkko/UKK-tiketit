@@ -56,8 +56,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  private fetchTicketsSub: Subscription | null = null;
-  private fetchFAQsSub: Subscription | null = null;
+  private fetchTicketsSub: Subscription = new Subscription;
+  private fetchFAQsSub: Subscription = new Subscription;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
 
@@ -114,9 +114,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setTicketListHeadline();
     });
     this.trackScreenSize();
-    this.authService.onIsUserLoggedIn().subscribe(response => {
-      if (response) this.updateLoggedInView(this.courseID);
-    });
+
+    if (this.authService.getIsUserLoggedIn() === true) {
+      this.updateLoggedInView(this.courseID);
+    };
+
+    // this.authService.onIsUserLoggedIn().subscribe(response => {
+    //   if (response) this.updateLoggedInView(this.courseID);
+    // });
   }
 
   ngAfterViewInit(): void {
@@ -124,9 +129,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fetchFAQsSub?.unsubscribe();
-    this.fetchTicketsSub?.unsubscribe();
-    this.store.untrackMessages();
+    // console.warn('listaus: ngOnDestroy ajettu.');
+    this.fetchFAQsSub.unsubscribe();
+    this.fetchTicketsSub.unsubscribe();
   }
 
   private trackRouteParameters() {
@@ -139,8 +144,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
-      console.log('lista: otettiin kurssi ID URL:sta');
       this.showCourseName(courseID);
+      this.fetchFAQsSub.unsubscribe();
       this.fetchFAQsSub = timer(0, this.FAQ_POLLING_RATE_MIN *
           Constants.MILLISECONDS_IN_MIN)
           .subscribe(() => this.fetchFAQ(this.courseID));
@@ -176,6 +181,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
+          // Älä poista, ei toimi pelkkä ngOnDestroyssa.
+          this.fetchTicketsSub.unsubscribe();
           this.fetchTicketsSub = timer(0, this.TICKET_POLLING_RATE_MIN *
               Constants.MILLISECONDS_IN_MIN)
               .subscribe(() => this.fetchTickets(this.courseID));
