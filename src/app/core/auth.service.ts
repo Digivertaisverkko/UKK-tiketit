@@ -384,29 +384,26 @@ export class AuthService {
     return url.protocol === "http:" || url.protocol === "https:";
   }
 
-  /*  Lähetä muotoiltuvirheilmoitus consoleen, puutu ylemmän tason virheisiin
-      kuten jos ei olle kirjautuneita.
-      Lähetä virheilmoitus templateen napattavaksi backendin virheolion muodossa.
-  */
   // Suorita uloskirjautuminen.
   public async logout(): Promise<any> {
-    const sessionID = this.getSessionID();
-    if (sessionID == undefined) {
-      this.setNotLoggegIn();
-      window.localStorage.clear();
-    } else {
+    // const sessionID = this.getSessionID();
+    // if (sessionID == undefined) {
+    //   this.setNotLoggegIn();
+    //   window.localStorage.clear();
+    // } else {
       let response: any;
-      let url = environment.apiBaseUrl + '/kirjaudu-ulos';
-
+      let url = environment.apiBaseUrl + '/kirjauduulos';
       try {
-        response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null));
+        response = await firstValueFrom(this.http.post(url, {}));
       } catch (error: any) {
+        console.log('header.logout: saatiin sendAskLoginRequest vastaukseksi: ');
+        console.dir(response);
         this.handleError(error);
       } finally {
         this.setNotLoggegIn();
         window.localStorage.clear();
+        return true
       }
-    }
   }
 
   // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan

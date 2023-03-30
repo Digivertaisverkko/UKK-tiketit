@@ -110,10 +110,17 @@ export class HeaderComponent implements OnInit {
   }
 
   public logout() {
-    this.authService.logout();
-    this.authService.sendAskLoginRequest('own').then((response: any) => {
-        this.router.navigateByUrl(response);
-    }).catch (error => {})
+    this.authService.logout().then(res => {
+      }).catch (error => {
+      }).finally( () => {
+        this.authService.sendAskLoginRequest('own').then((response: any) => {
+          if (response === undefined) {
+            console.log('Ei saatu login URL:a, ei voida ohjata kirjautumiseen.');
+            return
+          }
+          this.router.navigateByUrl(response);
+      })
+    });
   }
 
 }
