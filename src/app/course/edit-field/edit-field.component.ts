@@ -101,18 +101,20 @@ export class EditFieldComponent implements OnInit {
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
-    this.ticketService.getTicketFieldInfo(courseID, fieldID).then(response => {
-      // if (!response[0]?.id) {
-      //   throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
-      // }
+    this.ticketService.getTicketFieldInfo(courseID).then(response => {
+      if (!Array.isArray(response)) {
+        throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+      }
       // Tarvitaan tietojen lähettämiseen.
+      this.allFields = response;
+      // this.allFields = response.map(field => {
+      //   return {
+      //     ...field, id: field.id?.toString()
+      //   }
+      // });
 
-      this.allFields = response.map(field => {
-        return {
-          ...field, id: field.id?.toString()
-        }
-      });
-
+      console.log('alla kaikki kentät');
+      console.dir(this.allFields);
       if (!fieldID) return
 
       let matchingField = response.filter(field => {
@@ -132,6 +134,9 @@ export class EditFieldComponent implements OnInit {
       }
       this.titleServ.setTitle(Constants.baseTitle +' Lisäkenttä - ' + this.field.otsikko);
       console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
+
+      console.log('alla kaikki kentät');
+      console.dir(this.allFields);
     }).catch(error => {
       console.dir(error);
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
