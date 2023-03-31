@@ -1,17 +1,14 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
-import { truncate } from '../utils/truncate';
-import { ActivatedRoute, Router, ParamMap, ActivationEnd } from '@angular/router';
-import * as shajs from 'sha.js';
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import cryptoRandomString from 'crypto-random-string';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import * as shajs from 'sha.js';
+import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 
-import { getLocaleDateFormat, FormatWidth} from '@angular/common';
+import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { Inject, LOCALE_ID } from '@angular/core';
-import { Location } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 
@@ -39,7 +36,7 @@ export class AuthService {
   }
 
   public initialize() {
-    // this.checkIfSessionIDinStorage();
+    this.checkIfSessionIDinStorage();
     // this.checkIfSessionIdInURL();
     this.startUpdatingUserinfo();
   }
@@ -111,9 +108,15 @@ export class AuthService {
 
   // Aseta tila kirjautuneeksi.
   public setLoggedIn() {
+    console.log('setLoggedIn: vanha logged in value: ' + this.isUserLoggedIn$.value);
+
     if (this.isUserLoggedIn$.value === false) {
+      console.log('asetetaan uusi arvo;')
+      this.setSessionID('loggedin');
       this.isUserLoggedIn$.next(true);
       console.log('Olet nyt kirjautunut.');
+    } else {
+      console.log('ei aseteta uutta arvoa');
     }
   }
 
@@ -366,8 +369,9 @@ export class AuthService {
         loginResult.redirectUrl = redirectUrl;
         window.localStorage.removeItem('REDIRECT_URL')
       }
-      const sessionID = response['session-id'];
-      this.setSessionID(sessionID);
+      // const sessionID = response['session-id'];
+      // this.setSessionID(sessionID);
+      this.setSessionID('loggedIn');
       this.setLoggedIn();
     } else {
       loginResult = { success: false };
