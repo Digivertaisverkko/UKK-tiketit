@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       console.warn('Ei kurssi ID:ä URL:ssa, käytetään oletuksena 1:stä.');
       this.courseID = '1';
     } else {
-    console.warn('saatiin course id: ' + this.courseID);
+    // console.warn('saatiin course id: ' + this.courseID);
     }
   }
 

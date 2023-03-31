@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { isValidHttpUrl } from '../utils/isValidHttpUrl.util';
 import { truncate } from '../utils/truncate';
@@ -11,6 +11,7 @@ import { ErrorService } from './error.service';
 
 import { getLocaleDateFormat, FormatWidth} from '@angular/common';
 import { Inject, LOCALE_ID } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 
@@ -30,16 +31,37 @@ export class AuthService {
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,
+              private location: Location,
               private router: Router,
               private route: ActivatedRoute,
-              @Inject( LOCALE_ID ) private localeDateFormat: string ) {
-
+              @Inject( LOCALE_ID ) private localeDateFormat: string
+              ) {
   }
 
   public initialize() {
     // this.checkIfSessionIDinStorage();
     // this.checkIfSessionIdInURL();
-    this.updateUserInfo()
+    this.startUpdatingUserinfo();
+  }
+
+  public startUpdatingUserinfo() {
+    this.router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        // const url = window.location.href;
+        // console.log('urli: ' + url);
+        const courseID = event.snapshot.paramMap.get('courseid');
+        // console.warn('updateUserInfo kurssi ID: ' + courseID);
+        const currentUrl = this.location.path();
+        const isInLogin = currentUrl.includes('login');
+        // console.warn(' isInLogin ' + isInLogin);
+        if (!isInLogin && (courseID !== undefined && courseID !== null)) {
+          // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
+          console.dir(event.snapshot.url);
+          this.setCourseID(courseID);
+          this.fetchUserInfo(courseID);
+        }
+      }
+    });
   }
 
   private checkIfSessionIDinStorage() {
@@ -60,28 +82,6 @@ export class AuthService {
       console.log('auth.service: saatiin session ID URL:sta.');
       this.setSessionID(sessionID);
     }
-  }
-
-  private updateUserInfo() {
-    this.router.events.subscribe(event => {
-      if (event instanceof ActivationEnd) {
-        // const url = window.location.href;
-        // console.log('urli: ' + url);
-        const courseID = event.snapshot.paramMap.get('courseid');
-        console.warn('updateUserInfo kurssi ID: ' + courseID);
-        if (courseID !== undefined && courseID !== null) {
-          // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
-          this.setCourseID(courseID);
-
-          this.fetchUserInfo(courseID);
-
-          // if (this.getSessionID !== null) {
-            // console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
-            // this.fetchUserInfo(courseID);
-          // }
-        }
-      }
-    });
   }
 
   public setCourseID(courseID: string) {
@@ -218,7 +218,6 @@ export class AuthService {
   // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
   // käytettäviksi.
   public async fetchUserInfo(courseID: string): Promise<void> {
-    console.warn('haetaan käyttäjätiedot');
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
     }
@@ -405,8 +404,8 @@ export class AuthService {
       try {
         response = await firstValueFrom(this.http.post(url, {}));
       } catch (error: any) {
-        console.log('header.logout: saatiin sendAskLoginRequest vastaukseksi: ');
-        console.dir(response);
+        // console.log('header.logout: saatiin sendAskLoginRequest vastaukseksi: ');
+        // console.dir(response);
         this.handleError(error);
       } finally {
         this.setNotLoggegIn();

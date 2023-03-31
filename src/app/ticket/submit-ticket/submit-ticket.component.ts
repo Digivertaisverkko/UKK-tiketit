@@ -159,8 +159,7 @@ export class SubmitTicketComponent implements OnInit {
     this.state = 'sending';
     this.attachments.sendFilesPromise(ticketID, commentID).
     then((res) => {
-      console.log('komponentti: saatiin vastaus: ');
-      console.dir(res);
+
       this.goBack();
     })
     .catch((res: any) => {
