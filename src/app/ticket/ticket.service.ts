@@ -258,8 +258,6 @@ export class TicketService {
   public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
-    console.log('ticketService: Yritetään lähettää formData:');
-    console.dir(formData);
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
