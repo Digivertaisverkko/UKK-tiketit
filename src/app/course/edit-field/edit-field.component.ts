@@ -54,9 +54,9 @@ export class EditFieldComponent implements OnInit {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.fieldID  = paramMap.get('fieldid');
-      console.log('fieldID tyyppi:');
-      console.log(typeof this.fieldID);
-      console.dir(this.fieldID);
+      // console.log('fieldID tyyppi:');
+      // console.log(typeof this.fieldID);
+      // console.dir(this.fieldID);
       this.courseID = courseID;
       this.showCourseName(this.courseID);
       // Kentän id on uudella kentällä null.
@@ -66,7 +66,7 @@ export class EditFieldComponent implements OnInit {
       // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
       // uusi kenttä.
       this.getFieldInfo(courseID, this.fieldID);
-        this.isLoaded = true;
+      this.isLoaded = true;
     });
   }
 
@@ -112,6 +112,9 @@ export class EditFieldComponent implements OnInit {
           ...field, id: field.id?.toString()
         }
       });
+
+      if (!fieldID) return
+
       let matchingField = response.filter(field => {
         return String(field.id) === fieldID
       });
