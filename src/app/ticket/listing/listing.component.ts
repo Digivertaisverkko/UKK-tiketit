@@ -4,7 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subscription, timer } from 'rxjs';
+import { Subscription, timer, takeUntil } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
@@ -56,8 +56,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  private fetchTicketsSub: Subscription = new Subscription;
-  private fetchFAQsSub: Subscription = new Subscription;
+  private fetchTicketsSub$  = new Subscription;
+  private fetchFAQsSub$ = new Subscription;
+  private loggedIn$ = new Subscription;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
 
@@ -113,12 +114,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.user = response;
       this.setTicketListHeadline();
     });
-
-     this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.log('lista: saatiin loggaustieto: ' + response);
-      if (response) this.updateLoggedInView(this.courseID);
+    this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.warn('lista: saatiin login tieto: ' + response);
+      if (response === true) { 
+        this.updateLoggedInView(this.courseID);
+      } 
     });
-
     this.trackScreenSize();
   }
 
@@ -127,10 +128,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // console.warn('listaus: ngOnDestroy ajettu.');
-    this.fetchFAQsSub.unsubscribe();
-    this.fetchTicketsSub.unsubscribe();
+    console.warn('listaus: ngOnDestroy ajettu.');
+    this.stopPolling();
   }
+
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -143,11 +144,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.courseID = courseID;
       this.showCourseName(courseID);
-      this.fetchFAQsSub.unsubscribe();
-      this.fetchFAQsSub = timer(0, this.FAQ_POLLING_RATE_MIN *
+      this.fetchFAQsSub$.unsubscribe();
+      this.fetchFAQsSub$ = timer(0, this.FAQ_POLLING_RATE_MIN *
           Constants.MILLISECONDS_IN_MIN)
           .subscribe(() => this.fetchFAQ(this.courseID));
-    });
+    })
   }
 
   public openInNewTab() {
@@ -169,6 +170,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private updateLoggedInView(courseIDcandinate: string) {
     this.ticket.getMyCourses().then(response => {
+
+      console.warn('Päivitetään logged in view');
       if (response[0].kurssi !== undefined) {
         const myCourses: Kurssini[] = response;
         // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
@@ -180,10 +183,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
           // Älä poista, ei toimi pelkkä ngOnDestroyssa.
-          this.fetchTicketsSub.unsubscribe();
-          this.fetchTicketsSub = timer(0, this.TICKET_POLLING_RATE_MIN *
+          this.fetchTicketsSub$.unsubscribe();
+          console.warn('Aloitetaan tikettien pollaus.');
+          this.fetchTicketsSub$ = timer(0, this.TICKET_POLLING_RATE_MIN *
               Constants.MILLISECONDS_IN_MIN)
               .subscribe(() => this.fetchTickets(this.courseID));
+          this.loggedIn$.unsubscribe();
         }
       }
     }).catch(error => this.handleError(error));
@@ -284,6 +289,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
+    this.stopPolling();
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     if (this.authService.getIsUserLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
@@ -310,6 +316,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
       }*/
+  }
+
+  public stopPolling() {
+    this.fetchFAQsSub$.unsubscribe();
+    this.fetchTicketsSub$.unsubscribe();
   }
 
 }
