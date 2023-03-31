@@ -37,8 +37,8 @@ export class AuthService {
   }
 
   public initialize() {
-    this.checkIfSessionIDinStorage();
-    this.checkIfSessionIdInURL();
+    // this.checkIfSessionIDinStorage();
+    // this.checkIfSessionIdInURL();
     this.updateUserInfo()
   }
 
@@ -65,14 +65,20 @@ export class AuthService {
   private updateUserInfo() {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
+        // const url = window.location.href;
+        // console.log('urli: ' + url);
         const courseID = event.snapshot.paramMap.get('courseid');
+        console.warn('updateUserInfo kurssi ID: ' + courseID);
         if (courseID !== undefined && courseID !== null) {
           // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
           this.setCourseID(courseID);
-          if (this.getSessionID !== null) {
+
+          this.fetchUserInfo(courseID);
+
+          // if (this.getSessionID !== null) {
             // console.log('updateUserInfo 1: haetaan käyttäjätiedot.');
-            this.fetchUserInfo(courseID);
-          }
+            // this.fetchUserInfo(courseID);
+          // }
         }
       }
     });
@@ -159,10 +165,9 @@ export class AuthService {
   // Palauta session ID ja päivitä status kirjautumattomaksi, jos sitä ei ole.
   public getSessionID(): string | null {
     const sessionID = (window.localStorage.getItem('SESSION_ID'));
-    if (sessionID === undefined || sessionID === null) {
-      console.log('otettiin session ID local storagesta.');
-      this.setNotLoggegIn();
-    }
+    // if (sessionID === undefined || sessionID === null) {
+    //   this.setNotLoggegIn();
+    // }
     return sessionID;
   }
 
@@ -213,16 +218,17 @@ export class AuthService {
   // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
   // käytettäviksi.
   public async fetchUserInfo(courseID: string): Promise<void> {
+    console.warn('haetaan käyttäjätiedot');
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
     }
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
     }
-    if (window.localStorage.getItem('SESSION_ID') == null) {
-      this.setNotLoggegIn();
-      return
-    }
+    // if (window.localStorage.getItem('SESSION_ID') == null) {
+    //   this.setNotLoggegIn();
+    //   return
+    // }
     let response: any;
     try {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
@@ -275,7 +281,7 @@ export class AuthService {
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
      loginType voi olla atm: 'own' */
-  public async sendAskLoginRequest(loginType: string) {
+  public async sendAskLoginRequest(loginType: string, courseID?: string | null) {
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
     this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
     // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
@@ -299,7 +305,10 @@ export class AuthService {
     if (response['login-url'] == undefined) {
       throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
     }
-    const loginUrl = response['login-url'];
+    // console.warn('auth. service kurssi id: '+ courseID);
+    let loginUrl = response['login-url'];
+    if (courseID != null) loginUrl = `course/${courseID}${loginUrl}`;
+    // console.log('loginurl: ' + loginUrl);
     return loginUrl;
   }
 
@@ -433,7 +442,7 @@ export interface AuthRequestResponse {
   success: boolean,
   error: string,
   'session-id': string
-}
+}    
 // Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
 export interface User {
   id?: number,

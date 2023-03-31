@@ -113,15 +113,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.user = response;
       this.setTicketListHeadline();
     });
+
+     this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.log('lista: saatiin loggaustieto: ' + response);
+      if (response) this.updateLoggedInView(this.courseID);
+    });
+
     this.trackScreenSize();
-
-    if (this.authService.getIsUserLoggedIn() === true) {
-      this.updateLoggedInView(this.courseID);
-    };
-
-    // this.authService.onIsUserLoggedIn().subscribe(response => {
-    //   if (response) this.updateLoggedInView(this.courseID);
-    // });
   }
 
   ngAfterViewInit(): void {

@@ -26,7 +26,6 @@ export class AppComponent implements OnInit  {
     private router: Router,
     private route: ActivatedRoute,
     // private store: StoreService,
-    // private ticket: TicketService
   ) {
   }
 
