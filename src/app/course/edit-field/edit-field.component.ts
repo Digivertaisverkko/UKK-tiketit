@@ -61,7 +61,8 @@ export class EditFieldComponent implements OnInit {
       this.showCourseName(this.courseID);
       // Kentän id on uudella kentällä null.
       if  (!this.fieldID) {
-        this.titleServ.setTitle(Constants.baseTitle + 'Uusi lisäkenttä');
+        this.titleServ.setTitle(Constants.baseTitle + $localize 
+            `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
       }
       // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
       // uusi kenttä.
@@ -132,7 +133,8 @@ export class EditFieldComponent implements OnInit {
       } else {
         this.multipleSelection = true;
       }
-      this.titleServ.setTitle(Constants.baseTitle +' Lisäkenttä - ' + this.field.otsikko);
+      this.titleServ.setTitle(Constants.baseTitle + ' ' + $localize 
+      `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
 
       console.log('alla kaikki kentät');

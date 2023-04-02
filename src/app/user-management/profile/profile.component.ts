@@ -1,8 +1,9 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
+import { Constants, getIsInIframe } from '../../shared/utils';
 import { TicketService } from 'src/app/ticket/ticket.service';
+import { Title } from '@angular/platform-browser';
 import { UserManagementService } from 'src/app/user-management/user-management.service';
 
 @Component({
@@ -25,11 +26,13 @@ export class ProfileComponent implements OnInit {
               private renderer: Renderer2,
               private route: ActivatedRoute,
               private ticketService: TicketService,
+              private titleServ: Title,
               private userManagementService: UserManagementService) {
     this.courseId = this.route.snapshot.paramMap.get('courseid');
   }
 
   ngOnInit(): void {
+    this.titleServ.setTitle(Constants.baseTitle + $localize `:@@Profiili:Profiili`);
     if (this.courseId !== null) {
       this.ticketService.getCourseName(this.courseId).then(response => {
         this.courseName = response;

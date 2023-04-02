@@ -107,7 +107,7 @@ export class SubmitFaqComponent implements OnInit {
           }
         });
     } else {
-      this.titleServ.setTitle(Constants.baseTitle + 'Uusi UKK');
+      this.titleServ.setTitle(Constants.baseTitle + $localize `:@@Uusi UKK:Uusi UKK`);
     }
     this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response });

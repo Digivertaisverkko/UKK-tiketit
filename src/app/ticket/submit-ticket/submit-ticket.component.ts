@@ -57,7 +57,8 @@ export class SubmitTicketComponent implements OnInit {
   {}
 
   ngOnInit(): void {
-    this.titleServ.setTitle(Constants.baseTitle + "Uusi kysymys");
+    this.titleServ.setTitle(Constants.baseTitle + $localize `:@@Uusi kysymys:
+        UUsi kysymys`);
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     if (this.courseId === null) throw new Error('Ei kurssi ID:ä.');
     this.auth.fetchUserInfo(this.courseId);

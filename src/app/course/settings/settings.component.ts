@@ -40,7 +40,8 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleServ.setTitle(Constants.baseTitle + 'Kurssin asetukset');
+    this.titleServ.setTitle(Constants.baseTitle + $localize
+        `:@@Kurssin asetukset:Kurssin asetukset`);
     this.trackRouteParameters();
   }
 
@@ -68,12 +69,13 @@ export class SettingsComponent implements OnInit {
   }
 
   public saveFields() {
-    this.ticketService.setTicketFieldInfo(this.courseID, this.fieldList).then(response => {
-      if (response === true ) {
-        this.message = "Tallennus onnistui.";
-      } else {
-        this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
-      }
+    this.ticketService.setTicketFieldInfo(this.courseID, this.fieldList)
+      .then(response => {
+        if (response === true ) {
+          this.message = "Tallennus onnistui.";
+        } else {
+          this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
+        }
     }).catch (error => {
       this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
     })
@@ -86,7 +88,8 @@ export class SettingsComponent implements OnInit {
       }
       console.dir(this.fieldList);
     }).catch(e => {
-      this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:Kysymysten lisäkenttien haku epäonnistui` + '.';
+      this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
+          Kysymysten lisäkenttien haku epäonnistui` + '.';
     });
   }
 
