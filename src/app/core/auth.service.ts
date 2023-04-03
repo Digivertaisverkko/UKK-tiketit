@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angul
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import cryptoRandomString from 'crypto-random-string';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, first, firstValueFrom, Observable } from 'rxjs';
 import * as shajs from 'sha.js';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
@@ -80,6 +80,23 @@ export class AuthService {
       console.log('auth.service: saatiin session ID URL:sta.');
       this.setSessionID(sessionID);
     }
+  }
+
+  public async giveGdprConsent(tokenid: string | null): Promise<object> {
+    // console.log(' tokenid: ' + tokenid);
+    // console.log(typeof tokenid);
+    const body = {
+      'lupa-id': tokenid
+    }
+    console.log(body);
+    const url = '/lti/gdpr-lupa-ok';
+    let res: any;
+    try {
+      res = await firstValueFrom(this.http.post(url, body));
+    } catch (error: any) {
+      this.handleError(error)
+    }
+    return res
   }
 
   public setCourseID(courseID: string) {
@@ -413,17 +430,6 @@ export class AuthService {
   public getIsUserLoggedIn(): Boolean {
     this.getSessionID();
     return this.isUserLoggedIn$.value;
-  }
-
-  // Onko string muodoltaan HTTP URL.
-  isValidHttpUrl(testString: string): boolean {
-    let url: URL;
-    try {
-      url = new URL(testString);
-    } catch (_) {
-      return false;
-    }
-    return url.protocol === "http:" || url.protocol === "https:";
   }
 
   // Suorita uloskirjautuminen.
