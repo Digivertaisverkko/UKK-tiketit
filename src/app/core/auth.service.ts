@@ -82,7 +82,9 @@ export class AuthService {
     }
   }
 
-  public async giveGdprConsent(tokenid: string | null): Promise<object> {
+
+
+  public async giveGdprConsent(tokenid: string | null): Promise<ConsentResponse> {
     // console.log(' tokenid: ' + tokenid);
     // console.log(typeof tokenid);
     const body = {
@@ -468,6 +470,12 @@ export class AuthService {
   }
 
 } // End of class
+
+
+export interface ConsentResponse {
+  success: boolean,
+  kurssi: number
+}
 
 export interface LoginResponse {
   success: boolean,

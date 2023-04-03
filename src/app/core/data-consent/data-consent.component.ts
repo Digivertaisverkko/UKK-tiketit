@@ -29,7 +29,13 @@ export class DataConsentComponent implements OnInit {
   public giveConsent() {
     console.log('tokenid: ' + this.tokenid);
     this.auth.giveGdprConsent(this.tokenid).then(res => {
-      console.log('vastaus: ' + res);
+      if (res?.success == true) {
+        if (res?.kurssi != null) {
+          const courseID = String(res.kurssi);
+          const route = `course/${courseID}/list-tickets`;
+          this.router.navigateByUrl(route);
+        }
+      }
     }).catch(error => {
       console.log('error');
     })
