@@ -498,8 +498,6 @@ export class TicketService {
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
-      this.router.navigateByUrl
-      console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
       this.auth.handleNotLoggedIn();
     } else {
       this.errorService.handleServerError(error);
