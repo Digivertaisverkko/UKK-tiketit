@@ -54,7 +54,7 @@ export class PageNotFoundComponent implements OnInit {
   }
 
   public async goToLogin() {
-    const loginUrl = await this.authService.sendAskLoginRequest('own');
+    const loginUrl = await this.authService.sendAskLoginRequest('own', this.courseID);
     this.router.navigateByUrl(loginUrl);
   }
 

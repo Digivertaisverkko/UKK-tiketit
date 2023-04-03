@@ -106,22 +106,18 @@ export class HeaderComponent implements OnInit {
   }
 
   public login(): void {
-    this.authService.handleNotLoggedIn();
+    if (this.courseID === null) {
+      throw new Error('header.component.ts.login: ei kurssi ID:ä.');
+    }
+    this.authService.saveRedirectURL();
+    this.authService.navigateToLogin(this.courseID);
   }
 
   public logout() {
-    this.authService.logout().then(res => {
+    this.authService.saveRedirectURL();
+    this.authService.logout(this.courseID).then(res => {
       }).catch (error => {
-      }).finally( () => {
-        // console.warn('logout: kurssi id: ' + this.courseID);
-        this.authService.sendAskLoginRequest('own', this.courseID).then((response: any) => {
-          if (response === undefined) {
-            console.log('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
-            return
-          }
-          this.router.navigateByUrl(response);
-      })
-    });
+      });
   }
 
 }
