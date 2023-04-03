@@ -33,6 +33,7 @@
     </button>
 
     <button aria-label="Profiili"
+            (click)="stopPolling()"
             i18n-aria-label="@@Profiili"
             class="settings-button"
             mat-icon-button
@@ -256,8 +257,8 @@
 </table>
 
 <p  class="no-items-message" i18n="@@Ei tuloksia"
-  *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0">
-Suodattimella ei löytynyt tuloksia.
+    *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0">
+    Suodattimella ei löytynyt tuloksia.
 </p>
 
   <!--------------------------------------------------------------------------->
@@ -298,11 +299,11 @@ Suodattimella ei löytynyt tuloksia.
             color="primary"
             mat-raised-button
             [routerLink]="'/course/' + this.courseID + '/submit'"
-            tabindex="-1"
             target="_blank"
             >
       <a  i18n="@@Kysy opettajilta"
-          [routerLink]="'/course/' + this.courseID + '/submit'">
+          [routerLink]="'/course/' + this.courseID + '/submit'"
+          >
         Kysy opettajilta
       </a>
     </button>
