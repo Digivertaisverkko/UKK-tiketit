@@ -10,3 +10,14 @@ export function getIsInIframe(): boolean {
   const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
   return (isInIframe == 'true') ? true : false;
 }
+
+export function getCourseIDfromURL(): string | null {
+  const pathArray = window.location.pathname.split('/');
+  let courseID: string | null;
+  if (pathArray[1] === 'course' && pathArray[2] != null)  {
+    courseID = pathArray[2];
+  } else {
+    courseID = null;
+  }
+  return courseID
+}
