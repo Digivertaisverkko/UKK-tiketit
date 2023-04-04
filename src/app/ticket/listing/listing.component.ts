@@ -129,7 +129,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackLoggedStatus() {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
       console.warn('lista: saatiin login tieto: ' + response);
-      if (response === true) { 
+      if (response === true) {
+        this.ticketsError = {
+          title: '',
+          message: '',
+        }
         this.updateLoggedInView(this.courseID);
       } else if (response === false ) {
         this.ticketsError = {
