@@ -54,6 +54,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
+  public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
   private fetchTicketsSub$  = new Subscription;
@@ -108,6 +109,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.noDataConsent = this.getDataConsent();
     this.trackRouteParameters();
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
@@ -126,7 +128,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stopPolling();
   }
 
-  private trackLoggedStatus() {
+  private getDataConsent(): boolean {
+    return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
+  }
+
+  private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
       console.warn('lista: saatiin login tieto: ' + response);
       if (response === true) {
@@ -138,14 +144,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       } else if (response === false ) {
         this.ticketsError = {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-          message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-              tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+          message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
+              kurssilla esitettyjä henkilökohtaisia kysymyksiä.`
         }
       }
     });
   }
 
-  private trackRouteParameters() {
+  private trackRouteParameters(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
@@ -163,12 +169,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  public openInNewTab() {
+  public openInNewTab(): void {
     window.open(window.location.href, '_blank');
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
-  private trackMessages() {
+  private trackMessages(): void {
     this.store.trackMessages().subscribe(response => {
       if (response === 'refresh') {
         console.log('trackMessages: saatiin refresh pyyntö.');
@@ -259,6 +265,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.FAQisLoaded = true;
         if (refresh !== true) this.isLoaded = true;
       });
+  }
+
+  public giveConsent() {
+    localStorage.removeItem('NO_DATA_CONSENT');
   }
 
   public hideArchived() {
