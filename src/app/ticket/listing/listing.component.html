@@ -43,7 +43,7 @@
     </button>
   </div>
 
-  <section *ngIf="isLoaded && isParticipant; else notParticipantNotice">
+  <section *ngIf="isLoaded && isParticipant">
 
   <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
     hakukentälle tilaa. -->
@@ -328,15 +328,13 @@
 
   </section>
 
-  <ng-template #notParticipantNotice>
     <app-error-card
-        i18n-title="{{ notParticipant.title }}"
-        message="{{ notParticipant.message }}"
-        *ngIf="isLoaded"
-        title="{{ notParticipant.title }}"
+        i18n-title="{{ ticketsError.title }}"
+        message="{{ ticketsError.message }}"
+        *ngIf="isLoaded && ticketsError.title.length > 0"
+        title="{{ ticketsError.title }}"
         >
     </app-error-card>
-  </ng-template>
 
 <!------------ UKK:t ---------------------------------------------------------->
 

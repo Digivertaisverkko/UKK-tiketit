@@ -66,7 +66,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public courseName: string = '';
   public errorMessage: string = '';
   public headline: string = '';
-  public notParticipant;
+  public ticketsError;
   public ticketViewLink = '';
   public user: User = {} as User;
 
@@ -101,10 +101,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: false }
     ];
 
-    this.notParticipant = {
-      title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-      message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-          tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+    this.ticketsError = {
+      title: '',
+      message: '',
     }
   }
 
@@ -114,12 +113,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.user = response;
       this.setTicketListHeadline();
     });
-    this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.warn('lista: saatiin login tieto: ' + response);
-      if (response === true) { 
-        this.updateLoggedInView(this.courseID);
-      } 
-    });
+    this.trackLoggedStatus();
     this.trackScreenSize();
   }
 
@@ -132,6 +126,20 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stopPolling();
   }
 
+  private trackLoggedStatus() {
+    this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
+      console.warn('lista: saatiin login tieto: ' + response);
+      if (response === true) { 
+        this.updateLoggedInView(this.courseID);
+      } else if (response === false ) {
+        this.ticketsError = {
+          title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+          message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
+              tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+        }
+      }
+    });
+  }
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -170,14 +178,18 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private updateLoggedInView(courseIDcandinate: string) {
     this.ticket.getMyCourses().then(response => {
-
-      console.warn('Päivitetään logged in view');
+      console.log('Päivitetään logged in view');
       if (response[0].kurssi !== undefined) {
         const myCourses: Kurssini[] = response;
         // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
+          this.ticketsError = {
+            title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+            message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
+                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+          }
         } else {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
@@ -300,7 +312,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
     if (error?.tunnus == 1000 ) {
-      this.errorMessage = $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.'
+
     }
   }
 
