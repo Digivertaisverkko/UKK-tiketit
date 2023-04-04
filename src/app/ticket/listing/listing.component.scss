@@ -133,6 +133,15 @@ a {
 // ------------------------
 
 
+.no-items-box {
+  border: solid 2px #D3D3D3;
+  border-radius: 2px;
+  display: block;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+
 [hidden] {
   display: none !important;
 }
@@ -163,10 +172,6 @@ button {
 
 .filter-FAQ {
   margin-top: 1.8rem;
-}
-
-.no-items-message {
-  margin-left: 1.3rem;
 }
 
 .mat-mdc-form-field {

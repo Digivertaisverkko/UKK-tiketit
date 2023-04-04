@@ -157,6 +157,18 @@
     Suodattimella ei löytynyt tuloksia.
   </p>
 
+    <div class="no-items-box" *ngIf="numberOfQuestions === 0" mat-elevation-z1>
+      <p i18n="@@Ei yhtään kysymystä esitetty"
+        *ngIf="user.asema === 'opettaja' || user.asema === 'admin';
+            else noTicketsStudent" >
+        Yhtään kysymystä ei ole esitetty.
+      </p>
+      <ng-template #noTicketsStudent>
+        <p i18n="@@Et ole lähettänyt yhtään kysymystä.">
+        Et ole lähettänyt yhtään kysymystä.
+      </p>
+      </ng-template>
+    </div>
 
   <!-------------- Arkistoidut ------------------------------------------------>
 
@@ -274,22 +286,27 @@
         {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
         >
 
-    <button class="button"
-            (click)="fetchArchivedTickets()"
-            i18n="@@Arkistoitu"
-            mat-raised-button
-            *ngIf="archivedCount === 0; else hideArchivedBtn"
-            >
-        Näytä arkistoidut
-    </button>
+    <ng-template *ngIf="user.asema !== 'opiskelija'">
 
-    <ng-template #hideArchivedBtn>
       <button class="button"
-              (click)="hideArchived()"
+              (click)="fetchArchivedTickets()"
+              i18n="@@Arkistoitu"
               mat-raised-button
+              *ngIf="archivedCount === 0;
+                  else hideArchivedBtn"
               >
-          Piilota arkistoidut
+          Näytä arkistoidut
       </button>
+
+      <ng-template #hideArchivedBtn>
+        <button class="button"
+                (click)="hideArchived()"
+                mat-raised-button
+                >
+            Piilota arkistoidut
+        </button>
+      </ng-template>
+
     </ng-template>
 
     <div class="spacer"></div>
@@ -317,7 +334,7 @@
         message="{{ notParticipant.message }}"
         *ngIf="isLoaded"
         title="{{ notParticipant.title }}"
-    >
+        >
     </app-error-card>
   </ng-template>
 
@@ -336,11 +353,11 @@
   </mat-form-field>
 </div>
 
-<!-- <mat-card appearance="outlined" > -->
-  <p class="no-items-message" *ngIf="numberOfFAQ === 0 && FAQisLoaded" i18n="@@Ei yhtään UKK">
-    Yhtään usein kysyttyä kysymystä ei ole lisätty.
-  </p>
-<!-- </mat-card> -->
+  <div class="no-items-box" *ngIf="numberOfFAQ === 0">
+    <p i18n="@@Ei yhtään UKK">
+      Yhtään usein kysyttyä kysymystä ei ole lisätty.
+    </p>
+  </div>  
 
 <table id="faqTable" mat-table class="theme-table mat-elevation-z1" [dataSource]="dataSourceFAQ"
     [hidden]="dataSourceFAQ.filteredData.length === 0"
