@@ -333,8 +333,9 @@
         (clickEvent)="ticketErrorClickEvent($event)"
         message="{{ ticketsError.message }}"
         *ngIf="isLoaded && ticketsError.title.length > 0"
-        #ticketErrors
+        #ticketError
         title="{{ ticketsError.title }}"
+        buttonText="{{ticketsError.buttonText}}"
         >
     </app-error-card>
 

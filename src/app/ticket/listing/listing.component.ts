@@ -40,7 +40,6 @@ export interface SortableTicket {
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild(ErrorCardComponent) ticketError!: ErrorCardComponent
   public archivedCount: number = 0;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
@@ -75,6 +74,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public ticketViewLink = '';
   public user: User = {} as User;
 
+  // @ViewChild('ticketError') ticketError!: ErrorCardComponent
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortArchived', {static: false}) sortArchived = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -105,7 +105,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: false }
     ];
 
-    this.ticketsError = { title: '', message: ''}
+    this.ticketsError = { title: '', message: '', buttonText: ''}
   }
 
   ngOnInit() {
@@ -143,16 +143,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.ticketsError = {
           title: '',
           message: '',
+          buttonText: '',
         }
         this.updateLoggedInView(this.courseID);
       } else if (response === false ) {
         this.ticketsError = {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
           message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
-              kurssilla esitettyjä henkilökohtaisia kysymyksiä.`
-        }
-        if (this.noDataConsent === true) {
-          this.ticketError.buttonText = $localize `:@@Luo tili:Luo tili`;
+              kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`
+              : ''
         }
       }
     });
@@ -211,7 +211,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.ticketsError = {
             title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
             message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+            buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`
+                : ''
           }
         } else {
           this.isParticipant = true;
