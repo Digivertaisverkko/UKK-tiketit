@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
+    from '@angular/core';
+
 @Component({
   selector: 'app-error-card',
   template: `
@@ -11,7 +13,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       <div class="body-wrapper">
         <p>{{ message }}</p>
         <div>
-        <button mat-raised-button *ngIf="buttonText.length > 0">
+        <button (click)="buttonPressed('1')"
+                mat-raised-button
+                *ngIf="buttonText.length > 0"
+                >
           {{buttonText}}
         </button>
       </div>
@@ -27,7 +32,12 @@ export class ErrorCardComponent {
   @Input() styles: object = {};
   @Input() title: string = $localize `:@@Virhe:Virhe`;
   @Input() buttonText: string = '';
+  @Output() clickEvent = new EventEmitter<string>();
 
   constructor() { }
+
+  public buttonPressed(button: string) {
+    this.clickEvent.emit(button);
+  }
 
 }

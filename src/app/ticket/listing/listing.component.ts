@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
@@ -7,6 +7,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Subject, Subscription, takeUntil, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
+import { ErrorCardComponent } from 'src/app/shared/error-card/error-card.component';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
@@ -39,6 +40,7 @@ export interface SortableTicket {
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  @ViewChild(ErrorCardComponent) ticketError!: ErrorCardComponent
   public archivedCount: number = 0;
   public columnDefinitions: ColumnDefinition[];
   public columnDefinitionsFAQ: ColumnDefinition[];
@@ -130,6 +132,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
   }
 
+  public ticketErrorClickEvent(button: string) {
+    console.log('painettu button ' + button)
+  }
+
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
       console.warn('lista: saatiin login tieto: ' + response);
@@ -144,6 +150,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
           message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
               kurssilla esitettyjä henkilökohtaisia kysymyksiä.`
+        }
+        if (this.noDataConsent === true) {
+          this.ticketError.buttonText = $localize `:@@Luo tili:Luo tili`;
         }
       }
     });
