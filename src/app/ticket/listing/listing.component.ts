@@ -4,7 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subscription, timer, takeUntil } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
@@ -38,7 +38,6 @@ export interface SortableTicket {
 })
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
-  // displayedColumns: string[] = [ 'otsikko', 'aikaleima', 'aloittajanNimi' ];
 
   public archivedCount: number = 0;
   public columnDefinitions: ColumnDefinition[];
@@ -86,8 +85,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private ticket: TicketService,
     private title: Title
   ) {
-    this.title.setTitle(Constants.baseTitle +
-        $localize `:@@Otsikko-Kysymykset:Kysymykset`);
+    this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:Kysymykset`);
     this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
@@ -102,10 +100,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: false }
     ];
 
-    this.ticketsError = {
-      title: '',
-      message: '',
-    }
+    this.ticketsError = { title: '', message: ''}
   }
 
   ngOnInit() {
