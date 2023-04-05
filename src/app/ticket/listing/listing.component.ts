@@ -4,7 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subscription, timer } from 'rxjs';
+import { Subject, Subscription, takeUntil, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
@@ -61,6 +61,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private loggedIn$ = new Subscription;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
+  private isPollingTickets: boolean = false;
+  private isPollingFAQ: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
   // Merkkijonot
   public courseName: string = '';
@@ -157,9 +160,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.courseID = courseID;
       this.showCourseName(courseID);
+      if (this.isPollingFAQ === true) return
       this.fetchFAQsSub$.unsubscribe();
+      console.warn('Aloitetaan UKK pollaus.');
+      this.isPollingFAQ = true;
       this.fetchFAQsSub$ = timer(0, this.FAQ_POLLING_RATE_MIN *
           Constants.MILLISECONDS_IN_MIN)
+          .pipe(
+            takeUntil(this.unsubscribe$)
+          )
           .subscribe(() => this.fetchFAQ(this.courseID));
     })
   }
@@ -199,11 +208,18 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
-          // Älä poista, ei toimi pelkkä ngOnDestroyssa.
+          if (this.isPollingTickets) {
+            this.loggedIn$.unsubscribe();
+            return
+          }
           this.fetchTicketsSub$.unsubscribe();
           console.warn('Aloitetaan tikettien pollaus.');
+          this.isPollingTickets = true;
           this.fetchTicketsSub$ = timer(0, this.TICKET_POLLING_RATE_MIN *
               Constants.MILLISECONDS_IN_MIN)
+              .pipe(
+                takeUntil(this.unsubscribe$)
+              )
               .subscribe(() => this.fetchTickets(this.courseID));
           this.loggedIn$.unsubscribe();
         }
@@ -340,6 +356,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public stopPolling() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
     this.fetchFAQsSub$.unsubscribe();
     this.fetchTicketsSub$.unsubscribe();
   }
