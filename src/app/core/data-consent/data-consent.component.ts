@@ -17,7 +17,6 @@ export class DataConsentComponent implements OnInit {
       private router: Router,
       ) {
         this.courseID = null;
-        // this.courseID = this.route.snapshot.paramMap.get('courseid');
   }
 
   ngOnInit(): void {
@@ -26,7 +25,7 @@ export class DataConsentComponent implements OnInit {
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
     // selata kirjautumattomana.
     if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {
-      console.log('Ei ole annettu lupaa tietojen siirtoon, ohjataan näkymään.')
+      console.log('Ei ole annettu lupaa tietojen siirtoon, ohjataan näkymään.');
       this.router.navigateByUrl('course/1/list-tickets');
       // const courseID = getCourseIDfromURL();
       // this.navigateToListing(courseID);
@@ -37,8 +36,11 @@ export class DataConsentComponent implements OnInit {
 
   public dontGiveConsent() {
     localStorage.setItem('NO_DATA_CONSENT', 'true');
-
-    this.router.navigateByUrl('course/1/list-tickets');
+    if (this.courseID == null) {
+      console.error('Virhe: ei kurssi ID:ä.');
+      return
+    }
+    this.router.navigateByUrl(`course/${this.courseID}/list-tickets`);
   }
 
   public giveConsent() {
