@@ -17,14 +17,23 @@
   Tallennamme seuraavat tiedot Moodlesta omaan tietokantaamme:
 </span>
 
-  <ul>
-    <li i18n="@@Koko nimesi">Koko nimesi</li>
-    <li i18n="@@Sähköpostiosoitteesi">Sähköpostiosoitteesi</li>
-    <li i18n="@@Kurssialueen, jolla järjestelmä on käytössä">
-        Kurssialueen, jolla järjestelmä on käytössä
-    </li>
-    <li i18n="@@Roolisi kurssilla">Roolisi kurssilla (opettaja / opiskelija)</li>
-  </ul>
+<ul>
+  <li i18n="@@Koko nimesi">Koko nimesi</li>
+  <li i18n="@@Sähköpostiosoitteesi">Sähköpostiosoitteesi</li>
+  <li i18n="@@Kurssialueen, jolla järjestelmä on käytössä">
+      Kurssialueen, jolla järjestelmä on käytössä
+  </li>
+  <li i18n="@@Roolisi kurssilla">Roolisi kurssilla (opettaja / opiskelija)</li>
+</ul>
+
+<app-error-card
+    i18n-title="{{ ticketsError.title }}"
+    message="{{ error.message }}"
+    *ngIf="error.title.length > 0"
+    #ticketError
+    title="{{ error.title }}"
+    >
+</app-error-card>
 
 <div class="buttons-wrapper">
 

@@ -10,6 +10,7 @@ import { getCourseIDfromURL } from 'src/app/shared/utils';
 export class DataConsentComponent implements OnInit {
 
   public courseID: string | null;
+  public error;
   private tokenid: string | null = null;
 
   constructor(
@@ -18,6 +19,7 @@ export class DataConsentComponent implements OnInit {
       private router: Router,
       ) {
         this.courseID = null;
+        this.error = { title: '', message: ''}
   }
 
   ngOnInit(): void {
@@ -48,7 +50,9 @@ export class DataConsentComponent implements OnInit {
         }
       }
     }).catch(error => {
-      console.log(error);
+      this.error.title = $localize `:@@Virhe:Virhe`
+      this.error.message = $localize `:@@Tilin luominen ei onnistunut:
+          Tilin luominen ei onnistunut.`
     })
   }
 
