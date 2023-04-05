@@ -105,11 +105,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: false }
     ];
 
-    this.ticketsError = { title: '', message: '', buttonText: ''}
+    this.ticketsError = { title: '', message: ''}
   }
 
   ngOnInit() {
     this.noDataConsent = this.getDataConsent();
+    console.log('Kieltäydytty tietojen annosta: ' + this.noDataConsent);
     this.trackRouteParameters();
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
@@ -133,7 +134,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ticketErrorClickEvent(button: string) {
-    console.log('painettu button ' + button)
+      console.log('painettu button ' + button)
+      // this.giveConsent();
   }
 
   private trackLoggedStatus(): void {
@@ -142,8 +144,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       if (response === true) {
         this.ticketsError = {
           title: '',
-          message: '',
-          buttonText: '',
+          message: ''
         }
         this.updateLoggedInView(this.courseID);
       } else if (response === false ) {
@@ -151,9 +152,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
           message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
               kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
-          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`
-              : ''
         }
+        // buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili` : ''
       }
     });
   }
@@ -211,9 +211,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.ticketsError = {
             title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
             message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
-            buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`
-                : ''
+                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
+            // buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
           }
         } else {
           this.isParticipant = true;
