@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { getCourseIDfromURL } from 'src/app/shared/utils';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Constants } from '../../shared/utils';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   templateUrl: './data-consent.component.html',
@@ -17,9 +18,12 @@ export class DataConsentComponent implements OnInit {
       private auth: AuthService,
       private route: ActivatedRoute,
       private router: Router,
+      private title: Title
       ) {
         this.courseID = null;
-        this.error = { title: '', message: ''}
+        this.error = { title: '', message: ''};
+        this.title.setTitle(Constants.baseTitle + $localize `:@@OTervetuloa: Tervetuloa`);
+
   }
 
   ngOnInit(): void {
