@@ -195,6 +195,8 @@
     "Virhe": "Error",
     "Virheilmoitus": "Error message",
     "Virhetila": "Error state",
+    "Virkistä selaimen näkymä": "Refresh the browser view",
+    "Virkistä-viesti": "Please refresh the browser view. This is done on the computer by clicking on the browser refresh icon or by pressing F5.",
     "Yhteydenotto palvelimeen ei onnistunut.": "The connection to the server failed.",
     "Yhtään lisäkenttää ei ole lisätty": "No additional fields have been added.",
     "Yleisen tietosuoja-asetuksen mukainen tiedonhankinta pyyntö. Voit ladata kaikki omat tietosi.": "Data acquisition request in accordance with the General Data Protection Regulation. You can download all your own data.",

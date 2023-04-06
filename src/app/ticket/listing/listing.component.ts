@@ -1,6 +1,7 @@
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -13,6 +14,8 @@ import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
+import { RefreshDialogComponent } from './refresh-dialog/refresh-dialog.component';
+import { DialogConfig } from '@angular/cdk/dialog';
 
 enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
@@ -83,6 +86,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private dialog: MatDialog,
     private responsive: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router,
@@ -105,13 +109,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: false }
     ];
 
-    this.ticketsError = { title: '', message: ''}
+    this.ticketsError = { title: '', message: '', buttonText: '' }
   }
 
   ngOnInit() {
     this.noDataConsent = this.getDataConsent();
-    console.log('Kieltäydytty tietojen annosta: ' + this.noDataConsent);
-    this.trackRouteParameters();
+    if (this.noDataConsent) {
+      console.log('Kieltäydytty tietojen annosta.');
+    }
+      this.trackRouteParameters();
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.setTicketListHeadline();
@@ -135,25 +141,21 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ticketErrorClickEvent(button: string) {
       console.log('painettu button ' + button)
-      // this.giveConsent();
+      this.giveConsent();
   }
 
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
-      console.warn('lista: saatiin login tieto: ' + response);
       if (response === true) {
-        this.ticketsError = {
-          title: '',
-          message: ''
-        }
+        this.setEmptyTicketError();
         this.updateLoggedInView(this.courseID);
       } else if (response === false ) {
         this.ticketsError = {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
           message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
               kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
         }
-        // buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili` : ''
       }
     });
   }
@@ -211,8 +213,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.ticketsError = {
             title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
             message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`
-            // buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
+                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+            buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
           }
         } else {
           this.isParticipant = true;
@@ -290,6 +292,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public giveConsent() {
     localStorage.removeItem('NO_DATA_CONSENT');
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.maxWidth = '30rem';
+    const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
+    refreshDialog.afterClosed().subscribe(res => {
+      if (res === 'cancel') {
+        localStorage.setItem('NO_DATA_CONSENT', 'true');
+      }
+    })
   }
 
   public hideArchived() {
@@ -363,6 +373,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
       }*/
+  }
+
+  private setEmptyTicketError(): void {
+    this.ticketsError = { title: '', message: '', buttonText: ''}
   }
 
   public stopPolling() {

@@ -10,7 +10,6 @@ import { Title } from '@angular/platform-browser';
 })
 export class DataConsentComponent implements OnInit {
 
-  public courseID: string | null;
   public error;
   private tokenid: string | null = null;
 
@@ -20,7 +19,6 @@ export class DataConsentComponent implements OnInit {
       private router: Router,
       private title: Title
       ) {
-        this.courseID = null;
         this.error = { title: '', message: ''};
         this.title.setTitle(Constants.baseTitle + $localize `:@@OTervetuloa: Tervetuloa`);
 
@@ -28,24 +26,35 @@ export class DataConsentComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('URL: ' + window.location.href);
+    const urlParams = new URLSearchParams(window.location.search);
+    this.tokenid = urlParams.get('tokenid');
     // route.snapshot.paramMap.get ei toiminut tässä.
     // this.courseID = '2';
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
     // selata kirjautumattomana.
-    // if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {
-    //   console.log('Ei ole annettu lupaa tietojen siirtoon, ohjataan listaukseen.');
-    //   this.navigateToListing(this.courseID);
-    // }
-    const urlParams = new URLSearchParams(window.location.search);
-    this.tokenid = urlParams.get('tokenid');
+    if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {
+      console.log('Ei ole annettu lupaa tietojen siirtoon, ohjataan listaukseen.');
+      this.dontGiveConsent();
+    }
   }
 
   public dontGiveConsent() {
     localStorage.setItem('NO_DATA_CONSENT', 'true');
-    // this.navigateToListing(this.courseID);
+    this.auth.denyGdprConsent(this.tokenid).then((res: any) => {
+      let courseID: string;
+      if (res?.kurssi != null) {
+        courseID = String(res.kurssi);
+        this.navigateToListing(courseID);
+      }
+      // ? mitä jos ei saada id:ä?
+    }).catch (error => { 
+    })
   }
 
   public giveConsent() {
+    if (localStorage.getItem('NO_DATA_CONSENT')) {
+      localStorage.removeItem('NO_DATA_CONSENT')
+    }
     this.auth.giveGdprConsent(this.tokenid).then(res => {
       if (res?.success == true) {
         if (res?.kurssi != null) {
@@ -54,9 +63,9 @@ export class DataConsentComponent implements OnInit {
         }
       }
     }).catch(error => {
-      this.error.title = $localize `:@@Virhe:Virhe`
+      this.error.title = $localize `:@@Virhe:Virhe`;
       this.error.message = $localize `:@@Tilin luominen ei onnistunut:
-          Tilin luominen ei onnistunut.`
+          Tilin luominen ei onnistunut.`;
     })
   }
 

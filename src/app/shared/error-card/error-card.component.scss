@@ -42,6 +42,18 @@ mat-icon {
   width: 2.3rem;
 }
 
+.spacer {
+  border: 1px green solid;
+}
 
+.buttons-wrapper {
+  border: 1px blue solid;
+  display: flex;
+  justify-content: right;
+}
 
+button {
+  margin-left: auto;
+  margin-bottom: 0.5rem;
+}
 

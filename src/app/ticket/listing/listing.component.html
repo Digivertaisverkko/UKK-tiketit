@@ -16,7 +16,8 @@
       <button (click)="openInNewTab()"
               class="embedded-button"
               mat-raised-button
-              *ngIf="isInIframe">
+              *ngIf="isInIframe"
+              >
         <a target="_blank" i18n="@@Avaa uuteen välilehteen">
           Avaa uuteen välilehteen
         </a>
@@ -33,12 +34,13 @@
     </button>
 
     <button aria-label="Profiili"
+            class="settings-button"
             (click)="stopPolling()"
             i18n-aria-label="@@Profiili"
-            class="settings-button"
             mat-icon-button
             *ngIf="isParticipant && isInIframe"
-            [routerLink]="'/course/' + courseID + '/profile'">
+            [routerLink]="'/course/' + courseID + '/profile'"
+            >
       <mat-icon class="settings-icon">account_circle</mat-icon>
     </button>
   </div>
@@ -71,17 +73,17 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
-        <a aria-disabled="true"
-          [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-          tabindex="-1"
+        <a  aria-disabled="true"
+            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+            tabindex="-1"
           >
           <div class="ticket-state-wrapper">
             <div class="icon-wrapper">
-              <img alt=""
-                  class="icon"
-                  height="100%"
-                  src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
-                  width="100%"
+              <img  alt=""
+                    class="icon"
+                    height="100%"
+                    src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
+                    width="100%"
               >
             </div>
             <div>{{ element.tila }}</div>
@@ -335,6 +337,7 @@
         *ngIf="isLoaded && ticketsError.title.length > 0"
         #ticketError
         title="{{ ticketsError.title }}"
+        buttonText="{{ticketsError.buttonText}}"
         >
     </app-error-card>
 
@@ -364,8 +367,11 @@
     matSort #sortFaq="matSort" matSortActive="tyyppi" matSortDirection="desc">
 
   <ng-container matColumnDef="otsikko">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header
-        i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
+    <th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        i18n-sortActionDescription="@@Järjestä otsikon mukaan"
+        i18n="@@Otsikko"
         sortActionDescription="Järjestä otsikon mukaan"
         >
       Otsikko

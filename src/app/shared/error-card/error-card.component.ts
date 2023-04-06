@@ -11,15 +11,16 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
         <h3 class="h3">{{ title }}</h3>
       </div>
       <div class="body-wrapper">
+
         <p>{{ message }}</p>
-        <div>
+
         <button (click)="buttonPressed('1')"
                 mat-raised-button
                 *ngIf="buttonText.length > 0"
                 >
           {{buttonText}}
         </button>
-      </div>
+
     </div>
 
   `,
@@ -28,10 +29,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
 })
 export class ErrorCardComponent {
 
+  @Input() buttonText: string = '';
   @Input() message: string =  $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
   @Input() styles: object = {};
   @Input() title: string = $localize `:@@Virhe:Virhe`;
-  @Input() buttonText: string = '';
   @Output() clickEvent = new EventEmitter<string>();
 
   constructor() { }
