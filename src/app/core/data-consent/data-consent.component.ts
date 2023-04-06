@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Constants } from '../../shared/utils';
+import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+
+import { AuthService } from '../auth.service';
+import { Constants } from '../../shared/utils';
 
 @Component({
   templateUrl: './data-consent.component.html',
@@ -15,7 +16,6 @@ export class DataConsentComponent implements OnInit {
 
   constructor(
       private auth: AuthService,
-      private route: ActivatedRoute,
       private router: Router,
       private title: Title
       ) {
@@ -26,10 +26,9 @@ export class DataConsentComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('URL: ' + window.location.href);
+    // route.snapshot.paramMap.get ei toiminut tässä.
     const urlParams = new URLSearchParams(window.location.search);
     this.tokenid = urlParams.get('tokenid');
-    // route.snapshot.paramMap.get ei toiminut tässä.
-    // this.courseID = '2';
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
     // selata kirjautumattomana.
     if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {
