@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { Constants } from '../../shared/utils';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   template: `
@@ -11,23 +14,31 @@ import { AuthService } from '../auth.service';
 
     <h1 class="main-header"><span>404</span></h1>
 
-    <h2 i18n="@@404-otsikko" class="sub-header">Sivua ei löytynyt</h2>
+    <h2 i18n="@@404-otsikko" class="sub-header">
+      Sivua ei löytynyt
+    </h2>
 
     <div class="button-wrapper" *ngIf="!isLoggedIn">
       <div class="spacer"></div>
+
       <button align="end"
-      mat-raised-button color="primary" id="submitButton"
-      (click)="goToLogin()"
-      i18n="@@Kirjaudu sisään">
-      Kirjaudu sisään
-        </button>
+              (click)="goToLogin()"
+              id="submitButton"
+              i18n="@@Kirjaudu sisään"
+              mat-raised-button color="primary"
+              >
+        Kirjaudu sisään
+      </button>
+
     </div>
     <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
       ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.</p>
     <p i18n="@@404-2">Todennäköisesti ensimmäinen.</p>
     `,
+
     styleUrls: ['./page-not-found.component.scss']
 })
+
 export class PageNotFoundComponent implements OnInit {
   public isLoggedIn: Boolean = false;
   public courseID: string | null = null;
@@ -35,7 +46,10 @@ export class PageNotFoundComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private title: Title
+    ) {
+    this.title.setTitle(Constants.baseTitle + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
       this.isLoggedIn = this.authService.getIsUserLoggedIn();
       console.log(this.courseID);
   }
