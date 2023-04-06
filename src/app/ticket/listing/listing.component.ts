@@ -139,8 +139,28 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
   }
 
+  // Aseta virheviestejä.
+  private setError(type: string): void {
+    if (type === 'notParticipant') {
+      this.ticketsError = {
+        title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+        message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
+            tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+        buttonText: ''
+      }        
+    } else if  (type === 'notLoggedIn') {
+      this.ticketsError = {
+        title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+        message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
+            kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+        buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
+      }
+    } else {
+      console.error('Ei virheviestiä tyypille: ' + type);
+    }
+  }
+
   public ticketErrorClickEvent(button: string) {
-      console.log('painettu button ' + button)
       this.giveConsent();
   }
 
@@ -150,12 +170,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setEmptyTicketError();
         this.updateLoggedInView(this.courseID);
       } else if (response === false ) {
-        this.ticketsError = {
-          title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-          message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
-              kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
-          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
-        }
+        this.setError('notLoggedIn');
       }
     });
   }
@@ -210,12 +225,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
-          this.ticketsError = {
-            title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-            message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-                tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
-            buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
-          }
+          this.setError('notParticipant');
         } else {
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
