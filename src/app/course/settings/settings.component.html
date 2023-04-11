@@ -7,15 +7,27 @@
 
 <app-to-beginning-button></app-to-beginning-button>
 
-<div class="list-wrapper" *ngIf="isLoaded">
+<div class="view-wrapper" *ngIf="isLoaded">
 
-  <h2 class="sub-header table-header" i18n="@@Kysymysten lisäkentät">
-    Kysymysten lisäkentät
+  <h2 class="theme-subheader"
+      i18n="@@Kurssin asetukset">
+      Kurssin asetukset
   </h2>
+
+  <h3 class="table-header" i18n="@@Kysymysten lisäkentät">
+    Kysymysten lisäkentät
+  </h3>
+
+  <p i18n="@@Asetukset-kuvaus">
+    Voit asettaa kysymyksille lisäkenttiä, joita kysytään kaikilta uuden kysymyksen
+    esittäviltä käyttäjiltä. Lisäkenttiä voi asettaa pakollisiksi, antaa niille
+    valmiita vastausvaihtoehtoja sekä kuvaustekstejä. Voit muuttaa lisäkenttien
+    esitysjärjestystä muuttamalla alla olevan listan järjestystä. 
+  </p>
 
   <div  cdkDropList
         (cdkDropListDropped)="drop($event)"
-        class="container"
+        class="list-wrapper"
         *ngIf="errorMessage.length === 0"
         >
     <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
@@ -27,7 +39,10 @@
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
     </div>
-    <p *ngIf="fieldList.length === 0" class="no-fields-p" i18n="@@Yhtään lisäkenttää ei ole lisätty">
+    <p  class="no-fields-p"
+        *ngIf="fieldList.length === 0"
+        i18n="@@Yhtään lisäkenttää ei ole lisätty"
+        >
       Yhtään lisäkenttää ei ole lisätty.</p>
   </div>
 
@@ -42,17 +57,19 @@
 <div class="theme-actions" *ngIf="errorMessage.length === 0">
 
   <button class="add-button"
+          i18n="@@Lisää kenttä"
           mat-raised-button
           [routerLink]="'/course/' + this.courseID + '/settings/field'"
-          i18n="@@Lisää kenttä">
+          >
     Lisää kenttä
   </button>
 
   <button class="save-button"
-          color="primary"
-          mat-raised-button
           (click)="saveFields()"
-          i18n="@@Tallenna">
+          color="primary"
+          i18n="@@Tallenna"
+          mat-raised-button
+          >
     Tallenna
   </button>
 </div>
@@ -74,8 +91,9 @@
 
     <button class="invite-button"
             color="primary"
+            i18n="@@Kutsu"
             mat-raised-button
-            i18n="@@Kutsu">
+            >
       Kutsu
     </button>
 

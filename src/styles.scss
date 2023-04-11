@@ -50,9 +50,10 @@ $debug: false;
   margin-top: 2.2rem;
   // margin-top: 3.8rem;
   margin-bottom: 0.6rem;
+  overflow: hidden;
   position: relative;
   z-index: 0;
-  overflow: hidden;
+
   // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
   // alla olevan viivan pituuden määrittelyyn.
   span {
@@ -140,6 +141,7 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
   align-items: flex-center;
   gap: 1rem;
   @if $debug { border: 1px dotted purple; }
+
   .user-info-block {    // .text-info + ikoni
     @if $debug { border: 1px dotted green; }
     display: flex;
@@ -149,6 +151,7 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
     gap: inherit;
     // h1 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
     margin-top: 1.3rem;
+
     .text-info {        // Käyttäjätiedot
       @if $debug { border: 1px solid gray; }
       margin-top: 0.3rem;
@@ -159,6 +162,7 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
         margin-bottom: 0.3rem;
       }
     }
+
     img {
       @if $debug { border: 1px solid lightblue; }
       display: inline-block;
@@ -169,6 +173,7 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
       position: relative;
       width: 3rem;
     }
+
   }
 }
 
@@ -212,8 +217,13 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
   }
 
   .sub-header {
+    font-family: $displayFont;
     font-size: 1.66rem * 0.8;
     line-height: 1;
+  }
+
+  .theme-h3 {
+    font-family: $displayFont;
   }
 
   .theme-header-text {
