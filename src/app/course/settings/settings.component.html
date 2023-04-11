@@ -1,5 +1,8 @@
 
-<h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
+<h1 class="main-header"
+    id="courseName"
+    *ngIf="courseName.length > 0 && !isInIframe"
+    >
   <span>{{courseName}}</span>
 </h1>
 
@@ -9,8 +12,7 @@
 
 <div class="view-wrapper" *ngIf="isLoaded">
 
-  <h2 class="theme-subheader"
-      i18n="@@Kurssin asetukset">
+  <h2 class="theme-subheader" i18n="@@Kurssin asetukset">
       Kurssin asetukset
   </h2>
 
@@ -40,16 +42,21 @@
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
     </div>
     <p  class="no-fields-p"
-        *ngIf="fieldList.length === 0"
         i18n="@@Yhtään lisäkenttää ei ole lisätty"
+        *ngIf="fieldList.length === 0"
         >
       Yhtään lisäkenttää ei ole lisätty.</p>
   </div>
 
 </div>
 
-<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-  message="{{ errorMessage }}" [styles]="{ margin: '3em 20% 1em 20%' }">
+<app-error-card
+    i18n-title="@@Virhe"
+    *ngIf="errorMessage.length > 0"
+    message="{{ errorMessage }}"
+    [styles]="{ margin: '3em 20% 1em 20%' }"
+    title="Virhe"
+    >
 </app-error-card>
 
 <p *ngIf="message.length >0" class="theme-success-message">{{message}}</p>
@@ -80,7 +87,9 @@
 
   <h2 class="sub-header">Kutsu ulkopuolisia kurssille</h2>
 
-  <p>Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.</p>
+  <p>
+    Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
+  </p>
 
   <div class="invite-wrapper">
 

@@ -1,6 +1,8 @@
 @import '/src/variables.scss';
 
-.top-vertical-spacer { height: var(--margin-top-embedded) }
+.top-vertical-spacer {
+  height: var(--margin-top-embedded);
+}
 
 h3 {
   margin-top: 1.5rem;
