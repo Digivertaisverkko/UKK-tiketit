@@ -26,6 +26,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+                "filesize", "sha.js"
+            ],
             "outputPath": "dist/tikettisysteemi",
             "index": "src/index.html",
             "main": "src/main.ts",
