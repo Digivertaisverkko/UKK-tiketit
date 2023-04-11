@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { KentanTiedot, TicketService, UusiTiketti, AddTicketResponse
+import { KentanTiedot, Liite, TicketService, UusiTiketti, AddTicketResponse
         } from 'src/app/ticket/ticket.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
@@ -40,6 +40,7 @@ export class SubmitTicketComponent implements OnInit {
   public errorMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
   public message: string = '';
+  public oldAttachments: Liite[] = [];
   public state: 'editing' | 'sending' | 'done' = 'editing';
   public title: string = '';
   public ticketFields: TiketinKentat[] = [];
@@ -83,6 +84,7 @@ export class SubmitTicketComponent implements OnInit {
       if (response?.id) {
         this.title = response.otsikko;
         this.message = response.viesti;
+        this.oldAttachments = response.liitteet ?? [];
 
         if (response.kentat !== undefined ) {
           for (let tiketinKentta of response.kentat) {

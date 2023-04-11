@@ -32,7 +32,8 @@
                   name="titleText"
                   [(ngModel)]="title"
                   [placeholder]="titlePlaceholder"
-                  required>
+                  required
+                  >
           </textarea>
       </mat-form-field>
 
@@ -126,7 +127,6 @@
 
 <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
       <button (click)="uploadClick.next('add')"
-              *ngIf="!editExisting"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
               mat-raised-button
@@ -161,8 +161,10 @@
 
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments
-      [uploadClicks]="uploadClick.asObservable()"
-      (attachmentsMessages)="attachmentsMessages = $event">
+        [uploadClicks]="uploadClick.asObservable()"
+        (attachmentsMessages)="attachmentsMessages = $event"
+        [oldAttachments]="oldAttachments"
+        >
     </app-edit-attachments>
 
   </form>

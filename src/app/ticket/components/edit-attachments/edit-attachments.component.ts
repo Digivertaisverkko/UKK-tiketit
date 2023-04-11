@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit,
-        ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import {  Component, Input, Output, EventEmitter, OnInit,
+          ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { forkJoin, Observable, pipe, map, tap, catchError, of } from 'rxjs';
-import { TicketService } from '../../ticket.service';
+import { TicketService, Liite } from '../../ticket.service';
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
 // lähetysvaiheessa.
@@ -19,6 +19,7 @@ interface FileInfo {
 @Component({
   selector: 'app-edit-attachments',
   template: `
+    <!-- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
     <input  aria-disabled="true"
             (change)="onFileChanged($event)"
             class="file-input"
@@ -34,38 +35,70 @@ interface FileInfo {
 
     <p class="status-message-p" *ngIf="userMessage">{{userMessage}}</p>
 
-    <div class="file-list-wrapper" *ngIf="fileInfoList !== null">
-      <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
+    <div class="vertical-spacer"></div>
+
+    <!-- Aiemmin lähetetyt liitteet ------------------------------------------->
+    
+    <div class="file-list" *ngIf="oldAttachments.length > 0">
+      <div  class="file-list-row"
+            *ngFor="let file of oldAttachments; let index = index"
+            >
+        <div class="list-item">
+          <span class="filename"
+                matTooltip="{{file.nimi}}"
+                [matTooltipShowDelay]="600"
+                >
+            {{file.nimi}}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!--- Uudet liitteet ------------------------------------------------------>
+
+    <div class="file-list" *ngIf="fileInfoList !== null">
+      <div  class="file-list-row"
+            *ngFor="let file of fileInfoList; let index = index"
+            >
 
         <div class="list-item">
           <span class="filename"
                 matTooltip="{{file.filename}}"
-                [matTooltipShowDelay]="600">
+                [matTooltipShowDelay]="600"
+                >
             {{file.filename}}
           </span>
             <span class="filesize">
               &nbsp;({{file.filesize | filesize }})
             </span>
-          <div class="file-error-message" matError *ngIf="file.error"
-              matTooltip="{{file?.errorToolTip}}" [matTooltipShowDelay]="600">
+          <div  class="file-error-message"
+                matError
+                matTooltip="{{file?.errorToolTip}}"
+                [matTooltipShowDelay]="600"
+                *ngIf="file.error"
+                >
               <mat-icon>warning</mat-icon>{{file.error}}
           </div>
 
           <button class="remove-file-button"
                   (click)="removeSelectedFile(index)"
-                  mat-icon-button
                   [disabled]="isEditingDisabled"
+                  mat-icon-button
                   >
             <mat-icon>close</mat-icon>
           </button>
         </div>
+
         <mat-icon class="ok-icon" *ngIf="file.progress === 100 && !file.uploadError">
           done
         </mat-icon>
         <mat-icon class="error-icon" *ngIf="file.uploadError">error</mat-icon>
         <span *ngIf="file.uploadError">{{file.uploadError}}</span>
-        <mat-progress-bar [value]="file.progress" mode="determinate" value=100
-            *ngIf="file.progress && !file.uploadError">
+        <mat-progress-bar
+            mode="determinate"
+            *ngIf="file.progress && !file.uploadError"
+            [value]="file.progress"
+            >
         </mat-progress-bar>
       </div>
     </div>`,
@@ -74,22 +107,25 @@ interface FileInfo {
 
 export class EditAttachmentsComponent implements OnInit {
 
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks: Observable<string> = new Observable();
-  @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
+  @Output() fileListOutput = new EventEmitter<FileInfo[]>();
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
-  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public readonly MAX_FILE_SIZE_MB=100;
-  public state: 'adding' | 'sending' | 'done' = 'adding';
+  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public userMessage: string = '';
 
   constructor(private ticketService: TicketService,
-    private renderer: Renderer2) {
+              private renderer: Renderer2
+              ) {
   }
 
   ngOnInit() {
+    console.log('files: ' + JSON.stringify(this.oldAttachments));
     // const element: HTMLElement = document.querySelector() as HTMLElement;
     this.uploadClicks.subscribe(action => {
       if (action === 'add') {
@@ -119,7 +155,7 @@ export class EditAttachmentsComponent implements OnInit {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
             Tiedoston koko ylittää
-            ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+        ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.attachmentsMessages.emit('faulty');
       }
       this.fileInfoList.push(fileinfo);

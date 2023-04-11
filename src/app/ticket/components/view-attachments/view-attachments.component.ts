@@ -1,13 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
+    from '@angular/core';
 import { TicketService, Liite } from '../../ticket.service';
 
 @Component({
   selector: 'app-view-attachments',
   template: `
     <div class="attachments-wrapper">
-      <button class="attachment" *ngFor="let file of files; let i = index"
-        (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
-          matTooltip="{{file.nimi}}" [matTooltipShowDelay]="600">
+      <button
+          class="attachment"
+          (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
+          matTooltip="{{file.nimi}}"
+          [matTooltipShowDelay]="600"
+          *ngFor="let file of files; let i = index"
+          >
           <div class="filename">{{file.nimi}}</div>
           <mat-icon>download</mat-icon>
       </button>
@@ -25,7 +30,12 @@ export class ViewAttachmentsComponent {
 
   constructor(private ticketService: TicketService) {}
 
-  public downloadFile(ticketID: string, commentID: string, fileID: string, filename: string)
+  public downloadFile(
+        commentID: string,
+        fileID: string,
+        filename: string,
+        ticketID: string,
+      )
   {
     this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
