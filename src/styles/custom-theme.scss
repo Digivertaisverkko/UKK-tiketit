@@ -91,6 +91,7 @@ $textFont: Roboto, Arial, Helvetica, sans-serif;
 
 // headline-5 = h1, headline6 = h2, subtitle1 = mm. footerin lista.
 $custom-typography-config: mat.define-typography-config(
+  $headline-4: mat.define-typography-level(2.5rem, 1.2, 900, $displayFont, normal),
   $headline-5: mat.define-typography-level(2.5rem, 1.2, 900, $displayFont, normal),
   $headline-6: mat.define-typography-level(1.66rem, 1.2, 700, $displayFont, normal),
   $subtitle-1: mat.define-typography-level(rem, rem, 600, $textFont, normal),
