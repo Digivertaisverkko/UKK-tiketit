@@ -122,38 +122,48 @@ export class SubmitTicketComponent implements OnInit {
     });
     if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
     if (this.ticketId != null) {
-      this.ticketService.editTicket(this.ticketId, ticket)
-        .then( () => this.goBack()
-        ).catch(error => {
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-              Kysymyksen lähettäminen epäonnistui` + '.'
-          this.state = 'editing';
-        })
+      this.submitEditedTicket(ticket);
     } else {
-      this.ticketService.addTicket(this.courseId, ticket)
-        .then(response => {
-          if (this.attachments.fileInfoList.length === 0) this.goBack()
-          if (response == null || response?.success !== true) {
-            this.state = 'editing';
-            this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-                Kysymyksen lähettäminen epäonnistui` + '.'
-            throw new Error('Kysymyksen lähettäminen epäonnistui.');
-          }
-          if (response?.uusi == null) {
-            this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
-            throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-          }
-          response = response as AddTicketResponse;
-          const ticketID = response.uusi.tiketti;
-          const commentID = response.uusi.kommentti;
-          this.sendFiles(ticketID, commentID);
-      }).catch( error => {
-        // ? lisää eri virhekoodeja?
+      this.submitNewTicket(ticket);
+    }
+  }
+
+  private submitEditedTicket(ticket: UusiTiketti) {
+    if (this.ticketId === null) return
+    this.ticketService.editTicket(this.ticketId, ticket)
+      .then( () => this.goBack()
+      ).catch(error => {
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+            Kysymyksen lähettäminen epäonnistui` + '.'
+        this.state = 'editing';
+      })
+  }
+
+  private submitNewTicket(ticket: UusiTiketti) {
+    if (this.courseId === null) return
+    this.ticketService.addTicket(this.courseId, ticket)
+    .then(response => {
+      if (this.attachments.fileInfoList.length === 0) this.goBack()
+      if (response == null || response?.success !== true) {
         this.state = 'editing';
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
             Kysymyksen lähettäminen epäonnistui` + '.'
-      });
-    }
+        throw new Error('Kysymyksen lähettäminen epäonnistui.');
+      }
+      if (response?.uusi == null) {
+        this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+        throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+      }
+      response = response as AddTicketResponse;
+      const ticketID = response.uusi.tiketti;
+      const commentID = response.uusi.kommentti;
+      this.sendFiles(ticketID, commentID);
+    }).catch( error => {
+      // ? lisää eri virhekoodeja?
+      this.state = 'editing';
+      this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+          Kysymyksen lähettäminen epäonnistui` + '.'
+    });
   }
 
   private sendFiles(ticketID: string, commentID: string) {
