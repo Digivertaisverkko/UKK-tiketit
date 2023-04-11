@@ -2,13 +2,21 @@
 
 .top-vertical-spacer { height: var(--margin-top-embedded) }
 
+h3 {
+  margin-top: 1rem;
+}
+
+p {
+  margin-bottom: 1.5rem;
+}
+
 // ----- Lista --------------------------
 
-.container {
+.list-wrapper {
   // display: block;
   // padding: 0.7rem;
   // justify-items: start;
-  margin-top: 3rem;
+  margin-top: 1.5rem;
   max-width: 100%;
   border: solid 1px #ccc;
   min-height: 55px;
