@@ -144,7 +144,6 @@ export class EditAttachmentsComponent implements OnInit {
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let filesizeNumber = Number(file.size);
-      console.log('Tallennetaan ' + filesizeNumber);
       let fileinfo: FileInfo = {
         file: file,
         filename: file.name,

@@ -133,7 +133,11 @@ export class SubmitTicketComponent implements OnInit {
   private submitEditedTicket(ticket: UusiTiketti) {
     if (this.ticketId === null) return
     this.ticketService.editTicket(this.ticketId, ticket)
-      .then( () => this.goBack()
+      .then( () => {
+        if (this.oldAttachments.length === 0) this.goBack()
+        if (this.ticketId === null) throw Error
+        // this.sendFiles(this.ticketId, )
+      }
       ).catch(error => {
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
             Kysymyksen lähettäminen epäonnistui` + '.'
@@ -171,10 +175,9 @@ export class SubmitTicketComponent implements OnInit {
   private sendFiles(ticketID: string, commentID: string) {
     this.state = 'sending';
     this.attachments.sendFilesPromise(ticketID, commentID).
-    then((res) => {
-
-      this.goBack();
-    })
+      then((res) => {
+        this.goBack();
+      })
     .catch((res: any) => {
       this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
           ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
