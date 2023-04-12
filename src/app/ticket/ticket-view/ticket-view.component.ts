@@ -31,7 +31,9 @@ const MILLISECONDS_IN_MIN = 60000;
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
+  @Input() public oldCommentattachmentsMessages: string = '';
   @Input() public fileInfoList: FileInfo[] = [];
+  @Input() public oldCommentfileInfoList: FileInfo[] = [];
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
@@ -54,6 +56,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public ticketID: string;
   public tila: string;  // Tiketin tila
   public uploadClick: Subject<string> = new Subject<string>();
+  public uploadOldCommentClick: Subject<string> = new Subject<string>();
   public user: User = {} as User;
   public userRole: string = '';
   private fetchTicketsSub: Subscription | null = null;
@@ -233,6 +236,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public sendEditedComment(commentID: string, commentText: string) {
     this.ticketService.editComment(this.ticketID, commentID, commentText)
       .then(response => {
+
       }).catch(err => {
         console.log('Kommentin muokkaaminen epäonnistui.');
       }).finally(() => {

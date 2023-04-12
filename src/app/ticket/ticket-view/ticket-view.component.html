@@ -166,9 +166,10 @@
           {{proposedSolution}}
         </span>
 
-        <!-- Kommentin muokkaaminen -->
-        <button (click)="editComment(comment.id)"
-                aria-label="Muokkaa kommenttia"
+<!---------------- Kommentin muokkaaminen ------------------------------------->
+
+        <button aria-label="Muokkaa kommenttia"
+                (click)="editComment(comment.id)"
                 i18n-aria-label="@@Muokkaa kommenttia"
                 mat-icon-button
                 *ngIf="(comment.lahettaja.id === user?.id) &&
@@ -180,14 +181,19 @@
       </mat-card-header>
 
       <mat-card-content>
-        <app-message [messageHtml]=comment.viesti
-          *ngIf="editingComment !== comment.id; else commentEditing"></app-message>
-        <app-view-attachments (errorMessage)="errorMessage = $event"
-            [files]="comment.liitteet"
-            *ngIf="comment.liitteet"
-            [ticketID]="ticketID"
-        >
-        </app-view-attachments>
+        <div *ngIf="editingComment !== comment.id; else commentEditing">
+          <app-message
+              [messageHtml]=comment.viesti
+              >
+          </app-message>
+          <app-view-attachments
+              (errorMessage)="errorMessage = $event"
+              [files]="comment.liitteet"
+              *ngIf="comment.liitteet"
+              [ticketID]="ticketID"
+              >
+          </app-view-attachments>
+        </div>
       </mat-card-content>
 
       <ng-template #commentEditing>
@@ -197,6 +203,16 @@
         >
         </app-editor>
         <div class="theme-actions">
+
+          <button [attr.aria-label]="attachFilesText"
+                  class="attach-button"
+                  (click)="uploadOldCommentClick.next('add')"
+                  [disabled]="state==='sending'"
+                  mat-raised-button="attachFilesText"
+                  >
+            <mat-icon>attach_file</mat-icon>{{attachFilesText}}
+          </button>
+
           <div class="spacer"></div>
           <button class="send-button"
                   (click)="cancelCommentEditing()"
@@ -209,10 +225,20 @@
                   (click)="sendEditedComment(comment.id, comment.viesti)"
                   color="primary"
                   mat-raised-button
-          >
+                  >
             OK
           </button>
         </div>
+
+        <app-edit-attachments
+            (attachmentsMessages)="oldCommentattachmentsMessages = $event"
+            (fileListOutput)="oldCommentfileInfoList = $event"
+            id="attachments-{{comment.id}}"
+            [oldAttachments]="comment.liitteet"
+            [uploadClicks]="uploadOldCommentClick.asObservable()"
+            >
+        </app-edit-attachments>
+
       </ng-template>
 
     </mat-card>
