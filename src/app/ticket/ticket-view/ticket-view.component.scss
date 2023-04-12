@@ -1,6 +1,8 @@
 @import '/src/variables.scss';
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+.vertical-spacer {
+  height: var(--margin-top-embedded)
+}
 
 .top-buttons {
   display: flex;
@@ -9,7 +11,9 @@
   gap: $button-gap;
 }
 
-.short-field-value:last-child { margin-bottom: 1.5rem }
+.short-field-value:last-child {
+  margin-bottom: 1.5rem
+}
 
 // Muuten marginaalit menevät päällekkäin jostain syystä.
 // .short-vertical-spacer {
@@ -18,37 +22,57 @@
 
 .message-label {
   margin-bottom: -0.8rem;
-  + p {
+
+  +p {
     margin-top: -2rem;
   }
 }
 
 mat-card {
   margin: 0 auto 12px;
-  mat-card-subtitle { margin-top: 3px; }
+
+  mat-card-subtitle {
+    margin-top: 3px;
+  }
+
   .ticket-state {
     color: var(--primary-color);
     margin-right: 1em;
   }
 }
 
-.theme-actions { gap: 0.8rem }
+.theme-actions {
+  gap: 0.8rem
+}
 
-mat-radio-button { margin: 3px 1.7rem 3px 0px }
+mat-radio-button {
+  margin: 3px 1.7rem 3px 0px
+}
 
-.mdc-form-field > label { padding-left: 0 }
+.mdc-form-field>label {
+  padding-left: 0
+}
 
 // ::ng-deep .mat-mdc-card-content:last-child {
 //   padding-bottom: 0 !important;
 // }
 
 @media (max-width: 775px) {
+
   // Välttämättä ei mene useammalle riville.
   // .user-info-block {
   //   order: -1;
   //   margin-bottom: -30px;
   // }
-  .attach-button { order: 1; }
-  .spacer { order: 2 }
-  .send-button { order: 3; }
+  .attach-button {
+    order: 1;
+  }
+
+  .spacer {
+    order: 2
+  }
+
+  .send-button {
+    order: 3;
+  }
 }
