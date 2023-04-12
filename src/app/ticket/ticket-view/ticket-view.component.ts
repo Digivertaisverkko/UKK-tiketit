@@ -55,8 +55,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public ticket: Tiketti;
   public ticketID: string;
   public tila: string;  // Tiketin tila
-  public uploadClick: Subject<string> = new Subject<string>();
-  public uploadOldCommentClick: Subject<string> = new Subject<string>();
+  public uploadClick = new Subject<string>();
+  public uploadOldCommentClick = new Subject<string>();
   public user: User = {} as User;
   public userRole: string = '';
   private fetchTicketsSub: Subscription | null = null;
@@ -126,6 +126,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.errorMessage = "Kysymyksen arkistointi ei onnistunut.";
       }
     })
+  }
+
+  public addFilesOldToComment() {
+
   }
 
   public cancelCommentEditing() {
