@@ -116,9 +116,7 @@
 
     <div class="theme-actions">
 
-      <!-- ! Tällä hetkellä ei tueta liitetiedostojen editointia. -->
       <button (click)="uploadClick.next('add')"
-              *ngIf="!editExisting"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
               mat-raised-button>
@@ -154,17 +152,19 @@
       </button>
 
       <button class="submit-button"
-              *ngIf="state==='done'"
               (click)="goBack()"
               color="primary"
               mat-raised-button>
-              OK
+              *ngIf="state==='done'"
+        OK
       </button>
 
     </div>
 
-    <!-- Ylläoleva lapsikomponenttina -->
-    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()">
+    <app-edit-attachments
+        [oldAttachments]="oldAttachments"
+        [uploadClicks]="uploadClick.asObservable()"
+        >
     </app-edit-attachments>
 
   </form>

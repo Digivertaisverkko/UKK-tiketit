@@ -4,8 +4,8 @@ import { Constants, getIsInIframe } from '../../shared/utils';
 import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { Error, KentanTiedot, TicketService, Tiketti, UusiUKK, AddTicketResponse
-          } from 'src/app/ticket/ticket.service';
+import {  Error, KentanTiedot, Liite, TicketService, Tiketti, UusiUKK,
+          AddTicketResponse } from 'src/app/ticket/ticket.service';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { Title } from '@angular/platform-browser';
 
@@ -41,6 +41,7 @@ export class SubmitFaqComponent implements OnInit {
   public faqAnswer: string = '';
   public faqMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
+  public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
   public state: 'editing' | 'sending' | 'done' = 'editing';
   public ticketFields: TiketinKentat[] = [];
@@ -79,6 +80,8 @@ export class SubmitFaqComponent implements OnInit {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
           this.originalTicket = response;
+          // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
+          this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
           this.titleServ.setTitle(Constants.baseTitle + this.originalTicket.otsikko);
           // Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli "Ratkaisuehdotuksen" omaava kommentti
           // oletusvastaukseksi. Lopputuloksena viimeinen ratkaisuehdotus jää oletusvastaukseksi.

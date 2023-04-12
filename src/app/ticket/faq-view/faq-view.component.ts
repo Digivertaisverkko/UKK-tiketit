@@ -45,6 +45,7 @@ export class FaqViewComponent implements OnInit {
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
         .then((response) => {
+          console.dir(response);
           this.ticket = response;
           this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
           if (this.auth.getUserName.length == 0) {
