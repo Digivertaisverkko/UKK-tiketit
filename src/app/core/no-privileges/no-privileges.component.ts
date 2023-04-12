@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { Constants } from '../../shared/utils';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   template: `
@@ -40,9 +42,12 @@ export class NoPrivilegesComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private title: Title
+    ) {
+      this.title.setTitle(Constants.baseTitle + $localize
+            `:@@Tästä ei pääse:Tästä ei pääse`);
       this.isLoggedIn = this.authService.getIsUserLoggedIn();
-      console.log(this.courseID);
   }
 
   ngOnInit(): void {
