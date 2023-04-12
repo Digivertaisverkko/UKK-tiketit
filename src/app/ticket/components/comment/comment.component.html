@@ -1,0 +1,108 @@
+<mat-card appearance="outlined" class="answer"
+*ngFor="let comment of ticket.kommentit">
+
+<mat-card-header>
+
+<img  alt=''
+      mat-card-avatar
+      src="../../../assets/logos/UniOulu.png"
+>
+<mat-card-title class="theme-profile-name">
+  {{ comment.lahettaja.nimi }}
+</mat-card-title>
+
+<mat-card-subtitle class="theme-label">
+  <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}}
+    -
+  </span>
+  <span i18n="@@Tänään" *ngIf="isToday(comment.aikaleima)" >
+    Tänään
+  </span>
+  <span *ngIf="!isToday(comment.aikaleima)">
+    {{ comment.aikaleima | date: 'shortDate' }}
+  </span>
+  {{ comment.aikaleima | date: 'shortTime' }}
+</mat-card-subtitle>
+
+<div class="spacer"></div>
+<span class="ticket-state" *ngIf="comment.tila === 5">
+  {{proposedSolution}}
+</span>
+
+<!---------------- Kommentin muokkaaminen ------------------------------------->
+
+<button aria-label="Muokkaa kommenttia"
+        (click)="editComment(comment.id)"
+        i18n-aria-label="@@Muokkaa kommenttia"
+        mat-icon-button
+        *ngIf="(comment.lahettaja.id === user?.id) &&
+            (editingComment !== comment.id)"
+        >
+  <mat-icon>edit</mat-icon>
+</button>
+
+</mat-card-header>
+
+<mat-card-content>
+<div *ngIf="editingComment !== comment.id; else commentEditing">
+  <app-message
+      [messageHtml]=comment.viesti
+      >
+  </app-message>
+  <app-view-attachments
+      (errorMessage)="errorMessage = $event"
+      [files]="comment.liitteet"
+      *ngIf="comment.liitteet"
+      [ticketID]="ticketID"
+      >
+  </app-view-attachments>
+</div>
+</mat-card-content>
+
+<ng-template #commentEditing>
+<app-editor [disabled]="state==='sending'"
+    [(editorContent)]="comment.viesti"
+    *ngIf="!ticketIdFromParent && editingComment === comment.id"
+>
+</app-editor>
+<div class="theme-actions">
+
+  <button style="display: none"
+          [attr.aria-label]="attachFilesText"
+          class="attach-button"
+          (click)="uploadOldCommentClick.next('add')"
+          [disabled]="state==='sending'"
+          mat-raised-button="attachFilesText"
+          >
+    <mat-icon>attach_file</mat-icon>{{attachFilesText}}
+  </button>
+
+  <div class="spacer"></div>
+  <button class="send-button"
+          (click)="cancelCommentEditing()"
+          i18n="@@Peru"
+          mat-raised-button
+          >
+  Peru
+</button>
+  <button class="send-button"
+          (click)="sendEditedComment(comment.id, comment.viesti)"
+          color="primary"
+          mat-raised-button
+          >
+    OK
+  </button>
+</div>
+
+<app-edit-attachments
+    (attachmentsMessages)="oldCommentattachmentsMessages = $event"
+    (fileListOutput)="oldCommentfileInfoList = $event"
+    id="attachments-{{comment.id}}"
+    [oldAttachments]="comment.liitteet"
+    [uploadClicks]="uploadOldCommentClick.asObservable()"
+    >
+</app-edit-attachments>
+
+</ng-template>
+
+</mat-card>

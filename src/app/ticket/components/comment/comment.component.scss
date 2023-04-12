@@ -1,0 +1,17 @@
+
+mat-card {
+  margin: 0 auto 12px;
+
+  mat-card-subtitle {
+    margin-top: 3px;
+  }
+
+  .ticket-state {
+    color: var(--primary-color);
+    margin-right: 1em;
+  }
+}
+
+.theme-actions {
+  gap: 0.8rem
+}
