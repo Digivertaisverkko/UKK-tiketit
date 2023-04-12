@@ -34,6 +34,7 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   @Input() public attachmentsMessages: string = '';
+  private commentID: string | null = null;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -80,6 +81,7 @@ export class SubmitFaqComponent implements OnInit {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
           this.originalTicket = response;
+          response.kommentit[0].id;
           // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
           this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
           this.titleServ.setTitle(Constants.baseTitle + this.originalTicket.otsikko);
@@ -133,21 +135,41 @@ export class SubmitFaqComponent implements OnInit {
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
 
     this.ticketService.addFaq(id, newFaq, this.editExisting)
-      .then(response => {
-        if (this.attachments.fileInfoList.length === 0) this.goBack()
-        if (response?.success !== true) {
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-              Kysymyksen lähettäminen epäonnistui` + '.'
-          throw new Error('Kysymyksen lähettäminen epäonnistui.');
+      .then((response: AddTicketResponse) => {
+        if (this.attachments.fileInfoList.length === 0) {
+          // this.goBack();
+          // Ei toiminut, jos otti else:n pois.
+        } else {
+          if (response?.success !== true) {
+            this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+                Kysymyksen lähettäminen epäonnistui` + '.'
+            return
+          }
+          console.log('response:');
+          console.dir(response);
+          console.log('response.uusi:');
+          console.dir(response.uusi);
+          if (response == null) {
+            this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+            return
+          }
+          let ticketID: string;
+          let commentID: string | null;
+          // Uutta tikettiä lisätessä sen tiedot tulevat vastauksessa.
+          if (response?.uusi != null) {
+            ticketID = response.uusi.tiketti;
+            commentID = response.uusi.kommentti;
+          } else {
+            ticketID = this.ticketId!;
+            commentID = this.originalTicket?.kommentit[0]?.id ?? null;
+            if (commentID == null) {
+              console.error('Ei kommentti ID:ä.');
+              return
+            }
+          }
+          console.warn(`ticketID: ${ticketID} commentID ${commentID}`)
+          this.sendfiles(ticketID, commentID);
         }
-        if (response == null || response?.uusi == null) {
-          this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
-          throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-        }
-        response = response as AddTicketResponse;
-        const ticketID = response.uusi.tiketti;
-        const commentID = response.uusi.kommentti;
-        this.sendfiles(ticketID, commentID);
       })
       .catch((error: Error) => {
         this.state = 'editing';
@@ -168,7 +190,7 @@ export class SubmitFaqComponent implements OnInit {
       then(res => {
         console.log('komponentti: saatiin vastaus: ');
         console.dir(res);
-        this.goBack();
+        // this.goBack();
       })
       .catch((res: any) => {
         this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen

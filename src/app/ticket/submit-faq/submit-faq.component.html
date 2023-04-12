@@ -135,7 +135,8 @@
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
-              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId">
+              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId"
+              >
         Peru
       </button>
 
@@ -154,8 +155,9 @@
       <button class="submit-button"
               (click)="goBack()"
               color="primary"
-              mat-raised-button>
+              mat-raised-button
               *ngIf="state==='done'"
+              >
         OK
       </button>
 
