@@ -23,11 +23,11 @@ interface FileInfo {
     <input  aria-disabled="true"
             (change)="onFileChanged($event)"
             class="file-input"
-            #fileInput
             #fileUpload
+            #fileInput
             multiple
             type="file"
-            >
+    >
 
     <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
       name="file-input-{{url}}"
@@ -38,7 +38,7 @@ interface FileInfo {
     <div class="vertical-spacer"></div>
 
     <!-- Aiemmin lähetetyt liitteet ------------------------------------------->
-    
+
     <div class="file-list" *ngIf="oldAttachments.length > 0">
       <div  class="file-list-row"
             *ngFor="let file of oldAttachments; let index = index"
@@ -62,15 +62,19 @@ interface FileInfo {
             >
 
         <div class="list-item">
+
           <span class="filename"
                 matTooltip="{{file.filename}}"
                 [matTooltipShowDelay]="600"
                 >
             {{file.filename}}
           </span>
-            <span class="filesize">
-              &nbsp;({{file.filesize | filesize }})
-            </span>
+          <span class="in-brackets">
+            (
+              <span *ngIf="oldAttachments.length > 0">{{new}}</span>
+              <span>{{file.filesize | filesize }}</span>
+            )
+          </span>
           <div  class="file-error-message"
                 matError
                 matTooltip="{{file?.errorToolTip}}"
@@ -112,10 +116,11 @@ export class EditAttachmentsComponent implements OnInit {
   @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-  
+
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
+  public readonly new: string = $localize `:@@uusi:uusi` + ", ";
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public userMessage: string = '';
 
@@ -136,6 +141,28 @@ export class EditAttachmentsComponent implements OnInit {
 
   public clear() {
     this.fileInfoList = [];
+  }
+
+  private makeRequestArray(ticketID: string, commentID: string): any {
+    return this.fileInfoList.map((fileinfo, index) => {
+      return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file)
+        .pipe(
+          tap(progress => {
+            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
+                progress);
+            this.fileInfoList[index].progress = progress;
+
+          }),
+          catchError((error: any) => {
+            console.log('makeRequestChain: catchError: error napattu');
+            this.fileInfoList[index].uploadError = $localize `:@@Liitteen
+                lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            // Koko upload loppuu kaikkien tiedostojen kohdalla jos heitetään virhe.
+            return of('error');
+            // return throwError( () => new Error(error) );
+          })
+        )
+    });
   }
 
   public onFileChanged(event: any) {
@@ -162,26 +189,15 @@ export class EditAttachmentsComponent implements OnInit {
     }
   }
 
-  private makeRequestArray(ticketID: string, commentID: string): any {
-    return this.fileInfoList.map((fileinfo, index) => {
-      return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file)
-        .pipe(
-          tap(progress => {
-            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
-                progress);
-            this.fileInfoList[index].progress = progress;
-
-          }),
-          catchError((error: any) => {
-            console.log('makeRequestChain: catchError: error napattu');
-            this.fileInfoList[index].uploadError = $localize `:@@Liitteen
-                lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            // Koko upload loppuu kaikkien tiedostojen kohdalla jos heitetään virhe.
-            return of('error');
-            // return throwError( () => new Error(error) );
-          })
-        )
-    });
+  public removeSelectedFile(index: number) {
+    // this.fileList.splice(index, 1);
+    this.fileInfoList.splice(index, 1);
+    if (this.fileInfoList.some(item => item.error)) {
+      this.attachmentsMessages.emit('errors');
+    } else {
+      this.attachmentsMessages.emit('');
+    }
+    this.fileListOutput.emit(this.fileInfoList);
   }
 
   public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
@@ -203,17 +219,6 @@ export class EditAttachmentsComponent implements OnInit {
         }
       });
     })
-  }
-
-  public removeSelectedFile(index: number) {
-    // this.fileList.splice(index, 1);
-    this.fileInfoList.splice(index, 1);
-    if (this.fileInfoList.some(item => item.error)) {
-      this.attachmentsMessages.emit('errors');
-    } else {
-      this.attachmentsMessages.emit('');
-    }
-    this.fileListOutput.emit(this.fileInfoList);
   }
 
 }

@@ -33,6 +33,7 @@ export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   @Input() public fileInfo: FileInfo[] = [];
   @Input() public attachmentsMessages: string = '';
+  private commentID: string | null = null;
   private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public currentDate = new Date();
@@ -68,7 +69,8 @@ export class SubmitTicketComponent implements OnInit {
     });
     this.ticketService.getCourseName(this.courseId).then(response => {
       this.courseName = response;
-    }).catch(() => {});
+    }).catch(() => {
+    });
     this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
       this.ticketFields = response as TiketinKentat[];
       for (let field of this.ticketFields) {
@@ -84,6 +86,7 @@ export class SubmitTicketComponent implements OnInit {
       if (response?.id) {
         this.title = response.otsikko;
         this.message = response.viesti;
+        this.commentID = response.kommenttiID;
         this.oldAttachments = response.liitteet ?? [];
 
         if (response.kentat !== undefined ) {
@@ -135,8 +138,8 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.editTicket(this.ticketId, ticket)
       .then( () => {
         if (this.oldAttachments.length === 0) this.goBack()
-        if (this.ticketId === null) throw Error
-        // this.sendFiles(this.ticketId, )
+        if (this.ticketId === null || this.commentID === null) throw Error
+        this.sendFiles(this.ticketId, this.commentID);
       }
       ).catch(error => {
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:

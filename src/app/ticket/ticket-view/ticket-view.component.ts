@@ -161,7 +161,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public editTicket() {
-    let url = '/course/' + this.courseID + '/submit/' + this.ticketID;
+    let url = `/course/${this.courseID}/submit/${this.ticketID}`;
     this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 

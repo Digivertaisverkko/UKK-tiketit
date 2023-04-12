@@ -1,9 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest }
-    from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
 import { Router } from '@angular/router';
-import { firstValueFrom, map, Observable, catchError, Subject, of } from 'rxjs';
+import { Observable, Subject, catchError, firstValueFrom, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
@@ -270,9 +269,8 @@ export class TicketService {
   }
 
   // Lataa tiedosto.
-  public async getFile(ticketID: string,commentID: string, fileID: string):Promise<Blob> {
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/
-        ${commentID}/liite/${fileID}/lataa`;
+  public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
@@ -431,16 +429,19 @@ export class TicketService {
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url));
-      // throw new Error  // debuggaukseen.
     } catch (error: any) {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
+    // TODO: alla olevat kutsut voisi tehdä rinnakkain.
     response = await this.getFields(ticketID);
     ticket.kentat = response;
     response  = await this.getComments(ticketID);
     // Tiketin viestin sisältö on sen ensimmäinen kommentti.
+    /// TODO: 1. kommentti ei välttämättä viittaa tikettiin aina, vaan pitäisi
+    // ottaa aikaleiman mukaan vanhin.
     ticket.viesti = response[0].viesti;
+    ticket.kommenttiID = response[0].id;
     ticket.liitteet = response[0].liitteet;
     response.shift();
     ticket.kommentit = response;
@@ -579,9 +580,9 @@ export interface SortableTicket {
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
   Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
-  eri vaiheessa omilla kutsuillaan.
-  Backend palauttaa 1. kommentissa tiketin viestin sisällön, josta
-  tulee jäsenmuuttujan "viesti" -sisältö. Vastaavasti 1. kommentin liitteet
+  eri vaiheessa omilla kutsuillaan. Backend palauttaa 1. kommentissa tiketin
+  viestin sisällön, josta tulee jäsenmuuttujan "viesti" -sisältö ja sen id:stä
+  kommenttiID. Tätä tarvitaan mm.  Vastaavasti 1. kommentin liitteet
   ovat tiketin liitteitä. */
 export interface Tiketti extends TiketinPerustiedot {
   kurssi: number;
@@ -589,6 +590,7 @@ export interface Tiketti extends TiketinPerustiedot {
   ukk?: boolean;
   arkistoitava: boolean;
   kentat?: Array<Kentta>;
+  kommenttiID: string;
   kommentit: Array<Kommentti>;
   liitteet?: Array<Liite>;
 }
