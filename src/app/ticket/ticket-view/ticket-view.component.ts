@@ -20,8 +20,6 @@ interface FileInfo {
   done?: boolean;
 }
 
-const MILLISECONDS_IN_MIN = 60000;
-
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',
@@ -103,7 +101,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     });
-    this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * MILLISECONDS_IN_MIN)
+    this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN)
         .subscribe(() => this.fetchTicket(this.courseID));
   }
 
