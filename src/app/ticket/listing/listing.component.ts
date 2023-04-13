@@ -15,7 +15,6 @@ import { AuthService, User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
 import { RefreshDialogComponent } from './refresh-dialog/refresh-dialog.component';
-import { DialogConfig } from '@angular/cdk/dialog';
 
 enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
@@ -264,6 +263,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public fetchArchivedTickets() {
     this.ticket.getTicketList(this.courseID, { option: 'archived' }).then(response => {
+      if (!response) return
       if (response.length > 0) {
         this.dataSourceArchived = new MatTableDataSource(response);
         this.archivedCount = response.length;
@@ -274,6 +274,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then(response => {
+      if (!response) return
         if (response.length > 0) {
           this.dataSource = new MatTableDataSource(response);
           this.numberOfQuestions = response.length;
