@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TicketService } from '../../ticket.service';
+import { Subject } from 'rxjs';
+import { Kommentti, TicketService } from '../../ticket.service';
 import { User } from 'src/app/core/auth.service';
 
 interface FileInfo {
@@ -20,17 +21,24 @@ interface FileInfo {
 })
 export class CommentComponent {
 
-  @Input() public oldCommentfileInfoList: FileInfo[] = [];
+  @Input() public attachmentsMessages: string = '';
+  @Input() public comment: Kommentti = {} as Kommentti;
+  @Input() public fileInfoList: FileInfo[] = [];
   @Input() public user: User = {} as User;
   @Input() public ticketID: string = '';
   public attachFilesText: string = '';
   public editingComment: string | null = null;
+  public errorMessage: string = '';
+  public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
+  public uploadClick = new Subject<string>();
   private readonly CURRENT_DATE = new Date().toDateString();
   public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
 
   constructor(
     private ticketService: TicketService
-    ) {}
+    ) {
+
+    }
 
   public cancelCommentEditing() {
     this.editingComment = null;

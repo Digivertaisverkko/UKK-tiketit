@@ -43,7 +43,6 @@ export class EditAttachmentsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('files: ' + JSON.stringify(this.oldAttachments));
     // const element: HTMLElement = document.querySelector() as HTMLElement;
     this.uploadClicks.subscribe(action => {
       if (action === 'add') {

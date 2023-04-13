@@ -1,5 +1,5 @@
-<mat-card appearance="outlined" class="answer"
-*ngFor="let comment of ticket.kommentit">
+<mat-card appearance="outlined" class="answer">
+<!-- *ngFor="let comment of ticket.kommentit" -->
 
 <mat-card-header>
 
@@ -62,15 +62,17 @@
 <ng-template #commentEditing>
 <app-editor [disabled]="state==='sending'"
     [(editorContent)]="comment.viesti"
-    *ngIf="!ticketIdFromParent && editingComment === comment.id"
+    *ngIf="editingComment === comment.id"
 >
+<!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
+
 </app-editor>
 <div class="theme-actions">
 
   <button style="display: none"
           [attr.aria-label]="attachFilesText"
           class="attach-button"
-          (click)="uploadOldCommentClick.next('add')"
+          (click)="uploadClick.next('add')"
           [disabled]="state==='sending'"
           mat-raised-button="attachFilesText"
           >
@@ -95,11 +97,11 @@
 </div>
 
 <app-edit-attachments
-    (attachmentsMessages)="oldCommentattachmentsMessages = $event"
-    (fileListOutput)="oldCommentfileInfoList = $event"
+    (attachmentsMessages)="attachmentsMessages = $event"
+    (fileListOutput)="fileInfoList = $event"
     id="attachments-{{comment.id}}"
     [oldAttachments]="comment.liitteet"
-    [uploadClicks]="uploadOldCommentClick.asObservable()"
+    [uploadClicks]="uploadClick.asObservable()"
     >
 </app-edit-attachments>
 
