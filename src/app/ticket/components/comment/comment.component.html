@@ -3,43 +3,41 @@
 
 <mat-card-header>
 
-<img  alt=''
-      mat-card-avatar
-      src="../../../assets/logos/UniOulu.png"
->
-<mat-card-title class="theme-profile-name">
-  {{ comment.lahettaja.nimi }}
-</mat-card-title>
+  <img  alt=''
+        mat-card-avatar
+        src="../../../assets/logos/UniOulu.png"
+  >
+  <mat-card-title class="theme-profile-name">
+    {{ comment.lahettaja.nimi }}
+  </mat-card-title>
 
-<mat-card-subtitle class="theme-label">
-  <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}}
-    -
+  <mat-card-subtitle class="theme-label">
+    <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}}
+      -
+    </span>
+    <span i18n="@@Tänään" *ngIf="isToday(comment.aikaleima)" >
+      Tänään
+    </span>
+    <span *ngIf="!isToday(comment.aikaleima)">
+      {{ comment.aikaleima | date: 'shortDate' }}
+    </span>
+    {{ comment.aikaleima | date: 'shortTime' }}
+  </mat-card-subtitle>
+
+  <div class="spacer"></div>
+  <span class="ticket-state" *ngIf="comment.tila === 5">
+    {{proposedSolution}}
   </span>
-  <span i18n="@@Tänään" *ngIf="isToday(comment.aikaleima)" >
-    Tänään
-  </span>
-  <span *ngIf="!isToday(comment.aikaleima)">
-    {{ comment.aikaleima | date: 'shortDate' }}
-  </span>
-  {{ comment.aikaleima | date: 'shortTime' }}
-</mat-card-subtitle>
 
-<div class="spacer"></div>
-<span class="ticket-state" *ngIf="comment.tila === 5">
-  {{proposedSolution}}
-</span>
-
-<!---------------- Kommentin muokkaaminen ------------------------------------->
-
-<button aria-label="Muokkaa kommenttia"
-        (click)="editComment(comment.id)"
-        i18n-aria-label="@@Muokkaa kommenttia"
-        mat-icon-button
-        *ngIf="(comment.lahettaja.id === user?.id) &&
-            (editingComment !== comment.id)"
-        >
-  <mat-icon>edit</mat-icon>
-</button>
+  <button aria-label="Muokkaa kommenttia"
+          (click)="editComment(comment.id)"
+          i18n-aria-label="@@Muokkaa kommenttia"
+          mat-icon-button
+          *ngIf="(comment.lahettaja.id === user?.id) &&
+              (editingComment !== comment.id)"
+          >
+    <mat-icon>edit</mat-icon>
+  </button>
 
 </mat-card-header>
 
@@ -85,7 +83,7 @@
           i18n="@@Peru"
           mat-raised-button
           >
-  Peru
+    Peru
 </button>
   <button class="send-button"
           (click)="sendEditedComment(comment.id, comment.viesti)"

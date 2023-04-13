@@ -48,6 +48,7 @@ export class CommentComponent {
 
   public cancelCommentEditing() {
     this.editingComment = null;
+    this.messages.next('notEditing')
   }
 
   public editComment(commentID: string) {
