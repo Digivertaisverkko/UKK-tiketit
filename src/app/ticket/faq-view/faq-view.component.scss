@@ -1,11 +1,13 @@
-@import '/src/variables.scss';
+@import "/src/variables.scss";
 
 .faq-view {
   padding-right: 80px;
   margin-bottom: 0.5em;
 }
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+.vertical-spacer {
+  height: var(--margin-top-embedded);
+}
 
 #top-buttons {
   display: flex;
@@ -14,16 +16,25 @@
 
 .edit-buttons-wrapper {
   display: flex;
+  flex-wrap: wrap;
   gap: $button-gap;
+}
+
+.remove-btn {
+  margin-right: 0.5rem;
 }
 
 // .short-field-value:last-child {
 //   margin-bottom: 1.5rem;
 // }
 
-h2 { margin-bottom: 1em; }
+h2 {
+  margin-bottom: 1em;
+}
 
-mat-card { margin: 0 auto 1em; }
+mat-card {
+  margin: 0 auto 1em;
+}
 
 @media (max-width: 900px) {
   .edit-buttons-wrapper {
