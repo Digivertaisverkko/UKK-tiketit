@@ -33,15 +33,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   @Input() public attachmentsMessages: string = '';
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
-  @Input() public oldCommentattachmentsMessages: string = '';
-  @Input() public oldCommentfileInfoList: FileInfo[] = [];
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
   public commentText: string;
   public courseName: string = '';
-  public editingComment: string | null = null;
   public errorMessage: string = '';
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
@@ -129,16 +126,21 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  public addFilesOldToComment() {
-
+  changeArchiveButton() {
+    setTimeout(() => this.isArchivePressed = true, 300);
   }
 
-  public cancelCommentEditing() {
-    this.editingComment = null;
+  changeRemoveButton() {
+    setTimeout(() => this.isRemovePressed = true, 300);
   }
 
-  public editComment(commentID: string) {
-    this.editingComment = commentID;
+  public copyAsFAQ() {
+    // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
+    if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
+      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
+    }
+    this.attachments.clear();
+    this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
   }
 
   private fetchTicket(courseID: string | null) {
@@ -192,23 +194,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  changeArchiveButton() {
-    setTimeout(() => this.isArchivePressed = true, 300);
-  }
-
-  changeRemoveButton() {
-    setTimeout(() => this.isRemovePressed = true, 300);
-  }
-
-  public copyAsFAQ() {
-    // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
-    if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
-      this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
-    }
-    this.attachments.clear();
-    this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
-  }
-
   public getSenderTitle(name: string, role: string): string {
     if (name == this.userName) return $localize`:@@Minä:Minä`
     switch (role) {
@@ -242,19 +227,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (event === "fetchTicket") {
       this.fetchTicket(this.courseID);
     }
-  }
-
-  public sendEditedComment(commentID: string, commentText: string) {
-    this.ticketService.editComment(this.ticketID, commentID, commentText)
-      .then(response => {
-
-      }).catch(err => {
-        console.log('Kommentin muokkaaminen epäonnistui.');
-      }).finally(() => {
-        this.editingComment = null;
-        this.fetchTicket(this.courseID);
-      })
-    console.log('sending');
   }
 
   public sendComment(): void {
