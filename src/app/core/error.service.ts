@@ -71,6 +71,9 @@ export class ErrorService {
 
   private routeToNoPrivileges() {
     // Ei toimi tässä this.route.snapshot.paramMap.get('courseid').
+    const currentRoute = window.location.pathname + window.location.search;
+    // Kirjautumisnäkymässä ei koskaan haluta ohjata tähän näkymään.
+    if (currentRoute.indexOf('/login') !== -1) return
     const pathArray = window.location.pathname.split('/');
     let baseRoute = '';
     if (pathArray[1] === 'course' && pathArray[2] != null)  {
