@@ -387,8 +387,10 @@ export class TicketService {
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
   public async getTicketList(courseID: string, option?: GetTicketsOption) {
-    const currentRoute = window.location.pathname;
-    if (currentRoute.indexOf('/listing') === -1) return null
+    const currentRoute = window.location.href;
+    if (currentRoute.indexOf('/list-tickets') === -1) {
+      return null
+    }
     if (courseID === '') {
       throw new Error('Ei kurssi ID:ä.');
     }
