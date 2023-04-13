@@ -19,18 +19,18 @@ name="file-input-{{url}}"
 <!-- Aiemmin lähetetyt liitteet ------------------------------------------->
 
 <div class="file-list" *ngIf="oldAttachments.length > 0">
-<div  class="file-list-row"
-  *ngFor="let file of oldAttachments; let index = index"
-  >
-<div class="list-item">
-<span class="filename"
-      matTooltip="{{file.nimi}}"
-      [matTooltipShowDelay]="600"
-      >
-  {{file.nimi}}
-</span>
-</div>
-</div>
+  <div  class="file-list-row"
+    *ngFor="let file of oldAttachments; let index = index"
+    >
+  <div class="list-item">
+    <span class="filename"
+          matTooltip="{{file.nimi}}"
+          [matTooltipShowDelay]="600"
+          >
+      {{file.nimi}}
+    </span>
+    </div>
+  </div>
 </div>
 
 <!--- Uudet liitteet ------------------------------------------------------>
