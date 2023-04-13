@@ -362,9 +362,16 @@
     </p>
   </div>
 
-<table id="faqTable" mat-table class="theme-table mat-elevation-z1" [dataSource]="dataSourceFAQ"
-    [hidden]="dataSourceFAQ.filteredData.length === 0"
-    matSort #sortFaq="matSort" matSortActive="aikaleima" matSortDirection="desc">
+<table  class="theme-table mat-elevation-z1"
+        [dataSource]="dataSourceFAQ"
+        [hidden]="dataSourceFAQ.filteredData.length === 0"
+        id="faqTable"
+        mat-table
+        matSort
+        matSortActive="aikaleima"
+        matSortDirection="desc"
+        #sortFaq="matSort"
+        >
 
   <ng-container matColumnDef="otsikko">
     <th mat-header-cell
