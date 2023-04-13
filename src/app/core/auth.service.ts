@@ -214,7 +214,7 @@ export class AuthService {
 
   public saveRedirectURL() {
     const currentRoute = window.location.pathname + window.location.search;
-    // Kirjautumissivulle ei haluta ohjata.99
+    // Kirjautumissivulle ei haluta ohjata.
     if (currentRoute.indexOf('/login') === -1) {
       if (window.localStorage.getItem('REDIRECT_URL') == null) {
       window.localStorage.setItem('REDIRECT_URL', currentRoute);

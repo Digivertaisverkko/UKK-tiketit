@@ -1,3 +1,4 @@
+
 <mat-card appearance="outlined" class="answer">
 <!-- *ngFor="let comment of ticket.kommentit" -->
 
@@ -34,7 +35,7 @@
           i18n-aria-label="@@Muokkaa kommenttia"
           mat-icon-button
           *ngIf="(comment.lahettaja.id === user?.id) &&
-              (editingComment !== comment.id)"
+              (editingCommentID !== comment.id)"
           >
     <mat-icon>edit</mat-icon>
   </button>
@@ -43,7 +44,7 @@
           aria-label="Peru kommentin muokkaaminen"
           i18n-aria-label="@@Peru kommentin muokkaaminen"
           mat-icon-button
-          *ngIf="editingComment === comment.id"
+          *ngIf="editingCommentID === comment.id"
           >
     <mat-icon>close</mat-icon>
   </button>
@@ -51,7 +52,7 @@
 </mat-card-header>
 
 <mat-card-content>
-<div *ngIf="editingComment !== comment.id; else commentEditing">
+<div *ngIf="editingCommentID !== comment.id; else commentEditing">
   <app-message
       [messageHtml]=comment.viesti
       >
@@ -69,7 +70,7 @@
 <ng-template #commentEditing>
 <app-editor [disabled]="state==='sending'"
     [(editorContent)]="comment.viesti"
-    *ngIf="editingComment === comment.id"
+    *ngIf="editingCommentID === comment.id"
 >
 <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
 

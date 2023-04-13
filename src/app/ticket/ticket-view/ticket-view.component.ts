@@ -39,6 +39,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public cantRemoveTicket: string;
   public commentText: string;
   public courseName: string = '';
+  public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
@@ -54,7 +55,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public ticketID: string;
   public tila: string;  // Tiketin tila
   public uploadClick = new Subject<string>();
-  public uploadOldCommentClick = new Subject<string>();
   public user: User = {} as User;
   public userRole: string = '';
   private fetchTicketsSub: Subscription | null = null;
@@ -149,6 +149,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchTicket(courseID: string | null) {
+    
+    // TODO: lisää tähän, ettei fetchata tikettiä, jos kommentin editointi on kesken.
+
     this.ticketService.getTicketInfo(this.ticketID).then(response => {
       this.ticket = response;
       if (this.userName.length == 0) {
@@ -231,6 +234,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public messageFromComment(event: any) {
     if (event === "fetchTicket") {
       this.fetchTicket(this.courseID);
+    } else if (event === "stopEditing") {
+      this.editingCommentIDParent = null;
     }
   }
 

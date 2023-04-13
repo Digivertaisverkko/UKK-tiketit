@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild }
     from '@angular/core';
 import { Subject } from 'rxjs';
+
 import { Kommentti, TicketService } from '../../ticket.service';
-import { User } from 'src/app/core/auth.service';
+import { AuthService, User } from 'src/app/core/auth.service';
 
 interface FileInfo {
   filename: string;
@@ -24,21 +25,26 @@ export class CommentComponent {
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
+  @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
-  @Input() public user: User = {} as User;
-  @Output() public messages = new EventEmitter<string>;
+  @Output() public messages = new EventEmitter();
+  @Output() public editingCommentIDChange = new EventEmitter();
   public attachFilesText: string = '';
   public editingComment: string | null = null;
   public errorMessage: string = '';
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public uploadClick = new Subject<string>();
+  public user: User = {} as User;
+
   public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   private readonly CURRENT_DATE = new Date().toDateString();
 
   constructor(
+    private auth: AuthService,
     private ticketService: TicketService
     ) {
+      this.user = this.auth.getUserInfo();
       if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
         this.attachFilesText = $localize `:@@Liitä:liitä`;
       } else {
@@ -47,12 +53,13 @@ export class CommentComponent {
     }
 
   public cancelCommentEditing() {
-    this.editingComment = null;
-    this.messages.next('notEditing')
+    this.editingCommentID = null;
+    this.editingCommentIDChange.emit(this.editingCommentID);
   }
 
   public editComment(commentID: string) {
-    this.editingComment = commentID;
+    this.editingCommentID = commentID;
+    this.editingCommentIDChange.emit(this.editingCommentID);
   }
 
   public getSenderTitle(name: string, role: string): string {
@@ -87,7 +94,8 @@ export class CommentComponent {
         }).catch(err => {
           console.log('Kommentin muokkaaminen epäonnistui.');
         }).finally(() => {
-          this.editingComment = null;
+          this.editingCommentID = null;
+          this.editingCommentIDChange.emit(this.editingCommentID);
           this.messages.emit('fetchTicket');
           // this.fetchTicket(this.courseID);
         })
