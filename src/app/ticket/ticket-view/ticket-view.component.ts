@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -59,9 +59,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public userRole: string = '';
   private fetchTicketsSub: Subscription | null = null;
   private courseID: string | null;
+  private isPollingTicket: boolean = false;
   private userName: string = '';
   private readonly CURRENT_DATE = new Date().toDateString();
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private auth: AuthService,
@@ -101,11 +103,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.ticketService.getCourseName(this.courseID).then(response => {
       this.courseName = response;
     });
-    this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN)
-        .subscribe(() => this.fetchTicket(this.courseID));
+
+    if (!this.isPollingTicket) this.startPollingTicket();
+
   }
 
   ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
     this.fetchTicketsSub?.unsubscribe();
   }
 
@@ -275,6 +280,16 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         });
         this.state = 'editing';
       })
+  }
+
+  private startPollingTicket() {
+  this.fetchTicketsSub?.unsubscribe();
+  this.isPollingTicket = true;
+  this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN)
+    .pipe(
+      takeUntil(this.unsubscribe$)
+    )
+    .subscribe(() => this.fetchTicket(this.courseID));
   }
 
 }
