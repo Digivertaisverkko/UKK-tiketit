@@ -22,14 +22,15 @@ import { Title } from '@angular/platform-browser';
       näkemiseen, tai etsimääsi tietoa ei ole olemassa.
     </p>
 
-    <button align="end"
-          (click)="goToLogin()"
-          i18n="@@Kirjaudu sisään"
-          mat-raised-button color="primary"
-          *ngIf="!isLoggedIn"
-      >
+    <!-- <button align="end"
+            (click)="goToLogin()"
+            color="primary"
+            i18n="@@Kirjaudu sisään"
+            mat-raised-button
+            *ngIf="!isLoggedIn"
+            >
         Kirjaudu sisään
-      </button>
+    </button> -->
 
   `,
   styleUrls: ['./no-privileges.component.scss']
@@ -55,10 +56,10 @@ export class NoPrivilegesComponent implements OnInit {
     this.trackRouteParameters();
   }
 
-  public async goToLogin() {
-    const loginUrl = await this.authService.sendAskLoginRequest('own', this.courseID);
-    this.router.navigateByUrl(loginUrl);
-  }
+  // public async goToLogin() {
+  //   const loginUrl = await this.authService.sendAskLoginRequest('own', this.courseID);
+  //   this.router.navigateByUrl(loginUrl);
+  // }
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
