@@ -39,6 +39,15 @@
     <mat-icon>edit</mat-icon>
   </button>
 
+  <button (click)="cancelCommentEditing()"
+          aria-label="Peru kommentin muokkaaminen"
+          i18n-aria-label="@@Peru kommentin muokkaaminen"
+          mat-icon-button
+          *ngIf="editingComment === comment.id"
+          >
+    <mat-icon>close</mat-icon>
+  </button>
+
 </mat-card-header>
 
 <mat-card-content>
@@ -78,13 +87,7 @@
   </button>
 
   <div class="spacer"></div>
-  <button class="send-button"
-          (click)="cancelCommentEditing()"
-          i18n="@@Peru"
-          mat-raised-button
-          >
-    Peru
-</button>
+
   <button class="send-button"
           (click)="sendEditedComment(comment.id, comment.viesti)"
           color="primary"
