@@ -135,7 +135,19 @@
 
   <h3 class="sub-header" i18n="@@Keskustelu">Keskustelu</h3>
 
-    <mat-card appearance="outlined" class="answer"
+  <app-comment
+
+      [comment]="comment"
+      *ngFor="let comment of ticket.kommentit"
+      [ticketID]="ticket.id"
+      (messages)="messageFromComment($event)"
+      [user]="user"
+      >
+  </app-comment>
+
+
+  <!--
+  <mat-card appearance="outlined" class="answer"
         *ngFor="let comment of ticket.kommentit">
 
       <mat-card-header>
@@ -167,6 +179,8 @@
         </span>
 
 <!---------------- Kommentin muokkaaminen ------------------------------------->
+
+<!--
 
         <button aria-label="Muokkaa kommenttia"
                 (click)="editComment(comment.id)"
@@ -243,6 +257,8 @@
       </ng-template>
 
     </mat-card>
+
+  -->
 
     <div class="vertical-spacer"></div>
 

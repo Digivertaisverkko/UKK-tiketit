@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild }
+    from '@angular/core';
 import { Subject } from 'rxjs';
 import { Kommentti, TicketService } from '../../ticket.service';
 import { User } from 'src/app/core/auth.service';
@@ -24,20 +25,25 @@ export class CommentComponent {
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
   @Input() public fileInfoList: FileInfo[] = [];
-  @Input() public user: User = {} as User;
   @Input() public ticketID: string = '';
+  @Input() public user: User = {} as User;
+  @Output() public messages = new EventEmitter<string>;
   public attachFilesText: string = '';
   public editingComment: string | null = null;
   public errorMessage: string = '';
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public uploadClick = new Subject<string>();
-  private readonly CURRENT_DATE = new Date().toDateString();
   public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
+  private readonly CURRENT_DATE = new Date().toDateString();
 
   constructor(
     private ticketService: TicketService
     ) {
-
+      if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
+        this.attachFilesText = $localize `:@@Liitä:liitä`;
+      } else {
+        this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
+      }
     }
 
   public cancelCommentEditing() {
@@ -81,6 +87,7 @@ export class CommentComponent {
           console.log('Kommentin muokkaaminen epäonnistui.');
         }).finally(() => {
           this.editingComment = null;
+          this.messages.emit('fetchTicket');
           // this.fetchTicket(this.courseID);
         })
       console.log('sending');

@@ -1,13 +1,15 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService, User } from 'src/app/core/auth.service';
 import { Subject, Subscription, timer } from 'rxjs';
+import { Title } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
+import { AuthService, User } from 'src/app/core/auth.service';
+import { CommentComponent } from '../components/comment/comment.component';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
-import { Title } from '@angular/platform-browser';
 
 
 interface FileInfo {
@@ -29,8 +31,9 @@ interface FileInfo {
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
-  @Input() public oldCommentattachmentsMessages: string = '';
   @Input() public fileInfoList: FileInfo[] = [];
+  @Input() public messagesFromComments: string = '';
+  @Input() public oldCommentattachmentsMessages: string = '';
   @Input() public oldCommentfileInfoList: FileInfo[] = [];
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
@@ -233,6 +236,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila);
+  }
+
+  public messageFromComment(event: any) {
+    if (event === "fetchTicket") {
+      this.fetchTicket(this.courseID);
+    }
   }
 
   public sendEditedComment(commentID: string, commentText: string) {
