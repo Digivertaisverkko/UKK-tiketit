@@ -231,19 +231,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.courseID = courseIDcandinate;
           if (this.isPollingTickets) {
             this.loggedIn$.unsubscribe();
-            return
+          } else {
+            this.startPollingTickets();
           }
-          this.fetchTicketsSub$.unsubscribe();
-          console.warn('Aloitetaan tikettien pollaus.');
-          this.isPollingTickets = true;
-          this.fetchTicketsSub$ = timer(0, this.TICKET_POLLING_RATE_MIN *
-              Constants.MILLISECONDS_IN_MIN)
-              .pipe(
-                takeUntil(this.unsubscribe$),
-                tap(() => this.fetchTickets(this.courseID)),
-              )
-              .subscribe(() => {});
-          this.loggedIn$.unsubscribe();
         }
       }
     }).catch(error => this.handleError(error));
@@ -390,6 +380,20 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setEmptyTicketError(): void {
     this.ticketsError = { title: '', message: '', buttonText: ''}
+  }
+
+  private startPollingTickets() {
+    this.fetchTicketsSub$.unsubscribe();
+    console.warn('Aloitetaan tikettien pollaus.');
+    this.isPollingTickets = true;
+    this.fetchTicketsSub$ = timer(0, this.TICKET_POLLING_RATE_MIN *
+        Constants.MILLISECONDS_IN_MIN)
+        .pipe(
+          takeUntil(this.unsubscribe$),
+          tap(() => this.fetchTickets(this.courseID)),
+        )
+        .subscribe(() => {});
+    this.loggedIn$.unsubscribe();
   }
 
   public stopPolling() {
