@@ -1,6 +1,6 @@
 import {  Component, Input, Output, EventEmitter, OnInit,
-          ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { forkJoin, Observable, pipe, map, tap, catchError, of } from 'rxjs';
+          ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
+import { forkJoin, Observable, pipe, map, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService, Liite } from '../../ticket.service';
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
@@ -22,14 +22,16 @@ interface FileInfo {
   styleUrls: ['./edit-attachments.component.scss']
 })
 
-export class EditAttachmentsComponent implements OnInit {
+export class EditAttachmentsComponent implements OnInit, OnDestroy {
 
   @Input() oldAttachments: Liite[] = [];
-  @Input() uploadClicks: Observable<string> = new Observable();
+  @Input() uploadClicks = new Observable();
+  // @Input() uploadClicks: Observable<string> = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
+  public uploadClickSub = new Subscription();
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
@@ -44,11 +46,15 @@ export class EditAttachmentsComponent implements OnInit {
 
   ngOnInit() {
     // const element: HTMLElement = document.querySelector() as HTMLElement;
-    this.uploadClicks.subscribe(action => {
+    this.uploadClickSub = this.uploadClicks.subscribe(action => {
       if (action === 'add') {
         this.renderer.selectRootElement(this.fileInput.nativeElement).click();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.uploadClickSub.unsubscribe();
   }
 
   public clear() {
@@ -118,7 +124,6 @@ export class EditAttachmentsComponent implements OnInit {
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
-          console.log('sendFilesPromise: saatiin vastaus: ' + res );
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
           } else {

@@ -29,14 +29,13 @@ export class CommentComponent {
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
   @Input() public user: User = {} as User;
-  @Output() public messages = new EventEmitter();
   @Output() public editingCommentIDChange = new EventEmitter();
+  @Output() public messages = new EventEmitter();
   public attachFilesText: string = '';
   public editingComment: string | null = null;
   public errorMessage: string = '';
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public uploadClick = new Subject<string>();
-
 
   public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   private readonly CURRENT_DATE = new Date().toDateString();
