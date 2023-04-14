@@ -149,9 +149,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchTicket(courseID: string | null) {
-    
-    // TODO: lisää tähän, ettei fetchata tikettiä, jos kommentin editointi on kesken.
-
+    // fetchaus sulkee editointiboxin.
+    if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicketInfo(this.ticketID).then(response => {
       this.ticket = response;
       if (this.userName.length == 0) {
