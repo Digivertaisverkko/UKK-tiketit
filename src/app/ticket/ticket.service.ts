@@ -284,6 +284,19 @@ export class TicketService {
     return response
   }
 
+  public async removeComment(ticketID: string, commentID: string) {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.delete<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
   public async removeTicket(ticketID: string): Promise<boolean> {
     let response: any;
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;

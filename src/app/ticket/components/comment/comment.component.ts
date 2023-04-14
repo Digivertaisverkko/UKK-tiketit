@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild }
+import {  Component, EventEmitter, Input, Output, ViewChild }
     from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -19,8 +19,7 @@ interface FileInfo {
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./comment.component.scss']
 })
 export class CommentComponent {
 
@@ -36,6 +35,7 @@ export class CommentComponent {
   public attachFilesText: string = '';
   public editingComment: string | null = null;
   public errorMessage: string = '';
+  public isRemovePressed: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public uploadClick = new Subject<string>();
 
@@ -55,8 +55,7 @@ export class CommentComponent {
     }
 
   public cancelCommentEditing() {
-    this.editingCommentID = null;
-    this.editingCommentIDChange.emit(this.editingCommentID);
+    this.stopEditing();
   }
 
   public editComment(commentID: string) {
@@ -89,13 +88,31 @@ export class CommentComponent {
     return dateString == this.CURRENT_DATE ? true : false
   }
 
+  public removeComment(commentID: string) {
+    this.ticketService.removeComment(this.ticketID, commentID).then(res => {
+      this.stopEditing();
+      // this.fileInfoList = [];
+      // this.state = 'done';
+      // this.attachments.clear();
+      // this.editingCommentID = null;
+      // this.editingCommentIDChange.emit(this.editingCommentID);
+      // this.messages.emit('fetchTicket');
+    }).catch((err: any) => {
+      console.log('Kommentin poistaminen epäonnistui.');
+    })
+  }
+
+  public changeRemoveBtn() {
+    setTimeout(() => this.isRemovePressed = true, 300);
+  }
+
   public sendComment(commentID: string, commentText: string) {
     this.ticketService.editComment(this.ticketID, commentID, commentText)
       .then(response => {
-        this.editingCommentID = null;
-        this.editingCommentIDChange.emit(this.editingCommentID);
-        this.messages.emit('fetchTicket');
-        if (this.fileInfoList.length === 0) return
+        if (this.fileInfoList.length === 0) {
+          this.stopEditing();
+          return
+        }
         this.sendFiles(this.ticketID, commentID);
         return
       }).catch(err => {
@@ -108,17 +125,24 @@ export class CommentComponent {
     this.state = 'sending';
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
-        console.log('kaikki valmista');
-        this.state = 'done';
-        this.fileInfoList = [];
-        this.attachments.clear();
+        console.log('kaikki tiedostot valmiita.');
+        this.stopEditing();
       })
       .catch((res:any) => {
         console.log('ticket view: napattiin virhe: ' + res);
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
             ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
       })
+  }
 
+  private stopEditing() {
+    this.state = 'done';
+    this.fileInfoList = [];
+    this.attachments.clear();
+    this.editingCommentID = null;
+    this.editingCommentIDChange.emit(this.editingCommentID);
+    this.isRemovePressed = false;
+    this.messages.emit('fetchTicket');
   }
 
 }
