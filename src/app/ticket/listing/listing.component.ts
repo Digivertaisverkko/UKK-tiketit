@@ -62,6 +62,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfQuestions: number = 0;
   private fetchTicketsSub$: Subscription | null  = null;
   private fetchFAQsSub$: Subscription | null = null;
+  private fetchTicketsSub$: Subscription | null  = null;
+  private fetchFAQsSub$: Subscription | null = null;
   private loggedIn$ = new Subscription;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
