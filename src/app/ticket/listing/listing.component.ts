@@ -134,8 +134,104 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stopPolling();
   }
 
+    //hakutoiminto, jossa paginointi kommentoitu pois
+    public applyFilter(event: Event, isTicket: boolean ){
+      let filterValue = (event.target as HTMLInputElement).value;
+      filterValue = filterValue.trim().toLowerCase();
+      if (isTicket) {
+        this.dataSource.filter = filterValue;
+      } else {
+        this.dataSourceFAQ.filter = filterValue;
+      }
+        /*if (this.dataSourceFAQ.paginator) {
+          this.dataSourceFAQ.paginator.firstPage();
+        }*/
+    }
+
+  public fetchArchivedTickets() {
+    this.ticket.getTicketList(this.courseID, { option: 'archived' }).then(response => {
+      if (!response) return
+      if (response.length > 0) {
+        this.dataSourceArchived = new MatTableDataSource(response);
+        this.archivedCount = response.length;
+        this.dataSourceArchived.sort = this.sortArchived;
+      }
+    }).catch(error => this.handleError(error));
+  }
+
+  // Hae tiketit kerran.
+  private fetchTickets(courseID: string) {
+    this.ticket.getTicketList(courseID).then(response => {
+      if (!response) return
+        if (response.length > 0) {
+          this.dataSource = new MatTableDataSource(response);
+          this.numberOfQuestions = response.length;
+          this.dataSource.sort = this.sortQuestions;
+        }
+        // this.dataSource.paginator = this.paginator;
+    }).catch(error => this.handleError(error));
+  }
+
+  // refresh = Jos on saatu refresh-pyyntö muualta.
+  private fetchFAQ(courseID: string, refresh?: boolean) {
+    this.ticket.getFAQ(courseID).then(response => {
+        if (response.length > 0) {
+          this.numberOfFAQ = response.length;
+          this.dataSourceFAQ = new MatTableDataSource(response);
+          this.dataSourceFAQ.sort = this.sortFaq;
+          // this.dataSourceFAQ.paginator = this.paginatorFaq;
+        }
+      })
+      .catch(error => this.handleError(error))
+      .finally(() => {
+        this.FAQisLoaded = true;
+        if (refresh !== true) this.isLoaded = true;
+      });
+  }
+
+
+  public getDisplayedColumnFAQ(): string[] {
+    return this.columnDefinitionsFAQ
+      .filter(cd => !this.isPhonePortrait || cd.showMobile)
+      .map(cd => cd.def);
+  }
+
+  public getDisplayedColumn(): string[] {
+    return this.columnDefinitions
+      .filter(cd => !this.isPhonePortrait || cd.showMobile)
+      .map(cd => cd.def);
+  }
+
   private getDataConsent(): boolean {
     return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
+  }
+
+  public giveConsent() {
+    localStorage.removeItem('NO_DATA_CONSENT');
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.maxWidth = '30rem';
+    const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
+    refreshDialog.afterClosed().subscribe(res => {
+      if (res === 'cancel') {
+        localStorage.setItem('NO_DATA_CONSENT', 'true');
+      }
+    })
+  }
+
+  // TODO: lisää virheilmoitusten käsittelyjä.
+  private handleError(error: any) {
+    if (error?.tunnus == 1000 ) {
+
+    }
+  }
+
+  public hideArchived() {
+    this.dataSourceArchived = new MatTableDataSource();
+    this.archivedCount = 0;
+  }
+
+  public openInNewTab(): void {
+    window.open(window.location.href, '_blank');
   }
 
   // Aseta virheviestejä.
@@ -198,10 +294,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  public openInNewTab(): void {
-    window.open(window.location.href, '_blank');
-  }
-
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages(): void {
     this.store.trackMessages().subscribe(response => {
@@ -215,31 +307,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private updateLoggedInView(courseIDcandinate: string) {
-    this.ticket.getMyCourses().then(response => {
-      console.log('Päivitetään logged in view');
-      if (response[0].kurssi !== undefined) {
-        const myCourses: Kurssini[] = response;
-        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-        if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-          this.isParticipant = false;
-          this.authService.setIsParticipant(false);
-          this.setError('notParticipant');
-        } else {
-          this.isParticipant = true;
-          this.authService.setIsParticipant(true);
-          this.courseID = courseIDcandinate;
-          if (this.isPollingTickets) {
-            this.loggedIn$.unsubscribe();
-          } else {
-            this.startPollingTickets();
-          }
-        }
-      }
-    }).catch(error => this.handleError(error));
-    // .finally(this.isLoaded = true) ei toiminut.
-  }
-
   private trackScreenSize(): void {
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       if (result.matches) {
@@ -250,64 +317,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.maxItemTitleLength = 100;
       }
     });
-  }
-
-  public fetchArchivedTickets() {
-    this.ticket.getTicketList(this.courseID, { option: 'archived' }).then(response => {
-      if (!response) return
-      if (response.length > 0) {
-        this.dataSourceArchived = new MatTableDataSource(response);
-        this.archivedCount = response.length;
-        this.dataSourceArchived.sort = this.sortArchived;
-      }
-    }).catch(error => this.handleError(error));
-  }
-
-  // Hae tiketit kerran.
-  private fetchTickets(courseID: string) {
-    this.ticket.getTicketList(courseID).then(response => {
-      if (!response) return
-        if (response.length > 0) {
-          this.dataSource = new MatTableDataSource(response);
-          this.numberOfQuestions = response.length;
-          this.dataSource.sort = this.sortQuestions;
-        }
-        // this.dataSource.paginator = this.paginator;
-    }).catch(error => this.handleError(error));
-  }
-
-  // refresh = Jos on saatu refresh-pyyntö muualta.
-  private fetchFAQ(courseID: string, refresh?: boolean) {
-    this.ticket.getFAQ(courseID).then(response => {
-        if (response.length > 0) {
-          this.numberOfFAQ = response.length;
-          this.dataSourceFAQ = new MatTableDataSource(response);
-          this.dataSourceFAQ.sort = this.sortFaq;
-          // this.dataSourceFAQ.paginator = this.paginatorFaq;
-        }
-      })
-      .catch(error => this.handleError(error))
-      .finally(() => {
-        this.FAQisLoaded = true;
-        if (refresh !== true) this.isLoaded = true;
-      });
-  }
-
-  public giveConsent() {
-    localStorage.removeItem('NO_DATA_CONSENT');
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.maxWidth = '30rem';
-    const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
-    refreshDialog.afterClosed().subscribe(res => {
-      if (res === 'cancel') {
-        localStorage.setItem('NO_DATA_CONSENT', 'true');
-      }
-    })
-  }
-
-  public hideArchived() {
-    this.dataSourceArchived = new MatTableDataSource();
-    this.archivedCount = 0;
   }
 
   private showCourseName(courseID: string) {
@@ -335,18 +344,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public getDisplayedColumnFAQ(): string[] {
-    return this.columnDefinitionsFAQ
-      .filter(cd => !this.isPhonePortrait || cd.showMobile)
-      .map(cd => cd.def);
-  }
-
-  public getDisplayedColumn(): string[] {
-    return this.columnDefinitions
-      .filter(cd => !this.isPhonePortrait || cd.showMobile)
-      .map(cd => cd.def);
-  }
-
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
     this.stopPolling();
@@ -355,27 +352,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('tallennettu URL: ' + link);
       window.localStorage.setItem('REDIRECT_URL', link);
     }
-  }
-
-  // TODO: lisää virheilmoitusten käsittelyjä.
-  private handleError(error: any) {
-    if (error?.tunnus == 1000 ) {
-
-    }
-  }
-
-  //hakutoiminto, jossa paginointi kommentoitu pois
-  public applyFilter(event: Event, isTicket: boolean ){
-    let filterValue = (event.target as HTMLInputElement).value;
-    filterValue = filterValue.trim().toLowerCase();
-    if (isTicket) {
-      this.dataSource.filter = filterValue;
-    } else {
-      this.dataSourceFAQ.filter = filterValue;
-    }
-      /*if (this.dataSourceFAQ.paginator) {
-        this.dataSourceFAQ.paginator.firstPage();
-      }*/
   }
 
   private setEmptyTicketError(): void {
@@ -401,6 +377,31 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.unsubscribe$.complete();
     this.fetchFAQsSub$.unsubscribe();
     this.fetchTicketsSub$.unsubscribe();
+  }
+
+  private updateLoggedInView(courseIDcandinate: string) {
+    this.ticket.getMyCourses().then(response => {
+      console.log('Päivitetään logged in view');
+      if (response[0].kurssi !== undefined) {
+        const myCourses: Kurssini[] = response;
+        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
+        if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+          this.isParticipant = false;
+          this.authService.setIsParticipant(false);
+          this.setError('notParticipant');
+        } else {
+          this.isParticipant = true;
+          this.authService.setIsParticipant(true);
+          this.courseID = courseIDcandinate;
+          if (this.isPollingTickets) {
+            this.loggedIn$.unsubscribe();
+          } else {
+            this.startPollingTickets();
+          }
+        }
+      }
+    }).catch(error => this.handleError(error));
+    // .finally(this.isLoaded = true) ei toiminut.
   }
 
 }
