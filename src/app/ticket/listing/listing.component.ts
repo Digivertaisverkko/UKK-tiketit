@@ -5,7 +5,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { Subject, Subscription, switchMap, takeUntil, tap, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ErrorCardComponent } from 'src/app/shared/error-card/error-card.component';
@@ -146,7 +146,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
             tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
         buttonText: ''
-      }        
+      }
     } else if  (type === 'notLoggedIn') {
       this.ticketsError = {
         title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
@@ -239,9 +239,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.fetchTicketsSub$ = timer(0, this.TICKET_POLLING_RATE_MIN *
               Constants.MILLISECONDS_IN_MIN)
               .pipe(
-                takeUntil(this.unsubscribe$)
+                takeUntil(this.unsubscribe$),
+                tap(() => this.fetchTickets(this.courseID)),
               )
-              .subscribe(() => this.fetchTickets(this.courseID));
+              .subscribe(() => {});
           this.loggedIn$.unsubscribe();
         }
       }
@@ -272,6 +273,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }).catch(error => this.handleError(error));
   }
 
+  // Hae tiketit kerran.
   private fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then(response => {
       if (!response) return
