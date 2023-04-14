@@ -29,6 +29,30 @@
     {{proposedSolution}}
   </span>
 
+  <!-- i18n-aria-label="@@Muokkaa kommenttia" -->
+    <button aria-label="Poista kommentti"
+            class="remove-btn"
+            (click)="changeRemoveBtn()"
+            mat-icon-button
+            *ngIf="(comment.lahettaja.id === user?.id) &&
+                (editingCommentID === comment.id) &&
+                isRemovePressed === false"
+            >
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+
+    <button aria-label="Poista kommentti"
+            class="remove-btn"
+            (click)="removeComment(comment.id)"
+            color="accent"
+            mat-icon-button
+            *ngIf="(comment.lahettaja.id === user?.id) &&
+                (editingCommentID === comment.id) &&
+                isRemovePressed === true"
+            >
+            <mat-icon>delete_forever</mat-icon>
+    </button>
+
   <button aria-label="Muokkaa kommenttia"
           (click)="editComment(comment.id)"
           i18n-aria-label="@@Muokkaa kommenttia"

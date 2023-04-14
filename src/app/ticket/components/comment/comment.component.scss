@@ -6,6 +6,13 @@ mat-card {
     margin-top: 3px;
   }
 
+  .remove-btn {
+    font-size: 130%;
+    mat-icon {
+      font-size: 130%;
+    }
+  }
+
   .ticket-state {
     color: var(--primary-color);
     margin-right: 1em;
