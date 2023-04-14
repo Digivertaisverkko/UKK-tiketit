@@ -28,6 +28,7 @@ export class CommentComponent {
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
+  @Input() public user: User = {} as User;
   @Output() public messages = new EventEmitter();
   @Output() public editingCommentIDChange = new EventEmitter();
   public attachFilesText: string = '';
@@ -35,7 +36,7 @@ export class CommentComponent {
   public errorMessage: string = '';
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public uploadClick = new Subject<string>();
-  public user: User = {} as User;
+
 
   public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   private readonly CURRENT_DATE = new Date().toDateString();
@@ -76,30 +77,29 @@ export class CommentComponent {
     }
   }
 
-    // Onko annettu aikaleima tänään.
-    public isToday(timestamp: string | Date) : boolean {
-      if (typeof timestamp === 'string') {
-        var dateString = new Date(timestamp).toDateString();
-      } else {
-        var dateString = timestamp.toDateString();
-      }
-      // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-      return dateString == this.CURRENT_DATE ? true : false
+  // Onko annettu aikaleima tänään.
+  public isToday(timestamp: string | Date) : boolean {
+    if (typeof timestamp === 'string') {
+      var dateString = new Date(timestamp).toDateString();
+    } else {
+      var dateString = timestamp.toDateString();
     }
+    // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
+    return dateString == this.CURRENT_DATE ? true : false
+  }
 
-    public sendEditedComment(commentID: string, commentText: string) {
-      this.ticketService.editComment(this.ticketID, commentID, commentText)
-        .then(response => {
-
-        }).catch(err => {
-          console.log('Kommentin muokkaaminen epäonnistui.');
-        }).finally(() => {
-          this.editingCommentID = null;
-          this.editingCommentIDChange.emit(this.editingCommentID);
-          this.messages.emit('fetchTicket');
-          // this.fetchTicket(this.courseID);
-        })
-      console.log('sending');
-    }
+  public sendEditedComment(commentID: string, commentText: string) {
+    this.ticketService.editComment(this.ticketID, commentID, commentText)
+      .then(response => {
+      }).catch(err => {
+        console.log('Kommentin muokkaaminen epäonnistui.');
+      }).finally(() => {
+        this.editingCommentID = null;
+        this.editingCommentIDChange.emit(this.editingCommentID);
+        this.messages.emit('fetchTicket');
+        // this.fetchTicket(this.courseID);
+      })
+    console.log('sending');
+  }
 
 }
