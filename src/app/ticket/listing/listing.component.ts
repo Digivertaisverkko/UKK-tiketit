@@ -60,8 +60,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
-  private fetchTicketsSub$  = new Subscription;
-  private fetchFAQsSub$ = new Subscription;
+  private fetchTicketsSub$: Subscription | null  = null;
+  private fetchFAQsSub$: Subscription | null = null;
   private loggedIn$ = new Subscription;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
@@ -113,6 +113,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    // const testimer$ = timer(0, 10000)
+    // .pipe(
+    //     tap(() => console.log('ping')),
+    // ).subscribe();
+    // setTimeout(()=> testimer$.unsubscribe(), 21000);
+
     this.noDataConsent = this.getDataConsent();
     if (this.noDataConsent) {
       console.log('Kieltäydytty tietojen annosta.');
@@ -283,15 +289,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.courseID = courseID;
       this.showCourseName(courseID);
       if (this.isPollingFAQ === true) return
-      this.fetchFAQsSub$.unsubscribe();
+      if (this.fetchFAQsSub$) this.fetchFAQsSub$.unsubscribe();
       console.warn('Aloitetaan UKK pollaus.');
       this.isPollingFAQ = true;
       this.fetchFAQsSub$ = timer(0, this.FAQ_POLLING_RATE_MIN *
           Constants.MILLISECONDS_IN_MIN)
           .pipe(
-            takeUntil(this.unsubscribe$)
+            takeUntil(this.unsubscribe$),
+            tap(() => this.fetchFAQ(this.courseID))
           )
-          .subscribe(() => this.fetchFAQ(this.courseID));
+          .subscribe();
     })
   }
 
@@ -360,14 +367,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private startPollingTickets() {
-    this.fetchTicketsSub$.unsubscribe();
+    if (this.fetchTicketsSub$) this.fetchTicketsSub$.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
     this.isPollingTickets = true;
     const pollTime = this.TICKET_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
-    this.fetchTicketsSub$ = timer(0, pollTime)
+    // takeUntil(this.unsubscribe$),
+    // throttleTime(pollTime),
+    this.fetchTicketsSub$ = timer(0, 10000)
         .pipe(
-            takeUntil(this.unsubscribe$),
-            throttleTime(pollTime),
             tap(() => this.fetchTickets(this.courseID)),
         )
         .subscribe();
@@ -377,8 +384,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public stopPolling() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-    this.fetchFAQsSub$.unsubscribe();
-    this.fetchTicketsSub$.unsubscribe();
+    if (this.fetchFAQsSub$) this.fetchFAQsSub$.unsubscribe();
+    if (this.fetchTicketsSub$) this.fetchTicketsSub$.unsubscribe();
   }
 
   private updateLoggedInView(courseIDcandinate: string) {
