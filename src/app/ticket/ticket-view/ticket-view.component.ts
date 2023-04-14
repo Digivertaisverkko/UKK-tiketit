@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -291,9 +291,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   this.isPollingTicket = true;
   this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN)
     .pipe(
-      takeUntil(this.unsubscribe$)
+      takeUntil(this.unsubscribe$),
+      tap(() => this.fetchTicket(this.courseID))
     )
-    .subscribe(() => this.fetchTicket(this.courseID));
+    .subscribe();
   }
 
 }
