@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
+import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 
 interface FileInfo {
   filename: string;
@@ -31,6 +32,7 @@ export class CommentComponent {
   @Input() public user: User = {} as User;
   @Output() public editingCommentIDChange = new EventEmitter();
   @Output() public messages = new EventEmitter();
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public editingComment: string | null = null;
   public errorMessage: string = '';
@@ -87,18 +89,36 @@ export class CommentComponent {
     return dateString == this.CURRENT_DATE ? true : false
   }
 
-  public sendEditedComment(commentID: string, commentText: string) {
+  public sendComment(commentID: string, commentText: string) {
     this.ticketService.editComment(this.ticketID, commentID, commentText)
       .then(response => {
-      }).catch(err => {
-        console.log('Kommentin muokkaaminen epäonnistui.');
-      }).finally(() => {
         this.editingCommentID = null;
         this.editingCommentIDChange.emit(this.editingCommentID);
         this.messages.emit('fetchTicket');
-        // this.fetchTicket(this.courseID);
+        if (this.fileInfoList.length === 0) return
+        this.sendFiles(this.ticketID, commentID);
+        return
+      }).catch(err => {
+        console.log('Kommentin muokkaaminen epäonnistui.');
       })
     console.log('sending');
+  }
+
+  private sendFiles(ticketID: string, commentID: string) {
+    this.state = 'sending';
+    this.attachments.sendFilesPromise(ticketID, commentID)
+      .then((res:any) => {
+        console.log('kaikki valmista');
+        this.state = 'done';
+        this.fileInfoList = [];
+        this.attachments.clear();
+      })
+      .catch((res:any) => {
+        console.log('ticket view: napattiin virhe: ' + res);
+        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
+            ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+      })
+
   }
 
 }

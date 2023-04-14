@@ -19,7 +19,7 @@
   <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
       <app-to-beginning-button [disabled]="state==='sending'">
       </app-to-beginning-button>
-
+''
       <div class="spacer"></div>
 
       <button [disabled]="state==='sending'"
@@ -122,11 +122,12 @@
     <app-message [messageHtml]=ticket.viesti></app-message>
 
     <!----- Liitteet ---->
-    <app-view-attachments (errorMessage)="errorMessage = $event"
+    <app-view-attachments
+        (errorMessage)="errorMessage = $event"
         [files]="ticket.liitteet"
         *ngIf="ticket.liitteet"
         [ticketID]="ticketID"
-    >
+        >
     </app-view-attachments>
 
     <hr class="theme-divider">
@@ -224,7 +225,8 @@
 
     </div>
 
-    <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+    <app-edit-attachments
+        (attachmentsMessages)="attachmentsMessages = $event"
         [uploadClicks]="uploadClick.asObservable()"
         (fileListOutput)="fileInfoList = $event"
         >
