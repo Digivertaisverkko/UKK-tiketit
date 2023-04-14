@@ -5,7 +5,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subject, Subscription, switchMap, takeUntil, tap, timer } from 'rxjs';
+import { Subject, Subscription, switchMap, takeUntil, tap, throttleTime, timer }
+    from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ErrorCardComponent } from 'src/app/shared/error-card/error-card.component';
@@ -362,10 +363,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fetchTicketsSub$.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
     this.isPollingTickets = true;
-    this.fetchTicketsSub$ = timer(0, this.TICKET_POLLING_RATE_MIN *
-        Constants.MILLISECONDS_IN_MIN)
+    const pollTime = this.TICKET_POLLING_RATE_MIN *
+    Constants.MILLISECONDS_IN_MIN;
+    this.fetchTicketsSub$ = timer(0, pollTime)
         .pipe(
           takeUntil(this.unsubscribe$),
+          throttleTime(pollTime),
           tap(() => this.fetchTickets(this.courseID)),
         )
         .subscribe(() => {});
