@@ -363,15 +363,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fetchTicketsSub$.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
     this.isPollingTickets = true;
-    const pollTime = this.TICKET_POLLING_RATE_MIN *
-    Constants.MILLISECONDS_IN_MIN;
+    const pollTime = this.TICKET_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
     this.fetchTicketsSub$ = timer(0, pollTime)
         .pipe(
-          takeUntil(this.unsubscribe$),
-          throttleTime(pollTime),
-          tap(() => this.fetchTickets(this.courseID)),
+            takeUntil(this.unsubscribe$),
+            throttleTime(pollTime),
+            tap(() => this.fetchTickets(this.courseID)),
         )
-        .subscribe(() => {});
+        .subscribe();
     this.loggedIn$.unsubscribe();
   }
 
