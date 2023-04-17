@@ -93,6 +93,7 @@ export class CommentComponent {
       this.stopEditing();
     }).catch((err: any) => {
       console.log('Kommentin poistaminen epäonnistui.');
+      this.state="editing";
     })
   }
 
@@ -112,6 +113,8 @@ export class CommentComponent {
         return
       }).catch(err => {
         console.log('Kommentin muokkaaminen epäonnistui.');
+        this.state="editing";
+        this.messages.emit('continue')
       })
   }
 
@@ -120,13 +123,15 @@ export class CommentComponent {
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
         console.log('kaikki tiedostot valmiita.');
-        this.messages.emit('done')
+        this.messages.emit('continue')
         this.stopEditing();
       })
       .catch((res:any) => {
         console.log('ticket view: napattiin virhe: ' + res);
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
             ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+        this.state="editing";
+        this.messages.emit('continue')
       })
   }
 
@@ -138,7 +143,7 @@ export class CommentComponent {
     this.editingCommentID = null;
     this.editingCommentIDChange.emit(this.editingCommentID);
     this.isRemovePressed = false;
-    this.messages.emit('fetchTicket');
+    this.messages.emit('done');
   }
 
 }

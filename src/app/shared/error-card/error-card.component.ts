@@ -27,6 +27,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
   styleUrls: ['./error-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class ErrorCardComponent {
 
   @Input() buttonText: string = '';

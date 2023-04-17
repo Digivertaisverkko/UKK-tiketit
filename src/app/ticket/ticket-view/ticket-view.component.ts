@@ -231,11 +231,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public messageFromComment(event: any) {
-    if (event === "fetchTicket") {
+    if (event === "done") {
       this.fetchTicket(this.courseID);
     } else if (event === "sendingFiles") {
       this.state='sending';
-    } else if (event === "done") {
+    } else if (event === "continue") {
       this.state='editing';
     }
   }

@@ -69,7 +69,6 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
                 progress);
             this.fileInfoList[index].progress = progress;
-
           }),
           catchError((error: any) => {
             console.log('makeRequestChain: catchError: error napattu');
@@ -126,12 +125,14 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
+            this.isEditingDisabled = false;
           } else {
             resolve(res)
           }
         },
         error: (error) => {
           console.log('sendFilesPromise: saatiin virhe: ' + error );
+          this.isEditingDisabled = false;
           reject('error')
         }
       });

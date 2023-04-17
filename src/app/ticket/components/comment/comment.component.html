@@ -100,6 +100,17 @@
 <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
 
 </app-editor>
+
+
+<app-error-card
+    *ngIf="errorMessage.length > 0"
+    i18n-title="@@Virhe"
+    message="{{ errorMessage }}"
+    [styles]="{ 'margin-top': '1rem:' }"
+    title="Virhe"
+    >
+</app-error-card>
+
 <div class="theme-actions">
 
   <button [attr.aria-label]="attachFilesText"
