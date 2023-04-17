@@ -1,5 +1,4 @@
-import {  Component, EventEmitter, Input, Output, ViewChild }
-    from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
@@ -21,6 +20,7 @@ interface FileInfo {
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
+
 export class CommentComponent {
 
   @Input() public attachmentsMessages: string = '';
@@ -91,12 +91,6 @@ export class CommentComponent {
   public removeComment(commentID: string) {
     this.ticketService.removeComment(this.ticketID, commentID).then(res => {
       this.stopEditing();
-      // this.fileInfoList = [];
-      // this.state = 'done';
-      // this.attachments.clear();
-      // this.editingCommentID = null;
-      // this.editingCommentIDChange.emit(this.editingCommentID);
-      // this.messages.emit('fetchTicket');
     }).catch((err: any) => {
       console.log('Kommentin poistaminen epäonnistui.');
     })
@@ -107,6 +101,7 @@ export class CommentComponent {
   }
 
   public sendComment(commentID: string, commentText: string) {
+    this.state = 'sending';
     this.ticketService.editComment(this.ticketID, commentID, commentText)
       .then(response => {
         if (this.fileInfoList.length === 0) {
@@ -118,11 +113,9 @@ export class CommentComponent {
       }).catch(err => {
         console.log('Kommentin muokkaaminen epäonnistui.');
       })
-    console.log('sending');
   }
 
   private sendFiles(ticketID: string, commentID: string) {
-    this.state = 'sending';
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
         console.log('kaikki tiedostot valmiita.');
@@ -135,6 +128,7 @@ export class CommentComponent {
       })
   }
 
+  // Lopeta kommentin 
   private stopEditing() {
     this.state = 'done';
     this.fileInfoList = [];

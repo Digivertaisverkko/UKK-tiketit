@@ -6,7 +6,7 @@
   <img  alt=''
         mat-card-avatar
         src="../../../assets/logos/UniOulu.png"
-  >
+        >
   <mat-card-title class="theme-profile-name">
     {{ comment.lahettaja.nimi }}
   </mat-card-title>
@@ -33,17 +33,19 @@
     <button aria-label="Poista kommentti"
             class="remove-btn"
             (click)="changeRemoveBtn()"
+            [disabled]="state==='sending'"
             mat-icon-button
             *ngIf="(comment.lahettaja.id === user?.id) &&
                 (editingCommentID === comment.id) &&
                 isRemovePressed === false"
             >
-      <mat-icon>delete_outline</mat-icon>
+      <mat-icon>delete</mat-icon>
     </button>
 
     <button aria-label="Poista kommentti"
             class="remove-btn"
             (click)="removeComment(comment.id)"
+            [disabled]="state==='sending'"
             color="accent"
             mat-icon-button
             *ngIf="(comment.lahettaja.id === user?.id) &&
@@ -55,6 +57,7 @@
 
   <button aria-label="Muokkaa kommenttia"
           (click)="editComment(comment.id)"
+          [disabled]="state==='sending'"
           i18n-aria-label="@@Muokkaa kommenttia"
           mat-icon-button
           *ngIf="(comment.lahettaja.id === user?.id) &&
@@ -65,6 +68,7 @@
 
   <button (click)="cancelCommentEditing()"
           aria-label="Peru kommentin muokkaaminen"
+          [disabled]="state==='sending'"
           i18n-aria-label="@@Peru kommentin muokkaaminen"
           mat-icon-button
           *ngIf="editingCommentID === comment.id"
@@ -76,9 +80,7 @@
 
 <mat-card-content>
 <div *ngIf="editingCommentID !== comment.id; else commentEditing">
-  <app-message
-      [messageHtml]=comment.viesti
-      >
+  <app-message [messageHtml]=comment.viesti>
   </app-message>
   <app-view-attachments
       (errorMessage)="errorMessage = $event"
@@ -92,16 +94,15 @@
 
 <ng-template #commentEditing>
 <app-editor [disabled]="state==='sending'"
-    [(editorContent)]="comment.viesti"
-    *ngIf="editingCommentID === comment.id"
->
+            [(editorContent)]="comment.viesti"
+            *ngIf="editingCommentID === comment.id"
+            >
 <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
 
 </app-editor>
 <div class="theme-actions">
 
-  <button
-          [attr.aria-label]="attachFilesText"
+  <button [attr.aria-label]="attachFilesText"
           class="attach-button"
           (click)="uploadClick.next('add')"
           [disabled]="state==='sending'"
@@ -115,6 +116,7 @@
   <button class="send-button"
           (click)="sendComment(comment.id, comment.viesti)"
           color="primary"
+          [disabled]="state==='sending'"
           mat-raised-button
           >
     OK
