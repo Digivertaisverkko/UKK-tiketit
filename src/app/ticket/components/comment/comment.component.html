@@ -26,7 +26,7 @@
 
   <div class="spacer"></div>
   <span class="ticket-state" *ngIf="comment.tila === 5">
-    {{proposedSolution}}
+    {{ this.strings.get('proposedSolution') }}
   </span>
 
   <!-- i18n-aria-label="@@Muokkaa kommenttia" -->
@@ -42,15 +42,19 @@
       <mat-icon>delete</mat-icon>
     </button>
 
-    <button aria-label="Poista kommentti"
+    <button aria-label="Vahvista kommentin poistaminen"
             class="remove-btn"
             (click)="removeComment(comment.id)"
             [disabled]="state==='sending'"
             color="accent"
+            i18n-aria-label="@@Vahvista kommentin poistaminen"
             mat-icon-button
+            matTooltip="{{ strings.get('confirmRemoveTooltip') }}"
             *ngIf="(comment.lahettaja.id === user?.id) &&
                 (editingCommentID === comment.id) &&
                 isRemovePressed === true"
+            matTooltipPosition="after"
+            #tooltip="matTooltip"
             >
             <mat-icon>delete_forever</mat-icon>
     </button>

@@ -183,6 +183,7 @@ export class TicketService {
     const progress = new Subject<number>();
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     // Virheiden testaukseen vaihda http.post -> fakeHttpPost
+    // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
     this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
       .subscribe({
         next: (event) => {

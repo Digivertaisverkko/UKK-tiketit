@@ -37,6 +37,7 @@ export class CommentComponent {
   public errorMessage: string = '';
   public isRemovePressed: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
+  public strings =  new Map<string, string>();
   public uploadClick = new Subject<string>();
 
   public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
@@ -52,6 +53,10 @@ export class CommentComponent {
       } else {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
       }
+      this.strings.set('confirmRemoveTooltip', $localize `:@@Vahvista kommentin
+          poistaminen:Vahvista kommentin poistaminen`);
+      this.strings.set('Ratkaisuehdotus', $localize `:@@:Ratkaisuehdotus:
+          Ratkaisuehdotus`);
     }
 
   public cancelCommentEditing() {
