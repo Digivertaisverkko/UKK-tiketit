@@ -116,9 +116,11 @@ export class CommentComponent {
   }
 
   private sendFiles(ticketID: string, commentID: string) {
+    this.messages.emit('sendingFiles')
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
         console.log('kaikki tiedostot valmiita.');
+        this.messages.emit('done')
         this.stopEditing();
       })
       .catch((res:any) => {
