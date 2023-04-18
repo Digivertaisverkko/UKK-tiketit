@@ -37,31 +37,26 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
-  public commentText: string;
+  public commentText: string = '';
   public courseName: string = '';
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
   public isInIframe: boolean;
-  public isLoaded: boolean;
+  public isLoaded: boolean = false;
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
   public message: string = '';
   public newCommentState: 3 | 4 | 5 = 4;
-  public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
-  public ticket: Tiketti;
+  public ticket: Tiketti = {} as Tiketti;;
   public ticketID: string;
-  public tila: string;  // Tiketin tila
   public uploadClick = new Subject<string>();
   public user: User = {} as User;
-  public userRole: string = '';
   private fetchTicketsSub: Subscription | null = null;
   private courseID: string | null;
   private isPollingTicket: boolean = false;
-  private userName: string = '';
-  private readonly CURRENT_DATE = new Date().toDateString();
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -75,23 +70,17 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ) {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
-    this.commentText = '';
     this.courseID = this.route.snapshot.paramMap.get('courseid');
     this.isInIframe = getIsInIframe();
-    this.isLoaded = false;
-    this.ticket = {} as Tiketti;
     this.ticketID = this.ticketIdFromParent !== null
     ? this.ticketIdFromParent
     : String(this.route.snapshot.paramMap.get('id'));
-    this.tila = '';
   }
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
       if (response.id != null) this.user = response;
-      if (response.asema !== undefined ) this.userRole = response.asema;
-      if (response.nimi !== undefined ) this.userName = response.nimi;
-      if (this.userRole === 'opettaja' || this.userRole ==='admin') {
+      if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
         this.attachFilesText = $localize `:@@Liitä:liitä`;
       } else {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
@@ -123,25 +112,27 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       }
     }).catch(error => {
       if (error?.tunnus == 1003) {
-        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä
-            käyttäjäoikeuksia` + '.';
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
       } else {
         this.errorMessage = "Kysymyksen arkistointi ei onnistunut.";
       }
     })
   }
 
-  changeArchiveButton() {
-    setTimeout(() => this.isArchivePressed = true, 300);
-  }
-
-  changeRemoveButton() {
-    setTimeout(() => this.isRemovePressed = true, 300);
+  // Jotkin painikkeet muuttuvat yhden painalluksen jälkeen vahvistuspainikkeiksi.
+  changeButton(button: 'archive' | 'remove') {
+    setTimeout(() => {
+      if (button === 'archive') {
+        this.isArchivePressed = true
+      } else if (button === 'remove') {
+        this.isRemovePressed = true
+      }
+    }, 300);
   }
 
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
-    if (this.userRole !== 'opettaja' && this.userRole !== 'admin') {
+    if (this.user.asema !== 'opettaja' && this.user.asema !== 'admin') {
       this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
     this.attachments.clear();
@@ -153,10 +144,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicketInfo(this.ticketID).then(response => {
       this.ticket = response;
-      if (this.userName.length == 0) {
+      if (this.user.nimi.length == 0) {
         if (courseID !== null) this.auth.fetchUserInfo(courseID);
       }
-      this.tila = this.ticketService.getTicketState(this.ticket.tila);
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
         this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
@@ -192,8 +182,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       }
     }).catch(error => {
       if (error?.tunnus == 1003) {
-        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä
-            käyttäjäoikeuksia` + '.';
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä äyttäjäoikeuksia` + '.';
       } else {
         this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
             Kysymyksen poistaminen ei onnistunut.`;
@@ -202,7 +191,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public getSenderTitle(name: string, role: string): string {
-    if (name == this.userName) return $localize`:@@Minä:Minä`
+    if (name == this.user.nimi) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
         return $localize`:@@Opiskelija:Opiskelija`; break;
@@ -262,12 +251,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.state = 'sending';
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
-        console.log('ticket view: vastaus: ' + res);
       })
       .catch((res:any) => {
-        console.log('ticket view: napattiin virhe: ' + res);
-        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
-            ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:
+            Kaikkien liitteiden lähettäminen ei onnistunut`;
       })
       .finally(() => {
         console.log('kaikki valmista');
@@ -282,14 +269,15 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   private startPollingTicket() {
-  this.fetchTicketsSub?.unsubscribe();
-  this.isPollingTicket = true;
-  this.fetchTicketsSub = timer(0, this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN)
-    .pipe(
-      takeUntil(this.unsubscribe$),
-      tap(() => this.fetchTicket(this.courseID))
-    )
-    .subscribe();
-  }
+    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    this.fetchTicketsSub?.unsubscribe();
+    this.isPollingTicket = true;
+    this.fetchTicketsSub = timer(0, pollRate)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => this.fetchTicket(this.courseID))
+      )
+      .subscribe();
+    }
 
 }

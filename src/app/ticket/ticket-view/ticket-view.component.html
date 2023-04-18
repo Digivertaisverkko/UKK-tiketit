@@ -34,13 +34,13 @@
           [disabled]="state==='sending'"
           i18n="@@Kopioi UKK"
           mat-raised-button
-          *ngIf="(userRole === 'opettaja' || userRole === 'admin')"
+          *ngIf="(user.asema === 'opettaja' || user.asema === 'admin')"
           >
         Kopioi UKK:ksi
       </button>
 
 
-      <button (click)="changeArchiveButton()"
+      <button (click)="changeButton('archive')"
               i18n="@@Arkistoi"
               mat-raised-button
               *ngIf="ticket.arkistoitava === true && !isArchivePressed"
@@ -62,7 +62,7 @@
       <div matTooltip="{{cantRemoveTicket}}"
           [matTooltipDisabled]="isRemovable">
         <button [disabled]="!isRemovable || state==='sending'"
-                i18n="@@Poista" (click)="changeRemoveButton()"
+                i18n="@@Poista" (click)="changeButton('remove')"
                 mat-raised-button
                 *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
                 >
@@ -190,11 +190,11 @@
       </button>
 
       <div class="spacer"
-          *ngIf="userRole === 'opettaja' || userRole ==='admin'; else spacerHere">
+          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
       </div>
 
       <mat-radio-group align="start"
-          *ngIf="userRole === 'opettaja' || userRole ==='admin'"
+          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
           [(ngModel)]="newCommentState"
           [disabled]="state==='sending'"
           >
