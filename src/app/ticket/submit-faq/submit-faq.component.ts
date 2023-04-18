@@ -81,7 +81,7 @@ export class SubmitFaqComponent implements OnInit {
       this.ticketService.getTicketInfo(this.ticketId)
         .then((response) => {
           this.originalTicket = response;
-          response.kommentit[0].id;
+          // response.kommentit[0].id;
           // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
           this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
           this.titleServ.setTitle(Constants.baseTitle + this.originalTicket.otsikko);
@@ -137,7 +137,7 @@ export class SubmitFaqComponent implements OnInit {
     this.ticketService.addFaq(id, newFaq, this.editExisting)
       .then((response: AddTicketResponse) => {
         if (this.attachments.fileInfoList.length === 0) {
-          // this.goBack();
+          this.goBack();
           // Ei toiminut, jos otti else:n pois.
         } else {
           if (response?.success !== true) {
@@ -145,10 +145,6 @@ export class SubmitFaqComponent implements OnInit {
                 Kysymyksen lähettäminen epäonnistui` + '.'
             return
           }
-          console.log('response:');
-          console.dir(response);
-          console.log('response.uusi:');
-          console.dir(response.uusi);
           if (response == null) {
             this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
             return
@@ -175,8 +171,7 @@ export class SubmitFaqComponent implements OnInit {
         this.state = 'editing';
         console.log(error);
         if (error?.tunnus == 1003) {
-          this.errorMessage = $localize`:@@Ei oikeuksia:Sinulla ei ole riittäviä
-              käyttäjäoikeuksia` + '.';
+          this.errorMessage = $localize`:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
         } else {
           this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
               Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
