@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { CommentComponent } from '../components/comment/comment.component';
-import { Constants, getIsInIframe } from '../../shared/utils';
+import { Constants, getIsInIframe, isToday } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
@@ -215,15 +215,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Onko annettu aikaleima tänään.
   public isToday(timestamp: string | Date) : boolean {
-    if (typeof timestamp === 'string') {
-      var dateString = new Date(timestamp).toDateString();
-    } else {
-      var dateString = timestamp.toDateString();
-    }
-    // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    return dateString == this.CURRENT_DATE ? true : false
+    return isToday(timestamp)
   }
 
   public getCommentState(tila: number) {
