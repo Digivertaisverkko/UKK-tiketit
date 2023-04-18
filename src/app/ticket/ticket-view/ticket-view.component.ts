@@ -86,6 +86,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
       }
     });
+
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }

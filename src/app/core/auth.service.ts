@@ -85,7 +85,8 @@ export class AuthService {
   public async sendDataConsent(tokenid: string | null, allow: boolean): Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
     console.log(body);
-    let url = '/lti/' + allow ? 'gdpr-lupa-ok' : 'gdpr-lupa-kielto';
+    let url = '/lti/';
+    url += allow ? 'gdpr-lupa-ok' : 'gdpr-lupa-kielto';
     let res: any;
     try {
       res = await firstValueFrom(this.http.post(url, body));

@@ -88,11 +88,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
-    private route: ActivatedRoute,
+    private route:  ActivatedRoute,
     private router: Router,
-    private store: StoreService,
+    private store:  StoreService,
     private ticket: TicketService,
-    private title: Title
+    private title:  Title
   ) {
     this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:Kysymykset`);
     this.isInIframe = getIsInIframe();

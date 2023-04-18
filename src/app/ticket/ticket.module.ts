@@ -24,7 +24,7 @@ import { MessageComponent } from './components/message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
 import { ViewAttachmentsComponent } from './components/view-attachments/view-attachments.component';
 import { EditAttachmentsComponent } from './components/edit-attachments/edit-attachments.component';
-import { RefreshDialogComponent } from './listing/refresh-dialog/refresh-dialog.component';
+import { RefreshDialogComponent } from '../core/refresh-dialog/refresh-dialog.component';
 import { CommentComponent } from './components/comment/comment.component';
 
 

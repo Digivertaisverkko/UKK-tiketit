@@ -22,7 +22,6 @@ export class DataConsentComponent implements OnInit {
       ) {
         this.error = { title: '', message: ''};
         this.title.setTitle(Constants.baseTitle + $localize `:@@OTervetuloa:Tervetuloa`);
-
   }
 
   ngOnInit(): void {
@@ -41,10 +40,15 @@ export class DataConsentComponent implements OnInit {
   public dontGiveConsent() {
     localStorage.setItem('NO_DATA_CONSENT', 'true');
     this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
+      if (res?.success !== true) {
+        throw Error;
+      }
       let courseID: string;
       if (res?.kurssi != null) {
         courseID = String(res.kurssi);
         this.navigateToListing(courseID);
+      } else if (res?.kurssi === null) {
+        this.router.navigateByUrl('/no-data-consent');
       }
       // ? mitä jos ei saada id:ä?
     }).catch (error => { 
