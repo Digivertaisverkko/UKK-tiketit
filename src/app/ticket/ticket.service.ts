@@ -381,24 +381,6 @@ export class TicketService {
     return response;
   }
 
-  /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
-  Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
-  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketListOld(courseID: string,onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
-    if (courseID === '') {
-      throw new Error('Ei kurssi ID:ä.');
-    }
-    //const httpOptions = this.getHttpOptions();;
-    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
-    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
-    let response: any;
-    try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
 
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
@@ -440,6 +422,7 @@ export class TicketService {
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
       }
     ));
+
     return sortableData;
   }
 

@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { Kommentti, TicketService } from '../../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
+import { isToday } from 'src/app/shared/utils';
 
 interface FileInfo {
   filename: string;
@@ -40,8 +41,6 @@ export class CommentComponent {
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
 
-  private readonly CURRENT_DATE = new Date().toDateString();
-
   constructor(
     private auth: AuthService,
     private ticketService: TicketService
@@ -60,6 +59,10 @@ export class CommentComponent {
 
   public cancelCommentEditing() {
     this.stopEditing();
+  }
+
+  public changeRemoveBtn() {
+    setTimeout(() => this.isRemovePressed = true, 300);
   }
 
   public editComment(commentID: string) {
@@ -81,16 +84,10 @@ export class CommentComponent {
     }
   }
 
-  // Onko annettu aikaleima tänään.
-  public isToday(timestamp: string | Date) : boolean {
-    if (typeof timestamp === 'string') {
-      var dateString = new Date(timestamp).toDateString();
-    } else {
-      var dateString = timestamp.toDateString();
-    }
-    // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    return dateString == this.CURRENT_DATE ? true : false
+  public isToday(timestamp: string | Date) {
+    return isToday(timestamp);
   }
+
 
   public removeComment(commentID: string) {
     this.ticketService.removeComment(this.ticketID, commentID).then(res => {
@@ -100,10 +97,6 @@ export class CommentComponent {
           Kommentin poistaminen ei onnistunut`+ '.';
       this.state="editing";
     })
-  }
-
-  public changeRemoveBtn() {
-    setTimeout(() => this.isRemovePressed = true, 300);
   }
 
   public sendComment(commentID: string, commentText: string) {
@@ -142,7 +135,7 @@ export class CommentComponent {
       })
   }
 
-  // Lopeta kommentin 
+  // Lopeta kommentin
   private stopEditing() {
     this.state = 'done';
     this.fileInfoList = [];
