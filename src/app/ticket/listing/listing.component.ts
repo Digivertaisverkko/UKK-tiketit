@@ -15,7 +15,7 @@ import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
-import { RefreshDialogComponent } from './refresh-dialog/refresh-dialog.component';
+import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 
 enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",

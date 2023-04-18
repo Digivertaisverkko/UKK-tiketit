@@ -9,6 +9,7 @@ import { Constants } from '../../shared/utils';
   templateUrl: './data-consent.component.html',
   styleUrls: ['./data-consent.component.scss']
 })
+
 export class DataConsentComponent implements OnInit {
 
   public error;
@@ -20,7 +21,7 @@ export class DataConsentComponent implements OnInit {
       private title: Title
       ) {
         this.error = { title: '', message: ''};
-        this.title.setTitle(Constants.baseTitle + $localize `:@@OTervetuloa: Tervetuloa`);
+        this.title.setTitle(Constants.baseTitle + $localize `:@@OTervetuloa:Tervetuloa`);
 
   }
 
@@ -54,7 +55,7 @@ export class DataConsentComponent implements OnInit {
     if (localStorage.getItem('NO_DATA_CONSENT')) {
       localStorage.removeItem('NO_DATA_CONSENT')
     }
-    this.auth.sendDataConsent(this.tokenid, true).then(res => {
+    this.auth.sendDataConsent(this.tokenid, true).then((res: any) => {
       if (res?.success == true) {
         if (res?.kurssi != null) {
           const courseID = String(res.kurssi);
