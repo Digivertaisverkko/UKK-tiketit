@@ -32,14 +32,14 @@ export class DataConsentComponent implements OnInit {
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
     // selata kirjautumattomana.
     if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {
-      console.log('Ei ole annettu lupaa tietojen siirtoon, ohjataan listaukseen.');
+      console.log('Ei ole annettu lupaa tietojen siirtoon.');
       this.dontGiveConsent();
     }
   }
 
   public dontGiveConsent() {
     localStorage.setItem('NO_DATA_CONSENT', 'true');
-    this.auth.denyGdprConsent(this.tokenid).then((res: any) => {
+    this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
       let courseID: string;
       if (res?.kurssi != null) {
         courseID = String(res.kurssi);
@@ -54,7 +54,7 @@ export class DataConsentComponent implements OnInit {
     if (localStorage.getItem('NO_DATA_CONSENT')) {
       localStorage.removeItem('NO_DATA_CONSENT')
     }
-    this.auth.giveGdprConsent(this.tokenid).then(res => {
+    this.auth.sendDataConsent(this.tokenid, true).then(res => {
       if (res?.success == true) {
         if (res?.kurssi != null) {
           const courseID = String(res.kurssi);

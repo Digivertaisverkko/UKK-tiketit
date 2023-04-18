@@ -82,30 +82,10 @@ export class AuthService {
     }
   }
 
-  public async denyGdprConsent(tokenid: string | null): Promise<ConsentResponse> {
-    const body = {
-      'lupa-id': tokenid
-    }
+  public async sendDataConsent(tokenid: string | null, allow: boolean): Promise<ConsentResponse> {
+    const body = { 'lupa-id': tokenid };
     console.log(body);
-    const url = '/lti/gdpr-lupa-kielto';
-    let res: any;
-    try {
-      res = await firstValueFrom(this.http.post(url, body));
-    } catch (error: any) {
-      this.handleError(error)
-    }
-    return res
-  }
-
-
-  public async giveGdprConsent(tokenid: string | null): Promise<ConsentResponse> {
-    // console.log(' tokenid: ' + tokenid);
-    // console.log(typeof tokenid);
-    const body = {
-      'lupa-id': tokenid
-    }
-    console.log(body);
-    const url = '/lti/gdpr-lupa-ok';
+    let url = '/lti/' + allow ? 'gdpr-lupa-ok' : 'gdpr-lupa-kielto';
     let res: any;
     try {
       res = await firstValueFrom(this.http.post(url, body));
