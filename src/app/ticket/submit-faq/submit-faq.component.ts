@@ -185,16 +185,13 @@ export class SubmitFaqComponent implements OnInit {
       then(res => {
         console.log('komponentti: saatiin vastaus: ');
         console.dir(res);
-        // this.goBack();
+        this.state = 'done';
+        this.goBack();
       })
       .catch((res: any) => {
         this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen
             ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
         console.log('submit-ticket: saatiin virhe: ' + res);
-      })
-      .finally(() => {
-        console.log('Komponentti: Kaikki valmiita!');
-        this.state = 'done';
       })
   }
 
