@@ -34,10 +34,14 @@
             class="remove-btn"
             (click)="changeRemoveBtn()"
             [disabled]="state==='sending'"
+            i18n-aria-label="@Poista kommentti"
             mat-icon-button
+            matTooltip="{{ strings.get('removeComment') }}"
             *ngIf="(comment.lahettaja.id === user?.id) &&
                 (editingCommentID === comment.id) &&
                 isRemovePressed === false"
+            matTooltipPosition="after"
+            #tooltip="matTooltip"
             >
       <mat-icon>delete</mat-icon>
     </button>
@@ -123,7 +127,9 @@
           [disabled]="state==='sending'"
           mat-raised-button="attachFilesText"
           >
-    <mat-icon>attach_file</mat-icon>{{attachFilesText}}
+    <mat-icon>attach_file</mat-icon>
+    {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
+          strings.get('attach') : strings.get('attachFiles')}}
   </button>
 
   <div class="spacer"></div>

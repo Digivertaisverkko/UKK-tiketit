@@ -37,10 +37,9 @@ export class CommentComponent {
   public errorMessage: string = '';
   public isRemovePressed: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
-  public strings =  new Map<string, string>();
+  public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
 
-  public readonly proposedSolution = $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`;
   private readonly CURRENT_DATE = new Date().toDateString();
 
   constructor(
@@ -48,15 +47,15 @@ export class CommentComponent {
     private ticketService: TicketService
     ) {
       this.user = this.auth.getUserInfo();
-      if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
-        this.attachFilesText = $localize `:@@Liitä:liitä`;
-      } else {
-        this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
-      }
-      this.strings.set('confirmRemoveTooltip', $localize `:@@Vahvista kommentin
-          poistaminen:Vahvista kommentin poistaminen`);
-      this.strings.set('Ratkaisuehdotus', $localize `:@@:Ratkaisuehdotus:
-          Ratkaisuehdotus`);
+   
+      this.strings = new Map ([
+        ['attach', $localize `:@@Liitä:Liitä` ],
+        ['attachFiles', $localize `:@@Liitä tiedostoja:Liitä tiedostoja`],
+        ['confirmRemoveTooltip', $localize `:@@Vahvista kommentin poistaminen:
+          Vahvista kommentin poistaminen`], 
+        ['proposedSolution', $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`],
+        ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`]
+      ]);
     }
 
   public cancelCommentEditing() {
@@ -97,7 +96,8 @@ export class CommentComponent {
     this.ticketService.removeComment(this.ticketID, commentID).then(res => {
       this.stopEditing();
     }).catch((err: any) => {
-      console.log('Kommentin poistaminen epäonnistui.');
+      this.errorMessage = $localize `:@@Kommentin poistaminen ei onnistunut:
+          Kommentin poistaminen ei onnistunut`+ '.';
       this.state="editing";
     })
   }
@@ -118,6 +118,8 @@ export class CommentComponent {
         return
       }).catch(err => {
         console.log('Kommentin muokkaaminen epäonnistui.');
+        this.errorMessage = $localize `:@@Kommentin muokkaaminen epäonnistui:
+            Kommentin muokkaaminen epäonnistui` + '.';
         this.state="editing";
         this.messages.emit('continue')
       })
@@ -133,8 +135,8 @@ export class CommentComponent {
       })
       .catch((res:any) => {
         console.log('ticket view: napattiin virhe: ' + res);
-        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
-            ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+        this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:
+            Kaikkien liitteiden lähettäminen ei onnistunut`;
         this.state="editing";
         this.messages.emit('continue')
       })

@@ -204,7 +204,7 @@ export class TicketService {
   }
 
   // Tiedoston lähetyksen testaamisessa voi http.post korvata tällä, niin saa virheitä.
-  fakeHttpPost(url: any, formData: any, options?: any): Observable<any> {
+  public fakeHttpPost(url?: any, formData?: any, options?: any): Observable<any> {
     const errorResponse = new HttpErrorResponse({
       error: 'File upload failed',
       status: 400,
@@ -269,7 +269,7 @@ export class TicketService {
     return (response?.success === true) ? true : false;
   }
 
-  // Lataa tiedosto.
+  // Lataa liitetiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
     const options = {
@@ -298,6 +298,7 @@ export class TicketService {
     return response;
   }
 
+  // Poista tiketti.
   public async removeTicket(ticketID: string): Promise<boolean> {
     let response: any;
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
@@ -323,6 +324,7 @@ export class TicketService {
     return response;
   }
 
+  // Arkistoi tiketti.
   public async archiveTicket(ticketID: string): Promise<{ success: boolean }> {
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/valmis`;
