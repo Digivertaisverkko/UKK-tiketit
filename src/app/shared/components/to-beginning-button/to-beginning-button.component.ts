@@ -1,9 +1,18 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-to-beginning-button',
-  templateUrl: './to-beginning-button.component.html',
+  template: `
+    <button color="accent"
+            (click)="goBack()"
+            mat-raised-button 
+            [disabled]="disabled"
+            >
+      <mat-icon>arrow_back_ios</mat-icon>
+      <span i18n="@@Alkuun">Alkuun</span>
+    </button>
+  `,
   styleUrls: ['./to-beginning-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -13,7 +22,8 @@ export class ToBeginningButtonComponent {
 
   constructor (
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute
+    ) {
   }
 
   public goBack(): void {

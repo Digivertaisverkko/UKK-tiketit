@@ -126,7 +126,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.trackRouteParameters();
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
-      this.setTicketListHeadline();
+      this.headline = this.setTicketListHeadline();
     });
     this.trackLoggedStatus();
     this.trackScreenSize();
@@ -246,15 +246,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (type === 'notParticipant') {
       this.ticketsError = {
         title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-        message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä
-            tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+        message: $localize`:@@Ei osallistujana-viesti:
+            Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
         buttonText: ''
       }
     } else if  (type === 'notLoggedIn') {
       this.ticketsError = {
         title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-        message: $localize`:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä
-            kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+        message: $localize`:@@Ei osallistujana-viesti:
+            Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
         buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
       }
     } else {
@@ -281,8 +281,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:Kurssin tunnistetietoa
-            ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
+        this.errorMessage = $localize `:@@puuttuu kurssiID:
+            Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
         this.isLoaded = true;
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
@@ -333,22 +333,19 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }).catch( () => this.courseName = '');
   }
 
-  public setTicketListHeadline() {
-    // let userRole = this.authService.getUserRole();
+  public setTicketListHeadline(): string {
     switch (this.user.asema) {
       case 'opettaja':
-        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla
-            esitetyt kysymykset`;
+        return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
         break;
       case 'admin':
-        this.headline = $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla
-            esitetyt kysymykset`;
+        return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
         break;
       case 'opiskelija':
-        this.headline = $localize`:@@Omat kysymykset:Omat kysymykset`;
+        return $localize`:@@Omat kysymykset:Omat kysymykset`;
         break;
       default:
-        this.headline = $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
+        return $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
     }
   }
 
