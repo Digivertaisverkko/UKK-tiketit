@@ -22,6 +22,18 @@ export function getCourseIDfromURL(): string | null {
   return courseID
 }
 
+  // Onko annettu aikaleima tänään.
+  export function isToday(timestamp: string | Date) : boolean {
+    if (typeof timestamp === 'string') {
+      var dateString = new Date(timestamp).toDateString();
+    } else {
+      var dateString = timestamp.toDateString();
+    }
+    // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
+    const CURRENT_DATE = new Date().toDateString();
+    return dateString == CURRENT_DATE ? true : false
+  }
+
   // Onko string muodoltaan HTTP URL.
   export function isValidHttpUrl(testString: string): boolean {
     let url: URL;
