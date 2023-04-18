@@ -55,6 +55,7 @@ export class CommentComponent {
         ['proposedSolution', $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`],
         ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`]
       ]);
+      this.attachFilesText = this.strings.get('attachFiles')!;
     }
 
   public cancelCommentEditing() {
