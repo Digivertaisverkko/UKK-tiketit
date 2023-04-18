@@ -25,9 +25,19 @@
   </mat-card-subtitle>
 
   <div class="spacer"></div>
-  <span class="ticket-state" *ngIf="comment.tila === 5">
-    {{ this.strings.get('proposedSolution') }}
-  </span>
+
+  <div *ngIf="editingCommentID !== comment.id">
+
+    <span class="more-info-needed" *ngIf="comment.tila === 3">
+        <mat-icon></mat-icon>
+        {{ this.strings.get('moreInfoNeeded') }}
+    </span>
+    
+    <span class="proposed-solution" *ngIf="comment.tila === 5">
+      {{ this.strings.get('proposedSolution') }}
+    </span>
+  
+  </div>
 
   <!-- i18n-aria-label="@@Muokkaa kommenttia" -->
     <button aria-label="Poista kommentti"
@@ -132,7 +142,29 @@
           strings.get('attach') : strings.get('attachFiles')}}
   </button>
 
-  <div class="spacer"></div>
+  <div class="spacer"
+        *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+        >
+  </div>
+  
+  <mat-radio-group
+      align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+      [(ngModel)]="comment.tila"
+      [disabled]="state==='sending'">
+    <mat-radio-button [value]=4 i18n="@@Kommentti">
+      Kommentti
+    </mat-radio-button>
+    <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+      Lisätietoa tarvitaan
+    </mat-radio-button>
+    <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+      Ratkaisuehdotus
+    </mat-radio-button>
+  </mat-radio-group>
+  
+  <ng-template #spacerHere>
+    <div class="spacer"></div>
+  </ng-template>
 
   <button class="send-button"
           (click)="sendComment(comment.id, comment.viesti)"

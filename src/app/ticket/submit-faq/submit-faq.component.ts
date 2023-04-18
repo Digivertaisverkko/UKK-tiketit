@@ -34,7 +34,6 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   @Input() public attachmentsMessages: string = '';
-  private commentID: string | null = null;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -51,10 +50,9 @@ export class SubmitFaqComponent implements OnInit {
   public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
   public readonly MAX_FILE_SIZE_MB=100;
-
-  attachmentsHasErrors: boolean = false;
+  private commentID: string | null = null;
+  public attachmentsHasErrors: boolean = false;
   public url: string = '';
-  // public fileNameList: string[] = [];
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
 
   constructor(private auth: AuthService,
@@ -163,7 +161,6 @@ export class SubmitFaqComponent implements OnInit {
               return
             }
           }
-          console.warn(`ticketID: ${ticketID} commentID ${commentID}`)
           this.sendfiles(ticketID, commentID);
         }
       })
@@ -183,14 +180,12 @@ export class SubmitFaqComponent implements OnInit {
     this.state = 'sending';
     this.attachments.sendFilesPromise(ticketID, commentID).
       then(res => {
-        console.log('komponentti: saatiin vastaus: ');
-        console.dir(res);
         this.state = 'done';
         this.goBack();
       })
       .catch((res: any) => {
-        this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen
-            ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+        this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei onnistunut:
+            Kaikkien liitteiden lähettäminen ei onnistunut`;
         console.log('submit-ticket: saatiin virhe: ' + res);
       })
   }

@@ -14,7 +14,12 @@ mat-card {
     }
   }
 
-  .ticket-state {
+  .more-info-needed {
+    color: var(--accent-color);
+    margin-right: 1em;
+  }
+
+  .proposed-solution {
     color: var(--primary-color);
     margin-right: 1em;
   }
@@ -22,4 +27,8 @@ mat-card {
 
 .theme-actions {
   gap: 0.8rem
+}
+
+mat-radio-button {
+  margin: 3px 1.7rem 3px 0px
 }

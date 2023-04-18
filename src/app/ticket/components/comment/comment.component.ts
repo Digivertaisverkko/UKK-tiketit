@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
@@ -22,7 +22,7 @@ interface FileInfo {
   styleUrls: ['./comment.component.scss']
 })
 
-export class CommentComponent {
+export class CommentComponent implements OnInit {
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
@@ -53,7 +53,8 @@ export class CommentComponent {
         ['confirmRemoveTooltip', $localize `:@@Vahvista kommentin poistaminen:
           Vahvista kommentin poistaminen`], 
         ['proposedSolution', $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`],
-        ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`]
+        ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`],
+        ['moreInfoNeeded', $localize `:@@Lisätietoa tarvitaan:Lisätietoa tarvitaan`]
       ]);
       this.attachFilesText = this.strings.get('attachFiles')!;
     }
@@ -62,11 +63,16 @@ export class CommentComponent {
     this.stopEditing();
   }
 
+  ngOnInit(): void {
+    true
+  }
+
   public changeRemoveBtn() {
     setTimeout(() => this.isRemovePressed = true, 300);
   }
 
   public editComment(commentID: string) {
+    console.dir(this.comment);
     this.editingCommentID = commentID;
     this.editingCommentIDChange.emit(this.editingCommentID);
   }
@@ -102,7 +108,7 @@ export class CommentComponent {
 
   public sendComment(commentID: string, commentText: string) {
     this.state = 'sending';
-    this.ticketService.editComment(this.ticketID, commentID, commentText)
+    this.ticketService.editComment(this.ticketID, commentID, commentText, this.comment.tila)
       .then(response => {
         if (this.fileInfoList.length === 0) {
           this.stopEditing();

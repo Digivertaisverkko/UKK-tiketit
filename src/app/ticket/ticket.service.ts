@@ -79,11 +79,17 @@ export class TicketService {
     return response
   }
 
-  public async editComment(ticketID: string, commentID: string, comment: string):
-        Promise<boolean> {
+  public async editComment(ticketID: string, commentID: string, comment: string,
+        state: number): Promise<boolean> {
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
-    const body = { viesti: comment }
+    let body;
+    if (state < 3 || state > 5) {
+      console.error('Muokattavan Kommentin tila täytyy olla 3, 4 tai 5.');
+      const body = { viesti: comment }
+    } else {
+      const body = { viesti: comment, tila: state }
+    }
     try {
       // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
