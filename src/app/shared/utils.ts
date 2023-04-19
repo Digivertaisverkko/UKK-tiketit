@@ -44,3 +44,12 @@ export function getCourseIDfromURL(): string | null {
     }
     return url.protocol === "http:" || url.protocol === "https:";
   }
+
+  export function isValidEmail(email: string): boolean {
+    let validationString = new String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+    return validationString == null ? false : true;
+  }

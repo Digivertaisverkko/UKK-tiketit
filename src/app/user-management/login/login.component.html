@@ -4,15 +4,14 @@
   <h2 class="sub-header" i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</h2>
   <form action="">
     <mat-form-field>
-      <input
-        matInput
-        i18n-placeholder="@@Käyttäjätunnus"
-        placeholder="Käyttäjätunnus"
-        required
-        name="email"
-        [(ngModel)]="email"
-        ng-change="validateEmail()"
-      />
+      <input matInput
+            i18n-placeholder="@@Käyttäjätunnus"
+            name="email"
+            [(ngModel)]="email"
+            ng-change="validateEmail()"
+            placeholder="Käyttäjätunnus"
+            required
+            />
       <mat-error i18n="@@Käyttäjätunnus tarvitaan."
         >Käyttäjätunnus tarvitaan.</mat-error
 >
@@ -20,15 +19,14 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input
-        matInput
-        i18n-placeholder="@@Salasana"
-        placeholder="Salasana"
-        type="password"
-        required
-        minlength="8"
-        name="password"
-        [(ngModel)]="password"
+      <input  i18n-placeholder="@@Salasana"
+              matInput
+              minlength="8"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Salasana"
+              required
+              type="password"
       />
       <mat-error i18n="@@Salasanan pituus">
         Vähintään {{ passwordMinLength }} pitkä salasana tarvitaan.
@@ -36,42 +34,22 @@
       <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
-    <!-- <div class="line-container">
-              <mat-divider></mat-divider>
-              <div class="mat-typography" i18n="@@tai">tai</div>
-              <mat-divider></mat-divider>
-            </div>
-
-            <button
-              mat-raised-button
-              (click)="loginWithoutAuth()"
-              class="login-button"
-              style="color: gray"
-              i18n="@@Sisään kirjautumatta"
-            >
-              Sisään kirjautumatta (!)
-            </button> -->
-
-    <!-- <p>{{isLoginRemembered}}</p> -->
-    <!-- <mat-checkbox [(ngModel)]="isLoginRemembered" name="checkbox" i18n="@@Muista minut" >Muista minut</mat-checkbox> -->
-
     <!-- Custom-komponentti shared-moduulista. -->
     <app-error-card
-      *ngIf="errorMessage.length > 0"
-      i18n-title="@@Kirjautuminen ei onnistunut"
-      title="Kirjautuminen ei onnistunut"
-      message="{{ errorMessage }}"
-      [styles]="{ margin: '1em 10% 1em 10%;'}"
-    >
+        i18n-title="@@Kirjautuminen ei onnistunut"
+        message="{{ errorMessage }}"
+        *ngIf="errorMessage.length > 0"
+        [styles]="{ margin: '1em 10% 1em 10%;'}"
+        title="Kirjautuminen ei onnistunut"
+        >
     </app-error-card>
 
-    <button
-      mat-raised-button
-      [disabled]="email.length < 3 || password.length < passwordMinLength"
-      color="primary"
-      (click)="login()"
-      i18n="@@Kirjaudu"
-    >
+    <button (click)="login()"
+            color="primary"
+            [disabled]="email.length < 3 || password.length < passwordMinLength"
+            i18n="@@Kirjaudu"
+            mat-raised-button
+            >
       Kirjaudu
     </button>
 
