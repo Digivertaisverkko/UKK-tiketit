@@ -3,7 +3,8 @@ import { Observable, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 
-// Käsittelee muistissa olevia muuttujia, joita tarvitaan komponentin ja sen lapsien ulkopuolella.
+/* Tallentaa ja palauttaa muistissa olevia muuttujia, joita tarvitaan komponentin
+ja sen lapsien ulkopuolella. */
 
 export class StoreService {
 

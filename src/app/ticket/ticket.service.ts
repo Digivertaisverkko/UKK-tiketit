@@ -86,10 +86,11 @@ export class TicketService {
     let body;
     if (state < 3 || state > 5) {
       console.error('Muokattavan Kommentin tila täytyy olla 3, 4 tai 5.');
-      const body = { viesti: comment }
+      body = { viesti: comment }
     } else {
-      const body = { viesti: comment, tila: state }
+      body = { viesti: comment, tila: state }
     }
+
     try {
       // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
