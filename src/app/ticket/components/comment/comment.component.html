@@ -1,6 +1,8 @@
 
 <mat-card appearance="outlined" class="answer">
 
+<!----------------- Header- --------------------------------------------------->
+
 <mat-card-header>
 
   <img  alt=''
@@ -28,15 +30,15 @@
 
   <div *ngIf="editingCommentID !== comment.id">
 
-    <span class="more-info-needed" *ngIf="comment.tila === 3">
+    <span class="comment-state more-info-needed" *ngIf="comment.tila === 3">
         <!-- <mat-icon>question_mark</mat-icon> -->
         {{ this.strings.get('moreInfoNeeded') }}
     </span>
-    
-    <span class="proposed-solution" *ngIf="comment.tila === 5">
+
+    <span class="comment-state proposed-solution" *ngIf="comment.tila === 5">
       {{ this.strings.get('proposedSolution') }}
     </span>
-  
+
   </div>
 
   <!-- i18n-aria-label="@@Muokkaa kommenttia" -->
@@ -96,6 +98,8 @@
 
 </mat-card-header>
 
+<!----------------- Content --------------------------------------------------->
+
 <mat-card-content>
 <div *ngIf="editingCommentID !== comment.id; else commentEditing">
   <app-message [messageHtml]=comment.viesti>
@@ -129,6 +133,8 @@
     >
 </app-error-card>
 
+<!----------------- Alaosan toiminnot ----------------------------------------->
+
 <div class="theme-actions">
 
   <button [attr.aria-label]="attachFilesText"
@@ -142,11 +148,11 @@
           strings.get('attach') : strings.get('attachFiles')}}
   </button>
 
-  <div class="spacer"
-        *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
-        >
+  <div class="actions-spacer spacer"
+      *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+      >
   </div>
-  
+
   <mat-radio-group
       align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
       [(ngModel)]="comment.tila"
@@ -161,9 +167,9 @@
       Ratkaisuehdotus
     </mat-radio-button>
   </mat-radio-group>
-  
+
   <ng-template #spacerHere>
-    <div class="spacer"></div>
+    <div class="actions-spacer spacer"></div>
   </ng-template>
 
   <button class="send-button"

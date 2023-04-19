@@ -14,14 +14,18 @@ mat-card {
     }
   }
 
-  .more-info-needed {
-    color: #8c8c8c;
+  .comment-state {
+    display: inline-block;
+    margin-top: 0.6em;
     margin-right: 1em;
+  }
+
+  .more-info-needed {
+    color: #757575;
   }
 
   .proposed-solution {
     color: var(--primary-color);
-    margin-right: 1em;
   }
 }
 
@@ -31,4 +35,30 @@ mat-card {
 
 mat-radio-button {
   margin: 3px 1.7rem 3px 0px
+}
+
+
+@media (max-width: 775px) {
+
+  // Välttämättä ei mene useammalle riville.
+  // .user-info-block {
+  //   order: -1;
+  //   margin-bottom: -30px;
+  // }
+
+  .theme-actions {
+    gap: 0.5rem
+  }
+
+  .attach-button {
+    order: 1;
+  }
+
+  .actions-spacer {
+    order: 2
+  }
+
+  .send-button {
+    order: 3;
+  }
 }
