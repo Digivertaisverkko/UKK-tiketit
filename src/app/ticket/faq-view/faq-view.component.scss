@@ -5,19 +5,24 @@
   margin-bottom: 0.5em;
 }
 
+top-spacer {
+  height: 50%;
+}
+
+app-to-beginning-button {
+  margin-bottom: 0;
+}
+
 .vertical-spacer {
   height: var(--margin-top-embedded);
 }
 
-#top-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-
-.edit-buttons-wrapper {
+.top-buttons-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: $button-gap;
+  row-gap: calc($button-gap / 2);
+  justify-content: space-between;
 }
 
 .remove-btn {
@@ -37,7 +42,41 @@ mat-card {
 }
 
 @media (max-width: 900px) {
+  .copy-link-btn {
+    margin-left: auto;
+  }
   .edit-buttons-wrapper {
     gap: 0.5rem;
+  }
+  .remove-btn {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 800px) {
+  .faq-view {
+    padding-right: 1rem;
+  }
+}
+
+// 2 nappia per rivi.
+@media (max-width: 550px) {
+  .top-spacer {
+    order: 1;
+  }
+  .edit-btn {
+    order: 3;
+  }
+  .remove-btn {
+    order: 2;
+  }
+  .copy-link-btn {
+    order: 4;
+  }
+}
+
+@media (max-width: 500px) {
+  .faq-view {
+    padding-right: 1rem;
   }
 }

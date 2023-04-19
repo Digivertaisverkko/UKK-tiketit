@@ -5,19 +5,25 @@
 
   <h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
     <!-- Jos käytetään kirjautumisen tunnistinta. -->
-    <!-- <h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; 
+    <!-- <h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe;
       lse verticalSpacer"> -->
     <span>{{ courseName }}</span>
   </h1>
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <div id="top-buttons">
+  <!--------------- Ylänapit -------------------------------------------------->
+
+  <div class="top-buttons-wrapper">
     <app-to-beginning-button></app-to-beginning-button>
 
     <!-- Tiketin tilan tarkastamalla tietää, saatiinko tiedot haettua. -->
-    <div class="edit-buttons-wrapper">
-      <button (click)="editFaq()"
+    <!-- <div class="edit-buttons-wrapper"> -->
+
+      <div class="spacer top-spacer"></div>
+
+      <button class="edit-btn"
+              (click)="editFaq()"
               i18n="@@Muokkaa"
               mat-raised-button
               *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') &&
@@ -56,7 +62,8 @@
         Kopioi linkki
       </button>
 
-      <button mat-raised-button
+      <button class="copy-link-btn"
+              mat-raised-button
               i18n="@@Kopioitu leikepöydälle"
               onclick="navigator.clipboard.writeText(window.location.href)"
               *ngIf="isCopyToClipboardPressed === true"
@@ -64,15 +71,13 @@
         Kopioitu leikepöydälle
       </button>
 
-    </div>
-
   </div>
+
+  <!----------- Kysymys ------------------------------------------------------->
 
   <section *ngIf="ticket.viesti !== undefined">
 
     <h2 class="sub-header">{{ ticket.otsikko }}</h2>
-
-    <!----------- Kysymys ----------->
 
     <div *ngFor="let kentta of ticket.kentat">
       <p class="theme-label" >{{ kentta.otsikko }}</p>
@@ -92,7 +97,7 @@
 
     <hr class="theme-divider">
 
-    <!----------- Vastaus ----------->
+    <!----------- Vastaus ----------------------------------------------------->
 
     <h3 class="sub-header" i18n="@@Vastaus">Vastaus</h3>
 
