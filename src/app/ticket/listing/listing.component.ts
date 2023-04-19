@@ -7,15 +7,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Subject, Subscription, switchMap, takeUntil, tap, throttleTime, timer }
     from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
-import { environment } from 'src/environments/environment';
-import { ErrorCardComponent } from 'src/app/shared/error-card/error-card.component';
-import { TicketService, Kurssini, UKK } from '../ticket.service';
-import { StoreService } from 'src/app/core/store.service';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
-import { Title } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
+import { StoreService } from 'src/app/core/store.service';
+import { TicketService, Kurssini, UKK } from '../ticket.service';
 
 enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
@@ -50,12 +49,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
   public dataSourceFAQ = new MatTableDataSource<UKK>();
-  public FAQisLoaded: boolean = false;
   public iconFile: typeof IconFile = IconFile;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
+  public isPollingFAQ: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
@@ -63,11 +62,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private fetchTicketsSub$: Subscription | null  = null;
   private fetchFAQsSub$: Subscription | null = null;
   private loggedIn$ = new Subscription;
+  private position: number = 0;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private isPollingTickets: boolean = false;
-  private isPollingFAQ: boolean = false;
   private unsubscribe$ = new Subject<void>();
+  private url: string = '';
 
   // Merkkijonot
   public courseName: string = '';
@@ -77,7 +77,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public ticketViewLink = '';
   public user: User = {} as User;
 
-  // @ViewChild('ticketError') ticketError!: ErrorCardComponent
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortArchived', {static: false}) sortArchived = new MatSort();
   @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
@@ -88,11 +87,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
-    private route:  ActivatedRoute,
+    private route : ActivatedRoute,
     private router: Router,
-    private store:  StoreService,
+    private store : StoreService,
     private ticket: TicketService,
-    private title:  Title
+    private title : Title
   ) {
     this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:Kysymykset`);
     this.isInIframe = getIsInIframe();
@@ -113,17 +112,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    // const testimer$ = timer(0, 10000)
-    // .pipe(
-    //     tap(() => console.log('ping')),
-    // ).subscribe();
-    // setTimeout(()=> testimer$.unsubscribe(), 21000);
-
+    this.url = window.location.pathname;
+    this.trackCourseID();
     this.noDataConsent = this.getDataConsent();
     if (this.noDataConsent) {
       console.log('Kieltäydytty tietojen annosta.');
     }
-      this.trackRouteParameters();
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.headline = this.setTicketListHeadline();
@@ -138,23 +132,25 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     console.warn('listaus: ngOnDestroy ajettu.');
+    window.removeEventListener('scroll', this.onScroll);
     this.stopPolling();
   }
 
-    //hakutoiminto, jossa paginointi kommentoitu pois
-    public applyFilter(event: Event, isTicket: boolean ){
-      let filterValue = (event.target as HTMLInputElement).value;
-      filterValue = filterValue.trim().toLowerCase();
-      if (isTicket) {
-        this.dataSource.filter = filterValue;
-      } else {
-        this.dataSourceFAQ.filter = filterValue;
-      }
-        /*if (this.dataSourceFAQ.paginator) {
-          this.dataSourceFAQ.paginator.firstPage();
-        }*/
+  //hakutoiminto, jossa paginointi kommentoitu pois
+  public applyFilter(event: Event, isTicket: boolean) {
+    let filterValue = (event.target as HTMLInputElement).value;
+    filterValue = filterValue.trim().toLowerCase();
+    if (isTicket) {
+      this.dataSource.filter = filterValue;
+    } else {
+      this.dataSourceFAQ.filter = filterValue;
     }
+      /*if (this.dataSourceFAQ.paginator) {
+        this.dataSourceFAQ.paginator.firstPage();
+      }*/
+  }
 
+  // Hae arkistoidut tiketit.
   public fetchArchivedTickets() {
     this.ticket.getTicketList(this.courseID, { option: 'archived' }).then(response => {
       if (!response) return
@@ -168,15 +164,26 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Hae tiketit kerran.
   private fetchTickets(courseID: string) {
-    this.ticket.getTicketList(courseID).then(response => {
-      if (!response) return
+      this.ticket.getTicketList(courseID).then(response => {
+        if (!response) return
         if (response.length > 0) {
           this.dataSource = new MatTableDataSource(response);
           this.numberOfQuestions = response.length;
           this.dataSource.sort = this.sortQuestions;
         }
+        return
         // this.dataSource.paginator = this.paginator;
-    }).catch(error => this.handleError(error));
+      }).catch(error => {
+        this.handleError(error)
+      }).finally(() => {
+        if (this.isPollingTickets === false) {
+          this.isPollingTickets = true;
+          if (this.isPollingFAQ === true) {
+            this.isLoaded = true;
+            this.restorePosition();
+          }
+        }
+      })
   }
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
@@ -188,14 +195,20 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataSourceFAQ.sort = this.sortFaq;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
+        return
       })
       .catch(error => this.handleError(error))
       .finally(() => {
-        this.FAQisLoaded = true;
-        if (refresh !== true) this.isLoaded = true;
+        if (this.isPollingFAQ === false) {
+          this.isPollingFAQ = true;
+          if (this.isPollingTickets === true || this.isParticipant === false) {
+            this.isLoaded = true;
+            this.restorePosition();
+          }
+        }
+        // if (refresh !== true) this.isLoaded = true;
       });
   }
-
 
   public getDisplayedColumnFAQ(): string[] {
     return this.columnDefinitionsFAQ
@@ -237,6 +250,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.archivedCount = 0;
   }
 
+  private onScroll = () => {
+    this.position = window.scrollY;
+    this.store.setPosition(this.url, this.position);
+  }
+
+
   public openInNewTab(): void {
     window.open(window.location.href, '_blank');
   }
@@ -275,31 +294,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.setError('notLoggedIn');
       }
     });
-  }
-
-  private trackRouteParameters(): void {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:
-            Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
-        this.isLoaded = true;
-        throw new Error('Virhe: ei kurssi ID:ä.');
-      }
-      this.courseID = courseID;
-      this.showCourseName(courseID);
-      if (this.isPollingFAQ === true) return
-      this.fetchFAQsSub$?.unsubscribe();
-      console.warn('Aloitetaan UKK pollaus.');
-      this.isPollingFAQ = true;
-      this.fetchFAQsSub$ = timer(0, this.FAQ_POLLING_RATE_MIN *
-          Constants.MILLISECONDS_IN_MIN)
-          .pipe(
-            takeUntil(this.unsubscribe$),
-            tap(() => this.fetchFAQ(this.courseID))
-          )
-          .subscribe();
-    })
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
@@ -363,27 +357,59 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ticketsError = { title: '', message: '', buttonText: ''}
   }
 
-  private startPollingTickets() {
-    if (this.fetchTicketsSub$) this.fetchTicketsSub$.unsubscribe();
-    console.warn('Aloitetaan tikettien pollaus.');
-    this.isPollingTickets = true;
-    const pollTime = this.TICKET_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
-  
-    // throttleTime(pollTime),
-    this.fetchTicketsSub$ = timer(0, pollTime)
+  // Seurataan kurssi ID:ä URL:sta.
+  private trackCourseID(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      var courseID: string | null = paramMap.get('courseid');
+      if (courseID === null) {
+        this.errorMessage = $localize `:@@puuttuu kurssiID:
+            Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
+        this.isLoaded = true;
+        throw new Error('Virhe: ei kurssi ID:ä.');
+      }
+      this.courseID = courseID;
+      this.showCourseName(courseID);
+      this.startPollingFAQ();
+    })
+  }
+
+  private startPollingFAQ(): void {
+    this.fetchFAQsSub$?.unsubscribe();
+    console.warn('Aloitetaan UKK pollaus.');
+    const pollRate = this.FAQ_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    this.fetchFAQsSub$ = timer(0, pollRate)
         .pipe(
-            takeUntil(this.unsubscribe$),
-            tap(() => this.fetchTickets(this.courseID)),
-        )
-        .subscribe();
+          takeUntil(this.unsubscribe$)
+        ).subscribe(() => this.fetchFAQ(this.courseID));
+}
+
+  private startPollingTickets() {
+    this.fetchTicketsSub$?.unsubscribe();
+    console.warn('Aloitetaan tikettien pollaus.');
+    const pollRate = this.TICKET_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+
+    // throttleTime(pollTime),
+    this.fetchTicketsSub$ = timer(0, pollRate)
+        .pipe(
+            takeUntil(this.unsubscribe$)
+        ).subscribe(() => this.fetchTickets(this.courseID));
     this.loggedIn$.unsubscribe();
   }
 
-  public stopPolling() {
+  public stopPolling(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     if (this.fetchFAQsSub$) this.fetchFAQsSub$.unsubscribe();
     if (this.fetchTicketsSub$) this.fetchTicketsSub$.unsubscribe();
+  }
+
+  private restorePosition(): void {
+    this.position = this.store.getPosition(this.url);
+    if (this.position && this.position !== 0) {
+      console.log('skrollataan positioon: ' + this.position);
+      setTimeout(() => window.scrollTo(0, this.position), 100);
+    }
+    window.addEventListener('scroll', this.onScroll);
   }
 
   private updateLoggedInView(courseIDcandinate: string) {
