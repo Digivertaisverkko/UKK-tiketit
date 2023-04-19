@@ -204,7 +204,7 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
 // Ottaa horisontaalisesti käytettävissä olevan tilan.
 .spacer {
   display: block;
-  flex: 1 1 auto;
+  flex: 1 0 auto;
 }
 
 // ---- Media queryt ----------------
