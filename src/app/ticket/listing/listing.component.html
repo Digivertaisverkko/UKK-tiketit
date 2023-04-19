@@ -45,7 +45,7 @@
     </button>
   </div>
 
-  <section *ngIf="isLoaded && isParticipant">
+  <section *ngIf="isParticipant">
 
   <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
     hakukentälle tilaa. -->
@@ -343,7 +343,7 @@
 
 <!------------ UKK:t ---------------------------------------------------------->
 
-<section *ngIf="isPollingFAQ">
+<section>
 
 <div class="input-field-wrapper">
   <h2 class="sub-header" i18n="@@Usein kysytyt kysymykset">
@@ -423,7 +423,7 @@
 
 
   <div  class=" buttons-wrapper theme-actions"
-        *ngIf="user.asema === 'opettaja' || user.asema === 'admin'"
+        *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
         [ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} :
             {'justify-content': 'flex-end'}">
     <button class="submit-faq-btn"
