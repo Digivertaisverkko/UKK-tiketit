@@ -22,7 +22,8 @@
 
       <div class="spacer"></div>
 
-      <button [disabled]="state==='sending'"
+      <button class="edit-button"
+              [disabled]="state==='sending'"
           i18n="@@Muokkaa"
           mat-raised-button
           *ngIf="isEditable"
@@ -189,7 +190,7 @@
         <mat-icon>attach_file</mat-icon>{{attachFilesText}}
       </button>
 
-      <div class="spacer"
+      <div class="action-spacer spacer"
           *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
       </div>
 
@@ -209,7 +210,9 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <ng-template #spacerHere><div class="spacer"></div></ng-template>
+      <ng-template #spacerHere>
+        <div class="action-spacer spacer"></div>
+      </ng-template>
 
       <button class="send-button"
               (click)="sendComment()"
