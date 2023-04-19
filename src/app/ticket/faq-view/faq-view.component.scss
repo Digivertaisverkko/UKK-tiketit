@@ -5,16 +5,16 @@
   margin-bottom: 0.5em;
 }
 
-top-spacer {
-  height: 50%;
-}
-
 app-to-beginning-button {
   margin-bottom: 0;
 }
 
 .vertical-spacer {
   height: var(--margin-top-embedded);
+}
+
+.edit-btn {
+  margin-left: auto;
 }
 
 .top-buttons-wrapper {
@@ -65,6 +65,7 @@ mat-card {
     order: 1;
   }
   .edit-btn {
+    margin-left: 0;
     order: 3;
   }
   .remove-btn {
@@ -78,5 +79,15 @@ mat-card {
 @media (max-width: 500px) {
   .faq-view {
     padding-right: 1rem;
+  }
+}
+
+@media (max-width: 370px) {
+  .top-buttons-wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .copy-link-btn {
+    margin-left: 0;
   }
 }
