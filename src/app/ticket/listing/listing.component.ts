@@ -115,9 +115,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.url = window.location.pathname;
     this.trackCourseID();
     this.noDataConsent = this.getDataConsent();
-    if (this.noDataConsent) {
-      console.log('Kieltäydytty tietojen annosta.');
-    }
+    if (this.noDataConsent) console.log('Kieltäydytty tietojen annosta.');
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.headline = this.setTicketListHeadline();
@@ -169,6 +167,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         if (response.length > 0) {
           this.dataSource = new MatTableDataSource(response);
           this.numberOfQuestions = response.length;
+          // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
+          // jotta sorting toimii.
           this.dataSource.sort = this.sortQuestions;
         }
         return

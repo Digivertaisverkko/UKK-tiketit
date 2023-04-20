@@ -61,9 +61,15 @@
     </mat-form-field>
   </div>
 
-  <table class="theme-table mat-elevation-z1" mat-table [dataSource]="dataSource"
-      [hidden]="dataSource.filteredData.length === 0" matSort matSortActive="aikaleima"
-        matSortDirection="desc" #sortQuestions="matSort">
+  <table  class="theme-table mat-elevation-z1"
+          [dataSource]="dataSource"
+          [hidden]="dataSource.filteredData.length === 0"
+          matSort
+          matSortActive="aikaleima"
+          matSortDirection="desc"
+          mat-table
+          #sortQuestions="matSort"
+          >
 
     <ng-container matColumnDef="tila">
       <th mat-header-cell *matHeaderCellDef mat-sort-header
@@ -176,11 +182,15 @@
 
   <h2 class="sub-header" *ngIf="archivedCount > 0">Arkistoidut kysymykset</h2>
 
-  <table class="theme-table mat-elevation-z1" mat-table [dataSource]="dataSourceArchived"
-    [hidden]="dataSourceArchived.filteredData.length === 0" matSort matSortActive="aikaleima"
-    matSortDirection="desc"
-    #sortArchived="matSort">
-
+  <table  class="theme-table mat-elevation-z1"
+          mat-table
+          [dataSource]="dataSourceArchived"
+          [hidden]="dataSourceArchived.filteredData.length === 0"
+          matSort
+          matSortActive="aikaleima"
+          matSortDirection="desc"
+          #sortArchived="matSort"
+          >
 <ng-container matColumnDef="tila">
   <th mat-header-cell *matHeaderCellDef mat-sort-header
       i18n-sortActionDescription="@@Järjestä tilan mukaan" i18n="@@Tila"
