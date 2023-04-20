@@ -59,6 +59,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
   public numberOfQuestions: number = 0;
+  public showFilterQuestions: boolean = false;
+  public showFilterFAQ: boolean = false;
   private fetchTicketsSub$: Subscription | null  = null;
   private fetchFAQsSub$: Subscription | null = null;
   private loggedIn$ = new Subscription;

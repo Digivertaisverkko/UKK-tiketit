@@ -54,11 +54,26 @@
     <h2 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">
       {{headline}}
     </h2>
-    <!--Hakutoiminto-->
-    <mat-form-field class="filteringField" *ngIf="numberOfQuestions !== 0">
-      <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
-      <input matInput (keyup)="applyFilter($event, true)" placeholder="" #input>
-    </mat-form-field>
+
+    <ng-container *ngIf="numberOfQuestions !== 0">
+      <button aria-label="Suodata kysymyksiä"
+              class="filter-icon-btn"
+              (click)="showFilterQuestions = true"
+              i18n-aria-label="@@Suodata kysymyksiä"
+              mat-icon-button
+              *ngIf="!showFilterQuestions; else filterQuestions"
+              >
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <ng-template #filterQuestions>
+        <mat-form-field class="filteringField">
+          <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
+          <input matInput (keyup)="applyFilter($event, true)" placeholder="" #input>
+        </mat-form-field>
+      </ng-template>
+    </ng-container>
+
   </div>
 
   <table  class="theme-table mat-elevation-z1"
@@ -359,7 +374,7 @@
   <h2 class="sub-header" i18n="@@Usein kysytyt kysymykset">
     Usein kysytyt kysymykset
   </h2>
-  <!--Hakutoiminto-->
+
   <mat-form-field class="filteringField filter-FAQ" *ngIf="numberOfFAQ !== 0">
     <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
     <input matInput (keyup)="applyFilter($event, false)" placeholder="" #input>
