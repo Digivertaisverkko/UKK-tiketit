@@ -1,13 +1,16 @@
-<h1 class="main-header" >
-  <span>Kurssialuetta ei ole luotu</span>
+<h1 class="main-header">
+  <span i18n="@@Kurssialuetta ei ole luotu">
+    Kurssialuetta ei ole luotu
+  </span>
 </h1>
 
 <div class="content-wrapper">
 
-  <p>
+  <p i18n="@@Kurssialuetta ei ole luotu-ohje">
     Olet kieltäytynyt tietojen luovuttamisesta tikettijärjestelmän käyttöön.
     Kurssialuetta ei ole vielä luotu eikä siten ole vielä sisältöä näytettäväksi
-    kirjautumattomalle käyttäjälle.
+    kirjautumattomalle käyttäjälle. Jos olet opiskelija, niin ota yhteyttä opettajaan kurssialueen
+    luomiseksi.
     Voit halutessasi siirtyä luvan antamiseen tietojen luovuttamiseen painamalla
     alla olevaa painiketta. Tällöin myös uusi kurssialue luodaan.
   </p>
@@ -15,7 +18,7 @@
   <div class="buttons-wrapper">
     <button (click)="giveConsent()"
             color="primary"
-            i18n="@@Hyväksyn"
+            i18n="@@Siirry luvan antamiseen"
             mat-raised-button
             >
       Siirry luvan antamiseen
