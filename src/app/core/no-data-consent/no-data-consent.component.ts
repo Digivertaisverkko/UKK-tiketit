@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
+import { Constants } from 'src/app/shared/utils';
 import { RefreshDialogComponent } from '../refresh-dialog/refresh-dialog.component';
 import { Title } from '@angular/platform-browser';
 
@@ -16,7 +17,8 @@ export class NoDataConsentComponent {
     private router: Router,
     private title: Title
   ) {
-
+    this.title.setTitle(Constants.baseTitle + $localize `:@@OKurssialuetta ei ole luotu:
+        Kurssialuetta ei ole luotu`);
   }
 
   public giveConsent() {
