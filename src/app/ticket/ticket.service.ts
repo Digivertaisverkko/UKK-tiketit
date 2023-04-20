@@ -164,29 +164,27 @@ export class TicketService {
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
   public getTicketState(numericalState: number, role: Role): string {
-    let verbal: string;
+    let string: string;
     switch (numericalState) {
-      case 0: verbal = $localize`:@@Virhetila:Virhetila`; break;
+      case 0: string = $localize`:@@Virhetila:Virhetila`; break;
       case 1:
         if (role === 'opettaja') {
-          verbal = $localize`:@@Lukematon:Lukematon`;
+          string = $localize`:@@Lukematon:Lukematon`;
         } else {
-          verbal = $localize`:@@Lähetetty:Lähetetty`;
+          string = $localize`:@@Lähetetty:Lähetetty`;
         }
         break;
-      case 2: verbal = $localize`:@@Luettu:Luettu`; break;
-      case 3: verbal = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
-      case 4: verbal = $localize`:@@Kommentoitu:Kommentoitu`; break;
-      case 5: verbal = $localize`:@@Ratkaistu:Ratkaistu`; break;
-      case 6: verbal = $localize`:@@Arkistoitu:Arkistoitu`; break;
+      case 2: string = $localize`:@@Luettu:Luettu`; break;
+      case 3: string = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+      case 4: string = $localize`:@@Kommentoitu:Kommentoitu`; break;
+      case 5: string = $localize`:@@Ratkaistu:Ratkaistu`; break;
+      case 6: string = $localize`:@@Arkistoitu:Arkistoitu`; break;
       default:
         throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
     }
-    return verbal;
-  }
-
-  private getRandomInt(min: number, max: number) {
-    return Math.floor(Math.random() * max) + min;
+    // Numero edessä, koska järjestetään taulukossa sen mukaan.
+    string = numericalState + '-' + string;
+    return string;
   }
 
   // Lähetä tiedosto palauttaen edistymistietoja.
@@ -229,7 +227,6 @@ export class TicketService {
     return fakePost
   }
 
-
   // Testaamista varten.
   public getError(x: any, y : any, z: any): Observable<any> {
     const errorResponse = new HttpErrorResponse({
@@ -238,33 +235,6 @@ export class TicketService {
       statusText: 'Bad Request',
     });
     return of(errorResponse);
-  }
-
-  // Lähetä tiedosto palauttaen edistymistietoja.
-  public uploadFileExample(ticketID: string, commentID: string, file: File): Observable<any>{
-    let formData = new FormData();
-    formData.append('tiedosto', file);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-      .pipe(
-        map(event => {
-
-          let random = this.getRandomInt(1,15);
-          if (random == 3) {
-            throw new Error
-          }
-          if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-            const progress = Math.round(100 * event.loaded / event.total);
-            return progress;
-          } else if (event.type === HttpEventType.Response) {
-            return event.body  // pitäisi palauttaa onnistuessa { success: true }
-          } else return -1  // Ei huomioida näkymäss.
-        }
-      ),
-      catchError(() => {
-        throw { success: false }
-      })
-    );
   }
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
