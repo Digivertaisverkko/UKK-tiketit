@@ -1,5 +1,6 @@
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
+    from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -95,7 +96,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private ticket: TicketService,
     private title : Title
   ) {
-    this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:Kysymykset`);
+    this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:
+        Kysymykset`);
     this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
