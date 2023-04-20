@@ -79,6 +79,34 @@ export class TicketService {
     return response
   }
 
+   // Arkistoi (poista) UKK.
+   public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.post<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  // Arkistoi tiketti.
+  public async archiveTicket(ticketID: string): Promise<{ success: boolean }> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/valmis`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.post<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
   public async editComment(ticketID: string, commentID: string, comment: string,
         state: number): Promise<boolean> {
     let response: any;
@@ -291,34 +319,6 @@ export class TicketService {
       this.handleError(error);
     }
     return response?.success === true ? true : false;
-  }
-
-  // Arkistoi (poista) UKK.
-  public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
-    try {
-      response = await firstValueFrom<{ success: boolean }>(
-        this.http.post<{ success: boolean }>(url, {})
-      );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
-
-  // Arkistoi tiketti.
-  public async archiveTicket(ticketID: string): Promise<{ success: boolean }> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/valmis`;
-    try {
-      response = await firstValueFrom<{ success: boolean }>(
-        this.http.post<{ success: boolean }>(url, {})
-      );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
   }
 
   // Palauta kurssin nimi.
