@@ -62,6 +62,7 @@
               i18n-aria-label="@@Suodata kysymyksiä"
               mat-icon-button
               *ngIf="!showFilterQuestions; else filterQuestions"
+              type="search"
               >
         <mat-icon>search</mat-icon>
       </button>
@@ -296,7 +297,8 @@
 </table>
 
 <p  class="no-items-message" i18n="@@Ei tuloksia"
-    *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0">
+    *ngIf="dataSourceArchived.filteredData.length === 0 &&
+        archivedCount > 0">
     Suodattimella ei löytynyt tuloksia.
 </p>
 
@@ -313,7 +315,7 @@
         {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
         >
 
-    <ng-template *ngIf="user.asema !== 'opiskelija'">
+    <ng-container *ngIf="user.asema !== 'opiskelija'">
 
       <button class="button"
               (click)="fetchArchivedTickets()"
@@ -334,7 +336,7 @@
         </button>
       </ng-template>
 
-    </ng-template>
+    </ng-container>
 
     <div class="spacer"></div>
 
