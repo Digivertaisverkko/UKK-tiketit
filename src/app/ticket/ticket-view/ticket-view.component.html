@@ -13,7 +13,7 @@
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
   <app-to-beginning-button [disabled]="state==='sending'"
-        *ngIf="ticket.tila === undefined" >
+        *ngIf="ticket.tila === undefined">
   </app-to-beginning-button>
 
   <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
@@ -40,7 +40,6 @@
         Kopioi UKK:ksi
       </button>
 
-
       <button (click)="changeButton('archive')"
               i18n="@@Arkistoi"
               mat-raised-button
@@ -60,10 +59,10 @@
         Vahvista
       </button>
 
-      <div matTooltip="{{cantRemoveTicket}}"
-          [matTooltipDisabled]="isRemovable">
-        <button [disabled]="!isRemovable || state==='sending'"
-                i18n="@@Poista" (click)="changeButton('remove')"
+      <div matTooltip="{{cantRemoveTicket}}" [matTooltipDisabled]="isRemovable">
+        <button (click)="changeButton('remove')"
+                [disabled]="!isRemovable || state==='sending'"
+                i18n="@@Poista"
                 mat-raised-button
                 *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
                 >
