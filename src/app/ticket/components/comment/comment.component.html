@@ -1,7 +1,7 @@
 
 <mat-card appearance="outlined" class="answer">
 
-<!----------------- Header- --------------------------------------------------->
+<!----------------- Card header  ---------------------------------------------->
 
 <mat-card-header>
 
@@ -28,7 +28,7 @@
 
   <div class="spacer"></div>
 
-  <div *ngIf="editingCommentID !== comment.id">
+  <ng-container *ngIf="editingCommentID !== comment.id">
 
     <span class="comment-state more-info-needed" *ngIf="comment.tila === 3">
         <!-- <mat-icon>question_mark</mat-icon> -->
@@ -39,7 +39,7 @@
       {{ this.strings.get('proposedSolution') }}
     </span>
 
-  </div>
+  </ng-container>
 
   <!-- i18n-aria-label="@@Muokkaa kommenttia" -->
     <button aria-label="Poista kommentti"
@@ -86,8 +86,8 @@
     <mat-icon>edit</mat-icon>
   </button>
 
-  <button (click)="cancelCommentEditing()"
-          aria-label="Peru kommentin muokkaaminen"
+  <button aria-label="Peru kommentin muokkaaminen"
+          (click)="cancelCommentEditing()"
           [disabled]="state==='sending'"
           i18n-aria-label="@@Peru kommentin muokkaaminen"
           mat-icon-button
@@ -98,98 +98,95 @@
 
 </mat-card-header>
 
-<!----------------- Content --------------------------------------------------->
+<!----------------- Card content ---------------------------------------------->
 
 <mat-card-content>
-<div *ngIf="editingCommentID !== comment.id; else commentEditing">
-  <app-message [messageHtml]=comment.viesti>
-  </app-message>
-  <app-view-attachments
-      (errorMessage)="errorMessage = $event"
-      [files]="comment.liitteet"
-      *ngIf="comment.liitteet"
-      [ticketID]="ticketID"
-      >
-  </app-view-attachments>
-</div>
+  <ng-container *ngIf="editingCommentID !== comment.id; else commentEditing">
+    <app-message [messageHtml]=comment.viesti></app-message>
+    <app-view-attachments
+        (errorMessage)="errorMessage = $event"
+        [files]="comment.liitteet"
+        *ngIf="comment.liitteet"
+        [ticketID]="ticketID"
+        >
+    </app-view-attachments>
+  </ng-container>
 </mat-card-content>
 
 <ng-template #commentEditing>
-<app-editor [disabled]="state==='sending'"
-            [(editorContent)]="comment.viesti"
-            *ngIf="editingCommentID === comment.id"
-            >
-<!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
+  <app-editor [disabled]="state==='sending'"
+              [(editorContent)]="comment.viesti"
+              *ngIf="editingCommentID === comment.id"
+              >
+  <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
+  </app-editor>
 
-</app-editor>
-
-
-<app-error-card
-    *ngIf="errorMessage.length > 0"
-    i18n-title="@@Virhe"
-    message="{{ errorMessage }}"
-    [styles]="{ 'margin-top': '1rem:' }"
-    title="Virhe"
-    >
-</app-error-card>
-
-<!----------------- Alaosan toiminnot ----------------------------------------->
-
-<div class="theme-actions">
-
-  <button [attr.aria-label]="attachFilesText"
-          class="attach-button"
-          (click)="uploadClick.next('add')"
-          [disabled]="state==='sending'"
-          mat-raised-button="attachFilesText"
-          >
-    <mat-icon>attach_file</mat-icon>
-    {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
-          strings.get('attach') : strings.get('attachFiles')}}
-  </button>
-
-  <div class="actions-spacer spacer"
-      *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+  <app-error-card
+      i18n-title="@@Virhe"
+      *ngIf="errorMessage.length > 0"
+      message="{{ errorMessage }}"
+      [styles]="{ 'margin-top': '1rem:' }"
+      title="Virhe"
       >
+  </app-error-card>
+
+  <!----------------- Alaosan toiminnot --------------------------------------->
+
+  <div class="theme-actions">
+
+    <button [attr.aria-label]="attachFilesText"
+            class="attach-button"
+            (click)="uploadClick.next('add')"
+            [disabled]="state==='sending'"
+            mat-raised-button="attachFilesText"
+            >
+      <mat-icon>attach_file</mat-icon>
+      {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
+            strings.get('attach') : strings.get('attachFiles')}}
+    </button>
+
+    <div class="actions-spacer spacer"
+        *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+        >
+    </div>
+
+    <mat-radio-group
+        align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+        [(ngModel)]="comment.tila"
+        [disabled]="state==='sending'">
+      <mat-radio-button [value]=4 i18n="@@Kommentti">
+        Kommentti
+      </mat-radio-button>
+      <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+        Lisätietoa tarvitaan
+      </mat-radio-button>
+      <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+        Ratkaisuehdotus
+      </mat-radio-button>
+    </mat-radio-group>
+
+    <ng-template #spacerHere>
+      <div class="actions-spacer spacer"></div>
+    </ng-template>
+
+    <button class="send-button"
+            (click)="sendComment(comment.id, comment.viesti)"
+            color="primary"
+            [disabled]="state==='sending'"
+            mat-raised-button
+            >
+      OK
+    </button>
   </div>
 
-  <mat-radio-group
-      align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
-      [(ngModel)]="comment.tila"
-      [disabled]="state==='sending'">
-    <mat-radio-button [value]=4 i18n="@@Kommentti">
-      Kommentti
-    </mat-radio-button>
-    <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
-      Lisätietoa tarvitaan
-    </mat-radio-button>
-    <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
-      Ratkaisuehdotus
-    </mat-radio-button>
-  </mat-radio-group>
-
-  <ng-template #spacerHere>
-    <div class="actions-spacer spacer"></div>
-  </ng-template>
-
-  <button class="send-button"
-          (click)="sendComment(comment.id, comment.viesti)"
-          color="primary"
-          [disabled]="state==='sending'"
-          mat-raised-button
-          >
-    OK
-  </button>
-</div>
-
-<app-edit-attachments
-    (attachmentsMessages)="attachmentsMessages = $event"
-    (fileListOutput)="fileInfoList = $event"
-    id="attachments-{{comment.id}}"
-    [oldAttachments]="comment.liitteet"
-    [uploadClicks]="uploadClick.asObservable()"
-    >
-</app-edit-attachments>
+  <app-edit-attachments
+      (attachmentsMessages)="attachmentsMessages = $event"
+      (fileListOutput)="fileInfoList = $event"
+      id="attachments-{{comment.id}}"
+      [oldAttachments]="comment.liitteet"
+      [uploadClicks]="uploadClick.asObservable()"
+      >
+  </app-edit-attachments>
 
 </ng-template>
 
