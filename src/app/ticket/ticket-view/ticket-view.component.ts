@@ -210,7 +210,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public getCommentState(tila: number) {
-    return this.ticketService.getTicketState(tila);
+    return this.ticketService.getTicketState(tila, this.user.asema);
   }
 
   public messageFromComment(event: any) {

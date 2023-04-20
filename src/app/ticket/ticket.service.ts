@@ -4,7 +4,7 @@ import '@angular/localize/init';
 import { Router } from '@angular/router';
 import { Observable, Subject, catchError, firstValueFrom, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthService } from '../core/auth.service';
+import { AuthService, Role } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 
 @Injectable({ providedIn: 'root' })
@@ -163,11 +163,17 @@ export class TicketService {
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
-  public getTicketState(numericalState: number): string {
+  public getTicketState(numericalState: number, role: Role): string {
     let verbal: string;
     switch (numericalState) {
       case 0: verbal = $localize`:@@Virhetila:Virhetila`; break;
-      case 1: verbal = $localize`:@@Lähetetty:Lähetetty`; break;
+      case 1:
+        if (role === 'opettaja') {
+          verbal = $localize`:@@Lukematon:Lukematon`;
+        } else {
+          verbal = $localize`:@@Lähetetty:Lähetetty`;
+        }
+        break;
       case 2: verbal = $localize`:@@Luettu:Luettu`; break;
       case 3: verbal = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
       case 4: verbal = $localize`:@@Kommentoitu:Kommentoitu`; break;
@@ -396,16 +402,13 @@ export class TicketService {
     if (currentRoute.indexOf('/list-tickets') === -1) {
       return null
     }
-    if (courseID === '') {
-      throw new Error('Ei kurssi ID:ä.');
-    }
+    if (courseID === '') throw new Error('Ei kurssi ID:ä.');
     let target;
     switch (option?.option ?? '') {
       case 'onlyOwn':
         target = 'omat'; break;
       case "archived":
-        target = "arkistoidut";
-        break;
+        target = "arkistoidut"; break;
       default:
         target = "kaikki"
     }
@@ -418,11 +421,12 @@ export class TicketService {
     }
     // Muutetaan taulukkoon sopivaan muotoon.
     const myName = this.auth.getUserInfo().nimi;
+    const myRole = this.auth.getUserInfo().asema;
     const me = $localize`:@@Minä:Minä`;
     let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
       {
         tilaID: ticket.tila,
-        tila: this.getTicketState(ticket.tila),
+        tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
         aikaleima: ticket.aikaleima,
@@ -559,14 +563,14 @@ export interface Kurssi {
 // Metodi: getMyCourses, API: /api/kurssi/omatkurssit/
 export interface Kurssini {
   kurssi: number;
-  asema: 'opiskelija' | 'opettaja' | 'admin';
+  asema: Role;
 }
 
 export interface Kurssilainen {
   id: number,
   nimi: string;
   sposti: string;
-  asema: string;
+  asema: Role;
 }
 
 // Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
