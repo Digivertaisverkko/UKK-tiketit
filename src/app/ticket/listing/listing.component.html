@@ -52,7 +52,7 @@
   <!-- <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div> -->
   <div class="input-field-wrapper">
     <h2 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">
-      {{headline}}
+      {{ headline }}
     </h2>
 
     <ng-container *ngIf="numberOfQuestions !== 0">
@@ -202,7 +202,7 @@
 
   <!-------------- Arkistoidut ------------------------------------------------>
 
-  <h2 class="sub-header" *ngIf="archivedCount > 0">
+  <h2 class="sub-header" i18n="@@Arkistoidut kysymykset" *ngIf="archivedCount > 0">
     Arkistoidut kysymykset
   </h2>
 
@@ -240,7 +240,7 @@
               width="100%"
           >
         </div>
-        <div>{{ element.tila }}</div>
+        <div>{{ element.tila.substring(2) }}</div>
       </div>
     </a>
   </td>
@@ -341,7 +341,7 @@
 
       <button class="button"
               (click)="fetchArchivedTickets()"
-              i18n="@@Arkistoitu"
+              i18n="@@Näytä arkistoidut"
               mat-raised-button
               *ngIf="archivedCount === 0;
                   else hideArchivedBtn"
@@ -352,6 +352,7 @@
       <ng-template #hideArchivedBtn>
         <button class="button"
                 (click)="hideArchived()"
+                i18n="@@Piilota arkistoidut"
                 mat-raised-button
                 >
             Piilota arkistoidut
@@ -380,13 +381,13 @@
   </section>
 
     <app-error-card
-        i18n-title="{{ ticketsError.title }}"
+        buttonText="{{ticketsError.buttonText}}"
         (clickEvent)="ticketErrorClickEvent($event)"
-        message="{{ ticketsError.message }}"
         *ngIf="isLoaded && ticketsError.title.length > 0"
         #ticketError
+        i18n-title="{{ ticketsError.title }}"
+        message="{{ ticketsError.message }}"
         title="{{ ticketsError.title }}"
-        buttonText="{{ticketsError.buttonText}}"
         >
     </app-error-card>
 
