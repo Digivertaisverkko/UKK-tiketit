@@ -14,6 +14,7 @@ import { ToBeginningButtonComponent } from './components/to-beginning-button/to-
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -46,7 +47,8 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MenuLinkComponent,
     MenuSrcComponent,
     ToBeginningButtonComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SearchBarComponent
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MenuSrcComponent,
     ToBeginningButtonComponent,
     SafeHtmlPipe,
+    SearchBarComponent,
   ],
   providers: [
     {

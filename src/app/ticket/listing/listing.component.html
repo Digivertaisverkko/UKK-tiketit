@@ -55,6 +55,9 @@
       {{ headline }}
     </h2>
 
+    <app-search-bar></app-search-bar>
+
+  <!---
     <ng-container *ngIf="numberOfQuestions !== 0">
       <button aria-label="Suodata kysymyksiä"
               class="filter-icon-btn"
@@ -70,10 +73,12 @@
       <ng-template #filterQuestions>
         <mat-form-field class="filteringField">
           <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
-          <input matInput (keyup)="applyFilter($event, true)" placeholder="" #input>
+          <input matInput type="search" (keyup)="applyFilter($event, true)" placeholder="" #input>
         </mat-form-field>
       </ng-template>
     </ng-container>
+
+    -->
 
   </div>
 
@@ -91,7 +96,7 @@
       <th i18n-sortActionDescription="@@Järjestä tilan mukaan"
           i18n="@@Tila"
           mat-header-cell
-          *matHeaderCellDef 
+          *matHeaderCellDef
           mat-sort-header
           sortActionDescription="Järjestä tilan mukaan"
           >
