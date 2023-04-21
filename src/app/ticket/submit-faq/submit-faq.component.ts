@@ -81,7 +81,6 @@ export class SubmitFaqComponent implements OnInit {
       this.fetchAdditionalFields();
     } else {
       this.fetchTicketInfo(this.ticketId);
-      this.titleServ.setTitle(Constants.baseTitle + this.originalTicket!.otsikko);
     }
 
     this.ticketService.getCourseName(this.courseId)
@@ -144,6 +143,7 @@ export class SubmitFaqComponent implements OnInit {
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       this.originalTicket = response;
+      this.titleServ.setTitle(Constants.baseTitle + this.originalTicket!.otsikko);
 
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena
