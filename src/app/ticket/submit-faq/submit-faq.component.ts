@@ -1,4 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { Subject } from 'rxjs';
@@ -8,11 +10,6 @@ import {  Error, KentanTiedot, Liite, TicketService, Tiketti, UusiUKK,
           AddTicketResponse } from 'src/app/ticket/ticket.service';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { Title } from '@angular/platform-browser';
-
-
-interface TiketinKentat extends KentanTiedot {
-  arvo: string;
-}
 
 interface FileInfo {
   filename: string;
@@ -39,14 +36,14 @@ export class SubmitFaqComponent implements OnInit {
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public faqAnswer: string = '';
+  public faqForm: FormGroup = this.buildForm();
   public faqMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
   public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public ticketFields: TiketinKentat[] = [];
+  public ticketFields: KentanTiedot[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
-  public title: string = '';
   public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
   public readonly MAX_FILE_SIZE_MB=100;
@@ -55,7 +52,16 @@ export class SubmitFaqComponent implements OnInit {
   public url: string = '';
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
 
+  get additionalFields(): FormArray {
+    return this.faqForm.controls["additionalFields"] as FormArray;
+  }
+
+  get title(): FormControl {
+    return this.faqForm.get('title') as FormControl;
+  }
+
   constructor(private auth: AuthService,
+              private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
               private ticketService: TicketService,
@@ -69,51 +75,87 @@ export class SubmitFaqComponent implements OnInit {
     if (this.courseId === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
-    this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
-      this.ticketFields = response as TiketinKentat[];
-      for (let field of this.ticketFields) {
-        field.arvo = '';
-      }
-    });
-    if (this.ticketId !== null) {
-      this.ticketService.getTicketInfo(this.ticketId)
-        .then((response) => {
-          this.originalTicket = response;
-          // response.kommentit[0].id;
-          // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
-          this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
-          this.titleServ.setTitle(Constants.baseTitle + this.originalTicket.otsikko);
-          // Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli "Ratkaisuehdotuksen" omaava kommentti
-          // oletusvastaukseksi. Lopputuloksena viimeinen ratkaisuehdotus jää oletusvastaukseksi.
-          for (let comment of response.kommentit) {
-            if (comment.tila === 5) {
-              this.faqAnswer = comment.viesti;
-            }
-          }
-          if (String(response.kurssi) !== this.courseId) {
-            this.courseId = String(response.kurssi);
-            this.auth.fetchUserInfo(this.courseId);
-            this.ticketService.getCourseName(this.courseId)
-              .then( response => { this.courseName = response });
-          }
-          this.faqMessage = response.viesti;
-          this.title = response.otsikko;
-          if (response.kentat !== undefined ) {
-            for (let tiketinKentta of response.kentat) {
-              for (let uusiKentta of this.ticketFields) {
-                if (tiketinKentta.otsikko === uusiKentta.otsikko) {
-                  uusiKentta.arvo = tiketinKentta.arvo;
-                  break;
-                }
-              }
-            }
-          }
-        });
-    } else {
+
+    if (this.ticketId === null) {
       this.titleServ.setTitle(Constants.baseTitle + $localize `:@@Uusi UKK:Uusi UKK`);
+      this.fetchAdditionalFields();
+    } else {
+      this.fetchTicketInfo(this.ticketId);
     }
+
     this.ticketService.getCourseName(this.courseId)
       .then( response => { this.courseName = response });
+  }
+
+  private buildAdditionalFields(): void {
+    // Luodaan lomakkeelle controllit
+    // UKK:lla ei ole pakollisia kenttiä
+    for (const field of this.ticketFields) {
+      this.additionalFields.push(new FormControl('', Validators.maxLength(50)));
+    }
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      title: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)
+        ])
+      ],
+      additionalFields: this.formBuilder.array([])
+    });
+  }
+
+  private createFaq(): UusiUKK {
+    let faq: UusiUKK = {} as UusiUKK;
+    faq.otsikko = this.faqForm.controls['title'].value;
+    faq.viesti = this.faqMessage;
+    faq.vastaus = this.faqAnswer;
+    faq.kentat = [];
+    for (let i = 0; i < this.ticketFields.length; i++) {
+      faq.kentat.push({
+        id: Number(this.ticketFields[i].id),
+        arvo: this.additionalFields.controls[i].value
+      });
+    }
+    return faq;
+  }
+
+  private fetchAdditionalFields(): void {
+    if (this.courseId == null) throw new Error('Ei kurssi ID:ä.');
+    this.ticketService.getTicketFieldInfo(this.courseId)
+    .then((response) => {
+      this.ticketFields = response as KentanTiedot[];
+      this.buildAdditionalFields();
+    });
+  }
+
+  // TODO: lisäkenttien muokkaaminen, kun backend tarjoaa rajapinnan niiden hakemiseen
+  private fetchTicketInfo(ticketId: string): void {
+    this.ticketService.getTicketInfo(ticketId)
+    .then(response => {
+      this.originalTicket = response;
+      // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
+      this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
+      this.titleServ.setTitle(Constants.baseTitle + this.originalTicket.otsikko);
+      // Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli "Ratkaisuehdotuksen" omaava kommentti
+      // oletusvastaukseksi. Lopputuloksena viimeinen ratkaisuehdotus jää oletusvastaukseksi.
+      for (let comment of response.kommentit) {
+        if (comment.tila === 5) {
+          this.faqAnswer = comment.viesti;
+        }
+      }
+      if (String(response.kurssi) !== this.courseId) {
+        this.courseId = String(response.kurssi);
+        this.auth.fetchUserInfo(this.courseId);
+        this.ticketService.getCourseName(this.courseId)
+        .then( response => { this.courseName = response });
+      }
+      this.faqMessage = response.viesti;
+      this.faqForm.controls['title'].setValue(response.otsikko);
+    }).catch(e => {});
   }
 
   public goBack(): void {
@@ -121,14 +163,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public sendFaq(): void {
-    let newFaq: UusiUKK = {
-      otsikko: this.title,
-      viesti: this.faqMessage,
-      vastaus: this.faqAnswer,
-    }
-    newFaq.kentat = this.ticketFields.map((field) => {
-      return { id: Number(field.id), arvo: field.arvo }
-    });
+    let newFaq: UusiUKK = this.createFaq();
     if (this.courseId === null) throw new Error('Ei kurssi ID:ä.');
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
 
