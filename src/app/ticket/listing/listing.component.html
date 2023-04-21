@@ -58,7 +58,7 @@
   <ng-container *ngIf="numberOfFAQ !== 0">
     <app-search-bar
         i18n="@@Suodata kysymyksiä"
-        (searchResult)="applyFilter($event, false)"
+        (searchResult)="applyFilter($event)"
         >
       Suodata kysymyksiä
     </app-search-bar>
@@ -73,8 +73,8 @@
   </div>
 
 <table  class="theme-table mat-elevation-z1"
-        [dataSource]="dataSourceFAQ"
-        [hidden]="dataSourceFAQ.filteredData.length === 0"
+        [dataSource]="dataSource"
+        [hidden]="dataSource.filteredData.length === 0"
         id="faqTable"
         mat-table
         matSort
@@ -125,17 +125,18 @@
 </table>
 
   <p class="no-items-message" i18n="@@Ei tuloksia"
-      *ngIf="dataSourceFAQ.filteredData.length === 0 && numberOfFAQ > 0">
+      *ngIf="dataSource.filteredData.length === 0 && numberOfFAQ > 0">
     Suodattimella ei löytynyt tuloksia.
   </p>
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
 
-  <div  class=" buttons-wrapper theme-actions"
+  <div  class="buttons-wrapper theme-actions"
         *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
         [ngStyle]="numberOfFAQ === 0 ? {'justify-content': 'flex-start'} :
             {'justify-content': 'flex-end'}">
+
     <button class="submit-faq-btn"
             (click)="saveRedirectUrl('-faq')"
             color="primary"
@@ -148,6 +149,7 @@
         Uusi UKK
       </a>
     </button>
+
   </div>
 
 </section>

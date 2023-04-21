@@ -2,7 +2,7 @@ import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 import { AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, Subject, Subscription, switchMap, takeUntil, timer }
+import { Observable, Subject, Subscription, takeUntil, timer }
   from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -51,33 +51,34 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public errorMessage: string = '';
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
+  public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
-  public isPollingTickets: boolean = false;
+  public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
   public user: User = {} as User;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean = false;
   public numberOfQuestions: number = 0;
-  public showFilterQuestions: boolean = false;
   public ticketsError;
 
   private fetchTicketsSub$: Subscription | null  = null;
   private loggedIn$ = new Subscription;
-  private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
-  @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
-  @ViewChild('sortArchived', {static: false}) sortArchived = new MatSort();
+  @ViewChild('sortQuestions', { static: false }) sortQuestions = new MatSort();
+  @ViewChild('sortArchived',  { static: false }) sortArchived  = new MatSort();
 
   constructor(
     private authService: AuthService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
-    private route: ActivatedRoute,
+    private route : ActivatedRoute,
     private store : StoreService,
     private ticket: TicketService,
   ) {
+    this.isInIframe = getIsInIframe();
 
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
@@ -134,28 +135,28 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     }).catch(error => this.handleError(error));
   }
 
-    // Hae tiketit kerran.
-    private fetchTickets(courseID: string) {
-      this.ticket.getTicketList(courseID).then(response => {
-        if (!response) return
-        if (response.length > 0) {
-          this.dataSource = new MatTableDataSource(response);
-          this.numberOfQuestions = response.length;
-          // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
-          // jotta sorting toimii.
-          this.dataSource.sort = this.sortQuestions;
-        }
-        return
-        // this.dataSource.paginator = this.paginator;
-      }).catch(error => {
-        this.handleError(error)
-      }).finally(() => {
-        this.isLoaded = true;
-        if (this.isPollingTickets === false) {
-          this.isPollingTickets = true;
-          this.ticketMessage.emit('loaded');
-        }
-      })
+  // Hae tiketit kerran.
+  private fetchTickets(courseID: string) {
+    this.ticket.getTicketList(courseID).then(response => {
+      if (!response) return
+      if (response.length > 0) {
+        this.dataSource = new MatTableDataSource(response);
+        this.numberOfQuestions = response.length;
+        // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
+        // jotta sorting toimii.
+        this.dataSource.sort = this.sortQuestions;
+      }
+      return
+      // this.dataSource.paginator = this.paginator;
+    }).catch(error => {
+      this.handleError(error)
+    }).finally(() => {
+      this.isLoaded = true;
+      if (this.isPolling === false) {
+        this.isPolling = true;
+        this.ticketMessage.emit('loaded');
+      }
+    })
   }
 
   private getDataConsent(): boolean {
@@ -180,12 +181,12 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-    // TODO: lisää virheilmoitusten käsittelyjä.
-    private handleError(error: any) {
-      if (error?.tunnus == 1000 ) {
+  // TODO: lisää virheilmoitusten käsittelyjä.
+  private handleError(error: any) {
+    if (error?.tunnus == 1000 ) {
 
-      }
     }
+  }
 
   public hideArchived() {
     this.dataSourceArchived = new MatTableDataSource();
@@ -225,7 +226,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   private startPollingTickets() {
     this.fetchTicketsSub$?.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
-    const pollRate = this.TICKET_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
 
     // throttleTime(pollTime),
     this.fetchTicketsSub$ = timer(0, pollRate)
@@ -235,26 +236,26 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loggedIn$.unsubscribe();
   }
 
-    // Aseta virheviestejä.
-    private setError(type: string): void {
-      console.log('asetetaan error: ' +type);
-      if (type === 'notParticipant') {
-        this.ticketsError = {
-          title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-          message: $localize`:@@Ei osallistujana-viesti:
-              Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
-          buttonText: ''
-        }
-      } else if  (type === 'notLoggedIn') {
-        this.ticketsError = {
-          title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-          message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
-          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
-        }
-      } else {
-        console.error('Ei virheviestiä tyypille: ' + type);
+  // Aseta virheviestejä.
+  private setError(type: string): void {
+    console.log('asetetaan error: ' +type);
+    if (type === 'notParticipant') {
+      this.ticketsError = {
+        title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+        message: $localize`:@@Ei osallistujana-viesti:
+            Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+        buttonText: ''
       }
+    } else if  (type === 'notLoggedIn') {
+      this.ticketsError = {
+        title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+        message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+        buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
+      }
+    } else {
+      console.error('Ei virheviestiä tyypille: ' + type);
     }
+  }
 
   public stopPolling(): void {
     this.unsubscribe$.next();
@@ -264,19 +265,19 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ticketErrorClickEvent(button: string) {
     this.giveConsent();
-}
+  }
 
-private trackCourseID(): void {
-  this.route.paramMap.subscribe((paramMap: ParamMap) => {
-    var courseID: string | null = paramMap.get('courseid');
-    if (courseID === null) {
-      this.errorMessage = $localize `:@@puuttuu kurssiID:
-          Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
-      throw new Error('Virhe: ei kurssi ID:ä.');
-    }
-    this.courseID = courseID;
-  })
-}
+  private trackCourseID(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      var courseID: string | null = paramMap.get('courseid');
+      if (courseID === null) {
+        this.errorMessage = $localize `:@@puuttuu kurssiID:
+            Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
+        throw new Error('Virhe: ei kurssi ID:ä.');
+      }
+      this.courseID = courseID;
+    })
+  }
 
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
@@ -317,22 +318,21 @@ private trackCourseID(): void {
   private updateLoggedInView(courseIDcandinate: string) {
     this.ticket.getMyCourses().then(response => {
       console.log('Päivitetään logged in view');
-      if (response[0].kurssi !== undefined) {
-        const myCourses: Kurssini[] = response;
-        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-        if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-          this.isParticipant = false;
-          this.authService.setIsParticipant(false);
-          this.setError('notParticipant');
+      if (response[0].kurssi === undefined) return
+      const myCourses: Kurssini[] = response;
+      // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
+      if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+        this.isParticipant = false;
+        this.authService.setIsParticipant(false);
+        this.setError('notParticipant');
+      } else {
+        this.isParticipant = true;
+        this.authService.setIsParticipant(true);
+        this.courseID = courseIDcandinate;
+        if (this.isPolling) {
+          this.loggedIn$.unsubscribe();
         } else {
-          this.isParticipant = true;
-          this.authService.setIsParticipant(true);
-          this.courseID = courseIDcandinate;
-          if (this.isPollingTickets) {
-            this.loggedIn$.unsubscribe();
-          } else {
-            this.startPollingTickets();
-          }
+          this.startPollingTickets();
         }
       }
     }).catch(error => this.handleError(error));

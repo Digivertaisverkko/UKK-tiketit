@@ -1,12 +1,12 @@
 import { ActivatedRoute, Router, ParamMap} from '@angular/router';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Observable, Subject, Subscription, takeUntil, tap, timer }
+import { Subject, Subscription, takeUntil, tap, timer }
     from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -30,22 +30,22 @@ export interface ColumnDefinition {
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
-  public columnDefinitionsFAQ: ColumnDefinition[];
+  public columnDefinitions: ColumnDefinition[];
   public courseID: string = '';
-  public dataSourceFAQ = new MatTableDataSource<UKK>();
+  public dataSource = new MatTableDataSource<UKK>();
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
-  public isPollingFAQ: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
-  public showFilterFAQ: boolean = false;
+
   private fetchFAQsSub$: Subscription | null = null;
+  private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
   private position: number = 0;
-  private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
+  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
 
@@ -55,7 +55,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public ticketViewLink = '';
   public user: User = {} as User;
 
-  @ViewChild('sortFaq', {static: false}) sortFaq = new MatSort();
+  @ViewChild('sortFaq', { static: false }) sort = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
@@ -73,7 +73,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         Kysymykset`);
     this.isInIframe = getIsInIframe();
 
-    this.columnDefinitionsFAQ = [
+    this.columnDefinitions = [
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false }
     ];
@@ -102,31 +102,30 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //hakutoiminto, jossa paginointi kommentoitu pois
-  public applyFilter(event: Event, isTicket: boolean) {
+  public applyFilter(event: Event) {
     let filterValue = (event.target as HTMLInputElement).value;
     filterValue = filterValue.trim().toLowerCase();
-      this.dataSourceFAQ.filter = filterValue;
+      this.dataSource.filter = filterValue;
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
       }*/
   }
-
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
     this.ticket.getFAQ(courseID).then(response => {
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
-          this.dataSourceFAQ = new MatTableDataSource(response);
-          this.dataSourceFAQ.sort = this.sortFaq;
+          this.dataSource = new MatTableDataSource(response);
+          this.dataSource.sort = this.sort;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
         return
       })
       .catch(error => this.handleError(error))
       .finally(() => {
-        if (this.isPollingFAQ === false) {
-          this.isPollingFAQ = true;
+        if (this.isPolling === false) {
+          this.isPolling = true;
           if (this.isTicketsLoaded === true || this.isParticipant === false) {
             this.isLoaded = true;
             this.restorePosition();
@@ -137,7 +136,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getDisplayedColumnFAQ(): string[] {
-    return this.columnDefinitionsFAQ
+    return this.columnDefinitions
       .filter(cd => !this.isPhonePortrait || cd.showMobile)
       .map(cd => cd.def);
   }
@@ -152,7 +151,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public newTicketMessage(event: any) {
     if (event === 'loaded') {
       this.isTicketsLoaded = true;
-      if (this.isPollingFAQ === true) {
+      if (this.isPolling === true) {
         this.isLoaded = true;
         this.restorePosition();
       }
@@ -260,7 +259,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private startPollingFAQ(): void {
     this.fetchFAQsSub$?.unsubscribe();
     console.warn('Aloitetaan UKK pollaus.');
-    const pollRate = this.FAQ_POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
     this.fetchFAQsSub$ = timer(0, pollRate)
         .pipe(
           takeUntil(this.unsubscribe$)
