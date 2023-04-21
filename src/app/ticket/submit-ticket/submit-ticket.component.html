@@ -144,6 +144,16 @@
 
       <div class="spacer"></div>
 
+      <button class="cancel-button"
+              [disabled]="state!=='editing'"
+              i18n="@@Peru"
+              mat-raised-button
+              *ngIf="editExisting"
+              [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId"
+              >
+        Peru
+      </button>
+
       <button class="submit-button"
               *ngIf="state==='editing'"
               color="primary"

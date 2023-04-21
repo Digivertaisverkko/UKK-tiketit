@@ -32,7 +32,7 @@ export class SubmitTicketComponent implements OnInit {
   @Input() public fileInfo: FileInfo[] = [];
   @Input() public attachmentsMessages: string = '';
   private commentID: string | null = null;
-  private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
+  public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public courseName: string = '';
   public currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
