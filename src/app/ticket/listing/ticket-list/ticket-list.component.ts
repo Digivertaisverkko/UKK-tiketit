@@ -57,16 +57,15 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public isPhonePortrait: boolean = false;
   public user: User = {} as User;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
-
   public noDataConsent: boolean = false;
   public numberOfQuestions: number = 0;
   public showFilterQuestions: boolean = false;
+  public ticketsError;
+
   private fetchTicketsSub$: Subscription | null  = null;
   private loggedIn$ = new Subscription;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
-
-  public ticketsError;
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortArchived', {static: false}) sortArchived = new MatSort();
@@ -151,9 +150,9 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       }).catch(error => {
         this.handleError(error)
       }).finally(() => {
+        this.isLoaded = true;
         if (this.isPollingTickets === false) {
           this.isPollingTickets = true;
-          this.isLoaded = true;
           this.ticketMessage.emit('loaded');
         }
       })
@@ -238,6 +237,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Aseta virheviestejä.
     private setError(type: string): void {
+      console.log('asetetaan error: ' +type);
       if (type === 'notParticipant') {
         this.ticketsError = {
           title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
@@ -248,8 +248,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       } else if  (type === 'notLoggedIn') {
         this.ticketsError = {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-          message: $localize`:@@Ei osallistujana-viesti:
-              Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+          message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
           buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
         }
       } else {
@@ -273,7 +272,6 @@ private trackCourseID(): void {
     if (courseID === null) {
       this.errorMessage = $localize `:@@puuttuu kurssiID:
           Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
-      this.isLoaded = true;
       throw new Error('Virhe: ei kurssi ID:ä.');
     }
     this.courseID = courseID;
@@ -286,6 +284,7 @@ private trackCourseID(): void {
         this.setEmptyTicketError();
         this.updateLoggedInView(this.courseID);
       } else if (response === false ) {
+        this.isLoaded = true;
         this.setError('notLoggedIn');
       }
     });

@@ -1,4 +1,3 @@
-<div class="view-header">
 
 <section *ngIf="isParticipant">
 
@@ -323,13 +322,13 @@
 
 </section>
 
-  <app-error-card
-      buttonText="{{ticketsError.buttonText}}"
-      (clickEvent)="ticketErrorClickEvent($event)"
-      *ngIf="isLoaded && ticketsError.title.length > 0"
-      #ticketError
-      i18n-title="{{ ticketsError.title }}"
-      message="{{ ticketsError.message }}"
-      title="{{ ticketsError.title }}"
-      >
-  </app-error-card>
+<app-error-card
+    buttonText="{{ticketsError.buttonText}}"
+    (clickEvent)="ticketErrorClickEvent($event)"
+    *ngIf="isLoaded && ticketsError.title.length > 0"
+    #ticketError
+    i18n-title="{{ ticketsError.title }}"
+    message="{{ ticketsError.message }}"
+    title="{{ ticketsError.title }}"
+    >
+</app-error-card>
