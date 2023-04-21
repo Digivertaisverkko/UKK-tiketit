@@ -55,7 +55,10 @@
       {{ headline }}
     </h2>
 
-    <app-search-bar (searchResult)="applyFilter($event, true)"></app-search-bar>
+    <app-search-bar (searchResult)="applyFilter($event, true)"
+        i18n="@@Suodata kysymyksiä">
+      Suodata kysymyksiä
+    </app-search-bar>
 
   <!---
     <ng-container *ngIf="numberOfQuestions !== 0">
@@ -406,22 +409,12 @@
   </h2>
 
   <ng-container *ngIf="numberOfFAQ !== 0">
-    <button aria-label="Suodata kysymyksiä"
-            class="filter-icon-btn"
-            (click)="showFilterFAQ = true"
-            i18n-aria-label="@@Suodata kysymyksiä"
-            mat-icon-button
-            *ngIf="!showFilterFAQ; else filterFAQ"
-            >
-      <mat-icon>search</mat-icon>
-    </button>
-
-  <ng-template #filterFAQ>
-      <mat-form-field class="filteringField">
-        <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
-        <input matInput (keyup)="applyFilter($event, false)" placeholder="" #input>
-      </mat-form-field>
-    </ng-template>
+    <app-search-bar
+        i18n="@@Suodata kysymyksiä"
+        (searchResult)="applyFilter($event, false)"
+        >
+      Suodata kysymyksiä
+    </app-search-bar>
   </ng-container>
 
 </div>
