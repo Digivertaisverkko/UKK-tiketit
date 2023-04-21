@@ -7,7 +7,8 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
+  <app-to-beginning-button [disabled]="state==='sending'">
+  </app-to-beginning-button>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
@@ -15,7 +16,6 @@
         (ngSubmit)="sendTicket()">
 
     <div class="ticket-header">
-
       <mat-form-field appearance="fill" class="sub-header">
         <textarea aria-label="Otsikko"
                   #autosize="cdkTextareaAutosize"
@@ -108,19 +108,20 @@
     </section>
 
     <h2 class="sub-header"><span i18n="@@Viesti">Viesti</span><span>*</span></h2>
-    <app-editor [disabled]="state!=='editing'"
-                [(editorContent)]="message">
+    <app-editor [disabled]="state!=='editing'" [(editorContent)]="message">
     </app-editor>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message"
-        i18n="@@Uuden kysymyksen lähettäminen onnistui">
-            Uuden kysymyksen lähettäminen onnistui.
+    <p  class="theme-success-message"
+        i18n="@@Uuden kysymyksen lähettäminen onnistui"
+        *ngIf="state==='sending' || state==='done'">
+      Uuden kysymyksen lähettäminen onnistui.
     </p>
 
-    <p class='attachments-message' *ngIf="state==='sending'"
-        i18n="@@Lähetetään liitetiedostoja">
-          Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
+    <p  class="attachments-message"
+        i18n="@@Lähetetään liitetiedostoja"
+        *ngIf="state==='sending'">
+      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
     </p>
 
     <app-error-card i18n-title="@@Virhe"
@@ -132,19 +133,20 @@
 
     <div class="theme-actions">
 
-<!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa tikettiä. -->
+      <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa
+        tikettiä. -->
       <button (click)="uploadClick.next('add')"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
-              mat-raised-button
-              >
+              mat-raised-button>
         <mat-icon>attach_file</mat-icon>
         Liitä tiedostoja
       </button>
 
       <div class="spacer"></div>
 
-      <div class="required-span">*&nbsp;
+      <div class="required-span">
+        *&nbsp;
         <span i18n="@@Pakollinen">Pakollinen</span>
       </div>
 
@@ -153,8 +155,7 @@
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
-              [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId"
-              >
+              [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId">
         Peru
       </button>
 
@@ -168,21 +169,19 @@
       </button>
 
       <button class="submit-button"
-              *ngIf="state==='done'"
               (click)="goBack()"
               color="primary"
-              mat-raised-button>
+              mat-raised-button
+              *ngIf="state==='done'">
         OK
       </button>
 
     </div>
 
     <!-- (fileListOutput)="fileList = $event" -->
-    <app-edit-attachments
-        [uploadClicks]="uploadClick.asObservable()"
-        (attachmentsMessages)="attachmentsMessages = $event"
-        [oldAttachments]="oldAttachments"
-        >
+    <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          [oldAttachments]="oldAttachments"
+                          [uploadClicks]="uploadClick.asObservable()">
     </app-edit-attachments>
 
   </form>

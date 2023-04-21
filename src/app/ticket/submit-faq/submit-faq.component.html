@@ -103,25 +103,29 @@
     </app-editor>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message"
-      i18n="@@UKK lähettäminen onnistui">
+    <p  class="theme-success-message"
+        i18n="@@UKK lähettäminen onnistui"
+        *ngIf="state==='sending' || state==='done'">
       Uuden usein kysytyn kysymyksen lähettäminen onnistui.
     </p>
 
-    <p class='attachments-message' *ngIf="state==='sending'"
-      i18n="@@Lähetetään liitetiedostoja">
+    <p  class="attachments-message"
+        i18n="@@Lähetetään liitetiedostoja"
+        *ngIf="state==='sending'">
       Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
     </p>
 
     <app-error-card i18n-title="@@Virhe"
-      message="{{ errorMessage }}"
-      *ngIf="errorMessage.length > 0"
-      [styles]="{ margin: '1em 0 1em 0' }"
-      title="Virhe">
+                    message="{{ errorMessage }}"
+                    *ngIf="errorMessage.length > 0"
+                    [styles]="{ margin: '1em 0 1em 0;' }"
+                    title="Virhe">
     </app-error-card>
 
     <div class="theme-actions">
 
+      <!-- ! Toistaiseksi ei lisätä tiedostoja, jos muokataan olemassa olevaa
+        tikettiä. -->
       <button (click)="uploadClick.next('add')"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
@@ -132,7 +136,8 @@
 
       <div class="spacer"></div>
 
-      <div class="required-span">*&nbsp;
+      <div class="required-span">
+        *&nbsp;
         <span i18n="@@Pakollinen">Pakollinen</span>
       </div>
 
@@ -141,8 +146,7 @@
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
-              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId"
-              >
+              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId">
         Peru
       </button>
 
@@ -159,17 +163,16 @@
               (click)="goBack()"
               color="primary"
               mat-raised-button
-              *ngIf="state==='done'"
-              >
+              *ngIf="state==='done'">
         OK
       </button>
 
     </div>
 
-    <app-edit-attachments
-        [oldAttachments]="oldAttachments"
-        [uploadClicks]="uploadClick.asObservable()"
-        >
+    <!-- (fileListOutput)="fileList = $event" -->
+    <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          [oldAttachments]="oldAttachments"
+                          [uploadClicks]="uploadClick.asObservable()">
     </app-edit-attachments>
 
   </form>
