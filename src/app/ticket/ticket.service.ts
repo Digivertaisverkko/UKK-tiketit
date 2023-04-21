@@ -118,7 +118,6 @@ export class TicketService {
     } else {
       body = { viesti: comment, tila: state }
     }
-
     try {
       // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));

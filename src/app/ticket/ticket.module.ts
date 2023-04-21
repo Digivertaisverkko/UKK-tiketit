@@ -26,6 +26,7 @@ import { ViewAttachmentsComponent } from './components/view-attachments/view-att
 import { EditAttachmentsComponent } from './components/edit-attachments/edit-attachments.component';
 import { RefreshDialogComponent } from '../core/refresh-dialog/refresh-dialog.component';
 import { CommentComponent } from './components/comment/comment.component';
+import { TicketListComponent } from './listing/ticket-list/ticket-list.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { CommentComponent } from './components/comment/comment.component';
     TicketViewComponent,
     ViewAttachmentsComponent,
     CommentComponent,
+    TicketListComponent,
   ],
   imports: [
     CommonModule,

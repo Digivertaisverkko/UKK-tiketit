@@ -1,406 +1,49 @@
 <mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded">
 </mat-progress-bar>
 
-  <!----------- Tiketit ------------------------------------------------------->
+<div class="view-header">
+  <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
+  <h1 class="main-header"
+      id="courseName"
+      *ngIf="courseName.length > 0 && !isInIframe">
+    <span>{{courseName}}</span>
+  </h1>
 
-  <div class="view-header">
-    <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-    <h1 class="main-header"
-        id="courseName"
-        *ngIf="courseName.length > 0 && !isInIframe">
-      <span>{{courseName}}</span>
-    </h1>
+  <div class="spacer"></div>
 
-    <div class="spacer"></div>
-
-      <button (click)="openInNewTab()"
-              class="embedded-button"
-              mat-raised-button
-              *ngIf="isInIframe"
-              >
-        <a target="_blank" i18n="@@Avaa uuteen välilehteen">
-          Avaa uuteen välilehteen
-        </a>
-      </button>
-
-    <button aria-label="Kurssin asetukset"
-            i18n-aria-label="@@Kurssin asetukset"
-            class="settings-button"
-            mat-icon-button
-            *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
-            [routerLink]="'/course/' + courseID + '/settings'"
-            >
-      <mat-icon class="settings-icon">settings</mat-icon>
-    </button>
-
-    <button aria-label="Profiili"
-            class="settings-button"
-            (click)="stopPolling()"
-            i18n-aria-label="@@Profiili"
-            mat-icon-button
-            *ngIf="isParticipant && isInIframe"
-            [routerLink]="'/course/' + courseID + '/profile'"
-            >
-      <mat-icon class="settings-icon">account_circle</mat-icon>
-    </button>
-  </div>
-
-  <section *ngIf="isParticipant">
-
-  <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
-    hakukentälle tilaa. -->
-  <!-- <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div> -->
-  <div class="input-field-wrapper">
-    <h2 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">
-      {{ headline }}
-    </h2>
-
-    <app-search-bar (searchResult)="applyFilter($event, true)"
-        i18n="@@Suodata kysymyksiä">
-      Suodata kysymyksiä
-    </app-search-bar>
-
-  <!---
-    <ng-container *ngIf="numberOfQuestions !== 0">
-      <button aria-label="Suodata kysymyksiä"
-              class="filter-icon-btn"
-              (click)="showFilterQuestions = true"
-              i18n-aria-label="@@Suodata kysymyksiä"
-              mat-icon-button
-              *ngIf="!showFilterQuestions; else filterQuestions"
-              type="search"
-              >
-        <mat-icon>search</mat-icon>
-      </button>
-
-      <ng-template #filterQuestions>
-        <mat-form-field class="filteringField">
-          <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
-          <input matInput type="search" (keyup)="applyFilter($event, true)" placeholder="" #input>
-        </mat-form-field>
-      </ng-template>
-    </ng-container>
-
-    -->
-
-  </div>
-
-  <table  class="theme-table mat-elevation-z1"
-          [dataSource]="dataSource"
-          [hidden]="dataSource.filteredData.length === 0"
-          matSort
-          matSortActive="aikaleima"
-          matSortDirection="desc"
-          mat-table
-          #sortQuestions="matSort"
-          >
-
-    <ng-container matColumnDef="tila">
-      <th i18n-sortActionDescription="@@Järjestä tilan mukaan"
-          i18n="@@Tila"
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Järjestä tilan mukaan"
-          >
-        Tila
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
-        <a  aria-disabled="true"
-            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-            tabindex="-1"
-          >
-          <div class="ticket-state-wrapper">
-            <div class="icon-wrapper">
-              <img  alt=""
-                    class="icon"
-                    height="100%"
-                    src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
-                    width="100%"
-              >
-            </div>
-            <!--  Opiskelijalle tilan string on eri, mutta sama id,
-                  joten älä käytä id:ä. -->
-            <div [style.font-weight]="element.tila === '1-Lukematon' ||
-                element.tila === '1-Unread' ? 600 : 400">
-              {{ element.tila.substring(2) }}
-            </div>
-          </div>
-        </a>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="otsikko">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header
-          i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-          sortActionDescription="Järjestä otsikon mukaan">
-        Otsikko
-      </th>
-      <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
-      <td mat-cell *matCellDef="let element" >
-        <a class="a-left-padding"
-            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
-            {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko |
-            slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
-        </a>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="aloittajanNimi">
-      <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
-          sortActionDescription="Järjestä lähettäjän mukaan"
-          i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"
-          i18n="@@Lähettäjä">
-        Lähettäjä
-      </th>
-      <td class="cell-align-right" mat-cell *matCellDef="let element">
-        <a  aria-disabled="true" disabled
-            class="cell-align-right"
-            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-            tabindex="-1"
-            >
-          {{ element.aloittajanNimi }}
-        </a>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="aikaleima">
-      <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
-          sortActionDescription="Järjestä luodun päivämäärän mukaan"
-          i18n-sortActionDescription="@@Järjestä luodun mukaan"
-          i18n="@@Luotu">
-        Luotu
-      </th>
-      <td mat-cell *matCellDef="let element" class="cell-align-right">
-        <a  aria-disabled="true"
-            class="cell-align-right"
-            [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-            tabindex="-1"
-            >
-          {{element.aikaleima | date: 'shortDate' }}
-        </a>
-      </td>
-    </ng-container>
-
-    <!--  ***** Rivit **** -->
-
-    <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()">
-      <!-- <a [routerLink]="'/course/' + courseID + '/ticket-view/' + row.id"></a> -->
-    </tr>
-
-  </table>
-
-  <p  class="no-items-message" i18n="@@Ei tuloksia"
-      *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0">
-    Suodattimella ei löytynyt tuloksia.
-  </p>
-
-    <div class="no-items-box" *ngIf="numberOfQuestions === 0" mat-elevation-z1>
-      <p i18n="@@Ei yhtään kysymystä esitetty"
-        *ngIf="user.asema === 'opettaja' || user.asema === 'admin';
-            else noTicketsStudent" >
-        Yhtään kysymystä ei ole esitetty.
-      </p>
-      <ng-template #noTicketsStudent>
-        <p i18n="@@Et ole lähettänyt yhtään kysymystä.">
-          Et ole lähettänyt yhtään kysymystä.
-        </p>
-      </ng-template>
-    </div>
-
-  <!-------------- Arkistoidut ------------------------------------------------>
-
-  <h2 class="sub-header" i18n="@@Arkistoidut kysymykset" *ngIf="archivedCount > 0">
-    Arkistoidut kysymykset
-  </h2>
-
-  <table  class="theme-table mat-elevation-z1"
-          mat-table
-          [dataSource]="dataSourceArchived"
-          [hidden]="dataSourceArchived.filteredData.length === 0"
-          matSort
-          matSortActive="aikaleima"
-          matSortDirection="desc"
-          #sortArchived="matSort"
-          >
-<ng-container matColumnDef="tila">
-  <th i18n-sortActionDescription="@@Järjestä tilan mukaan"
-      i18n="@@Tila"
-      mat-sort-header
-      *matHeaderCellDef
-      mat-header-cell
-      sortActionDescription="Järjestä tilan mukaan"
-      >
-    Tila
-  </th>
-  <td mat-cell *matCellDef="let element">
-    <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
-    <a aria-disabled="true"
-      [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-      tabindex="-1"
-      >
-      <div class="ticket-state-wrapper">
-        <div class="icon-wrapper">
-          <img alt=""
-              class="icon"
-              height="100%"
-              src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
-              width="100%"
-          >
-        </div>
-        <div>{{ element.tila.substring(2) }}</div>
-      </div>
-    </a>
-  </td>
-</ng-container>
-
-<ng-container matColumnDef="otsikko">
-  <th mat-header-cell *matHeaderCellDef mat-sort-header
-      i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-      sortActionDescription="Järjestä otsikon mukaan">
-    Otsikko
-  </th>
-  <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
-  <td mat-cell *matCellDef="let element" >
-    <a class="a-left-padding"
-        [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-        >
-          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko |
-              slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
-    </a>
-  </td>
-</ng-container>
-
-<ng-container matColumnDef="aloittajanNimi">
-  <th class="align-right"
-      i18n="@@Lähettäjä"
-      i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Järjestä lähettäjän mukaan"
-      >
-    Lähettäjä
-  </th>
-  <td class="cell-align-right" mat-cell *matCellDef="let element">
-    <a  aria-disabled="true"
-        class="cell-align-right"
-        disabled
-        [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-        tabindex="-1"
-        >
-      {{ element.aloittajanNimi }}
-    </a>
-  </td>
-</ng-container>
-
-<ng-container matColumnDef="aikaleima">
-  <th class="align-right"
-      i18n-sortActionDescription="@@Järjestä luodun mukaan"
-      i18n="@@Luotu"
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      sortActionDescription="Järjestä luodun päivämäärän mukaan"
-      >
-    Luotu
-  </th>
-  <td mat-cell *matCellDef="let element" class="cell-align-right">
-    <a  aria-disabled="true"
-        class="cell-align-right"
-        [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-        tabindex="-1"
-        >
-      {{element.aikaleima | date: 'shortDate' }}
-    </a>
-  </td>
-</ng-container>
-
-<!--  ***** Rivit **** -->
-
-<tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
-
-<tr mat-row *matRowDef="let row; columns: getDisplayedColumn()">
-  <!-- <a [routerLink]="'/course/' + courseID + '/ticket-view/' + row.id"></a> -->
-</tr>
-
-</table>
-
-<p  class="no-items-message" i18n="@@Ei tuloksia"
-    *ngIf="dataSourceArchived.filteredData.length === 0 &&
-        archivedCount > 0">
-    Suodattimella ei löytynyt tuloksia.
-</p>
-
-  <!--------------------------------------------------------------------------->
-
-
-  <!-- Jos halutaan paginator -->
-  <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10"
-          #paginatorQuestions showFirstLastButtons
-      aria-label="Valitse kysymysten sivu"></mat-paginator> -->
-
-  <div  class="buttons-wrapper theme-actions"
-        [ngStyle]="numberOfQuestions === 0 ?
-        {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
-        >
-
-    <ng-container *ngIf="user.asema !== 'opiskelija'">
-
-      <button class="button"
-              (click)="fetchArchivedTickets()"
-              i18n="@@Näytä arkistoidut"
-              mat-raised-button
-              *ngIf="archivedCount === 0;
-                  else hideArchivedBtn"
-              >
-          Näytä arkistoidut
-      </button>
-
-      <ng-template #hideArchivedBtn>
-        <button class="button"
-                (click)="hideArchived()"
-                i18n="@@Piilota arkistoidut"
-                mat-raised-button
-                >
-            Piilota arkistoidut
-        </button>
-      </ng-template>
-
-    </ng-container>
-
-    <div class="spacer"></div>
-
-    <button class="button"
-            (click)="saveRedirectUrl()"
-            color="primary"
+    <button (click)="openInNewTab()"
+            class="embedded-button"
             mat-raised-button
-            [routerLink]="'/course/' + this.courseID + '/submit'"
-            target="_blank"
+            *ngIf="isInIframe"
             >
-      <a  i18n="@@Kysy opettajilta"
-          [routerLink]="'/course/' + this.courseID + '/submit'"
-          >
-        Kysy opettajilta
+      <a target="_blank" i18n="@@Avaa uuteen välilehteen">
+        Avaa uuteen välilehteen
       </a>
     </button>
-  </div>
 
-  </section>
+  <button aria-label="Kurssin asetukset"
+          i18n-aria-label="@@Kurssin asetukset"
+          class="settings-button"
+          mat-icon-button
+          *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
+          [routerLink]="'/course/' + courseID + '/settings'"
+          >
+    <mat-icon class="settings-icon">settings</mat-icon>
+  </button>
 
-    <app-error-card
-        buttonText="{{ticketsError.buttonText}}"
-        (clickEvent)="ticketErrorClickEvent($event)"
-        *ngIf="isLoaded && ticketsError.title.length > 0"
-        #ticketError
-        i18n-title="{{ ticketsError.title }}"
-        message="{{ ticketsError.message }}"
-        title="{{ ticketsError.title }}"
-        >
-    </app-error-card>
+  <button aria-label="Profiili"
+  class="settings-button"
+  (click)="stopPolling()"
+  i18n-aria-label="@@Profiili"
+  mat-icon-button
+  *ngIf="isParticipant && isInIframe"
+  [routerLink]="'/course/' + courseID + '/profile'"
+  >
+<mat-icon class="settings-icon">account_circle</mat-icon>
+</button>
+</div>
+
+<!-- tikettilista tähän -->
 
 <!------------ UKK:t ---------------------------------------------------------->
 
