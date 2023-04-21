@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators
+  } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -8,10 +10,6 @@ import { KentanTiedot, Liite, TicketService, UusiTiketti, AddTicketResponse
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { Title } from '@angular/platform-browser';
-
-interface TiketinKentat extends KentanTiedot {
-  arvo: string;
-}
 
 interface FileInfo {
   filename: string;
@@ -43,14 +41,23 @@ export class SubmitTicketComponent implements OnInit {
   public message: string = '';
   public oldAttachments: Liite[] = [];
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public title: string = '';
-  public ticketFields: TiketinKentat[] = [];
+  public ticketFields: KentanTiedot[] = [];
+  public ticketForm: FormGroup = this.buildForm();
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
   public userName: string | null = '';
 
+  get additionalFields(): FormArray {
+    return this.ticketForm.controls["additionalFields"] as FormArray;
+  }
+
+  get title(): FormControl {
+    return this.ticketForm.get('title') as FormControl;
+  }
+
   constructor(private auth: AuthService,
+              private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
               private ticketService: TicketService,
@@ -71,36 +78,70 @@ export class SubmitTicketComponent implements OnInit {
       this.courseName = response;
     }).catch(() => {
     });
-    this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
-      this.ticketFields = response as TiketinKentat[];
-      for (let field of this.ticketFields) {
-        field.arvo = '';
-      }
-    });
-    if (this.ticketId != null) this.fetchTicketInfo();
+
+    if (this.ticketId === null) {
+      this.fetchAdditionalFields();
+    } else {
+      this.fetchTicketInfo(this.ticketId);
+    }
   }
 
-  private fetchTicketInfo() {
-    if (this.ticketId == null) return
-    this.ticketService.getTicketInfo(this.ticketId).then(response => {
-      if (response?.id) {
-        this.title = response.otsikko;
-        this.message = response.viesti;
-        this.commentID = response.kommenttiID;
-        this.oldAttachments = response.liitteet ?? [];
-
-        if (response.kentat !== undefined ) {
-          for (let tiketinKentta of response.kentat) {
-            for (let uusiKentta of this.ticketFields) {
-              if (tiketinKentta.otsikko === uusiKentta.otsikko) {
-                uusiKentta.arvo = tiketinKentta.arvo;
-                break;
-              }
-            }
-          }
-        }
+  private buildAdditionalFields(): void {
+    // Luodaan lomakkeelle controllit
+    for (const field of this.ticketFields) {
+      let validators;
+      if (field.pakollinen) {
+        validators = Validators.required, Validators.maxLength(50);
       }
-    }).catch(e => {})
+      this.additionalFields.push(new FormControl('', validators));
+    }
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      title: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)
+        ])
+      ],
+      additionalFields: this.formBuilder.array([])
+    });
+  }
+
+  private createTicket(): UusiTiketti {
+    let ticket: UusiTiketti = {} as UusiTiketti;
+    ticket.otsikko = this.ticketForm.controls['title'].value;
+    ticket.viesti = this.message;
+    ticket.kentat = [];
+    for (let i = 0; i < this.ticketFields.length; i++) {
+      ticket.kentat.push({
+        id: Number(this.ticketFields[i].id),
+        arvo: this.additionalFields.controls[i].value
+      });
+    }
+    return ticket;
+  }
+
+  private fetchAdditionalFields(): void {
+    if (this.courseId == null) throw new Error('Ei kurssi ID:ä.');
+    this.ticketService.getTicketFieldInfo(this.courseId)
+    .then((response) => {
+      this.ticketFields = response as KentanTiedot[];
+      this.buildAdditionalFields();
+    });
+  }
+
+  // TODO: lisäkenttien muokkaaminen, kun backend tarjoaa rajapinnan niiden hakemiseen
+  private fetchTicketInfo(ticketId: string): void {
+    this.ticketService.getTicketInfo(ticketId)
+    .then(response => {
+      this.ticketForm.controls['title'].setValue(response.otsikko);
+      this.message = response.viesti;
+      this.commentID = response.kommenttiID;
+      this.oldAttachments = response.liitteet ?? [];
+    }).catch(e => {});
   }
 
   public goBack() {
@@ -119,13 +160,9 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public sendTicket(): void {
-    let ticket: UusiTiketti = {} as UusiTiketti;
-    ticket.otsikko = this.title;
-    ticket.viesti = this.message;
-    ticket.kentat = this.ticketFields.map((field) => {
-      return { id: Number(field.id), arvo: field.arvo }
-    });
-    if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
+    let ticket = this.createTicket();
+
+    if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.'); }
     if (this.ticketId != null) {
       this.submitEditedTicket(ticket);
     } else {
@@ -134,29 +171,31 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private submitEditedTicket(ticket: UusiTiketti) {
-    if (this.ticketId === null) return
+    if (this.ticketId === null) return;
     this.ticketService.editTicket(this.ticketId, ticket)
       .then( () => {
-        if (this.oldAttachments.length === 0) this.goBack()
-        if (this.ticketId === null || this.commentID === null) throw Error
+        if (this.oldAttachments.length === 0) this.goBack();
+        if (this.ticketId === null || this.commentID === null) throw Error;
         this.sendFiles(this.ticketId, this.commentID);
       }
       ).catch(error => {
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-            Kysymyksen lähettäminen epäonnistui` + '.'
+            Kysymyksen lähettäminen epäonnistui` + '.';
         this.state = 'editing';
-      })
+        this.ticketForm.enable();
+      });
   }
 
   private submitNewTicket(ticket: UusiTiketti) {
-    if (this.courseId === null) return
+    if (this.courseId === null) return;
     this.ticketService.addTicket(this.courseId, ticket)
     .then(response => {
-      if (this.attachments.fileInfoList.length === 0) this.goBack()
+      if (this.attachments.fileInfoList.length === 0) this.goBack();
       if (response == null || response?.success !== true) {
         this.state = 'editing';
+        this.ticketForm.enable();
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-            Kysymyksen lähettäminen epäonnistui` + '.'
+            Kysymyksen lähettäminen epäonnistui` + '.';
         throw new Error('Kysymyksen lähettäminen epäonnistui.');
       }
       if (response?.uusi == null) {
@@ -170,13 +209,15 @@ export class SubmitTicketComponent implements OnInit {
     }).catch( error => {
       // ? lisää eri virhekoodeja?
       this.state = 'editing';
+      this.ticketForm.enable();
       this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-          Kysymyksen lähettäminen epäonnistui` + '.'
+          Kysymyksen lähettäminen epäonnistui` + '.';
     });
   }
 
   private sendFiles(ticketID: string, commentID: string) {
     this.state = 'sending';
+    this.ticketForm.disable();
     this.attachments.sendFilesPromise(ticketID, commentID).
       then((res) => {
         this.goBack();
@@ -186,12 +227,13 @@ export class SubmitTicketComponent implements OnInit {
           ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
       console.log('submit-ticket: saatiin virhe: ' + res);
       this.state = 'editing';
+      this.ticketForm.enable();
     })
     .finally(() => {
       console.log('Komponentti: Kaikki valmiita!');
       // Kommentoi alla olevat, jos haluat, että jää näkyviin.
       // this.attachments.clear();
-    })
+    });
   }
 
 }
