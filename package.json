@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^15.0.1",
     "@angular/platform-browser-dynamic": "^15.0.1",
     "@angular/router": "^15.0.1",
-    "@codemirror/lang-javascript": "^6.1.5",
+    "@codemirror/lang-javascript": "^6.1.7",
     "@codemirror/language": "^6.6.0",
     "@lezer/highlight": "^1.1.4",
     "codemirror": "^6.0.1",
@@ -37,7 +37,7 @@
     "prosemirror-view": "^1.30.1",
     "rxjs": "~7.5.0",
     "sha.js": "^2.4.11",
-    "style-mod": "^4.0.2",
+    "style-mod": "^4.0.3",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
