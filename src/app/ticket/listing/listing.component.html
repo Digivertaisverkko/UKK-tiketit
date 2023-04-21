@@ -120,7 +120,10 @@
                     width="100%"
               >
             </div>
-            <div [style.font-weight]="element.tilaID === 1 ? 600 : 400">
+            <!--  Opiskelijalle tilan string on eri, mutta sama id,
+                  joten älä käytä id:ä. -->
+            <div [style.font-weight]="element.tila === '1-Lukematon' ||
+                element.tila === '1-Unread' ? 600 : 400">
               {{ element.tila.substring(2) }}
             </div>
           </div>
