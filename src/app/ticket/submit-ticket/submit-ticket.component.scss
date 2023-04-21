@@ -1,13 +1,21 @@
 @import "/src/variables.scss";
 
-form { margin-top: -6px; }
-mat-form-field { min-width: 21rem; }
+form {
+  margin-top: -6px;
+}
+mat-form-field {
+  min-width: 21rem;
+}
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+.vertical-spacer {
+  height: var(--margin-top-embedded);
+}
 
 .ticket-header {
   margin-bottom: -20px;
-  mat-form-field { flex-grow: 3; }
+  mat-form-field {
+    flex-grow: 3;
+  }
   .user-info-block {
     margin-bottom: 1.5rem;
     padding-top: 1.1rem;
@@ -17,7 +25,9 @@ mat-form-field { min-width: 21rem; }
 .short-field-wrapper {
   width: 24em;
 
-  mat-form-field { margin-top: 2px; }
+  mat-form-field {
+    margin-top: 2px;
+  }
 }
 
 .attachments-message {
@@ -30,9 +40,14 @@ mat-form-field { min-width: 21rem; }
 }
 
 @media (min-width: $XSmall) {
-  .submit-ticket { padding-right: $right-padding; }
+  .submit-ticket {
+    padding-right: $right-padding;
+  }
 }
 
 @media (max-width: $XSmall) {
-  .user-info-block, .mat-mdc-card-avatar { display: none; }
+  .user-info-block,
+  .mat-mdc-card-avatar {
+    display: none;
+  }
 }
