@@ -8,7 +8,12 @@
 
 <div class="search-bar">
 
-  <input type="text" class="input" #input placeholder="&nbsp;">
+  <input  class="input"
+          #input
+          type="text" 
+          (keyup)="searchResult.emit($event)"
+          placeholder="&nbsp;"
+          >
   <span class="label">Suodata kysymyksiä</span>
   <span class="highlight"></span>
   <button class="search-btn" (click)="focus()" mat-icon-button>

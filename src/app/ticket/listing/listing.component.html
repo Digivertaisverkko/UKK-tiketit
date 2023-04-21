@@ -55,7 +55,7 @@
       {{ headline }}
     </h2>
 
-    <app-search-bar></app-search-bar>
+    <app-search-bar (searchResult)="applyFilter($event, true)"></app-search-bar>
 
   <!---
     <ng-container *ngIf="numberOfQuestions !== 0">

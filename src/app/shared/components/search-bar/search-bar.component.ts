@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-search-bar',
@@ -9,6 +9,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 export class SearchBarComponent {
 
   @ViewChild('input') searchInput!: ElementRef<HTMLInputElement>;
+  @Output() searchResult = new EventEmitter<Event>();
 
   public focus() {
     this.searchInput.nativeElement.focus();
