@@ -69,6 +69,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MenuSrcComponent,
     ToBeginningButtonComponent,
     SafeHtmlPipe,
+    ReactiveFormsModule,
     SearchBarComponent,
   ],
   providers: [
