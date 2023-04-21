@@ -138,7 +138,8 @@
       <button (click)="uploadClick.next('add')"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
-              mat-raised-button>
+              mat-raised-button
+              type="button">
         <mat-icon>attach_file</mat-icon>
         Liitä tiedostoja
       </button>
@@ -155,7 +156,8 @@
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
-              [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId">
+              [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId"
+              type="button">
         Peru
       </button>
 
@@ -172,7 +174,8 @@
               (click)="goBack()"
               color="primary"
               mat-raised-button
-              *ngIf="state==='done'">
+              *ngIf="state==='done'"
+              type="button">
         OK
       </button>
 
