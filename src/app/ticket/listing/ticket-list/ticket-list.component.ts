@@ -24,7 +24,7 @@ enum IconFile {
   'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
   "Arkistoitu"
 }
-    
+
 export interface SortableTicket {
   id: number;
   otsikko: string;
@@ -69,7 +69,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('sortQuestions', {static: false}) sortQuestions = new MatSort();
   @ViewChild('sortArchived', {static: false}) sortArchived = new MatSort();
-  
+
   constructor(
     private authService: AuthService,
     private dialog: MatDialog,
@@ -183,7 +183,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     // TODO: lisää virheilmoitusten käsittelyjä.
     private handleError(error: any) {
       if (error?.tunnus == 1000 ) {
-  
+
       }
     }
 
@@ -321,19 +321,13 @@ private trackCourseID(): void {
         const myCourses: Kurssini[] = response;
         // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-          console.log('ei olla kurssilla');
-          console.log('kurssi id: ' + this.courseID);
-
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
           this.setError('notParticipant');
         } else {
-          console.log('kurssi id: ' + this.courseID);
-          console.log('ollaan kurssilla');
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
-          console.log('ispollingtickets: ' + this.isPollingTickets);
           if (this.isPollingTickets) {
             this.loggedIn$.unsubscribe();
           } else {
@@ -345,4 +339,4 @@ private trackCourseID(): void {
     // .finally(this.isLoaded = true) ei toiminut.
   }
 
-}  
+}

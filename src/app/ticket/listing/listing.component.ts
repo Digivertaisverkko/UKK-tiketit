@@ -77,15 +77,17 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false }
     ];
- 
+
   }
 
-  ngOnInit() {  
+  ngOnInit() {
     this.url = window.location.pathname;
     this.trackCourseID();
+
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
     });
+    this.trackLoggedStatus();
     this.trackScreenSize();
   }
 
@@ -227,6 +229,32 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.showCourseName(courseID);
       this.startPollingFAQ();
     })
+  }
+
+  private trackLoggedStatus(): void {
+    this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
+      if (response === true) {
+        this.ticket.getMyCourses().then(response => {
+
+          if (response[0].kurssi !== undefined) {
+            const myCourses: Kurssini[] = response;
+            // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
+            if (!myCourses.some(course => course.kurssi == Number(this.courseID))) {
+              console.log('ei olla kurssilla');
+              console.log('kurssi id: ' + this.courseID);
+              this.isParticipant = false;
+              this.authService.setIsParticipant(false);
+            } else {
+              console.log('kurssi id: ' + this.courseID);
+              console.log('ollaan kurssilla');
+              this.isParticipant = true;
+              this.authService.setIsParticipant(true);
+            }
+          }
+
+        })
+      }
+    });
   }
 
   private startPollingFAQ(): void {
