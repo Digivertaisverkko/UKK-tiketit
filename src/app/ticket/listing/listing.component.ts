@@ -29,8 +29,7 @@ export interface ColumnDefinition {
 })
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  public ticketsLoaded = new Subscription();
+  @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
   public columnDefinitionsFAQ: ColumnDefinition[];
   public courseID: string = '';
   public dataSourceFAQ = new MatTableDataSource<UKK>();
@@ -43,10 +42,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfFAQ: number = 0;
   public showFilterFAQ: boolean = false;
   private fetchFAQsSub$: Subscription | null = null;
+  private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
   private position: number = 0;
   private readonly FAQ_POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
-  private isPollingTickets: boolean = false;
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
 
@@ -81,12 +80,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
  
   }
 
-  ngOnInit() {
-    this.ticketsLoaded = this.ticketsLoaded.subscribe(action => {
-      if (action === 'add') {
-        this.renderer.selectRootElement(this.fileInput.nativeElement).click();
-      }
-    });
+  ngOnInit() {  
     this.url = window.location.pathname;
     this.trackCourseID();
     this.authService.trackUserInfo().subscribe(response => {
@@ -131,7 +125,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       .finally(() => {
         if (this.isPollingFAQ === false) {
           this.isPollingFAQ = true;
-          if (this.isPollingTickets === true || this.isParticipant === false) {
+          if (this.isTicketsLoaded === true || this.isParticipant === false) {
             this.isLoaded = true;
             this.restorePosition();
           }
@@ -150,6 +144,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private handleError(error: any) {
     if (error?.tunnus == 1000 ) {
 
+    }
+  }
+
+  public newTicketMessage(event: any) {
+    if (event === 'loaded') {
+      this.isTicketsLoaded = true;
+      if (this.isPollingFAQ === true) {
+        this.isLoaded = true;
+        this.restorePosition();
+      }
     }
   }
 

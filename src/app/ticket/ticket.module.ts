@@ -51,6 +51,9 @@ import { TicketListComponent } from './listing/ticket-list/ticket-list.component
     NgxFilesizeModule,
     SharedModule,
     TicketRoutingModule,
+  ],
+  exports: [
+    TicketListComponent
   ]
 })
 

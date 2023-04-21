@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
+import { ActivatedRoute, Router, ParamMap} from '@angular/router';
+import { AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, Subscription, switchMap, takeUntil, tap, throttleTime, timer }
+import { Observable, Subject, Subscription, switchMap, takeUntil, timer }
   from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -11,8 +12,8 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../../shared/utils';
 import { RefreshDialogComponent } from '../../../core/refresh-dialog/refresh-dialog.component';
+import { StoreService } from 'src/app/core/store.service';
 import { TicketService, Kurssini, } from '../../ticket.service';
-
 
 export interface ColumnDefinition {
   def: string;
@@ -41,18 +42,19 @@ export interface SortableTicket {
 
 export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  @Input() public courseID: string = '';
+  @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
-  public courseID: string = '';
   public columnDefinitions: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
+  public errorMessage: string = '';
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
   public isPollingTickets: boolean = false;
   public isPhonePortrait: boolean = false;
-  private loggedIn$ = new Subscription;
   public user: User = {} as User;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
 
@@ -60,6 +62,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public showFilterQuestions: boolean = false;
   private fetchTicketsSub$: Subscription | null  = null;
+  private loggedIn$ = new Subscription;
   private readonly TICKET_POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -72,6 +75,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
+    private route: ActivatedRoute,
+    private store : StoreService,
     private ticket: TicketService,
   ) {
 
@@ -87,19 +92,19 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-  
+    this.trackCourseID();
     this.authService.trackUserInfo().subscribe(response => {
       this.user = response;
       this.headline = this.setTicketListHeadline();
     });
-    this.trackLoggedStatus();
     this.noDataConsent = this.getDataConsent();
     if (this.noDataConsent) console.log('Kieltäydytty tietojen annosta.');
+    this.trackLoggedStatus();
     this.trackScreenSize();
   }
 
   ngAfterViewInit(): void {
-    true; 
+    this.trackMessages();
   }
 
   ngOnDestroy(): void {
@@ -107,17 +112,15 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stopPolling();
   }
 
-    //hakutoiminto, jossa paginointi kommentoitu pois
-    public applyFilter(event: Event, isTicket: boolean) {
-      let filterValue = (event.target as HTMLInputElement).value;
-      filterValue = filterValue.trim().toLowerCase();
-      if (isTicket) {
-        this.dataSource.filter = filterValue;
-      }
-        /*if (this.dataSourceFAQ.paginator) {
-          this.dataSourceFAQ.paginator.firstPage();
-        }*/
-    }
+  //hakutoiminto, jossa paginointi kommentoitu pois
+  public applyFilter(event: Event) {
+    let filterValue = (event.target as HTMLInputElement).value;
+    filterValue = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+      /*if (this.dataSourceFAQ.paginator) {
+        this.dataSourceFAQ.paginator.firstPage();
+      }*/
+  }
 
   // Hae arkistoidut tiketit.
   public fetchArchivedTickets() {
@@ -150,10 +153,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       }).finally(() => {
         if (this.isPollingTickets === false) {
           this.isPollingTickets = true;
-          if (this.isPollingFAQ === true) {
-            this.isLoaded = true;
-            this.restorePosition();
-          }
+          this.isLoaded = true;
+          this.ticketMessage.emit('loaded');
         }
       })
   }
@@ -266,6 +267,19 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.giveConsent();
 }
 
+private trackCourseID(): void {
+  this.route.paramMap.subscribe((paramMap: ParamMap) => {
+    var courseID: string | null = paramMap.get('courseid');
+    if (courseID === null) {
+      this.errorMessage = $localize `:@@puuttuu kurssiID:
+          Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
+      this.isLoaded = true;
+      throw new Error('Virhe: ei kurssi ID:ä.');
+    }
+    this.courseID = courseID;
+  })
+}
+
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response === true) {
@@ -276,6 +290,18 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+    // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
+    private trackMessages(): void {
+      this.store.trackMessages().subscribe(response => {
+        if (response === 'refresh') {
+          console.log('trackMessages: saatiin refresh pyyntö.');
+          this.isLoaded = false;
+          setTimeout(() => this.isLoaded = true, 800);
+          this.fetchTickets(this.courseID);
+        }
+      });
+    }
 
   private trackScreenSize(): void {
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
@@ -296,13 +322,19 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
         const myCourses: Kurssini[] = response;
         // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
         if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
+          console.log('ei olla kurssilla');
+          console.log('kurssi id: ' + this.courseID);
+
           this.isParticipant = false;
           this.authService.setIsParticipant(false);
           this.setError('notParticipant');
         } else {
+          console.log('kurssi id: ' + this.courseID);
+          console.log('ollaan kurssilla');
           this.isParticipant = true;
           this.authService.setIsParticipant(true);
           this.courseID = courseIDcandinate;
+          console.log('ispollingtickets: ' + this.isPollingTickets);
           if (this.isPollingTickets) {
             this.loggedIn$.unsubscribe();
           } else {

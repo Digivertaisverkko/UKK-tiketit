@@ -1,8 +1,4 @@
-<!----------- Tiketit ------------------------------------------------------->
-
 <div class="view-header">
-
-
 
 <section *ngIf="isParticipant">
 
@@ -14,33 +10,10 @@
     {{ headline }}
   </h2>
 
-  <app-search-bar (searchResult)="applyFilter($event, true)"
+  <app-search-bar (searchResult)="applyFilter($event)"
       i18n="@@Suodata kysymyksiä">
     Suodata kysymyksiä
   </app-search-bar>
-
-<!---
-  <ng-container *ngIf="numberOfQuestions !== 0">
-    <button aria-label="Suodata kysymyksiä"
-            class="filter-icon-btn"
-            (click)="showFilterQuestions = true"
-            i18n-aria-label="@@Suodata kysymyksiä"
-            mat-icon-button
-            *ngIf="!showFilterQuestions; else filterQuestions"
-            type="search"
-            >
-      <mat-icon>search</mat-icon>
-    </button>
-
-    <ng-template #filterQuestions>
-      <mat-form-field class="filteringField">
-        <mat-label i18n="@@Suodata kysymyksiä">Suodata kysymyksiä</mat-label>
-        <input matInput type="search" (keyup)="applyFilter($event, true)" placeholder="" #input>
-      </mat-form-field>
-    </ng-template>
-  </ng-container>
-
-  -->
 
 </div>
 
@@ -69,7 +42,7 @@
       <a  aria-disabled="true"
           [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
           tabindex="-1"
-        >
+          >
         <div class="ticket-state-wrapper">
           <div class="icon-wrapper">
             <img  alt=""
@@ -77,7 +50,7 @@
                   height="100%"
                   src="../../../assets/icons/{{iconFile[element.tilaID]}}.svg"
                   width="100%"
-            >
+                  >
           </div>
           <!--  Opiskelijalle tilan string on eri, mutta sama id,
                 joten älä käytä id:ä. -->

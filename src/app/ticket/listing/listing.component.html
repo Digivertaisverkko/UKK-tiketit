@@ -43,7 +43,8 @@
 </button>
 </div>
 
-<!-- tikettilista tähän -->
+<app-ticket-list [courseID]="courseID" (ticketMessage)="newTicketMessage($event)">
+</app-ticket-list>
 
 <!------------ UKK:t ---------------------------------------------------------->
 
