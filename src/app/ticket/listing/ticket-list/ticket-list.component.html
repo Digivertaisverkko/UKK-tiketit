@@ -54,6 +54,7 @@
                 joten älä käytä id:ä. -->
           <div [style.font-weight]="element.tila === '1-Lukematon' ||
               element.tila === '1-Unread' ? 600 : 400">
+              <!-- Ensimmäiset 2 merkkiä ovat tilan numeroarvo ja viiva. -->
             {{ element.tila.substring(2) }}
           </div>
         </div>

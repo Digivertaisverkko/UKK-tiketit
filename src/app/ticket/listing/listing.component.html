@@ -56,7 +56,7 @@
     buttonText="{{ error.buttonText}}"
     i18n-title="{{ error.title }}"
     message="{{ error.message }}"
-    *ngIf="isLoaded && error.title.length > 0"
+    *ngIf="isLoaded && error !== null"
     #ticketError
     title="{{ error.title }}"
     >
@@ -171,8 +171,13 @@
 
 </section>
 
-<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-    message="{{ errorMessage }}" [styles]="{ margin: '1em 20% 1em 20%' }">
+<app-error-card
+    i18n-title="@@Virhe"
+    message="{{ errorMessage }}"
+    *ngIf="errorMessage.length > 0"
+    [styles]="{ margin: '1em 20% 1em 20%' }"
+    title="Virhe"
+    >
 </app-error-card>
 
 <!-- <div class="theme-actions">

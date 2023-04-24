@@ -22,6 +22,12 @@ export interface ColumnDefinition {
   showMobile: boolean;
 }
 
+export interface ErrorNotification {
+  title: string,
+  message: string,
+  buttonText?: string
+}
+
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -33,7 +39,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public columnDefinitions: ColumnDefinition[];
   public courseID: string = '';
   public dataSource = new MatTableDataSource<UKK>();
-  public error;
+  public error: ErrorNotification | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
@@ -79,8 +85,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false }
     ];
-
-    this.error = { title: '', message: '', buttonText: '' }
 
   }
 
