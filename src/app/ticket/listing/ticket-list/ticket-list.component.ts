@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit, ViewChild }
-    from '@angular/core';
+import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit,
+          ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, Subscription, takeUntil, timer }
+import { catchError, Subject, Subscription, takeUntil, timer }
   from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -36,7 +36,7 @@ export interface SortableTicket {
 export interface ErrorNotification {
   title: string,
   message: string,
-  buttonText: string
+  buttonText?: string
 }
 
 @Component({
@@ -131,6 +131,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ticket.getTicketList(courseID).then(response => {
       if (!response) return
       if (response.length > 0) {
+        this.error = null;
         this.dataSource = new MatTableDataSource(response);
         this.numberOfQuestions = response.length;
         // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
@@ -190,8 +191,10 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
-    if (error?.tunnus == 1000 ) {
-
+    this.error = {
+      title: $localize`:@@Virhe:Virhe`,
+      message: $localize`:@@Kysymysten hakeminen ei onnistunut:
+        Kysymysten hakeminen ei onnistunut.`
     }
   }
 

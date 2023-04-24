@@ -128,7 +128,10 @@
   Suodattimella ei löytynyt tuloksia.
 </p>
 
-  <div class="no-items-box" *ngIf="numberOfQuestions === 0" mat-elevation-z1>
+  <div  class="no-items-box"
+        mat-elevation-z1
+        *ngIf="numberOfQuestions === 0 && !error"
+        >
     <p i18n="@@Ei yhtään kysymystä esitetty"
       *ngIf="user.asema === 'opettaja' || user.asema === 'admin';
           else noTicketsStudent" >
@@ -260,9 +263,19 @@
 </table>
 
 <p  class="no-items-message" i18n="@@Ei tuloksia"
-    *ngIf="dataSourceArchived.filteredData.length === 0 && archivedCount > 0">
+    *ngIf="dataSourceArchived.filteredData.length === 0 && archivedCount">
   Suodattimella ei löytynyt tuloksia.
 </p>
+
+<app-error-card
+    buttonText="{{ error.buttonText }}"
+    i18n-title="{{ error.title }}"
+    message="{{ error.message }}"
+    *ngIf="isLoaded && error"
+    #ticketError
+    title="{{ error.title }}"
+    >
+</app-error-card>
 
 <!--------------------------------------------------------------------------->
 
@@ -317,15 +330,5 @@
     </a>
   </button>
 </div>
-
-<app-error-card
-    buttonText="{{ error.buttonText }}"
-    i18n-title="{{ error.title }}"
-    message="{{ error.message }}"
-    *ngIf="isLoaded && error"
-    #ticketError
-    title="{{ error.title }}"
-    >
-</app-error-card>
 
 </div>
