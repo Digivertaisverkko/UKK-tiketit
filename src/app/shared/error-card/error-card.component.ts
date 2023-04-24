@@ -14,13 +14,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
 
         <p>{{ message }}</p>
 
-        <button (click)="buttonPressed('1')"
+        <button (click)="clickEvent.emit('1')"
                 mat-raised-button
                 *ngIf="buttonText.length > 0"
                 >
-          {{buttonText}}
+          {{ buttonText }}
         </button>
-
     </div>
 
   `,
@@ -35,11 +34,5 @@ export class ErrorCardComponent {
   @Input() styles: object = {};
   @Input() title: string = $localize `:@@Virhe:Virhe`;
   @Output() clickEvent = new EventEmitter<string>();
-
-  constructor() { }
-
-  public buttonPressed(button: string) {
-    this.clickEvent.emit(button);
-  }
 
 }
