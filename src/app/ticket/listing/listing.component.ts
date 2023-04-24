@@ -42,7 +42,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public error: ErrorNotification | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
-  public isParticipant: boolean = false;
+  public isParticipant: boolean | null = null;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean = false;
@@ -91,9 +91,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.getDataConsent();
     this.url = window.location.pathname;
     this.trackCourseID();
-
     this.authService.trackUserInfo().subscribe(response => {
-      this.user = response;
+      if (response?.id) this.user = response;
     });
     this.trackLoggedStatus();
     this.trackScreenSize();
@@ -118,6 +117,24 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       /*if (this.dataSourceFAQ.paginator) {
         this.dataSourceFAQ.paginator.firstPage();
       }*/
+  }
+
+  private checkIfParticipant() {
+    this.ticket.getMyCourses().then(response => {
+      if (response[0].kurssi === undefined) return
+        const myCourses: Kurssini[] = response;
+        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
+        if (myCourses.some(course => course.kurssi == Number(this.courseID))) {
+          this.isParticipant = true;
+          console.log('kurssi id: ' + this.courseID);
+          console.log('ollaan kurssilla');
+        } else {
+          this.isParticipant = false;
+          console.log('ei olla kurssilla');
+          console.log('kurssi id: ' + this.courseID);
+          this.setError('notParticipant');
+        }
+    })
   }
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
@@ -253,23 +270,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       if (response === false) {
         this.isLoaded = true;
         this.setError('notLoggedIn');
-      } else {
-        this.ticket.getMyCourses().then(response => {
-          if (response[0].kurssi !== undefined) {
-            const myCourses: Kurssini[] = response;
-            // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-            if (!myCourses.some(course => course.kurssi == Number(this.courseID))) {
-              console.log('ei olla kurssilla');
-              console.log('kurssi id: ' + this.courseID);
-              this.isParticipant = false;
-              this.setError('notParticipant');
-            } else {
-              console.log('kurssi id: ' + this.courseID);
-              console.log('ollaan kurssilla');
-              this.isParticipant = true;
-            }
-          }
-        })
+      } else if (response === true) {
+        this.checkIfParticipant();
       }
     });
   }
