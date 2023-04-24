@@ -237,10 +237,6 @@ export class AuthService {
     if (isNaN(Number(courseID))) {
       throw new Error('authService: Haussa olevat tiedot ovat väärässä muodossa.');
     }
-    // if (window.localStorage.getItem('SESSION_ID') == null) {
-    //   this.setNotLoggegIn();
-    //   return
-    // }
     let response: any;
     try {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
@@ -256,6 +252,7 @@ export class AuthService {
     } else {
       console.log('saatiin vastaus null');
       // Tarkistetaan, onko kirjautuneena eri kurssille.
+
       const response = await this.fetchVisitorInfo();
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
