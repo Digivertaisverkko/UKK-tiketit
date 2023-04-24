@@ -59,7 +59,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Merkkijonot
   public courseName: string = '';
-  public errorMessage: string = '';
+  public errorMessage: string | null = null;
   public ticketViewLink = '';
   public user: User = {} as User;
 
@@ -72,7 +72,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
     private route : ActivatedRoute,
-    private router: Router,
     private store : StoreService,
     private ticket: TicketService,
     private title : Title
