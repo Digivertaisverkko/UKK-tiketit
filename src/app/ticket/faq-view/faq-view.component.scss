@@ -42,14 +42,17 @@ mat-card {
 }
 
 @media (max-width: 900px) {
-  .copy-link-btn {
-    margin-left: auto;
-  }
-  .edit-buttons-wrapper {
+  .top-buttons-wrapper {
     gap: 0.5rem;
   }
   .remove-btn {
     margin-right: 0;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 370px) {
+  .copy-link-btn {
+    margin-left: auto;
   }
 }
 
@@ -76,11 +79,11 @@ mat-card {
   }
 }
 
-@media (max-width: 500px) {
-  .faq-view {
-    padding-right: 1rem;
-  }
-}
+// @media (max-width: 500px) {
+//   .faq-view {
+//     padding-right: 1rem;
+//   }
+// }
 
 @media (max-width: 370px) {
   .top-buttons-wrapper {
