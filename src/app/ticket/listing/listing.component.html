@@ -45,6 +45,7 @@
 
 <app-ticket-list
     [courseID]="courseID"
+    *ngIf="isParticipant"
     (ticketMessage)="newTicketMessage($event)"
     [user]="user">
 </app-ticket-list>

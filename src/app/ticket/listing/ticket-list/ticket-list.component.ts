@@ -54,7 +54,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public iconFile: typeof IconFile = IconFile;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
-  public isParticipant: boolean = false;
   public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
@@ -63,7 +62,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public ticketsError;
 
   private fetchTicketsSub$: Subscription | null  = null;
-  private loggedIn$ = new Subscription;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -94,9 +92,10 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.noDataConsent = this.getDataConsent();
     if (this.noDataConsent) console.log('Kieltäydytty tietojen annosta.');
-    this.trackLoggedStatus();
+    // this.trackLoggedStatus();
     this.headline = this.setTicketListHeadline();
     this.trackScreenSize();
+    this.startPollingTickets();
   }
 
   ngAfterViewInit(): void {
@@ -104,7 +103,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.warn('listaus: ngOnDestroy ajettu.');
+    console.warn('tikettilista: ngOnDestroy ajettu.');
     this.stopPolling();
   }
 
@@ -223,36 +222,13 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fetchTicketsSub$?.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
     const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
-
     // throttleTime(pollTime),
     this.fetchTicketsSub$ = timer(0, pollRate)
         .pipe(
             takeUntil(this.unsubscribe$)
         ).subscribe(() => this.fetchTickets(this.courseID));
-    this.loggedIn$.unsubscribe();
   }
 
-  // Aseta virheviestejä.
-  private setError(type: string): void {
-    console.log('asetetaan error: ' +type);
-    if (type === 'notParticipant') {
-      this.ticketsError = {
-        title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-        message: $localize`:@@Ei osallistujana-viesti:
-            Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
-        buttonText: ''
-      }
-    } else if  (type === 'notLoggedIn') {
-      this.ticketsError = {
-        title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-        message: $localize`:@@Ei osallistujana-viesti:
-            Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
-        buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
-      }
-    } else {
-      console.error('Ei virheviestiä tyypille: ' + type);
-    }
-  }
 
   public stopPolling(): void {
     this.unsubscribe$.next();
@@ -264,29 +240,17 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.giveConsent();
   }
 
-  private trackLoggedStatus(): void {
-    this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
-      if (response === true) {
-        this.setEmptyTicketError();
-        this.updateLoggedInView(this.courseID);
-      } else if (response === false ) {
-        this.isLoaded = true;
-        this.setError('notLoggedIn');
+  // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
+  private trackMessages(): void {
+    this.store.trackMessages().subscribe(response => {
+      if (response === 'refresh') {
+        console.log('trackMessages: saatiin refresh pyyntö.');
+        this.isLoaded = false;
+        setTimeout(() => this.isLoaded = true, 800);
+        this.fetchTickets(this.courseID);
       }
     });
   }
-
-    // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
-    private trackMessages(): void {
-      this.store.trackMessages().subscribe(response => {
-        if (response === 'refresh') {
-          console.log('trackMessages: saatiin refresh pyyntö.');
-          this.isLoaded = false;
-          setTimeout(() => this.isLoaded = true, 800);
-          this.fetchTickets(this.courseID);
-        }
-      });
-    }
 
   private trackScreenSize(): void {
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
@@ -298,30 +262,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.maxItemTitleLength = 100;
       }
     });
-  }
-
-  private updateLoggedInView(courseIDcandinate: string) {
-    this.ticket.getMyCourses().then(response => {
-      console.log('Päivitetään logged in view');
-      if (response[0].kurssi === undefined) return
-      const myCourses: Kurssini[] = response;
-      // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-      if (!myCourses.some(course => course.kurssi == Number(courseIDcandinate))) {
-        this.isParticipant = false;
-        this.authService.setIsParticipant(false);
-        this.setError('notParticipant');
-      } else {
-        this.isParticipant = true;
-        this.authService.setIsParticipant(true);
-        this.courseID = courseIDcandinate;
-        if (this.isPolling) {
-          this.loggedIn$.unsubscribe();
-        } else {
-          this.startPollingTickets();
-        }
-      }
-    }).catch(error => this.handleError(error));
-    // .finally(this.isLoaded = true) ei toiminut.
   }
 
 }

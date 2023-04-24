@@ -39,6 +39,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isParticipant: boolean = false;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
+  public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
 
   private fetchFAQsSub$: Subscription | null = null;
@@ -84,6 +85,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.noDataConsent = this.getDataConsent();
     this.url = window.location.pathname;
     this.trackCourseID();
 
@@ -101,6 +103,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     console.warn('listaus: ngOnDestroy ajettu.');
     window.removeEventListener('scroll', this.onScroll);
+    this.loggedIn$.unsubscribe();
     this.stopPolling();
   }
 
@@ -138,6 +141,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         // if (refresh !== true) this.isLoaded = true;
       });
+  }
+
+  private getDataConsent(): boolean {
+    return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
   }
 
   public getDisplayedColumnFAQ(): string[] {
@@ -237,26 +244,51 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
-      if (response !== true) return
-      this.ticket.getMyCourses().then(response => {
-        if (response[0].kurssi !== undefined) {
-          const myCourses: Kurssini[] = response;
-          // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-          if (!myCourses.some(course => course.kurssi == Number(this.courseID))) {
-            console.log('ei olla kurssilla');
-            console.log('kurssi id: ' + this.courseID);
-            this.isParticipant = false;
-            this.authService.setIsParticipant(false);
-          } else {
-            console.log('kurssi id: ' + this.courseID);
-            console.log('ollaan kurssilla');
-            this.isParticipant = true;
-            this.authService.setIsParticipant(true);
+      if (response === false) {
+        this.isLoaded = true;
+        this.setError('notLoggedIn');
+      } else {
+        this.ticket.getMyCourses().then(response => {
+          if (response[0].kurssi !== undefined) {
+            const myCourses: Kurssini[] = response;
+            // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
+            if (!myCourses.some(course => course.kurssi == Number(this.courseID))) {
+              console.log('ei olla kurssilla');
+              console.log('kurssi id: ' + this.courseID);
+              this.isParticipant = false;
+              this.setError('notParticipant');
+            } else {
+              console.log('kurssi id: ' + this.courseID);
+              console.log('ollaan kurssilla');
+              this.isParticipant = true;
+            }
           }
-        }
-      })
+        })
+      }
     });
   }
+
+    // Aseta virheviestejä.
+    private setError(type: string): void {
+      console.log('asetetaan error: ' +type);
+      if (type === 'notParticipant') {
+        this.error = {
+          title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+          message: $localize`:@@Ei osallistujana-viesti:
+              Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+          buttonText: ''
+        }
+      } else if  (type === 'notLoggedIn') {
+        this.error = {
+          title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+          message: $localize`:@@Ei osallistujana-viesti:
+              Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
+        }
+      } else {
+        console.error('Ei virheviestiä tyypille: ' + type);
+      }
+    }
 
   private startPollingFAQ(): void {
     this.fetchFAQsSub$?.unsubscribe();

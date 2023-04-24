@@ -107,20 +107,6 @@ export class AuthService {
     return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
 
-    // Aseta tieto, onko käyttäjä osallistujana aktiivisella kurssilla.
-  public setIsParticipant(isParticipant: boolean) {
-    if (isParticipant) {
-      if (this.isParticipant$.value === false) this.isParticipant$.next(true);
-    } else {
-      if (this.isParticipant$.value === true) this.isParticipant$.next(false);
-    }
-  }
-
-  // Onko käyttäjä osallistustaja aktiivisella kurssilla.
-  public getIsParticipant(): boolean {
-    return this.isParticipant$.value
-  }
-
   // Aseta tila kirjautuneeksi.
   public setLoggedIn() {
     console.log('setLoggedIn: vanha logged in value: ' + this.isUserLoggedIn$.value);

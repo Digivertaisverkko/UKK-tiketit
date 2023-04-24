@@ -1,5 +1,5 @@
-
-<section *ngIf="isParticipant">
+<!-- Älä korvaa ngIf:llä tai sorting ei toimi. -->
+<div [ngStyle]="{ 'display': 'isLoaded' ? 'block' : 'none' }">
 
 <!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
   hakukentälle tilaa. -->
@@ -318,8 +318,6 @@
   </button>
 </div>
 
-</section>
-
 <app-error-card
     buttonText="{{ticketsError.buttonText}}"
     (clickEvent)="ticketErrorClickEvent($event)"
@@ -330,3 +328,5 @@
     title="{{ ticketsError.title }}"
     >
 </app-error-card>
+
+</div>
