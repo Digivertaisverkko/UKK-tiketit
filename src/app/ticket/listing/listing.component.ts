@@ -191,7 +191,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages(): void {
-    this.store.trackMessages().subscribe(response => {
+    this.store.trackMessages()
+    .pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe(response => {
       if (response === 'refresh') {
         console.log('trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;
