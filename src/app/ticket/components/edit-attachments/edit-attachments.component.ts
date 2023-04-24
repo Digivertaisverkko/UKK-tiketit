@@ -1,6 +1,6 @@
-import {  Component, Input, Output, EventEmitter, OnInit,
+import {  ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { forkJoin, Observable, pipe, map, Subscription, tap, catchError, of } from 'rxjs';
+import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService, Liite } from '../../ticket.service';
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
@@ -19,7 +19,8 @@ interface FileInfo {
 @Component({
   selector: 'app-edit-attachments',
   templateUrl: './edit-attachments.component.html',
-  styleUrls: ['./edit-attachments.component.scss']
+  styleUrls: ['./edit-attachments.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class EditAttachmentsComponent implements OnInit, OnDestroy {
