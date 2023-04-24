@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { StoreService } from '../store.service';
 import { AuthService, User } from '../auth.service';
@@ -6,7 +6,8 @@ import { AuthService, User } from '../auth.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class HeaderComponent implements OnInit {
@@ -23,9 +24,10 @@ export class HeaderComponent implements OnInit {
 
   constructor (
     private authService: AuthService,
-    private route: ActivatedRoute,
+    private change: ChangeDetectorRef,
+    private route : ActivatedRoute,
     private router: Router,
-    private store: StoreService)
+    private store : StoreService)
     {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
   }
@@ -53,6 +55,7 @@ export class HeaderComponent implements OnInit {
     this.authService.trackUserInfo().subscribe(response => {
         this.user = response;
         this.setUserRole(this.user.asema);
+        this.change.detectChanges();
     })
   }
 
@@ -75,7 +78,6 @@ export class HeaderComponent implements OnInit {
       }
       this.userRole = role;
   }
-
 
   public toggleLanguage() {
     this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
