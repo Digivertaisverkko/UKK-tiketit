@@ -37,7 +37,7 @@ export interface SortableTicket {
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
-  styleUrls: ['./ticket-list.component.scss']
+  styleUrls: [ '../listing.component.scss' , './ticket-list.component.scss']
 })
 
 export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
