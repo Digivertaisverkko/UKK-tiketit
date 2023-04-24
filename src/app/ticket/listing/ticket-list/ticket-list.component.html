@@ -9,8 +9,7 @@
     {{ headline }}
   </h2>
 
-  <app-search-bar (searchResult)="applyFilter($event)"
-      i18n="@@Suodata kysymyksiä">
+  <app-search-bar (searchResult)="applyFilter($event)" i18n="@@Suodata kysymyksiä">
     Suodata kysymyksiä
   </app-search-bar>
 
@@ -261,8 +260,7 @@
 </table>
 
 <p  class="no-items-message" i18n="@@Ei tuloksia"
-  *ngIf="dataSourceArchived.filteredData.length === 0 &&
-      archivedCount > 0">
+    *ngIf="dataSourceArchived.filteredData.length === 0 && archivedCount > 0">
   Suodattimella ei löytynyt tuloksia.
 </p>
 
@@ -276,7 +274,7 @@
 
 <div  class="buttons-wrapper theme-actions"
       [ngStyle]="numberOfQuestions === 0 ?
-      {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
+          {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
       >
 
   <ng-container *ngIf="user.asema !== 'opiskelija'">
@@ -325,10 +323,10 @@
 <app-error-card
     buttonText="{{ticketsError.buttonText}}"
     (clickEvent)="ticketErrorClickEvent($event)"
-    *ngIf="isLoaded && ticketsError.title.length > 0"
-    #ticketError
     i18n-title="{{ ticketsError.title }}"
     message="{{ ticketsError.message }}"
+    *ngIf="isLoaded && ticketsError.title.length > 0"
+    #ticketError
     title="{{ ticketsError.title }}"
     >
 </app-error-card>

@@ -43,6 +43,7 @@ export interface SortableTicket {
 export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() public courseID: string = '';
+  @Input() public user: User = {} as User;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
   public columnDefinitions: ColumnDefinition[];
@@ -56,7 +57,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public isParticipant: boolean = false;
   public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
-  public user: User = {} as User;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean = false;
   public numberOfQuestions: number = 0;
@@ -92,14 +92,10 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.trackCourseID();
-    this.authService.trackUserInfo().subscribe(response => {
-      this.user = response;
-      this.headline = this.setTicketListHeadline();
-    });
     this.noDataConsent = this.getDataConsent();
     if (this.noDataConsent) console.log('Kieltäydytty tietojen annosta.');
     this.trackLoggedStatus();
+    this.headline = this.setTicketListHeadline();
     this.trackScreenSize();
   }
 
@@ -249,7 +245,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if  (type === 'notLoggedIn') {
       this.ticketsError = {
         title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-        message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+        message: $localize`:@@Ei osallistujana-viesti:
+            Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
         buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
       }
     } else {
@@ -265,18 +262,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ticketErrorClickEvent(button: string) {
     this.giveConsent();
-  }
-
-  private trackCourseID(): void {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:
-            Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
-        throw new Error('Virhe: ei kurssi ID:ä.');
-      }
-      this.courseID = courseID;
-    })
   }
 
   private trackLoggedStatus(): void {

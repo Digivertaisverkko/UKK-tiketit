@@ -32,23 +32,38 @@
   </button>
 
   <button aria-label="Profiili"
-  class="settings-button"
-  (click)="stopPolling()"
-  i18n-aria-label="@@Profiili"
-  mat-icon-button
-  *ngIf="isParticipant && isInIframe"
-  [routerLink]="'/course/' + courseID + '/profile'"
-  >
-<mat-icon class="settings-icon">account_circle</mat-icon>
-</button>
+          class="settings-button"
+          (click)="stopPolling()"
+          i18n-aria-label="@@Profiili"
+          mat-icon-button
+          *ngIf="isParticipant && isInIframe"
+          [routerLink]="'/course/' + courseID + '/profile'"
+          >
+    <mat-icon class="settings-icon">account_circle</mat-icon>
+  </button>
 </div>
 
-<app-ticket-list [courseID]="courseID" (ticketMessage)="newTicketMessage($event)">
+<app-ticket-list
+    [courseID]="courseID"
+    (ticketMessage)="newTicketMessage($event)"
+    [user]="user">
 </app-ticket-list>
+
+<!-- (clickEvent)="errorClickEvent($event)" -->
+<app-error-card
+    buttonText="{{ error.buttonText}}"
+    i18n-title="{{ error.title }}"
+    message="{{ error.message }}"
+    *ngIf="isLoaded && error.title.length > 0"
+    #ticketError
+    title="{{ error.title }}"
+    >
+</app-error-card>
 
 <!------------ UKK:t ---------------------------------------------------------->
 
-<section>
+<!-- Älä korvaa ngIf:llä tai sorting ei toimi. -->
+<section [ngStyle]="{ 'display': 'isLoaded' ? 'block' : 'none' }">
 
 <div class="input-field-wrapper">
   <h2 class="sub-header" i18n="@@Usein kysytyt kysymykset">

@@ -33,6 +33,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public columnDefinitions: ColumnDefinition[];
   public courseID: string = '';
   public dataSource = new MatTableDataSource<UKK>();
+  public error;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean = false;
@@ -78,6 +79,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: false }
     ];
 
+    this.error = { title: '', message: '', buttonText: '' }
+
   }
 
   ngOnInit() {
@@ -122,12 +125,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         return
       })
-      .catch(error => this.handleError(error))
+      .catch(error => {
+        this.handleError(error)
+      })
       .finally(() => {
+        this.isLoaded = true;
         if (this.isPolling === false) {
           this.isPolling = true;
           if (this.isTicketsLoaded === true || this.isParticipant === false) {
-            this.isLoaded = true;
             this.restorePosition();
           }
         }
@@ -144,8 +149,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
     if (error?.tunnus == 1000 ) {
-
     }
+    this.isLoaded = true;
   }
 
   public newTicketMessage(event: any) {
@@ -232,27 +237,24 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
-      if (response === true) {
-        this.ticket.getMyCourses().then(response => {
-
-          if (response[0].kurssi !== undefined) {
-            const myCourses: Kurssini[] = response;
-            // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-            if (!myCourses.some(course => course.kurssi == Number(this.courseID))) {
-              console.log('ei olla kurssilla');
-              console.log('kurssi id: ' + this.courseID);
-              this.isParticipant = false;
-              this.authService.setIsParticipant(false);
-            } else {
-              console.log('kurssi id: ' + this.courseID);
-              console.log('ollaan kurssilla');
-              this.isParticipant = true;
-              this.authService.setIsParticipant(true);
-            }
+      if (response !== true) return
+      this.ticket.getMyCourses().then(response => {
+        if (response[0].kurssi !== undefined) {
+          const myCourses: Kurssini[] = response;
+          // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
+          if (!myCourses.some(course => course.kurssi == Number(this.courseID))) {
+            console.log('ei olla kurssilla');
+            console.log('kurssi id: ' + this.courseID);
+            this.isParticipant = false;
+            this.authService.setIsParticipant(false);
+          } else {
+            console.log('kurssi id: ' + this.courseID);
+            console.log('ollaan kurssilla');
+            this.isParticipant = true;
+            this.authService.setIsParticipant(true);
           }
-
-        })
-      }
+        }
+      })
     });
   }
 
@@ -264,7 +266,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         .pipe(
           takeUntil(this.unsubscribe$)
         ).subscribe(() => this.fetchFAQ(this.courseID));
-}
+  }
 
   private restorePosition(): void {
     this.position = this.store.getPosition(this.url);
