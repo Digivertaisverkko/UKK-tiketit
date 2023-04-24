@@ -1,19 +1,18 @@
-import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 import { AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable, Subject, Subscription, takeUntil, timer }
+import { Subject, Subscription, takeUntil, timer }
   from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 
-import { AuthService, User } from 'src/app/core/auth.service';
+import { User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../../shared/utils';
 import { RefreshDialogComponent } from '../../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
-import { TicketService, Kurssini, } from '../../ticket.service';
+import { TicketService } from '../../ticket.service';
 
 export interface ColumnDefinition {
   def: string;
@@ -34,6 +33,12 @@ export interface SortableTicket {
   tila: string;
 }
 
+export interface ErrorNotification {
+  title: string,
+  message: string,
+  buttonText: string
+}
+
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
@@ -49,7 +54,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public columnDefinitions: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
-  public errorMessage: string = '';
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
   public isInIframe: boolean;
@@ -57,9 +61,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
-  public noDataConsent: boolean = false;
   public numberOfQuestions: number = 0;
-  public ticketsError;
+  public error: ErrorNotification | null = null;
 
   private fetchTicketsSub$: Subscription | null  = null;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
@@ -69,10 +72,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sortArchived',  { static: false }) sortArchived  = new MatSort();
 
   constructor(
-    private authService: AuthService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
-    private route : ActivatedRoute,
     private store : StoreService,
     private ticket: TicketService,
   ) {
@@ -85,15 +86,10 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aikaleima', showMobile: true }
     ];
 
-    this.ticketsError = { title: '', message: '', buttonText: '' }
-
   }
 
   ngOnInit() {
-    this.noDataConsent = this.getDataConsent();
-    if (this.noDataConsent) console.log('Kieltäydytty tietojen annosta.');
-    // this.trackLoggedStatus();
-    this.headline = this.setTicketListHeadline();
+    this.headline = this.getHeadline();
     this.trackScreenSize();
     this.startPollingTickets();
   }
@@ -164,6 +160,22 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       .map(cd => cd.def);
   }
 
+  public getHeadline(): string {
+    switch (this.user.asema) {
+      case 'opettaja':
+        return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+        break;
+      case 'admin':
+        return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
+        break;
+      case 'opiskelija':
+        return $localize`:@@Omat kysymykset:Omat kysymykset`;
+        break;
+      default:
+        return $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
+    }
+  }
+
   public giveConsent() {
     localStorage.removeItem('NO_DATA_CONSENT');
     const dialogConfig = new MatDialogConfig();
@@ -192,30 +204,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public saveRedirectUrl(linkEnding?: string): void {
     this.stopPolling();
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
-    if (this.authService.getIsUserLoggedIn() === false) {
-      console.log('tallennettu URL: ' + link);
-      window.localStorage.setItem('REDIRECT_URL', link);
-    }
-  }
-
-  private setEmptyTicketError(): void {
-    this.ticketsError = { title: '', message: '', buttonText: ''}
-  }
-
-  public setTicketListHeadline(): string {
-    switch (this.user.asema) {
-      case 'opettaja':
-        return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
-        break;
-      case 'admin':
-        return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
-        break;
-      case 'opiskelija':
-        return $localize`:@@Omat kysymykset:Omat kysymykset`;
-        break;
-      default:
-        return $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
-    }
+    console.log('tallennettu URL: ' + link);
+    window.localStorage.setItem('REDIRECT_URL', link);
   }
 
   private startPollingTickets() {
@@ -229,15 +219,10 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
         ).subscribe(() => this.fetchTickets(this.courseID));
   }
 
-
   public stopPolling(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     if (this.fetchTicketsSub$) this.fetchTicketsSub$.unsubscribe();
-  }
-
-  public ticketErrorClickEvent(button: string) {
-    this.giveConsent();
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.

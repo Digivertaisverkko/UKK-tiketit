@@ -319,13 +319,12 @@
 </div>
 
 <app-error-card
-    buttonText="{{ticketsError.buttonText}}"
-    (clickEvent)="ticketErrorClickEvent($event)"
-    i18n-title="{{ ticketsError.title }}"
-    message="{{ ticketsError.message }}"
-    *ngIf="isLoaded && ticketsError.title.length > 0"
+    buttonText="{{ error.buttonText }}"
+    i18n-title="{{ error.title }}"
+    message="{{ error.message }}"
+    *ngIf="isLoaded && error"
     #ticketError
-    title="{{ ticketsError.title }}"
+    title="{{ error.title }}"
     >
 </app-error-card>
 
