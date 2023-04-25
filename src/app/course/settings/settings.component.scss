@@ -55,6 +55,11 @@ mat-icon {
   font-size: 2;
 }
 
+.edit-icon {
+  // Chrome värjää oletuksena siniseksi.
+  color: black;
+}
+
 .no-fields-p {
   text-align: center;
 }
