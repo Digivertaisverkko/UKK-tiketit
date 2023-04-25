@@ -21,7 +21,7 @@ export class DataConsentComponent implements OnInit {
       private title: Title
       ) {
         this.error = { title: '', message: ''};
-        this.title.setTitle(Constants.baseTitle + $localize `:@@OTervetuloa:Tervetuloa`);
+        this.title.setTitle(Constants.baseTitle + $localize `:@@Tervetuloa:Tervetuloa`);
   }
 
   ngOnInit(): void {
