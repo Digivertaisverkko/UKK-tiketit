@@ -86,6 +86,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.startLoading();
     this.headline = this.getHeadline();
     this.trackScreenSize();
     this.startPollingTickets();
@@ -140,10 +141,10 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     }).catch(error => {
       this.handleError(error)
     }).finally(() => {
-      this.isLoaded = true;
       if (this.isPolling === false) {
         this.isPolling = true;
         this.ticketMessage.emit('loaded');
+        this.stopLoading();
       }
     })
   }
@@ -192,6 +193,16 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     window.localStorage.setItem('REDIRECT_URL', link);
   }
 
+  private startLoading() {
+    this.isLoaded = false;
+    this.store.startLoading();
+  }
+
+  private stopLoading() {
+    this.isLoaded = true;
+    this.store.stopLoading();
+  }
+
   private startPollingTickets() {
     this.fetchTicketsSub$?.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
@@ -217,8 +228,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       ).subscribe(response => {
       if (response === 'refresh') {
         console.log('trackMessages: saatiin refresh pyyntö.');
-        this.isLoaded = false;
-        setTimeout(() => this.isLoaded = true, 800);
+        this.startLoading();
+        setTimeout(() => this.stopLoading(), 800);
         this.fetchTickets(this.courseID);
       }
     });

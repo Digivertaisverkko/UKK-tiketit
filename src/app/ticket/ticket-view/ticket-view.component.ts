@@ -80,6 +80,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.startLoading();
     this.auth.trackUserInfo().subscribe(response => {
       if (response.id != null) this.user = response;
       if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
@@ -155,7 +156,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
       }
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
-      this.isLoaded = true;
+      this.stopLoading();
     }).catch(error => {
       switch (error.tunnus) {
         case 1003:
@@ -166,7 +167,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:
               Kysymyksen näyttäminen epäonnistui`;
       }
-      this.isLoaded = true;
+      this.stopLoading();
     });
   }
 

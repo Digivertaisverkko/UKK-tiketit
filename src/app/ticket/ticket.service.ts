@@ -402,7 +402,6 @@ export class TicketService {
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
       }
     ));
-
     return sortableData;
   }
 

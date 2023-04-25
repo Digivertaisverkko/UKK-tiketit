@@ -1,8 +1,10 @@
-import {  Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { AuthService } from './core/auth.service';
-import { ActivatedRoute, Router, ParamMap} from '@angular/router';
 import { environment } from 'src/environments/environment';
-// import { StoreService } from './core/store.service';
+import { StoreService } from './core/store.service';
+import { Observable } from 'rxjs';
 // import { TicketService } from './ticket/ticket.service';
 
 @Component({
@@ -15,7 +17,7 @@ export class AppComponent implements OnInit  {
   private courseID: string | null = null;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
-  public isLoaded: boolean = false;
+  public isLoading: Observable<boolean>;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
 
@@ -25,19 +27,13 @@ export class AppComponent implements OnInit  {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    // private store: StoreService,
+    private store: StoreService,
   ) {
+    this.isLoading = this.store.trackLoading();
   }
 
   ngOnInit(): void {
-    // this.store.trackIsLoaded().subscribe(response => {
-    //   if (response === true) {
-    //     this.isLoaded = true;
-    //   } else if (response === false) {
-    //     this.isLoaded = false;
-    //   }
-    // })
-
+    // this.trackLoading();
     if (environment.production === true) {
       console.log('Production build');
     }
@@ -53,6 +49,7 @@ export class AppComponent implements OnInit  {
     this.trackLoginStatus();
     // this.trackCourseID();
   }
+
 
   private trackLoginStatus() {
     this.authService.onIsUserLoggedIn().subscribe(response => {

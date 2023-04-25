@@ -45,6 +45,7 @@ export class EditFieldComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.startLoading();
     this.trackRouteParameters();
   }
 
@@ -52,7 +53,7 @@ export class EditFieldComponent implements OnInit {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
-        // this.isLoaded = true;
+        // this.stopLoading();
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.fieldID  = paramMap.get('fieldid');
@@ -69,7 +70,7 @@ export class EditFieldComponent implements OnInit {
       // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
       // uusi kenttä.
       this.getFieldInfo(courseID, this.fieldID);
-      this.isLoaded = true;
+      this.stopLoading();
     });
   }
 
@@ -182,6 +183,16 @@ export class EditFieldComponent implements OnInit {
 
   public changeRemoveButton() {
     setTimeout(() => this.isRemovePressed = true, 300);
+  }
+
+  private startLoading() {
+    this.isLoaded = false;
+    this.store.startLoading();
+  }
+
+  private stopLoading() {
+    this.isLoaded = true;
+    this.store.stopLoading();
   }
 
 }

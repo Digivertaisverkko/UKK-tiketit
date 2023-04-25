@@ -34,6 +34,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.startLoading();
     this.titleServ.setTitle(Constants.baseTitle + $localize `:@@Profiili:Profiili`);
     if (this.courseId !== null) {
       this.ticketService.getCourseName(this.courseId).then(response => {
@@ -46,7 +47,7 @@ export class ProfileComponent implements OnInit {
       this.userName = response.nimi;
       this.userEmail = response.sposti;
     });
-    this.isLoaded = true;
+    this.stopLoading();
   }
 
   public changeRemoveButton(): void {
@@ -79,6 +80,16 @@ export class ProfileComponent implements OnInit {
     }).catch(error => {
       this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:Profiilin poistaminen epäonnistui` + '.';
     });
+  }
+
+  private startLoading() {
+    this.isLoaded = false;
+    this.store.startLoading();
+  }
+
+  private stopLoading() {
+    this.isLoaded = true;
+    this.store.stopLoading();
   }
 
 }

@@ -167,7 +167,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
             this.restorePosition();
           }
         }
-        // if (refresh !== true) this.isLoaded = true;
+        // if (refresh !== true) this.stopLoading();
       });
   }
 

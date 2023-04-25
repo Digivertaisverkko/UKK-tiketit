@@ -5,7 +5,13 @@
   </app-header>
 
   <main>
-    <!-- <mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar> -->
+
+    <mat-progress-bar
+        class="theme-progress-bar"
+        mode="indeterminate"
+        *ngIf="isLoading | async"
+        >
+  </mat-progress-bar>
 
     <!-- <h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
       <span>{{courseName}}</span>

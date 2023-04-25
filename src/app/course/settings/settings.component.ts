@@ -42,6 +42,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.startLoading();
     this.titleServ.setTitle(Constants.baseTitle + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
     this.trackRouteParameters();
@@ -51,7 +52,7 @@ export class SettingsComponent implements OnInit {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
-        // this.isLoaded = true;
+        // this.stopLoading();
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
@@ -62,7 +63,7 @@ export class SettingsComponent implements OnInit {
       // } else {
       this.fetchTicketFieldInfo(courseID);
       // }
-      this.isLoaded = true;
+      this.stopLoading();
     });
   }
 
@@ -99,6 +100,16 @@ export class SettingsComponent implements OnInit {
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
+  }
+
+  private startLoading() {
+    this.isLoaded = false;
+    this.store.startLoading();
+  }
+
+  private stopLoading() {
+    this.isLoaded = true;
+    this.store.stopLoading();
   }
 
 }
