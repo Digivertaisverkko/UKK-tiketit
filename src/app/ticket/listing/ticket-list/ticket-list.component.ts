@@ -4,13 +4,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { catchError, Subject, Subscription, takeUntil, timer }
   from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 
 import { User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../../shared/utils';
-import { RefreshDialogComponent } from '../../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from '../../ticket.service';
 
@@ -72,7 +70,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sortArchived',  { static: false }) sortArchived  = new MatSort();
 
   constructor(
-    private dialog: MatDialog,
     private responsive: BreakpointObserver,
     private store : StoreService,
     private ticket: TicketService,
@@ -151,10 +148,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  private getDataConsent(): boolean {
-    return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
-  }
-
   public getDisplayedColumn(): string[] {
     return this.columnDefinitions
       .filter(cd => !this.isPhonePortrait || cd.showMobile)
@@ -175,18 +168,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       default:
         return $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
     }
-  }
-
-  public giveConsent() {
-    localStorage.removeItem('NO_DATA_CONSENT');
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.maxWidth = '30rem';
-    const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
-    refreshDialog.afterClosed().subscribe(res => {
-      if (res === 'cancel') {
-        localStorage.setItem('NO_DATA_CONSENT', 'true');
-      }
-    })
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.

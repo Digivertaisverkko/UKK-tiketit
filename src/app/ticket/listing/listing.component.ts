@@ -13,6 +13,7 @@ import { Title } from '@angular/platform-browser';
 import { AuthService, User } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
+import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
@@ -137,6 +138,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  public errorClickEvent(button: string) {
+    if (this.noDataConsent === false) {
+      this.giveConsent();
+    }
+}
+
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
     this.ticket.getFAQ(courseID).then(response => {
@@ -172,6 +179,19 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       .filter(cd => !this.isPhonePortrait || cd.showMobile)
       .map(cd => cd.def);
   }
+
+  public giveConsent() {
+    localStorage.removeItem('NO_DATA_CONSENT');
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.maxWidth = '30rem';
+    const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
+    refreshDialog.afterClosed().subscribe(res => {
+      if (res === 'cancel') {
+        localStorage.setItem('NO_DATA_CONSENT', 'true');
+      }
+    })
+  }
+
 
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
@@ -291,8 +311,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
           message: $localize`:@@Ei osallistujana-viesti:
               Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
-          buttonText: (this.noDataConsent === true) ? $localize `:@@Luo tili:Luo tili`: ''
+          buttonText: ''
         }
+        if (this.noDataConsent === true) {
+          this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
+        } else if (!this.isInIframe) {
+          this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
+        }
+
       } else {
         console.error('Ei virheviestiä tyypille: ' + type);
       }

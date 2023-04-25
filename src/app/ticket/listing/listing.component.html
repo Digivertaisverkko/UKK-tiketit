@@ -51,9 +51,9 @@
     >
 </app-ticket-list>
 
-<!-- (clickEvent)="errorClickEvent($event)" -->
 <app-error-card
     buttonText="{{ error.buttonText}}"
+    (clickEvent)="errorClickEvent($event)"
     i18n-title="{{ error.title }}"
     message="{{ error.message }}"
     *ngIf="isLoaded && error !== null"

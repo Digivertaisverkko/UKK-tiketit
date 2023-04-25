@@ -14,6 +14,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
 
         <p>{{ message }}</p>
 
+        <!-- Lähettää '1' jos implementoidaan useampia nappeja. -->
         <button (click)="clickEvent.emit('1')"
                 mat-raised-button
                 *ngIf="buttonText.length > 0"
