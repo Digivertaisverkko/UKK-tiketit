@@ -293,6 +293,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoaded = true;
         this.setError('notLoggedIn');
       } else if (response === true) {
+        if (this.error !== null) this.error === null;
         this.checkIfParticipant();
       }
     });
