@@ -337,7 +337,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private restorePosition(): void {
     this.position = this.store.getPosition(this.url);
     if (this.position && this.position !== 0) {
-      console.log('skrollataan positioon: ' + this.position);
+      console.log('siirrytään aiempaan scroll-positioon');
       setTimeout(() => window.scrollTo(0, this.position), 100);
     }
     window.addEventListener('scroll', this.onScroll);
