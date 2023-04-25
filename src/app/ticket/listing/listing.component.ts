@@ -139,9 +139,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public errorClickEvent(button: string) {
-    if (this.noDataConsent === false) {
+    if (this.noDataConsent === true && this.isInIframe === true) {
       this.giveConsent();
-    } else if (this.isInIframe === false) {
+    } else if (this.noDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
     }
 }
@@ -194,7 +194,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
     if (error?.tunnus == 1000 ) {
@@ -219,6 +218,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public openInNewTab(): void {
     window.open(window.location.href, '_blank');
+  }
+
+  private restorePosition(): void {
+    this.position = this.store.getPosition(this.url);
+    if (this.position && this.position !== 0) {
+      console.log('siirrytään aiempaan scroll-positioon');
+      setTimeout(() => window.scrollTo(0, this.position), 100);
+    }
+    window.addEventListener('scroll', this.onScroll);
   }
 
   public stopPolling(): void {
@@ -335,15 +343,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         .pipe(
           takeUntil(this.unsubscribe$)
         ).subscribe(() => this.fetchFAQ(this.courseID));
-  }
-
-  private restorePosition(): void {
-    this.position = this.store.getPosition(this.url);
-    if (this.position && this.position !== 0) {
-      console.log('siirrytään aiempaan scroll-positioon');
-      setTimeout(() => window.scrollTo(0, this.position), 100);
-    }
-    window.addEventListener('scroll', this.onScroll);
   }
 
 }
