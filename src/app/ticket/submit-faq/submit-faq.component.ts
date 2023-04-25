@@ -177,22 +177,18 @@ export class SubmitFaqComponent implements OnInit {
     if (this.courseId === null) return;
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.addFaq(id, faq, this.editExisting)
-    .then((response: AddTicketResponse) => {
-      if (this.attachments.fileInfoList.length === 0) this.goBack();
-      if (response === null || response?.success !== true) {
-        this.state = 'editing';
-        this.faqForm.enable();
-        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-            Kysymyksen lähettäminen epäonnistui` + '.';
-        throw new Error('Kysymyksen lähettäminen epäonnistui.');
-      }
-      if (response?.uusi === null) {
-        this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
-        throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-      }
-      const ticketID = response.uusi.tiketti;
-      const commentID = response.uusi.kommentti;
-      this.sendFiles(ticketID, commentID);
+      .then((response: AddTicketResponse) => {
+        if (this.attachments.fileInfoList.length === 0) {
+          this.goBack();
+        }
+        if (response === null || response?.success !== true) {
+          this.state = 'editing';
+          this.faqForm.enable();
+          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+              Kysymyksen lähettäminen epäonnistui` + '.';
+          throw new Error('Kysymyksen lähettäminen epäonnistui.');
+        }
+      this.prepareSendFiles(response);
     }).catch( error => {
       // ? lisää eri virhekoodeja?
       this.state = 'editing';
@@ -202,11 +198,25 @@ export class SubmitFaqComponent implements OnInit {
     });
   }
 
-  private sendFiles(ticketID: string, commentID: string) {
+  private prepareSendFiles(response: any) {
+    if (!this.editExisting && response?.uusi == null) {
+      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+    }
+    let ticketID, commentID;
+    if (!this.editExisting) {
+      ticketID = response.uusi.tiketti;
+      commentID = response.uusi.kommentti;
+    } else {
+      commentID = this.originalTicket?.kommentit[0].id;
+      ticketID = this.ticketId;
+      if (ticketID == null || commentID == null) {
+        throw Error('Ei tarvittavia tietoja liitteiden lähettämiseen.');
+      }
+    }
     this.state = 'sending';
     this.faqForm.disable();
-    this.attachments.sendFilesPromise(ticketID, commentID)
-    .then(res => {
+    this.attachments.sendFilesPromise(ticketID, commentID).then(res => {
       this.state = 'done';
       this.goBack();
     })
