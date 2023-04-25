@@ -290,8 +290,8 @@ export class AuthService {
   }
 
   public async navigateToLogin(courseID: string | null) {
-     // console.warn('logout: kurssi id: ' + this.courseID);
-     if (this.courseID === null ) {
+    // console.warn('logout: kurssi id: ' + this.courseID);
+    if (this.courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
     this.sendAskLoginRequest('own', this.courseID).then((response: any) => {
@@ -335,7 +335,7 @@ export class AuthService {
       throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
     }
     // console.warn('auth. service kurssi id: '+ courseID);
-    let loginUrl = response['login-url'];
+    const loginUrl = response['login-url'];
     // if (courseID != null) loginUrl = `course/${courseID}${loginUrl}`;
     // console.log('loginurl: ' + loginUrl);
     return loginUrl;

@@ -141,6 +141,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public errorClickEvent(button: string) {
     if (this.noDataConsent === false) {
       this.giveConsent();
+    } else if (this.isInIframe === false) {
+      this.authService.navigateToLogin(this.courseID);
     }
 }
 
