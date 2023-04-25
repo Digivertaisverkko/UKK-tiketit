@@ -8,7 +8,7 @@ import { Title } from '@angular/platform-browser';
   template: `
 
   <div class="top-buttons-wrapper" *ngIf="courseID">
-      <app-to-beginning-button></app-to-beginning-button>
+      <app-beginning-button></app-beginning-button>
     </div>
 
     <h1 class="main-header">

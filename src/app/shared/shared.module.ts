@@ -10,7 +10,7 @@ import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
-import { ToBeginningButtonComponent } from './components/to-beginning-button/to-beginning-button.component';
+import { ToBeginningButtonComponent } from './components/beginning-button/beginning-button.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';

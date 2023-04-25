@@ -9,7 +9,7 @@ import { Title } from '@angular/platform-browser';
   template: `
 
     <div *ngIf="courseID" class="top-buttons-wrapper">
-      <app-to-beginning-button></app-to-beginning-button>
+      <app-beginning-button></app-beginning-button>
     </div>
 
     <h1 class="main-header"><span>404</span></h1>

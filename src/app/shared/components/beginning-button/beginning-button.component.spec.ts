@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToBeginningButtonComponent } from './to-beginning-button.component';
+import { ToBeginningButtonComponent } from './beginning-button.component';
 
 describe('ToBeginningButtonComponent', () => {
   let component: ToBeginningButtonComponent;

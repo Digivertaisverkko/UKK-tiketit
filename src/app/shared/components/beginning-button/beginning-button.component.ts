@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-to-beginning-button',
+  selector: 'app-beginning-button',
   template: `
     <button color="accent"
             (click)="goBack()"
@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
       <span i18n="@@Alkuun">Alkuun</span>
     </button>
   `,
-  styleUrls: ['./to-beginning-button.component.scss'],
+  styleUrls: ['./beginning-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToBeginningButtonComponent {

@@ -12,13 +12,13 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-to-beginning-button [disabled]="state==='sending'"
+  <app-beginning-button [disabled]="state==='sending'"
         *ngIf="ticket.tila === undefined">
-  </app-to-beginning-button>
+  </app-beginning-button>
 
   <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
-      <app-to-beginning-button [disabled]="state==='sending'">
-      </app-to-beginning-button>
+      <app-beginning-button [disabled]="state==='sending'">
+      </app-beginning-button>
 
       <div class="spacer"></div>
 
