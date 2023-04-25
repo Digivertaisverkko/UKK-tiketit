@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
+import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { Title } from '@angular/platform-browser';
 import { UserManagementService } from 'src/app/user-management/user-management.service';
@@ -25,6 +26,7 @@ export class ProfileComponent implements OnInit {
   constructor(private authService: AuthService,
               private renderer: Renderer2,
               private route: ActivatedRoute,
+              private store: StoreService,
               private ticketService: TicketService,
               private titleServ: Title,
               private userManagementService: UserManagementService) {

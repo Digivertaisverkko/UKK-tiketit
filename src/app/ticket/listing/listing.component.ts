@@ -89,6 +89,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.startLoading();
     this.noDataConsent = this.getDataConsent();
     this.url = window.location.pathname;
     this.trackCourseID();
@@ -156,12 +157,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
         return
-      })
-      .catch(error => {
+      }).catch(error => {
         this.handleError(error)
-      })
-      .finally(() => {
-        this.isLoaded = true;
+      }).finally(() => {
+        this.stopLoading();
         if (this.isPolling === false) {
           this.isPolling = true;
           if (this.isTicketsLoaded === true || this.isParticipant === false) {
@@ -198,14 +197,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private handleError(error: any) {
     if (error?.tunnus == 1000 ) {
     }
-    this.isLoaded = true;
+    this.stopLoading();
   }
 
   public newTicketMessage(event: any) {
     if (event === 'loaded') {
       this.isTicketsLoaded = true;
       if (this.isPolling === true) {
-        this.isLoaded = true;
+        this.stopLoading();
         this.restorePosition();
       }
     }
@@ -243,8 +242,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe(response => {
       if (response === 'refresh') {
         console.log('trackMessages: saatiin refresh pyyntö.');
-        this.isLoaded = false;
-        setTimeout(() => this.isLoaded = true, 800);
+        this.startLoading();
+        setTimeout(() => {
+          this.stopLoading();
+        });
         // this.fetchTickets(this.courseID);
         this.fetchFAQ(this.courseID, true);
       }
@@ -279,6 +280,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private startLoading() {
+    this.isLoaded = false;
+    this.store.startLoading();
+  }
+
+  private stopLoading() {
+    this.isLoaded = true;
+    this.store.stopLoading();
+  }
+
   // Seurataan kurssi ID:ä URL:sta.
   private trackCourseID(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -286,7 +297,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       if (courseID === null) {
         this.errorMessage = $localize `:@@puuttuu kurssiID:
             Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
-        this.isLoaded = true;
+        this.stopLoading();
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
@@ -298,7 +309,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response === false) {
-        this.isLoaded = true;
+        this.stopLoading();
         this.setError('notLoggedIn');
       } else if (response === true) {
         this.error === null;

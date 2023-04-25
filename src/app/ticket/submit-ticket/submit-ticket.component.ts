@@ -10,6 +10,7 @@ import { EditAttachmentsComponent
 import { AddTicketResponse, KentanTiedot, Liite, TicketService, UusiTiketti
 } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
+import { StoreService } from 'src/app/core/store.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 
 interface FileInfo {
@@ -62,6 +63,7 @@ export class SubmitTicketComponent implements OnInit {
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
+              private store: StoreService,
               private ticketService: TicketService,
               private titleServ: Title)
   {}
@@ -169,8 +171,7 @@ export class SubmitTicketComponent implements OnInit {
         if (this.oldAttachments.length === 0) this.goBack();
         if (this.ticketId === null || this.commentID === null) throw Error;
         this.sendFiles(this.ticketId, this.commentID);
-      }
-      ).catch(error => {
+      }).catch(error => {
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
             Kysymyksen lähettäminen epäonnistui` + '.';
         this.state = 'editing';

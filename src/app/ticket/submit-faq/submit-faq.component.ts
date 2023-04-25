@@ -11,6 +11,7 @@ import { AddTicketResponse, Error, KentanTiedot, Liite, TicketService, Tiketti,
     UusiUKK } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
+import { StoreService } from 'src/app/core/store.service';
 
 interface FileInfo {
   filename: string;
@@ -66,6 +67,7 @@ export class SubmitFaqComponent implements OnInit {
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
+              private store: StoreService,
               private ticketService: TicketService,
               private titleServ: Title)
   {}

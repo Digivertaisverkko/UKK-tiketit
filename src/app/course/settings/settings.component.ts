@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants, getIsInIframe } from '../../shared/utils';
+import { StoreService } from 'src/app/core/store.service';
 import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
@@ -33,6 +34,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {
