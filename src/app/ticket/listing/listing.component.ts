@@ -92,9 +92,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.getDataConsent();
     this.url = window.location.pathname;
     this.trackCourseID();
-    this.authService.trackUserInfo().subscribe(response => {
-      if (response?.id) this.user = response;
-    });
+    this.trackUserInfo();
     this.trackLoggedStatus();
     this.trackScreenSize();
   }
@@ -260,6 +258,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isPhonePortrait = false;
         this.maxItemTitleLength = 100;
       }
+    });
+  }
+
+  private trackUserInfo(): void {
+    this.authService.trackUserInfo()
+    .pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe(response => {
+      if (response?.id) this.user = response;
     });
   }
 

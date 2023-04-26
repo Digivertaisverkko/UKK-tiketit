@@ -35,7 +35,6 @@ export class FaqViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.startLoading();
     this.getIfInIframe();
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -59,7 +58,7 @@ export class FaqViewComponent implements OnInit {
           this.errorMessage =
             $localize`:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
         })
-        .finally(() => this.stopLoading() );
+        .finally(() => this.isLoaded = true );
     }
   }
 
@@ -88,17 +87,6 @@ export class FaqViewComponent implements OnInit {
   private getIfInIframe() {
     const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
     this.isInIframe = (isInIframe === 'false') ? false : true;
-  }
-
-
-  private startLoading() {
-    this.isLoaded = false;
-    this.store.startLoading();
-  }
-
-  private stopLoading() {
-    this.isLoaded = true;
-    this.store.stopLoading();
   }
 
 }

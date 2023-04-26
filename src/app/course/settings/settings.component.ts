@@ -40,7 +40,6 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.startLoading();
     this.titleServ.setTitle(Constants.baseTitle + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
     this.trackRouteParameters();
@@ -61,7 +60,6 @@ export class SettingsComponent implements OnInit {
       // } else {
       this.fetchTicketFieldInfo(courseID);
       // }
-      this.stopLoading();
     });
   }
 
@@ -88,26 +86,17 @@ export class SettingsComponent implements OnInit {
         this.fieldList = response;
       }
       console.dir(this.fieldList);
+      return
     }).catch(e => {
       this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
           Kysymysten lisäkenttien haku epäonnistui` + '.';
-    });
+    }).finally( () => this.isLoaded = true)
   }
 
   private showCourseName(courseID: string) {
     this.ticketService.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
-  }
-
-  private startLoading() {
-    this.isLoaded = false;
-    this.store.startLoading();
-  }
-
-  private stopLoading() {
-    this.isLoaded = true;
-    this.store.stopLoading();
   }
 
 }

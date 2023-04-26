@@ -43,7 +43,6 @@ export class EditFieldComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.startLoading();
     this.trackRouteParameters();
   }
 
@@ -62,13 +61,12 @@ export class EditFieldComponent implements OnInit {
       this.showCourseName(this.courseID);
       // Kentän id on uudella kentällä null.
       if  (!this.fieldID) {
-        this.titleServ.setTitle(Constants.baseTitle + $localize 
+        this.titleServ.setTitle(Constants.baseTitle + $localize
             `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
       }
       // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
       // uusi kenttä.
       this.getFieldInfo(courseID, this.fieldID);
-      this.stopLoading();
     });
   }
 
@@ -134,17 +132,18 @@ export class EditFieldComponent implements OnInit {
       } else {
         this.multipleSelection = true;
       }
-      this.titleServ.setTitle(Constants.baseTitle + ' ' + $localize 
+      this.titleServ.setTitle(Constants.baseTitle + ' ' + $localize
       `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
 
       console.log('alla kaikki kentät');
       console.dir(this.allFields);
+      return
     }).catch(error => {
       console.dir(error);
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
-    })
+    }).finally( () => this.isLoaded = true)
   }
 
   private showCourseName(courseID: string) {
@@ -181,16 +180,6 @@ export class EditFieldComponent implements OnInit {
 
   public changeRemoveButton() {
     setTimeout(() => this.isRemovePressed = true, 300);
-  }
-
-  private startLoading() {
-    this.isLoaded = false;
-    this.store.startLoading();
-  }
-
-  private stopLoading() {
-    this.isLoaded = true;
-    this.store.stopLoading();
   }
 
 }

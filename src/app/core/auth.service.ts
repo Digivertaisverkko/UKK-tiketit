@@ -1,8 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import cryptoRandomString from 'crypto-random-string';
-import { BehaviorSubject, first, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import * as shajs from 'sha.js';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
@@ -32,7 +32,7 @@ export class AuthService {
               private location: Location,
               private router: Router,
               private route: ActivatedRoute,
-              @Inject( LOCALE_ID ) private localeDateFormat: string
+              @Inject(LOCALE_ID) private localeDateFormat: string
               ) {
   }
 
