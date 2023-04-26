@@ -34,10 +34,12 @@ export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   private commentID: string | null = null;
+  public confirmationStyle;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
+  public isConfirmRequested: boolean = false;
   public isInIframe: boolean = getIsInIframe();
   public message: string = '';
   public oldAttachments: Liite[] = [];
@@ -63,7 +65,9 @@ export class SubmitTicketComponent implements OnInit {
               private route: ActivatedRoute,
               private ticketService: TicketService,
               private titleServ: Title)
-  {}
+  {
+    this.confirmationStyle = { margin: '2rem 0 0 0' }
+  }
 
   ngOnInit(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -82,6 +86,13 @@ export class SubmitTicketComponent implements OnInit {
     this.auth.trackUserInfo()
     .subscribe(response => { this.userName = response?.nimi ?? ''; });
 
+  }
+
+  public backBtnPressed() {
+    if (!this.ticketForm.dirty || this.isConfirmRequested) {
+      this.goBack();
+    }
+    this.isConfirmRequested = true;
   }
 
   private buildAdditionalFields(): void {

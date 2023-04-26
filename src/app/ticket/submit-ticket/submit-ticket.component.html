@@ -4,8 +4,23 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-  <app-beginning-button [disabled]="state==='sending'">
-  </app-beginning-button>
+    <button color="accent"
+        (click)="backBtnPressed()"
+        [disabled]="state==='sending'"
+        mat-raised-button>
+      <mat-icon>arrow_back_ios</mat-icon>
+      <span i18n="@@Alkuun">Alkuun</span>
+    </button>
+
+    <app-error-card
+        (clickEvent)="goBack()"
+        *ngIf="isConfirmRequested"
+        buttonText="Kyllä"
+        message="Jos poistut näkymästä  kesken muokkauksen, menetät kaikki tekemäsi muutokset."
+        [styles]="confirmationStyle"
+        title="Oletko varma?"
+        >
+    </app-error-card>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
