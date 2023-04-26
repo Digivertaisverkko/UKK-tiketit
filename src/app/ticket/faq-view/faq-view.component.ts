@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { StoreService } from 'src/app/core/store.service';
 import { TicketService, Tiketti, Error } from '../ticket.service';
 import { Constants } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
@@ -28,7 +27,6 @@ export class FaqViewComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {

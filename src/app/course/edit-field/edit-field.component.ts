@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants, getIsInIframe } from '../../shared/utils';
-import { StoreService } from 'src/app/core/store.service';
 import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }from '@angular/material/chips';
@@ -30,7 +29,6 @@ export class EditFieldComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {

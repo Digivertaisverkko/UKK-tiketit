@@ -6,7 +6,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { StoreService } from 'src/app/core/store.service';
 import { CommentComponent } from '../components/comment/comment.component';
 import { Constants, getIsInIframe, isToday } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
@@ -66,7 +65,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {
@@ -270,16 +268,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         });
         this.state = 'editing';
       })
-  }
-
-  private startLoading() {
-    this.isLoaded = false;
-    this.store.startLoading();
-  }
-
-  private stopLoading() {
-    this.isLoaded = true;
-    this.store.stopLoading();
   }
 
   private startPollingTicket() {
