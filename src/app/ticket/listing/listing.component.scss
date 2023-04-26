@@ -1,5 +1,14 @@
 @import '/src/variables.scss';
 
+.view-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+  .main-header > span {
+    padding-right: 2em;
+  }
+
 /* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
    kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
 section,
@@ -11,11 +20,6 @@ section,
 app-error-card,
 .theme-actions {
   margin-left: -15px;
-}
-
-.view-header {
-  display: flex;
-  justify-content: space-between;
 }
 
 .embedded-button {

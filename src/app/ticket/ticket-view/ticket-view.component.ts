@@ -38,7 +38,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
   public commentText: string = '';
-  public courseName: string = '';
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public isArchivePressed: boolean = false;
@@ -90,9 +89,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
-    this.ticketService.getCourseName(this.courseID).then(response => {
-      this.courseName = response;
-    });
 
     if (!this.isPollingTicket) this.startPollingTicket();
 

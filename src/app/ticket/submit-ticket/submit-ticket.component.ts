@@ -35,7 +35,6 @@ export class SubmitTicketComponent implements OnInit {
 
   private commentID: string | null = null;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
-  public courseName: string = '';
   public currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
@@ -78,9 +77,6 @@ export class SubmitTicketComponent implements OnInit {
     } else {
       this.fetchTicketInfo(this.ticketId);
     }
-
-    this.ticketService.getCourseName(this.courseId)
-    .then(response => { this.courseName = response; });
 
     this.auth.fetchUserInfo(this.courseId);
     this.auth.trackUserInfo()

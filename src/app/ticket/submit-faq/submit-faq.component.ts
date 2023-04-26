@@ -37,7 +37,6 @@ export class SubmitFaqComponent implements OnInit {
 
   public attachmentsHasErrors: boolean = false;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
-  public courseName: string = '';
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public faqAnswer: string = '';
@@ -82,10 +81,6 @@ export class SubmitFaqComponent implements OnInit {
     } else {
       this.fetchTicketInfo(this.ticketId);
     }
-
-    this.ticketService.getCourseName(this.courseId)
-    .then( response => { this.courseName = response });
-
   }
 
   private buildAdditionalFields(): void {
@@ -157,8 +152,6 @@ export class SubmitFaqComponent implements OnInit {
       if (String(response.kurssi) !== this.courseId) {
         this.courseId = String(response.kurssi);
         this.auth.fetchUserInfo(this.courseId);
-        this.ticketService.getCourseName(this.courseId)
-        .then( response => { this.courseName = response });
       }
     });
   }

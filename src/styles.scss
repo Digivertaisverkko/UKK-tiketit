@@ -52,7 +52,6 @@ $debug: false;
   // margin-top: 3.8rem;
   margin-bottom: 0.6rem;
   overflow: hidden;
-  padding-right: 5rem;
   position: relative;
   z-index: 0;
 
@@ -62,10 +61,11 @@ $debug: false;
     @if $debug { outline: 2px dotted blue }
     position: relative;
     // Firefoxilla korkeutta ei määritellä span-elementillä, vaan tarvitaan tämä.
-    // Viiva on tällöin koko näkymän leveyksinen.
+    // Viiva on tällöin useammalla rivillä koko näkymän leveyksinen.
     @-moz-document url-prefix() {
       display: inline-block;
     }
+    // padding-right: 2em;
     // Otsikon viimeisen rivin alla oleva viiva.lock;
     &:after {
       @if $debug { outline: 2px solid green }
@@ -73,7 +73,7 @@ $debug: false;
       bottom: 4px;
       content: "";
       left: 0;
-      padding-right: 5em;
+      padding-right: 3em;
       position: absolute;
       width: 100%;
       z-index: -1;

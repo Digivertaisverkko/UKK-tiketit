@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
+    from '@angular/core';
 import { getIsInIframe } from 'src/app/shared/utils';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -11,6 +12,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
         *ngIf="courseName.length > 0 && !isInIframe"
 
         >
+      <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>{{courseName}}</span>
     </h1>
   `,
@@ -37,6 +39,7 @@ export class HeadlineComponent implements OnInit {
   private showCourseName(courseID: string) {
     this.ticketServ.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
+      // this.courseName = 'Testikurssi';
       this.change.detectChanges();
     }).catch( () => this.courseName = '');
   }

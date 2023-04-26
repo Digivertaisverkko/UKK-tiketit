@@ -1,9 +1,7 @@
-<div *ngIf="isLoaded">
 
-  <h1 class="main-header"
-      *ngIf="courseName.length > 0 && !isInIframe && !ticketIdFromParent">
-    <span>{{ courseName }}</span>
-  </h1>
+  <app-headline></app-headline>
+
+  <div *ngIf="isLoaded">
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 

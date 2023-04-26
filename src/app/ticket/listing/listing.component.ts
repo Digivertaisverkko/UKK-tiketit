@@ -39,6 +39,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
   public columnDefinitions: ColumnDefinition[];
   public courseID: string = '';
+  public courseName: string = '';
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
   public isInIframe: boolean;
@@ -59,7 +60,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private url: string = '';
 
   // Merkkijonot
-  public courseName: string = '';
   public errorMessage: string | null = null;
   public ticketViewLink = '';
   public user: User = {} as User;
@@ -270,11 +270,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private showCourseName(courseID: string) {
-    this.ticket.getCourseName(courseID).then(response => {
-      this.courseName = response ?? '';
-    }).catch( () => this.courseName = '');
-  }
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
@@ -341,6 +336,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         console.error('Ei virheviestiä tyypille: ' + type);
       }
     }
+
+  private showCourseName(courseID: string) {
+    this.ticket.getCourseName(courseID).then(response => {
+      this.courseName = response ?? '';
+    }).catch( () => this.courseName = '');
+  }
 
   private startPollingFAQ(): void {
     this.fetchFAQsSub$?.unsubscribe();

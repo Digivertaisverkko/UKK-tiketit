@@ -27,7 +27,6 @@ export class SettingsComponent implements OnInit {
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public courseID: string = '';
-  public courseName: string = '';
   // private delayFetching: string = window.history.state.delayFetching ?? false;
 
   constructor(
@@ -53,7 +52,6 @@ export class SettingsComponent implements OnInit {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
-      this.showCourseName(this.courseID);
       // FIXME: Palvelin voi palauttaa tyhjän taulun, niin väliaikainen fiksi.
       // if (this.delayFetching == 'true') {
         // setTimeout(() => { this.fetchTicketFieldInfo(this.courseID) }, 200);
@@ -91,12 +89,6 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
           Kysymysten lisäkenttien haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)
-  }
-
-  private showCourseName(courseID: string) {
-    this.ticketService.getCourseName(courseID).then(response => {
-      this.courseName = response ?? '';
-    }).catch( () => this.courseName = '');
   }
 
 }

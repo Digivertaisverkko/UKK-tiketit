@@ -14,7 +14,6 @@ import { UserManagementService } from 'src/app/user-management/user-management.s
 export class ProfileComponent implements OnInit {
 
   private courseId: string | null;
-  public courseName: string = '';
   public errorMessage: string = '';
   public isLoaded: boolean = false;
   public isInIframe: boolean = getIsInIframe();
@@ -33,13 +32,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleServ.setTitle(Constants.baseTitle + $localize `:@@Profiili:Profiili`);
-    if (this.courseId !== null) {
-      this.ticketService.getCourseName(this.courseId).then(response => {
-        this.courseName = response;
-      });
-    } else {
-      throw new Error('Kurssi ID puuttuu URL:sta.');
-    }
     this.userManagementService.getPersonalInfo().then(response => {
       this.userName = response.nimi;
       this.userEmail = response.sposti;
