@@ -15,6 +15,7 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { HeadlineComponent } from './components/headline/headline.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -44,6 +45,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   declarations: [
     ErrorCardComponent,
     EditorComponent,
+    HeadlineComponent,
     MenuLinkComponent,
     MenuSrcComponent,
     ToBeginningButtonComponent,
@@ -63,6 +65,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     BrowserAnimationsModule,
     FormsModule,
     MaterialModule,
+    HeadlineComponent,
     ErrorCardComponent,
     EditorComponent,
     MenuLinkComponent,

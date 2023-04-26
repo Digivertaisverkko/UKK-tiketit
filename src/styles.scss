@@ -11,6 +11,7 @@ html {
 :root {
   --margin-top-embedded: 1.5rem
 }
+
 body {
   line-height: 1.45;
   margin: 0;
@@ -51,20 +52,23 @@ $debug: false;
   // margin-top: 3.8rem;
   margin-bottom: 0.6rem;
   overflow: hidden;
+  padding-right: 5rem;
   position: relative;
   z-index: 0;
 
   // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
   // alla olevan viivan pituuden määrittelyyn.
   span {
-    @if $debug { outline: 2px dotted blue; }
+    @if $debug { outline: 2px dotted blue }
     position: relative;
     // Firefoxilla korkeutta ei määritellä span-elementillä, vaan tarvitaan tämä.
     // Viiva on tällöin koko näkymän leveyksinen.
-    @-moz-document url-prefix() { display: inline-block; }
+    @-moz-document url-prefix() {
+      display: inline-block;
+    }
     // Otsikon viimeisen rivin alla oleva viiva.lock;
     &:after {
-      @if $debug { outline: 2px solid green; }
+      @if $debug { outline: 2px solid green }
       border-bottom: 3px solid var(--accent-color);
       bottom: 4px;
       content: "";
@@ -192,7 +196,7 @@ Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
       height: 3em;
     }
   }
-  
+
 .theme-success-message {
   padding: 1rem;
   background-color: #C8E6C9;
