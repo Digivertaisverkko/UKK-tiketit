@@ -30,9 +30,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
 
 export class ErrorCardComponent {
 
+  // styles: voi laittaa CSS:ää.
   @Input() buttonText: string = '';
   @Input() message: string =  $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
-  @Input() styles: any;
+  @Input() styles: object | null = null;
   @Input() title: string = $localize `:@@Virhe:Virhe`;
   @Output() clickEvent = new EventEmitter<string>();
 
