@@ -11,13 +11,14 @@
         mode="indeterminate"
         *ngIf="isLoading | async"
         >
-  </mat-progress-bar>
+    </mat-progress-bar>
 
     <!-- <h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
       <span>{{courseName}}</span>
     </h1> -->
 
     <router-outlet></router-outlet>
+
   </main>
 
   <app-footer></app-footer>

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { AuthService } from './core/auth.service';
+import { AuthService, User } from './core/auth.service';
 import { environment } from 'src/environments/environment';
+import { getIsInIframe } from './shared/utils';
 import { StoreService } from './core/store.service';
-import { Observable } from 'rxjs';
 // import { TicketService } from './ticket/ticket.service';
 
 @Component({
@@ -12,16 +13,18 @@ import { Observable } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit  {
+export class AppComponent implements OnInit, OnDestroy  {
   public courseName: string = '';
   private courseID: string | null = null;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
-  public isLoading: Observable<boolean>;
+  public isLoading: Observable<boolean> | null = null;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
+  public user: User = {} as User;
 
   private isLogged: boolean = false;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private authService: AuthService,
@@ -33,7 +36,6 @@ export class AppComponent implements OnInit  {
   }
 
   ngOnInit(): void {
-    // this.trackLoading();
     if (environment.production === true) {
       console.log('Production build');
     }
@@ -43,7 +45,7 @@ export class AppComponent implements OnInit  {
     // Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
     // this.isInIframe = true;
-    this.isInIframe = this.testIframe();
+    this.isInIframe = getIsInIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackLoginStatus();
@@ -51,8 +53,16 @@ export class AppComponent implements OnInit  {
   }
 
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   private trackLoginStatus() {
-    this.authService.onIsUserLoggedIn().subscribe(response => {
+    this.authService.onIsUserLoggedIn()
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(response => {
       if (response) {
         this.isLogged = true;
         this.logButtonString = $localize`:@@Kirjaudu ulos:Kirjaudu ulos`;
@@ -70,14 +80,6 @@ export class AppComponent implements OnInit  {
     } else {
       this.authService.saveRedirectURL();
       this.authService.navigateToLogin(this.courseID);
-    }
-  }
-
-  private testIframe () {
-    try {
-      return window.self !== window.top;
-    } catch (e) {
-      return true;
     }
   }
 
