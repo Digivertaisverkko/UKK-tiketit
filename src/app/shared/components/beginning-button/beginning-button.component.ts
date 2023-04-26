@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: `
     <button color="accent"
             (click)="goBack()"
-            mat-raised-button 
+            mat-raised-button
             [disabled]="disabled"
             >
       <mat-icon>arrow_back_ios</mat-icon>
@@ -16,7 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./beginning-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToBeginningButtonComponent {
+export class BeginningButtonComponent {
 
   @Input() disabled: boolean = false;
 

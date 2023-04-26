@@ -10,7 +10,7 @@ import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
-import { ToBeginningButtonComponent } from './components/beginning-button/beginning-button.component';
+import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
@@ -48,7 +48,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     HeadlineComponent,
     MenuLinkComponent,
     MenuSrcComponent,
-    ToBeginningButtonComponent,
+    BeginningButtonComponent,
     SafeHtmlPipe,
     SearchBarComponent
   ],
@@ -70,7 +70,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     EditorComponent,
     MenuLinkComponent,
     MenuSrcComponent,
-    ToBeginningButtonComponent,
+    BeginningButtonComponent,
     SafeHtmlPipe,
     ReactiveFormsModule,
     SearchBarComponent,
