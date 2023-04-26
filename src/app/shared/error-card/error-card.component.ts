@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
   selector: 'app-error-card',
   template: `
 
-    <div class="border-area">
+    <div class="border-area" [ngStyle]="styles">
       <div class="headline-wrapper">
       <mat-icon fontIcon="warning_amber"></mat-icon>
         <h3 class="h3">{{ title }}</h3>
@@ -32,7 +32,7 @@ export class ErrorCardComponent {
 
   @Input() buttonText: string = '';
   @Input() message: string =  $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
-  @Input() styles: object = {};
+  @Input() styles: any;
   @Input() title: string = $localize `:@@Virhe:Virhe`;
   @Output() clickEvent = new EventEmitter<string>();
 
