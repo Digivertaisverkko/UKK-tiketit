@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { Constants, isValidEmail } from '../../shared/utils';
+import { StoreService } from 'src/app/core/store.service';
 import { Title } from '@angular/platform-browser';
 
 
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
+    private store: StoreService,
     private titleServ: Title
   ) {
   }
@@ -62,6 +64,7 @@ export class LoginComponent implements OnInit {
   }
 
   private handleError (error: any) {
+    this.store.stopLoading();
     switch (error?.tunnus) {
       case 1001:
         this.errorMessage = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:
