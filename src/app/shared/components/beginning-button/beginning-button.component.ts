@@ -45,11 +45,8 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
   }
 
   private listenMessages(): void {
-    this.store.trackMessages().pipe(
-    ).subscribe(response => {
-      if (response === 'go begin') {
-        this.goBack();
-      }
+    this.store.trackMessages().subscribe(response => {
+      if (response === 'go begin') this.buttonPressed();
     })
   }
 
