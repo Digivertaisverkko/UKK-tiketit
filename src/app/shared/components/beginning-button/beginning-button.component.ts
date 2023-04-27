@@ -1,11 +1,16 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output,
+    OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
+import { StoreService } from 'src/app/core/store.service';
 
 @Component({
   selector: 'app-beginning-button',
   template: `
-    <button color="accent"
-            (click)="goBack()"
+
+    <button  color="accent"
+            (click)="buttonPressed()"
             mat-raised-button
             [disabled]="disabled"
             >
@@ -16,17 +21,48 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./beginning-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BeginningButtonComponent {
+export class BeginningButtonComponent implements OnInit, OnDestroy {
 
+  @Input() confirm?: boolean = false;
   @Input() disabled: boolean = false;
+  @Output() clicked = new EventEmitter<void>();
+  
+  private messages$: Subscription | null = null;
 
   constructor (
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: StoreService
     ) {
   }
+  
+  ngOnInit(): void {
+    this.listenMessages();
+  }
 
-  public goBack(): void {
+  ngOnDestroy(): void {
+    this.messages$?.unsubscribe();
+  }
+
+  private listenMessages(): void {
+    this.store.trackMessages().pipe(
+    ).subscribe(response => {
+      if (response === 'go begin') {
+        this.goBack();
+      }
+    })
+  }
+
+  public buttonPressed() {
+    if (this.confirm === false) {
+      this.goBack();
+    } else {
+      this.confirm = false;
+      this.clicked.emit();
+    }
+  }
+
+  private goBack(): void {
     const courseID = this.route.snapshot.paramMap.get('courseid');
     this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
   }
