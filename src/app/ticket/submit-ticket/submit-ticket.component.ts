@@ -82,7 +82,6 @@ export class SubmitTicketComponent implements OnInit {
     this.auth.fetchUserInfo(this.courseId);
     this.auth.trackUserInfo()
     .subscribe(response => { this.userName = response?.nimi ?? ''; });
-
   }
 
 
@@ -151,6 +150,8 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public sendTicket(): void {
+    this.state = 'sending';
+    this.ticketForm.disable();
     let newTicket = this.createTicket();
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     if (this.editExisting) {
@@ -206,8 +207,6 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private sendFiles(ticketID: string, commentID: string) {
-    this.state = 'sending';
-    this.ticketForm.disable();
     this.attachments.sendFilesPromise(ticketID, commentID)
     .then((res) => {
       this.state = 'done';

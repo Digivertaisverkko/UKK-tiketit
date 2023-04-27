@@ -179,6 +179,8 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public sendFaq(): void {
+    this.state = 'sending';
+    this.faqForm.disable();
     let newFaq: UusiUKK = this.createFaq();
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.submitNewFaq(newFaq);
@@ -188,19 +190,20 @@ export class SubmitFaqComponent implements OnInit {
     if (this.courseId === null) return;
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.addFaq(id, faq, this.editExisting)
-      .then((response: AddTicketResponse) => {
-        if (this.attachments.fileInfoList.length === 0) {
-          this.goBack();
-        }
-        if (response === null || response?.success !== true) {
-          this.state = 'editing';
-          this.faqForm.enable();
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-              Kysymyksen lähettäminen epäonnistui` + '.';
-          throw new Error('Kysymyksen lähettäminen epäonnistui.');
-        }
+    .then((response: AddTicketResponse) => {
+      if (this.attachments.fileInfoList.length === 0) {
+        this.goBack();
+      }
+      if (response === null || response?.success !== true) {
+        this.state = 'editing';
+        this.faqForm.enable();
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+            Kysymyksen lähettäminen epäonnistui` + '.';
+        throw new Error('Kysymyksen lähettäminen epäonnistui.');
+      }
       this.prepareSendFiles(response);
-    }).catch( error => {
+    })
+    .catch( error => {
       // ? lisää eri virhekoodeja?
       this.state = 'editing';
       this.faqForm.enable();
@@ -210,8 +213,6 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   private sendFiles(ticketID: string, commentID: string) {
-    this.state = 'sending';
-    this.faqForm.disable();
     this.attachments.sendFilesPromise(ticketID, commentID)
     .then(res => {
       this.state = 'done';
