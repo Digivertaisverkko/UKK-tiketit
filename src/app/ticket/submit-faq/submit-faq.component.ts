@@ -36,6 +36,7 @@ export class SubmitFaqComponent implements OnInit {
   public readonly MAX_FILE_SIZE_MB = 100;
 
   public attachmentsHasErrors: boolean = false;
+  public confirmationStyle;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
@@ -46,6 +47,7 @@ export class SubmitFaqComponent implements OnInit {
   public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
+  public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
   public ticketFields: KentanTiedot[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
@@ -67,7 +69,9 @@ export class SubmitFaqComponent implements OnInit {
               private route: ActivatedRoute,
               private ticketService: TicketService,
               private titleServ: Title)
-  {}
+  {
+    this.confirmationStyle = { margin: '2rem 0 0 0' }
+  }
 
   ngOnInit(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
