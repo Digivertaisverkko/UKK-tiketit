@@ -6,9 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { EditAttachmentsComponent
-} from '../components/edit-attachments/edit-attachments.component';
+    } from '../components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, KentanTiedot, Liite, TicketService, UusiTiketti
-} from '../ticket.service';
+    } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 
@@ -63,11 +63,8 @@ export class SubmitTicketComponent implements OnInit {
               private router: Router,
               private route : ActivatedRoute,
               private ticketService: TicketService,
-              private titleServ: Title
-              )
-  {
-    this.confirmationStyle = { margin: '2rem 0 0 0' }
-  }
+              private titleServ: Title)
+  {}
 
   ngOnInit(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -145,6 +142,7 @@ export class SubmitTicketComponent implements OnInit {
       this.message = response.viesti;
       this.oldAttachments = response.liitteet ?? [];
       this.commentID = response.kommenttiID;
+      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
     });
   }
 
@@ -166,17 +164,17 @@ export class SubmitTicketComponent implements OnInit {
   private submitEditedTicket(ticket: UusiTiketti) {
     if (this.ticketId === null) return;
     this.ticketService.editTicket(this.ticketId, ticket)
-      .then( () => {
-        if (this.oldAttachments.length === 0) this.goBack();
-        if (this.ticketId === null || this.commentID === null) throw Error;
-        this.sendFiles(this.ticketId, this.commentID);
-      }
-      ).catch(error => {
-        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-            Kysymyksen lähettäminen epäonnistui` + '.';
-        this.state = 'editing';
-        this.ticketForm.enable();
-      });
+    .then( () => {
+      if (this.oldAttachments.length === 0) this.goBack();
+      if (this.ticketId === null || this.commentID === null) throw Error;
+      this.sendFiles(this.ticketId, this.commentID);
+    })
+    .catch(error => {
+      this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+          Kysymyksen lähettäminen epäonnistui` + '.';
+      this.state = 'editing';
+      this.ticketForm.enable();
+    });
   }
 
   private submitNewTicket(ticket: UusiTiketti) {
@@ -199,7 +197,8 @@ export class SubmitTicketComponent implements OnInit {
       const ticketID = response.uusi.tiketti;
       const commentID = response.uusi.kommentti;
       this.sendFiles(ticketID, commentID);
-    }).catch( error => {
+    })
+    .catch( error => {
       // ? lisää eri virhekoodeja?
       this.state = 'editing';
       this.ticketForm.enable();

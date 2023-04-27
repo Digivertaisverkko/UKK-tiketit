@@ -33,9 +33,6 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
-  public readonly MAX_FILE_SIZE_MB = 100;
-
-  public attachmentsHasErrors: boolean = false;
   public confirmationStyle;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -44,7 +41,6 @@ export class SubmitFaqComponent implements OnInit {
   public faqForm: FormGroup = this.buildForm();
   public faqMessage: string = '';
   public isInIframe: boolean = getIsInIframe();
-  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
@@ -53,7 +49,6 @@ export class SubmitFaqComponent implements OnInit {
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
-  public url: string = '';
 
   get additionalFields(): FormArray {
     return this.faqForm.controls["additionalFields"] as FormArray;
@@ -142,7 +137,7 @@ export class SubmitFaqComponent implements OnInit {
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       this.originalTicket = response;
-      this.titleServ.setTitle(Constants.baseTitle + this.originalTicket!.otsikko);
+      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
 
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena
@@ -162,6 +157,25 @@ export class SubmitFaqComponent implements OnInit {
 
   public goBack(): void {
     this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
+  }
+
+  private prepareSendFiles(response: any) {
+    if (!this.editExisting && response?.uusi == null) {
+      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+    }
+    let ticketID, commentID;
+    if (!this.editExisting) {
+      ticketID = response.uusi.tiketti;
+      commentID = response.uusi.kommentti;
+    } else {
+      commentID = this.originalTicket?.kommentit[0].id;
+      ticketID = this.ticketId;
+      if (ticketID == null || commentID == null) {
+        throw Error('Ei tarvittavia tietoja liitteiden lähettämiseen.');
+      }
+    }
+    this.sendFiles(ticketID, commentID);
   }
 
   public sendFaq(): void {
@@ -195,32 +209,18 @@ export class SubmitFaqComponent implements OnInit {
     });
   }
 
-  private prepareSendFiles(response: any) {
-    if (!this.editExisting && response?.uusi == null) {
-      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
-      throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-    }
-    let ticketID, commentID;
-    if (!this.editExisting) {
-      ticketID = response.uusi.tiketti;
-      commentID = response.uusi.kommentti;
-    } else {
-      commentID = this.originalTicket?.kommentit[0].id;
-      ticketID = this.ticketId;
-      if (ticketID == null || commentID == null) {
-        throw Error('Ei tarvittavia tietoja liitteiden lähettämiseen.');
-      }
-    }
+  private sendFiles(ticketID: string, commentID: string) {
     this.state = 'sending';
     this.faqForm.disable();
-    this.attachments.sendFilesPromise(ticketID, commentID).then(res => {
+    this.attachments.sendFilesPromise(ticketID, commentID)
+    .then(res => {
       this.state = 'done';
       this.goBack();
     })
     .catch((res: any) => {
-      this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei onnistunut:
-          Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log('submit-ticket: saatiin virhe: ' + res);
+      this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
+          onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+      console.log('submit-faq: saatiin virhe: ' + res);
       this.state = 'editing';
       this.faqForm.enable();
     })
