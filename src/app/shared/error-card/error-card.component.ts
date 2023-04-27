@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output }
     from '@angular/core';
+import { StoreService } from 'src/app/core/store.service';
 
 @Component({
   selector: 'app-error-card',
@@ -15,7 +16,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
         <p>{{ message }}</p>
 
         <!-- Lähettää '1' jos implementoidaan useampia nappeja. -->
-        <button (click)="clickEvent.emit('1')"
+        <button (click)="click()"
                 mat-raised-button
                 *ngIf="buttonText.length > 0"
                 >
@@ -28,13 +29,37 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output }
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ErrorCardComponent {
+export class ErrorCardComponent implements OnInit {
 
-  // styles: voi laittaa CSS:ää.
+  // styles: voi laittaa CSS:ää. Komponenttiin esim:
+  // [styles]="{ margin: '1em 0 1em' }"
   @Input() buttonText: string = '';
   @Input() message: string =  $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
-  @Input() styles: object | null = null;
+  @Input() styles: any;
   @Input() title: string = $localize `:@@Virhe:Virhe`;
+  @Input() confirmLeave: boolean = false;
   @Output() clickEvent = new EventEmitter<string>();
+
+  constructor(
+      private store: StoreService
+  ) {}
+
+
+  ngOnInit(): void {
+    if (this.confirmLeave) {
+      this.buttonText = $localize `:@@Kyllä:Kyllä`;
+      this.message = $localize `:@@Jos poistut:
+          Jos poistut näkymästä kesken muokkauksen, menetät kaikki tekemäsi muutokset.`;
+      this.title = $localize `:@@Oletko varma:Oletko varma?`;
+    }
+  }
+
+  public click(): void {
+    if (this.confirmLeave) {
+      this.store.sendMessage('go begin');
+    } else {
+      this.clickEvent.emit('1')
+    }
+  }
 
 }
