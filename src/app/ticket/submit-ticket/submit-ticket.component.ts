@@ -151,23 +151,21 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public sendTicket(): void {
-    let ticket = this.createTicket();
-
+    let newTicket = this.createTicket();
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    if (this.ticketId != null) {
-      this.submitEditedTicket(ticket);
+    if (this.editExisting) {
+      this.submitEditedTicket(newTicket);
     } else {
-      this.submitNewTicket(ticket);
+      this.submitNewTicket(newTicket);
     }
   }
 
-  private submitEditedTicket(ticket: UusiTiketti) {
-    if (this.ticketId === null) return;
-    this.ticketService.editTicket(this.ticketId, ticket)
+  private submitEditedTicket(newTicket: UusiTiketti) {
+    if (this.ticketId === null || this.commentID === null) throw new Error;
+    this.ticketService.editTicket(this.ticketId, newTicket)
     .then( () => {
       if (this.oldAttachments.length === 0) this.goBack();
-      if (this.ticketId === null || this.commentID === null) throw Error;
-      this.sendFiles(this.ticketId, this.commentID);
+      this.sendFiles(this.ticketId!, this.commentID!);
     })
     .catch(error => {
       this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
