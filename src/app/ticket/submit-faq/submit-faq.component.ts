@@ -12,6 +12,17 @@ import { AddTicketResponse, Error, KentanTiedot, Liite, TicketService, Tiketti,
 import { AuthService } from '../../core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 
+interface AdditionalField {
+  id: string;
+  otsikko: string;
+  arvo: string;
+  tyyppi: string;
+  ohje: string;
+  pakollinen: boolean;
+  esitaytettava: boolean;
+  valinnat: string[];
+}
+
 interface FileInfo {
   filename: string;
   file: File;
@@ -45,7 +56,7 @@ export class SubmitFaqComponent implements OnInit {
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public ticketFields: KentanTiedot[] = [];
+  public ticketFields: AdditionalField[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
@@ -86,7 +97,8 @@ export class SubmitFaqComponent implements OnInit {
     /* Luodaan lomakkeelle controllit
     HUOM! UKK:lla ei ole pakollisia kenttiä */
     for (const field of this.ticketFields) {
-      this.additionalFields.push(new FormControl('', Validators.maxLength(50)));
+      let value = field.arvo !== undefined && field.arvo !== null ? field.arvo : '';
+      this.additionalFields.push(new FormControl(value, Validators.maxLength(50)));
     }
   }
 
@@ -123,12 +135,11 @@ export class SubmitFaqComponent implements OnInit {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.ticketService.getTicketFieldInfo(this.courseId)
     .then((response) => {
-      this.ticketFields = response as KentanTiedot[];
+      this.ticketFields = response as AdditionalField[];
       this.buildAdditionalFields();
     });
   }
 
-  // TODO: lisäkenttien muokkaaminen, kun backend tarjoaa rajapinnan niiden hakemiseen
   private fetchTicketInfo(ticketId: string): void {
     this.ticketService.getTicketInfo(ticketId)
     .then(response => {
@@ -138,6 +149,8 @@ export class SubmitFaqComponent implements OnInit {
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       this.originalTicket = response;
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
+      this.ticketFields = response.kentat as AdditionalField[];
+      this.buildAdditionalFields();
 
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena

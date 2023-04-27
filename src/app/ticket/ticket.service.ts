@@ -615,12 +615,16 @@ export interface UusiUKK extends UusiTiketti {
   Metodi: getTicketInfo -> getTickgetFields,
   API: /api/tiketti/:tiketti-id/kentat/
   Uusia propertyjä: tyyppi ja ohje.
-  Palautustyypit tarkistettu 25.1.23. */
+  Palautustyypit tarkistettu 27.4.23. */
 export interface Kentta {
+  id: string;
   otsikko: string;
   arvo: string;
   tyyppi: string;
-  ohje?: string;
+  ohje: string;
+  pakollinen: boolean;
+  esitaytettava: boolean;
+  valinnat: string[];
 }
 
 /* Metodi: getTicketFieldInfo
