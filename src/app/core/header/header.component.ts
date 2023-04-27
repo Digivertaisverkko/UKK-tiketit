@@ -94,17 +94,8 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  public goToFrontPage() {
-    if (this.courseID !== null) {
-      const currentRoute = window.location.pathname;
-      if (currentRoute.includes('/list-tickets')) {
-        this.store.sendMessage('refresh');
-      } else {
-        this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
-      }
-    } else {
-      console.error('Ei kurssi ID:ä.');
-    }
+  public logoClicked() {
+    this.store.sendMessage('go begin');
   }
 
   public login(): void {
