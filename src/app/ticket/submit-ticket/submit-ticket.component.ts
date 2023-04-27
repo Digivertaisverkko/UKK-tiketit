@@ -39,7 +39,7 @@ export class SubmitTicketComponent implements OnInit {
   public currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
-  public isConfirmRequested: boolean = false;
+  public showConfirm: boolean = false;
   public isInIframe: boolean = getIsInIframe();
   public message: string = '';
   public oldAttachments: Liite[] = [];
@@ -62,9 +62,10 @@ export class SubmitTicketComponent implements OnInit {
   constructor(private auth: AuthService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private route: ActivatedRoute,
+              private route : ActivatedRoute,
               private ticketService: TicketService,
-              private titleServ: Title)
+              private titleServ: Title
+              )
   {
     this.confirmationStyle = { margin: '2rem 0 0 0' }
   }
@@ -88,12 +89,6 @@ export class SubmitTicketComponent implements OnInit {
 
   }
 
-  public backBtnPressed() {
-    if (!this.ticketForm.dirty || this.isConfirmRequested) {
-      this.goBack();
-    }
-    this.isConfirmRequested = true;
-  }
 
   private buildAdditionalFields(): void {
     // Luodaan lomakkeelle controllit

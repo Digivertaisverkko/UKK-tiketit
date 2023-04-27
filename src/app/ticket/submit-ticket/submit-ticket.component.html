@@ -4,23 +4,28 @@
 
   <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
-    <button color="accent"
+    <!-- <button color="accent"
         (click)="backBtnPressed()"
         [disabled]="state==='sending'"
+        
         mat-raised-button>
       <mat-icon>arrow_back_ios</mat-icon>
       <span i18n="@@Alkuun">Alkuun</span>
-    </button>
+    </button> -->
+
+    <app-beginning-button
+        [confirm]=ticketForm.dirty
+        (clicked)="showConfirm = true"
+        [disabled]="state === 'sending'"
+        >
+    </app-beginning-button>
 
     <app-error-card
-        (clickEvent)="goBack()"
-        *ngIf="isConfirmRequested"
-        buttonText="Kyllä"
-        message="Jos poistut näkymästä  kesken muokkauksen, menetät kaikki tekemäsi muutokset."
+        [confirmLeave]="true"
+        *ngIf="showConfirm"
         [styles]="confirmationStyle"
-        title="Oletko varma?"
         >
-    </app-error-card>
+    </app-error-card> 
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
@@ -41,7 +46,8 @@
                   maxlength="255"
                   name="title"
                   [placeholder]="titlePlaceholder"
-                  type="text">
+                  type="text"
+                  >
         </textarea>
         <mat-error  i18n="@@Pakollinen kenttä."
                     *ngIf="title?.errors?.['required']">
@@ -139,7 +145,7 @@
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
                     *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 0 1em 0;' }"
+                    [styles]="{ margin: '1em 0' }"
                     title="Virhe">
     </app-error-card>
 

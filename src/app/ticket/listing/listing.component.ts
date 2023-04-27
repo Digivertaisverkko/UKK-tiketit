@@ -54,7 +54,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
-  private position: number = 0;
+  private scrollPosition: number = 0;
   private readonly POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
@@ -210,8 +210,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private onScroll = () => {
-    this.position = window.scrollY;
-    this.store.setPosition(this.url, this.position);
+    this.scrollPosition = window.scrollY;
+    this.store.setPosition(this.url, this.scrollPosition);
   }
 
   public openInNewTab(): void {
@@ -219,10 +219,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private restorePosition(): void {
-    this.position = this.store.getPosition(this.url);
-    if (this.position && this.position !== 0) {
+    this.scrollPosition = this.store.getPosition(this.url);
+    if (this.scrollPosition && this.scrollPosition !== 0) {
       console.log('siirrytään aiempaan scroll-positioon');
-      setTimeout(() => window.scrollTo(0, this.position), 100);
+      setTimeout(() => window.scrollTo(0, this.scrollPosition), 100);
     }
     window.addEventListener('scroll', this.onScroll);
   }
@@ -239,7 +239,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     .pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe(response => {
-      if (response === 'refresh') {
+      if (response === 'go begin') {
         console.log('trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
