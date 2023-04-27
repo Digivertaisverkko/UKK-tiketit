@@ -7,7 +7,7 @@
     <!-- <button color="accent"
         (click)="backBtnPressed()"
         [disabled]="state==='sending'"
-        
+
         mat-raised-button>
       <mat-icon>arrow_back_ios</mat-icon>
       <span i18n="@@Alkuun">Alkuun</span>
@@ -23,9 +23,9 @@
     <app-error-card
         [confirmLeave]="true"
         *ngIf="showConfirm"
-        [styles]="confirmationStyle"
+        [styles]="{ margin: '2rem 0 0 0' }"
         >
-    </app-error-card> 
+    </app-error-card>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"

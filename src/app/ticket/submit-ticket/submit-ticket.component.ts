@@ -34,7 +34,6 @@ export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   private commentID: string | null = null;
-  public confirmationStyle;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
