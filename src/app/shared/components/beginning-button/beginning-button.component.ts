@@ -26,7 +26,7 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
   @Input() confirm?: boolean = false;
   @Input() disabled: boolean = false;
   @Output() clicked = new EventEmitter<void>();
-  
+
   private messages$: Subscription | null = null;
 
   constructor (
@@ -35,7 +35,7 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
     private store: StoreService
     ) {
   }
-  
+
   ngOnInit(): void {
     this.listenMessages();
   }
@@ -54,7 +54,7 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
     if (this.confirm === false) {
       this.goBack();
     } else {
-      this.confirm = false;
+      setTimeout(() => this.confirm = false, 300);
       this.clicked.emit();
     }
   }
