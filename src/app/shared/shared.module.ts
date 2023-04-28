@@ -16,7 +16,7 @@ import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { HeadlineComponent } from './components/headline/headline.component';
-import { SenderInfoComponent } from './components/components/sender-info/sender-info.component';
+import { SenderInfoComponent } from './components/sender-info/sender-info.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
