@@ -175,6 +175,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public submit(): void {
+    if (this.form.invalid) return;
     this.state = 'sending';
     this.form.disable();
     let newTicket = this.createTicket();

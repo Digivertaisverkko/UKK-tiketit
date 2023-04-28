@@ -189,6 +189,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public submit(): void {
+    if (this.form.invalid) return;
     this.state = 'sending';
     this.form.disable();
     let newFaq: UusiUKK = this.createFaq();
