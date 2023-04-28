@@ -47,8 +47,6 @@ export class SubmitFaqComponent implements OnInit {
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
-  public faqAnswer: string = '';
-  public faqMessage: string = '';
   public form: FormGroup = this.buildForm();
   public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
@@ -63,8 +61,16 @@ export class SubmitFaqComponent implements OnInit {
     return this.form.controls["additionalFields"] as FormArray;
   }
 
+  get answer(): FormControl {
+    return this.form.get('answer') as FormControl;
+  }
+
   get title(): FormControl {
     return this.form.get('title') as FormControl;
+  }
+
+  get question(): FormControl {
+    return this.form.get('question') as FormControl;
   }
 
   constructor(private auth: AuthService,
@@ -99,7 +105,6 @@ export class SubmitFaqComponent implements OnInit {
     }
   }
 
-  // TODO: editorin faqMessage ja faqAnswer
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [
@@ -109,15 +114,27 @@ export class SubmitFaqComponent implements OnInit {
           Validators.maxLength(255)
         ])
       ],
-      additionalFields: this.formBuilder.array([])
+      additionalFields: this.formBuilder.array([]),
+      question: [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ],
+      answer: [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ],
     });
   }
 
   private createFaq(): UusiUKK {
     let faq: UusiUKK = {} as UusiUKK;
     faq.otsikko = this.form.controls['title'].value;
-    faq.viesti = this.faqMessage;
-    faq.vastaus = this.faqAnswer;
+    faq.viesti = this.form.controls['question'].value;
+    faq.vastaus = this.form.controls['answer'].value;
     faq.kentat = [];
     for (let i = 0; i < this.ticketFields.length; i++) {
       faq.kentat.push({
@@ -141,7 +158,7 @@ export class SubmitFaqComponent implements OnInit {
     this.ticketService.getTicketInfo(ticketId)
     .then(response => {
       this.form.controls['title'].setValue(response.otsikko);
-      this.faqMessage = response.viesti;
+      this.form.controls['question'].setValue(response.viesti);
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       this.originalTicket = response;
@@ -154,7 +171,7 @@ export class SubmitFaqComponent implements OnInit {
       viimeinen ratkaisuehdotus jää oletusvastaukseksi. */
       for (let comment of response.kommentit) {
         if (comment.tila === 5) {
-          this.faqAnswer = comment.viesti;
+          this.form.controls['answer'].setValue(comment.viesti);
         }
       }
 
@@ -189,6 +206,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public submit(): void {
+    this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.state = 'sending';
     this.form.disable();

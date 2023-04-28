@@ -113,8 +113,12 @@
     </section>
 
     <h2 class="sub-header"><span i18n="@@Viesti">Viesti</span><span>*</span></h2>
-    <app-editor [disabled]="state!=='editing'" [(editorContent)]="message">
-    </app-editor>
+    <app-editor formControlName="message"></app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="message?.errors?.['required'] && message?.touched"
+                >
+      Pakollinen kenttä.
+    </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
     <p  class="theme-success-message"

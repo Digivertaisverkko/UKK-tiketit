@@ -50,7 +50,6 @@ export class SubmitTicketComponent implements OnInit {
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
-  public message: string = '';
   public oldAttachments: Liite[] = [];
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
@@ -62,6 +61,10 @@ export class SubmitTicketComponent implements OnInit {
 
   get additionalFields(): FormArray {
     return this.form.controls["additionalFields"] as FormArray;
+  }
+
+  get message(): FormControl {
+    return this.form.get('message') as FormControl;
   }
 
   get title(): FormControl {
@@ -109,7 +112,6 @@ export class SubmitTicketComponent implements OnInit {
     }
   }
 
-  // TODO: editorin message
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [
@@ -119,14 +121,20 @@ export class SubmitTicketComponent implements OnInit {
           Validators.maxLength(255)
         ])
       ],
-      additionalFields: this.formBuilder.array([])
+      additionalFields: this.formBuilder.array([]),
+      message: [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ],
     });
   }
 
   private createTicket(): UusiTiketti {
     let ticket: UusiTiketti = {} as UusiTiketti;
     ticket.otsikko = this.form.controls['title'].value;
-    ticket.viesti = this.message;
+    ticket.viesti = this.form.controls['message'].value;
     ticket.kentat = [];
     for (let i = 0; i < this.ticketFields.length; i++) {
       ticket.kentat.push({
@@ -150,7 +158,7 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.getTicketInfo(ticketId)
     .then(response => {
       this.form.controls['title'].setValue(response.otsikko);
-      this.message = response.viesti;
+      this.form.controls['message'].setValue(response.viesti);
       this.oldAttachments = response.liitteet ?? [];
       this.commentID = response.kommenttiID;
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
@@ -175,6 +183,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public submit(): void {
+    this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.state = 'sending';
     this.form.disable();
