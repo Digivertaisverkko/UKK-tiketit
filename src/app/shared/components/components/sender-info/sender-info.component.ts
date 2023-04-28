@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Kurssilainen } from 'src/app/ticket/ticket.service';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+
+import { AuthService, User } from 'src/app/core/auth.service';
 import { isToday } from 'src/app/shared/utils';
-import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-sender-info',
@@ -9,19 +9,24 @@ import { AuthService } from 'src/app/core/auth.service';
   styleUrls: ['./sender-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SenderInfoComponent {
+export class SenderInfoComponent implements OnInit {
 
-  @Input() aikaleima: string = '';
-  @Input() user: Kurssilainen = {} as Kurssilainen;
+  @Input() aikaleima: string | Date = '';
+  @Input() user: User | null = {} as User;
 
   public isItToday: boolean;
-  public senderName: string;
+  public senderTitle: string = '';
   private currentUserName: string | null;
 
   constructor(private auth: AuthService) {
     this.currentUserName = this.auth.getUserName();
     this.isItToday = isToday(this.aikaleima);
-    this.senderName = this.getSenderTitle(this.user.nimi, this.user.asema);
+  }
+
+  ngOnInit() {
+    if (this.user != null) {
+      this.senderTitle = this.getSenderTitle(this.user.nimi, this.user.asema);
+    }
   }
 
   public getSenderTitle(name: string, role: string): string {

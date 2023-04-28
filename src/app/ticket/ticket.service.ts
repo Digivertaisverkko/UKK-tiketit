@@ -4,7 +4,7 @@ import '@angular/localize/init';
 import { Router } from '@angular/router';
 import { Observable, Subject, catchError, firstValueFrom, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthService, Role } from '../core/auth.service';
+import { AuthService, Role, User } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 
 @Injectable({ providedIn: 'root' })
@@ -534,20 +534,13 @@ export interface Kurssini {
   asema: Role;
 }
 
-export interface Kurssilainen {
-  id: number,
-  nimi: string;
-  sposti: string;
-  asema: Role;
-}
-
 // Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
 // Tikettilistan näyttämistä varten.
 export interface TiketinPerustiedot {
   id: string;
   otsikko: string;
   aikaleima: string;
-  aloittaja: Kurssilainen;
+  aloittaja: User;
   tila: number;
 }
 
@@ -645,7 +638,7 @@ export interface KentanTiedot {
 // TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
 export interface Kommentti {
   id: string;
-  lahettaja: Kurssilainen;
+  lahettaja: User;
   aikaleima: Date;
   tila: number;
   viesti: string;

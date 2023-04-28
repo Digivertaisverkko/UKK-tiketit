@@ -1,3 +1,5 @@
+$debug: false;
+
 .user-info-block {    // .text-info + ikoni
   @if $debug { border: 1px dotted green; }
   display: flex;
