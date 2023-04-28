@@ -81,29 +81,16 @@
 
       <div class="spacer"></div>
 
-      <div class="user-info-block">
-        <div class="text-info">
-          <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
-          <div class="theme-label">
-            <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}}
-              -
-            </span>
-            <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">
-              Tänään
-            </span>
-            <ng-template #notToday>
-              <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
-            </ng-template>
-            <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
-          </div>
-        </div>
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
-      </div>
+      <app-sender-info
+          [aikaleima]="ticket.aikaleima"
+          [user]="ticket.aloittaja"
+          >
+      </app-sender-info>
 
     </div>
 
     <div *ngFor="let kentta of ticket.kentat">
-      <p class="theme-label" >{{ kentta.otsikko }}</p>
+      <p class="theme-label">{{ kentta.otsikko }}</p>
       <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
