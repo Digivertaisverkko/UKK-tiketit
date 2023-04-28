@@ -54,7 +54,8 @@ export class FaqViewComponent implements OnInit {
         })
         .catch(error => {
           this.errorMessage =
-            $localize`:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
+            $localize`:@@UKK näyttäminen epäonnistui:
+                Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
         })
         .finally(() => this.isLoaded = true );
     }

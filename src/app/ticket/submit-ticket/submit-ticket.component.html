@@ -46,11 +46,7 @@
         </mat-error>
       </mat-form-field>
 
-      <app-sender-info
-          [aikaleima]="currentDate"
-          *ngIf="user"
-          [user]="user"
-          >
+      <app-sender-info [aikaleima]="currentDate" *ngIf="user" [user]="user">
       </app-sender-info>
 
     </div>

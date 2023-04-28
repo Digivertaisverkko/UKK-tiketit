@@ -71,20 +71,14 @@
       </button>
     </div>
 
-  <section *ngIf="ticket.tila > 0">
-
   <!-------------- Kysymys ---------------------------------------------------->
 
+  <section *ngIf="ticket.tila > 0">
+
     <div class="ticket-header">
-
       <h2 class="sub-header">{{ ticket.otsikko }}</h2>
-
       <div class="spacer"></div>
-
-      <app-sender-info
-          [aikaleima]="ticket.aikaleima"
-          [user]="ticket.aloittaja"
-          >
+      <app-sender-info [aikaleima]="ticket.aikaleima" [user]="ticket.aloittaja">
       </app-sender-info>
 
     </div>
@@ -111,16 +105,16 @@
 
   <!-------------- Keskustelu ------------------------------------------------->
 
-  <h3 class="sub-header" i18n="@@Keskustelu">Keskustelu</h3>
+    <h3 class="sub-header" i18n="@@Keskustelu">Keskustelu</h3>
 
-  <app-comment
-      [comment]="comment"
-      [(editingCommentID)]="editingCommentIDParent"
-      *ngFor="let comment of ticket.kommentit"
-      [ticketID]="ticket.id"
-      (messages)="messageFromComment($event)"
-      >
-  </app-comment>
+    <app-comment
+        [comment]="comment"
+        [(editingCommentID)]="editingCommentIDParent"
+        *ngFor="let comment of ticket.kommentit"
+        [ticketID]="ticket.id"
+        (messages)="messageFromComment($event)"
+        >
+    </app-comment>
 
     <div class="vertical-spacer"></div>
 
@@ -206,8 +200,8 @@
 
     <app-edit-attachments
         (attachmentsMessages)="attachmentsMessages = $event"
-        [uploadClicks]="uploadClick.asObservable()"
         (fileListOutput)="fileInfoList = $event"
+        [uploadClicks]="uploadClick.asObservable()"
         >
     </app-edit-attachments>
 

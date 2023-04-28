@@ -97,7 +97,6 @@ export class SubmitTicketComponent implements OnInit {
     });
   }
 
-
   private buildAdditionalFields(): void {
     // Luodaan lomakkeelle controllit
     for (const field of this.ticketFields) {
