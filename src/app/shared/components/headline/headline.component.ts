@@ -7,14 +7,16 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 @Component({
   selector: 'app-headline',
   template: `
+
     <h1 class="main-header"
         id="courseName"
         *ngIf="courseName.length > 0 && !isInIframe"
-
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>{{courseName}}</span>
     </h1>
+
+    <div class="vertical-spacer" *ngIf="isInIframe"></div>
   `,
   styleUrls: ['./headline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
