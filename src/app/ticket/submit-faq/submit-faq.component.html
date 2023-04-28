@@ -2,12 +2,10 @@
 
 <div class="submit-faq">
 
-  <div class="vertical-spacer" *ngIf="isInIframe"></div>
-
     <app-beginning-button
-    [confirm]=faqForm.dirty
-    (clicked)="showConfirm = true"
-    [disabled]="state === 'sending'"
+        [confirm]=faqForm.dirty
+        (clicked)="showConfirm = true"
+        [disabled]="state === 'sending'"
     >
   </app-beginning-button>
 
@@ -16,7 +14,7 @@
       *ngIf="showConfirm"
       [styles]="confirmationStyle"
       >
-  </app-error-card> 
+  </app-error-card>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"

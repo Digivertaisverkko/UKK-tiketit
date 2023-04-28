@@ -7,10 +7,10 @@ import { Subject } from 'rxjs';
 
 import { EditAttachmentsComponent
     } from '../components/edit-attachments/edit-attachments.component';
-import { AddTicketResponse, Error, KentanTiedot, Liite, TicketService, Tiketti,
+import { AddTicketResponse, Liite, TicketService, Tiketti,
     UusiUKK } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
-import { Constants, getIsInIframe } from '../../shared/utils';
+import { Constants } from '../../shared/utils';
 
 interface AdditionalField {
   id: string;
@@ -51,7 +51,6 @@ export class SubmitFaqComponent implements OnInit {
   public faqAnswer: string = '';
   public faqForm: FormGroup = this.buildForm();
   public faqMessage: string = '';
-  public isInIframe: boolean = getIsInIframe();
   public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
