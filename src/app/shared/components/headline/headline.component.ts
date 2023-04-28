@@ -8,22 +8,24 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
   selector: 'app-headline',
   template: `
 
-    <h1 class="main-header"
-        id="courseName"
-        *ngIf="courseName.length > 0 && !isInIframe"
+    <h1 class="mat-h1"
+        [ngClass]="login ? 'login-h1' : ''"
+        *ngIf="headlineText && !isInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-      <span>{{courseName}}</span>
+      <span>{{headlineText}}</span>
     </h1>
 
-    <div class="vertical-spacer" *ngIf="isInIframe"></div>
+    <div class="vertical-spacer" *ngIf="isInIframe || !headlineText"></div>
   `,
   styleUrls: ['./headline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeadlineComponent implements OnInit {
 
-  public courseName: string = '';
+  // login:a käytetään kirjautumissivulla.
+  @Input() public login: boolean = false
+  public headlineText: string | null = null;
   public isInIframe: boolean;
 
   constructor(
@@ -35,15 +37,19 @@ export class HeadlineComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.trackCourseID();
+    if (this.login) {
+      this.headlineText = "DVV-tikettijärjestelmä";
+    } else {
+      this.trackCourseID();
+    }
   }
 
   private showCourseName(courseID: string) {
     this.ticketServ.getCourseName(courseID).then(response => {
-      this.courseName = response ?? '';
+      this.headlineText = response ?? '';
       // this.courseName = 'Testikurssi';
       this.change.detectChanges();
-    }).catch( () => this.courseName = '');
+    }).catch( () => this.headlineText = '');
   }
 
   private trackCourseID(): void {

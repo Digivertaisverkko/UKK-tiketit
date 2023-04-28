@@ -1,7 +1,9 @@
-<h1 class="main-header centered-h1"><span>DVV-tikettijärjestelmä</span></h1>
+<app-headline [login]="true"></app-headline>
 
 <div class="content">
-  <h2 class="sub-header" i18n="@@Sisäänkirjautuminen">Sisäänkirjautuminen</h2>
+  <h2 class="sub-header" i18n="@@Sisäänkirjautuminen">
+    Sisäänkirjautuminen
+  </h2>
   <form action="">
     <mat-form-field>
       <input matInput
@@ -12,9 +14,9 @@
             placeholder="Käyttäjätunnus"
             required
             />
-      <mat-error i18n="@@Käyttäjätunnus tarvitaan."
-        >Käyttäjätunnus tarvitaan.</mat-error
->
+      <mat-error i18n="@@Käyttäjätunnus tarvitaan.">
+        Käyttäjätunnus tarvitaan.
+      </mat-error>
       <!-- <mat-icon matSuffix>email</mat-icon> -->
     </mat-form-field>
 

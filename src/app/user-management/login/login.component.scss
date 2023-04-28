@@ -1,16 +1,5 @@
 @import "/src/variables.scss";
 
-.centered-h1 {
-  margin: 1.8em auto 0 auto;
-  text-align: center;
-  span:after {
-    bottom: 4px;
-    left: -6%;
-    padding-right: 0;
-    width: 112%;
-  }
-}
-
 .content {
   // border: red dotted 1px;
   max-width: 21em;
