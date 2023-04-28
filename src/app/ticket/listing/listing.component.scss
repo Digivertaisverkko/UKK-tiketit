@@ -6,9 +6,9 @@
   justify-content: space-between;
 }
 
-  .main-header > span {
-    padding-right: 2em;
-  }
+.main-header > span {
+  padding-right: 2em;
+}
 
 /* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
    kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
@@ -89,26 +89,8 @@ a {
   padding-left: 16px;
 }
 
-.ticket-state-wrapper {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-}
-
-.icon-wrapper {
-  display: flex;
-  align-items: center;
-  width: 1.8rem;
-}
-
-.mat-column-aloittajanNimi,
-.mat-column-aikaleima,
-.mat-column-tyyppi {
+.mat-column-aikaleima {
   text-align: right;
-}
-
-.mat-column-aloittajanNimi {
-  min-width: 11em;
 }
 
 // headereissa sorting-nuoli ottaa oikealta puolelta tilaa.
@@ -116,7 +98,6 @@ a {
   padding-right: 2.1rem;
 }
 
-// Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
 // :host ei toimi, jos on styles.scss.
 :host ::ng-deep .align-right>.mat-sort-header-container {
   justify-content: flex-end;
@@ -165,20 +146,6 @@ button {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-.filter-icon-btn {
-  margin-bottom: 0.5rem;
-  margin-right: 3px;
-}
-
-.filteringField {
-  align-self: flex-end;
-  max-width: 220px;
-}
-
-.filter-FAQ {
-  margin-top: 1.8rem;
 }
 
 .mat-mdc-form-field {

@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 
 import { User } from 'src/app/core/auth.service';
-import { Constants, getIsInIframe } from '../../../shared/utils';
+import { Constants } from '../../../shared/utils';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from '../../ticket.service';
 
@@ -54,7 +54,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
-  public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
@@ -74,8 +73,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     private store : StoreService,
     private ticket: TicketService,
   ) {
-    this.isInIframe = getIsInIframe();
-
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
