@@ -46,17 +46,12 @@
         </mat-error>
       </mat-form-field>
 
-      <div class="user-info-block">
-        <div class="text-info">
-          <span class="theme-profile-name">{{ userName }}</span>
-          <div class="theme-label">
-            <span i18n="@@Minä">Minä</span>-
-            <span i18n="@@Tänään">Tänään </span>
-            <span>{{ currentDate | date: 'shortTime' }}</span>
-          </div>
-        </div>
-        <img alt="" mat-card-avatar src="../../../assets/logos/UniOulu.png">
-      </div>
+      <app-sender-info
+          [aikaleima]="currentDate"
+          *ngIf="user"
+          [user]="user"
+          >
+      </app-sender-info>
 
     </div>
 

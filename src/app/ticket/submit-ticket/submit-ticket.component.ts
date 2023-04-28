@@ -9,7 +9,7 @@ import { EditAttachmentsComponent
     } from '../components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, Liite, TicketService, UusiTiketti
     } from '../ticket.service';
-import { AuthService } from '../../core/auth.service';
+import { AuthService, User } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
 
 interface AdditionalField {
@@ -58,7 +58,7 @@ export class SubmitTicketComponent implements OnInit {
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick: Subject<string> = new Subject<string>();
-  public userName: string | null = '';
+  public user: User | null = null;
 
   get additionalFields(): FormArray {
     return this.form.controls["additionalFields"] as FormArray;
@@ -88,10 +88,13 @@ export class SubmitTicketComponent implements OnInit {
     } else {
       this.fetchTicketInfo(this.ticketId);
     }
-
     this.auth.fetchUserInfo(this.courseId);
-    this.auth.trackUserInfo()
-    .subscribe(response => { this.userName = response?.nimi ?? ''; });
+    console.log(1);
+    this.auth.trackUserInfo().subscribe(response => {
+      if (response?.nimi != null) {
+        this.user = response
+      }
+    });
   }
 
 
