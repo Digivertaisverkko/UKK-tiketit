@@ -5,9 +5,12 @@ import { SettingsComponent } from './settings/settings.component';
 import { EditFieldComponent } from './edit-field/edit-field.component';
 
 const routes: Routes = [
-  { path: 'course/:courseid/settings', component: SettingsComponent, canActivate: [authGuard] },
-  { path: 'course/:courseid/settings/field/:fieldid', component: EditFieldComponent, canActivate: [authGuard] },
-  { path: 'course/:courseid/settings/field', component: EditFieldComponent, canActivate: [authGuard] }
+  { path: 'course/:courseid/settings', component: SettingsComponent },
+  {
+    path: 'course/:courseid/settings/field/:fieldid',
+    component: EditFieldComponent,
+  },
+  { path: 'course/:courseid/settings/field', component: EditFieldComponent },
 ];
 
 // { path: '', component: AppComponent }

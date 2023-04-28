@@ -16,7 +16,7 @@ import { getCourseIDfromURL } from '../shared/utils';
 // Luokka käsittelee käyttäjäautentikointiin liittyviä toimia.
 export class AuthService {
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
-  private isUserLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private isUserLoggedIn$: BehaviorSubject<any> = new BehaviorSubject(null);
   // Onko käyttäjä osallisena aktiivisella kurssilla.
   private isParticipant$ = new BehaviorSubject<boolean>(false);
   private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
@@ -37,8 +37,7 @@ export class AuthService {
   }
 
   public initialize() {
-    this.checkIfSessionIDinStorage();
-    // this.checkIfSessionIdInURL();
+    // this.checkIfSessionIDinStorage();
     this.startUpdatingUserinfo();
   }
 
@@ -48,39 +47,28 @@ export class AuthService {
         // const url = window.location.href;
         // console.log('urli: ' + url);
         const courseID = event.snapshot.paramMap.get('courseid');
-        // console.warn('updateUserInfo kurssi ID: ' + courseID);
+        console.log('authService: huomattiin kurssi id ' + this.courseID);
         const currentUrl = this.location.path();
-        const isInLogin = currentUrl.includes('login');
-        // console.warn(' isInLogin ' + isInLogin);
+        const isInLogin: boolean = currentUrl.includes('login');
         if (!isInLogin && (courseID !== undefined && courseID !== null)) {
           // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
           // console.dir(event.snapshot.url);
-          this.setCourseID(courseID);
           this.fetchUserInfo(courseID);
         }
       }
     });
   }
 
+  /*
   private checkIfSessionIDinStorage() {
     const savedSessionID = this.getSessionID();
     if (savedSessionID !== null) {
       console.log('Session ID on tallennettuna.');
       /* ? Muuta, että asetetaan kirjautuneeksi vasta, kun saada
       palvelimelta hyväksytty vastaus? */
-      this.setLoggedIn();
-    }
-  }
-
-  private checkIfSessionIdInURL() {
-    // Angular Routella parametrien haku ei onnistunut.
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionID = urlParams.get('sessionID');
-    if (sessionID !== undefined && sessionID !== null) {
-      console.log('auth.service: saatiin session ID URL:sta.');
-      this.setSessionID(sessionID);
-    }
-  }
+  //     this.setLoggedIn();
+  //   }
+  // }
 
   public async sendDataConsent(tokenid: string | null, allow: boolean): Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
@@ -96,13 +84,6 @@ export class AuthService {
     return res
   }
 
-  public setCourseID(courseID: string) {
-    if (courseID !== this.courseID) {
-      console.log('setCourseID: asetetaan kurssi id: ' + this.courseID);
-      this.courseID = courseID;
-    }
-  }
-
   public getDateFormat(): string {
     return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
@@ -111,11 +92,10 @@ export class AuthService {
   public setLoggedIn() {
     console.log('setLoggedIn: vanha logged in value: ' + this.isUserLoggedIn$.value);
 
-    if (this.isUserLoggedIn$.value === false) {
-      console.log('asetetaan uusi arvo;')
-      this.setSessionID('loggedin');
+    if (this.isUserLoggedIn$.value !== true) {
+      // this.setSessionID('loggedin');
       this.isUserLoggedIn$.next(true);
-      console.log('Olet nyt kirjautunut.');
+      console.log('authService: asetettiin kirjautuminen.');
     } else {
       console.log('ei aseteta uutta arvoa');
     }
@@ -123,7 +103,7 @@ export class AuthService {
 
   // Aseta tila kirjautumattomaksi.
   public setNotLoggegIn() {
-    if (this.isUserLoggedIn$.value === true) {
+    if (this.isUserLoggedIn$.value !== false) {
       this.isUserLoggedIn$.next(false);
     }
     if (this.user$.value.nimi !== '') {
@@ -160,20 +140,20 @@ export class AuthService {
     this.user$.unsubscribe();
   }
 
-  public setSessionID(newSessionID: string) {
-    const oldSessionID =  window.localStorage.getItem('SESSION_ID');
-    if (oldSessionID == undefined || oldSessionID !== newSessionID)
-    window.localStorage.setItem('SESSION_ID', newSessionID);
-  }
+  // public setSessionID(newSessionID: string) {
+  //   const oldSessionID =  window.localStorage.getItem('SESSION_ID');
+  //   if (oldSessionID == undefined || oldSessionID !== newSessionID)
+  //   window.localStorage.setItem('SESSION_ID', newSessionID);
+  // }
 
   // Palauta session ID ja päivitä status kirjautumattomaksi, jos sitä ei ole.
-  public getSessionID(): string | null {
-    const sessionID = (window.localStorage.getItem('SESSION_ID'));
+  // public getSessionID(): string | null {
+  //   const sessionID = (window.localStorage.getItem('SESSION_ID'));
     // if (sessionID === undefined || sessionID === null) {
     //   this.setNotLoggegIn();
     // }
-    return sessionID;
-  }
+  //   return sessionID;
+  // }
 
   private getMethodName() {
     return this.getMethodName.caller.name
@@ -249,10 +229,10 @@ export class AuthService {
     let newUserInfo: any;
     if (response != null && response?.id != null)  {
       newUserInfo = response;
+      this.setLoggedIn();
     } else {
       console.log('saatiin vastaus null');
       // Tarkistetaan, onko kirjautuneena eri kurssille.
-
       const response = await this.fetchVisitorInfo();
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
@@ -267,9 +247,8 @@ export class AuthService {
       console.log('fetchUserInfo: Jatketaan samalla käyttäjällä.');
       return
     }
-    console.log('fetchUserInfo: Asetetaan uusi userinfo.');
-    this.setLoggedIn();
     this.user$.next(newUserInfo);
+    console.log('asetettiin uusi käyttäjä ' + JSON.stringify(newUserInfo));
   }
 
   // Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
@@ -291,10 +270,10 @@ export class AuthService {
 
   public async navigateToLogin(courseID: string | null) {
     // console.warn('logout: kurssi id: ' + this.courseID);
-    if (this.courseID === null ) {
+    if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
-    this.sendAskLoginRequest('own', this.courseID).then((response: any) => {
+    this.sendAskLoginRequest('own', courseID).then((response: any) => {
       if (response === undefined) {
         console.log('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
         return
@@ -397,8 +376,8 @@ export class AuthService {
         loginResult.redirectUrl = redirectUrl;
         window.localStorage.removeItem('REDIRECT_URL')
       }
-      const sessionID = response['session-id'];
-      this.setSessionID(sessionID);
+      // const sessionID = response['session-id'];
+      // this.setSessionID(sessionID);
       this.setLoggedIn();
     } else {
       loginResult = { success: false };
@@ -408,7 +387,7 @@ export class AuthService {
 
   // Tämään hetkinen kirjautumisen tila.
   public getIsUserLoggedIn(): Boolean {
-    this.getSessionID();
+    // this.getSessionID();
     return this.isUserLoggedIn$.value;
   }
 
@@ -439,6 +418,7 @@ export class AuthService {
   // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
   // virheen käsittelyä.
   private handleError(error: HttpErrorResponse) {
+    console.log('authService: saatiin virhe.');
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
         console.log('Virhe, et ole kirjautunut. Ohjataan kirjautumiseen.');
         this.handleNotLoggedIn();

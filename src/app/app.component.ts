@@ -44,14 +44,13 @@ export class AppComponent implements OnInit, OnDestroy  {
 
     // Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
-    // this.isInIframe = true;
+    // this.isInIframe = trsue;
     this.isInIframe = getIsInIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackLoginStatus();
     // this.trackCourseID();
   }
-
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
