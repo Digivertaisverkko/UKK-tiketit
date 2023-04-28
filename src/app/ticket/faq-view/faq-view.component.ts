@@ -14,7 +14,6 @@ import { Title } from '@angular/platform-browser';
 export class FaqViewComponent implements OnInit {
   public courseName: string = '';
   public errorMessage: string = '';
-  public isInIframe: boolean = true;
   public isLoaded: boolean = false;
   public ticket: Tiketti = {} as Tiketti;
   public user: User = <User>{};
@@ -35,7 +34,6 @@ export class FaqViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getIfInIframe();
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
@@ -82,11 +80,6 @@ export class FaqViewComponent implements OnInit {
         this.errorMessage = $localize `:@@UKK poisto epäonnistui:Usein kysytyn kysymyksen poistaminen ei onnistunut.`
       }
     })
-  }
-
-  private getIfInIframe() {
-    const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
-    this.isInIframe = (isInIframe === 'false') ? false : true;
   }
 
 }

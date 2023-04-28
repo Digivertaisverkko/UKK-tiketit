@@ -2,17 +2,6 @@
 
 <div class="submit-ticket">
 
-  <div class="vertical-spacer" *ngIf="isInIframe"></div>
-
-    <!-- <button color="accent"
-        (click)="backBtnPressed()"
-        [disabled]="state==='sending'"
-
-        mat-raised-button>
-      <mat-icon>arrow_back_ios</mat-icon>
-      <span i18n="@@Alkuun">Alkuun</span>
-    </button> -->
-
     <app-beginning-button
         [confirm]=ticketForm.dirty
         (clicked)="showConfirm = true"
