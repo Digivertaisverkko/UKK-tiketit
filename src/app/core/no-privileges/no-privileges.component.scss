@@ -1,8 +1,7 @@
 @import "/src/variables.scss";
 
 .top-buttons-wrapper {
-  // Käytetään, vaikka ei olisi upotuksessa.
-  margin-top: var(--margin-top-embedded);
+  margin-top: 1.5rem;
 }
 
 h1 {
