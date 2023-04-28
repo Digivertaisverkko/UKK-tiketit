@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Constants, getIsInIframe } from '../../shared/utils';
+import { Constants } from '../../shared/utils';
 import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }from '@angular/material/chips';
@@ -19,7 +19,6 @@ export class EditFieldComponent implements OnInit {
   public errorMessage: string = '';
   public field: KentanTiedot;
   public fieldID: string | null = null;
-  public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
   public multipleSelection: boolean = false;
@@ -32,7 +31,6 @@ export class EditFieldComponent implements OnInit {
     private ticketService: TicketService,
     private titleServ: Title
   ) {
-    this.isInIframe = getIsInIframe();
     this.field = {
       otsikko: '',
       pakollinen: false,

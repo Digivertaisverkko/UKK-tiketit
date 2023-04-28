@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Constants, getIsInIframe } from '../../shared/utils';
-import { TicketService, KentanTiedot, Kentta } from 'src/app/ticket/ticket.service';
+import { Constants } from '../../shared/utils';
+import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
 
@@ -24,7 +24,6 @@ export class SettingsComponent implements OnInit {
   public message = '';
   public fieldList: KentanTiedot[] = [];
   public inviteEmail: string = '';
-  public isInIframe: boolean;
   public isLoaded: boolean = false;
   public courseID: string = '';
   // private delayFetching: string = window.history.state.delayFetching ?? false;
@@ -35,7 +34,6 @@ export class SettingsComponent implements OnInit {
     private ticketService: TicketService,
     private titleServ: Title
   ) {
-    this.isInIframe = getIsInIframe();
   }
 
   ngOnInit(): void {
