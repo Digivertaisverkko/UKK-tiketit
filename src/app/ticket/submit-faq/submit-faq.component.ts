@@ -44,13 +44,12 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
-  public confirmationStyle;
   public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public faqAnswer: string = '';
-  public faqForm: FormGroup = this.buildForm();
   public faqMessage: string = '';
+  public form: FormGroup = this.buildForm();
   public oldAttachments: Liite[] = [];
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
@@ -61,11 +60,11 @@ export class SubmitFaqComponent implements OnInit {
   public uploadClick: Subject<string> = new Subject<string>();
 
   get additionalFields(): FormArray {
-    return this.faqForm.controls["additionalFields"] as FormArray;
+    return this.form.controls["additionalFields"] as FormArray;
   }
 
   get title(): FormControl {
-    return this.faqForm.get('title') as FormControl;
+    return this.form.get('title') as FormControl;
   }
 
   constructor(private auth: AuthService,
@@ -74,9 +73,7 @@ export class SubmitFaqComponent implements OnInit {
               private route: ActivatedRoute,
               private ticketService: TicketService,
               private titleServ: Title)
-  {
-    this.confirmationStyle = { margin: '2rem 0 0 0' }
-  }
+  {}
 
   ngOnInit(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -96,8 +93,9 @@ export class SubmitFaqComponent implements OnInit {
     /* Luodaan lomakkeelle controllit
     HUOM! UKK:lla ei ole pakollisia kenttiä */
     for (const field of this.ticketFields) {
+      let validators = Validators.maxLength(50);
       let value = field.arvo !== undefined && field.arvo !== null ? field.arvo : '';
-      this.additionalFields.push(new FormControl(value, Validators.maxLength(50)));
+      this.additionalFields.push(new FormControl(value, validators));
     }
   }
 
@@ -117,7 +115,7 @@ export class SubmitFaqComponent implements OnInit {
 
   private createFaq(): UusiUKK {
     let faq: UusiUKK = {} as UusiUKK;
-    faq.otsikko = this.faqForm.controls['title'].value;
+    faq.otsikko = this.form.controls['title'].value;
     faq.viesti = this.faqMessage;
     faq.vastaus = this.faqAnswer;
     faq.kentat = [];
@@ -142,7 +140,7 @@ export class SubmitFaqComponent implements OnInit {
   private fetchTicketInfo(ticketId: string): void {
     this.ticketService.getTicketInfo(ticketId)
     .then(response => {
-      this.faqForm.controls['title'].setValue(response.otsikko);
+      this.form.controls['title'].setValue(response.otsikko);
       this.faqMessage = response.viesti;
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
@@ -168,10 +166,10 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.router.navigateByUrl('course/' + this.courseId +  '/list-tickets');
+    this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
   }
 
-  private prepareSendFiles(response: any) {
+  private prepareSendFiles(response: any): void {
     if (!this.editExisting && response?.uusi == null) {
       this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
@@ -190,25 +188,23 @@ export class SubmitFaqComponent implements OnInit {
     this.sendFiles(ticketID, commentID);
   }
 
-  public sendFaq(): void {
+  public submit(): void {
     this.state = 'sending';
-    this.faqForm.disable();
+    this.form.disable();
     let newFaq: UusiUKK = this.createFaq();
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    this.submitNewFaq(newFaq);
+    this.submitNew(newFaq);
   }
 
-  private submitNewFaq(faq: UusiUKK): void {
+  private submitNew(faq: UusiUKK): void {
     if (this.courseId === null) return;
     let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
     this.ticketService.addFaq(id, faq, this.editExisting)
     .then((response: AddTicketResponse) => {
-      if (this.attachments.fileInfoList.length === 0) {
-        this.goBack();
-      }
+      if (this.attachments.fileInfoList.length === 0) this.goBack();
       if (response === null || response?.success !== true) {
         this.state = 'editing';
-        this.faqForm.enable();
+        this.form.enable();
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
             Kysymyksen lähettäminen epäonnistui` + '.';
         throw new Error('Kysymyksen lähettäminen epäonnistui.');
@@ -218,24 +214,24 @@ export class SubmitFaqComponent implements OnInit {
     .catch( error => {
       // ? lisää eri virhekoodeja?
       this.state = 'editing';
-      this.faqForm.enable();
+      this.form.enable();
       this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
           Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
     });
   }
 
-  private sendFiles(ticketID: string, commentID: string) {
+  private sendFiles(ticketID: string, commentID: string): void {
     this.attachments.sendFilesPromise(ticketID, commentID)
-    .then(res => {
+    .then(() => {
       this.state = 'done';
       this.goBack();
     })
     .catch((res: any) => {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
           onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log('submit-faq: saatiin virhe: ' + res);
+      console.log(this.router.url + ': saatiin virhe: ' + res);
       this.state = 'editing';
-      this.faqForm.enable();
+      this.form.enable();
     })
     .finally(() => {
       console.log('Komponentti: Kaikki valmiita!');

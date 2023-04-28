@@ -2,24 +2,25 @@
 
 <div class="submit-ticket">
 
-    <app-beginning-button
-        [confirm]=ticketForm.dirty
-        (clicked)="showConfirm = true"
-        [disabled]="state === 'sending'"
-        >
-    </app-beginning-button>
+  <app-beginning-button
+      (clicked)="showConfirm = true"
+      [confirm]=form.dirty
+      [disabled]="state === 'sending'"
+      >
+  </app-beginning-button>
 
-    <app-error-card
-        [confirmLeave]="true"
-        *ngIf="showConfirm"
-        [styles]="{ margin: '2rem 0 0 0' }"
-        >
-    </app-error-card>
+  <app-error-card
+      [confirmLeave]="true"
+      *ngIf="showConfirm"
+      [styles]="{ margin: '2rem 0 0 0' }"
+      >
+  </app-error-card>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
-        [formGroup]="ticketForm"
-        (ngSubmit)="sendTicket()">
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        >
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
@@ -39,7 +40,8 @@
                   >
         </textarea>
         <mat-error  i18n="@@Pakollinen kenttä."
-                    *ngIf="title?.errors?.['required']">
+                    *ngIf="title?.errors?.['required']"
+                    >
           Pakollinen kenttä.
         </mat-error>
       </mat-form-field>
@@ -61,7 +63,8 @@
     <section class="short-field-wrapper">
 
       <ng-container formArrayName="additionalFields"
-                    *ngFor="let af of additionalFields.controls; let i = index">
+                    *ngFor="let af of additionalFields.controls; let i = index"
+                    >
 
         <mat-form-field appearance="fill">
           <mat-label>{{ ticketFields[i].otsikko }}</mat-label>
@@ -71,11 +74,13 @@
                   matInput
                   maxlength="50"
                   name="{{ ticketFields[i].otsikko }}"
-                  type="text">
+                  type="text"
+                  >
 
           <mat-icon matSuffix
                     *ngIf="ticketFields[i].valinnat[0] !== ''"
-                    [ngStyle]="{ 'color': '#000000' }">
+                    [ngStyle]="{ 'color': '#000000' }"
+                    >
             keyboard_arrow_down
           </mat-icon>
 
@@ -85,14 +90,16 @@
               suinkaan ole tyhjä. -->
             <ng-container *ngIf="ticketFields[i].valinnat[0] !== ''">
               <mat-option *ngFor="let valinta of ticketFields[i].valinnat"
-                          [value]="valinta">
+                          [value]="valinta"
+                          >
                 {{ valinta }}
               </mat-option>
             </ng-container>
           </mat-autocomplete>
 
           <mat-error  i18n="@@Pakollinen kenttä."
-                      *ngIf="af?.errors?.['required']">
+                      *ngIf="af?.errors?.['required']"
+                      >
             Pakollinen kenttä.
           </mat-error>
 
@@ -121,13 +128,15 @@
     <!-- Kun lähetetään liitetiedostoja -->
     <p  class="theme-success-message"
         i18n="@@Uuden kysymyksen lähettäminen onnistui"
-        *ngIf="state==='sending' || state==='done'">
+        *ngIf="state==='sending' || state==='done'"
+        >
       Uuden kysymyksen lähettäminen onnistui.
     </p>
 
     <p  class="attachments-message"
         i18n="@@Lähetetään liitetiedostoja"
-        *ngIf="state==='sending'">
+        *ngIf="state==='sending'"
+        >
       Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
     </p>
 
@@ -135,7 +144,8 @@
                     message="{{ errorMessage }}"
                     *ngIf="errorMessage.length > 0"
                     [styles]="{ margin: '1em 0' }"
-                    title="Virhe">
+                    title="Virhe"
+                    >
     </app-error-card>
 
     <div class="theme-actions">
@@ -146,7 +156,8 @@
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
               mat-raised-button
-              type="button">
+              type="button"
+              >
         <mat-icon>attach_file</mat-icon>
         Liitä tiedostoja
       </button>
@@ -164,7 +175,8 @@
               mat-raised-button
               *ngIf="editExisting"
               [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId"
-              type="button">
+              type="button"
+              >
         Peru
       </button>
 
@@ -173,7 +185,8 @@
               color="primary"
               i18n="@@Lähetä opettajille"
               mat-raised-button
-              type="submit">
+              type="submit"
+              >
         Lähetä opettajille
       </button>
 
@@ -182,7 +195,8 @@
               color="primary"
               mat-raised-button
               *ngIf="state==='done'"
-              type="button">
+              type="button"
+              >
         OK
       </button>
 
@@ -191,7 +205,8 @@
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
                           [oldAttachments]="oldAttachments"
-                          [uploadClicks]="uploadClick.asObservable()">
+                          [uploadClicks]="uploadClick.asObservable()"
+                          >
     </app-edit-attachments>
 
   </form>
