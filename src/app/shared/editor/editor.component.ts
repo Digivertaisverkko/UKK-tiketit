@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Optional, Self, ViewEncapsulation
+    } from '@angular/core';
+import { ControlContainer, ControlValueAccessor, FormGroupDirective, NgControl
+    } from '@angular/forms';
 import { minimalSetup } from 'codemirror';
 import { javascript } from "@codemirror/lang-javascript"
 import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
@@ -6,6 +9,12 @@ import { node as codeMirrorNode, CodeMirrorView } from 'prosemirror-codemirror-6
 import { gapCursor } from 'prosemirror-gapcursor';
 import { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+
+export const NOOP_VALUE_ACCESSOR: ControlValueAccessor = {
+  writeValue(): void {},
+  registerOnChange(): void {},
+  registerOnTouched(): void {}
+};
 
 const nodes = {
   ...basicNodes,
@@ -40,6 +49,10 @@ const nodeViews = {
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [{
+    provide: ControlContainer,
+    useExisting: FormGroupDirective
+  }]
 })
 export class EditorComponent implements OnInit, OnDestroy {
   editor!: Editor;
@@ -50,9 +63,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     ['image']
   ];
 
-  @Input() disabled: boolean = false;
-  @Input() editorContent: string = '';
-  @Output() editorContentChange = new EventEmitter<string>();
+  @Input() formControlName: string = '';
+
+  constructor(@Self() @Optional() public ngControl: NgControl) {
+    if (this.ngControl) this.ngControl.valueAccessor = NOOP_VALUE_ACCESSOR;
+  }
 
   ngOnInit(): void {
     this.editor = new Editor({
