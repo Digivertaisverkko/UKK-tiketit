@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { Constants, getIsInIframe } from '../../shared/utils';
+import { Constants } from '../../shared/utils';
 import { TicketService } from 'src/app/ticket/ticket.service';
 import { Title } from '@angular/platform-browser';
 import { UserManagementService } from 'src/app/user-management/user-management.service';
@@ -16,7 +16,6 @@ export class ProfileComponent implements OnInit {
   private courseId: string | null;
   public errorMessage: string = '';
   public isLoaded: boolean = false;
-  public isInIframe: boolean = getIsInIframe();
   public isRemovePressed: boolean = false;
   public userEmail: string = '';
   public userName: string = '';
