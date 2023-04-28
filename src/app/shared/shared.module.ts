@@ -16,6 +16,7 @@ import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { HeadlineComponent } from './components/headline/headline.component';
+import { SenderInfoComponent } from './components/components/sender-info/sender-info.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -50,7 +51,8 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MenuSrcComponent,
     BeginningButtonComponent,
     SafeHtmlPipe,
-    SearchBarComponent
+    SearchBarComponent,
+    SenderInfoComponent
   ],
   imports: [
     CommonModule,
@@ -74,6 +76,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     SafeHtmlPipe,
     ReactiveFormsModule,
     SearchBarComponent,
+    SenderInfoComponent,
   ],
   providers: [
     {

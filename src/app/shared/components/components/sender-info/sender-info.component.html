@@ -1,0 +1,21 @@
+<div class="user-info-block">
+
+  <div class="text-info">
+    <span class="theme-profile-name">{{ user.nimi }}</span>
+    <div class="theme-label">
+      <span>{{senderName}}
+        -
+      </span>
+      <span *ngIf="isItToday; else notToday" i18n="@@Tänään">
+        Tänään
+      </span>
+      <ng-template #notToday>
+        <span>{{ aikaleima | date: 'shortDate' }}</span>
+      </ng-template>
+      <span>&nbsp;{{ aikaleima | date: 'shortTime' }}</span>
+    </div>
+  </div>
+
+  <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+
+</div>

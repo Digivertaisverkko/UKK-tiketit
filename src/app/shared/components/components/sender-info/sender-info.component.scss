@@ -1,0 +1,33 @@
+.user-info-block {    // .text-info + ikoni
+  @if $debug { border: 1px dotted green; }
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  flex-shrink: 0;
+  gap: 0.8rem;
+  // h1 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
+  margin-top: 1.3rem;
+
+  .text-info {        // Käyttäjätiedot
+    @if $debug { border: 1px solid gray; }
+    margin-top: 0.3rem;
+    text-align: right;
+    .theme-profile-name {
+      display: block;
+      line-height: 1.15;
+      margin-bottom: 0.3rem;
+    }
+  }
+
+  img {
+    @if $debug { border: 1px solid lightblue; }
+    display: inline-block;
+    flex-shrink: 0;
+    height: 3rem;
+    margin: auto;
+    object-fit: cover;
+    position: relative;
+    width: 3rem;
+  }
+
+}
