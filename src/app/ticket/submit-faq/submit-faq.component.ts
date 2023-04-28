@@ -94,7 +94,7 @@ export class SubmitFaqComponent implements OnInit {
     HUOM! UKK:lla ei ole pakollisia kenttiä */
     for (const field of this.ticketFields) {
       let validators = Validators.maxLength(50);
-      let value = field.arvo !== undefined && field.arvo !== null ? field.arvo : '';
+      let value = field.arvo ? field.arvo : '';
       this.additionalFields.push(new FormControl(value, validators));
     }
   }
