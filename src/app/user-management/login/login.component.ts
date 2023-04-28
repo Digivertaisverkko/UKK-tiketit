@@ -64,7 +64,6 @@ export class LoginComponent implements OnInit {
   }
 
   private handleError (error: any) {
-    this.store.stopLoading();
     switch (error?.tunnus) {
       case 1001:
         this.errorMessage = $localize`:@@Kirjautumispalveluun ei saatu yhteyttä:
