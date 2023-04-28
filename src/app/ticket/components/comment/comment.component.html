@@ -114,12 +114,12 @@
 </mat-card-content>
 
 <ng-template #commentEditing>
-  <app-editor [disabled]="state==='sending'"
-              [(editorContent)]="comment.viesti"
-              *ngIf="editingCommentID === comment.id"
-              >
+  <app-editor-legacy  [disabled]="state==='sending'"
+                      [(editorContent)]="comment.viesti"
+                      *ngIf="editingCommentID === comment.id"
+                      >
   <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
-  </app-editor>
+  </app-editor-legacy>
 
   <app-error-card
       i18n-title="@@Virhe"

@@ -120,11 +120,11 @@
 
   <!-------------- Uuden kommentin tekeminen ---------------------------------->
 
-    <app-editor [disabled]="state==='sending'"
-                [(editorContent)]="commentText"
-                *ngIf="!ticketIdFromParent"
-                >
-    </app-editor>
+    <app-editor-legacy  [disabled]="state==='sending'"
+                        [(editorContent)]="commentText"
+                        *ngIf="!ticketIdFromParent"
+                        >
+    </app-editor-legacy>
 
   </section>
 
