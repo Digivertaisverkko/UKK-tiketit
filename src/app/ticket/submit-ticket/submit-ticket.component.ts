@@ -100,7 +100,7 @@ export class SubmitTicketComponent implements OnInit {
   private buildAdditionalFields(): void {
     // Luodaan lomakkeelle controllit
     for (const field of this.ticketFields) {
-      let validators;
+      let validators = Validators.maxLength(50);
       if (field.pakollinen) {
         validators = Validators.required, Validators.maxLength(50);
       }
