@@ -6,8 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { CommentComponent } from '../components/comment/comment.component';
-import { Constants, getIsInIframe, isToday } from '../../shared/utils';
+import { Constants, isToday } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
@@ -41,7 +40,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public errorMessage: string = '';
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
-  public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
@@ -69,7 +67,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
     this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.isInIframe = getIsInIframe();
     this.ticketID = this.ticketIdFromParent !== null
     ? this.ticketIdFromParent
     : String(this.route.snapshot.paramMap.get('id'));

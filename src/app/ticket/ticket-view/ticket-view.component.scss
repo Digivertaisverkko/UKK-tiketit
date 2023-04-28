@@ -1,9 +1,5 @@
 @import '/src/variables.scss';
 
-.vertical-spacer {
-  height: var(--margin-top-embedded)
-}
-
 .top-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -14,11 +10,6 @@
 .short-field-value:last-child {
   margin-bottom: 1.5rem
 }
-
-// Muuten marginaalit menevät päällekkäin jostain syystä.
-// .short-vertical-spacer {
-//   height: 1px;
-// }
 
 .message-label {
   margin-bottom: -0.8rem;

@@ -1,9 +1,6 @@
-
   <app-headline></app-headline>
 
   <div *ngIf="isLoaded">
-
-  <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
   <app-beginning-button [disabled]="state==='sending'"
         *ngIf="ticket.tila === undefined">
