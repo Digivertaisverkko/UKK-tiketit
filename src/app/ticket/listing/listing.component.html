@@ -1,6 +1,7 @@
 
 <div class="view-header">
-    <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
+    <!-- Ei käytä komponenttia, koska samassa elementissä nappeja, joiden
+      kanssa otsikon alaviiva ei näy kuten pitäisi. -->
     <h1 class="main-header"
         id="courseName"
         *ngIf="courseName.length > 0 && !isInIframe">

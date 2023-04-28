@@ -11,7 +11,6 @@ import { Constants, getIsInIframe, isToday } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
-
 interface FileInfo {
   filename: string;
   file: File;

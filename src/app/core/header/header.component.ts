@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
+    from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { StoreService } from '../store.service';
 import { AuthService, User } from '../auth.service';
@@ -11,14 +12,14 @@ import { AuthService, User } from '../auth.service';
 })
 
 export class HeaderComponent implements OnInit {
+    // Async pipeä varten.
   // public isUserLoggedIn$: Observable<boolean>;
-  // Async pipeä varten.
-  public isLoggedIn: boolean = false;
+  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public disableLangSelect: boolean = false;
+  public isLoggedIn: boolean = false;
   public readonly maxUserLength = 40;
   public user: User = {} as User;
   public userRole: string = '';
-  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
 
   private _language!: string;
 
@@ -27,8 +28,8 @@ export class HeaderComponent implements OnInit {
     private change: ChangeDetectorRef,
     private route : ActivatedRoute,
     private router: Router,
-    private store : StoreService)
-    {
+    private store : StoreService
+    ) {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
   }
 
