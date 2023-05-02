@@ -45,8 +45,8 @@ export class SubmitTicketComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   private commentID: string | null = null;
-  public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
-  public currentDate = new Date();
+  public readonly courseId: string | null = this.route.snapshot.paramMap.get('courseid');
+  public readonly currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -56,7 +56,7 @@ export class SubmitTicketComponent implements OnInit {
   public ticketFields: AdditionalField[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
-  public uploadClick: Subject<string> = new Subject<string>();
+  public uploadClick = new Subject<string>();
   public user: User | null = null;
 
   get additionalFields(): FormArray {
