@@ -74,19 +74,17 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
-      if (response.id != null) this.user = response;
+      console.log('saatiin userinfo: ' + response);
+      if (response.id != null) {
+        this.user = response;
+        if (!this.isPollingTicket) this.startPollingTicket();
+      }
       if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
         this.attachFilesText = $localize `:@@Liitä:liitä`;
       } else {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
       }
     });
-
-    if (this.courseID === null) {
-      throw new Error('Kurssi ID puuttuu URL:sta.');
-    }
-
-    if (!this.isPollingTicket) this.startPollingTicket();
 
   }
 
@@ -113,7 +111,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   // Jotkin painikkeet muuttuvat yhden painalluksen jälkeen vahvistuspainikkeiksi.
-  changeButton(button: 'archive' | 'remove') {
+  public changeButton(button: 'archive' | 'remove') {
     setTimeout(() => {
       if (button === 'archive') {
         this.isArchivePressed = true
@@ -134,6 +132,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   private fetchTicket(courseID: string | null) {
     // fetchaus sulkee editointiboxin.
+    console.log('haetaan tiketin tiedot.');
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicketInfo(this.ticketID).then(response => {
       this.ticket = response;
