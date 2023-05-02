@@ -118,93 +118,104 @@
 
     <div class="vertical-spacer"></div>
 
+  </section>
+
   <!-------------- Uuden kommentin tekeminen ---------------------------------->
 
-    <app-editor-legacy  [disabled]="state==='sending'"
-                        [(editorContent)]="commentText"
-                        *ngIf="!ticketIdFromParent"
-                        >
-    </app-editor-legacy>
+  <form [formGroup]="form" (ngSubmit)="sendComment()">
 
-  </section>
+    <app-editor formControlName="message"
+                *ngIf="!ticketIdFromParent"
+                >
+    </app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="message?.errors?.['required'] && message?.touched"
+                >
+      Pakollinen kenttä.
+  </mat-error>
 
-  <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
+    <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
-  <app-error-card
-      *ngIf="errorMessage.length > 0"
-      i18n-title="@@Virhe"
-      message="{{ errorMessage }}"
-      [styles]="{ margin: '0' }"
-      title="Virhe"
-  >
-  </app-error-card>
+    <app-error-card
+        *ngIf="errorMessage.length > 0"
+        i18n-title="@@Virhe"
+        message="{{ errorMessage }}"
+        [styles]="{ margin: '0' }"
+        title="Virhe"
+        >
+    </app-error-card>
 
-  <!-- Kun lähetetään liitetiedostoja -->
-  <p class="theme-success-message"
-      i18n="@@Uuden kysymyksen lähettäminen onnistui"
-      *ngIf="state==='sending'">
-    Uuden kysymyksen lähettäminen onnistui.
-  </p>
+    <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
+    <p class="theme-success-message"
+        i18n="@@Kommentin lisääminen"
+        *ngIf="state==='sending'">
+      Uuden kommentin lähettäminen onnistui.
+    </p>
 
-  <section *ngIf="ticket.tila > 0">
+    <section *ngIf="ticket.tila > 0">
 
-    <div class="theme-actions" *ngIf="!ticketIdFromParent">
+      <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-      <!-- Nimi sidottu muuttujaan, koska eri rooleilla on eri teksti. -->
-      <button class="attach-button"
-              (click)="uploadClick.next('add')"
-              [disabled]="state==='sending'"
-              [attr.aria-label]="attachFilesText"
-              mat-raised-button="attachFilesText"
-              >
-        <mat-icon>attach_file</mat-icon>{{attachFilesText}}
-      </button>
+        <!-- Nimi sidottu muuttujaan, koska eri rooleilla on eri teksti. -->
+        <button class="attach-button"
+                (click)="uploadClick.next('add')"
+                [disabled]="state==='sending'"
+                [attr.aria-label]="attachFilesText"
+                mat-raised-button="attachFilesText"
+                type='button'
+                >
+          <mat-icon>attach_file</mat-icon>{{attachFilesText}}
+        </button>
 
-      <div class="action-spacer spacer"
-          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
+        <div class="action-spacer spacer"
+            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
+        </div>
+
+        <mat-radio-group align="start"
+            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+            [(ngModel)]="newCommentState"
+            [ngModelOptions]="{standalone: true}"
+            [disabled]="state === 'sending'"
+            >
+          <mat-radio-button [value]=4 i18n="@@Kommentti">
+            Kommentti
+          </mat-radio-button>
+          <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+            Lisätietoa tarvitaan
+          </mat-radio-button>
+          <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+            Ratkaisuehdotus
+          </mat-radio-button>
+        </mat-radio-group>
+
+        <ng-template #spacerHere>
+          <div class="action-spacer spacer"></div>
+        </ng-template>
+
+        <!-- [disabled]="commentText.length < 1 ||
+        attachmentsMessages === 'faulty' ||
+        state === 'sending'" -->
+
+        <button class="send-button"
+                color="primary"
+                [disabled]="form.disabled"
+                i18n="@@Lähetä"
+                mat-raised-button
+                type="submit"
+                >
+          Lähetä
+        </button>
+
       </div>
 
-      <mat-radio-group align="start"
-          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
-          [(ngModel)]="newCommentState"
-          [disabled]="state==='sending'"
+      <app-edit-attachments
+          (attachmentsMessages)="attachmentsMessages = $event"
+          (fileListOutput)="fileInfoList = $event"
+          [uploadClicks]="uploadClick.asObservable()"
           >
-        <mat-radio-button [value]=4 i18n="@@Kommentti">
-          Kommentti
-        </mat-radio-button>
-        <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
-          Lisätietoa tarvitaan
-        </mat-radio-button>
-        <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
-          Ratkaisuehdotus
-        </mat-radio-button>
-      </mat-radio-group>
+      </app-edit-attachments>
 
-      <ng-template #spacerHere>
-        <div class="action-spacer spacer"></div>
-      </ng-template>
-
-      <button class="send-button"
-              (click)="sendComment()"
-              color="primary"
-              [disabled]="commentText.length < 1 ||
-                  attachmentsMessages === 'faulty' ||
-                  state === 'sending'"
-              i18n="@@Lähetä"
-              mat-raised-button
-              >
-        Lähetä
-      </button>
-
-    </div>
-
-    <app-edit-attachments
-        (attachmentsMessages)="attachmentsMessages = $event"
-        (fileListOutput)="fileInfoList = $event"
-        [uploadClicks]="uploadClick.asObservable()"
-        >
-    </app-edit-attachments>
-
-  </section>
+    </section>
+  </form>
 
 </div>

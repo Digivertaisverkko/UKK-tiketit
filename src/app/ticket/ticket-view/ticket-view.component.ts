@@ -1,12 +1,12 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
-import { Constants, isToday } from '../../shared/utils';
+import { Constants } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 
@@ -35,15 +35,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
-  public commentText: string = '';
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
+  public form: FormGroup = this.buildForm();
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
   public isLoaded: boolean = false;
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
-  public message: string = '';
   public newCommentState: 3 | 4 | 5 = 4;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public ticket: Tiketti = {} as Tiketti;;
@@ -56,11 +55,15 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
+  get message(): FormControl {
+    return this.form.get('message') as FormControl;
+  }
+
   constructor(
     private auth: AuthService,
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar,
     private ticketService: TicketService,
     private titleServ: Title
   ) {
@@ -108,6 +111,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.errorMessage = "Kysymyksen arkistointi ei onnistunut.";
       }
     })
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      message: [ '', Validators.required ]
+    });
   }
 
   // Jotkin painikkeet muuttuvat yhden painalluksen jälkeen vahvistuspainikkeiksi.
@@ -182,10 +191,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  public isToday(timestamp: string | Date) : boolean {
-    return isToday(timestamp)
-  }
-
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila, this.user.asema);
   }
@@ -201,19 +206,22 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public sendComment(): void {
-    this.ticketService.addComment(this.ticketID, this.commentText, this.newCommentState)
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
+    const commentText = this.form.controls['message'].value;
+    this.ticketService.addComment(this.ticketID, commentText, this.newCommentState)
       .then(response => {
         if (response == null || response?.success !== true) {
           this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
               Kommentin lisääminen tikettiin epäonnistui.`;
           throw new Error('Kommentin lähettäminen epäonnistui.');
         }
-        this.commentText = '';
+        this.message.setValue('');
+        this.form = this.buildForm();
         if (this.fileInfoList.length === 0) {
           this.ticketService.getTicketInfo(this.ticketID).then(response => {
             this.ticket = response
           });
-          this.state = 'editing';
           return
         }
         response = response as NewCommentResponse;
@@ -227,6 +235,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   private sendFiles(ticketID: string, commentID: string) {
     this.state = 'sending';
+    this.form.disable();
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
       })
@@ -243,6 +252,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           this.ticket = response;
         });
         this.state = 'editing';
+        this.form.enable();
       })
   }
 
