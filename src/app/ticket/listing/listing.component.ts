@@ -152,6 +152,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.sort = this.sort;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
+          if (this.isLoaded === false) this.isLoaded = true;
         }
         return
       })
@@ -159,7 +160,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.handleError(error)
       })
       .finally(() => {
-        this.isLoaded = true;
         if (this.isPolling === false) {
           this.isPolling = true;
           if (this.isTicketsLoaded === true || this.isParticipant === false) {
@@ -203,7 +203,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (event === 'loaded') {
       this.isTicketsLoaded = true;
       if (this.isPolling === true) {
-        this.isLoaded = true;
+        // this.isLoaded = true;
         this.restorePosition();
       }
     }
@@ -300,6 +300,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackLoggedStatus(): void {
     this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
       if (response === false) {
+        console.log('Listing: saatiin tieto, ettei olla kirjautuneina.');
         this.isLoaded = true;
         this.setError('notLoggedIn');
       } else if (response === true) {
