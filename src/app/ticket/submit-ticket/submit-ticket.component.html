@@ -128,13 +128,6 @@
       Uuden kysymyksen lähettäminen onnistui.
     </p>
 
-    <p  class="attachments-message"
-        i18n="@@Lähetetään liitetiedostoja"
-        *ngIf="state==='sending'"
-        >
-      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...
-    </p>
-
     <app-error-card i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
                     *ngIf="errorMessage.length > 0"

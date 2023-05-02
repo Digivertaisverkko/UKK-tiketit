@@ -75,9 +75,8 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
             console.log('makeRequestChain: catchError: error napattu');
             this.fileInfoList[index].uploadError = $localize `:@@Liitteen
                 lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            // Koko upload loppuu kaikkien tiedostojen kohdalla jos heitetään virhe.
+            // Koko upload loppuu kaikkien tiedostojen kohdalla jos *heitetään* virhe.
             return of('error');
-            // return throwError( () => new Error(error) );
           })
         )
     });
@@ -120,6 +119,8 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
 
   public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
     this.isEditingDisabled = true;
+    this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
+        Lähetetään liitetiedostoja, odota hetki...`
     let requestArray = this.makeRequestArray(ticketID, commentID)
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
@@ -127,8 +128,10 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
             this.isEditingDisabled = false;
+            this.userMessage = '';
           } else {
             resolve(res)
+            this.userMessage = '';
           }
         },
         error: (error) => {

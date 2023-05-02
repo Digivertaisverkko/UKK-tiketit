@@ -1,18 +1,18 @@
   <!-- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
   <input  aria-disabled="true"
-  (change)="onFileChanged($event)"
-  class="file-input"
-  #fileUpload
-  #fileInput
-  multiple
-  type="file"
->
+          (change)="onFileChanged($event)"
+          class="file-input"
+          #fileUpload
+          #fileInput
+          multiple
+          type="file"
+          >
 
 <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
 name="file-input-{{url}}"
 (change)="onFileChanged($event)" #fileUpload> -->
 
-<p class="status-message-p" *ngIf="userMessage">{{userMessage}}</p>
+<p class="status-message-p" *ngIf="userMessage">{{ userMessage }}</p>
 
 <div class="vertical-spacer"></div>
 
@@ -20,8 +20,8 @@ name="file-input-{{url}}"
 
 <div class="file-list" *ngIf="oldAttachments.length > 0">
   <div  class="file-list-row"
-    *ngFor="let file of oldAttachments; let index = index"
-    >
+        *ngFor="let file of oldAttachments; let index = index"
+        >
   <div class="list-item">
     <span class="filename"
           matTooltip="{{file.nimi}}"
@@ -37,30 +37,30 @@ name="file-input-{{url}}"
 
 <div class="file-list" *ngIf="fileInfoList !== null">
 <div  class="file-list-row"
-  *ngFor="let file of fileInfoList; let index = index"
-  >
+      *ngFor="let file of fileInfoList; let index = index"
+      >
 
 <div class="list-item">
 
 <span class="filename"
-      matTooltip="{{file.filename}}"
+      matTooltip="{{ file.filename }}"
       [matTooltipShowDelay]="600"
       >
-  {{file.filename}}
+  {{ file.filename }}
 </span>
 <span class="in-brackets">
   (
-    <span *ngIf="oldAttachments.length > 0">{{new}}</span>
-    <span>{{file.filesize | filesize }}</span>
+    <span *ngIf="oldAttachments.length > 0">{{ new }}</span>
+    <span> {{ file.filesize | filesize }} </span>
   )
 </span>
 <div  class="file-error-message"
       matError
-      matTooltip="{{file?.errorToolTip}}"
+      matTooltip="{{ file?.errorToolTip }}"
       [matTooltipShowDelay]="600"
       *ngIf="file.error"
       >
-    <mat-icon>warning</mat-icon>{{file.error}}
+    <mat-icon>warning</mat-icon>{{ file.error }}
 </div>
 
 <button class="remove-file-button"
@@ -76,12 +76,12 @@ name="file-input-{{url}}"
 done
 </mat-icon>
 <mat-icon class="error-icon" *ngIf="file.uploadError">error</mat-icon>
-<span *ngIf="file.uploadError">{{file.uploadError}}</span>
+<span *ngIf="file.uploadError">{{ file.uploadError }}</span>
 <mat-progress-bar
-  mode="determinate"
-  *ngIf="file.progress && !file.uploadError"
-  [value]="file.progress"
-  >
+    mode="determinate"
+    *ngIf="file.progress && !file.uploadError"
+    [value]="file.progress"
+    >
 </mat-progress-bar>
 </div>
 </div>
