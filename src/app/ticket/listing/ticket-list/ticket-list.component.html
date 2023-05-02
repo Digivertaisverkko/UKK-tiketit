@@ -1,9 +1,6 @@
 <!-- Älä korvaa ngIf:llä tai sorting ei toimi. -->
 <div [ngStyle]="{ 'display': 'isLoaded' ? 'block' : 'none' }">
 
-<!-- Upotuksessa jos ei otsikkoa ja näytetään kirjautumisen ilmaisin, niin
-  hakukentälle tilaa. -->
-<!-- <div *ngIf="isInIframe && numberOfQuestions > 0" class="vertical-spacer"></div> -->
 <div class="input-field-wrapper">
   <h2 id="tickets-header" class="sub-header" *ngIf="headline.length > 0">
     {{ headline }}

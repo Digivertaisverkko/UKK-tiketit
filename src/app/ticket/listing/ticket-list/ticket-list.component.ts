@@ -83,7 +83,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.startLoading();
     this.headline = this.getHeadline();
     this.trackScreenSize();
     this.startPollingTickets();

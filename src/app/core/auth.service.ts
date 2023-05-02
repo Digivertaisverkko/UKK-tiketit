@@ -37,7 +37,6 @@ export class AuthService {
   }
 
   public initialize() {
-    // this.checkIfSessionIDinStorage();
     this.startUpdatingUserinfo();
   }
 
@@ -58,17 +57,6 @@ export class AuthService {
       }
     });
   }
-
-  /*
-  private checkIfSessionIDinStorage() {
-    const savedSessionID = this.getSessionID();
-    if (savedSessionID !== null) {
-      console.log('Session ID on tallennettuna.');
-      /* ? Muuta, että asetetaan kirjautuneeksi vasta, kun saada
-      palvelimelta hyväksytty vastaus? */
-  //     this.setLoggedIn();
-  //   }
-  // }
 
   public async sendDataConsent(tokenid: string | null, allow: boolean): Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
@@ -139,21 +127,6 @@ export class AuthService {
   public unTrackUserInfo(): void {
     this.user$.unsubscribe();
   }
-
-  // public setSessionID(newSessionID: string) {
-  //   const oldSessionID =  window.localStorage.getItem('SESSION_ID');
-  //   if (oldSessionID == undefined || oldSessionID !== newSessionID)
-  //   window.localStorage.setItem('SESSION_ID', newSessionID);
-  // }
-
-  // Palauta session ID ja päivitä status kirjautumattomaksi, jos sitä ei ole.
-  // public getSessionID(): string | null {
-  //   const sessionID = (window.localStorage.getItem('SESSION_ID'));
-    // if (sessionID === undefined || sessionID === null) {
-    //   this.setNotLoggegIn();
-    // }
-  //   return sessionID;
-  // }
 
   private getMethodName() {
     return this.getMethodName.caller.name
@@ -376,8 +349,6 @@ export class AuthService {
         loginResult.redirectUrl = redirectUrl;
         window.localStorage.removeItem('REDIRECT_URL')
       }
-      // const sessionID = response['session-id'];
-      // this.setSessionID(sessionID);
       this.setLoggedIn();
     } else {
       loginResult = { success: false };
