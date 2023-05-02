@@ -123,24 +123,27 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
         Lähetetään liitetiedostoja, odota hetki...`
     let requestArray = this.makeRequestArray(ticketID, commentID)
     return new Promise((resolve, reject) => {
+      this.sendingEnded();
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
-            this.isEditingDisabled = false;
-            this.userMessage = '';
           } else {
             resolve(res)
-            this.userMessage = '';
           }
         },
         error: (error) => {
           console.log('sendFilesPromise: saatiin virhe: ' + error );
-          this.isEditingDisabled = false;
+          this.sendingEnded();
           reject('error')
         }
       });
     })
   }
+
+ private sendingEnded(): void {
+  this.userMessage = '';
+  this.isEditingDisabled = false;
+ }
 
 }
