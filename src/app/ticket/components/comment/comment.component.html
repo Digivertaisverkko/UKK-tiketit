@@ -127,8 +127,12 @@
     <app-editor formControlName="message"
                 *ngIf="editingCommentID === comment.id"
                 >
-
     </app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="message?.errors?.['required']"
+                >
+      Pakollinen kenttä.
+    </mat-error>
 
     <app-error-card
         i18n-title="@@Virhe"
@@ -139,7 +143,7 @@
         >
     </app-error-card>
 
-    <!----------------- Alaosan toiminnot --------------------------------------->
+    <!----------------- Alaosan toiminnot ------------------------------------->
 
     <div class="theme-actions">
 

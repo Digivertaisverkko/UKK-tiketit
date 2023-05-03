@@ -92,7 +92,6 @@ export class SubmitTicketComponent implements OnInit {
       this.fetchTicketInfo(this.ticketId);
     }
     this.auth.fetchUserInfo(this.courseId);
-    console.log(1);
     this.auth.trackUserInfo().subscribe(response => {
       if (response?.nimi != null) {
         this.user = response

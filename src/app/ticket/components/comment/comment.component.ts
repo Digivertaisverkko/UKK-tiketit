@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
@@ -42,6 +42,10 @@ export class CommentComponent {
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
+
+  get message(): FormControl {
+    return this.form.get('message') as FormControl;
+  }
 
   constructor(
     private auth: AuthService,
