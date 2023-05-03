@@ -1,6 +1,6 @@
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormControl, NG_VALIDATORS,
+import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
     NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService, Liite } from '../../ticket.service';
@@ -42,21 +42,21 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks = new Observable();
-  @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
+  @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfo[]>();
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @Output() isInvalid: boolean = false;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  public uploadClickSub = new Subscription();
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
   public onChange = (isInvalid: boolean) => {};
   public onTouched = () => {};
-  public readonly MAX_FILE_SIZE_MB=1;
+  public readonly MAX_FILE_SIZE_MB=100;
   public readonly new: string = $localize `:@@uusi:uusi` + ", ";
   public readonly noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public touched = false;
+  public uploadClickSub = new Subscription();
   public userMessage: string = '';
 
   constructor(private ticketService: TicketService,
@@ -108,9 +108,10 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     }
   }
 
-  public onFileChanged(event: any) {
+  public onFileAdded(event: any) {
     console.log('edit-attachments: event saatu.');
     this.markAsTouched();
+    this.onChange(this.isInvalid);
     const MEGABYTE = 1000000;
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
@@ -124,12 +125,11 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
-            Tiedoston koko ylittää
-        ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+            Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.isInvalid = true;
         this.errors = { size: 'overMax' };
-        this.attachmentsMessages.emit('faulty');
         this.onChange(this.isInvalid);
+        console.log('this.isInvalid: ' + this.isInvalid + ", this.errors: " + this.errors);
       }
       this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileInfoList);
@@ -185,12 +185,14 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   }
 
   private sendingEnded(): void {
+    this.isInvalid = false;
+    this.errors = null;
     this.userMessage = '';
     this.isEditingDisabled = false;
   }
 
   public validate(control: AbstractControl): ValidationErrors | null {
-    return  this.isInvalid ? this.errors : null;
+    return this.isInvalid === true ? this.errors : null;
   }
 
   public writeValue(): void {}

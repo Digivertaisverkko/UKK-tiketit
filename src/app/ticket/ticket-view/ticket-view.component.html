@@ -174,7 +174,7 @@
                 [disabled]="state==='sending'"
                 [attr.aria-label]="attachFilesText"
                 mat-raised-button="attachFilesText"
-                type='button'
+                type="button"
                 >
           <mat-icon>attach_file</mat-icon>{{attachFilesText}}
         </button>
@@ -204,10 +204,6 @@
           <div class="action-spacer spacer"></div>
         </ng-template>
 
-        <!-- [disabled]="commentText.length < 1 ||
-        attachmentsMessages === 'faulty' ||
-        state === 'sending'" -->
-
         <button class="send-button"
                 color="primary"
                 [disabled]="form.disabled"
@@ -227,10 +223,6 @@
           [uploadClicks]="uploadClick.asObservable()"
           >
       </app-edit-attachments>
-
-      <!-- <p>{{attachmentsMessages}}</p> -->
-
-      <!-- <p>{{isAttachmentsInvalid}}</p> -->
 
     </section>
   </form>
