@@ -128,6 +128,7 @@ export class SubmitTicketComponent implements OnInit {
           Validators.required
         ])
       ],
+      attachments: [''],
     });
   }
 

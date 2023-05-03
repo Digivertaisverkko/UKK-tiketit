@@ -117,7 +117,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       message: [ '', Validators.required ],
-      attachments: ['', []]
+      attachments: ['']
     });
   }
 

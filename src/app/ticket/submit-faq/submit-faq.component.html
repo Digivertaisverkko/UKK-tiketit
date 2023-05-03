@@ -194,6 +194,7 @@
 
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          formControlName="attachments"
                           [oldAttachments]="oldAttachments"
                           [uploadClicks]="uploadClick.asObservable()"
                           >

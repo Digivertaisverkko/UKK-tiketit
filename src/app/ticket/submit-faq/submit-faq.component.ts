@@ -127,6 +127,7 @@ export class SubmitFaqComponent implements OnInit {
           Validators.required
         ])
       ],
+      attachments: ['']
     });
   }
 
