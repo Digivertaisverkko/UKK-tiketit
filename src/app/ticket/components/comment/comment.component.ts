@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
@@ -23,7 +23,7 @@ interface FileInfo {
   styleUrls: ['./comment.component.scss']
 })
 
-export class CommentComponent implements OnInit {
+export class CommentComponent {
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
@@ -72,10 +72,6 @@ export class CommentComponent implements OnInit {
 
   public cancelCommentEditing() {
     this.stopEditing();
-  }
-
-  ngOnInit(): void {
-    true
   }
 
   public changeRemoveBtn() {

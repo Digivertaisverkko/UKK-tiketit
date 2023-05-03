@@ -61,8 +61,8 @@
     <button aria-label="Vahvista kommentin poistaminen"
             class="remove-btn"
             (click)="removeComment(comment.id)"
-            [disabled]="state==='sending'"
             color="accent"
+            [disabled]="state==='sending'"
             i18n-aria-label="@@Vahvista kommentin poistaminen"
             mat-icon-button
             matTooltip="{{ strings.get('confirmRemoveTooltip') }}"
@@ -125,7 +125,6 @@
     <!-- </app-editor-legacy> -->
 
     <app-editor formControlName="message"
-                [disabled]="state==='sending'"
                 *ngIf="editingCommentID === comment.id"
                 >
 
@@ -185,7 +184,6 @@
       </ng-template>
 
       <button class="send-button"
-              (click)="sendComment(comment.id)"
               color="primary"
               [disabled]="state==='sending'"
               mat-raised-button

@@ -15,8 +15,6 @@ name="file-input-{{url}}"
 <p class="status-message-p" *ngIf="userMessage">{{ userMessage }}</p>
 
 <div class="vertical-spacer"></div>
-<!--
-<p>touched: {{touched}}</p> -->
 
 <!-- Aiemmin lähetetyt liitteet ------------------------------------------->
 
@@ -53,7 +51,7 @@ name="file-input-{{url}}"
     <span class="in-brackets">
       (
         <span *ngIf="oldAttachments.length > 0">{{ new }}</span>
-        <span> {{ file.filesize | filesize }} </span>
+        <span>{{ file.filesize | filesize }}</span>
       )
     </span>
     <div  class="file-error-message"

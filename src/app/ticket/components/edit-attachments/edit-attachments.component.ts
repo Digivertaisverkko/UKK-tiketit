@@ -50,7 +50,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
-  public readonly MAX_FILE_SIZE_MB=1;
+  public readonly MAX_FILE_SIZE_MB=100;
   public readonly new = $localize `:@@uusi:uusi` + ", ";
   public readonly noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public touched = false;
@@ -109,7 +109,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public onChange = (isInvalid: boolean) => {};
 
   public onFileAdded(event: any) {
-    console.log('edit-attachments: event saatu.');
     this.markAsTouched();
     this.onChange(this.isInvalid);
     const MEGABYTE = 1000000;
@@ -147,6 +146,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   }
 
   public removeSelectedFile(index: number) {
+    if (this.isEditingDisabled === true) return
     this.markAsTouched();
     this.fileInfoList.splice(index, 1);
     if (this.fileInfoList.some(item => item.error)) {
@@ -168,7 +168,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         Lähetetään liitetiedostoja, odota hetki...`
     let requestArray = this.makeRequestArray(ticketID, commentID)
     return new Promise((resolve, reject) => {
-      this.sendingEnded();
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
           if (res.some((result: unknown) => result === 'error' )) {
@@ -179,8 +178,10 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         },
         error: (error) => {
           console.log('sendFilesPromise: saatiin virhe: ' + error );
-          this.sendingEnded();
           reject('error')
+        },
+        complete: () => {
+          this.sendingEnded();
         }
       });
     })
