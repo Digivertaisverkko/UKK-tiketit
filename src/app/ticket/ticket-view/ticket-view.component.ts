@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -49,6 +49,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public ticketID: string;
   public uploadClick = new Subject<string>();
   public user: User = {} as User;
+  public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
   private courseID: string | null;
   private isPollingTicket: boolean = false;
@@ -115,9 +116,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', Validators.required ]
+      message: [ '', Validators.required ],
+      attachments: ['', []]
     });
   }
+
 
   // Jotkin painikkeet muuttuvat yhden painalluksen jälkeen vahvistuspainikkeiksi.
   public changeButton(button: 'archive' | 'remove') {

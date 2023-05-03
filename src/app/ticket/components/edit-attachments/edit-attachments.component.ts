@@ -1,5 +1,7 @@
-import {  ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit,
+import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, FormControl, NG_VALIDATORS,
+    NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService, Liite } from '../../ticket.service';
 
@@ -20,24 +22,41 @@ interface FileInfo {
   selector: 'app-edit-attachments',
   templateUrl: './edit-attachments.component.html',
   styleUrls: ['./edit-attachments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: EditAttachmentsComponent
+    },
+    {
+      provide: NG_VALIDATORS,
+      multi: true,
+      useExisting: EditAttachmentsComponent
+    }
+  ]
 })
 
-export class EditAttachmentsComponent implements OnInit, OnDestroy {
+export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
+    OnDestroy, Validator {
 
   @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks = new Observable();
-  // @Input() uploadClicks: Observable<string> = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'faulty' | 'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfo[]>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @Output() isInvalid: boolean = false;
 
   public uploadClickSub = new Subscription();
+  public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
-  public readonly MAX_FILE_SIZE_MB=100;
+  public onChange = (isInvalid: boolean) => {};
+  public onTouched = () => {};
+  public readonly MAX_FILE_SIZE_MB=1;
   public readonly new: string = $localize `:@@uusi:uusi` + ", ";
-  public noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
+  public readonly noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
+  public touched = false;
   public userMessage: string = '';
 
   constructor(private ticketService: TicketService,
@@ -82,8 +101,16 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
     });
   }
 
+  private markAsTouched() {
+    if (!this.touched) {
+      this.onTouched();
+      this.touched = true;
+    }
+  }
+
   public onFileChanged(event: any) {
     console.log('edit-attachments: event saatu.');
+    this.markAsTouched();
     const MEGABYTE = 1000000;
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
@@ -99,21 +126,37 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
             Tiedoston koko ylittää
         ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+        this.isInvalid = true;
+        this.errors = { size: 'overMax' };
         this.attachmentsMessages.emit('faulty');
+        this.onChange(this.isInvalid);
       }
       this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileInfoList);
     }
   }
 
+  public registerOnChange(onChange: any): void {
+    this.onChange = onChange;
+  }
+
+  public registerOnTouched(onTouched: any): void {
+    this.onTouched = onTouched;
+  }
+
   public removeSelectedFile(index: number) {
-    // this.fileList.splice(index, 1);
+    this.markAsTouched();
     this.fileInfoList.splice(index, 1);
     if (this.fileInfoList.some(item => item.error)) {
       this.attachmentsMessages.emit('errors');
+      this.isInvalid = true;
+      this.errors = { size: 'overMax' };
     } else {
       this.attachmentsMessages.emit('');
+      this.isInvalid = false;
+      this.errors = null;
     }
+    this.onChange(this.isInvalid);
     this.fileListOutput.emit(this.fileInfoList);
   }
 
@@ -141,9 +184,15 @@ export class EditAttachmentsComponent implements OnInit, OnDestroy {
     })
   }
 
- private sendingEnded(): void {
-  this.userMessage = '';
-  this.isEditingDisabled = false;
- }
+  private sendingEnded(): void {
+    this.userMessage = '';
+    this.isEditingDisabled = false;
+  }
+
+  public validate(control: AbstractControl): ValidationErrors | null {
+    return  this.isInvalid ? this.errors : null;
+  }
+
+  public writeValue(): void {}
 
 }

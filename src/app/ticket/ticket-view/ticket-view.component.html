@@ -7,7 +7,12 @@
   </app-beginning-button>
 
   <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
-      <app-beginning-button [disabled]="state==='sending'">
+
+      <app-beginning-button
+          (clicked)="showConfirm = true"
+          [confirm]=form.dirty
+          [disabled]="state==='sending'"
+          >
       </app-beginning-button>
 
       <div class="spacer"></div>
@@ -70,6 +75,13 @@
         Vahvista poisto
       </button>
     </div>
+
+    <app-error-card
+        [confirmLeave]="true"
+        *ngIf="showConfirm"
+        [styles]="{ margin: '2rem 0 0 0' }"
+        >
+    </app-error-card>
 
   <!-------------- Kysymys ---------------------------------------------------->
 
@@ -211,9 +223,14 @@
       <app-edit-attachments
           (attachmentsMessages)="attachmentsMessages = $event"
           (fileListOutput)="fileInfoList = $event"
+          formControlName="attachments"
           [uploadClicks]="uploadClick.asObservable()"
           >
       </app-edit-attachments>
+
+      <!-- <p>{{attachmentsMessages}}</p> -->
+
+      <!-- <p>{{isAttachmentsInvalid}}</p> -->
 
     </section>
   </form>
