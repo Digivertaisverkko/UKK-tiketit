@@ -65,8 +65,13 @@ export class CommentComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       message: [ '', Validators.required ],
+      checkboxes: [ this.comment.tila ],
       attachments: ['']
     });
+  }
+
+  public cancelCommentEditing() {
+    this.stopEditing();
   }
 
   ngOnInit(): void {
@@ -78,10 +83,10 @@ export class CommentComponent implements OnInit {
   }
 
   public editComment(commentID: string) {
-    console.dir(this.comment);
     this.editingCommentID = commentID;
     this.editingCommentIDChange.emit(this.editingCommentID);
     this.form.controls['message'].setValue(this.comment.viesti);
+    this.form.controls['checkboxes'].setValue(this.comment.tila);
   }
 
   public getSenderTitle(name: string, role: string): string {
@@ -115,10 +120,11 @@ export class CommentComponent implements OnInit {
 
   public sendComment(commentID: string) {
     this.state = 'sending';
+    this.form.disable();
     const commentText = this.form.controls['message'].value;
-    console.log('koitetaan lähettää teksti: ' + commentText)
+    const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
-        this.comment.tila)
+        commentState)
       .then(response => {
         if (this.fileInfoList.length === 0) {
           this.stopEditing();
@@ -131,6 +137,7 @@ export class CommentComponent implements OnInit {
         this.errorMessage = $localize `:@@Kommentin muokkaaminen epäonnistui:
             Kommentin muokkaaminen epäonnistui` + '.';
         this.state="editing";
+        this.form.enable();
         this.messages.emit('continue')
       })
   }
@@ -148,6 +155,7 @@ export class CommentComponent implements OnInit {
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:
             Kaikkien liitteiden lähettäminen ei onnistunut`;
         this.state="editing";
+        this.form.enable();
         this.messages.emit('continue')
       })
   }

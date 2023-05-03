@@ -50,10 +50,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfo[] = [];
   public isEditingDisabled: boolean = false;
-  public onChange = (isInvalid: boolean) => {};
-  public onTouched = () => {};
-  public readonly MAX_FILE_SIZE_MB=100;
-  public readonly new: string = $localize `:@@uusi:uusi` + ", ";
+  public readonly MAX_FILE_SIZE_MB=1;
+  public readonly new = $localize `:@@uusi:uusi` + ", ";
   public readonly noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public touched = false;
   public uploadClickSub = new Subscription();
@@ -108,6 +106,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     }
   }
 
+  public onChange = (isInvalid: boolean) => {};
+
   public onFileAdded(event: any) {
     console.log('edit-attachments: event saatu.');
     this.markAsTouched();
@@ -135,6 +135,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       this.fileListOutput.emit(this.fileInfoList);
     }
   }
+
+  public onTouched = () => {};
 
   public registerOnChange(onChange: any): void {
     this.onChange = onChange;

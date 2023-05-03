@@ -81,13 +81,13 @@
           i18n-aria-label="@@Muokkaa kommenttia"
           mat-icon-button
           *ngIf="(comment.lahettaja.id === user?.id) &&
-              (editingCommentID !== comment.id)"
+                (editingCommentID !== comment.id)"
           >
     <mat-icon>edit</mat-icon>
   </button>
 
   <button aria-label="Peru kommentin muokkaaminen"
-          (click)="stopEditing()"
+          (click)="cancelCommentEditing()"
           [disabled]="state==='sending'"
           i18n-aria-label="@@Peru kommentin muokkaaminen"
           mat-icon-button
@@ -101,7 +101,7 @@
 <!----------------- Card content ---------------------------------------------->
 
 <mat-card-content>
-  <ng-container *ngIf="editingCommentID !== comment.id; else commentEditing">
+  <ng-container *ngIf="editingCommentID !== comment.id; else editingComment">
     <app-message [messageHtml]=comment.viesti></app-message>
     <app-view-attachments
         (errorMessage)="errorMessage = $event"
@@ -113,9 +113,9 @@
   </ng-container>
 </mat-card-content>
 
-  <ng-template #commentEditing>
+  <ng-template #editingComment>
 
-    <form [formGroup]="form" (ngSubmit)="sendComment(comment.id)">
+  <form [formGroup]="form" (ngSubmit)="sendComment(comment.id)">
 
 <!--     <app-editor-legacy  [disabled]="state==='sending'"
                         [(editorContent)]="comment.viesti"
@@ -149,6 +149,7 @@
               (click)="uploadClick.next('add')"
               [disabled]="state==='sending'"
               mat-raised-button="attachFilesText"
+              type="button"
               >
         <mat-icon>attach_file</mat-icon>
         {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
@@ -160,10 +161,13 @@
           >
       </div>
 
+      <!-- [(ngModel)]="comment.tila" -->
+      <!-- [disabled]="state==='sending'" -->
+
       <mat-radio-group
-          align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
-          [(ngModel)]="comment.tila"
-          [disabled]="state==='sending'"
+          align="start"
+          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+          formControlName="checkboxes"
           >
         <mat-radio-button [value]=4 i18n="@@Kommentti">
           Kommentti
@@ -185,6 +189,7 @@
               color="primary"
               [disabled]="state==='sending'"
               mat-raised-button
+              type="submit"
               >
         OK
       </button>
@@ -193,6 +198,7 @@
     <app-edit-attachments
         (attachmentsMessages)="attachmentsMessages = $event"
         (fileListOutput)="fileInfoList = $event"
+        formControlName="attachments"
         id="attachments-{{comment.id}}"
         [oldAttachments]="comment.liitteet"
         [uploadClicks]="uploadClick.asObservable()"
