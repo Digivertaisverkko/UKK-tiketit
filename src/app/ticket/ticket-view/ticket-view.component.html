@@ -206,7 +206,7 @@
 
         <button class="send-button"
                 color="primary"
-                [disabled]="form.disabled"
+                [disabled]="state ==='sending'"
                 i18n="@@Lähetä"
                 mat-raised-button
                 type="submit"
