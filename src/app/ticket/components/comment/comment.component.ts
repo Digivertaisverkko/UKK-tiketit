@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
@@ -35,6 +36,7 @@ export class CommentComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public editingComment: string | null = null;
+  public form: FormGroup = this.buildForm();
   public errorMessage: string = '';
   public isRemovePressed: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
@@ -43,24 +45,28 @@ export class CommentComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
+    private formBuilder: FormBuilder,
     private ticketService: TicketService
-    ) {
+  ) {
       this.user = this.auth.getUserInfo();
-   
+
       this.strings = new Map ([
         ['attach', $localize `:@@Liitä:Liitä` ],
         ['attachFiles', $localize `:@@Liitä tiedostoja:Liitä tiedostoja`],
         ['confirmRemoveTooltip', $localize `:@@Vahvista kommentin poistaminen:
-          Vahvista kommentin poistaminen`], 
+          Vahvista kommentin poistaminen`],
         ['proposedSolution', $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`],
         ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`],
         ['moreInfoNeeded', $localize `:@@Lisätietoa tarvitaan:Lisätietoa tarvitaan`]
       ]);
       this.attachFilesText = this.strings.get('attachFiles')!;
-    }
+  }
 
-  public cancelCommentEditing() {
-    this.stopEditing();
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      message: [ '', Validators.required ],
+      attachments: ['']
+    });
   }
 
   ngOnInit(): void {
@@ -75,6 +81,7 @@ export class CommentComponent implements OnInit {
     console.dir(this.comment);
     this.editingCommentID = commentID;
     this.editingCommentIDChange.emit(this.editingCommentID);
+    this.form.controls['message'].setValue(this.comment.viesti);
   }
 
   public getSenderTitle(name: string, role: string): string {
@@ -106,9 +113,12 @@ export class CommentComponent implements OnInit {
     })
   }
 
-  public sendComment(commentID: string, commentText: string) {
+  public sendComment(commentID: string) {
     this.state = 'sending';
-    this.ticketService.editComment(this.ticketID, commentID, commentText, this.comment.tila)
+    const commentText = this.form.controls['message'].value;
+    console.log('koitetaan lähettää teksti: ' + commentText)
+    this.ticketService.editComment(this.ticketID, commentID, commentText,
+        this.comment.tila)
       .then(response => {
         if (this.fileInfoList.length === 0) {
           this.stopEditing();
@@ -143,7 +153,7 @@ export class CommentComponent implements OnInit {
   }
 
   // Lopeta kommentin
-  private stopEditing() {
+  public stopEditing() {
     this.state = 'done';
     this.fileInfoList = [];
     this.attachments.clear();

@@ -87,7 +87,7 @@
   </button>
 
   <button aria-label="Peru kommentin muokkaaminen"
-          (click)="cancelCommentEditing()"
+          (click)="stopEditing()"
           [disabled]="state==='sending'"
           i18n-aria-label="@@Peru kommentin muokkaaminen"
           mat-icon-button
@@ -113,81 +113,94 @@
   </ng-container>
 </mat-card-content>
 
-<ng-template #commentEditing>
-  <app-editor-legacy  [disabled]="state==='sending'"
-                      [(editorContent)]="comment.viesti"
-                      *ngIf="editingCommentID === comment.id"
-                      >
-  <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
-  </app-editor-legacy>
+  <ng-template #commentEditing>
 
-  <app-error-card
-      i18n-title="@@Virhe"
-      *ngIf="errorMessage.length > 0"
-      message="{{ errorMessage }}"
-      [styles]="{ 'margin-top': '1rem:' }"
-      title="Virhe"
-      >
-  </app-error-card>
+    <form [formGroup]="form" (ngSubmit)="sendComment(comment.id)">
 
-  <!----------------- Alaosan toiminnot --------------------------------------->
+<!--     <app-editor-legacy  [disabled]="state==='sending'"
+                        [(editorContent)]="comment.viesti"
+                        *ngIf="editingCommentID === comment.id"
+                        >
+    <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
+    <!-- </app-editor-legacy> -->
 
-  <div class="theme-actions">
+    <app-editor formControlName="message"
+                [disabled]="state==='sending'"
+                *ngIf="editingCommentID === comment.id"
+                >
 
-    <button [attr.aria-label]="attachFilesText"
-            class="attach-button"
-            (click)="uploadClick.next('add')"
-            [disabled]="state==='sending'"
-            mat-raised-button="attachFilesText"
-            >
-      <mat-icon>attach_file</mat-icon>
-      {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
-            strings.get('attach') : strings.get('attachFiles')}}
-    </button>
+    </app-editor>
 
-    <div class="actions-spacer spacer"
-        *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+    <app-error-card
+        i18n-title="@@Virhe"
+        *ngIf="errorMessage.length > 0"
+        message="{{ errorMessage }}"
+        [styles]="{ 'margin-top': '1rem:' }"
+        title="Virhe"
         >
+    </app-error-card>
+
+    <!----------------- Alaosan toiminnot --------------------------------------->
+
+    <div class="theme-actions">
+
+      <button [attr.aria-label]="attachFilesText"
+              class="attach-button"
+              (click)="uploadClick.next('add')"
+              [disabled]="state==='sending'"
+              mat-raised-button="attachFilesText"
+              >
+        <mat-icon>attach_file</mat-icon>
+        {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
+              strings.get('attach') : strings.get('attachFiles')}}
+      </button>
+
+      <div class="actions-spacer spacer"
+          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+          >
+      </div>
+
+      <mat-radio-group
+          align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+          [(ngModel)]="comment.tila"
+          [disabled]="state==='sending'"
+          >
+        <mat-radio-button [value]=4 i18n="@@Kommentti">
+          Kommentti
+        </mat-radio-button>
+        <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+          Lisätietoa tarvitaan
+        </mat-radio-button>
+        <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+          Ratkaisuehdotus
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <ng-template #spacerHere>
+        <div class="actions-spacer spacer"></div>
+      </ng-template>
+
+      <button class="send-button"
+              (click)="sendComment(comment.id)"
+              color="primary"
+              [disabled]="state==='sending'"
+              mat-raised-button
+              >
+        OK
+      </button>
     </div>
 
-    <mat-radio-group
-        align="start" *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
-        [(ngModel)]="comment.tila"
-        [disabled]="state==='sending'">
-      <mat-radio-button [value]=4 i18n="@@Kommentti">
-        Kommentti
-      </mat-radio-button>
-      <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
-        Lisätietoa tarvitaan
-      </mat-radio-button>
-      <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
-        Ratkaisuehdotus
-      </mat-radio-button>
-    </mat-radio-group>
+    <app-edit-attachments
+        (attachmentsMessages)="attachmentsMessages = $event"
+        (fileListOutput)="fileInfoList = $event"
+        id="attachments-{{comment.id}}"
+        [oldAttachments]="comment.liitteet"
+        [uploadClicks]="uploadClick.asObservable()"
+        >
+    </app-edit-attachments>
 
-    <ng-template #spacerHere>
-      <div class="actions-spacer spacer"></div>
-    </ng-template>
+  </form>
 
-    <button class="send-button"
-            (click)="sendComment(comment.id, comment.viesti)"
-            color="primary"
-            [disabled]="state==='sending'"
-            mat-raised-button
-            >
-      OK
-    </button>
-  </div>
-
-  <app-edit-attachments
-      (attachmentsMessages)="attachmentsMessages = $event"
-      (fileListOutput)="fileInfoList = $event"
-      id="attachments-{{comment.id}}"
-      [oldAttachments]="comment.liitteet"
-      [uploadClicks]="uploadClick.asObservable()"
-      >
-  </app-edit-attachments>
-
-</ng-template>
+  </ng-template>
 
 </mat-card>
