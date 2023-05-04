@@ -61,9 +61,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private auth: AuthService,
+    private auth : AuthService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
+    private route : ActivatedRoute,
     private router: Router,
     private ticketService: TicketService,
     private titleServ: Title

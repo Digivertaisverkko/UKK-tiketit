@@ -26,11 +26,11 @@ export class AppComponent implements OnInit, OnDestroy  {
   private isLogged: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
-  constructor(
+  constructor (
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
-    private store: StoreService,
+    private route : ActivatedRoute,
+    private store : StoreService,
   ) {
     this.isLoading = this.store.trackLoading();
   }
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.authService.initialize();
     // Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
-    // this.isInIframe = trsue;
+    // this.isInIframe = true;
     this.isInIframe = this.getIsInIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
@@ -52,6 +52,24 @@ export class AppComponent implements OnInit, OnDestroy  {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  private getIsInIframe(): boolean {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  public logInOut() {
+    if (this.isLogged) {
+      this.authService.saveRedirectURL();
+      this.authService.logout(this.courseID);
+    } else {
+      this.authService.saveRedirectURL();
+      this.authService.navigateToLogin(this.courseID);
+    }
   }
 
   private trackLoginStatus() {
@@ -67,24 +85,6 @@ export class AppComponent implements OnInit, OnDestroy  {
         this.logButtonString = $localize`:@@Kirjaudu sisään:Kirjaudu sisään`;
       }
     });
-  }
-
-  public logInOut() {
-    if (this.isLogged) {
-      this.authService.saveRedirectURL();
-      this.authService.logout(this.courseID);
-    } else {
-      this.authService.saveRedirectURL();
-      this.authService.navigateToLogin(this.courseID);
-    }
-  }
-
-  private getIsInIframe(): boolean {
-    try {
-      return window.self !== window.top;
-    } catch (e) {
-      return true;
-    }
   }
 
 }

@@ -49,10 +49,10 @@
             i18n-aria-label="@Poista kommentti"
             mat-icon-button
             matTooltip="{{ strings.get('removeComment') }}"
-            *ngIf="(comment.lahettaja.id === user?.id) &&
-                (editingCommentID === comment.id) &&
-                isRemovePressed === false"
             matTooltipPosition="after"
+            *ngIf="(comment.lahettaja.id === user?.id) &&
+                  (editingCommentID === comment.id) &&
+                  isRemovePressed === false"
             #tooltip="matTooltip"
             >
       <mat-icon>delete</mat-icon>
@@ -66,10 +66,10 @@
             i18n-aria-label="@@Vahvista kommentin poistaminen"
             mat-icon-button
             matTooltip="{{ strings.get('confirmRemoveTooltip') }}"
+            matTooltipPosition="after"
             *ngIf="(comment.lahettaja.id === user?.id) &&
                 (editingCommentID === comment.id) &&
                 isRemovePressed === true"
-            matTooltipPosition="after"
             #tooltip="matTooltip"
             >
             <mat-icon>delete_forever</mat-icon>
@@ -100,18 +100,18 @@
 
 <!----------------- Card content ---------------------------------------------->
 
-<mat-card-content>
-  <ng-container *ngIf="editingCommentID !== comment.id; else editingComment">
-    <app-message [messageHtml]=comment.viesti></app-message>
-    <app-view-attachments
-        (errorMessage)="errorMessage = $event"
-        [files]="comment.liitteet"
-        *ngIf="comment.liitteet"
-        [ticketID]="ticketID"
-        >
-    </app-view-attachments>
-  </ng-container>
-</mat-card-content>
+  <mat-card-content>
+    <ng-container *ngIf="editingCommentID !== comment.id; else editingComment">
+      <app-message [messageHtml]=comment.viesti></app-message>
+      <app-view-attachments
+          (errorMessage)="errorMessage = $event"
+          [files]="comment.liitteet"
+          *ngIf="comment.liitteet"
+          [ticketID]="ticketID"
+          >
+      </app-view-attachments>
+    </ng-container>
+  </mat-card-content>
 
   <ng-template #editingComment>
 

@@ -158,9 +158,10 @@
     </app-error-card>
 
     <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
-    <p class="theme-success-message"
+    <p  class="theme-success-message"
         i18n="@@Kommentin lisääminen"
-        *ngIf="state==='sending'">
+        *ngIf="state==='sending'"
+        >
       Uuden kommentin lähettäminen onnistui.
     </p>
 
@@ -183,11 +184,12 @@
             *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
         </div>
 
-        <mat-radio-group align="start"
+        <mat-radio-group
+            align="start"
+            [disabled]="state === 'sending'"
             *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
             [(ngModel)]="newCommentState"
             [ngModelOptions]="{standalone: true}"
-            [disabled]="state === 'sending'"
             >
           <mat-radio-button [value]=4 i18n="@@Kommentti">
             Kommentti
