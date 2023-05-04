@@ -10,6 +10,9 @@ mat-form-field {
 }
 
 .ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: -20px;
   mat-form-field {
     flex-grow: 3;

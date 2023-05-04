@@ -7,6 +7,25 @@
   gap: $button-gap;
 }
 
+.ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  mat-form-field {
+    flex-grow: 3;
+  }
+
+  // .user-info-block {
+  //   margin-bottom: 1.5rem;
+  //   padding-top: 1.1rem;
+  // }
+
+  // app-sender-info {
+  //   margin-bottom: 1.5rem;
+  // }
+}
+
 .short-field-value:last-child {
   margin-bottom: 1.5rem
 }
@@ -16,19 +35,6 @@
 
   +p {
     margin-top: -2rem;
-  }
-}
-
-mat-card {
-  margin: 0 auto 12px;
-
-  mat-card-subtitle {
-    margin-top: 3px;
-  }
-
-  .ticket-state {
-    color: var(--primary-color);
-    margin-right: 1em;
   }
 }
 
@@ -44,17 +50,8 @@ mat-radio-button {
   padding-left: 0
 }
 
-// ::ng-deep .mat-mdc-card-content:last-child {
-//   padding-bottom: 0 !important;
-// }
-
 @media (max-width: 775px) {
 
-  // Välttämättä ei mene useammalle riville.
-  // .user-info-block {
-  //   order: -1;
-  //   margin-bottom: -30px;
-  // }
   .attach-button {
     order: 1;
   }
@@ -66,4 +63,5 @@ mat-radio-button {
   .send-button {
     order: 3;
   }
+
 }

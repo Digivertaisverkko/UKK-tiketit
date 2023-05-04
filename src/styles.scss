@@ -93,14 +93,6 @@ mat-hint {
 // Testaamiseen jos haluaa osan block-elementeistä näkyviin.
 $debug: false;
 
-/* käytetään ticket-view ja submit-ticket -komponenteissa tiketin otsakkeessa.
-Tiketin otsikko ja oikeassa reunassa käyttäjätiedot + ikoni. */
-.ticket-header {
-  display: flex;
-  align-items: flex-center;
-  gap: 1rem;
-  @if $debug { border: 1px dotted purple; }
-}
 
 .theme-table {
   width: 100%; line-height: 1.4rem;
