@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 
@@ -23,7 +23,7 @@ interface FileInfo {
   styleUrls: ['./comment.component.scss']
 })
 
-export class CommentComponent {
+export class CommentComponent implements OnChanges {
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
@@ -31,13 +31,16 @@ export class CommentComponent {
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
   @Input() public user: User = {} as User;
-  @Output() public editingCommentIDChange = new EventEmitter();
-  @Output() public messages = new EventEmitter();
+  // Lähettää ID:n, mitä kommenttia editoidaan.
+  @Output() public editingCommentIDChange = new EventEmitter<string | null>();
+  // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
+  @Output() public messages = new EventEmitter<string>();
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public editingComment: string | null = null;
   public form: FormGroup = this.buildForm();
   public errorMessage: string = '';
+  public isEdited: boolean = false;
   public isRemovePressed: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
@@ -53,7 +56,6 @@ export class CommentComponent {
     private ticketService: TicketService
   ) {
       this.user = this.auth.getUserInfo();
-
       this.strings = new Map ([
         ['attach', $localize `:@@Liitä:Liitä` ],
         ['attachFiles', $localize `:@@Liitä tiedostoja:Liitä tiedostoja`],
@@ -66,16 +68,19 @@ export class CommentComponent {
       this.attachFilesText = this.strings.get('attachFiles')!;
   }
 
+  ngOnChanges(): void {
+    if (!this.isEdited && this.form.dirty) {
+      this.isEdited = true
+      this.messages.emit('editingComment');
+    }
+  }
+
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       message: [ '', Validators.required ],
       checkboxes: [ this.comment.tila ],
       attachments: ['']
     });
-  }
-
-  public cancelCommentEditing() {
-    this.stopEditing();
   }
 
   public changeRemoveBtn() {
@@ -107,7 +112,6 @@ export class CommentComponent {
     return isToday(timestamp);
   }
 
-
   public removeComment(commentID: string) {
     this.ticketService.removeComment(this.ticketID, commentID).then(res => {
       this.stopEditing();
@@ -127,7 +131,7 @@ export class CommentComponent {
     const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
         commentState)
-      .then(response => {
+      .then(() => {
         if (this.fileInfoList.length === 0) {
           this.stopEditing();
           return
@@ -149,7 +153,6 @@ export class CommentComponent {
     this.attachments.sendFilesPromise(ticketID, commentID)
       .then((res:any) => {
         console.log('kaikki tiedostot valmiita.');
-        this.messages.emit('continue')
         this.stopEditing();
       })
       .catch((res:any) => {
@@ -168,7 +171,7 @@ export class CommentComponent {
     this.fileInfoList = [];
     this.attachments.clear();
     this.editingCommentID = null;
-    this.editingCommentIDChange.emit(this.editingCommentID);
+    this.editingCommentIDChange.emit(null);
     this.isRemovePressed = false;
     this.messages.emit('done');
   }

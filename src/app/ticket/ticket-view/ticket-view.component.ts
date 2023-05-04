@@ -40,19 +40,20 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public form: FormGroup = this.buildForm();
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
+  public isEditingComment: boolean = false;
   public isLoaded: boolean = false;
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
   public newCommentState: 3 | 4 | 5 = 4;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
-  public ticket: Tiketti = {} as Tiketti;;
+  public ticket: Tiketti = {} as Tiketti;
   public ticketID: string;
   public uploadClick = new Subject<string>();
   public user: User = {} as User;
   public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
   private courseID: string | null;
-  private isPollingTicket: boolean = false;
+  private isPolling: boolean = false;
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -78,10 +79,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
-      console.log('saatiin userinfo: ' + response);
       if (response.id != null) {
         this.user = response;
-        if (!this.isPollingTicket) this.startPollingTicket();
+        if (!this.isPolling) this.startPollingTicket();
       }
       if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
         this.attachFilesText = $localize `:@@Liitä:liitä`;
@@ -120,7 +120,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       attachments: ['']
     });
   }
-
 
   // Jotkin painikkeet muuttuvat yhden painalluksen jälkeen vahvistuspainikkeiksi.
   public changeButton(button: 'archive' | 'remove') {
@@ -200,7 +199,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public messageFromComment(event: any) {
     if (event === "done") {
+      this.isEditingComment = false;
       this.fetchTicket(this.courseID);
+    } else if (event === 'editingComment') {
+      this.isEditingComment = true
     } else if (event === "sendingFiles") {
       this.state='sending';
     } else if (event === "continue") {
@@ -262,7 +264,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private startPollingTicket() {
     const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
     this.fetchTicketsSub?.unsubscribe();
-    this.isPollingTicket = true;
+    this.isPolling = true;
     this.fetchTicketsSub = timer(0, pollRate)
       .pipe(
         takeUntil(this.unsubscribe$),

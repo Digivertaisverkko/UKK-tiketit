@@ -87,7 +87,7 @@
   </button>
 
   <button aria-label="Peru kommentin muokkaaminen"
-          (click)="cancelCommentEditing()"
+          (click)="stopEditing()"
           [disabled]="state==='sending'"
           i18n-aria-label="@@Peru kommentin muokkaaminen"
           mat-icon-button
@@ -163,9 +163,6 @@
           *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
           >
       </div>
-
-      <!-- [(ngModel)]="comment.tila" -->
-      <!-- [disabled]="state==='sending'" -->
 
       <mat-radio-group
           align="start"
