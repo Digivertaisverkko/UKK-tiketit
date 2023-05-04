@@ -3,6 +3,7 @@
 form {
   margin-top: -6px;
 }
+
 mat-form-field {
   min-width: 21rem;
 }
@@ -12,6 +13,7 @@ mat-form-field {
   align-items: center;
   gap: 1rem;
   margin-bottom: -20px;
+
   mat-form-field {
     flex-grow: 3;
   }
@@ -23,30 +25,21 @@ mat-form-field {
 
 .short-field-wrapper {
   width: 24em;
-
   mat-form-field {
     margin-top: 2px;
   }
 }
 
-.attachments-message {
-  text-align: center;
-}
-
 .theme-actions {
-  align-items: center;
-  gap: 0.8rem;
+  gap: $button-gap;
 }
 
 @media (min-width: $XSmall) {
   .submit-ticket {
     padding-right: $right-padding;
   }
-}
 
-@media (max-width: $XSmall) {
-  .user-info-block,
-  .mat-mdc-card-avatar {
-    display: none;
+  .required-span {
+    margin-right: 1rem;
   }
 }
