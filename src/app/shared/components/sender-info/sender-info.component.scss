@@ -8,7 +8,7 @@ $debug: false;
   flex-shrink: 0;
   gap: 0.8rem;
   // h1 elementti asettaa omat marginaalit, joten saadaan suhteessa oikeaan kohtaan.
-  margin-top: 1.3rem;
+  margin-top: 0.8rem;
 
   .text-info {        // Käyttäjätiedot
     @if $debug { border: 1px solid gray; }
