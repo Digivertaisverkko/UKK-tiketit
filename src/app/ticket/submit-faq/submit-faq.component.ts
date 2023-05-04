@@ -44,7 +44,7 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
-  public courseId: string | null = this.route.snapshot.paramMap.get('courseid');
+  public readonly courseId: string | null = this.route.snapshot.paramMap.get('courseid');
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -55,7 +55,7 @@ export class SubmitFaqComponent implements OnInit {
   public ticketFields: AdditionalField[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
-  public uploadClick: Subject<string> = new Subject<string>();
+  public uploadClick = new Subject<string>();
 
   get additionalFields(): FormArray {
     return this.form.controls["additionalFields"] as FormArray;
@@ -174,11 +174,6 @@ export class SubmitFaqComponent implements OnInit {
         if (comment.tila === 5) {
           this.form.controls['answer'].setValue(comment.viesti);
         }
-      }
-
-      if (String(response.kurssi) !== this.courseId) {
-        this.courseId = String(response.kurssi);
-        this.auth.fetchUserInfo(this.courseId);
       }
     });
   }
