@@ -1,8 +1,7 @@
 <app-headline></app-headline>
+<app-beginning-button></app-beginning-button>
 
-<div *ngIf="isLoaded">
-
-  <app-beginning-button></app-beginning-button>
+<div *ngIf="isPersonalInfoLoaded">
 
   <section class="personal-info">
     <h2 class="sub-header" i18n="@@Henkilökohtaiset tiedot">
@@ -16,7 +15,8 @@
               maxlength="50"
               name="name"
               [(ngModel)]="userName"
-              placeholder="">
+              placeholder=""
+              >
 
       <mat-hint align="end">{{ userName.length }} / 50</mat-hint>
     </mat-form-field>
@@ -26,7 +26,8 @@
               matTooltip="Järjestelmään tallennettu nimesi."
               matTooltipPosition="after"
               [ngStyle]="{ 'padding-left': '15px' }"
-              #tooltip="matTooltip">
+              #tooltip="matTooltip"
+              >
       help_outline
     </mat-icon>
 
@@ -48,7 +49,8 @@
               matTooltip="Järjestelmään tallennettu sähköpostiosoitteesi."
               matTooltipPosition="after"
               [ngStyle]="{ 'padding-left': '15px' }"
-              #tooltip="matTooltip">
+              #tooltip="matTooltip"
+              >
       help_outline
     </mat-icon>
 
@@ -73,7 +75,9 @@
       <span>
         <button (click)="downloadPersonalData()"
                 i18n="@@Lataa kaikki datani"
-                mat-raised-button>
+                mat-raised-button
+                type="button"
+                >
           Lataa kaikki datani
         </button>
       </span>
@@ -92,7 +96,9 @@
                   color="accent"
                   i18n="@@Poista tili ja data"
                   mat-raised-button
-                  *ngIf="isRemovePressed === false">
+                  *ngIf="isRemovePressed === false"
+                  type="button"
+                  >
             Poista tili ja data
           </button>
         </div>
@@ -100,7 +106,9 @@
                 color="accent"
                 i18n="@@Vahvista poisto"
                 mat-raised-button
-                *ngIf="isRemovePressed === true">
+                *ngIf="isRemovePressed === true"
+                type="button"
+                >
             Vahvista poisto
         </button>
       </span>
@@ -118,7 +126,8 @@
                   message="{{ errorMessage }}"
                   *ngIf="errorMessage.length > 0"
                   [styles]="{ margin: '0' }"
-                  title="Virhe">
+                  title="Virhe"
+                  >
   </app-error-card>
 
 </div>
