@@ -1,45 +1,5 @@
-@import "/src/variables.scss";
+@import "../submits";
 
-form {
-  margin-top: -6px;
-}
-
-mat-form-field {
-  min-width: 21rem;
-}
-
-.ticket-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: -20px;
-
-  mat-form-field {
-    flex-grow: 3;
-  }
-
-  app-sender-info {
-    margin-bottom: 1.5rem;
-  }
-}
-
-.short-field-wrapper {
-  width: 24em;
-  mat-form-field {
-    margin-top: 2px;
-  }
-}
-
-.theme-actions {
-  gap: $button-gap;
-}
-
-@media (min-width: $XSmall) {
-  .submit-ticket {
-    padding-right: $right-padding;
-  }
-
-  .required-span {
-    margin-right: 1rem;
-  }
+app-sender-info {
+  margin-bottom: 1rem;  
 }
