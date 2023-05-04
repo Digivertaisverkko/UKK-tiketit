@@ -119,6 +119,8 @@ export class CommentComponent {
   }
 
   public sendComment(commentID: string) {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
     this.state = 'sending';
     this.form.disable();
     const commentText = this.form.controls['message'].value;
