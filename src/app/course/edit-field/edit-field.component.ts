@@ -76,13 +76,19 @@ export class EditFieldComponent implements OnInit {
   }
 
   // Luodaan lomakkeelle lisävalintojen kontrollit.
-  private buildMultipleSelections(): void {
-    for (const selection of this.field.valinnat) {
-      let validators = Validators.maxLength(255);
-      this.multipleSelections.push(new FormControl(selection ?? '', validators))
-    }
+  private buildMultipleSelections(selections: string[]): void {
+    const validators = Validators.maxLength(255);
+    this.field.valinnat.forEach(selection => {
+      this.multipleSelections.push(new FormControl(selection, validators))
+      this.form.addControl(selection, this.multipleSelections);
+    })
+    // for (const selection of selections) {
+    //   const validators = Validators.maxLength(255);
+    //   // this.multipleSelections.push(this.formBuilder.control(selection));
+    //   this.multipleSelections.push(new FormControl(selection, validators))
+    // }
   }
-  
+
   public changeRemoveButton() {
     setTimeout(() => this.isRemovePressed = true, 300);
   }
@@ -154,17 +160,21 @@ export class EditFieldComponent implements OnInit {
       this.form.controls['title'].setValue(this.field.otsikko);
       this.form.controls['infoText'].setValue(this.field.ohje);
       this.form.controls['mandatory'].setValue(this.field.pakollinen);
-      this.buildMultipleSelections();
+      this.buildMultipleSelections(this.field.valinnat);
+      console.log('controllerit:');
+      console.dir(this.multipleSelections);
       // console.log('form:');
       // console.dir(this.form);
       // console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
       // console.log('alla kaikki kentät');
       // console.dir(this.allFields);
+      this.isLoaded = true
       return
     }).catch(error => {
       console.dir(error);
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
+          this.isLoaded = true
     }).finally( () => this.isLoaded = true)
   }
 

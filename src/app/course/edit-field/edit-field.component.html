@@ -81,7 +81,7 @@
               class="chipRow"
               [editable]="true"
               (edited)="edit(valinta, $event)"
-              [formControlName]="valinta"
+              formControlName="{{valinta}}"
               *ngFor="let valinta of field.valinnat"
               (removed)="remove(valinta)"
               >
