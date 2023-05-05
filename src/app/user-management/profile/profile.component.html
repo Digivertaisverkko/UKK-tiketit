@@ -1,7 +1,7 @@
 <app-headline></app-headline>
 <app-beginning-button></app-beginning-button>
 
-<div *ngIf="isPersonalInfoLoaded">
+<div *ngIf="isPersonalInfoLoaded && isSettingsLoaded">
 
   <section class="personal-info">
     <h2 class="sub-header" i18n="@@Henkilökohtaiset tiedot">
@@ -57,13 +57,24 @@
   </section>
 
   <section class="e-mail-settings">
-    <h2 class="sub-header" i18n="@@Sähköpostiasetukset">Sähköpostiasetukset</h2>
-    <mat-checkbox i18n="@@Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista">
-      Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista
-    </mat-checkbox>
-    <mat-checkbox i18n="@@Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi">
-      Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
-    </mat-checkbox>
+    <form [formGroup]="emailSettingsForm">
+      <h2 class="sub-header" i18n="@@Sähköpostiasetukset">Sähköpostiasetukset</h2>
+      <mat-checkbox formControlName="notify"
+                    i18n="@@Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista"
+                    >
+        Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista
+      </mat-checkbox>
+      <mat-checkbox formControlName="summary"
+                    i18n="@@Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista"
+                    >
+        Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista
+      </mat-checkbox>
+      <mat-checkbox formControlName="feedback"
+                    i18n="@@Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi"
+                    >
+        Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
+      </mat-checkbox>
+    </form>
   </section>
 
   <section class="personal-data">

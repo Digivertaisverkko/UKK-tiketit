@@ -1,4 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
 import { UserManagementService } from '../user-management.service';
@@ -15,10 +16,18 @@ export class ProfileComponent implements OnInit {
   public errorMessage: string = '';
   public isPersonalInfoLoaded: boolean = false;
   public isRemovePressed: boolean = false;
+  public isSettingsLoaded: boolean = false;
   public userEmail: string = '';
   public userName: string = '';
 
+  public emailSettingsForm: FormGroup = this.formBuilder.group({
+    notify: [false],
+    summary: [false],
+    feedback: [false],
+  });
+
   constructor(private authService: AuthService,
+              private formBuilder: FormBuilder,
               private renderer: Renderer2,
               private titleServ: Title,
               private userManagementService: UserManagementService)
@@ -28,10 +37,20 @@ export class ProfileComponent implements OnInit {
     this.titleServ.setTitle(
       Constants.baseTitle + $localize `:@@Profiili:Profiili`
     );
-    this.userManagementService.getPersonalInfo().then(response => {
+    this.userManagementService.getPersonalInfo()
+    .then(response => {
       this.userName = response.nimi;
       this.userEmail = response.sposti;
       this.isPersonalInfoLoaded = true;
+    });
+    this.userManagementService.getSettings()
+    .then(response => {
+      this.emailSettingsForm.setValue({
+        notify: response['sposti-ilmoitus'],
+        summary: response['sposti-kooste'],
+        feedback: response['sposti-palaute']
+      });
+      this.isSettingsLoaded = true;
     });
   }
 
