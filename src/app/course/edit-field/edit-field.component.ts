@@ -26,6 +26,7 @@ export class EditFieldComponent implements OnInit {
   public isRemovePressed: boolean = false;
   public multipleSelection: boolean = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  public showConfirm: boolean = false;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
 
   get multipleSelections(): FormArray {
@@ -53,9 +54,11 @@ export class EditFieldComponent implements OnInit {
   }
 
   public addSelection(event: MatChipInputEvent): void {
+
     const value = (event.value || '').trim();
     if (value) {
-      this.multipleSelections.push(this.formBuilder.control(value));
+      this.multipleSelections.push(new FormControl(value));
+      this.multipleSelections.markAsDirty();
       this.field.valinnat.push(value);
     }
     event.chipInput!.clear();
@@ -103,9 +106,13 @@ export class EditFieldComponent implements OnInit {
       this.remove(valinta);
       return;
     }
-    const index = this.field.valinnat.indexOf(valinta);
+    let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat[index] = value;
 
+    index = this.multipleSelections.value.indexOf(valinta);
+    if (index >= 0) {
+      this.multipleSelections.markAsDirty();
+    } 
   }
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
@@ -170,8 +177,13 @@ export class EditFieldComponent implements OnInit {
   }
 
   public remove(valinta: string): void {
-    const index = this.field.valinnat.indexOf(valinta);
+    let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat.splice(index, 1);
+    index = this.multipleSelections.value.indexOf(valinta);
+    if (index >= 0) {
+      this.multipleSelections.removeAt(index);
+      this.multipleSelections.markAsDirty();
+    } 
   }
 
   private showCourseName(courseID: string) {

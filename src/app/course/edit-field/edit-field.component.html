@@ -1,7 +1,13 @@
 <app-headline></app-headline>
 
 <div class="top-buttons">
-  <app-beginning-button></app-beginning-button>
+    <app-beginning-button
+    (clicked)="showConfirm = true"
+    [confirm]=form.dirty
+    >
+</app-beginning-button>
+
+  <p>dirty: {{form.dirty}}</p>
 
   <button class="remove-button"
           (click)="changeRemoveButton()"
@@ -21,6 +27,13 @@
     Vahvista poisto
   </button>
 </div>
+
+<app-error-card
+    [confirmLeave]="true"
+    *ngIf="showConfirm"
+    [styles]="{ margin: '2rem 0 0 0' }"
+    >
+</app-error-card>
 
 <div class="view-wrapper" *ngIf="isLoaded">
   <h2 class="sub-header" i18n="@@Kysymysten lisäkenttä">
