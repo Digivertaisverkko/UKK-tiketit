@@ -58,16 +58,19 @@
         <mat-chip-grid
             #chipGrid
             aria-label="Valitse monivalinnan vaihtoehtoja"
+            FormArrayName="multipleSelections"
             i18n-aria-label="@@Valitse monivalinnan vaihtoehtoja"
             [disabled]="!multipleSelection"
             >
+
           <mat-chip-row
-              *ngFor="let valinta of field.valinnat"
-              [editable]="true"
-              (edited)="edit(valinta, $event)"
-              (removed)="remove(valinta)"
               [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
               class="chipRow"
+              [editable]="true"
+              (edited)="edit(valinta, $event)"
+              [formControlName]="valinta"
+              *ngFor="let valinta of field.valinnat"
+              (removed)="remove(valinta)"
               >
             {{ valinta }}
             <button [attr.aria-label]="'poista valinta ' + valinta"
@@ -83,7 +86,7 @@
                   [matChipInputFor]="chipGrid"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="addOnBlur"
-                  (matChipInputTokenEnd)="add($event)"
+                  (matChipInputTokenEnd)="addSelection($event)"
                   (keydown.arrowleft)="onArrowLeft($event)"
                   />
         </mat-chip-grid>

@@ -5,7 +5,7 @@ import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -28,6 +28,10 @@ export class EditFieldComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
 
+  get multipleSelections(): FormArray {
+    return this.form.get("multipleSelections") as FormArray;
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -48,19 +52,32 @@ export class EditFieldComponent implements OnInit {
     this.trackRouteParameters();
   }
 
-  public add(event: MatChipInputEvent): void {
+  public addSelection(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
-    if (value) this.field.valinnat.push(value);
+    if (value) {
+      this.multipleSelections.push(this.formBuilder.control(value));
+      this.field.valinnat.push(value);
+    }
     event.chipInput!.clear();
   }
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
-      multipleSelection: [ '' ],
+      multipleSelections: this.formBuilder.array([
+        this.formBuilder.control('')
+      ]),
       infoText: [ '' ],
       mandatory: [ '' ],
     })
+  }
+
+  // Luodaan lomakkeelle lisävalintojen kontrollit.
+  private buildMultipleSelections(): void {
+    for (const selection of this.field.valinnat) {
+      let validators = Validators.maxLength(255);
+      this.multipleSelections.push(new FormControl(selection ?? '', validators))
+    }
   }
   
   public changeRemoveButton() {
@@ -73,10 +90,10 @@ export class EditFieldComponent implements OnInit {
     field.id = this.field.id;
     field.otsikko = controls['title'].value;
     field.pakollinen = controls['mandatory'].value;
+    // TODO: Esitäytettävä ei vielä käytössä.
     field.esitaytettava = this.field.esitaytettava;
     field.ohje = controls['infoText'].value;
-    const multipleSelection: boolean = controls['multipleSelection'].value;
-    field.valinnat = multipleSelection ? this.field.valinnat : []; 
+    field.valinnat = this.field.valinnat;
     return field
   }
 
@@ -88,6 +105,7 @@ export class EditFieldComponent implements OnInit {
     }
     const index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat[index] = value;
+
   }
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
@@ -123,11 +141,13 @@ export class EditFieldComponent implements OnInit {
       } else {
         this.multipleSelection = true;
       }
+
       this.titleServ.setTitle(Constants.baseTitle + ' ' + 
           $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       this.form.controls['title'].setValue(this.field.otsikko);
       this.form.controls['infoText'].setValue(this.field.ohje);
       this.form.controls['mandatory'].setValue(this.field.pakollinen);
+      this.buildMultipleSelections();
       // console.log('form:');
       // console.dir(this.form);
       // console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
@@ -161,6 +181,7 @@ export class EditFieldComponent implements OnInit {
   }
 
   public sendField(removeExisting?: boolean): void {
+    if (this.form.invalid) return
     if (this.multipleSelection === false) this.field.valinnat = [];
     const newField = this.createField();
     if (this.fieldID == null) {   // Ellei ole uusi kenttä.
