@@ -14,7 +14,7 @@
   </mat-card-title>
 
   <mat-card-subtitle class="theme-label">
-    <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}}
+    <span>{{ getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema) }}
       -
     </span>
     <span i18n="@@Tänään" *ngIf="isToday(comment.aikaleima)" >
@@ -159,9 +159,9 @@
               strings.get('attach') : strings.get('attachFiles')}}
       </button>
 
-      <div class="actions-spacer spacer"
-          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
-          >
+      <div  class="actions-spacer spacer"
+            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+            >
       </div>
 
       <mat-radio-group
