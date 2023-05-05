@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription, first } from 'rxjs';
 
 import { Kommentti, TicketService } from '../../ticket.service';
 import { AuthService, User } from 'src/app/core/auth.service';
@@ -23,7 +23,7 @@ interface FileInfo {
   styleUrls: ['./comment.component.scss']
 })
 
-export class CommentComponent implements OnChanges {
+export class CommentComponent implements AfterViewInit{
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
@@ -40,7 +40,6 @@ export class CommentComponent implements OnChanges {
   public editingComment: string | null = null;
   public form: FormGroup = this.buildForm();
   public errorMessage: string = '';
-  public isEdited: boolean = false;
   public isRemovePressed: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
@@ -68,12 +67,10 @@ export class CommentComponent implements OnChanges {
       this.attachFilesText = this.strings.get('attachFiles')!;
   }
 
-  ngOnChanges(): void {
-    if (!this.isEdited && this.form.dirty) {
-      this.isEdited = true
-      this.messages.emit('editingComment');
-    }
+  ngAfterViewInit(): void {
+    this.trackWhenEditing();
   }
+
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
@@ -174,6 +171,15 @@ export class CommentComponent implements OnChanges {
     this.editingCommentIDChange.emit(null);
     this.isRemovePressed = false;
     this.messages.emit('done');
+  }
+
+  private trackWhenEditing() {
+    let sub: Subscription = this.form.valueChanges.subscribe(() => {
+      if (this.form.dirty) {
+        this.messages.emit('editingComment');
+        sub.unsubscribe();
+      }
+    })
   }
 
 }

@@ -197,7 +197,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     return this.ticketService.getTicketState(tila, this.user.asema);
   }
 
-  public messageFromComment(event: any) {
+  public listenMessagesFromComment(event: any) {
     if (event === "done") {
       this.isEditingComment = false;
       this.fetchTicket(this.courseID);

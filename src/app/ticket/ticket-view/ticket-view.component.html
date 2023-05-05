@@ -10,7 +10,7 @@
 
       <app-beginning-button
           (clicked)="showConfirm = true"
-          [confirm]=form.dirty
+          [confirm]="form.dirty || isEditingComment"
           [disabled]="state==='sending'"
           >
       </app-beginning-button>
@@ -124,7 +124,7 @@
         [(editingCommentID)]="editingCommentIDParent"
         *ngFor="let comment of ticket.kommentit"
         [ticketID]="ticket.id"
-        (messages)="messageFromComment($event)"
+        (messages)="listenMessagesFromComment($event)"
         >
     </app-comment>
 
