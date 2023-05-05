@@ -3,23 +3,21 @@
 <div class="top-buttons">
   <app-beginning-button></app-beginning-button>
 
-  <button
-    class="remove-button"
-    (click)="changeRemoveButton()"
-    *ngIf="fieldID !== null && isRemovePressed === false"
-    mat-raised-button
-    i18n="@@Poista"
-    >
+  <button class="remove-button"
+          (click)="changeRemoveButton()"
+          i18n="@@Poista"
+          mat-raised-button
+          *ngIf="fieldID !== null && isRemovePressed === false"
+          >
     Poista
   </button>
 
-  <button
-    mat-raised-button
-    (click)="sendField(true)"
-    *ngIf="isRemovePressed === true"
-    color="accent"
-    i18n="@@Vahvista poisto"
-    >
+  <button (click)="sendField(true)"
+          color="accent"
+          i18n="@@Vahvista poisto"
+          *ngIf="isRemovePressed === true"
+          mat-raised-button
+          >
     Vahvista poisto
   </button>
 </div>
@@ -29,65 +27,65 @@
     Kysymysten lisäkenttä
   </h2>
 
-  <form action="" #submitForm="ngForm" accept-charset="UTF-8">
+  <form action="" [formGroup]="form" (ngSubmit)="sendField()" #submitForm="ngForm">
     <mat-form-field class="field-title" appearance="fill">
       <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
-      <input
-        name="kentta.otsikko"
-        [(ngModel)]="field.otsikko"
-        matInput
-        maxlength="50"
-        placeholder="Kentän nimi"
-        i18n-placeholder="@@Kentän nimi"
-      />
+      <input  formControlName="title"
+              i18n-placeholder="@@Kentän nimi"
+              matInput
+              maxlength="50"
+              name="kentta.otsikko"
+              placeholder="Kentän nimi"
+              />
+              <!-- [(ngModel)]="field.otsikko" -->
       <mat-hint align="end">{{ field.otsikko.length }} / 50</mat-hint>
     </mat-form-field>
 
     <div class="multiple-selection-wrapper">
       <mat-checkbox
-        [(ngModel)]="multipleSelection"
-        name="checkbox"
-        i18n="@@Monivalinta"
-        >
+          name="checkbox"
+          i18n="@@Monivalinta"
+          [(ngModel)]="multipleSelection"
+          [ngModelOptions]="{ standalone: true }"
+          >
         Monivalinta
       </mat-checkbox>
 
       <mat-form-field class="chip-list-form-field" appearance="fill">
-        <mat-label i18n="@@Monivalinnan vaihtoehdot"
-          >Monivalinnan vaihtoehdot</mat-label
-        >
+        <mat-label i18n="@@Monivalinnan vaihtoehdot">
+          Monivalinnan vaihtoehdot
+        </mat-label>
         <mat-chip-grid
-          #chipGrid
-          aria-label="Valitse monivalinnan vaihtoehtoja"
-          i18n-aria-label="@@Valitse monivalinnan vaihtoehtoja"
-          [disabled]="!multipleSelection"
-        >
-          <mat-chip-row
-            *ngFor="let valinta of field.valinnat"
-            [editable]="true"
-            (edited)="edit(valinta, $event)"
-            (removed)="remove(valinta)"
-            [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
-            class="chipRow"
-          >
-            {{ valinta }}
-            <button
-              matChipRemove
-              [attr.aria-label]="'poista valinta ' + valinta"
+            #chipGrid
+            aria-label="Valitse monivalinnan vaihtoehtoja"
+            i18n-aria-label="@@Valitse monivalinnan vaihtoehtoja"
+            [disabled]="!multipleSelection"
             >
+          <mat-chip-row
+              *ngFor="let valinta of field.valinnat"
+              [editable]="true"
+              (edited)="edit(valinta, $event)"
+              (removed)="remove(valinta)"
+              [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
+              class="chipRow"
+              >
+            {{ valinta }}
+            <button [attr.aria-label]="'poista valinta ' + valinta"
+                    matChipRemove
+                    type="button"
+                    >
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip-row>
 
-          <input
-            i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
-            placeholder="Paina enter valinnan kirjoittamisen jälkeen."
-            [matChipInputFor]="chipGrid"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="addOnBlur"
-            (matChipInputTokenEnd)="add($event)"
-            (keydown.arrowleft)="onArrowLeft($event)"
-          />
+          <input  i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
+                  placeholder="Paina enter valinnan kirjoittamisen jälkeen."
+                  [matChipInputFor]="chipGrid"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add($event)"
+                  (keydown.arrowleft)="onArrowLeft($event)"
+                  />
         </mat-chip-grid>
       </mat-form-field>
     </div>
@@ -95,67 +93,69 @@
     <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
 
     <mat-form-field class="text-area-wrapper">
-      <textarea
-        [(ngModel)]="field.ohje"
-        #autosize="cdkTextareaAutosize"
-        autocomplete="off"
-        cdkAutosizeMaxRows="5"
-        cdkAutosizeMinRows="3"
-        cdkTextareaAutosize
-        contenteditable
-        i18n-placeholder="@@Infoteksti"
-        matInput
-        maxlength="255"
-        name="infoText"
-        placeholder="Info-teksti"
-      ></textarea>
+      <textarea autocomplete="off"
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMaxRows="5"
+                cdkAutosizeMinRows="3"
+                cdkTextareaAutosize
+                contenteditable
+                formControlName="infoText"
+                i18n-placeholder="@@Infoteksti"
+                matInput
+                maxlength="255"
+                name="infoText"
+                placeholder="Info-teksti"
+                >
+      </textarea>
+      <!-- [(ngModel)]="field.ohje" -->
 
       <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
     </mat-form-field>
 
     <app-error-card
-      *ngIf="errorMessage.length > 0"
-      i18n-title="@@Virhe"
-      title="Virhe"
-      message="{{ errorMessage }}"
-      [styles]="{ margin: '1rem 1rem' }"
-    >
+        *ngIf="errorMessage.length > 0"
+        i18n-title="@@Virhe"
+        title="Virhe"
+        message="{{ errorMessage }}"
+        [styles]="{ margin: '1rem 1rem' }"
+        >
     </app-error-card>
 
     <div class="bottom-buttons-wrapper">
-      <mat-checkbox
-        [(ngModel)]="field.pakollinen"
-        name="checkbox-mandatory"
-        i18n="@@Pakollinen"
-        >Pakollinen</mat-checkbox
-      >
+      <mat-checkbox formControlName="mandatory"
+                    name="checkbox-mandatory"
+                    i18n="@@Pakollinen"
+                    >
+      <!-- [(ngModel)]="field.pakollinen" -->
+        Pakollinen
+      </mat-checkbox>
 
       <mat-checkbox
-        style="display: none"
-        [(ngModel)]="field.esitaytettava"
-        name="checkbox-prefillable"
-        i18n="@@Esitäytettävä"
-        >Esitäytettävä</mat-checkbox
-      >
+          style="display: none"
+          name="checkbox-prefillable"
+          i18n="@@Esitäytettävä"
+          >
+          Esitäytettävä
+        </mat-checkbox>
+        <!-- [(ngModel)]="field.esitaytettava" -->
 
       <div class="spacer bottom-spacer"></div>
 
-      <button
-        class="cancel-button"
-        i18n="@@Peru"
-        mat-raised-button
-        [routerLink]="'/course/' + courseID + '/settings'"
-      >
+      <button class="cancel-button"
+              i18n="@@Peru"
+              mat-raised-button
+              [routerLink]="'/course/' + courseID + '/settings'"
+              type="button"
+              >
         Peru
       </button>
 
-      <button
-        class="send-button"
-        (click)="sendField()"
-        color="primary"
-        i18n="@@Tallenna"
-        mat-raised-button
-      >
+      <button class="send-button"
+              color="primary"
+              i18n="@@Tallenna"
+              mat-raised-button
+              type="submit"
+              >
         Tallenna
       </button>
     </div>
