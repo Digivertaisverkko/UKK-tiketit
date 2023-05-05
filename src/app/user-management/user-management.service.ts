@@ -38,6 +38,18 @@ export class UserManagementService {
     return response;
   }
 
+  // GET /api/minun/asetukset - sähköpostiasetukset
+  public async getSettings(): Promise<MinunAsetukset> {
+    let response: any;
+    let url = environment.apiBaseUrl + '/minun/asetukset';
+    try {
+      response = await firstValueFrom(this.http.get<MinunAsetukset>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
         console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
@@ -68,7 +80,15 @@ export class UserManagementService {
 
 }
 
+// /api/minun/
 export interface Minun {
   nimi: string,
   sposti: string,
+}
+
+// /api/minun/asetukset/
+export interface MinunAsetukset {
+  'sposti-ilmoitus': boolean,
+  'sposti-kooste': boolean,
+  'sposti-palaute': boolean,
 }
