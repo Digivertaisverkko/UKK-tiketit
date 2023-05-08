@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 import { isToday } from 'src/app/shared/utils';
+import { User } from 'src/app/core/core.models';
 
 @Component({
   selector: 'app-sender-info',

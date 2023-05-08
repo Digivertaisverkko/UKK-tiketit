@@ -9,8 +9,10 @@ import { EditAttachmentsComponent
     } from '../components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, Liite, TicketService, UusiTiketti
     } from '../ticket.service';
-import { AuthService, User } from '../../core/auth.service';
+import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
+import { User } from '../../core/core.models'
+
 
 interface AdditionalField {
   id: string;

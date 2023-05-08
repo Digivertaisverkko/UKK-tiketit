@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
     from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { StoreService } from '../store.service';
-import { AuthService, User } from '../auth.service';
+import { AuthService } from '../auth.service';
+import { User } from 'src/app/core/core.models';
+
 
 @Component({
   selector: 'app-header',

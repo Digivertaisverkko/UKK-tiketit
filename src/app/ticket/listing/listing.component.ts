@@ -10,13 +10,14 @@ import { Subject, Subscription, takeUntil, tap, timer }
     from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService, Kurssini, UKK } from '../ticket.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
+import { User } from 'src/app/core/core.models';
 
 export interface ColumnDefinition {
   def: string;

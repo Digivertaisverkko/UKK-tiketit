@@ -10,6 +10,7 @@ import { ErrorService } from './error.service';
 import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { Inject, LOCALE_ID } from '@angular/core';
 import { getCourseIDfromURL } from '../shared/utils';
+import { User } from './core.models';
 
 @Injectable({ providedIn: 'root' })
 
@@ -420,16 +421,6 @@ export interface AuthRequestResponse {
   success: boolean;
   error: string;
   'session-id': string;
-}
-
-export type Role = 'opiskelija' | 'opettaja' | 'admin' | '';
-
-// Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
-export interface User {
-  id?: number;
-  nimi: string;
-  sposti: string;
-  asema: Role;
 }
 
 export interface Kurssi {

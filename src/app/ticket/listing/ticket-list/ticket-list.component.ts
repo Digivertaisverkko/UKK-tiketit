@@ -7,10 +7,10 @@ import { environment } from 'src/environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 
-import { User } from 'src/app/core/auth.service';
 import { Constants } from '../../../shared/utils';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from '../../ticket.service';
+import { User } from 'src/app/core/core.models';
 
 export interface ColumnDefinition {
   def: string;

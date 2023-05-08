@@ -126,7 +126,7 @@ export class EditFieldComponent implements OnInit {
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)
-  }
+  } 
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
   public onArrowLeft(event: any) {

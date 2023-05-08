@@ -4,8 +4,9 @@ import '@angular/localize/init';
 import { Router } from '@angular/router';
 import { Observable, Subject, catchError, firstValueFrom, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthService, Role, User } from '../core/auth.service';
+import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
+import { Role, User } from '../core/core.models';
 
 @Injectable({ providedIn: 'root' })
 
@@ -154,7 +155,8 @@ export class TicketService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string, fieldID?: string | null): Promise<KentanTiedot[]> {
+  public async getTicketFieldInfo(courseID: string, fieldID?: string | null):
+      Promise<KentanTiedot[]> {
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {

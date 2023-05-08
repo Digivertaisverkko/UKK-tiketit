@@ -1,9 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { environment } from 'src/environments/environment';
+import { User } from '../core/core.models';
 
 @Injectable({
   providedIn: 'root'

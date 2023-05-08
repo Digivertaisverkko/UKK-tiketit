@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { AuthService, User } from './core/auth.service';
+import { AuthService } from './core/auth.service';
 import { environment } from 'src/environments/environment';
 import { getIsInIframe } from './shared/utils';
 import { StoreService } from './core/store.service';
+import { User } from './core/core.models';
 // import { TicketService } from './ticket/ticket.service';
 
 @Component({

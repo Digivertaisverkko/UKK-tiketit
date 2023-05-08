@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, User } from 'src/app/core/auth.service';
+import { AuthService } from 'src/app/core/auth.service';
 import { TicketService, Tiketti, Error } from '../ticket.service';
 import { Constants } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
-
+import { User } from 'src/app/core/core.models';
 
 @Component({
   templateUrl: './faq-view.component.html',
