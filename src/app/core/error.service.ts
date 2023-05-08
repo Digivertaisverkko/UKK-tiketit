@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 
 export class ErrorService {
 
-  constructor(private router: Router,
-              private route: ActivatedRoute) {
+  constructor(private router: Router) {
   }
 
   /* Käsittellään virheet ensin yleisellä tasolla, jonka jälkeen heitetään ne

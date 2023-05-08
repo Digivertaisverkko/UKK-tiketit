@@ -1,18 +1,17 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators
-    } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
-import { EditAttachmentsComponent
-    } from '../components/edit-attachments/edit-attachments.component';
-import { AddTicketResponse, TicketService, UusiTiketti
-    } from '../ticket.service';
+import { EditAttachmentsComponent }
+    from '../components/edit-attachments/edit-attachments.component';
+import { TicketService, UusiTiketti } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
-import { Liite } from '../ticket.models.';
+import { AddTicketResponse, Liite } from '../ticket.models.';
 
 interface AdditionalField {
   id: string;

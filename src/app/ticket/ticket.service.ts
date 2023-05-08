@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 import { Role, User } from '../core/core.models';
-import { Liite } from './ticket.models.';
+import { AddTicketResponse, Liite } from './ticket.models.';
 
 @Injectable({ providedIn: 'root' })
 
@@ -517,12 +517,6 @@ export class TicketService {
 
 // Jäsenmuuttujien järjestys pitäisi vastata palvelimen API-dokumenttia.
 
-export interface Error {
-  tunnus: number;
-  virheilmoitus: string;
-  originaali?: string;
-}
-
 // Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
 // API:a se vastaa.
 
@@ -589,13 +583,7 @@ export interface UusiTiketti {
   kentat?: Array<{ id: number, arvo: string }>;
 }
 
-export interface AddTicketResponse {
-  success: Boolean;
-  uusi: {
-    tiketti: string;
-    kommentti: string;
-  }
-}
+
 
 // Metodi: sendFaq. API: /api/kurssi/:kurssi-id/ukk/
 export interface UusiUKK extends UusiTiketti {
@@ -644,7 +632,7 @@ export interface Kommentti {
 }
 
 // Vastaus kommentin lisäämiseen.
-export interface NewCommentResponse {
+interface NewCommentResponse {
   success: boolean;
   kommentti: string;
 }

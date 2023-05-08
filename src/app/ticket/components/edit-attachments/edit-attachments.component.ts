@@ -58,8 +58,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
 
-  constructor(private ticketService: TicketService,
-              private renderer: Renderer2
+  constructor(private renderer: Renderer2,
+              private ticketService: TicketService
               ) {
   }
 
