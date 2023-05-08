@@ -31,7 +31,7 @@ export class CommentComponent implements AfterViewInit{
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
-  @Input() public user: User = {} as User;
+  @Input() public user: User | null = null;
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
   // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
@@ -92,8 +92,8 @@ export class CommentComponent implements AfterViewInit{
     this.form.controls['checkboxes'].setValue(this.comment.tila);
   }
 
-  public getSenderTitle(name: string, role: string): string {
-    if (name == this.user.nimi) return $localize`:@@Minä:Minä`
+  public getSenderTitle(name: string, role: string | null): string {
+    if (name == this.user?.nimi) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
         return $localize`:@@Opiskelija:Opiskelija`; break;

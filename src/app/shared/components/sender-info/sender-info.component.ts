@@ -30,7 +30,7 @@ export class SenderInfoComponent implements OnInit {
     }
   }
 
-  public getSenderTitle(name: string, role: string): string {
+  public getSenderTitle(name: string, role: string | null): string {
     if (name == this.currentUserName) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':

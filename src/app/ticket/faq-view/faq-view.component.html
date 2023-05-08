@@ -12,7 +12,7 @@
               (click)="editFaq()"
               i18n="@@Muokkaa"
               mat-raised-button
-              *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') &&
+              *ngIf="(user?.asema === 'opettaja' || user?.asema === 'admin') &&
                   ticket.tila > 0"
               >
         Muokkaa
@@ -22,8 +22,8 @@
               (click)="changeArchiveButton()"
               i18n="@@Poista"
               mat-raised-button
-              *ngIf="isArchivePressed === false && (user.asema === 'opettaja' ||
-                  user.asema === 'admin') && ticket.tila > 0"
+              *ngIf="isArchivePressed === false && (user?.asema === 'opettaja' ||
+                  user?.asema === 'admin') && ticket.tila > 0"
               >
         Poista
       </button>

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { TicketService, Tiketti, Error } from '../ticket.service';
+import { TicketService, Tiketti } from '../ticket.service';
 import { Constants } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
-import { User } from 'src/app/core/core.models';
+import { User, Error } from 'src/app/core/core.models';
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -16,7 +16,7 @@ export class FaqViewComponent implements OnInit {
   public errorMessage: string = '';
   public isLoaded: boolean = false;
   public ticket: Tiketti = {} as Tiketti;
-  public user: User = <User>{};
+  public user: User | null = null;
   public isArchivePressed: boolean = false;
   public isCopyToClipboardPressed: boolean = false;
   private courseID: string | null;

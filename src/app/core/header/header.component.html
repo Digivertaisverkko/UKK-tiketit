@@ -19,29 +19,30 @@
   <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä, jos tulee tarpeen. -->
   <ng-content></ng-content>
 
-  <section class="user-info">
+  <section class="user-info" *ngIf="user">
 
-    <div class="theme-header-text" *ngIf="user.nimi.length > 0">
+    <div class="theme-header-text">
 
-      {{ (user.nimi.length > maxUserLength)? (user.nimi | slice:0:maxUserLength) +
-        '...':(user.nimi) | titlecase}}
+      {{ user.nimi.length > maxUserLength ?
+            (user.nimi | slice:0:maxUserLength) + '...' :
+            (user.nimi) | titlecase }}
     </div>
 
     <div class="email theme-header-text"
         *ngIf="user.nimi.length === 0 && user.sposti.length > 0">
-        {{ (user.sposti.length > maxUserLength)? (user.sposti |
-          slice:0:maxUserLength) + '...':(user.sposti) }}
+        {{ user.sposti.length > maxUserLength ?
+            (user.sposti | slice:0:maxUserLength) + '...':(user.sposti) }}
     </div>
 
-    <div class="theme-header-text-small">{{userRole | titlecase}}</div>
+    <div class="theme-header-text-small">{{ userRole | titlecase }}</div>
 
   </section>
 
   <button aria-label="Tili"
-          i18n-aria-label="@@Tili"
           class="material-symbols-outlined"
           (click)="updateMenu()"
           id="account-icon-button"
+          i18n-aria-label="@@Tili"
           mat-icon-button
           [matMenuTriggerFor]="accountMenu">
     <mat-icon >account_circle</mat-icon>

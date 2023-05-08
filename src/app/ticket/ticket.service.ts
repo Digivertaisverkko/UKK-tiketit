@@ -618,7 +618,7 @@ export interface Kommentti {
 }
 
 // Vastaus kommentin lisäämiseen.
-interface NewCommentResponse {
+export interface NewCommentResponse {
   success: boolean;
   kommentti: string;
 }

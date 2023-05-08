@@ -80,7 +80,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.auth.trackUserInfo().subscribe(response => {
-      if (response.id != null) {
+      if (response?.id != null) {
         this.user = response;
         if (!this.isPolling) this.startPollingTicket();
       }

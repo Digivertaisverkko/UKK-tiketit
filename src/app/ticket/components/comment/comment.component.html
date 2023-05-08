@@ -155,18 +155,18 @@
               type="button"
               >
         <mat-icon>attach_file</mat-icon>
-        {{ (user.asema === 'opettaja' || user.asema === 'admin') ?
+        {{ (user?.asema === 'opettaja' || user?.asema === 'admin') ?
               strings.get('attach') : strings.get('attachFiles')}}
       </button>
 
       <div  class="actions-spacer spacer"
-            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere"
+            *ngIf="user?.asema === 'opettaja' || user?.asema ==='admin'; else spacerHere"
             >
       </div>
 
       <mat-radio-group
           align="start"
-          *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+          *ngIf="user?.asema === 'opettaja' || user?.asema ==='admin'"
           formControlName="checkboxes"
           >
         <mat-radio-button [value]=4 i18n="@@Kommentti">
