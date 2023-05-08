@@ -13,6 +13,8 @@
     "Arkistoidut kysymykset": "Archived questions",
     "Arkistoitu": "Archived",
     "Asetukset-kuvaus": "You can make additional fields for questions, which will be asked of everyone who submits a new question. You can set additional fields mandatory, give them predefined, multiple-choice options and descriptive info texts. You can change the order of additional fields by changing the order of list below.",
+    "Asetusten tallentaminen epäonnistui.": "Saving settings failed.",
+    "Asetusten tallentaminen onnistui.": "Settings saved successfully.",
     "Avaa uuteen välilehteen": "Open in new tab",
     "Bullettilista": "Bullet list",
     "Digivertaisverkko": "Diginet",
