@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { StoreService } from '../store.service';
 import { AuthService } from '../auth.service';
-import { User } from 'src/app/core/core.models';
+import { User, Role } from 'src/app/core/core.models';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   public disableLangSelect: boolean = false;
   public isLoggedIn: boolean = false;
   public readonly maxUserLength = 40;
-  public user: User = {} as User;
+  public user: User | null = null;
   public userRole: string = '';
 
   private _language!: string;
@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   trackUserInfo() {
     this.authService.trackUserInfo().subscribe(response => {
         this.user = response;
-        this.setUserRole(this.user.asema);
+        this.userRole = this.getRoleString(this.user?.asema ?? null);
         this.change.detectChanges();
     })
   }
@@ -67,8 +67,8 @@ export class HeaderComponent implements OnInit {
     this.disableLangSelect = (url.searchParams.get('lang') !== null) ? true : false;
   }
 
-  setUserRole(asema: string): void {
-    let role: string = '';
+  getRoleString(asema: Role): string {
+    let role: string;
       switch (asema) {
         case 'opiskelija':
           role = $localize`:@@Opiskelija:Opiskelija`; break;
@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit {
         default:
           role = '';
       }
-      this.userRole = role;
+      return role;
   }
 
   public toggleLanguage() {

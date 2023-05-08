@@ -209,7 +209,7 @@ export class AuthService {
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
         newUserInfo = response ;
-        newUserInfo.asema = '';
+        newUserInfo.asema = null;
       } else {
         this.setNotLoggegIn();
         return
