@@ -391,8 +391,9 @@ export class TicketService {
       this.handleError(error);
     }
     // Muutetaan taulukkoon sopivaan muotoon.
-    const myName = this.auth.getUserInfo().nimi;
-    const myRole = this.auth.getUserInfo().asema;
+    const user = this.auth.getUserInfo();
+    const myName = user?.nimi ?? '';
+    const myRole = user?.asema ?? '';
     const me = $localize`:@@Minä:Minä`;
     let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
       {

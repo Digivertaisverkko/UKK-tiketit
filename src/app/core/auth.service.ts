@@ -20,7 +20,7 @@ export class AuthService {
   private isUserLoggedIn$: BehaviorSubject<any> = new BehaviorSubject(null);
   // Onko käyttäjä osallisena aktiivisella kurssilla.
   private isParticipant$ = new BehaviorSubject<boolean>(false);
-  private user$ = new BehaviorSubject <User>({ id: 0, nimi: '', sposti: '', asema: '' });
+  private user$ = new BehaviorSubject(null) ;
   // TODO: nämä oAuth tiedot yhteen tietotyyppiin.
   private codeVerifier: string = '';
   private codeChallenge: string = '';
@@ -95,9 +95,7 @@ export class AuthService {
     if (this.isUserLoggedIn$.value !== false) {
       this.isUserLoggedIn$.next(false);
     }
-    if (this.user$.value.nimi !== '') {
-      this.user$.next({ id: 0, nimi: '', sposti: '', asema: ''});
-    }
+    if (this.user$ !== null) this.user$.next(null);
   }
 
   // Ala seuraamaan, onko käyttäjä kirjautuneena.
@@ -110,17 +108,16 @@ export class AuthService {
     this.isUserLoggedIn$.unsubscribe;
   }
 
-  public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | '' {
-    let user = this.user$.value;
-    return (user.asema == null) ? '' : user.asema;
+  public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | null {
+    return this.user$.value;
   }
 
-  public getUserInfo(): User {
+  public getUserInfo(): User | null {
     const user: User | null = this.user$.value;
     return user;
   }
 
-  public trackUserInfo(): Observable<User> {
+  public trackUserInfo(): Observable<User | null> {
     return this.user$.asObservable();
   }
 
@@ -159,8 +156,9 @@ export class AuthService {
 
   public getUserName(): string | null {
     // return this.userName$.value;
-    const user: User  = this.user$.value;
-    return user.nimi;
+    // const user: User  = this.user$.value;
+    // return user.nimi;
+    return this.user$ === null ? null : this.user$.value; 
   }
 
   // Luo käyttäjätili
@@ -401,15 +399,14 @@ export class AuthService {
 
 } // End of class
 
-
-export interface ConsentResponse {
-  success: boolean,
-  kurssi: number
-}
-
-export interface LoginResponse {
+interface LoginResponse {
   success: boolean,
   'login-code': string
+}
+
+interface ConsentResponse {
+  success: boolean,
+  kurssi: number
 }
 
 interface LoginResult {
@@ -417,7 +414,7 @@ interface LoginResult {
   redirectUrl?: string
 };
 
-export interface AuthRequestResponse {
+interface AuthRequestResponse {
   success: boolean;
   error: string;
   'session-id': string;
