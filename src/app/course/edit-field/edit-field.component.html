@@ -7,8 +7,6 @@
       >
   </app-beginning-button>
 
-  <!-- <p>dirty: {{form.dirty}}</p> -->
-
   <button class="remove-button"
           (click)="changeRemoveButton()"
           i18n="@@Poista"
@@ -40,7 +38,11 @@
     Kysymysten lisäkenttä
   </h2>
 
-  <form action="" [formGroup]="form" (ngSubmit)="updateAllFields()" #submitForm="ngForm">
+  <form action=""
+        [formGroup]="form"
+        (ngSubmit)="updateAllFields()"
+        #submitForm="ngForm"
+        >
     <mat-form-field class="field-title" appearance="fill">
       <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
       <input  formControlName="title"
@@ -75,8 +77,6 @@
             [disabled]="!hasSelections"
             formControlName="selections"
             >
-
-            <!--               FormArrayName="multipleSelections" -->
           <mat-chip-row
               [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
               class="chipRow"
@@ -123,7 +123,6 @@
                 placeholder="Info-teksti"
                 >
       </textarea>
-      <!-- [(ngModel)]="field.ohje" -->
 
       <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
     </mat-form-field>
@@ -142,7 +141,6 @@
                     name="checkbox-mandatory"
                     i18n="@@Pakollinen"
                     >
-      <!-- [(ngModel)]="field.pakollinen" -->
         Pakollinen
       </mat-checkbox>
 
@@ -151,9 +149,8 @@
           name="checkbox-prefillable"
           i18n="@@Esitäytettävä"
           >
-          Esitäytettävä
-        </mat-checkbox>
-        <!-- [(ngModel)]="field.esitaytettava" -->
+        Esitäytettävä
+      </mat-checkbox>
 
       <div class="spacer bottom-spacer"></div>
 
