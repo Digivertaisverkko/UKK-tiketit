@@ -3,7 +3,8 @@ import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnIn
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
     NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
-import { TicketService, Liite } from '../../ticket.service';
+import { TicketService } from '../../ticket.service';
+import { Liite } from '../../ticket.models.';
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
 // lähetysvaiheessa.

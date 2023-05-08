@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 import { Role, User } from '../core/core.models';
+import { Liite } from './ticket.models.';
 
 @Injectable({ providedIn: 'root' })
 
@@ -571,12 +572,6 @@ export interface Tiketti extends TiketinPerustiedot {
   kommenttiID: string;
   kommentit: Array<Kommentti>;
   liitteet?: Array<Liite>;
-}
-
-export interface Liite {
-  kommentti: string;
-  tiedosto: string;
-  nimi: string;
 }
 
 // Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
