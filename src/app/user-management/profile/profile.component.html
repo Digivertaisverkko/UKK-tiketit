@@ -1,7 +1,7 @@
 <app-headline></app-headline>
 <app-beginning-button></app-beginning-button>
 
-<div *ngIf="isPersonalInfoLoaded && isSettingsLoaded">
+<div *ngIf="isPersonalInfoLoaded && emailSettingsForm">
 
   <section class="personal-info">
     <h2 class="sub-header" i18n="@@Henkilökohtaiset tiedot">
@@ -75,6 +75,18 @@
         Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
       </mat-checkbox>
     </form>
+    <p  class="theme-success-message"
+        *ngIf="emailSettingsSuccessMessage.length > 0"
+        >
+      {{ emailSettingsSuccessMessage }}
+    </p>
+    <app-error-card i18n-title="@@Virhe"
+                    message="{{ emailSettingsErrorMessage }}"
+                    *ngIf="emailSettingsErrorMessage.length > 0"
+                    [styles]="{ margin: '0' }"
+                    title="Virhe"
+                    >
+    </app-error-card>
   </section>
 
   <section class="personal-data">

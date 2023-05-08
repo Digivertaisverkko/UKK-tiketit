@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
-import { UserManagementService } from '../user-management.service';
+import { MinunAsetukset, UserManagementService } from '../user-management.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
 
@@ -13,18 +13,14 @@ import { Constants } from '../../shared/utils';
 })
 
 export class ProfileComponent implements OnInit {
+  public emailSettingsForm!: FormGroup;
+  public emailSettingsErrorMessage: string = '';
+  public emailSettingsSuccessMessage: string = '';
   public errorMessage: string = '';
   public isPersonalInfoLoaded: boolean = false;
   public isRemovePressed: boolean = false;
-  public isSettingsLoaded: boolean = false;
   public userEmail: string = '';
   public userName: string = '';
-
-  public emailSettingsForm: FormGroup = this.formBuilder.group({
-    notify: [false],
-    summary: [false],
-    feedback: [false],
-  });
 
   constructor(private authService: AuthService,
               private formBuilder: FormBuilder,
@@ -45,17 +41,40 @@ export class ProfileComponent implements OnInit {
     });
     this.userManagementService.getSettings()
     .then(response => {
-      this.emailSettingsForm.setValue({
-        notify: response['sposti-ilmoitus'],
-        summary: response['sposti-kooste'],
-        feedback: response['sposti-palaute']
-      });
-      this.isSettingsLoaded = true;
+      this.emailSettingsForm = this.createEmailSettingsForm(response);
     });
   }
 
   public changeRemoveButton(): void {
     setTimeout(() => this.isRemovePressed = true, 300);
+  }
+
+  private createEmailSettingsForm(defaultSettings: MinunAsetukset): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      notify: [defaultSettings['sposti-ilmoitus']],
+      summary: [defaultSettings['sposti-kooste']],
+      feedback: [defaultSettings['sposti-palaute']],
+    });
+
+    form.valueChanges.subscribe(() => {
+      let settings: MinunAsetukset = {
+        "sposti-ilmoitus": this.emailSettingsForm.controls['notify'].value,
+        "sposti-kooste": this.emailSettingsForm.controls['summary'].value,
+        "sposti-palaute": this.emailSettingsForm.controls['feedback'].value
+      }
+
+      this.userManagementService.postSettings(settings)
+      .then(() => {
+        this.emailSettingsErrorMessage = '';
+        this.emailSettingsSuccessMessage = $localize `:@@Asetusten tallentaminen onnistui.:Asetusten tallentaminen onnistui.`;
+      })
+      .catch(() => {
+        this.emailSettingsSuccessMessage = '';
+        this.emailSettingsErrorMessage = $localize `:@@Asetusten tallentaminen epäonnistui.:Asetusten tallentaminen epäonnistui.`;
+      });
+    });
+
+    return form;
   }
 
   public downloadPersonalData(): void {

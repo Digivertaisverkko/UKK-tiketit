@@ -60,6 +60,19 @@ export class UserManagementService {
     }
   }
 
+  // POST /api/minun/asetukset - sähköpostiasetukset
+  public async postSettings(settings: MinunAsetukset) {
+    let response: any;
+    let url = environment.apiBaseUrl + '/minun/asetukset';
+    let body = settings;
+    try {
+      response = await firstValueFrom(this.http.post<MinunAsetukset>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
   // DELETE /api/minun - poista käyttäjä
   public async removeUser(): Promise<boolean> {
     let user: User = this.authService.getUserInfo();
