@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants } from '../../shared/utils';
-import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
+import { TicketService, Kenttapohja } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
@@ -14,11 +14,11 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 
 export class EditFieldComponent implements OnInit {
   public addOnBlur = true;
-  public allFields: KentanTiedot[] = [];  // Kaikki kurssilla olevat lisäkentät.
+  public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.
   public courseID: string = '';
   public courseName: string = '';
   public errorMessage: string = '';
-  public field: KentanTiedot;
+  public field: Kenttapohja;
   public fieldID: string | null = null;
   public form: FormGroup = this.buildForm();
   public hasSelections: boolean = false;
@@ -76,8 +76,8 @@ export class EditFieldComponent implements OnInit {
     setTimeout(() => this.isRemovePressed = true, 300);
   }
 
-  private createField(): KentanTiedot {
-    let field: KentanTiedot = {} as KentanTiedot;
+  private createField(): Kenttapohja {
+    let field: Kenttapohja = {} as Kenttapohja;
     field.id = this.field.id;
     const controls = this.form.controls;
     field.otsikko = controls['title'].value;
@@ -143,7 +143,7 @@ export class EditFieldComponent implements OnInit {
   }
 
   // Lähetä kaikkien kenttien tiedot.§
-  private sendAllFields(courseID: string, allFields: KentanTiedot[]) {
+  private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
     this.ticketService.setTicketFieldInfo(courseID, allFields)
       .then(response => {
         if (response === true ) {

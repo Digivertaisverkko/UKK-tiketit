@@ -156,16 +156,16 @@ export class TicketService {
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
   public async getTicketFieldInfo(courseID: string, fieldID?: string | null):
-      Promise<KentanTiedot[]> {
+      Promise<Kenttapohja[]> {
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
     try {
-      response = await firstValueFrom(this.http.get<KentanTiedot[]>(url));
+      response = await firstValueFrom(this.http.get<Kenttapohja[]>(url));
     } catch (error: any) {
       this.handleError(error);
     }
     if (response === null) response = [];
-    if (fieldID) response = response.filter((field: KentanTiedot) => field.id == fieldID);
+    if (fieldID) response = response.filter((field: Kenttapohja) => field.id == fieldID);
     return response;
   }
 
@@ -192,7 +192,7 @@ export class TicketService {
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
-  public getTicketState(numericalState: number, role: Role): string {
+  public getTicketState(numericalState: number, role: Role | ''): string {
     let string: string;
     switch (numericalState) {
       case 0: string = $localize`:@@Virhetila:Virhetila`; break;
@@ -491,7 +491,7 @@ export class TicketService {
   }
 
   // Luo uudet kentät tikettipohjalle.
-  public async setTicketFieldInfo(courseID: string, fields: KentanTiedot[]) {
+  public async setTicketFieldInfo(courseID: string, fields: Kenttapohja[]) {
     for (let field of fields) {
       if (field.id != null) delete field.id;
     }
@@ -627,7 +627,7 @@ export interface Kentta {
   API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
   api/kurssi/:kurssi-id/tiketinkentat/
   id vapaaehtoinen, koska lähetettäessä sitä ei ole. */
-export interface KentanTiedot {
+export interface Kenttapohja {
   id?: string;
   otsikko: string;
   pakollinen: boolean;

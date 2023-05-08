@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants } from '../../shared/utils';
-import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
+import { TicketService, Kenttapohja } from 'src/app/ticket/ticket.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
 
@@ -13,7 +13,7 @@ export class SettingsComponent implements OnInit {
 
   public courseID: string = '';
   public errorMessage: string = '';
-  public fieldList: KentanTiedot[] = [];
+  public fieldList: Kenttapohja[] = [];
   public inviteEmail: string = '';
   public isDirty: boolean = false;
   public showConfirm: boolean = false;
