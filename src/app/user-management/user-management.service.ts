@@ -75,7 +75,8 @@ export class UserManagementService {
 
   // DELETE /api/minun - poista käyttäjä
   public async removeUser(): Promise<boolean> {
-    let user: User = this.authService.getUserInfo();
+    let user: User | null = this.authService.getUserInfo();
+    if (user === null) throw Error('Ei ole käyttäjätietoja.');
     const options = {
       body: {
         id: user.id,
