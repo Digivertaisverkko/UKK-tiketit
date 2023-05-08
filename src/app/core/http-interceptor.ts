@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpEvent, HttpResponse, HttpRequest, HttpHandler }
     from '@angular/common/http';
 import { Observable, PartialObserver, tap } from 'rxjs';
-import { truncate } from '../utils/truncate';
+import { truncate } from '../shared/utils';
 import { StoreService } from './store.service';
 
 @Injectable({ providedIn: 'root' })
