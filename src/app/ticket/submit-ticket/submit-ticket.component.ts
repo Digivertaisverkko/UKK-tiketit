@@ -7,11 +7,11 @@ import { Subject } from 'rxjs';
 
 import { EditAttachmentsComponent }
     from '../components/edit-attachments/edit-attachments.component';
-import { TicketService, UusiTiketti } from '../ticket.service';
+import { TicketService } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
-import { AddTicketResponse, Liite } from '../ticket.models.';
+import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models.';
 
 interface AdditionalField {
   id: string;

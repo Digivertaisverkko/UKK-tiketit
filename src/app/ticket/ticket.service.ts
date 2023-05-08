@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 import { Role, User } from '../core/core.models';
-import { AddTicketResponse, Liite } from './ticket.models.';
+import { AddTicketResponse, Liite, UusiTiketti, UusiUKK } from './ticket.models.';
 
 @Injectable({ providedIn: 'root' })
 
@@ -574,20 +574,6 @@ export interface UKK {
   otsikko: string;
   aikaleima: string;
   tila: number;
-}
-
-// Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/
-export interface UusiTiketti {
-  otsikko: string;
-  viesti: string;
-  kentat?: Array<{ id: number, arvo: string }>;
-}
-
-
-
-// Metodi: sendFaq. API: /api/kurssi/:kurssi-id/ukk/
-export interface UusiUKK extends UusiTiketti {
-  vastaus: string;
 }
 
 /* Tiketin lisäkenttä.
