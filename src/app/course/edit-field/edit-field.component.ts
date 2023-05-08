@@ -5,7 +5,7 @@ import { TicketService, KentanTiedot } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -14,8 +14,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 
 export class EditFieldComponent implements OnInit {
   public addOnBlur = true;
-  // Kaikki kurssilla olevat lisäkentät.
-  public allFields: KentanTiedot[] = [];
+  public allFields: KentanTiedot[] = []; // Kaikki kurssilla olevat lisäkentät.
   public courseID: string = '';
   public courseName: string = '';
   public errorMessage: string = '';
@@ -24,13 +23,13 @@ export class EditFieldComponent implements OnInit {
   public form: FormGroup = this.buildForm();
   public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
-  public multipleSelection: boolean = false;
+  public hasSelections: boolean = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public showConfirm: boolean = false;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
 
-  get multipleSelections(): FormArray {
-    return this.form.get("multipleSelections") as FormArray;
+  get selections(): AbstractControl<any, any> | null {
+    return this.form.get('selections');
   }
 
   constructor(
@@ -54,12 +53,12 @@ export class EditFieldComponent implements OnInit {
   }
 
   public addSelection(event: MatChipInputEvent): void {
-
     const value = (event.value || '').trim();
     if (value) {
-      this.multipleSelections.push(new FormControl(value));
-      this.multipleSelections.markAsDirty();
-      this.field.valinnat.push(value);
+      // this.selections?.markAsDirty();
+      const values = this.selections?.value || [];
+      values.push(value);
+      this.selections?.setValue(values);
     }
     event.chipInput!.clear();
   }
@@ -67,26 +66,10 @@ export class EditFieldComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
-      multipleSelections: this.formBuilder.array([
-        this.formBuilder.control('')
-      ]),
+      selections: [[]],
       infoText: [ '' ],
       mandatory: [ '' ],
     })
-  }
-
-  // Luodaan lomakkeelle lisävalintojen kontrollit.
-  private buildMultipleSelections(selections: string[]): void {
-    const validators = Validators.maxLength(255);
-    this.field.valinnat.forEach(selection => {
-      this.multipleSelections.push(new FormControl(selection, validators))
-      this.form.addControl(selection, this.multipleSelections);
-    })
-    // for (const selection of selections) {
-    //   const validators = Validators.maxLength(255);
-    //   // this.multipleSelections.push(this.formBuilder.control(selection));
-    //   this.multipleSelections.push(new FormControl(selection, validators))
-    // }
   }
 
   public changeRemoveButton() {
@@ -95,30 +78,30 @@ export class EditFieldComponent implements OnInit {
 
   private createField(): KentanTiedot {
     let field: KentanTiedot = {} as KentanTiedot;
-    const controls = this.form.controls;
     field.id = this.field.id;
+    const controls = this.form.controls;
     field.otsikko = controls['title'].value;
     field.pakollinen = controls['mandatory'].value;
     // TODO: Esitäytettävä ei vielä käytössä.
     field.esitaytettava = this.field.esitaytettava;
     field.ohje = controls['infoText'].value;
-    field.valinnat = this.field.valinnat;
+    field.valinnat = controls['selections'].value;
     return field
   }
 
-  public edit(valinta: string, event: MatChipEditedEvent) {
+  public editSelection(valinta: string, event: MatChipEditedEvent) {
     const value = event.value.trim();
     if (!value) {
-      this.remove(valinta);
+      this.removeSelection(valinta);
       return;
     }
     let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat[index] = value;
 
-    index = this.multipleSelections.value.indexOf(valinta);
+    // index = this.multipleSelections.value.indexOf(valinta);
     if (index >= 0) {
-      this.multipleSelections.markAsDirty();
-    } 
+      // this.multipleSelections.markAsDirty();
+    }
   }
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
@@ -150,24 +133,21 @@ export class EditFieldComponent implements OnInit {
         // alkion "", mitä ei haluta.
       if (this.field.valinnat[0].length === 0) {
         this.field.valinnat = [];
-        this.multipleSelection = false;
+        this.hasSelections = false;
       } else {
-        this.multipleSelection = true;
+        this.hasSelections = true;
       }
 
-      this.titleServ.setTitle(Constants.baseTitle + ' ' + 
+      this.titleServ.setTitle(Constants.baseTitle + ' ' +
           $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       this.form.controls['title'].setValue(this.field.otsikko);
       this.form.controls['infoText'].setValue(this.field.ohje);
       this.form.controls['mandatory'].setValue(this.field.pakollinen);
-      this.buildMultipleSelections(this.field.valinnat);
-      console.log('controllerit:');
-      console.dir(this.multipleSelections);
-      // console.log('form:');
-      // console.dir(this.form);
-      // console.log('Muokattavan kentän tiedot: ' + JSON.stringify(this.field));
-      // console.log('alla kaikki kentät');
-      // console.dir(this.allFields);
+      this.form.controls['selections'].setValue(this.field.valinnat);
+      // this.field.valinnat.forEach(selection => {
+      //   this.multipleSelections?.value.push(selection);
+      // })
+      // this.buildMultipleSelections(this.field.valinnat);
       this.isLoaded = true
       return
     }).catch(error => {
@@ -186,41 +166,42 @@ export class EditFieldComponent implements OnInit {
     }
   }
 
-  public remove(valinta: string): void {
+  public removeSelection(valinta: string): void {
     let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat.splice(index, 1);
-    index = this.multipleSelections.value.indexOf(valinta);
-    if (index >= 0) {
-      this.multipleSelections.removeAt(index);
-      this.multipleSelections.markAsDirty();
-    } 
+    // index = this.multipleSelections.value.indexOf(valinta);
+    // if (index >= 0) {
+      // this.multipleSelections.removeAt(index);
+      // this.multipleSelections.markAsDirty();
+    // }
   }
 
-  private showCourseName(courseID: string) {
-    this.ticketService.getCourseName(courseID).then(response => {
-      this.courseName = response ?? '';
-    }).catch( () => this.courseName = '');
-  }
 
-  public sendField(removeExisting?: boolean): void {
+  // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
+  public updateAllFields(remove?: boolean): void {
     if (this.form.invalid) return
-    if (this.multipleSelection === false) this.field.valinnat = [];
+    if (this.hasSelections === false) this.field.valinnat = [];
     const newField = this.createField();
     if (this.fieldID == null) {   // Ellei ole uusi kenttä.
       this.allFields.push(newField);
     } else {
       const index = this.allFields.findIndex(field => field.id == this.fieldID);
-      if (removeExisting) {
+      if (remove) {
         this.allFields.splice(index, 1);
       } else {
         this.allFields.splice(index, 1, newField)
       }
     // this.allFields = this.allFields.filter(field => field.id !== this.fieldID);
     }
-    this.ticketService.setTicketFieldInfo(this.courseID, this.allFields)
+    this.sendAllFields(this.courseID, this.allFields);
+  }
+
+  // Lähetä kaikkien kenttien tiedot.§
+  private sendAllFields(courseID: string, allFields: KentanTiedot[]) {
+    this.ticketService.setTicketFieldInfo(courseID, allFields)
       .then(response => {
         if (response === true ) {
-          this.router.navigate(['/course/' + this.courseID + '/settings'],
+          this.router.navigate(['/course/' + courseID + '/settings'],
               { state: { delayFetching: 'true' } });
         } else {
           console.log('Tikettipohjan muuttaminen epäonnistui.');
@@ -243,7 +224,6 @@ export class EditFieldComponent implements OnInit {
       // console.log(typeof this.fieldID);
       // console.dir(this.fieldID);
       this.courseID = courseID;
-      this.showCourseName(this.courseID);
       // Kentän id on uudella kentällä null.
       if  (!this.fieldID) {
         this.titleServ.setTitle(Constants.baseTitle + $localize

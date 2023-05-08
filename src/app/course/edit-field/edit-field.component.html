@@ -1,13 +1,13 @@
 <app-headline></app-headline>
 
 <div class="top-buttons">
-    <app-beginning-button
-    (clicked)="showConfirm = true"
-    [confirm]=form.dirty
-    >
-</app-beginning-button>
+  <app-beginning-button
+      (clicked)="showConfirm = true"
+      [confirm]=form.dirty
+      >
+  </app-beginning-button>
 
-  <p>dirty: {{form.dirty}}</p>
+  <!-- <p>dirty: {{form.dirty}}</p> -->
 
   <button class="remove-button"
           (click)="changeRemoveButton()"
@@ -18,7 +18,7 @@
     Poista
   </button>
 
-  <button (click)="sendField(true)"
+  <button (click)="updateAllFields(true)"
           color="accent"
           i18n="@@Vahvista poisto"
           *ngIf="isRemovePressed === true"
@@ -40,7 +40,7 @@
     Kysymysten lisäkenttä
   </h2>
 
-  <form action="" [formGroup]="form" (ngSubmit)="sendField()" #submitForm="ngForm">
+  <form action="" [formGroup]="form" (ngSubmit)="updateAllFields()" #submitForm="ngForm">
     <mat-form-field class="field-title" appearance="fill">
       <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
       <input  formControlName="title"
@@ -58,7 +58,7 @@
       <mat-checkbox
           name="checkbox"
           i18n="@@Monivalinta"
-          [(ngModel)]="multipleSelection"
+          [(ngModel)]="hasSelections"
           [ngModelOptions]="{ standalone: true }"
           >
         Monivalinta
@@ -71,19 +71,19 @@
         <mat-chip-grid
             #chipGrid
             aria-label="Valitse monivalinnan vaihtoehtoja"
-            FormArrayName="multipleSelections"
             i18n-aria-label="@@Valitse monivalinnan vaihtoehtoja"
-            [disabled]="!multipleSelection"
+            [disabled]="!hasSelections"
+            formControlName="selections"
             >
 
+            <!--               FormArrayName="multipleSelections" -->
           <mat-chip-row
               [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
               class="chipRow"
               [editable]="true"
-              (edited)="edit(valinta, $event)"
-              formControlName="{{valinta}}"
+              (edited)="editSelection(valinta, $event)"
               *ngFor="let valinta of field.valinnat"
-              (removed)="remove(valinta)"
+              (removed)="removeSelection(valinta)"
               >
             {{ valinta }}
             <button [attr.aria-label]="'poista valinta ' + valinta"
