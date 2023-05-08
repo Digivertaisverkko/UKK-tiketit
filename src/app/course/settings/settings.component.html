@@ -1,6 +1,17 @@
 <app-headline></app-headline>
 
-<app-beginning-button></app-beginning-button>
+<app-beginning-button
+    (clicked)="showConfirm = true"
+    [confirm]="isDirty === true"
+    >
+</app-beginning-button>
+
+<app-error-card
+    [confirmLeave]="true"
+    *ngIf="showConfirm === true"
+    [styles]="{ margin: '2rem 0 0 0' }"
+    >
+</app-error-card>
 
 <div class="view-wrapper" *ngIf="isLoaded">
 
@@ -26,8 +37,8 @@
         >
     <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
-      <div class="title-column">{{field.otsikko}}</div>
-      <div class="info-text-column">{{field.ohje}}</div>
+      <div class="title-column">{{ field.otsikko }}</div>
+      <div class="info-text-column">{{ field.ohje }}</div>
       <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" >
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
