@@ -13,7 +13,6 @@ import { User, Error } from 'src/app/core/core.models';
 })
 
 export class FaqViewComponent implements OnInit {
-  public courseName: string = '';
   public errorMessage: string = '';
   public isLoaded: boolean = false;
   public ticket: Tiketti = {} as Tiketti;
@@ -38,9 +37,6 @@ export class FaqViewComponent implements OnInit {
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
-    this.ticketService.getCourseName(this.courseID).then(response => {
-      this.courseName = response;
-    });
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
         .then((response) => {

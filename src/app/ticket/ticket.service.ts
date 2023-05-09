@@ -10,6 +10,10 @@ import { Role } from '../core/core.models';
 import { AddTicketResponse, Kentta, Kommentti, Liite, NewCommentResponse, SortableTicket,
   TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
 
+interface GetTicketsOption {
+  option: 'onlyOwn' | 'archived';
+}
+
 @Injectable({ providedIn: 'root' })
 
 // Tämä service on käsittelee tiketteihin liittyvää tietoa.
@@ -155,21 +159,6 @@ export class TicketService {
       }
     }
     return true
-  }
-
-  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string, fieldID?: string | null):
-      Promise<Kenttapohja[]> {
-    let response: any;
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
-    try {
-      response = await firstValueFrom(this.http.get<Kenttapohja[]>(url));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (response === null) response = [];
-    if (fieldID) response = response.filter((field: Kenttapohja) => field.id == fieldID);
-    return response;
   }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
@@ -325,21 +314,6 @@ export class TicketService {
     return response?.success === true ? true : false;
   }
 
-  // Palauta kurssin nimi.
-  public async getCourseName(courseID: string): Promise<string> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}`;
-    try {
-      response = await firstValueFrom(
-        this.http.get<{ 'kurssi-nimi': string }[]>(url)
-      );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response['nimi'];
-  }
-
 
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
@@ -465,51 +439,8 @@ export class TicketService {
     }
   }
 
-  // Luo uudet kentät tikettipohjalle.
-  public async setTicketFieldInfo(courseID: string, fields: Kenttapohja[]) {
-    for (let field of fields) {
-      if (field.id != null) delete field.id;
-    }
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
-    let response: any;
-    const body = { kentat: fields };
-    try {
-      response = await firstValueFrom( this.http.put(url, body) );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
-  }
-
   trackMessages(): Observable<string> {
     return this.$messages.asObservable();
   }
 
-}
-
-//--------- Rajapinnat ---------------------------------------------------------
-
-// Jäsenmuuttujien järjestys pitäisi vastata palvelimen API-dokumenttia.
-
-// Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
-// API:a se vastaa.
-
-
-
-/* Tiketin lisäkentän tiedot sisältävä kenttäpohja.
-  Metodi: getTicketFieldInfo
-  API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
-  api/kurssi/:kurssi-id/tiketinkentat/
-  id vapaaehtoinen, koska lähetettäessä sitä ei ole. */
-  export interface Kenttapohja {
-    id?: string;
-    otsikko: string;
-    pakollinen: boolean;
-    esitaytettava: boolean;
-    ohje: string;
-    valinnat: string[];
-  }
-
-interface GetTicketsOption {
-  option: 'onlyOwn' | 'archived';
 }

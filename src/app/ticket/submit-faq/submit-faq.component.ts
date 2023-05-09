@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-
+import { CourseService } from 'src/app/course/course.service';
 import { EditAttachmentsComponent
     } from '../components/edit-attachments/edit-attachments.component';
 import { TicketService  } from '../ticket.service';
@@ -74,6 +74,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   constructor(private auth: AuthService,
+              private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
@@ -148,7 +149,7 @@ export class SubmitFaqComponent implements OnInit {
 
   private fetchAdditionalFields(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    this.ticketService.getTicketFieldInfo(this.courseId)
+    this.courses.getTicketFieldInfo(this.courseId)
     .then((response) => {
       this.ticketFields = response as AdditionalField[];
       this.buildAdditionalFields();

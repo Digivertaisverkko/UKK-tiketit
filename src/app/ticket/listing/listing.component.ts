@@ -346,7 +346,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
   private showCourseName(courseID: string) {
-    this.ticket.getCourseName(courseID).then(response => {
+    this.courses.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch( () => this.courseName = '');
   }

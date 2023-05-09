@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
 import { getIsInIframe } from 'src/app/shared/utils';
-import { TicketService } from 'src/app/ticket/ticket.service';
+import { CourseService } from 'src/app/course/course.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
@@ -31,7 +31,7 @@ export class HeadlineComponent implements OnInit {
   constructor(
       private change: ChangeDetectorRef,
       private route : ActivatedRoute,
-      private ticketServ: TicketService,
+      private courses: CourseService,
   ) {
     this.isInIframe = getIsInIframe();
   }
@@ -45,7 +45,7 @@ export class HeadlineComponent implements OnInit {
   }
 
   private showCourseName(courseID: string) {
-    this.ticketServ.getCourseName(courseID).then(response => {
+    this.courses.getCourseName(courseID).then(response => {
       this.headlineText = response ?? '';
       // this.courseName = 'Testikurssi';
       this.change.detectChanges();

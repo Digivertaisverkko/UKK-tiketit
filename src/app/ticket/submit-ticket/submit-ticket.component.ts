@@ -9,6 +9,7 @@ import { EditAttachmentsComponent }
     from '../components/edit-attachments/edit-attachments.component';
 import { TicketService } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
+import { CourseService } from 'src/app/course/course.service';
 import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
 import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models';
@@ -73,6 +74,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   constructor(private auth: AuthService,
+              private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
@@ -148,7 +150,7 @@ export class SubmitTicketComponent implements OnInit {
 
   private fetchAdditionalFields(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    this.ticketService.getTicketFieldInfo(this.courseId)
+    this.courses.getTicketFieldInfo(this.courseId)
     .then((response) => {
       this.ticketFields = response as AdditionalField[];
       this.buildAdditionalFields();

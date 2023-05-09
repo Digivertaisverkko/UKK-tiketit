@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants } from '../../shared/utils';
-import { TicketService, Kenttapohja } from 'src/app/ticket/ticket.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Kenttapohja } from '../course.models';
+import { CourseService } from '../course.service';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -36,7 +37,7 @@ export class EditFieldComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private ticketService: TicketService,
+    private courses: CourseService,
     private titleServ: Title
   ) {
     this.field = {
@@ -101,7 +102,7 @@ export class EditFieldComponent implements OnInit {
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
-    this.ticketService.getTicketFieldInfo(courseID).then(response => {
+    this.courses.getTicketFieldInfo(courseID).then(response => {
       if (!Array.isArray(response) || !fieldID) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
@@ -126,7 +127,7 @@ export class EditFieldComponent implements OnInit {
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)
-  } 
+  }
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
   public onArrowLeft(event: any) {
@@ -144,7 +145,7 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    this.ticketService.setTicketFieldInfo(courseID, allFields)
+    this.courses.setTicketFieldInfo(courseID, allFields)
       .then(response => {
         if (response === true ) {
           this.router.navigate(['/course/' + courseID + '/settings'],
@@ -158,7 +159,7 @@ export class EditFieldComponent implements OnInit {
       })
   }
 
-  private setControls(): void { 
+  private setControls(): void {
     this.form.controls['title'].setValue(this.field.otsikko);
     this.form.controls['infoText'].setValue(this.field.ohje);
     this.form.controls['mandatory'].setValue(this.field.pakollinen);

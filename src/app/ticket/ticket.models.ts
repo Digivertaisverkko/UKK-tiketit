@@ -1,5 +1,10 @@
 /* Tänne exportoitavat modelit, joita käytetään useammassa komponentissa
-ja joita on tarkoitus käyttää tämän feature-moduulin sisällä. */
+ja joita on tarkoitus käyttää tämän feature-moduulin sisällä.
+
+  Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
+  API:a se vastaa. Rajapintojen jäsenmuuttujien arvojen järjestys noudattaa
+  API-dokumentin järjestystä. */
+
 import { User } from "../core/core.models";
 
 export interface AddTicketResponse {

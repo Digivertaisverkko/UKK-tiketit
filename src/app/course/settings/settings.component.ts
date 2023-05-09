@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants } from '../../shared/utils';
-import { TicketService, Kenttapohja } from 'src/app/ticket/ticket.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
+import { CourseService } from '../course.service';
+import { Kenttapohja } from '../course.models';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -19,10 +20,10 @@ export class SettingsComponent implements OnInit {
   public showConfirm: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
- 
+
   constructor(
+    private courses: CourseService,
     private route: ActivatedRoute,
-    private ticketService: TicketService,
     private titleServ: Title
   ) {
   }
@@ -39,7 +40,7 @@ export class SettingsComponent implements OnInit {
   }
 
   private fetchTicketFieldInfo(courseID: string) {
-    this.ticketService.getTicketFieldInfo(courseID).then(response => {
+    this.courses.getTicketFieldInfo(courseID).then(response => {
       if (response[0]?.otsikko != null) {
         this.fieldList = response;
       }
@@ -52,7 +53,7 @@ export class SettingsComponent implements OnInit {
   }
 
   public saveFields() {
-    this.ticketService.setTicketFieldInfo(this.courseID, this.fieldList)
+    this.courses.setTicketFieldInfo(this.courseID, this.fieldList)
       .then(response => {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
