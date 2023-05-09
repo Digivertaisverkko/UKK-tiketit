@@ -7,10 +7,10 @@ import { Subject } from 'rxjs';
 
 import { EditAttachmentsComponent
     } from '../components/edit-attachments/edit-attachments.component';
-import { TicketService, Tiketti } from '../ticket.service';
+import { TicketService  } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
-import { AddTicketResponse, Liite, UusiUKK } from '../ticket.models.';
+import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models.';
 
 interface AdditionalField {
   id: string;

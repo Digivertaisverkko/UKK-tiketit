@@ -7,8 +7,8 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 import { Role, User } from '../core/core.models';
-import { AddTicketResponse, Kommentti, Liite, NewCommentResponse, SortableTicket,
-    UKK, UusiTiketti, UusiUKK } from './ticket.models.';
+import { AddTicketResponse, Kentta, Kommentti, Liite, NewCommentResponse, SortableTicket,
+  TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models.';
 
 @Injectable({ providedIn: 'root' })
 
@@ -534,61 +534,19 @@ export interface Kurssini {
   asema: Role;
 }
 
-// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
-// Tikettilistan näyttämistä varten.
-export interface TiketinPerustiedot {
-  id: string;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: User;
-  tila: number;
-}
-
-/* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
-  Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
-  eri vaiheessa omilla kutsuillaan. Backend palauttaa 1. kommentissa tiketin
-  viestin sisällön, josta tulee jäsenmuuttujan "viesti" -sisältö ja sen id:stä
-  kommenttiID. Tätä tarvitaan mm.  Vastaavasti 1. kommentin liitteet
-  ovat tiketin liitteitä. */
-export interface Tiketti extends TiketinPerustiedot {
-  kurssi: number;
-  viesti: string;
-  ukk?: boolean;
-  arkistoitava: boolean;
-  kentat?: Array<Kentta>;
-  kommenttiID: string;
-  kommentit: Array<Kommentti>;
-  liitteet?: Array<Liite>;
-}
-
-/* Tiketin lisäkenttä.
-  Metodi: getTicketInfo -> getTickgetFields,
-  API: /api/tiketti/:tiketti-id/kentat/
-  Uusia propertyjä: tyyppi ja ohje.
-  Palautustyypit tarkistettu 27.4.23. */
-export interface Kentta {
-  id: string;
-  otsikko: string;
-  arvo: string;
-  tyyppi: string;
-  ohje: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  valinnat: string[];
-}
-
-/* Metodi: getTicketFieldInfo
+/* Tiketin lisäkentän tiedot sisältävä kenttäpohja.
+  Metodi: getTicketFieldInfo
   API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
   api/kurssi/:kurssi-id/tiketinkentat/
   id vapaaehtoinen, koska lähetettäessä sitä ei ole. */
-export interface Kenttapohja {
-  id?: string;
-  otsikko: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  ohje: string;
-  valinnat: string[];
-}
+  export interface Kenttapohja {
+    id?: string;
+    otsikko: string;
+    pakollinen: boolean;
+    esitaytettava: boolean;
+    ohje: string;
+    valinnat: string[];
+  }
 
 interface GetTicketsOption {
   option: 'onlyOwn' | 'archived';

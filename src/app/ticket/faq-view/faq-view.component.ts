@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
-import { TicketService, Tiketti } from '../ticket.service';
+import { TicketService } from '../ticket.service';
 import { Constants } from '../../shared/utils';
+import { Tiketti } from '../ticket.models.';
 import { Title } from '@angular/platform-browser';
 import { User, Error } from 'src/app/core/core.models';
 
