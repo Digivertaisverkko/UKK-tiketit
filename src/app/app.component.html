@@ -1,4 +1,4 @@
-<div id="app-wrapper">
+<div class="app-wrapper">
 
   <app-header *ngIf="!isInIframe">
     <span class="spacer"></span>
@@ -12,10 +12,6 @@
         *ngIf="isLoading | async"
         >
     </mat-progress-bar>
-
-    <!-- <h1 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-      <span>{{courseName}}</span>
-    </h1> -->
 
     <router-outlet></router-outlet>
 

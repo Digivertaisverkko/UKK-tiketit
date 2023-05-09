@@ -1,10 +1,10 @@
+/* Voidaan tallentaa ja palauttaa muistissa olevia muuttujia, joita tarvitaan
+globaalisti komponenttien ja sen lapsien tai vanhempien ulkopuolella. */
+
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-
-/* Tallentaa ja palauttaa muistissa olevia muuttujia, joita tarvitaan komponentin
-ja sen lapsien ulkopuolella. */
 
 export class StoreService {
 

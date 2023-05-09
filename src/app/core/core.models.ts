@@ -7,6 +7,11 @@ export interface Error {
   originaali?: string;
 }
 
+export interface GenericResponse {
+  success: boolean,
+  error: object
+}
+
 export type Role = 'opiskelija' | 'opettaja' | 'admin' | null;
 
 // Jos ollaan kirjautunena eri kurssille, ei saada id:ä.

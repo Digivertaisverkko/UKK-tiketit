@@ -15,9 +15,7 @@ interface Kurssi {
   nimi: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 
 export class CourseService {
 

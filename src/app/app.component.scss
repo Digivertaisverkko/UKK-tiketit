@@ -1,7 +1,7 @@
 @import '/src/variables.scss';
 
 // Jotta footer ei nouse sivun alaosasta.
-#app-wrapper {
+.app-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;

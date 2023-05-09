@@ -1,3 +1,5 @@
+// Tämä service käsittelee käyttäjäautentikointiin liittyviä toimia.
+
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
@@ -10,11 +12,31 @@ import { ErrorService } from './error.service';
 import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { Inject, LOCALE_ID } from '@angular/core';
 import { getCourseIDfromURL } from '../shared/utils';
-import { User } from './core.models';
+import { GenericResponse, Role, User } from './core.models';
+
+interface LoginResponse {
+  success: boolean,
+  'login-code': string
+}
+
+interface ConsentResponse {
+  success: boolean,
+  kurssi: number
+}
+
+interface LoginResult {
+  success: boolean,
+  redirectUrl?: string
+};
+
+interface AuthRequestResponse {
+  success: boolean;
+  error: string;
+  'session-id': string;
+}
 
 @Injectable({ providedIn: 'root' })
 
-// Luokka käsittelee käyttäjäautentikointiin liittyviä toimia.
 export class AuthService {
   // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
   private isUserLoggedIn$: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -108,7 +130,7 @@ export class AuthService {
     this.isUserLoggedIn$.unsubscribe;
   }
 
-  public getUserRole(): 'opettaja' | 'opiskelija' | 'admin' | null {
+  public getUserRole(): Role | null {
     return this.user$.value;
   }
 
@@ -158,7 +180,7 @@ export class AuthService {
     // return this.userName$.value;
     // const user: User  = this.user$.value;
     // return user.nimi;
-    return this.user$ === null ? null : this.user$.value; 
+    return this.user$ === null ? null : this.user$.value;
   }
 
   // Luo käyttäjätili
@@ -252,7 +274,7 @@ export class AuthService {
       }
       const loginURL = response;
       this.router.navigateByUrl(loginURL);
-  })
+    })
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
@@ -397,35 +419,4 @@ export class AuthService {
     }
   }
 
-} // End of class
-
-interface LoginResponse {
-  success: boolean,
-  'login-code': string
-}
-
-interface ConsentResponse {
-  success: boolean,
-  kurssi: number
-}
-
-interface LoginResult {
-  success: boolean,
-  redirectUrl?: string
-};
-
-interface AuthRequestResponse {
-  success: boolean;
-  error: string;
-  'session-id': string;
-}
-
-export interface Kurssi {
-  id: string;
-  nimi: string;
-}
-
-export interface GenericResponse {
-  success: boolean,
-  error: object
 }

@@ -1,6 +1,9 @@
-/* Tämä service on käsittelee tiketteihin liittyvää tietoa. */
+/* Tämä service on käsittelee tiketteihin eli kysymyksiin liittyvää tietoa.
+    UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
+    niistä vastaavassa servicessä. */
 
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders }
+    from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,7 +21,6 @@ interface GetTicketsOption {
 
 export class TicketService {
 
-  public $messages = new Subject<string>();
   private debug: boolean = false;
 
   constructor (
@@ -314,8 +316,9 @@ export class TicketService {
   }
 
 
-  /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
-  opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
+  /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
+      lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
+      palauttaa ainoastaan itse luodut tiketit. */
   public async getTicketList(courseID: string, option?: GetTicketsOption) {
     const currentRoute = window.location.href;
     if (currentRoute.indexOf('/list-tickets') === -1) {
@@ -436,10 +439,6 @@ export class TicketService {
     } else {
       this.errorService.handleServerError(error);
     }
-  }
-
-  trackMessages(): Observable<string> {
-    return this.$messages.asObservable();
   }
 
 }
