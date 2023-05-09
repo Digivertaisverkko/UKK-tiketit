@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router, ParamMap} from '@angular/router';
+import { ActivatedRoute, ParamMap} from '@angular/router';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -6,7 +6,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subject, Subscription, takeUntil, tap, timer }
+import { Subject, Subscription, takeUntil, timer }
     from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -15,9 +15,10 @@ import { Constants, getIsInIframe } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
-import { TicketService, Kurssini, UKK } from '../ticket.service';
+import { TicketService, Kurssini } from '../ticket.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from 'src/app/core/core.models';
+import { UKK } from '../ticket.models.';
 
 export interface ColumnDefinition {
   def: string;
@@ -293,6 +294,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
       this.courseID = courseID;
+      // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
       this.showCourseName(courseID);
       this.startPollingFAQ();
     })
@@ -339,6 +341,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
+  // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
   private showCourseName(courseID: string) {
     this.ticket.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';

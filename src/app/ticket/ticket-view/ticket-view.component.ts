@@ -4,12 +4,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { TicketService, Tiketti, NewCommentResponse } from '../ticket.service';
+import { TicketService, Tiketti } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { Constants } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { User } from '../../core/core.models'
+import { NewCommentResponse } from '../ticket.models.';
 
 interface FileInfo {
   filename: string;

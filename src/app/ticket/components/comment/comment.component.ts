@@ -2,10 +2,11 @@ import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, Subscription, first } from 'rxjs';
 
-import { Kommentti, TicketService } from '../../ticket.service';
+import { TicketService } from '../../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { isToday } from 'src/app/shared/utils';
+import { Kommentti } from '../../ticket.models.';
 import { User } from 'src/app/core/core.models';
 
 interface FileInfo {

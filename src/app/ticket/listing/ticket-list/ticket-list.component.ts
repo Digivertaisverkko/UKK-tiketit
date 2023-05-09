@@ -1,18 +1,18 @@
 import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit,
           ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { catchError, Subject, Subscription, takeUntil, timer }
-  from 'rxjs';
+import { Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 
 import { Constants } from '../../../shared/utils';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from 'src/app/core/core.models';
+import { SortableTicket } from '../../ticket.models.';
 
-export interface ColumnDefinition {
+interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
@@ -22,16 +22,7 @@ enum IconFile {
   "Arkistoitu"
 }
 
-export interface SortableTicket {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittajanNimi: string
-  tilaID: number;
-  tila: string;
-}
-
-export interface ErrorNotification {
+interface ErrorNotification {
   title: string,
   message: string,
   buttonText?: string

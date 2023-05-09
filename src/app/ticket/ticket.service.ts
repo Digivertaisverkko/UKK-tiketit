@@ -2,12 +2,13 @@ import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angu
 import { Injectable } from '@angular/core';
 import '@angular/localize/init';
 import { Router } from '@angular/router';
-import { Observable, Subject, catchError, firstValueFrom, map, of } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 import { Role, User } from '../core/core.models';
-import { AddTicketResponse, Liite, UusiTiketti, UusiUKK } from './ticket.models.';
+import { AddTicketResponse, Kommentti, Liite, NewCommentResponse, SortableTicket,
+    UKK, UusiTiketti, UusiUKK } from './ticket.models.';
 
 @Injectable({ providedIn: 'root' })
 
@@ -21,7 +22,8 @@ export class TicketService {
     private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient,
-    private router: Router) {}
+    private router: Router
+    ) {}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
   public async addComment(ticketID: string, message: string, tila?: number):
@@ -82,7 +84,7 @@ export class TicketService {
   }
 
    // Arkistoi (poista) UKK.
-   public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
+  public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
     let response: any;
     const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
     try {
@@ -542,15 +544,6 @@ export interface TiketinPerustiedot {
   tila: number;
 }
 
-export interface SortableTicket {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittajanNimi: string
-  tilaID: number;
-  tila: string;
-}
-
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
   Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
   eri vaiheessa omilla kutsuillaan. Backend palauttaa 1. kommentissa tiketin
@@ -566,14 +559,6 @@ export interface Tiketti extends TiketinPerustiedot {
   kommenttiID: string;
   kommentit: Array<Kommentti>;
   liitteet?: Array<Liite>;
-}
-
-// Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
-export interface UKK {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  tila: number;
 }
 
 /* Tiketin lisäkenttä.
@@ -603,24 +588,6 @@ export interface Kenttapohja {
   esitaytettava: boolean;
   ohje: string;
   valinnat: string[];
-}
-
-// Tiketin kommentti
-// Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
-// TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
-export interface Kommentti {
-  id: string;
-  lahettaja: User;
-  aikaleima: Date;
-  tila: number;
-  viesti: string;
-  liitteet: Array<Liite>;
-}
-
-// Vastaus kommentin lisäämiseen.
-export interface NewCommentResponse {
-  success: boolean;
-  kommentti: string;
 }
 
 interface GetTicketsOption {
