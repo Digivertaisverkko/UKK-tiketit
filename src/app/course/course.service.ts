@@ -1,3 +1,5 @@
+/* Tämä service käsittelee kursseihin liittyvää tietoa. */
+
 import { AuthService } from '../core/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +18,7 @@ interface Kurssi {
 @Injectable({
   providedIn: 'root'
 })
+
 export class CourseService {
 
   constructor(

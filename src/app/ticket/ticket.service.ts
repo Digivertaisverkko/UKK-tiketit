@@ -1,13 +1,13 @@
+/* Tämä service on käsittelee tiketteihin liittyvää tietoa. */
+
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import '@angular/localize/init';
-import { Router } from '@angular/router';
 import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
 import { Role } from '../core/core.models';
-import { AddTicketResponse, Kentta, Kommentti, Liite, NewCommentResponse, SortableTicket,
+import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse, SortableTicket,
   TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
 
 interface GetTicketsOption {
@@ -16,7 +16,6 @@ interface GetTicketsOption {
 
 @Injectable({ providedIn: 'root' })
 
-// Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
   public $messages = new Subject<string>();
@@ -26,7 +25,6 @@ export class TicketService {
     private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient,
-    private router: Router
     ) {}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
@@ -209,7 +207,7 @@ export class TicketService {
   }
 
   // Lähetä tiedosto palauttaen edistymistietoja.
-  public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+  public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
@@ -275,7 +273,8 @@ export class TicketService {
 
   // Lataa liitetiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
+    let url = environment.apiBaseUrl;
+    url += `/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })

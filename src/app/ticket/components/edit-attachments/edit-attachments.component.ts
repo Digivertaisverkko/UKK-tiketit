@@ -82,7 +82,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      return this.ticketService.newUploadFile(ticketID, commentID, fileinfo.file)
+      return this.ticketService.uploadFile(ticketID, commentID, fileinfo.file)
         .pipe(
           tap(progress => {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
