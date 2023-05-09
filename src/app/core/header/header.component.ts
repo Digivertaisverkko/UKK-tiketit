@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit {
     this.disableLangSelect = (url.searchParams.get('lang') !== null) ? true : false;
   }
 
-  getRoleString(asema: Role): string {
+  getRoleString(asema: Role | null): string {
     let role: string;
       switch (asema) {
         case 'opiskelija':
@@ -83,7 +83,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public toggleLanguage() {
-    this.language = (this._language === 'fi-FI') ? 'en-US' : 'fi-FI';
+    this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }
 
   get language(): string {

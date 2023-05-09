@@ -9,7 +9,7 @@
         matRipple
         [matRippleRadius]="30"
         [matRippleUnbounded]="true"
-    >
+        >
     <img  alt=""
           (click)="logoClicked()"
           src="../../../assets/logos/dvv-white.svg"
@@ -61,28 +61,32 @@
   <button mat-menu-item
           (click)="toggleLanguage()"
           [disabled]="disableLangSelect"
-          i18n="@@vaihda kieli">
+          i18n="@@vaihda kieli"
+          >
     Change to English
   </button>
 
   <button i18n="@@Profiili"
           mat-menu-item
           *ngIf="courseID !== null && isLoggedIn === true"
-          [routerLink]="'/course/' + courseID + '/profile'">
+          [routerLink]="'/course/' + courseID + '/profile'"
+          >
     Profiili
   </button>
 
   <button (click)="logout()"
           i18n="@@Kirjaudu ulos"
           mat-menu-item
-          *ngIf="isLoggedIn === true; else logIn">
+          *ngIf="isLoggedIn === true; else logIn"
+          >
     Kirjaudu ulos
   </button>
 
   <ng-template #logIn>
     <button (click)="login()"
             i18n="@@Kirjaudu sisään"
-            mat-menu-item>
+            mat-menu-item
+            >
       Kirjaudu sisään
     </button>
   </ng-template>

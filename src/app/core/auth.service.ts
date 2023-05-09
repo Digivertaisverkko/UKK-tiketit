@@ -81,7 +81,8 @@ export class AuthService {
     });
   }
 
-  public async sendDataConsent(tokenid: string | null, allow: boolean): Promise<ConsentResponse> {
+  public async sendDataConsent(tokenid: string | null, allow: boolean):
+      Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
     console.log(body);
     let url = '/lti/';
@@ -323,7 +324,7 @@ export class AuthService {
             'salasana': password,
             'login-id': loginID
           })
-    }
+      }
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
