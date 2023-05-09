@@ -7,6 +7,11 @@ import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/error.service';
 import { Kurssini } from './course.models';
 
+// Metodi: getCourses, API: /api/kurssit/
+interface Kurssi {
+  id: string;
+  nimi: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +23,20 @@ export class CourseService {
     private errorService: ErrorService,
     private http: HttpClient,
   ) { }
+
+    // Palauta listan kaikista kursseista.
+    public async getCourses(): Promise<Kurssi[]> {
+      //const httpOptions = this.getHttpOptions();;
+      let response: any;
+      let url = environment.apiBaseUrl + '/kurssit';
+      try {
+        response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
+        this.auth.setLoggedIn();
+      } catch (error: any) {
+        this.handleError(error);
+      }
+      return response;
+    }
 
   // Palauta listan kaikista kursseista, joilla käyttäjä on.
   public async getMyCourses(): Promise<Kurssini[]> {

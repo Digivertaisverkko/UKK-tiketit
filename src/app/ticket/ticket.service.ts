@@ -340,20 +340,6 @@ export class TicketService {
     return response['nimi'];
   }
 
-  // Palauta listan kaikista kursseista.
-  public async getCourses(): Promise<Kurssi[]> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    let url = environment.apiBaseUrl + '/kurssit';
-    try {
-      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
-
 
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
@@ -508,11 +494,7 @@ export class TicketService {
 // Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
 // API:a se vastaa.
 
-// Metodi: getCourses, API: /api/kurssit/
-interface Kurssi {
-  id: string;
-  nimi: string;
-}
+
 
 /* Tiketin lisäkentän tiedot sisältävä kenttäpohja.
   Metodi: getTicketFieldInfo
