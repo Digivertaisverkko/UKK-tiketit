@@ -10,7 +10,7 @@ import { EditAttachmentsComponent
 import { TicketService  } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
-import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models.';
+import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models';
 
 interface AdditionalField {
   id: string;

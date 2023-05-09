@@ -11,7 +11,7 @@ import { TicketService } from '../ticket.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
-import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models.';
+import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models';
 
 interface AdditionalField {
   id: string;

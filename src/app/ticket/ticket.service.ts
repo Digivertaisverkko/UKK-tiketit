@@ -6,9 +6,9 @@ import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
-import { Role, User } from '../core/core.models';
+import { Role } from '../core/core.models';
 import { AddTicketResponse, Kentta, Kommentti, Liite, NewCommentResponse, SortableTicket,
-  TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models.';
+  TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
 
 @Injectable({ providedIn: 'root' })
 
@@ -354,20 +354,6 @@ export class TicketService {
     return response;
   }
 
-  // Palauta listan kaikista kursseista, joilla käyttäjä on.
-  public async getMyCourses(): Promise<Kurssini[]> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
-    try {
-      response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
-
 
   /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
   opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
@@ -523,15 +509,9 @@ export class TicketService {
 // API:a se vastaa.
 
 // Metodi: getCourses, API: /api/kurssit/
-export interface Kurssi {
+interface Kurssi {
   id: string;
   nimi: string;
-}
-
-// Metodi: getMyCourses, API: /api/kurssi/omatkurssit/
-export interface Kurssini {
-  kurssi: number;
-  asema: Role;
 }
 
 /* Tiketin lisäkentän tiedot sisältävä kenttäpohja.

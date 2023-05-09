@@ -10,7 +10,7 @@ import { Constants } from '../../../shared/utils';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from 'src/app/core/core.models';
-import { SortableTicket } from '../../ticket.models.';
+import { SortableTicket } from '../../ticket.models';
 
 interface ColumnDefinition {
   def: string;

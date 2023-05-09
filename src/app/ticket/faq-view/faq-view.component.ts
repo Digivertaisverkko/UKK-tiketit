@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { TicketService } from '../ticket.service';
 import { Constants } from '../../shared/utils';
-import { Tiketti } from '../ticket.models.';
+import { Tiketti } from '../ticket.models';
 import { Title } from '@angular/platform-browser';
 import { User, Error } from 'src/app/core/core.models';
 

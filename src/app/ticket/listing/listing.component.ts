@@ -1,4 +1,4 @@
-import { ActivatedRoute, ParamMap} from '@angular/router';
+import { ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -12,13 +12,15 @@ import { Title } from '@angular/platform-browser';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
+import { CourseService } from 'src/app/course/course.service';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
-import { TicketService, Kurssini } from '../ticket.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
+import { Kurssini } from 'src/app/course/course.models';
 import { User } from 'src/app/core/core.models';
-import { UKK } from '../ticket.models.';
+import { UKK } from '../ticket.models';
+import { TicketService } from '../ticket.service';
 
 export interface ColumnDefinition {
   def: string;
@@ -72,11 +74,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private courses: CourseService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
     private route : ActivatedRoute,
     private store : StoreService,
-    private ticket: TicketService,
+    private ticket:TicketService,
     private title : Title
   ) {
     this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:
@@ -121,7 +124,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private checkIfParticipant() {
-    this.ticket.getMyCourses().then(response => {
+    this.courses.getMyCourses().then(response => {
       if (response[0].kurssi === undefined) return
         const myCourses: Kurssini[] = response;
         // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.

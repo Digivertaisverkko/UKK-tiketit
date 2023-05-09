@@ -10,7 +10,7 @@ import { Constants } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { User } from '../../core/core.models'
-import { NewCommentResponse, Tiketti } from '../ticket.models.';
+import { NewCommentResponse, Tiketti } from '../ticket.models';
 
 interface FileInfo {
   filename: string;
