@@ -4,7 +4,6 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AuthService } from './core/auth.service';
 import { environment } from 'src/environments/environment';
-import { getIsInIframe } from './shared/utils';
 import { StoreService } from './core/store.service';
 import { User } from './core/core.models';
 // import { TicketService } from './ticket/ticket.service';
@@ -16,15 +15,15 @@ import { User } from './core/core.models';
 })
 export class AppComponent implements OnInit, OnDestroy  {
   public courseName: string = '';
-  private courseID: string | null = null;
+  public courseID: string | null = null;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
+  public isLogged: boolean = false;
   public isLoading: Observable<boolean> | null = null;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
   public user: User = {} as User;
 
-  private isLogged: boolean = false;
   private unsubscribe$ = new Subject<void>();
 
   constructor (

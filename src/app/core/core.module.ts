@@ -12,7 +12,6 @@ import { SharedModule } from '../shared/shared.module';
 import { MatDialogConfig, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
 import { MaterialModule } from '../shared/material.module';
 import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 // import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
@@ -28,6 +27,7 @@ import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 import { NoDataConsentComponent } from './no-data-consent/no-data-consent.component';
+import { UsermenuComponent } from './usermenu/usermenu.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import { NoDataConsentComponent } from './no-data-consent/no-data-consent.compon
     PageNotFoundComponent,
     PrivacyModalComponent,
     NoDataConsentComponent,
+    UsermenuComponent,
   ],
   imports: [
     CommonModule,
@@ -45,7 +46,6 @@ import { NoDataConsentComponent } from './no-data-consent/no-data-consent.compon
     MatDialogModule,
     MaterialModule,
     MatListModule,
-    MatMenuModule,
     MatRippleModule,
     RouterModule,
     SharedModule,
@@ -59,7 +59,8 @@ import { NoDataConsentComponent } from './no-data-consent/no-data-consent.compon
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UsermenuComponent
   ]
 })
 export class CoreModule { }

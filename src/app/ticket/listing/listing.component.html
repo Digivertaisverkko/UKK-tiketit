@@ -10,21 +10,12 @@
 
   <div class="spacer"></div>
 
-    <button (click)="openInNewTab()"
-            class="embedded-button"
-            mat-raised-button
-            *ngIf="isInIframe"
-            >
-      <a target="_blank" i18n="@@Avaa uuteen välilehteen">
-        Avaa uuteen välilehteen
-      </a>
-    </button>
-
   <button aria-label="Kurssin asetukset"
           i18n-aria-label="@@Kurssin asetukset"
           class="settings-button"
           mat-icon-button
-          *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
+          *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') &&
+              isParticipant"
           [routerLink]="'/course/' + courseID + '/settings'"
           >
     <mat-icon class="settings-icon">settings</mat-icon>
@@ -178,11 +169,6 @@
     title="Virhe"
     >
 </app-error-card>
-
-<!-- <div class="theme-actions">
-  <button mat-raised-button *ngIf="isLoaded && isInIframe" color="primary"
-  [routerLink]="'/submit/'">Avaa kurssinäkymä</button>
-</div> -->
 
 <!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. -->
 <section class="feedback">

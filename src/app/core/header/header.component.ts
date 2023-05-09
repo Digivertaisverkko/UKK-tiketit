@@ -43,6 +43,10 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  public logoClicked() {
+    this.store.sendMessage('go begin');
+  }
+
   private trackCourseID() {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
@@ -62,11 +66,6 @@ export class HeaderComponent implements OnInit {
     })
   }
 
-  updateMenu() {
-    const url = new URL(window.location.href);
-    this.disableLangSelect = (url.searchParams.get('lang') !== null) ? true : false;
-  }
-
   getRoleString(asema: Role | null): string {
     let role: string;
       switch (asema) {
@@ -82,8 +81,15 @@ export class HeaderComponent implements OnInit {
       return role;
   }
 
+ /*
+
   public toggleLanguage() {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
+  }
+
+  updateMenu() {
+    const url = new URL(window.location.href);
+    this.disableLangSelect = (url.searchParams.get('lang') !== null) ? true : false;
   }
 
   get language(): string {
@@ -97,10 +103,6 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  public logoClicked() {
-    this.store.sendMessage('go begin');
-  }
-
   public login(): void {
     if (this.courseID === null) {
       throw new Error('header.component.ts.login: ei kurssi ID:ä.');
@@ -112,5 +114,7 @@ export class HeaderComponent implements OnInit {
   public logout() {
     this.authService.logout(this.courseID);
   }
+
+  */
 
 }

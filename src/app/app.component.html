@@ -13,6 +13,27 @@
         >
     </mat-progress-bar>
 
+
+      <div class="embedded-wrapper" *ngIf="isInIframe">
+        <button aria-label="Menu"
+                i18n-aria-label=""
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <app-usermenu
+              [courseID]="courseID"
+              [isLoggedIn]="isLogged"
+              [user]="user"
+              >
+            </app-usermenu>
+        </mat-menu>
+
+      </div>
+
     <router-outlet></router-outlet>
 
   </main>

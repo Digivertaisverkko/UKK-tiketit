@@ -219,10 +219,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.setPosition(this.url, this.scrollPosition);
   }
 
-  public openInNewTab(): void {
-    window.open(window.location.href, '_blank');
-  }
-
   private restorePosition(): void {
     this.scrollPosition = this.store.getPosition(this.url);
     if (this.scrollPosition && this.scrollPosition !== 0) {

@@ -43,18 +43,27 @@
 
   <button aria-label="Tili"
           class="material-symbols-outlined"
-          (click)="updateMenu()"
           id="account-icon-button"
           i18n-aria-label="@@Tili"
           mat-icon-button
           [matMenuTriggerFor]="accountMenu"
           >
+          <!-- (click)="updateMenu()" -->
     <mat-icon >account_circle</mat-icon>
   </button>
 
 </mat-toolbar>
 
 <!----------------- Valikko --------------------------------------------------->
+<mat-menu #accountMenu="matMenu">
+  <app-usermenu
+      [courseID]="courseID"
+      [user]="user"
+      [isLoggedIn]="isLoggedIn"
+      >
+  </app-usermenu>
+</mat-menu>
+<!--
 
 <mat-menu #accountMenu="matMenu">
 
@@ -92,7 +101,10 @@
   </ng-template>
 
 
-  <!--  + Kurssin asetukset
-        + Upotuksessa avaa uuteen välilehteen. -->
+   + Kurssin asetukset
+        + Upotuksessa avaa uuteen välilehteen.
 
 </mat-menu>
+
+
+-->
