@@ -379,24 +379,16 @@ export class AuthService {
 
   // Tämään hetkinen kirjautumisen tila.
   public getIsUserLoggedIn(): Boolean {
-    // this.getSessionID();
     return this.isUserLoggedIn$.value;
   }
 
   // Suorita uloskirjautuminen.
-  public async logout(courseID: string | null): Promise<any> {
-    // const sessionID = this.getSessionID();
-    // if (sessionID == undefined) {
-    //   this.setNotLoggegIn();
-    //   window.localStorage.clear();
-    // } else {
+  public async logout(courseID: string | null) {
       let response: any;
       let url = environment.apiBaseUrl + '/kirjauduulos';
       try {
         response = await firstValueFrom(this.http.post(url, {}));
       } catch (error: any) {
-        // console.log('header.logout: saatiin sendAskLoginRequest vastaukseksi: ');
-        // console.dir(response);
         this.handleError(error);
       } finally {
         this.setNotLoggegIn();

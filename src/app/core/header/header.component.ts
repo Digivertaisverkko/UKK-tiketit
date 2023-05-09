@@ -14,7 +14,7 @@ import { User, Role } from 'src/app/core/core.models';
 })
 
 export class HeaderComponent implements OnInit {
-    // Async pipeä varten.
+  // Async pipeä varten.
   // public isUserLoggedIn$: Observable<boolean>;
   public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public disableLangSelect: boolean = false;
@@ -110,10 +110,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public logout() {
-    this.authService.saveRedirectURL();
-    this.authService.logout(this.courseID).then(res => {
-      }).catch (error => {
-      });
+    this.authService.logout(this.courseID);
   }
 
 }
