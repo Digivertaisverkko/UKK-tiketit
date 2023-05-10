@@ -38,7 +38,7 @@ import { StoreService } from '../store.service';
 
 export class NoPrivilegesComponent implements OnInit {
   public courseID: string | null = null;
-  public isLoggedIn: Boolean = false;
+  public isLoggedIn: Boolean | null = null;
 
   constructor(
     private route: ActivatedRoute,

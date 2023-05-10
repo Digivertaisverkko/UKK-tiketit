@@ -41,7 +41,7 @@ import { StoreService } from '../store.service';
 })
 
 export class PageNotFoundComponent implements OnInit {
-  public isLoggedIn: Boolean = false;
+  public isLoggedIn: Boolean | null = null;
   public courseID: string | null = null;
 
   constructor(
