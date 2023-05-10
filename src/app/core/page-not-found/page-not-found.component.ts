@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Constants } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
+import { StoreService } from '../store.service';
 
 
 @Component({
@@ -47,10 +48,11 @@ export class PageNotFoundComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private title: Title
     ) {
     this.title.setTitle(Constants.baseTitle + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
-      this.isLoggedIn = this.authService.getIsUserLoggedIn();
+      this.isLoggedIn = this.store.getIsLoggedIn();
       console.log(this.courseID);
   }
 

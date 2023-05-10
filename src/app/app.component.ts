@@ -73,7 +73,7 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   private trackLoginStatus() {
-    this.authService.onIsUserLoggedIn()
+    this.store.onIsUserLoggedIn()
       .pipe(
         takeUntil(this.unsubscribe$)
       ).subscribe(response => {

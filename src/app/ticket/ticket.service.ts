@@ -12,6 +12,7 @@ import { ErrorService } from '../core/error.service';
 import { Role } from '../core/core.models';
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse, SortableTicket,
   TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
+import { StoreService } from '../core/store.service';
 
 interface GetTicketsOption {
   option: 'onlyOwn' | 'archived';
@@ -27,6 +28,7 @@ export class TicketService {
     private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient,
+    private store: StoreService
     ) {}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
@@ -50,7 +52,7 @@ export class TicketService {
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
     try {
       response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
-      this.auth.setLoggedIn();
+      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -342,7 +344,7 @@ export class TicketService {
       this.handleError(error);
     }
     // Muutetaan taulukkoon sopivaan muotoon.
-    const user = this.auth.getUserInfo();
+    const user = this.store.getUserInfo();
     const myName = user?.nimi ?? '';
     const myRole = user?.asema ?? '';
     const me = $localize`:@@Minä:Minä`;
@@ -434,11 +436,7 @@ export class TicketService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
-      this.auth.handleNotLoggedIn();
-    } else {
-      this.errorService.handleServerError(error);
-    }
+    this.errorService.handleServerError(error);
   }
 
 }

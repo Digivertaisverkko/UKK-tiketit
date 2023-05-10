@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { AuthService } from '../auth.service';
 import { Constants } from '../../shared/utils';
 import { Title } from '@angular/platform-browser';
+import { StoreService } from '../store.service';
 
 @Component({
   template: `
@@ -41,14 +41,13 @@ export class NoPrivilegesComponent implements OnInit {
   public isLoggedIn: Boolean = false;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private title: Title
     ) {
       this.title.setTitle(Constants.baseTitle + $localize
             `:@@Tästä ei pääse:Tästä ei pääse`);
-      this.isLoggedIn = this.authService.getIsUserLoggedIn();
+      this.isLoggedIn = this.store.getIsLoggedIn();
   }
 
   ngOnInit(): void {

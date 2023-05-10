@@ -1,6 +1,5 @@
 /* Tämä service käsittelee kursseihin liittyvää tietoa. */
 
-import { AuthService } from '../core/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -8,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/error.service';
 import { Kenttapohja, Kurssini } from './course.models';
+import { StoreService } from '../core/store.service';
 
 // Metodi: getCourses, API: /api/kurssit/
 interface Kurssi {
@@ -20,9 +20,9 @@ interface Kurssi {
 export class CourseService {
 
   constructor(
-    private auth: AuthService,
     private errorService: ErrorService,
     private http: HttpClient,
+    private store: StoreService
   ) { }
 
   // Palauta listan kaikista kursseista.
@@ -32,7 +32,7 @@ export class CourseService {
     let url = environment.apiBaseUrl + '/kurssit';
     try {
       response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
-      this.auth.setLoggedIn();
+      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -61,7 +61,7 @@ export class CourseService {
     let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
     try {
       response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
-      this.auth.setLoggedIn();
+      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -94,17 +94,13 @@ export class CourseService {
     try {
       response = await firstValueFrom( this.http.put(url, body) );
     } catch (error: any) {
-      this.handleError(error);
+      this.errorService.handleServerError(error);
     }
     return (response?.success === true) ? true : false;
     }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
-      this.auth.handleNotLoggedIn();
-    } else {
-      this.errorService.handleServerError(error);
-    }
+    this.errorService.handleServerError(error);
   }
 
 }

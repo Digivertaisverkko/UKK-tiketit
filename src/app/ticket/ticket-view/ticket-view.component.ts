@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { User } from '../../core/core.models'
 import { NewCommentResponse, Tiketti } from '../ticket.models';
+import { StoreService } from 'src/app/core/store.service';
 
 interface FileInfo {
   filename: string;
@@ -68,6 +69,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private route : ActivatedRoute,
     private router: Router,
+    private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {
@@ -80,7 +82,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.auth.trackUserInfo().subscribe(response => {
+    this.store.trackUserInfo().subscribe(response => {
       if (response?.id != null) {
         this.user = response;
         if (!this.isPolling) this.startPollingTicket();

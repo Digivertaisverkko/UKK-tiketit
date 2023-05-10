@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
 import { TicketService } from '../ticket.service';
 import { Constants } from '../../shared/utils';
 import { Tiketti } from '../ticket.models';
 import { Title } from '@angular/platform-browser';
 import { User, Error } from 'src/app/core/core.models';
+import { StoreService } from 'src/app/core/store.service';
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -23,14 +23,14 @@ export class FaqViewComponent implements OnInit {
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(
-    private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {
     this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.auth.trackUserInfo().subscribe(response => this.user = response);
+    this.store.trackUserInfo().subscribe(response => this.user = response);
   }
 
   ngOnInit(): void {
@@ -43,11 +43,6 @@ export class FaqViewComponent implements OnInit {
           console.dir(response);
           this.ticket = response;
           this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
-          if (this.auth.getUserName.length == 0) {
-            try {
-              if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
-            } catch {}
-          }
         })
         .catch(error => {
           this.errorMessage =

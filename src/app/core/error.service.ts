@@ -1,19 +1,26 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { StoreService } from "./store.service";
+import { getCourseIDfromURL } from '../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 
 export class ErrorService {
 
-  constructor(private router: Router) {
+  constructor(
+      private router: Router,
+      private store: StoreService
+      ) {
   }
 
-  /* Käsittellään virheet ensin yleisellä tasolla, jonka jälkeen heitetään ne
-    eteenpäin. Jos virhe on palvelimen käyttämää muotoa, heitetään virhe
-    siinä muodossa. Käsittely sisältää virheen logituksen consoleen.
+  /* Käsitellään virheitä ennen niiden toimittamista komponenteille. Logitetaan
+      kaikki virheet. Jos käyttäjällä ei ole oikeuksia resurssiin tai virheenä
+      on, ettei ole kirjautunut, niin ohjataan "Ei oikeuksia" -näkymään. Muussa
+      tapauksessa virhe heitetään eteenpäin komponenteille, jotka voivat
+      tarpeen mukaan näyttää käyttäjällle virheilmoituksia.
   */
 
-  public handleServerError(error: any): never {
+  public handleServerError(error: any) {
     var backendResponse = error?.error;
     var backendError: Error = backendResponse?.error;
     var logMessage: string; // Pastetaan consoleen.
@@ -47,12 +54,19 @@ export class ErrorService {
       console.dir(error);
     }
 
+    // if (error.status === 403 && error?.error?.error?.tunnus == 1000)  {
+    //   this.handleNotLoggedIn();
+    // }
+    const eiKirjautunut = 1000;
     const eiOikeuksia = 1003;
-    if (backendError?.tunnus && backendError?.tunnus === eiOikeuksia) {
+    if (error.status === 403 && backendError?.tunnus === eiKirjautunut)  {
+      this.handleNotLoggedIn();
+    } else if (backendError?.tunnus === eiOikeuksia) {
       this.routeToNoPrivileges();
+    } else {
+      // Komponentin on tarkoitus catchata tämä.
+      throw (backendError !== undefined) ? backendError : error;
     }
-
-    throw (backendError !== undefined) ? backendError : error;
   }
 
   private getBackendErrorLog(backendError: Error, logMessage: string): string {
@@ -68,6 +82,18 @@ export class ErrorService {
     return logMessage
   }
 
+  public handleNotLoggedIn() {
+    console.log('errorService.handleNotLoggedIn(): et ole kirjaunut,' +
+          'ohjataan virhesivulle.');
+    this.store.setNotLoggegIn();
+    // window.localStorage.clear();
+    // const courseID = getCourseIDfromURL();
+    // this.saveRedirectURL();
+    this.routeToNoPrivileges();
+    // const baseUrl = (courseID == null) ? '' : 'course/' + courseID  + '/';
+    // this.router.navigateByUrl(baseUrl + 'forbidden');
+  }
+
   private routeToNoPrivileges() {
     // Ei toimi tässä this.route.snapshot.paramMap.get('courseid').
     const currentRoute = window.location.pathname + window.location.search;
@@ -80,6 +106,21 @@ export class ErrorService {
     }
     this.router.navigateByUrl(baseRoute + '/forbidden');
   }
+
+  public saveRedirectURL() {
+    const currentRoute = window.location.pathname + window.location.search;
+    // Kirjautumissivulle ei haluta ohjata.
+    if (currentRoute.indexOf('/login') === -1) {
+      if (window.localStorage.getItem('REDIRECT_URL') == null) {
+      window.localStorage.setItem('REDIRECT_URL', currentRoute);
+      console.log('tallennettiin redirect URL: ' + currentRoute);
+      } else {
+        console.log('Löydettiin redirect URL, ei tallenneta päälle.');
+      }
+    }
+  }
+
+
 }
 
 export interface Error {

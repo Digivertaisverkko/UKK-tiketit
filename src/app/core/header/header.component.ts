@@ -26,7 +26,6 @@ export class HeaderComponent implements OnInit {
   private _language!: string;
 
   constructor (
-    private authService: AuthService,
     private change: ChangeDetectorRef,
     private route : ActivatedRoute,
     private router: Router,
@@ -38,7 +37,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.trackCourseID();
     this.trackUserInfo();
-    this.authService.onIsUserLoggedIn().subscribe(response => {
+    this.store.onIsUserLoggedIn().subscribe(response => {
       this.isLoggedIn = response
     });
   }
@@ -59,7 +58,7 @@ export class HeaderComponent implements OnInit {
   }
 
   trackUserInfo() {
-    this.authService.trackUserInfo().subscribe(response => {
+    this.store.trackUserInfo().subscribe(response => {
         this.user = response;
         this.userRole = this.getRoleString(this.user?.asema ?? null);
         this.change.detectChanges();

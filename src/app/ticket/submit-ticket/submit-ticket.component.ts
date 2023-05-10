@@ -13,6 +13,7 @@ import { CourseService } from 'src/app/course/course.service';
 import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
 import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models';
+import { StoreService } from 'src/app/core/store.service';
 
 interface AdditionalField {
   id: string;
@@ -73,11 +74,11 @@ export class SubmitTicketComponent implements OnInit {
     return this.form.get('title') as FormControl;
   }
 
-  constructor(private auth: AuthService,
-              private courses: CourseService,
+  constructor(private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
+              private store: StoreService,
               private ticketService: TicketService,
               private titleServ: Title)
   {}
@@ -95,7 +96,7 @@ export class SubmitTicketComponent implements OnInit {
       this.fetchTicketInfo(this.ticketId);
     }
 
-    this.auth.trackUserInfo().subscribe(response => {
+    this.store.trackUserInfo().subscribe(response => {
       if (response?.nimi != null) {
         this.user = response
       }

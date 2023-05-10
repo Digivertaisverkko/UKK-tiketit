@@ -5,7 +5,7 @@
     <h1 class="main-header"
         id="courseName"
         *ngIf="courseName.length > 0 && !isInIframe">
-      <span>{{courseName}}</span>
+      <span>{{ courseName }}</span>
     </h1>
 
   <div class="spacer"></div>
@@ -44,7 +44,7 @@
 </section>
 
 <app-error-card
-    buttonText="{{ error.buttonText}}"
+    buttonText="{{ error.buttonText }}"
     (clickEvent)="errorClickEvent($event)"
     i18n-title="{{ error.title }}"
     message="{{ error.message }}"
@@ -122,7 +122,7 @@
           [routerLink]="'/course/' + courseID + '/faq-view/' + element.id"
           tabindex="-1"
           >
-        {{element.aikaleima | date: 'shortDate'}}
+        {{ element.aikaleima | date: 'shortDate' }}
       </a>
     </td>
   </ng-container>

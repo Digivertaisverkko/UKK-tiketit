@@ -5,15 +5,17 @@ import { AuthService } from 'src/app/core/auth.service';
 import { ErrorService } from 'src/app/core/error.service';
 import { environment } from 'src/environments/environment';
 import { User } from '../core/core.models';
+import { StoreService } from '../core/store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserManagementService {
 
-  constructor(private authService: AuthService,
-              private errorService: ErrorService,
-              private http: HttpClient) { }
+  constructor(private errorService: ErrorService,
+              private http: HttpClient,
+              private store: StoreService
+              ) { }
 
   // GET /api/gdpr - GDPR data
   public async getGdprData(): Promise<any> {
@@ -52,12 +54,7 @@ export class UserManagementService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
-        console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
-        this.authService.handleNotLoggedIn();
-    } else {
-      this.errorService.handleServerError(error);
-    }
+    this.errorService.handleServerError(error);
   }
 
   // POST /api/minun/asetukset - sähköpostiasetukset
@@ -75,7 +72,7 @@ export class UserManagementService {
 
   // DELETE /api/minun - poista käyttäjä
   public async removeUser(): Promise<boolean> {
-    let user: User | null = this.authService.getUserInfo();
+    let user: User | null = this.store.getUserInfo();
     if (user === null) throw Error('Ei ole käyttäjätietoja.');
     const options = {
       body: {

@@ -3,11 +3,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subject, Subscription, first } from 'rxjs';
 
 import { TicketService } from '../../ticket.service';
-import { AuthService } from 'src/app/core/auth.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { isToday } from 'src/app/shared/utils';
 import { Kommentti } from '../../ticket.models';
 import { User } from 'src/app/core/core.models';
+import { StoreService } from 'src/app/core/store.service';
 
 interface FileInfo {
   filename: string;
@@ -52,11 +52,11 @@ export class CommentComponent implements AfterViewInit{
   }
 
   constructor(
-    private auth: AuthService,
     private formBuilder: FormBuilder,
+    private store: StoreService,
     private ticketService: TicketService
   ) {
-      this.user = this.auth.getUserInfo();
+      this.user = this.store.getUserInfo();
       this.strings = new Map ([
         ['attach', $localize `:@@Liitä:Liitä` ],
         ['attachFiles', $localize `:@@Liitä tiedostoja:Liitä tiedostoja`],

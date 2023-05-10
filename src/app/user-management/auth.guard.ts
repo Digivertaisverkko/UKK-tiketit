@@ -3,13 +3,15 @@ import { inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../core/auth.service";
 import { getCourseIDfromURL } from "../shared/utils";
+import { StoreService } from "../core/store.service";
 
 export const authGuard: CanActivateFn = async () => {
   const authService = inject(AuthService);
   const router = inject(Router);
+  const store = inject(StoreService)
   // const location = inject(Location);
 
-  if (authService.getIsUserLoggedIn()) {
+  if (store.getIsLoggedIn()) {
     // console.log('authGuard: olet kirjautunut.');
     return true
   } else {

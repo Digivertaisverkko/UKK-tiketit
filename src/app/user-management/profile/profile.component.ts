@@ -5,6 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { MinunAsetukset, UserManagementService } from '../user-management.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
+import { ErrorService } from 'src/app/core/error.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   public userEmail: string = '';
   public userName: string = '';
 
-  constructor(private authService: AuthService,
+  constructor(private errorService: ErrorService,
               private formBuilder: FormBuilder,
               private renderer: Renderer2,
               private titleServ: Title,
@@ -101,7 +102,8 @@ export class ProfileComponent implements OnInit {
     this.userManagementService.removeUser()
     .then(response => {
       if (response) {
-        this.authService.handleNotLoggedIn();
+        this.errorService.handleNotLoggedIn();
+
       } else {
         throw new Error;
       }

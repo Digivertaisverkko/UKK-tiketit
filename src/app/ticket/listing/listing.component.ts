@@ -55,6 +55,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfFAQ: number = 0;
 
   private fetchFAQsSub$: Subscription | null = null;
+  private isParticipant$: Subscription | null = null;
   private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
@@ -98,6 +99,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.url = window.location.pathname;
     this.trackCourseID();
     this.trackUserInfo();
+    this.trackIfParticipant();
     this.trackLoggedStatus();
     this.trackScreenSize();
   }
@@ -110,6 +112,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     console.warn('listaus: ngOnDestroy ajettu.');
     window.removeEventListener('scroll', this.onScroll);
     this.loggedIn$.unsubscribe();
+    this.isParticipant$?.unsubscribe();
     this.stopPolling();
   }
 
@@ -123,21 +126,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }*/
   }
 
-  private checkIfParticipant() {
-    this.courses.getMyCourses().then(response => {
-      if (response[0].kurssi === undefined) return
-        const myCourses: Kurssini[] = response;
-        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-        if (myCourses.some(course => course.kurssi == Number(this.courseID))) {
-          this.isParticipant = true;
-          console.log('kurssi id: ' + this.courseID);
-          console.log('ollaan kurssilla');
-        } else {
-          this.isParticipant = false;
-          console.log('ei olla kurssilla');
-          console.log('kurssi id: ' + this.courseID);
-          this.setError('notParticipant');
-        }
+
+  private trackIfParticipant() {
+    this.isParticipant$ = this.store.trackIfParticipant().subscribe(response => {
+      if (response === true) {
+        this.isParticipant = true;
+      } else if (response === false) {
+        this.isParticipant = false;
+        this.setError('notParticipant');
+      }
     })
   }
 
@@ -152,12 +149,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
     this.ticket.getFAQ(courseID).then(response => {
+      if (this.isLoaded === false) this.isLoaded = true;
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.sort = this.sort;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
-          if (this.isLoaded === false) this.isLoaded = true;
         }
         return
       })
@@ -263,7 +260,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private trackUserInfo(): void {
-    this.authService.trackUserInfo()
+    this.store.trackUserInfo()
     .pipe(
       takeUntil(this.unsubscribe$)
     ).subscribe(response => {
@@ -276,7 +273,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public saveRedirectUrl(linkEnding?: string): void {
     this.stopPolling();
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
-    if (this.authService.getIsUserLoggedIn() === false) {
+    if (this.store.getIsLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
       window.localStorage.setItem('REDIRECT_URL', link);
     }
@@ -300,33 +297,29 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private trackLoggedStatus(): void {
-    this.loggedIn$ = this.authService.onIsUserLoggedIn().subscribe(response => {
+    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
       if (response === false) {
         console.log('Listing: saatiin tieto, ettei olla kirjautuneina.');
         this.isLoaded = true;
         this.setError('notLoggedIn');
       } else if (response === true) {
         this.error === null;
-        this.checkIfParticipant();
       }
     });
   }
 
     // Aseta virheviestejä.
     private setError(type: string): void {
-      console.log('asetetaan error: ' +type);
       if (type === 'notParticipant') {
         this.error = {
           title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-          message: $localize`:@@Ei osallistujana-viesti:
-              Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+          message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
           buttonText: ''
         }
       } else if  (type === 'notLoggedIn') {
         this.error = {
           title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-          message: $localize`:@@Ei osallistujana-viesti:
-              Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+          message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
           buttonText: ''
         }
         if (this.noDataConsent === true) {
