@@ -3,12 +3,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { EditAttachmentsComponent }
     from '../components/edit-attachments/edit-attachments.component';
 import { TicketService } from '../ticket.service';
-import { AuthService } from '../../core/auth.service';
 import { CourseService } from 'src/app/course/course.service';
 import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
@@ -60,7 +59,7 @@ export class SubmitTicketComponent implements OnInit {
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
-  public user: User | null = null;
+  public user$: Observable<User | null>;
 
   get additionalFields(): FormArray {
     return this.form.controls["additionalFields"] as FormArray;
@@ -80,8 +79,10 @@ export class SubmitTicketComponent implements OnInit {
               private route: ActivatedRoute,
               private store: StoreService,
               private ticketService: TicketService,
-              private titleServ: Title)
-  {}
+              private titleServ: Title
+              ) {
+    this.user$ = this.store.trackUserInfo();
+  }
 
   ngOnInit(): void {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -95,12 +96,6 @@ export class SubmitTicketComponent implements OnInit {
     } else {
       this.fetchTicketInfo(this.ticketId);
     }
-
-    this.store.trackUserInfo().subscribe(response => {
-      if (response?.nimi != null) {
-        this.user = response
-      }
-    });
   }
 
   private buildAdditionalFields(): void {

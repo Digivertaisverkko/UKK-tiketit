@@ -31,6 +31,8 @@
             (user.nimi) | titlecase }}
     </div>
 
+    <!-- Voi olla tilanteita, missä käyttäjälle ei ole asetettu nimeä,
+    niin näytetään silloin sähköpostiosoite. -->
     <div class="email theme-header-text"
         *ngIf="user.nimi.length === 0 && user.sposti.length > 0">
         {{ user.sposti.length > maxUserLength ?

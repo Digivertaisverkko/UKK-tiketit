@@ -176,7 +176,7 @@ export class CommentComponent implements AfterViewInit{
   }
 
   private trackWhenEditing() {
-    let sub: Subscription = this.form.valueChanges.subscribe(() => {
+    const sub: Subscription = this.form.valueChanges.subscribe(() => {
       if (this.form.dirty) {
         this.messages.emit('editingComment');
         sub.unsubscribe();

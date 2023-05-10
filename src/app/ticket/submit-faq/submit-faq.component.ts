@@ -8,7 +8,6 @@ import { CourseService } from 'src/app/course/course.service';
 import { EditAttachmentsComponent
     } from '../components/edit-attachments/edit-attachments.component';
 import { TicketService  } from '../ticket.service';
-import { AuthService } from '../../core/auth.service';
 import { Constants } from '../../shared/utils';
 import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models';
 
@@ -73,8 +72,7 @@ export class SubmitFaqComponent implements OnInit {
     return this.form.get('question') as FormControl;
   }
 
-  constructor(private auth: AuthService,
-              private courses: CourseService,
+  constructor(private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
