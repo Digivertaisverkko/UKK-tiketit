@@ -17,7 +17,6 @@ import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
-import { Kurssini } from 'src/app/course/course.models';
 import { User } from 'src/app/core/core.models';
 import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';

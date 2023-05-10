@@ -18,7 +18,6 @@ export class HeaderComponent implements OnInit {
   // public isUserLoggedIn$: Observable<boolean>;
   public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public disableLangSelect: boolean = false;
-  public isLoggedIn: boolean = false;
   public readonly maxUserLength = 40;
   public user: User | null = null;
   public userRole: string = '';
@@ -37,9 +36,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.trackCourseID();
     this.trackUserInfo();
-    this.store.onIsUserLoggedIn().subscribe(response => {
-      this.isLoggedIn = response
-    });
   }
 
   public logoClicked() {

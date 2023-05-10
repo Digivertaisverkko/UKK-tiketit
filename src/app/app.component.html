@@ -17,10 +17,13 @@
 
         <button aria-label="Käyttäjävalikko"
                 i18n-aria-label="@@Käyttäjävalikko"
+                i18n-matTooltip="@@Käyttäjävalikko"
                 mat-icon-button
                 [matMenuTriggerFor]="menu"
+                [matTooltipShowDelay]="600"
+                matTooltip="Käyttäjävalikko"
                 >
-          <mat-icon>more_vert</mat-icon>
+          <mat-icon>menu</mat-icon>
         </button>
 
         <mat-menu #menu="matMenu">
