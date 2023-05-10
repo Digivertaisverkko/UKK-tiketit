@@ -131,7 +131,7 @@
         *ngIf="numberOfQuestions === 0 && !error"
         >
     <p i18n="@@Ei yhtään kysymystä esitetty"
-      *ngIf="user.asema === 'opettaja' || user.asema === 'admin';
+      *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin';
           else noTicketsStudent" >
       Yhtään kysymystä ei ole esitetty.
     </p>
@@ -288,7 +288,7 @@
           {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
       >
 
-  <ng-container *ngIf="user.asema !== 'opiskelija'">
+  <ng-container *ngIf="user?.asema !== 'opiskelija'">
 
     <button class="button"
             (click)="fetchArchivedTickets()"

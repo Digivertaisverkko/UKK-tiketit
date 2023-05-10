@@ -6,13 +6,11 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
-import { Subject, Subscription, takeUntil, timer }
-    from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from 'src/app/core/auth.service';
 import { Constants, getIsInIframe } from '../../shared/utils';
-import { CourseService } from 'src/app/course/course.service';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
@@ -42,9 +40,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
   public columnDefinitions: ColumnDefinition[];
   public courseID: string = '';
-  public courseName: string = '';
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
+  public errorMessage: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean | null = null;
@@ -52,6 +50,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
+  public user$: Observable<User | null>;
 
   private fetchFAQsSub$: Subscription | null = null;
   private isParticipant$: Subscription | null = null;
@@ -63,18 +62,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
 
-  // Merkkijonot
-  public errorMessage: string | null = null;
-  public ticketViewLink = '';
-  public user: User = {} as User;
-
   @ViewChild('sortFaq', { static: false }) sort = new MatSort();
   // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
   // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
   constructor(
     private authService: AuthService,
-    private courses: CourseService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
     private route : ActivatedRoute,
@@ -85,7 +78,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
     this.isInIframe = getIsInIframe();
-
+    this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: false }
@@ -97,7 +90,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.getDataConsent();
     this.url = window.location.pathname;
     this.trackCourseID();
-    this.trackUserInfo();
     this.trackIfParticipant();
     this.trackLoggedStatus();
     this.trackScreenSize();
@@ -195,8 +187,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
-    if (error?.tunnus == 1000 ) {
-    }
     this.isLoaded = true;
   }
 
@@ -237,10 +227,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       takeUntil(this.unsubscribe$)
     ).subscribe(response => {
       if (response === 'go begin') {
-        console.log('trackMessages: saatiin refresh pyyntö.');
+        console.log('listing.trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
-        // this.fetchTickets(this.courseID);
         this.fetchFAQ(this.courseID, true);
       }
     });
@@ -258,16 +247,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private trackUserInfo(): void {
-    this.store.trackUserInfo()
-    .pipe(
-      takeUntil(this.unsubscribe$)
-    ).subscribe(response => {
-      if (response?.id) this.user = response;
-    });
-  }
-
-
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
     this.stopPolling();
@@ -281,16 +260,9 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // Seurataan kurssi ID:ä URL:sta.
   private trackCourseID(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) {
-        this.errorMessage = $localize `:@@puuttuu kurssiID:
-            Kurssin tunnistetietoa  ei löytynyt. Tarkista URL-osoitteen oikeinkirjoitus.`;
-        this.isLoaded = true;
-        throw new Error('Virhe: ei kurssi ID:ä.');
-      }
-      this.courseID = courseID;
+      const courseID = paramMap.get('courseid');
+      if (courseID) this.courseID = courseID;
       // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-      this.showCourseName(courseID);
       this.startPollingFAQ();
     })
   }
@@ -307,36 +279,29 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-    // Aseta virheviestejä.
-    private setError(type: string): void {
-      if (type === 'notParticipant') {
-        this.error = {
-          title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
-          message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
-          buttonText: ''
-        }
-      } else if  (type === 'notLoggedIn') {
-        this.error = {
-          title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-          message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
-          buttonText: ''
-        }
-        if (this.noDataConsent === true) {
-          this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
-        } else if (!this.isInIframe) {
-          this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
-        }
-
-      } else {
-        console.error('Ei virheviestiä tyypille: ' + type);
+  // Aseta virheviestejä.
+  private setError(type: string): void {
+    if (type === 'notParticipant') {
+      this.error = {
+        title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+        message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+        buttonText: ''
       }
-    }
+    } else if  (type === 'notLoggedIn') {
+      this.error = {
+        title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+        message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+        buttonText: ''
+      }
+      if (this.noDataConsent === true) {
+        this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
+      } else if (!this.isInIframe) {
+        this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
+      }
 
-  // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-  private showCourseName(courseID: string) {
-    this.courses.getCourseName(courseID).then(response => {
-      this.courseName = response ?? '';
-    }).catch( () => this.courseName = '');
+    } else {
+      console.error('Ei virheviestiä tyypille: ' + type);
+    }
   }
 
   private startPollingFAQ(): void {

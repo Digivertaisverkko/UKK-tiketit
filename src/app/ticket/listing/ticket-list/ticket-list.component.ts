@@ -37,7 +37,7 @@ interface ErrorNotification {
 export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() public courseID: string = '';
-  @Input() public user: User = {} as User;
+  @Input() public user: User | null = null;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
   public columnDefinitions: ColumnDefinition[];
@@ -143,7 +143,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public getHeadline(): string {
-    switch (this.user.asema) {
+    switch (this.user?.asema) {
       case 'opettaja':
         return $localize`:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset`;
         break;

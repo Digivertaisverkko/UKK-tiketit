@@ -3,9 +3,9 @@
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
       [courseID]="courseID"
-      *ngIf="isParticipant"
+      *ngIf="isParticipant && (user$ | async)"
       (ticketMessage)="newTicketMessage($event)"
-      [user]="user"
+      [user]="(user$ | async)"
       >
   </app-ticket-list>
 </section>
@@ -108,7 +108,9 @@
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
   <div  class="buttons-wrapper theme-actions"
-        *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && isParticipant"
+        *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                (user$ | async)?.asema === 'admin') &&
+                isParticipant"
         >
 
     <button class="submit-faq-btn"
@@ -127,15 +129,6 @@
   </div>
 
 </section>
-
-<app-error-card
-    i18n-title="@@Virhe"
-    message="{{ errorMessage }}"
-    *ngIf="errorMessage"
-    [styles]="{ margin: '1em 20% 1em 20%' }"
-    title="Virhe"
-    >
-</app-error-card>
 
 <!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. -->
 <section class="feedback">
