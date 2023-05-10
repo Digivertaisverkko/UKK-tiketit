@@ -22,14 +22,10 @@ export class AppComponent implements OnInit, OnDestroy  {
   public isLoading: Observable<boolean> | null = null;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
-  public user: User = {} as User;
-
   private unsubscribe$ = new Subject<void>();
 
   constructor (
     private authService: AuthService,
-    private router: Router,
-    private route : ActivatedRoute,
     private store : StoreService,
   ) {
     this.isLoading = this.store.trackLoading();
@@ -59,16 +55,6 @@ export class AppComponent implements OnInit, OnDestroy  {
       return window.self !== window.top;
     } catch (e) {
       return true;
-    }
-  }
-
-  public logInOut() {
-    if (this.isLogged) {
-      this.authService.saveRedirectURL();
-      this.authService.logout(this.courseID);
-    } else {
-      this.authService.saveRedirectURL();
-      this.authService.navigateToLogin(this.courseID);
     }
   }
 

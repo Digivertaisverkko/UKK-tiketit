@@ -1,39 +1,6 @@
+<app-headline></app-headline>
 
-<div class="view-header">
-    <!-- Ei käytä komponenttia, koska samassa elementissä nappeja, joiden
-      kanssa otsikon alaviiva ei näy kuten pitäisi. -->
-    <h1 class="main-header"
-        id="courseName"
-        *ngIf="courseName.length > 0 && !isInIframe">
-      <span>{{ courseName }}</span>
-    </h1>
-
-  <div class="spacer"></div>
-
-  <button aria-label="Kurssin asetukset"
-          i18n-aria-label="@@Kurssin asetukset"
-          class="settings-button"
-          mat-icon-button
-          *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') &&
-              isParticipant"
-          [routerLink]="'/course/' + courseID + '/settings'"
-          >
-    <mat-icon class="settings-icon">settings</mat-icon>
-  </button>
-
-  <button aria-label="Profiili"
-          class="settings-button"
-          (click)="stopPolling()"
-          i18n-aria-label="@@Profiili"
-          mat-icon-button
-          *ngIf="isParticipant && isInIframe"
-          [routerLink]="'/course/' + courseID + '/profile'"
-          >
-    <mat-icon class="settings-icon">account_circle</mat-icon>
-  </button>
-</div>
-
-<section>
+<section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
       [courseID]="courseID"
       *ngIf="isParticipant"

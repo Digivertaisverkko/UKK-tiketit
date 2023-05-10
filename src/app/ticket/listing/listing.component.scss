@@ -23,31 +23,6 @@ app-error-card,
   margin-left: -15px;
 }
 
-.embedded-button {
-  font-size: 85%;
-  margin-top: 1rem;
-  white-space: nowrap;
-}
-
-.settings-button {
-  align-self: center;
-  font-size: 2rem;
-  width: 1em;
-  height: 1em;
-  margin-top: 1rem;
-  position: relative;
-
-  // margin-bottom: 1.3rem;
-  mat-icon {
-    font-size: inherit;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: auto;
-    height: auto;
-  }
-}
-
 .feedback {
   margin-top: 2rem;
   margin-left: 0;
@@ -57,17 +32,9 @@ app-error-card,
   }
 }
 
-h1 {
-  padding-right: 2rem;
-}
-
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
 h2 {
   padding-left: 20px;
-}
-
-.vertical-spacer {
-  height: 1.5rem;
 }
 
 .mdc-card__actions {

@@ -11,7 +11,7 @@ export class StoreService {
 
   // Kaikki jäsenmuuttujat tulisi olla privaatteja.
   private isLoading$: Subject<boolean> = new Subject();
-  private isLoggedIn$: BehaviorSubject<any> = new BehaviorSubject(null);
+  private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
   // Voidaan välittää viestejä komponenttien välillä.
   private messageEmitter$ = new Subject<string>();
@@ -20,8 +20,11 @@ export class StoreService {
 
   constructor() { }
 
-  // Tämään hetkinen kirjautumisen tila.
-  public getIsLoggedIn(): Boolean {
+  /* get -alkuiset palauttavat sen hetkisen arvon. Huomioi, että
+    esimerkiksi käyttäjätietoja ei sivun latautumisen alussa ole
+    välttämättä ehditty vielä hakea, vaan arvo on null. */
+
+  public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
   }
 
@@ -123,6 +126,10 @@ export class StoreService {
 
   public trackLoading(): Observable<boolean> {
     return this.isLoading$.asObservable();
+  }
+
+  public trackLoggedIn(): Observable<boolean | null> {
+    return this.isLoggedIn$.asObservable();
   }
 
   public trackMessages(): Observable<string> {

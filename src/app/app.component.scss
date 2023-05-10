@@ -25,6 +25,12 @@ main {
 .embedded-wrapper {
   display: flex;
   justify-content: flex-end;
+  margin-right: -1.5rem;
+
+  button {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+  }
 }
 
 // .embedded-button {

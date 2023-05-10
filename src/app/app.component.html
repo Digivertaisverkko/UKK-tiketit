@@ -13,10 +13,10 @@
         >
     </mat-progress-bar>
 
-
       <div class="embedded-wrapper" *ngIf="isInIframe">
-        <button aria-label="Menu"
-                i18n-aria-label=""
+
+        <button aria-label="Käyttäjävalikko"
+                i18n-aria-label="@@Käyttäjävalikko"
                 mat-icon-button
                 [matMenuTriggerFor]="menu"
                 >
@@ -24,12 +24,7 @@
         </button>
 
         <mat-menu #menu="matMenu">
-          <app-usermenu
-              [courseID]="courseID"
-              [isLoggedIn]="isLogged"
-              [user]="user"
-              >
-            </app-usermenu>
+          <app-usermenu></app-usermenu>
         </mat-menu>
 
       </div>

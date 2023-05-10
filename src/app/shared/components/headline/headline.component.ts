@@ -16,7 +16,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
       <span>{{headlineText}}</span>
     </h1>
 
-    <div class="vertical-spacer" *ngIf="isInIframe || !headlineText"></div>
+    <!-- <div class="vertical-spacer" *ngIf="isInIframe || !headlineText"></div> -->
   `,
   styleUrls: ['./headline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

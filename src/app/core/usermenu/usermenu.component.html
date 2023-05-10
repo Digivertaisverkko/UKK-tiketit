@@ -1,5 +1,4 @@
 <button (click)="openInNewTab()"
-        class="embedded-button"
         i18n="@@Avaa uuteen välilehteen"
         mat-menu-item
         *ngIf="isInIframe"
@@ -12,33 +11,64 @@
           [disabled]="disableLangSelect"
           i18n="@@vaihda kieli"
           >
-    Change to English
-  </button>
+  Change to English
+</button>
 
-  <button i18n="@@Profiili"
+<button i18n="@@Profiili"
+        i18n-aria-label="@@Profiili"
+        mat-menu-item
+        *ngIf="courseID !== null && (isLoggedIn$ | async) === true"
+        [routerLink]="'/course/' + courseID + '/profile'"
+        >
+  Profiili
+</button>
+
+
+<button i18n="@@Kurssin asetukset"
+        mat-menu-item
+        *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                (user$ | async)?.asema === 'admin') &&
+              (isParticipant$ | async) === true"
+        [routerLink]="'/course/' + courseID + '/settings'"
+        >
+        Kurssin asetukset
+</button>
+
+<ng-container *ngIf="isDevBuild">
+
+  <button (click)="setHeader(true)"
           mat-menu-item
-          *ngIf="courseID !== null && isLoggedIn === true"
-          [routerLink]="'/course/' + courseID + '/profile'"
+          *ngIf="isInIframe; else headerOff"
           >
-    Profiili
+      Header päälle (dev)
   </button>
 
-  <button (click)="logout()"
-          i18n="@@Kirjaudu ulos"
-          mat-menu-item
-          *ngIf="isLoggedIn === true; else logIn"
-          >
-    Kirjaudu ulos
-  </button>
-
-  <ng-template #logIn>
-    <button (click)="login()"
-            i18n="@@Kirjaudu sisään"
+  <ng-template #headerOff>
+    <button (click)="setHeader(false)"
             mat-menu-item
             >
-      Kirjaudu sisään
+      Header pois (dev)
     </button>
   </ng-template>
+
+</ng-container>
+
+
+<button (click)="logout()"
+        i18n="@@Kirjaudu ulos"
+        mat-menu-item
+        *ngIf="!isInIframe && (isLoggedIn$ | async) === true"
+        >
+  Kirjaudu ulos
+</button>
+
+<button (click)="login()"
+        i18n="@@Kirjaudu sisään"
+        mat-menu-item
+        *ngIf="(isLoggedIn$ | async) === false"
+        >
+  Kirjaudu sisään
+</button>
 
 
   <!--  + Kurssin asetukset
