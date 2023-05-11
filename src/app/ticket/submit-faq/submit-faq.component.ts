@@ -11,20 +11,9 @@ import schema from 'src/app/shared/editor/schema';
 import { Constants } from 'src/app/shared/utils';
 import { EditAttachmentsComponent }
     from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
-import { AddTicketResponse, FileInfo, Liite, Tiketti, UusiUKK }
+import { AddTicketResponse, FileInfo, Kentta, Liite, Tiketti, UusiUKK }
     from 'src/app/ticket/ticket.models';
 import { TicketService } from 'src/app/ticket/ticket.service';
-
-interface AdditionalField {
-  id: string;
-  otsikko: string;
-  arvo: string;
-  tyyppi: string;
-  ohje: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  valinnat: string[];
-}
 
 @Component({
   selector: 'app-submit-faq',
@@ -45,7 +34,7 @@ export class SubmitFaqComponent implements OnInit {
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public ticketFields: AdditionalField[] = [];
+  public ticketFields: Kentta[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
@@ -145,7 +134,7 @@ export class SubmitFaqComponent implements OnInit {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseId)
     .then((response) => {
-      this.ticketFields = response as AdditionalField[];
+      this.ticketFields = response as Kentta[];
       this.buildAdditionalFields();
     });
   }
@@ -159,7 +148,7 @@ export class SubmitFaqComponent implements OnInit {
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       this.originalTicket = response;
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
-      this.ticketFields = response.kentat as AdditionalField[];
+      this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
 
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli
