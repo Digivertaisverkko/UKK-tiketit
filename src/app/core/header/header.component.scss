@@ -34,15 +34,19 @@
 //----------------- Muut -------------------------------------------------------
 
 .logo {
-    margin: auto;
-    height: 80%;
+  margin: auto;
+  height: 80%;
 
-    img { height: 100%; }
+  img {
+    height: 100%;
+  }
 
-    &-clickable {
-      &:hover { filter: brightness(97%); }
-      cursor: pointer;
+  &-clickable {
+    &:hover {
+      filter: brightness(97%);
     }
+    cursor: pointer;
+  }
 }
 
 .user-info {

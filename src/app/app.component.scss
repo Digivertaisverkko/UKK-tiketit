@@ -23,40 +23,48 @@ main {
 }
 
 .embedded-wrapper {
-  align-items: center;
+  width: 100%;
+  // align-items: space-between;
+  height: 2.3rem;
   display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
-  margin-right: -1rem;
+  // margin-right: -1rem;
+}
 
-  button {
-    margin-bottom: 0.4rem;
-    margin-top: 0.2rem;
+.logo {
+  margin: auto;
+  height: 80%;
+
+  img { 
+      height: 100%;
+  }
+
+  &-clickable {
+    &:hover { filter: brightness(97%); }
+    cursor: pointer;
   }
 }
 
-// .embedded-button {
-//   display: inline-block;
-//   font-size: 75%;
-//   // width: 15em;
-// }
+.vertical-spacer {
+  height: 0.8rem;
+}
 
-
-  @media (max-width: 1024px) {
-    main {
-      width: 100%;
-      min-width: 280px;
-    }
+@media (max-width: 1024px) {
+  main {
+    width: 100%;
+    min-width: 280px;
   }
+}
 
-  @media (max-width: 839.98px) {
-    main {
-      padding: 0 20px 20px 20px;
-    }
+@media (max-width: 839.98px) {
+  main {
+    padding: 0 20px 20px 20px;
   }
+}
 
-  @media (max-width: $XSmall) {
-    main {
-      padding: 0 3px 3px 3px;
-    }
+@media (max-width: $XSmall) {
+  main {
+    padding: 0 3px 3px 3px;
   }
+}
