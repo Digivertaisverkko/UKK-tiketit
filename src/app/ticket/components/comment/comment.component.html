@@ -5,26 +5,12 @@
 
 <mat-card-header>
 
-  <img  alt=''
-        mat-card-avatar
-        src="../../../assets/logos/UniOulu.png"
-        >
-  <mat-card-title class="theme-profile-name">
-    {{ comment.lahettaja.nimi }}
-  </mat-card-title>
-
-  <mat-card-subtitle class="theme-label">
-    <span>{{ getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema) }}
-      -
-    </span>
-    <span i18n="@@Tänään" *ngIf="isToday(comment.aikaleima)" >
-      Tänään
-    </span>
-    <span *ngIf="!isToday(comment.aikaleima)">
-      {{ comment.aikaleima | date: 'shortDate' }}
-    </span>
-    {{ comment.aikaleima | date: 'shortTime' }}
-  </mat-card-subtitle>
+  <app-sender-info
+      [aikaleima]="comment.aikaleima"
+      [alignLeft]=true
+      [user]="user"
+      >
+    </app-sender-info>
 
   <div class="spacer"></div>
 

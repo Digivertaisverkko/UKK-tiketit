@@ -1,11 +1,17 @@
 <div class="user-info-block">
 
-  <div class="text-info">
+  <ng-container *ngIf="alignLeft === true">
+    <img  mat-card-avatar
+          src="../../../assets/logos/UniOulu.png" alt="">
+  </ng-container>
+
+  <div  class="text-info"
+        [ngStyle]="{'text-align': alignLeft ? 'left' : 'right'}"
+        >
     <span class="theme-profile-name">{{ user?.nimi }}</span>
     <div class="theme-label">
-      &nbsp;
       <span>{{senderTitle}}</span>
-      -
+      –
       <span *ngIf="isItToday; else notToday" i18n="@@Tänään">
         Tänään
       </span>
@@ -18,6 +24,8 @@
     </div>
   </div>
 
-  <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+  <ng-container *ngIf="alignLeft === false">
+    <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
+  </ng-container>
 
 </div>

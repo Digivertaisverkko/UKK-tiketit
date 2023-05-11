@@ -12,8 +12,6 @@ $debug: false;
 
   .text-info {        // Käyttäjätiedot
     @if $debug { border: 1px solid gray; }
-    margin-top: 0.3rem;
-    text-align: right;
     .theme-profile-name {
       display: block;
       line-height: 1.15;

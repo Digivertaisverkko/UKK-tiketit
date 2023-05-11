@@ -14,7 +14,7 @@ export class SenderInfoComponent implements OnInit {
 
   @Input() aikaleima: string | Date = '';
   @Input() user: User | null = {} as User;
-
+  @Input() alignLeft: boolean = false;
   public isItToday: boolean;
   public senderTitle: string = '';
   private currentUserName: string | null;
@@ -31,7 +31,6 @@ export class SenderInfoComponent implements OnInit {
   }
 
   public getSenderTitle(name: string, role: string | null): string {
-    if (name == this.currentUserName) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
         return $localize`:@@Opiskelija:Opiskelija`; break;
@@ -40,6 +39,7 @@ export class SenderInfoComponent implements OnInit {
       case 'admin':
         return $localize`:@@Admin:Admin`; break;
       default:
+        if (name == this.currentUserName) return $localize`:@@Minä:Minä`
         return '';
     }
   }
