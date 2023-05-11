@@ -239,6 +239,7 @@ export class AuthService {
     } catch (error: any) {
       return null
     }
+    this.store.setLoggedIn();
     return response
   }
 
