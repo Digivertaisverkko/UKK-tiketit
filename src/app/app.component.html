@@ -15,6 +15,8 @@
 
       <div class="embedded-wrapper" *ngIf="isInIframe">
 
+        <div class="user-role">{{ (user$ | async)?.asemaStr }}</div>
+
         <button aria-label="Käyttäjävalikko"
                 i18n-aria-label="@@Käyttäjävalikko"
                 i18n-matTooltip="@@Käyttäjävalikko"
@@ -23,7 +25,7 @@
                 [matTooltipShowDelay]="600"
                 matTooltip="Käyttäjävalikko"
                 >
-          <mat-icon>menu</mat-icon>
+          <mat-icon>account_circle</mat-icon>
         </button>
 
         <mat-menu #menu="matMenu">

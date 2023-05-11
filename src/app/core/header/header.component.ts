@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
     from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { StoreService } from '../store.service';
-import { AuthService } from '../auth.service';
-import { User, Role } from 'src/app/core/core.models';
+import { User } from 'src/app/core/core.models';
 
 
 @Component({
@@ -25,8 +24,8 @@ export class HeaderComponent implements OnInit {
   private _language!: string;
 
   constructor (
-    private change: ChangeDetectorRef,
     private route : ActivatedRoute,
+    private change: ChangeDetectorRef,
     private router: Router,
     private store : StoreService
     ) {
@@ -39,7 +38,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public logoClicked() {
-    this.store.sendMessage('go begin');
+    this.store.sendMessage('go begin'); 
   }
 
   private trackCourseID() {
@@ -56,24 +55,8 @@ export class HeaderComponent implements OnInit {
   trackUserInfo() {
     this.store.trackUserInfo().subscribe(response => {
         this.user = response;
-        this.userRole = this.getRoleString(this.user?.asema ?? null);
         this.change.detectChanges();
     })
-  }
-
-  getRoleString(asema: Role | null): string {
-    let role: string;
-      switch (asema) {
-        case 'opiskelija':
-          role = $localize`:@@Opiskelija:Opiskelija`; break;
-        case 'opettaja':
-          role = $localize`:@@Opettaja:Opettaja`; break;
-        case 'admin':
-          role = $localize`:@@Admin:Admin`; break;
-        default:
-          role = '';
-      }
-      return role;
   }
 
  /*

@@ -2,16 +2,15 @@
 
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import cryptoRandomString from 'crypto-random-string';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import * as shajs from 'sha.js';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 
 import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { Inject, LOCALE_ID } from '@angular/core';
-import { getCourseIDfromURL } from '../shared/utils';
 import { GenericResponse, Role, User } from './core.models';
 import { Kurssini } from '../course/course.models';
 import { CourseService } from '../course/course.service';
@@ -102,6 +101,22 @@ export class AuthService {
     })
   }
 
+  // Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
+  private getRoleString(asema: Role | null): string {
+    let role: string;
+      switch (asema) {
+        case 'opiskelija':
+          role = $localize`:@@Opiskelija:Opiskelija`; break;
+        case 'opettaja':
+          role = $localize`:@@Opettaja:Opettaja`; break;
+        case 'admin':
+          role = $localize`:@@Admin:Admin`; break;
+        default:
+          role = '';
+      }
+      return role;
+  }
+
   public async sendDataConsent(tokenid: string | null, allow: boolean):
       Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
@@ -190,6 +205,7 @@ export class AuthService {
     let newUserInfo: any;
     if (response != null && response?.id != null)  {
       newUserInfo = response;
+      newUserInfo.asemaStr = this.getRoleString(newUserInfo.asema);
       this.store.setLoggedIn();
       this.checkIfParticipant(courseID);
     } else {

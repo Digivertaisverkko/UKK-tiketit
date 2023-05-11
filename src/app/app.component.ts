@@ -23,12 +23,14 @@ export class AppComponent implements OnInit, OnDestroy  {
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
   private unsubscribe$ = new Subject<void>();
+  public user$: Observable<User | null>;
 
   constructor (
     private authService: AuthService,
     private store : StoreService,
   ) {
     this.isLoading = this.store.trackLoading();
+    this.user$ = this.store.trackUserInfo();
   }
 
   ngOnInit(): void {

@@ -20,4 +20,5 @@ export interface User {
   nimi: string;
   sposti: string;
   asema: Role;
+  asemaStr?: string
 }
