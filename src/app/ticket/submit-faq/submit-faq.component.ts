@@ -120,13 +120,15 @@ export class SubmitFaqComponent implements OnInit {
       question: [
         '',
         Validators.compose([
-          EditorValidators.required(schema)
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
         ])
       ],
       answer: [
         '',
         Validators.compose([
-          EditorValidators.required(schema)
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
         ])
       ],
       attachments: ['']
