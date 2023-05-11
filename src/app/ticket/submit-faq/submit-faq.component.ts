@@ -11,7 +11,7 @@ import schema from 'src/app/shared/editor/schema';
 import { Constants } from 'src/app/shared/utils';
 import { EditAttachmentsComponent }
     from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
-import { AddTicketResponse, Liite, Tiketti, UusiUKK }
+import { AddTicketResponse, FileInfo, Liite, Tiketti, UusiUKK }
     from 'src/app/ticket/ticket.models';
 import { TicketService } from 'src/app/ticket/ticket.service';
 
@@ -24,16 +24,6 @@ interface AdditionalField {
   pakollinen: boolean;
   esitaytettava: boolean;
   valinnat: string[];
-}
-
-interface FileInfo {
-  filename: string;
-  file: File;
-  error?: string;
-  errorToolTip?: string;
-  progress?: number;
-  uploadError?: string;
-  done?: boolean;
 }
 
 @Component({

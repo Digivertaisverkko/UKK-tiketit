@@ -4,19 +4,10 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
     NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService } from '../../ticket.service';
-import { Liite } from '../../ticket.models';
+import { FileInfo, Liite } from '../../ticket.models';
 
-// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
-// lähetysvaiheessa.
-interface FileInfo {
-  filename: string;
-  file: File;
+interface FileInfoWithSize extends FileInfo {
   filesize: number;
-  error?: string;
-  errorToolTip?: string;
-  progress?: number;
-  uploadError?: string;
-  done?: boolean;
 }
 
 @Component({
@@ -44,12 +35,12 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
-  @Output() fileListOutput = new EventEmitter<FileInfo[]>();
+  @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   public errors: ValidationErrors | null = null;
-  public fileInfoList: FileInfo[] = [];
+  public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
   public readonly new = $localize `:@@uusi:uusi` + ", ";
@@ -116,7 +107,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     for (let file of event.target.files) {
       if (this.fileInfoList.some(item => item.filename === file.name)) continue
       let filesizeNumber = Number(file.size);
-      let fileinfo: FileInfo = {
+      let fileinfo: FileInfoWithSize = {
         file: file,
         filename: file.name,
         filesize: filesizeNumber,

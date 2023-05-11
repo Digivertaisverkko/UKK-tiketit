@@ -15,6 +15,18 @@ export interface AddTicketResponse {
   }
 }
 
+// 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
+// lähetysvaiheessa.
+export interface FileInfo {
+  filename: string;
+  file: File;
+  error?: string;
+  errorToolTip?: string;
+  progress?: number;
+  uploadError?: string;
+  done?: boolean;
+}
+
 /* Tiketin lisäkenttä.
 Metodi: getTicketInfo -> getTickgetFields,
 API: /api/tiketti/:tiketti-id/kentat/
