@@ -13,20 +13,9 @@ import schema from 'src/app/shared/editor/schema';
 import { Constants } from 'src/app/shared/utils';
 import { EditAttachmentsComponent }
     from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
-import { AddTicketResponse, FileInfo, Liite, UusiTiketti }
+import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
     from 'src/app/ticket/ticket.models';
 import { TicketService } from 'src/app/ticket/ticket.service';
-
-interface AdditionalField {
-  id: string;
-  otsikko: string;
-  arvo: string;
-  tyyppi: string;
-  ohje: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  valinnat: string[];
-}
 
 @Component({
   selector: 'app-submit-ticket',
@@ -48,7 +37,7 @@ export class SubmitTicketComponent implements OnInit {
   public oldAttachments: Liite[] = [];
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public ticketFields: AdditionalField[] = [];
+  public ticketFields: Kentta[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
@@ -142,7 +131,7 @@ export class SubmitTicketComponent implements OnInit {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseId)
     .then((response) => {
-      this.ticketFields = response as AdditionalField[];
+      this.ticketFields = response as Kentta[];
       this.buildAdditionalFields();
     });
   }
@@ -155,7 +144,7 @@ export class SubmitTicketComponent implements OnInit {
       this.oldAttachments = response.liitteet ?? [];
       this.commentID = response.kommenttiID;
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
-      this.ticketFields = response.kentat as AdditionalField[];
+      this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
     });
   }
