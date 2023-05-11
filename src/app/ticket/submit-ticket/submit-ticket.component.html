@@ -122,6 +122,11 @@
                 >
       Pakollinen kenttä.
     </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="message?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
     <p  class="theme-success-message"

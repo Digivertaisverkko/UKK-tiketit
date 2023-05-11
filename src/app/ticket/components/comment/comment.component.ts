@@ -6,21 +6,11 @@ import { Subject, Subscription, first } from 'rxjs';
 import { TicketService } from '../../ticket.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { isToday } from 'src/app/shared/utils';
-import { Kommentti } from '../../ticket.models';
+import { FileInfo, Kommentti } from '../../ticket.models';
 import { User } from 'src/app/core/core.models';
 import { StoreService } from 'src/app/core/store.service';
 
 import schema from '../../../shared/editor/schema';
-
-interface FileInfo {
-  filename: string;
-  file: File;
-  error?: string;
-  errorToolTip?: string;
-  progress?: number;
-  uploadError?: string;
-  done?: boolean;
-}
 
 @Component({
   selector: 'app-comment',
@@ -79,7 +69,13 @@ export class CommentComponent implements AfterViewInit{
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', EditorValidators.required(schema) ],
+      message: [
+        '',
+        Validators.compose([
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
+        ])
+      ],
       checkboxes: [ this.comment.tila ],
       attachments: ['']
     });

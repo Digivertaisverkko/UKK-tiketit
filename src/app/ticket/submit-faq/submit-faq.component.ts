@@ -1,39 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators
-    } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject } from 'rxjs';
+
 import { CourseService } from 'src/app/course/course.service';
-import { EditAttachmentsComponent
-    } from '../components/edit-attachments/edit-attachments.component';
-import { TicketService  } from '../ticket.service';
-import { Constants } from '../../shared/utils';
-import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models';
-
-import schema from '../../shared/editor/schema';
-
-interface AdditionalField {
-  id: string;
-  otsikko: string;
-  arvo: string;
-  tyyppi: string;
-  ohje: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  valinnat: string[];
-}
-
-interface FileInfo {
-  filename: string;
-  file: File;
-  error?: string;
-  errorToolTip?: string;
-  progress?: number;
-  uploadError?: string;
-  done?: boolean;
-}
+import schema from 'src/app/shared/editor/schema';
+import { Constants } from 'src/app/shared/utils';
+import { EditAttachmentsComponent }
+    from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
+import { AddTicketResponse, FileInfo, Kentta, Liite, Tiketti, UusiUKK }
+    from 'src/app/ticket/ticket.models';
+import { TicketService } from 'src/app/ticket/ticket.service';
 
 @Component({
   selector: 'app-submit-faq',
@@ -54,7 +34,7 @@ export class SubmitFaqComponent implements OnInit {
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public ticketFields: AdditionalField[] = [];
+  public ticketFields: Kentta[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
@@ -120,13 +100,15 @@ export class SubmitFaqComponent implements OnInit {
       question: [
         '',
         Validators.compose([
-          EditorValidators.required(schema)
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
         ])
       ],
       answer: [
         '',
         Validators.compose([
-          EditorValidators.required(schema)
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
         ])
       ],
       attachments: ['']
@@ -152,7 +134,7 @@ export class SubmitFaqComponent implements OnInit {
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseId)
     .then((response) => {
-      this.ticketFields = response as AdditionalField[];
+      this.ticketFields = response as Kentta[];
       this.buildAdditionalFields();
     });
   }
@@ -166,7 +148,7 @@ export class SubmitFaqComponent implements OnInit {
       this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       this.originalTicket = response;
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
-      this.ticketFields = response.kentat as AdditionalField[];
+      this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
 
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli

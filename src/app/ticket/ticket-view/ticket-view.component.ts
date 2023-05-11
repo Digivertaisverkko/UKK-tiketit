@@ -11,20 +11,10 @@ import { Constants } from '../../shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { User } from '../../core/core.models'
-import { NewCommentResponse, Tiketti } from '../ticket.models';
+import { FileInfo, NewCommentResponse, Tiketti } from '../ticket.models';
 import { StoreService } from 'src/app/core/store.service';
 
 import schema from '../../shared/editor/schema';
-
-interface FileInfo {
-  filename: string;
-  file: File;
-  error?: string;
-  errorToolTip?: string;
-  progress?: number;
-  uploadError?: string;
-  done?: boolean;
-}
 
 @Component({
   selector: 'app-ticket-view',
@@ -123,7 +113,13 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', EditorValidators.required(schema) ],
+      message: [
+        '',
+        Validators.compose([
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
+        ])
+      ],
       attachments: ['']
     });
   }

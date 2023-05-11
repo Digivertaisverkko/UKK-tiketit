@@ -115,13 +115,23 @@
                 >
       Pakollinen kenttä.
     </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="question?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    </mat-error>
 
     <h1><span i18n="@@Vastaus">Vastaus</span><span>*</span></h1>
     <app-editor formControlName="answer"></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
-                *ngIf="question?.errors?.['required'] && question?.touched"
+                *ngIf="answer?.errors?.['required'] && answer?.touched"
                 >
       Pakollinen kenttä.
+    </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="answer?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
     </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
