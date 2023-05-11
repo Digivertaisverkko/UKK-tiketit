@@ -15,6 +15,22 @@ export interface AddTicketResponse {
   }
 }
 
+/* Tiketin lisäkenttä.
+  Metodi: getTicketInfo -> getTickgetFields,
+  API: /api/tiketti/:tiketti-id/kentat/
+  Uusia propertyjä: tyyppi ja ohje.
+  Palautustyypit tarkistettu 27.4.23. */
+  export interface Kentta {
+    id: string;
+    otsikko: string;
+    arvo: string;
+    tyyppi: string;
+    ohje: string;
+    pakollinen: boolean;
+    esitaytettava: boolean;
+    valinnat: string[];
+  }
+
 // Tiketin kommentti
 // Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
 // TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
@@ -46,22 +62,6 @@ export interface SortableTicket {
   aloittajanNimi: string
   tilaID: number;
   tila: string;
-}
-
-/* Tiketin lisäkenttä.
-  Metodi: getTicketInfo -> getTickgetFields,
-  API: /api/tiketti/:tiketti-id/kentat/
-  Uusia propertyjä: tyyppi ja ohje.
-  Palautustyypit tarkistettu 27.4.23. */
-export interface Kentta {
-  id: string;
-  otsikko: string;
-  arvo: string;
-  tyyppi: string;
-  ohje: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  valinnat: string[];
 }
 
 // Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
