@@ -1,6 +1,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -12,6 +13,8 @@ import { EditAttachmentsComponent } from '../components/edit-attachments/edit-at
 import { User } from '../../core/core.models'
 import { NewCommentResponse, Tiketti } from '../ticket.models';
 import { StoreService } from 'src/app/core/store.service';
+
+import schema from '../../shared/editor/schema';
 
 interface FileInfo {
   filename: string;
@@ -120,7 +123,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', Validators.required ],
+      message: [ '', EditorValidators.required(schema) ],
       attachments: ['']
     });
   }
