@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject, Subscription, first } from 'rxjs';
 
 import { TicketService } from '../../ticket.service';
@@ -8,6 +9,8 @@ import { isToday } from 'src/app/shared/utils';
 import { Kommentti } from '../../ticket.models';
 import { User } from 'src/app/core/core.models';
 import { StoreService } from 'src/app/core/store.service';
+
+import schema from '../../../shared/editor/schema';
 
 interface FileInfo {
   filename: string;
@@ -76,7 +79,7 @@ export class CommentComponent implements AfterViewInit{
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', Validators.required ],
+      message: [ '', EditorValidators.required(schema) ],
       checkboxes: [ this.comment.tila ],
       attachments: ['']
     });

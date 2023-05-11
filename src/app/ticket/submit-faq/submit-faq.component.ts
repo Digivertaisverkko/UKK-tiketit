@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators
     } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject } from 'rxjs';
 import { CourseService } from 'src/app/course/course.service';
 import { EditAttachmentsComponent
@@ -10,6 +11,8 @@ import { EditAttachmentsComponent
 import { TicketService  } from '../ticket.service';
 import { Constants } from '../../shared/utils';
 import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models';
+
+import schema from '../../shared/editor/schema';
 
 interface AdditionalField {
   id: string;
@@ -117,13 +120,13 @@ export class SubmitFaqComponent implements OnInit {
       question: [
         '',
         Validators.compose([
-          Validators.required
+          EditorValidators.required(schema)
         ])
       ],
       answer: [
         '',
         Validators.compose([
-          Validators.required
+          EditorValidators.required(schema)
         ])
       ],
       attachments: ['']

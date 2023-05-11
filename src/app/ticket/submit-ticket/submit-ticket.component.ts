@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Validators as EditorValidators } from 'ngx-editor';
 import { Observable, Subject } from 'rxjs';
 
 import { EditAttachmentsComponent }
@@ -13,6 +14,8 @@ import { Constants } from '../../shared/utils';
 import { User } from '../../core/core.models'
 import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models';
 import { StoreService } from 'src/app/core/store.service';
+
+import schema from '../../shared/editor/schema';
 
 interface AdditionalField {
   id: string;
@@ -123,7 +126,7 @@ export class SubmitTicketComponent implements OnInit {
       message: [
         '',
         Validators.compose([
-          Validators.required
+          EditorValidators.required(schema)
         ])
       ],
       attachments: [''],
