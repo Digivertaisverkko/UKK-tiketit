@@ -126,7 +126,8 @@ export class SubmitTicketComponent implements OnInit {
       message: [
         '',
         Validators.compose([
-          EditorValidators.required(schema)
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
         ])
       ],
       attachments: [''],
