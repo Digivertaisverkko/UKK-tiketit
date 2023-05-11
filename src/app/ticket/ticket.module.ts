@@ -10,7 +10,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog'; 
 import { MatListModule } from '@angular/material/list';
-import { NgxFilesizeModule } from 'ngx-filesize';
 
 // import { MatInputModule } from '@angular/material/input';
 // import { MatFormFieldModule } from '@angular/material/form-field';
@@ -48,7 +47,6 @@ import { TicketListComponent } from './listing/ticket-list/ticket-list.component
     MatDialogModule,
     MatListModule,
     MatSortModule,
-    NgxFilesizeModule,
     SharedModule,
     TicketRoutingModule,
   ],

@@ -53,21 +53,20 @@
 
 </ng-container>
 
-
-<button (click)="logout()"
-        i18n="@@Kirjaudu ulos"
-        mat-menu-item
-        *ngIf="!isInIframe && (isLoggedIn$ | async) === true"
-        >
-  Kirjaudu ulos
-</button>
-
 <button (click)="login()"
         i18n="@@Kirjaudu sisään"
         mat-menu-item
         *ngIf="(isLoggedIn$ | async) === false"
         >
   Kirjaudu sisään
+</button>
+
+<button (click)="logout()"
+        i18n="@@Kirjaudu ulos"
+        mat-menu-item
+        *ngIf="(isLoggedIn$ | async) === true"
+        >
+  Kirjaudu ulos
 </button>
 
 

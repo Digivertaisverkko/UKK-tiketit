@@ -5,8 +5,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FilesizeModule } from './pipes/filesize.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
+
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { EditorLegacyComponent } from './editor-legacy/editor-legacy.component';
@@ -54,7 +56,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     BeginningButtonComponent,
     SafeHtmlPipe,
     SearchBarComponent,
-    SenderInfoComponent
+    SenderInfoComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   exports: [
     CommonModule,
     BrowserAnimationsModule,
+    FilesizeModule,
     FormsModule,
     MaterialModule,
     HeadlineComponent,
