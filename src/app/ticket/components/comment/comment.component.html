@@ -103,13 +103,6 @@
 
   <form [formGroup]="form" (ngSubmit)="sendComment(comment.id)">
 
-<!--     <app-editor-legacy  [disabled]="state==='sending'"
-                        [(editorContent)]="comment.viesti"
-                        *ngIf="editingCommentID === comment.id"
-                        >
-    <!-- *ngIf="!ticketIdFromParent && editingComment === comment.id" -->
-    <!-- </app-editor-legacy> -->
-
     <app-editor formControlName="message"
                 *ngIf="editingCommentID === comment.id"
                 >
