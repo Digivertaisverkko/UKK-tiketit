@@ -123,7 +123,13 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', EditorValidators.required(schema) ],
+      message: [
+        '',
+        Validators.compose([
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
+        ])
+      ],
       attachments: ['']
     });
   }
