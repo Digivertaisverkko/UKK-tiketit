@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
-import { EditorLegacyComponent } from './editor-legacy/editor-legacy.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
@@ -47,7 +46,6 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   declarations: [
     ErrorCardComponent,
     EditorComponent,
-    EditorLegacyComponent,
     HeadlineComponent,
     MenuLinkComponent,
     MenuSrcComponent,
@@ -72,7 +70,6 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     HeadlineComponent,
     ErrorCardComponent,
     EditorComponent,
-    EditorLegacyComponent,
     MenuLinkComponent,
     MenuSrcComponent,
     BeginningButtonComponent,
