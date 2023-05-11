@@ -25,36 +25,29 @@ function getLanguage(): string {
   var language: string;
   // console.log('urlLang: ' + urlLang);
   // Upotuksessa kieli tulee URL-parametrina.
-  const urlLang = url.searchParams.get('lang');
-  if (urlLang !== null) {
-    if (urlLang == 'en') {
-      language = 'en-US';
-      console.log('enkku valittu url:sta');
-    } else if (urlLang == 'fi') {
-      language = 'fi-FI';
-      console.log('suomi valittu url:sta');
+
+  var savedlanguage: string | null = localStorage.getItem('language');
+  if (savedlanguage !== null) {
+    if (savedlanguage === 'en-US' || savedlanguage === "fi-FI") {
+      language = savedlanguage;
     } else {
-      language = 'en-US';
-      console.log('Tuntematon kieli: "' + urlLang  + '", käytetään englantia.');
+      console.error('app.initializers.ts: Tuntematon tallennettu kieli: ' +
+          savedlanguage);
+      console.log('Käytetään oletuskieltä');
+      // Oletus on upotuksessa englanti, koska käyttäjä ei voi vaihtaa kieltä
+      // toisin kuin normaalinäkymässä.
+      language = isInIframe() ? 'en-US' : 'fi-FI'; 
     }
   } else {
-    var savedlanguage: string | null = localStorage.getItem('language');
-    if (savedlanguage !== null) {
-      if (savedlanguage === 'en-US' || savedlanguage === "fi-FI") {
-        language = savedlanguage;
-      } else {
-        console.error('app.initializers.ts: Tuntematon tallennettu kieli: ' +
-            savedlanguage);
-        console.log('Käytetään oletuskieltä');
-        // Oletus on upotuksessa englanti, koska käyttäjä ei voi vaihtaa kieltä
-        // toisin kuin normaalinäkymässä.
-        language = isInIframe() ? 'en-US' : 'fi-FI'; 
-      }
+    const urlLang = url.searchParams.get('lang');
+    if (urlLang !== null) {
+     language = getLangFormat(urlLang);
     } else {
       console.log('Ei kieltä tallennettuna tai URL:ssa, käytetään oletusta: fi-FI');
       language = isInIframe() ? 'en-US' : 'fi-FI'; 
     }
   }
+
     // Jos haluaa käyttää selaimen kieltä.
     // language = navigator.language;
     // console.log('navigator.language -kieli: ' + language);
@@ -63,6 +56,22 @@ function getLanguage(): string {
     //   const browserLanguages: string[] | undefined = getBrowserLocales();
     //   console.log('Saatiin kielet: ' + browserLanguages);
   return language;
+}
+
+// Muunna URL:ssa oleva kielen muoto asetuksissa vaadituksi.
+function getLangFormat(langInUrl: string): string {
+  let lang: string;
+  if (langInUrl == 'en') {
+    lang = 'en-US';
+    console.log('enkku valittu url:sta');
+  } else if (langInUrl == 'fi') {
+    lang = 'fi-FI';
+    console.log('suomi valittu url:sta');
+  } else {
+    lang = 'en-US';
+    console.log('Tuntematon kieli: "' + langInUrl  + '", käytetään englantia.');
+  }
+  return lang
 }
 
 // Alusta oletus fi-FI -locale. Ei toiminut.
