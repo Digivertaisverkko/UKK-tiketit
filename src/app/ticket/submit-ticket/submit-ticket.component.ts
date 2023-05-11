@@ -6,16 +6,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Observable, Subject } from 'rxjs';
 
-import { EditAttachmentsComponent }
-    from '../components/edit-attachments/edit-attachments.component';
-import { TicketService } from '../ticket.service';
-import { CourseService } from 'src/app/course/course.service';
-import { Constants } from '../../shared/utils';
-import { User } from '../../core/core.models'
-import { AddTicketResponse, Liite, UusiTiketti } from '../ticket.models';
+import { User } from 'src/app/core/core.models'
 import { StoreService } from 'src/app/core/store.service';
-
-import schema from '../../shared/editor/schema';
+import { CourseService } from 'src/app/course/course.service';
+import schema from 'src/app/shared/editor/schema';
+import { Constants } from 'src/app/shared/utils';
+import { EditAttachmentsComponent }
+    from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
+import { AddTicketResponse, Liite, UusiTiketti }
+    from 'src/app/ticket/ticket.models';
+import { TicketService } from 'src/app/ticket/ticket.service';
 
 interface AdditionalField {
   id: string;

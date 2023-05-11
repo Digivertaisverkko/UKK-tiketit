@@ -1,18 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators
-    } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject } from 'rxjs';
-import { CourseService } from 'src/app/course/course.service';
-import { EditAttachmentsComponent
-    } from '../components/edit-attachments/edit-attachments.component';
-import { TicketService  } from '../ticket.service';
-import { Constants } from '../../shared/utils';
-import { AddTicketResponse, Liite, Tiketti, UusiUKK } from '../ticket.models';
 
-import schema from '../../shared/editor/schema';
+import { CourseService } from 'src/app/course/course.service';
+import schema from 'src/app/shared/editor/schema';
+import { Constants } from 'src/app/shared/utils';
+import { EditAttachmentsComponent }
+    from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
+import { AddTicketResponse, Liite, Tiketti, UusiUKK }
+    from 'src/app/ticket/ticket.models';
+import { TicketService } from 'src/app/ticket/ticket.service';
 
 interface AdditionalField {
   id: string;
