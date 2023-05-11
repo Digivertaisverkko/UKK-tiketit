@@ -79,7 +79,13 @@ export class CommentComponent implements AfterViewInit{
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      message: [ '', EditorValidators.required(schema) ],
+      message: [
+        '',
+        Validators.compose([
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
+        ])
+      ],
       checkboxes: [ this.comment.tila ],
       attachments: ['']
     });
