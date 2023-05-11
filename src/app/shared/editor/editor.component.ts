@@ -4,27 +4,19 @@ import { ControlContainer, ControlValueAccessor, FormGroupDirective, NgControl
     } from '@angular/forms';
 import { minimalSetup } from 'codemirror';
 import { javascript } from "@codemirror/lang-javascript"
-import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
-import { node as codeMirrorNode, CodeMirrorView } from 'prosemirror-codemirror-6';
+import { Editor, Toolbar } from 'ngx-editor';
+import { CodeMirrorView } from 'prosemirror-codemirror-6';
 import { gapCursor } from 'prosemirror-gapcursor';
-import { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
+import { Node as ProseMirrorNode } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
+
+import schema from './schema';
 
 export const NOOP_VALUE_ACCESSOR: ControlValueAccessor = {
   writeValue(): void {},
   registerOnChange(): void {},
   registerOnTouched(): void {}
 };
-
-const nodes = {
-  ...basicNodes,
-  code_mirror: codeMirrorNode,
-}
-
-const schema = new Schema({
-  nodes,
-  marks,
-});
 
 const nodeViews = {
   code_mirror: (node: ProseMirrorNode,
