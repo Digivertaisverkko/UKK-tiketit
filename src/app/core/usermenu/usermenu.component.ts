@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
-import { User } from 'src/app/core/core.models';
+import { User } from '@core/core.models';
 import { StoreService } from '../store.service';
 import { getCourseIDfromURL } from '@shared/utils';
 

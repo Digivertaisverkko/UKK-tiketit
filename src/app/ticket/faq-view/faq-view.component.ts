@@ -5,8 +5,8 @@ import { TicketService } from '../ticket.service';
 import { Constants } from '@shared/utils';
 import { Tiketti } from '../ticket.models';
 import { Title } from '@angular/platform-browser';
-import { User, Error } from 'src/app/core/core.models';
-import { StoreService } from 'src/app/core/store.service';
+import { User, Error } from '@core/core.models';
+import { StoreService } from '@core/store.service';
 
 @Component({
   templateUrl: './faq-view.component.html',

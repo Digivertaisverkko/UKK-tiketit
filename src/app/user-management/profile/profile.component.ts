@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { MinunAsetukset, UserManagementService } from '../user-management.service';
 import { AuthService } from '../../core/auth.service';
 import { Constants } from '@shared/utils';
-import { ErrorService } from 'src/app/core/error.service';
+import { ErrorService } from '@core/error.service';
 
 @Component({
   selector: 'app-profile',

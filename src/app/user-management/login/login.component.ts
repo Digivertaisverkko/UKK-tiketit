@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService } from '@core/auth.service';
 import { Constants, isValidEmail } from '@shared/utils';
-import { StoreService } from 'src/app/core/store.service';
+import { StoreService } from '@core/store.service';
 import { Title } from '@angular/platform-browser';
 
 

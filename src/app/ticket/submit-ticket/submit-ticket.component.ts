@@ -6,8 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Observable, Subject } from 'rxjs';
 
-import { User } from 'src/app/core/core.models'
-import { StoreService } from 'src/app/core/store.service';
+import { User } from '@core/core.models'
+import { StoreService } from '@core/store.service';
 import { CourseService } from 'src/app/course/course.service';
 import schema from 'src/app/shared/editor/schema';
 import { Constants } from 'src/app/shared/utils';

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output }
     from '@angular/core';
-import { StoreService } from 'src/app/core/store.service';
+import { StoreService } from '@core/store.service';
 
 @Component({
   selector: 'app-error-card',
