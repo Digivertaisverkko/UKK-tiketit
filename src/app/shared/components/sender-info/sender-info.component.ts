@@ -15,6 +15,7 @@ export class SenderInfoComponent implements OnInit {
   @Input() aikaleima: string | Date = '';
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
+  @Input() styles: any;
   public isItToday: boolean;
   public senderTitle: string = '';
   private currentUserName: string | null;
