@@ -250,7 +250,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
             Kaikkien liitteiden lähettäminen ei onnistunut`;
       })
       .finally(() => {
-        this.state = 'done';
         this.fileInfoList = [];
         this.attachments.clear();
         this.state = 'editing';
