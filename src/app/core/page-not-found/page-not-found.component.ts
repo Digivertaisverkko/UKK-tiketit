@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { Constants } from '../../shared/utils';
+import { Constants } from '@shared/utils';
 import { Title } from '@angular/platform-browser';
 import { StoreService } from '../store.service';
 

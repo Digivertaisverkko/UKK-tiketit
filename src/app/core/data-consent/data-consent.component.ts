@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../auth.service';
-import { Constants } from '../../shared/utils';
+import { Constants } from '@shared/utils';
 
 @Component({
   templateUrl: './data-consent.component.html',

@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
     from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { getIsInIframe } from '../../shared/utils';
+import { getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/core/core.models';
 import { StoreService } from '../store.service';
-import { getCourseIDfromURL } from '../../shared/utils';
+import { getCourseIDfromURL } from '@shared/utils';
 
 
 @Component({

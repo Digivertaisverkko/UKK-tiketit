@@ -3,8 +3,8 @@ import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnIn
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
     NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
-import { TicketService } from '../../ticket.service';
-import { FileInfo, Liite } from '../../ticket.models';
+import { TicketService } from '@ticket/ticket.service';
+import { FileInfo, Liite } from '@ticket/ticket.models';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;

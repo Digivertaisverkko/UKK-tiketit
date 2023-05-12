@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TicketService } from '../ticket.service';
-import { Constants } from '../../shared/utils';
+import { Constants } from '@shared/utils';
 import { Tiketti } from '../ticket.models';
 import { Title } from '@angular/platform-browser';
 import { User, Error } from 'src/app/core/core.models';

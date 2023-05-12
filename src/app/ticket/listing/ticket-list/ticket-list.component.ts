@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
-import { Constants } from '../../../shared/utils';
+import { Constants } from '@shared/utils';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from 'src/app/core/core.models';

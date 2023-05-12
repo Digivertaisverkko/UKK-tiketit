@@ -9,7 +9,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService } from '@core/auth.service';
 import { Constants, getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';

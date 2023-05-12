@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Constants } from '../../shared/utils';
+import { Constants } from '@shared/utils';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';

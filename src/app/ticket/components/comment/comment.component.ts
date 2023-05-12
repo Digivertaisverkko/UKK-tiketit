@@ -3,14 +3,14 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject, Subscription, first } from 'rxjs';
 
-import { TicketService } from '../../ticket.service';
+import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
-import { isToday } from 'src/app/shared/utils';
-import { FileInfo, Kommentti } from '../../ticket.models';
-import { User } from 'src/app/core/core.models';
-import { StoreService } from 'src/app/core/store.service';
+import { isToday } from '@shared/utils';
+import { FileInfo, Kommentti } from '@ticket//ticket.models';
+import { User } from '@core/core.models';
+import { StoreService } from '@core/store.service';
 
-import schema from '../../../shared/editor/schema';
+import schema from '@shared/editor/schema';
 
 @Component({
   selector: 'app-comment',

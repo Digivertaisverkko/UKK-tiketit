@@ -7,14 +7,14 @@ import { Title } from '@angular/platform-browser';
 
 import { TicketService  } from '../ticket.service';
 import { AuthService } from 'src/app/core/auth.service';
-import { Constants } from '../../shared/utils';
+import { Constants } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { User } from '../../core/core.models'
 import { FileInfo, NewCommentResponse, Tiketti } from '../ticket.models';
 import { StoreService } from 'src/app/core/store.service';
 
-import schema from '../../shared/editor/schema';
+import schema from '@shared/editor/schema';
 
 @Component({
   selector: 'app-ticket-view',

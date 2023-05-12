@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
     from '@angular/core';
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { StoreService } from '../store.service';
-import { User } from 'src/app/core/core.models';
+import { User } from '@core/core.models';
 
 
 @Component({

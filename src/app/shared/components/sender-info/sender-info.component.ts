@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
-import { isToday } from 'src/app/shared/utils';
-import { User } from 'src/app/core/core.models';
-import { StoreService } from 'src/app/core/store.service';
+import { isToday } from '@shared/utils';
+import { User } from '@core/core.models';
+import { StoreService } from '@core/store.service';
 
 @Component({
   selector: 'app-sender-info',

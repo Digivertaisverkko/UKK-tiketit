@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Constants } from '../../shared/utils';
+import { Constants } from '@shared/utils';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
 import { CourseService } from '../course.service';
