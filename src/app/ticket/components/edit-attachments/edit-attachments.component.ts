@@ -42,6 +42,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
+  public readonly new = $localize `:@@uusi:uusi` + ',';
   public readonly MAX_FILE_SIZE_MB=100;
   public touched = false;
   public uploadClickSub = new Subscription();

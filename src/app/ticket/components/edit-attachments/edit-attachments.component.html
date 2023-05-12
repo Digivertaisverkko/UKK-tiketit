@@ -49,13 +49,11 @@ name="file-input-{{url}}"
       {{ file.filename }}
     </span>
     <span class="in-brackets">
-      (
-        <span *ngIf="oldAttachments.length > 0">
-          {{ $localize `:@@uusi:uusi` + ", "` }}
+      (<span *ngIf="oldAttachments.length > 0">
+          {{new}}
         </span>
         <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
-          separator: ",", pad: true } }}</span>
-      )
+          separator: ",", pad: true } }}</span>)
     </span>
     <div  class="file-error-message"
           matError
