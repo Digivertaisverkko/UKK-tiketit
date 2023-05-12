@@ -20,9 +20,9 @@ export const initializeLanguage = (): Promise<void> | void => {
 };
 
 // Mikä kieli on käytössä.
-function getLanguage(): string {
+function getLanguage(): 'en-US' | 'fi-FI' {
   const url = new URL(window.location.href);
-  var language: string;
+  var language: 'en-US' | 'fi-FI';
   // console.log('urlLang: ' + urlLang);
   // Upotuksessa kieli tulee URL-parametrina.
 
@@ -59,8 +59,8 @@ function getLanguage(): string {
 }
 
 // Muunna URL:ssa oleva kielen muoto asetuksissa vaadituksi.
-function getLangFormat(langInUrl: string): string {
-  let lang: string;
+function getLangFormat(langInUrl: string): 'en-US' | 'fi-FI' {
+  let lang: 'en-US' | 'fi-FI';
   if (langInUrl == 'en') {
     lang = 'en-US';
     console.log('enkku valittu url:sta');

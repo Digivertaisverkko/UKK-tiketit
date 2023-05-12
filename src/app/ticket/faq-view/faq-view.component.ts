@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { TicketService } from '../ticket.service';
 import { Constants } from '../../shared/utils';
 import { Tiketti } from '../ticket.models';
@@ -14,11 +15,11 @@ import { StoreService } from 'src/app/core/store.service';
 
 export class FaqViewComponent implements OnInit {
   public errorMessage: string = '';
-  public isLoaded: boolean = false;
-  public ticket: Tiketti = {} as Tiketti;
-  public user: User | null = null;
   public isArchivePressed: boolean = false;
   public isCopyToClipboardPressed: boolean = false;
+  public isLoaded: boolean = false;
+  public ticket: Tiketti = {} as Tiketti;
+  public user$: Observable<User | null>;
   private courseID: string | null;
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
@@ -30,7 +31,7 @@ export class FaqViewComponent implements OnInit {
     private titleServ: Title
   ) {
     this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.store.trackUserInfo().subscribe(response => this.user = response);
+    this.user$ = this.store.trackUserInfo();
   }
 
   ngOnInit(): void {

@@ -34,7 +34,7 @@ export class ErrorCardComponent implements OnInit {
   // styles: voi laittaa CSS:ää. Komponenttiin esim:
   // [styles]="{ margin: '1em 0 1em' }"
   @Input() buttonText: string = '';
-  @Input() message: string =  $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
+  @Input() message: string = $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
   @Input() styles: any;
   @Input() title: string = $localize `:@@Virhe:Virhe`;
   @Input() confirmLeave: boolean = false;

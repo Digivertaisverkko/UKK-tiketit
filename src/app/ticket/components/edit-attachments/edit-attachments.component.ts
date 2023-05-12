@@ -43,8 +43,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
-  public readonly new = $localize `:@@uusi:uusi` + ", ";
-  public readonly noAttachmentsMessage = $localize `:@@Ei liitetiedostoa:Ei liitetiedostoa` + '.';
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
