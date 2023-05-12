@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
 
     <div class="logo" *ngIf="courseID === null; else clickableLogo">
-      <img alt="" src="../../../assets/logos/dvv-white.svg">
+      <img alt="" src="assets/logos/dvv-white.svg">
     </div>
 
   <ng-template #clickableLogo>
@@ -12,7 +12,7 @@
         >
     <img  alt=""
           (click)="logoClicked()"
-          src="../../../assets/logos/dvv-white.svg"
+          src="assets/logos/dvv-white.svg"
           >
       </div>
   </ng-template>

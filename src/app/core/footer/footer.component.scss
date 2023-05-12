@@ -1,14 +1,16 @@
 $debug: false;
 
 hr {
-  background-color: var(--accent-color);
+  background-color: white;
+  // background-color: var(--accent-color);
   border-width: 0;
-  height: 3px;
+  height: 1px;
   margin: 0 auto;
   position: relative;
   top: 12px;
   width: 98%;
 }
+
 
 footer {
   margin: 0;
