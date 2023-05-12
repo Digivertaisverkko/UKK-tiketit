@@ -144,15 +144,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
   }
 
+  // Hae tiketti ja päivitä näkymän tila.
   private fetchTicket(courseID: string | null) {
     // fetchaus sulkee editointiboxin.
-    console.log('haetaan tiketin tiedot.');
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicketInfo(this.ticketID).then(response => {
       this.ticket = response;
-      if (this.user.nimi.length == 0) {
-        if (courseID !== null) this.auth.fetchUserInfo(courseID);
-      }
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
         this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
@@ -200,7 +197,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     return this.ticketService.getTicketState(tila, this.user.asema);
   }
 
+  //  Reagoi kommenttikomponenteilta tuleviin viesteihin.
   public listenMessagesFromComment(event: any) {
+    console.warn('saatiin viesti: ' + event);
     if (event === "done") {
       this.isEditingComment = false;
       this.fetchTicket(this.courseID);
@@ -227,9 +226,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.message.setValue('');
         this.form = this.buildForm();
         if (this.fileInfoList.length === 0) {
-          this.ticketService.getTicketInfo(this.ticketID).then(response => {
-            this.ticket = response
-          });
+          this.fetchTicket(this.courseID);
           return
         }
         response = response as NewCommentResponse;
@@ -241,6 +238,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       })
   }
 
+  // Lähetä komenttiin lisätyt liitetiedostot.
   private sendFiles(ticketID: string, commentID: string) {
     this.state = 'sending';
     this.form.disable();
@@ -252,15 +250,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
             Kaikkien liitteiden lähettäminen ei onnistunut`;
       })
       .finally(() => {
-        console.log('kaikki valmista');
         this.state = 'done';
         this.fileInfoList = [];
         this.attachments.clear();
-        this.ticketService.getTicketInfo(this.ticketID).then(response => {
-          this.ticket = response;
-        });
         this.state = 'editing';
         this.form.enable();
+        this.fetchTicket(this.courseID);
       })
   }
 

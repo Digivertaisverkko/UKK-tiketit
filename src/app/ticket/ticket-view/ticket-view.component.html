@@ -56,7 +56,7 @@
 
       <div matTooltip="{{cantRemoveTicket}}" [matTooltipDisabled]="isRemovable">
         <button (click)="changeButton('remove')"
-                [disabled]="!isRemovable || state==='sending'"
+                [disabled]="!isRemovable || state === 'sending'"
                 i18n="@@Poista"
                 mat-raised-button
                 *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
