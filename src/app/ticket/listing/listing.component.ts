@@ -10,9 +10,9 @@ import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from 'src/app/core/auth.service';
-import { Constants, getIsInIframe } from '../../shared/utils';
+import { Constants, getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
-import { RefreshDialogComponent } from '../../core/refresh-dialog/refresh-dialog.component';
+import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from 'src/app/core/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from 'src/app/core/core.models';
@@ -42,7 +42,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public courseID: string = '';
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
-  public errorMessage: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean | null = null;
