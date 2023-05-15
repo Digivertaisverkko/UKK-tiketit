@@ -202,6 +202,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     console.warn('saatiin viesti: ' + event);
     if (event === "done") {
       this.isEditingComment = false;
+      this.state = 'editing';
       this.fetchTicket(this.courseID);
     } else if (event === 'editingComment') {
       this.isEditingComment = true
