@@ -99,15 +99,9 @@ export class StoreService {
     if (this.user$ !== null) this.user$.next(null);
   }
 
-  public setParticipant(newIsParticipant: boolean): void {
-    if (newIsParticipant) {
-      if (this.isParticipant$.value !== true) {
-        this.isParticipant$.next(true);
-      }
-    } else {
-      if (this.isParticipant$.value !== false) {
-        this.isParticipant$.next(false);
-      }
+  public setParticipant(newIsParticipant: boolean | null): void {
+    if (newIsParticipant !== this.isParticipant$.value) {
+      this.isParticipant$.next(newIsParticipant);
     }
   }
 

@@ -368,6 +368,8 @@ export class AuthService {
         this.handleError(error);
       } finally {
         this.store.setNotLoggegIn();
+        this.store.setUserInfo(null);
+        this.store.setParticipant(null);
         window.localStorage.clear();
         if (courseID != null) {
           this.navigateToLogin(courseID);
