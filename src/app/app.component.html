@@ -26,15 +26,16 @@
     <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
 
 
-    <button aria-label="Käyttäjävalikko"
-            i18n-aria-label="@@Käyttäjävalikko"
-            i18n-matTooltip="@@Käyttäjävalikko"
+    <button aria-label="Valikko"
+            i18n-aria-label="@@Valikko"
+            i18n-matTooltip="@@Valikko"
             mat-icon-button
             [matMenuTriggerFor]="menu"
             [matTooltipShowDelay]="600"
-            matTooltip="Käyttäjävalikko"
+            matTooltip="Valikko"
             >
-      <mat-icon>account_circle</mat-icon>
+      <mat-icon>menu</mat-icon>
+      <!-- <mat-icon>account_circle</mat-icon> -->
     </button>
 
     <mat-menu #menu="matMenu">
