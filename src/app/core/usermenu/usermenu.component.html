@@ -64,7 +64,7 @@
 <button (click)="logout()"
         i18n="@@Kirjaudu ulos"
         mat-menu-item
-        *ngIf="(isLoggedIn$ | async) === true"
+        *ngIf="(isLoggedIn$ | async) === true && !isInIframe"
         >
   Kirjaudu ulos
 </button>
