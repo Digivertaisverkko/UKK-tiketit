@@ -135,9 +135,8 @@
     </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p  class="theme-success-message"
-        i18n="@@UKK lähettäminen onnistui"
-        *ngIf="state==='sending' || state==='done'"
+    <p  i18n="@@UKK lähettäminen onnistui"
+        *ngIf="isFaqSent"
         >
       Uuden usein kysytyn kysymyksen lähettäminen onnistui.
     </p>
@@ -195,7 +194,7 @@
               (click)="goBack()"
               color="primary"
               mat-raised-button
-              *ngIf="state==='done'"
+              *ngIf=""
               type="button"
               >
         OK
