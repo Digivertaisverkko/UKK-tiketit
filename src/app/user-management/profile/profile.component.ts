@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
 import { MinunAsetukset, UserManagementService } from '../user-management.service';
-import { AuthService } from '../../core/auth.service';
 import { Constants } from '@shared/utils';
 import { ErrorService } from '@core/error.service';
 

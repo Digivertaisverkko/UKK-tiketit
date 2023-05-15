@@ -10,7 +10,7 @@ import { AuthService } from '@core/auth.service';
 import { Constants } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
-import { User } from '../../core/core.models'
+import { User } from '@core/core.models'
 import { FileInfo, NewCommentResponse, Tiketti } from '../ticket.models';
 import { StoreService } from '@core/store.service';
 

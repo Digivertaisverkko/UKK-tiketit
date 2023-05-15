@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
     from '@angular/core';
-import { TicketService } from '../../ticket.service';
-import { Liite } from '../../ticket.models';
+import { TicketService } from '@ticket/ticket.service';
+import { Liite } from '@ticket/ticket.models';
 
 @Component({
   selector: 'app-view-attachments',
