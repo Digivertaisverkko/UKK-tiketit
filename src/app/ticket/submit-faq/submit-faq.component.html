@@ -173,7 +173,7 @@
               [disabled]="state!=='editing'"
               i18n="@@Peru"
               mat-raised-button
-              *ngIf="editExisting"
+              *ngIf="ticketId"
               [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId"
               type="button"
               >
