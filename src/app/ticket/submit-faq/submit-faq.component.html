@@ -169,6 +169,7 @@
         <span i18n="@@Pakollinen">Pakollinen</span>
       </div>
 
+      <!-- TicketId on asetettu, jos editoidaan olemassa olevaa UKK:a. -->
       <button class="cancel-button"
               [disabled]="state!=='editing'"
               i18n="@@Peru"
@@ -181,8 +182,8 @@
       </button>
 
       <button class="submit-button"
-              *ngIf="state==='editing'"
               color="primary"
+              *ngIf="state==='editing'"
               i18n="@@Julkaise"
               mat-raised-button
               type="submit"
@@ -214,7 +215,7 @@
 
 <!--------------- Alkuperäinen kysymys ---------------------------------------->
 
-  <ng-container *ngIf="originalTicket !== undefined && !editExisting">
+  <ng-container *ngIf="originalTicket !== undefined && !ticketId">
     <hr class="theme-divider">
     <h1 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys

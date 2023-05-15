@@ -27,7 +27,6 @@ export class SubmitFaqComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   public readonly courseId: string | null = this.route.snapshot.paramMap.get('courseid');
-  public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
   public oldAttachments: Liite[] = [];
@@ -167,12 +166,12 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   private prepareSendFiles(response: any): void {
-    if (!this.editExisting && response?.uusi == null) {
+    if (!this.ticketId && response?.uusi == null) {
       this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
     }
     let ticketID, commentID;
-    if (!this.editExisting) {
+    if (!this.ticketId) {
       ticketID = response.uusi.tiketti;
       commentID = response.uusi.kommentti;
     } else {
@@ -197,8 +196,10 @@ export class SubmitFaqComponent implements OnInit {
 
   private submitNew(faq: UusiUKK): void {
     if (this.courseId === null) return;
-    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
-    this.ticketService.addFaq(id, faq, this.editExisting)
+    // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
+    const id = this.ticketId ?? this.courseId;
+    const editExisting = this.ticketId ? true : false;
+    this.ticketService.addFaq(id, faq, editExisting)
     .then((response: AddTicketResponse) => {
       if (this.attachments.fileInfoList.length === 0) this.goBack();
       if (response === null || response?.success !== true) {
