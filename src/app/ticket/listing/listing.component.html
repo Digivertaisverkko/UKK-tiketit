@@ -10,6 +10,21 @@
   </app-ticket-list>
 </section>
 
+<!--
+
+<app-error-card
+    buttonText="''"
+    (clickEvent)="errorClickEvent($event)"
+    i18n-title="{{ error.title }}"
+    message={{ $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`, }}
+    *ngIf="isLoaded && !isParticipant"
+    #ticketError
+    title={{ $localize `:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.` }}
+    >
+</app-error-card>
+
+-->
+
 <app-error-card
     buttonText="{{ error.buttonText }}"
     (clickEvent)="errorClickEvent($event)"
@@ -20,6 +35,19 @@
     title="{{ error.title }}"
     >
 </app-error-card>
+
+<!--
+<app-error-card
+    buttonText="{{ error.buttonText }}"
+    (clickEvent)="errorClickEvent($event)"
+    i18n-title="{{ error.title }}"
+    message="{{ error.message }}"
+    *ngIf="isLoaded && error !== null"
+    #ticketError
+    title="{{ error.title }}"
+    >
+</app-error-card> 
+-->
 
 <!------------ UKK:t ---------------------------------------------------------->
 

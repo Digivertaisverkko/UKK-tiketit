@@ -43,6 +43,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public columnDefinitions: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
+  public error: ErrorNotification | null = null;
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
   public isLoaded: boolean = false;
@@ -50,7 +51,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfQuestions: number = 0;
-  public error: ErrorNotification | null = null;
+  public isArchivedShown: boolean = false;
 
   private fetchTicketsSub$: Subscription | null  = null;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
@@ -168,6 +169,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public hideArchived() {
+    this.isArchivedShown = false;
     this.dataSourceArchived = new MatTableDataSource();
     this.archivedCount = 0;
   }
@@ -178,6 +180,11 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
     window.localStorage.setItem('REDIRECT_URL', link);
+  }
+  
+  public showArchived() {
+    this.isArchivedShown = true;
+    this.fetchArchivedTickets()
   }
 
   private startLoading() {
