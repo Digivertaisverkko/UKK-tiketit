@@ -51,7 +51,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfQuestions: number = 0;
-  public isArchivedShown: boolean = false;
+  public isArchivedShown: boolean;
 
   private fetchTicketsSub$: Subscription | null  = null;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
@@ -71,6 +71,11 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'aloittajanNimi', showMobile: false },
       { def: 'aikaleima', showMobile: true }
     ];
+    if (window.sessionStorage.getItem('SHOW_ARCHIVED') === 'true') {
+      this.isArchivedShown = true;
+    } else {
+      this.isArchivedShown = false;
+    };
 
   }
 
@@ -78,6 +83,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.headline = this.getHeadline();
     this.trackScreenSize();
     this.startPollingTickets();
+    if (this.isArchivedShown) this.fetchArchivedTickets();
   }
 
   ngAfterViewInit(): void {
@@ -170,6 +176,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public hideArchived() {
     this.isArchivedShown = false;
+    window.sessionStorage.setItem('SHOW_ARCHIVED', 'false');
     this.dataSourceArchived = new MatTableDataSource();
     this.archivedCount = 0;
   }
@@ -183,6 +190,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   public showArchived() {
+    window.sessionStorage.setItem('SHOW_ARCHIVED', 'true');
     this.isArchivedShown = true;
     this.fetchArchivedTickets()
   }
