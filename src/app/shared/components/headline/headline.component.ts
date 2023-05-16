@@ -10,10 +10,10 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 
     <h1 class="mat-h1"
         [ngClass]="login ? 'login-h1' : ''"
-        *ngIf="headlineText && !isInIframe"
+        *ngIf="!isInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
-      <span>{{headlineText}}</span>
+      <span>{{ headlineText }}<ng-content></ng-content></span>
     </h1>
 
     <!-- <div class="vertical-spacer" *ngIf="isInIframe || !headlineText"></div> -->
@@ -25,6 +25,7 @@ export class HeadlineComponent implements OnInit {
 
   // login:a käytetään kirjautumissivulla.
   @Input() public login: boolean = false
+  @Input() noCourseTitle: boolean = false;
   public headlineText: string | null = null;
   public isInIframe: boolean;
 
@@ -39,7 +40,7 @@ export class HeadlineComponent implements OnInit {
   ngOnInit() {
     if (this.login) {
       this.headlineText = "DVV-tikettijärjestelmä";
-    } else {
+    } else if (this.noCourseTitle !== true) {
       this.trackCourseID();
     }
   }

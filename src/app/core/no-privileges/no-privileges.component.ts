@@ -11,9 +11,9 @@ import { StoreService } from '../store.service';
       <app-beginning-button></app-beginning-button>
     </div>
 
-    <h1 class="main-header">
-      <span i18n="@@Tästä ei pääse">Tästä ei pääse</span>
-    </h1>
+    <app-headline [noCourseTitle]="true" i18n="@@Tästä ei pääse">
+      Tästä ei pääse
+    </app-headline>
 
     <div class="button-wrapper" *ngIf="!isLoggedIn">
       <div class="spacer"></div>

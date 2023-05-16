@@ -13,7 +13,9 @@ import { StoreService } from '../store.service';
       <app-beginning-button></app-beginning-button>
     </div>
 
-    <h1 class="main-header"><span>404</span></h1>
+    <!-- <h1 class="main-header"><span>404</span></h1> -->
+
+    <app-headline [noCourseTitle]="true">404</app-headline>
 
     <h2 i18n="@@404-otsikko" class="sub-header">
       Sivua ei löytynyt
@@ -22,6 +24,7 @@ import { StoreService } from '../store.service';
     <div class="button-wrapper" *ngIf="!isLoggedIn">
       <div class="spacer"></div>
 
+    <!--
       <button align="end"
               (click)="goToLogin()"
               id="submitButton"
@@ -30,6 +33,7 @@ import { StoreService } from '../store.service';
               >
         Kirjaudu sisään
       </button>
+    -->
 
     </div>
     <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
@@ -47,9 +51,9 @@ export class PageNotFoundComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
-    private store: StoreService,
-    private title: Title
+    private route : ActivatedRoute,
+    private store : StoreService,
+    private title : Title
     ) {
     this.title.setTitle(Constants.baseTitle + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
       this.isLoggedIn = this.store.getIsLoggedIn();
