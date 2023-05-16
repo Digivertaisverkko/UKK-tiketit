@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit,
           ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -36,7 +37,8 @@ interface ErrorNotification {
 
 export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() public courseID: string = '';
+  // @Input() public courseID: string = '';
+  public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   @Input() public user: User | null = null;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
@@ -62,6 +64,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private responsive: BreakpointObserver,
+    private route: ActivatedRoute,
     private store : StoreService,
     private ticket: TicketService,
   ) {
@@ -107,6 +110,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Hae arkistoidut tiketit.
   public fetchArchivedTickets() {
+    if (this.courseID === null) return
     this.ticket.getTicketList(this.courseID, { option: 'archived' })
       .then(response => {
         if (!response) return
@@ -213,7 +217,9 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.fetchTicketsSub$ = timer(0, pollRate)
         .pipe(
             takeUntil(this.unsubscribe$)
-        ).subscribe(() => this.fetchTickets(this.courseID));
+        ).subscribe(() => {
+          if (this.courseID) this.fetchTickets(this.courseID)
+        });
   }
 
   public stopPolling(): void {
@@ -232,7 +238,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('trackMessages: saatiin refresh pyyntö.');
         this.startLoading();
         setTimeout(() => this.stopLoading(), 800);
-        this.fetchTickets(this.courseID);
+        if (this.courseID)  this.fetchTickets(this.courseID);
       }
     });
   }

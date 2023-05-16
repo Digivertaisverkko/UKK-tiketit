@@ -261,7 +261,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackCourseID(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       const courseID = paramMap.get('courseid');
-      if (courseID) this.courseID = courseID;
+      if (courseID != null) this.courseID = courseID;
       // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
       this.startPollingFAQ();
     })
@@ -287,7 +287,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
         buttonText: ''
       }
-    } else if  (type === 'notLoggedIn') {
+    } else if (type === 'notLoggedIn') {
       this.error = {
         title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
         message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,

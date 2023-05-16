@@ -2,7 +2,6 @@
 
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
-      [courseID]="courseID"
       *ngIf="isParticipant && (user$ | async)"
       (ticketMessage)="newTicketMessage($event)"
       [user]="(user$ | async)"
