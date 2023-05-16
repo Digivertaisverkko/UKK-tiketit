@@ -5,6 +5,7 @@ import { AuthService } from './core/auth.service';
 import { environment } from 'src/environments/environment';
 import { StoreService } from './core/store.service';
 import { User } from './core/core.models';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 // import { TicketService } from './ticket/ticket.service';
 
 @Component({
@@ -14,18 +15,19 @@ import { User } from './core/core.models';
 })
 export class AppComponent implements OnInit, OnDestroy  {
   public courseName: string = '';
-  public courseID: string | null = null;
+  public courseID: string = '';
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
   public isLogged: boolean = false;
   public isLoading: Observable<boolean> | null = null;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
-  private unsubscribe$ = new Subject<void>();
   public user$: Observable<User | null>;
+  private unsubscribe$ = new Subject<void>();
 
   constructor (
     private authService: AuthService,
+    private route: ActivatedRoute,
     private store : StoreService,
   ) {
     this.isLoading = this.store.trackLoading();
@@ -43,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.isInIframe = this.getIsInIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
+    this.trackCourseID();
     this.trackLoginStatus();
   }
 
@@ -58,6 +61,19 @@ export class AppComponent implements OnInit, OnDestroy  {
       return true;
     }
   }
+
+  public logoClicked() {
+    this.store.sendMessage('go begin'); 
+  }
+
+    // Seurataan kurssi ID:ä URL:sta.
+    private trackCourseID(): void {
+      this.route.paramMap.subscribe((paramMap: ParamMap) => {
+        const courseID = paramMap.get('courseid');
+        if (courseID != null) this.courseID = courseID;
+        // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
+      })
+    }
 
   private trackLoginStatus() {
     this.store.onIsUserLoggedIn()

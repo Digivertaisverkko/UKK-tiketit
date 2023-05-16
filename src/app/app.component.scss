@@ -41,7 +41,9 @@ main {
   }
 
   &-clickable {
-    &:hover { filter: brightness(97%); }
+    &:hover {
+      filter: brightness(97%);
+    }
     cursor: pointer;
   }
 }
