@@ -1,5 +1,6 @@
 /* Voidaan tallentaa ja palauttaa muistissa olevia muuttujia, joita tarvitaan
-globaalisti komponenttien ja sen lapsien tai vanhempien ulkopuolella. */
+globaalisti useamman kuin yhden komponentin ja sen lapsien tai vanhempien
+ulkopuolella. Tämä tulisi olla ainut service, jossa näin tehdään. */
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -80,14 +81,11 @@ export class StoreService {
 
   // Aseta tila kirjautuneeksi.
   public setLoggedIn() {
-    console.log('setLoggedIn: vanha logged in value: ' + this.isLoggedIn$.value);
-
     if (this.isLoggedIn$.value !== true) {
       // this.setSessionID('loggedin');
       this.isLoggedIn$.next(true);
       console.log('authService: asetettiin kirjautuminen.');
     } else {
-      console.log('ei aseteta uutta arvoa');
     }
   }
 

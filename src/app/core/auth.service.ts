@@ -65,6 +65,8 @@ export class AuthService {
     this.startUpdatingUserinfo();
   }
 
+  /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
+     Käyttäjää on voitu vaihtaa eri tabissa/ikkunassa. */
   public startUpdatingUserinfo() {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
@@ -197,6 +199,7 @@ export class AuthService {
     try {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
       joka paikassa odottaa observablen arvoa? */
+      /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
       response = await firstValueFrom<User>(this.http.get<any>(url));
     } catch (error: any) {
@@ -207,16 +210,17 @@ export class AuthService {
       newUserInfo = response;
       newUserInfo.asemaStr = this.getRoleString(newUserInfo.asema);
       this.store.setLoggedIn();
-      this.checkIfParticipant(courseID);
+      this.store.setParticipant(true);
     } else {
       this.store.setParticipant(false);
       console.log('authService: saatiin /oikeudet vastaus null');
-      // Tarkistetaan, onko kirjautuneena eri kurssille.
+      // Haetana käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
       const response = await this.fetchVisitorInfo();
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
         newUserInfo = response ;
         newUserInfo.asema = null;
+        this.store.setLoggedIn();
       } else {
         this.store.setNotLoggegIn();
         return
@@ -239,7 +243,6 @@ export class AuthService {
     } catch (error: any) {
       return null
     }
-    this.store.setLoggedIn();
     return response
   }
 
@@ -352,6 +355,7 @@ export class AuthService {
         window.localStorage.removeItem('REDIRECT_URL')
       }
       this.store.setLoggedIn();
+      this.store.setParticipant(null);
     } else {
       loginResult = { success: false };
     }
