@@ -37,6 +37,7 @@ export class SettingsComponent implements OnInit {
   public drop(event: CdkDragDrop<string[]>) {
     this.isDirty = true;
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
+    this.saveFields();
   }
 
   private fetchTicketFieldInfo(courseID: string) {
@@ -58,6 +59,7 @@ export class SettingsComponent implements OnInit {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
           this.isDirty = false;
+          this.fetchTicketFieldInfo(this.courseID);
         } else {
           throw Error;
         }
