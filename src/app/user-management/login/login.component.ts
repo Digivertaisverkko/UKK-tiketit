@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/auth.service';
 import { Constants, isValidEmail } from '@shared/utils';
@@ -12,7 +12,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./login.component.scss'],
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public email: string = '';
   public errorMessage: string = '';
@@ -36,11 +36,17 @@ export class LoginComponent implements OnInit {
     this.titleServ.setTitle(Constants.baseTitle +
         $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
     this.setLoginID();
+    this.store.setUserInfo(null);
     if (this.courseID === null) {
-      console.warn('Ei kurssi ID:ä URL:ssa, käytetään oletuksena 1:stä.');
-      this.courseID = '1';
-    } else {
+      console.error('Ei kurssi ID:ä URL:ssa, käytetään oletuksena 1:stä.');
     }
+  }
+
+  // Jos tullaan näkymistä tänne, virheilmoituksia voidaa näyttää, jos
+  // nämä asetetaan aiemmin.
+  ngAfterViewInit(): void {
+    this.store.setNotLoggegIn();
+    this.store.setParticipant(null);
   }
 
   public login(): void {

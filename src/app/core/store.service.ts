@@ -39,9 +39,6 @@ export class StoreService {
   }
 
   public getUserName(): string | null {
-    // return this.userName$.value;
-    // const user: User  = this.user$.value;
-    // return user.nimi;
     return this.user$.value?.nimi ?? null;
   }
 
