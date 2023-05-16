@@ -4,7 +4,7 @@ import { Constants } from '@shared/utils';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Kenttapohja } from '../course.models';
 import { CourseService } from '../course.service';
 
@@ -31,6 +31,10 @@ export class EditFieldComponent implements OnInit {
 
   get selections(): AbstractControl<any, any> | null {
     return this.form.get('selections');
+  }
+
+  get title(): FormControl {
+    return this.form.get('title') as FormControl;
   }
 
   constructor(
@@ -103,20 +107,24 @@ export class EditFieldComponent implements OnInit {
   // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
-      if (!Array.isArray(response) || !fieldID) {
+      if (!Array.isArray(response)) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
       this.allFields = response;
-      let matchingField = response.filter(field => String(field.id) === fieldID);
-      if (matchingField == null) {
-        throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
-      }
-      this.field = matchingField[0];
-        // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
+
+      if (this.allFields.length > 0 && this.fieldID) {
+        let matchingField = response.filter(field => String(field.id) === fieldID);
+        if (matchingField == null) {
+          throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+        }
+        this.field = matchingField[0];
+              // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
         // alkion "", mitä ei haluta.
-      if (this.field.valinnat[0].length === 0) this.field.valinnat = [];
-      this.hasSelections = this.field.valinnat.length > 0 ? true : false;
+        if (this.field.valinnat[0].length === 0) this.field.valinnat = [];
+        this.hasSelections = this.field.valinnat.length > 0 ? true : false;
+      }
+
       this.setControls();
       this.titleServ.setTitle(Constants.baseTitle + ' ' +
           $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
@@ -173,7 +181,7 @@ export class EditFieldComponent implements OnInit {
         // this.stopLoading();
         throw new Error('Virhe: ei kurssi ID:ä.');
       }
-      this.fieldID  = paramMap.get('fieldid');
+      this.fieldID = paramMap.get('fieldid')
       // console.log('fieldID tyyppi:');
       // console.log(typeof this.fieldID);
       // console.dir(this.fieldID);

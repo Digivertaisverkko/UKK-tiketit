@@ -54,6 +54,12 @@
               />
               <!-- [(ngModel)]="field.otsikko" -->
       <mat-hint align="end">{{ field.otsikko.length }} / 50</mat-hint>
+
+      <mat-error  i18n="@@Pakollinen kenttä."
+      *ngIf="title.errors?.['required']"
+      >
+Pakollinen kenttä.
+</mat-error>
     </mat-form-field>
 
     <div class="multiple-selection-wrapper">
