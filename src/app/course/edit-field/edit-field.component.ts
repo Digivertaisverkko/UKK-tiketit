@@ -163,7 +163,8 @@ export class EditFieldComponent implements OnInit {
         }
       }).catch (() => {
         // TODO: käännä.
-        this.errorMessage = 'Kenttäpohjan muuttaminen ei onnistunut.';
+        this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
+        Kenttäpohjan muuttaminen ei onnistunut.`;
       })
   }
 
