@@ -1,6 +1,6 @@
 @import "/src/variables.scss";
 
-.faq-view {
+.view-wrapper {
   padding-right: 80px;
   margin-bottom: 0.5em;
 }
@@ -53,8 +53,8 @@ mat-card {
 }
 
 @media (max-width: 800px) {
-  .faq-view {
-    padding-right: 1rem;
+  .view-wrapper {
+    padding-right: 0;
   }
 }
 

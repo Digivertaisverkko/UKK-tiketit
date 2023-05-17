@@ -1,6 +1,6 @@
   <app-headline></app-headline>
 
-  <div *ngIf="isLoaded">
+  <div class="view-wrapper" *ngIf="isLoaded">
 
   <app-beginning-button
         [disabled]="state==='sending'"
@@ -100,8 +100,8 @@
       <div class="spacer"></div>
       <app-sender-info
           [aikaleima]="ticket.aikaleima"
-          [user]="ticket.aloittaja"
           [styles]="{'margin-top': '1.5rem' }"
+          [user]="ticket.aloittaja"
           >
       </app-sender-info>
 
@@ -134,9 +134,9 @@
     <app-comment
         [comment]="comment"
         [(editingCommentID)]="editingCommentIDParent"
+        (messages)="listenMessagesFromComment($event)"
         *ngFor="let comment of ticket.kommentit"
         [ticketID]="ticket.id"
-        (messages)="listenMessagesFromComment($event)"
         >
     </app-comment>
 
