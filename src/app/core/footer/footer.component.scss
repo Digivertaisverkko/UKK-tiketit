@@ -21,7 +21,7 @@ footer {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin: 0 auto 0 auto;
     max-width: 1024px;
     min-width: 300px;
@@ -32,19 +32,15 @@ footer {
   img {
     display: block;
     height: 100%;
-    margin-left: 10px;
-    margin-right: 10px;
-    // padding-top: 1em;
-    // padding-bottom: 1em
+    margin-left: 15px;
+    margin-right: 15px;
     @if $debug { border: dashed green 1px; }
   }
 
   #yo-logo {
     height: 80px;
-    // margin-bottom:
     padding-bottom: 22px;;
     padding-left: 5px;
-    // width: 200px;
   }
 
   #oamk-logo {
@@ -58,8 +54,6 @@ footer {
   #vipuvoimaa-logo {
     height: 80px;
     padding-bottom: 15px;
-    // padding-right: 8px;
-    // padding-left: 8px;
   }
 
   #eu-logo {
@@ -68,13 +62,11 @@ footer {
   }
 
   mat-nav-list {
-    // flex-grow: 5;
-    // display: block;§
+    align-self: flex-start;
     padding: 18px 0 10px 0;
     margin-left: auto;
     max-width: 16em;
     text-align: right;
-    // max-width: 220px;
     @if $debug {
       border: {
         style: dashed;
@@ -91,12 +83,12 @@ footer {
   }
 
   .about-software {
-    align-self: flex-start;
     font-weight: 500;
     box-sizing: border-box;
     color: var(--contrast-color);
-    display: block;
     max-width: 445px;
+    margin-right: auto;
+
     padding: 16px 13px 14px 18px;
     @if $debug { border: dashed gray 1px; }
   }

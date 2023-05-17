@@ -149,9 +149,13 @@ button[mat-raised-button] {
 
 // Important -ylikirjoitukset
 
-// FIXME: Miksei poimi teeman kontrastiväriä?
-.mat-primary { color: white !important; }
+// ? Miksei poimi teeman kontrastiväriä?
+.mat-primary {
+  color: white !important;
+}
 
-.mdc-button { height: 2.3em !important; }
+.mdc-button {
+  height: 2.3em !important;
+}
 
 /* ================================================= */
