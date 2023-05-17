@@ -14,12 +14,12 @@ main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin: 0 auto;
+  margin: 0 auto 0 auto;
   position: relative;
   width: 1024px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
   // min-height: calc(100vh - $header-height - $footer-height);
-  padding: 0 40px 50px 40px;
+  padding: 0 40px 70px 40px;
 }
 
 .embedded-wrapper {
@@ -59,14 +59,14 @@ main {
   }
 }
 
-@media (max-width: 839.98px) {
+@media (max-width: 840px) {
   main {
-    padding: 0 20px 20px 20px;
+    padding: 0 20px 60px 20px;
   }
 }
 
 @media (max-width: $XSmall) {
   main {
-    padding: 0 20px 3px 3px;
+    padding: 0 20px 50px 3px;
   }
 }

@@ -1,16 +1,13 @@
 $debug: false;
 
-hr {
-  background-color: white;
-  // background-color: var(--accent-color);
-  border-width: 0;
-  height: 1px;
-  margin: 0 auto;
+.curve-wrapper {
+  background-color: transparent;
+  margin-top: -20px;
   position: relative;
-  top: 12px;
-  width: 98%;
+  > svg {
+    margin-bottom: -8px ;
+  }
 }
-
 
 footer {
   margin: 0;
@@ -28,7 +25,7 @@ footer {
     margin: 0 auto 0 auto;
     max-width: 1024px;
     min-width: 300px;
-    padding: 0 8px 30px 4px;
+    padding: 12px 8px 30px 4px;
     width: 100%;
   }
 
@@ -74,6 +71,7 @@ footer {
     // flex-grow: 5;
     // display: block;§
     padding: 18px 0 10px 0;
+    margin-left: auto;
     max-width: 16em;
     text-align: right;
     // max-width: 220px;
