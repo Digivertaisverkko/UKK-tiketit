@@ -153,16 +153,13 @@ button {
 }
 
 @media (max-width: $XSmall) {
-  main {
-    padding-right: 0;
-  }
-  section,
-    app-error-card {
-    width: 100%;
-  }
   section,
   app-error-card,
-  .theme-actions {
+  h2 {
     margin-left: 0;
+  }
+
+  .table-header {
+    padding-left: 0;
   }
 }
