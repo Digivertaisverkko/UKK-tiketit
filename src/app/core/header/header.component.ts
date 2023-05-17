@@ -1,6 +1,8 @@
+import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
+import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
     from '@angular/core';
-import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
+import { Observable } from 'rxjs';
 import { StoreService } from '../store.service';
 import { User } from '@core/core.models';
 
@@ -20,15 +22,18 @@ export class HeaderComponent implements OnInit {
   public readonly maxUserLength = 40;
   public user: User | null = null;
   public userRole: string = '';
+  public handsetPB$: Observable<BreakpointState>;
 
   private _language!: string;
 
   constructor (
     private route : ActivatedRoute,
     private change: ChangeDetectorRef,
+    private responsive: BreakpointObserver,
     private router: Router,
     private store : StoreService
     ) {
+    this.handsetPB$ = this.responsive.observe(Breakpoints.HandsetPortrait);
     this._language = localStorage.getItem('language') ?? 'fi-FI';
   }
 
@@ -38,7 +43,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public logoClicked() {
-    this.store.sendMessage('go begin'); 
+    this.store.sendMessage('go begin');
   }
 
   private trackCourseID() {
@@ -58,41 +63,5 @@ export class HeaderComponent implements OnInit {
         this.change.detectChanges();
     })
   }
-
- /*
-
-  public toggleLanguage() {
-    this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
-  }
-
-  updateMenu() {
-    const url = new URL(window.location.href);
-    this.disableLangSelect = (url.searchParams.get('lang') !== null) ? true : false;
-  }
-
-  get language(): string {
-    return this._language;
-  }
-
-  set language(value: string) {
-    if (value !== this._language) {
-      localStorage.setItem('language', value);
-      window.location.reload();
-    }
-  }
-
-  public login(): void {
-    if (this.courseID === null) {
-      throw new Error('header.component.ts.login: ei kurssi ID:ä.');
-    }
-    this.authService.saveRedirectURL();
-    this.authService.navigateToLogin(this.courseID);
-  }
-
-  public logout() {
-    this.authService.logout(this.courseID);
-  }
-
-  */
 
 }
