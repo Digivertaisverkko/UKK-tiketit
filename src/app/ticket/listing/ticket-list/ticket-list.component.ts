@@ -72,14 +72,11 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false },
-      { def: 'aikaleima', showMobile: true }
+      { def: 'aikaleima', showMobile: false }
     ];
-    if (window.sessionStorage.getItem('SHOW_ARCHIVED') === 'true') {
-      this.isArchivedShown = true;
-    } else {
-      this.isArchivedShown = false;
-    };
 
+    this.isArchivedShown = window.sessionStorage.getItem('SHOW_ARCHIVED') === 'true' ?
+        true : false;
   }
 
   ngOnInit() {
@@ -192,7 +189,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('tallennettu URL: ' + link);
     window.localStorage.setItem('REDIRECT_URL', link);
   }
-  
+
   public showArchived() {
     window.sessionStorage.setItem('SHOW_ARCHIVED', 'true');
     this.isArchivedShown = true;

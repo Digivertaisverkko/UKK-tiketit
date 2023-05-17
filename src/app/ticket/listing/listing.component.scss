@@ -35,10 +35,15 @@ app-error-card,
 // Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
 h2 {
   padding-left: 20px;
+  margin-right: 0.5em;
 }
 
 .mdc-card__actions {
   min-height: 30px;
+}
+
+app-search-bar {
+  margin-left: auto;
 }
 
 // ----------------- Table -----------------------------------------------------
@@ -150,5 +155,14 @@ button {
 @media (max-width: $XSmall) {
   main {
     padding-right: 0;
+  }
+  section,
+    app-error-card {
+    width: 100%;
+  }
+  section,
+  app-error-card,
+  .theme-actions {
+    margin-left: 0;
   }
 }
