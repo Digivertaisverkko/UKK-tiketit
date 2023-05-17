@@ -64,7 +64,6 @@ mat-radio-button {
 }
 
 @media (max-width: 765px) {
-
   .attach-button {
     order: 1;
   }
@@ -76,7 +75,6 @@ mat-radio-button {
   .send-button {
     order: 3;
   }
-
 }
 
 @media (max-width: $XSmall) {
@@ -91,7 +89,9 @@ mat-radio-button {
     justify-content: center;
   }
 
-  .remove-btn {
+  .attach-button,
+  .remove-btn,
+  .send-button {
     width: 100%;
   }
 }

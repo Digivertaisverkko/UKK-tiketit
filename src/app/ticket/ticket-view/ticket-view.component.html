@@ -187,10 +187,10 @@
       <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
         <!-- Nimi sidottu muuttujaan, koska eri rooleilla on eri teksti. -->
-        <button class="attach-button"
+        <button [attr.aria-label]="attachFilesText"
+                class="attach-button"
                 (click)="uploadClick.next('add')"
                 [disabled]="state==='sending'"
-                [attr.aria-label]="attachFilesText"
                 mat-raised-button="attachFilesText"
                 type="button"
                 >
