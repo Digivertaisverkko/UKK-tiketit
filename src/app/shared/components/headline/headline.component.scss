@@ -1,3 +1,4 @@
+@import '/src/variables.scss';
 $debug: false;
 
 .vertical-spacer {
@@ -54,5 +55,13 @@ h1 {
     left: -6%;
     padding-right: 0;
     width: 112%;
+  }
+}
+
+@media (max-width: $XSmall) {
+
+  h1 {
+    font-size: 2.5rem * 0.8;
+    line-height: 1.1;
   }
 }
