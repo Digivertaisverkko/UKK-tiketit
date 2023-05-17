@@ -1,5 +1,25 @@
 @import "../submits";
+@import '/src/variables.scss';
 
-app-sender-info {
-  margin-bottom: 1rem;  
+.ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  row-gap: 0;
+  margin-bottom: 0.5rem;
+  mat-form-field {
+    flex-grow: 3;
+  }
+  app-sender-info {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: $XSmall) {
+  .sub-header {
+    order: 2;
+  }
+  app-sender-info {
+    margin-top: 1rem;
+  }
 }
