@@ -1,7 +1,7 @@
 import { ActivatedRoute, ParamMap, Router} from '@angular/router';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
@@ -45,6 +45,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isParticipant: boolean | null = null;
+  public screenSize: 'handset' | 'small' | 'other' = 'other';
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean = false;
@@ -80,7 +81,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
       { def: 'otsikko', showMobile: true },
-      { def: 'aikaleima', showMobile: false }
+      { def: 'aikaleima', showMobile: true }
     ];
 
   }
@@ -235,14 +236,22 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // Aseta tarvittavat asettelun muutokset riippuen näkymän leveydestä.
   private trackScreenSize(): void {
-    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
-      if (result.matches) {
-        this.maxItemTitleLength = 35;
+    this.responsive.observe([Breakpoints.HandsetPortrait, Breakpoints.Small])
+    .subscribe((state: BreakpointState) => {
+      if (state.breakpoints[Breakpoints.HandsetPortrait]) {
+        this.maxItemTitleLength = 85;
         this.isPhonePortrait = true;
+        this.screenSize = "handset";
+      } else if (state.breakpoints[Breakpoints.Small]) {
+        this.isPhonePortrait = false;
+        this.maxItemTitleLength = 90;
+        this.screenSize = "small";
       } else {
         this.isPhonePortrait = false;
         this.maxItemTitleLength = 100;
+        this.screenSize = "other";
       }
     });
   }

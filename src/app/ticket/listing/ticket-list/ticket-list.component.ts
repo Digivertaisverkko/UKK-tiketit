@@ -243,7 +243,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackScreenSize(): void {
     this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result => {
       if (result.matches) {
-        this.maxItemTitleLength = 35;
+        this.maxItemTitleLength = 75;
         this.isPhonePortrait = true;
       } else {
         this.isPhonePortrait = false;
