@@ -2,11 +2,13 @@
 
   <div *ngIf="isLoaded">
 
-  <app-beginning-button [disabled]="state==='sending'"
-        *ngIf="ticket.tila === undefined">
+  <app-beginning-button
+        [disabled]="state==='sending'"
+        *ngIf="ticket.tila === undefined"
+        >
   </app-beginning-button>
 
-  <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
+  <div class="top-buttons-wrapper" *ngIf="!ticketIdFromParent && ticket.tila > 0">
 
       <app-beginning-button
           (clicked)="showConfirm = true"
@@ -19,19 +21,20 @@
 
       <button class="edit-button"
               [disabled]="state==='sending'"
-          i18n="@@Muokkaa"
-          mat-raised-button
-          *ngIf="isEditable"
-          (click)="editTicket()">
+              i18n="@@Muokkaa"
+              mat-raised-button
+              *ngIf="isEditable"
+              (click)="editTicket()"
+              >
         Muokkaa
       </button>
 
       <button (click)="copyAsFAQ()"
-          [disabled]="state==='sending'"
-          i18n="@@Kopioi UKK"
-          mat-raised-button
-          *ngIf="(user.asema === 'opettaja' || user.asema === 'admin')"
-          >
+              [disabled]="state==='sending'"
+              i18n="@@Kopioi UKK"
+              mat-raised-button
+              *ngIf="(user.asema === 'opettaja' || user.asema === 'admin')"
+              >
         Kopioi UKK:ksi
       </button>
 
@@ -44,7 +47,8 @@
         Arkistoi
       </button>
 
-      <button (click)="archiveTicket()"
+      <button class="remove-btn"
+              (click)="archiveTicket()"
               color="accent"
               i18n="@@Vahvista"
               mat-raised-button
@@ -54,8 +58,12 @@
         Vahvista
       </button>
 
-      <div matTooltip="{{cantRemoveTicket}}" [matTooltipDisabled]="isRemovable">
-        <button (click)="changeButton('remove')"
+      <div  class="remove-btn"
+            matTooltip="{{ cantRemoveTicket }}"
+            [matTooltipDisabled]="isRemovable"
+            >
+        <button class="remove-btn"
+                (click)="changeButton('remove')"
                 [disabled]="!isRemovable || state === 'sending'"
                 i18n="@@Poista"
                 mat-raised-button
