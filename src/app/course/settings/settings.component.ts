@@ -41,24 +41,11 @@ export class SettingsComponent implements OnInit {
     this.saveFields();
   }
 
-  private fetchTicketFieldInfo(courseID: string) {
-    this.courses.getTicketFieldInfo(courseID).then(response => {
-      if (response[0]?.otsikko != null) {
-        this.fieldList = response;
-      }
-      console.dir(this.fieldList);
-      return
-    }).catch(e => {
-      this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
-          Kysymysten lisäkenttien haku epäonnistui` + '.';
-    }).finally( () => this.isLoaded = true)
-  }
-
-  public importFAQs() {
+  public exportFAQs() {
     const faq = $localize `:@@UKK:UKK`;
     const course = $localize `:@@kurssi:kurssi`;
     const filename = `${faq}-${course}-${this.courseID}.json`;
-    this.courses.importFAQs(this.courseID).then(response => {
+    this.courses.exportFAQs(this.courseID).then(response => {
       let filecontent = JSON.stringify(response, null, 2);
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
@@ -73,6 +60,23 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
                                         Tiedoston lataaminen epäonnistui` + '.';
     });
+  }
+
+  private fetchTicketFieldInfo(courseID: string) {
+    this.courses.getTicketFieldInfo(courseID).then(response => {
+      if (response[0]?.otsikko != null) {
+        this.fieldList = response;
+      }
+      console.dir(this.fieldList);
+      return
+    }).catch(e => {
+      this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
+          Kysymysten lisäkenttien haku epäonnistui` + '.';
+    }).finally( () => this.isLoaded = true)
+  }
+
+  public onFileAdded(event: any) {
+
   }
 
   public saveFields() {

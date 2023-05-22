@@ -23,7 +23,19 @@ export class CourseService {
     private errorService: ErrorService,
     private http : HttpClient,
     private store: StoreService
-  ) { }
+  ) {
+  }
+
+  public async exportFAQs(courseID: string): Promise<any> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk/vienti`;
+    try {
+      response = await firstValueFrom(this.http.get<any>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
 
   // Palauta listan kaikista kursseista.
   public async getCourses(): Promise<Kurssi[]> {
@@ -54,20 +66,9 @@ export class CourseService {
     return response['nimi'];
   }
 
-  public async importFAQs(courseID: string): Promise<any> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk/vienti`;
-    try {
-      response = await firstValueFrom(this.http.get<any>(url));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
-
   // Palauta listan kaikista kursseista, joilla käyttäjä on.
   public async getMyCourses(): Promise<Kurssini[]> {
-    //const httpOptions = this.getHttpOptions();;
+    //const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
     try {
@@ -91,6 +92,17 @@ export class CourseService {
     }
     if (response === null) response = [];
     if (fieldID) response = response.filter((field: Kenttapohja) => field.id == fieldID);
+    return response;
+  }
+
+  public async importFAQs(courseID: string, file: File) {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk/vienti`;
+    try {
+      response = await firstValueFrom(this.http.post<any>(url, file));
+    } catch (error: any) {
+      this.handleError(error);
+    }
     return response;
   }
 

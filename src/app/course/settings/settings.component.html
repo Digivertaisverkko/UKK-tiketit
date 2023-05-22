@@ -87,10 +87,21 @@
   Usein kysyttyjen kysymysten siirtäminen
 </h3>
 
+<!---- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
+<input  aria-disabled="true"
+        (change)="onFileAdded($event)"
+        class="file-input"
+        #fileInput
+        multiple
+        style="display: none"
+        type="file"
+        >
+
 <div class="transfer-buttons-wrapper">
   <button i18n="@@Lataa tiedostona"
-          (click)="importFAQs()"
+          (click)="exportFAQs()"
           mat-raised-button
+          type="button"
           >
     Lataa tiedostona
   </button>
