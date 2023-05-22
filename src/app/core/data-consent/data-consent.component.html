@@ -39,30 +39,39 @@
 
   <!-- Poista tili -->
 
-  <button (click)="dontGiveConsent()"
-          i18n="@@Älä siirrä"
+  <ng-container *ngIf="accountExists; else forNewUser">
+    <button (click)="dontGiveConsent()"
+            i18n="@@Poista tili ja jatka kirjautumatta"
+            mat-raised-button
+            >
+      Poista tili ja jatka kirjautumatta
+    </button>
+
+  <button (click)="giveConsent()"
+          color="primary"
+          i18n="@@Jatka käyttämistä"
           mat-raised-button
-          *ngIf="accountExists; else forNewUser"
           >
-    Poista tili ja jatka kirjautumatta
+    Jatka käyttämistä
   </button>
+</ng-container>
 
 <ng-template #forNewUser>
   <button (click)="dontGiveConsent()"
-          i18n="@@Älä siirrä"
+          i18n="@@Jatka kirjautumatta"
           mat-raised-button
           >
     Jatka kirjautumatta
   </button>
-</ng-template>
 
   <button (click)="giveConsent()"
           color="primary"
-          i18n="@@Hyväksyn"
+          i18n="@@Luo tili"
           mat-raised-button
           >
     Luo tili
   </button>
+</ng-template>
 
 </div>
 

@@ -38,8 +38,9 @@
     "Esitäytettävä": "Pre-fillable",
     "Henkilökohtaiset tiedot": "Personal info",
     "Henkilötietojen hallinta": "Personal data control",
-    "Hyväksyn": " Accept",
     "Infoteksti": "Info text",
+    "Jatka kirjautumatta": "Continue without logging in",
+    "Jatka käyttämistä": "Continue use",
     "Jos poistut": "If you leave the view in the middle of editing, you will lose all your changes.",
     "Järjestä lähettäjän mukaan": "Sort by sender",
     "Järjestä luodun mukaan": "Sort by creation date",
@@ -157,6 +158,7 @@
     "Poista linkki": "Remove link",
     "Poista": "Remove",
     "Poista tili ja data": "Remove account and data",
+    "Poista tili ja jatka kirjautumatta": "Remove account and continue without logging in",
     "Poista valitut": "Remove selected",
     "Poistaa kaiken järjestelmään tallennetut tietosi, mukaan lukien henkilötiedot, kysymykset, kommentit, liitteet ja kirjautumistiedot.": "Deletes all your data stored in the system, including personal information, questions, comments, attachments and login information.",
     "Profiili": "Profile",
@@ -227,7 +229,6 @@
     "Yhteydenotto palvelimeen ei onnistunut.": "The connection to the server failed.",
     "Yhtään lisäkenttää ei ole lisätty": "No additional fields have been added.",
     "Yleisen tietosuoja-asetuksen mukainen tiedonhankinta pyyntö. Voit ladata kaikki omat tietosi.": "Data acquisition request in accordance with the General Data Protection Regulation. You can download all your own data.",
-    "Yliviivaa": "Strike-through",
-    "Älä siirrä": "Don't transfer"
+    "Yliviivaa": "Strike-through"
   }
 }

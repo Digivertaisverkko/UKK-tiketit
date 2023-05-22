@@ -33,7 +33,7 @@ export class DataConsentComponent implements OnInit {
     this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
     console.log('on jo tili: ' + this.accountExists);
 
-    // this.accountExists = true;
+    this.accountExists = true;
 
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
     // selata kirjautumattomana.

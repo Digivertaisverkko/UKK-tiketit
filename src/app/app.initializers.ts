@@ -15,7 +15,7 @@ export const initializeLanguage = (): Promise<void> | void => {
     return fetch(`/assets/i18n/${language}.json`)
       .then(response => response.json())
       .then(response => loadTranslations(response.translations))
-      .catch(() => console.log(`Käännöstä "${language}" ei löytynyt.`));
+      .catch(() => console.error(`Käännöstä "${language}" ei löytynyt.`));
   }
 };
 
