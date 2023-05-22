@@ -10,7 +10,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 
     <h1 class="mat-h1"
         [ngClass]="login ? 'login-h1' : ''"
-        *ngIf="!isInIframe"
+        *ngIf="!isInIframe || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>{{ headlineText }}<ng-content></ng-content></span>
@@ -26,6 +26,7 @@ export class HeadlineComponent implements OnInit {
   // login:a käytetään kirjautumissivulla.
   @Input() public login: boolean = false
   @Input() noCourseTitle: boolean = false;
+  @Input() showInIframe: boolean = false;
   public headlineText: string | null = null;
   public isInIframe: boolean;
 

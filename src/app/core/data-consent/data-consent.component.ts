@@ -13,6 +13,7 @@ import { Constants } from '@shared/utils';
 export class DataConsentComponent implements OnInit {
 
   public error;
+  public accountExists: boolean | null = null;
   private tokenid: string | null = null;
 
   constructor(
@@ -29,6 +30,11 @@ export class DataConsentComponent implements OnInit {
     // route.snapshot.paramMap.get ei toiminut tässä.
     const urlParams = new URLSearchParams(window.location.search);
     this.tokenid = urlParams.get('tokenid');
+    this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
+    console.log('on jo tili: ' + this.accountExists);
+
+    // this.accountExists = true;
+
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
     // selata kirjautumattomana.
     if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {

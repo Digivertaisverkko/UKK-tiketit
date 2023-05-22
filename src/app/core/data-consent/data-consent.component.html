@@ -1,8 +1,9 @@
-<h1 class="main-header" >
-  <span i18n="@@Tervetuloa">Tervetuloa</span>
-</h1>
+<div class="view-wrapper">
+<app-headline i18n="@@Tervetuloa" [noCourseTitle]='true' [showInIframe]='true'>
+  Tervetuloa
+</app-headline>
 
-<p i18n="@@Tietojenkäyttösuostumus">
+<p i18n="@@Tietojenkäyttösuostumus" class="main-text">
   Tämä on Digivertaisverkkohankkeen rakentama tikettijärjestelmä kurssin
   opettajien ja oppilaiden väliseen keskusteluun ja kysymysten kysymiseen.
   Ohjelmiston tarvitsee henkilökohtaisen tilin, jotta voit esittää ja katsella
@@ -10,7 +11,6 @@
   kurssilla olet ja mitä olet kurssilla tekemässä. Tilin luomalla annat
   luvan näiden tietojen siirtämiseen tikettijärjestelmän käyttöön. Jos olet
   kiinnostunut siitä, miten käsittelemme tietojasi, voit lukea tietoturvaselosteen.
-
 </p>
 
 <span i18n="@@Tallennamme seuraavat tiedot">
@@ -37,12 +37,24 @@
 
 <div class="buttons-wrapper">
 
+  <!-- Poista tili -->
+
+  <button (click)="dontGiveConsent()"
+          i18n="@@Älä siirrä"
+          mat-raised-button
+          *ngIf="accountExists; else forNewUser"
+          >
+    Poista tili ja jatka kirjautumatta
+  </button>
+
+<ng-template #forNewUser>
   <button (click)="dontGiveConsent()"
           i18n="@@Älä siirrä"
           mat-raised-button
           >
     Jatka kirjautumatta
   </button>
+</ng-template>
 
   <button (click)="giveConsent()"
           color="primary"
@@ -51,5 +63,7 @@
           >
     Luo tili
   </button>
+
+</div>
 
 </div>
