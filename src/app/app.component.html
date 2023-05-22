@@ -5,29 +5,27 @@
   </app-header>
 
   <!-- style="display: none" -->
-  <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe"
-  >
+  <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
 
     <div class="logo" *ngIf="courseID === null; else clickableLogo">
       <img alt="" src="assets/logos/dvv-white.svg">
     </div>
 
-  <ng-template #clickableLogo>
-    <div class="logo logo-clickable"
-        matRipple
-        >
-    <img  alt=""
-          (click)="logoClicked()"
-          src="assets/logos/dvv-white.svg"
-          >
-      </div>
-  </ng-template>
+    <ng-template #clickableLogo>
+      <div  class="logo logo-clickable"
+            matRipple
+            >
+      <img  alt=""
+            (click)="logoClicked()"
+            src="assets/logos/dvv-white.svg"
+            >
+        </div>
+    </ng-template>
   
     <span class="spacer"></span>
 
     <div class="role theme-header-text-small">{{ (user$ | async)?.asemaStr }}</div>
     <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
-
 
     <button aria-label="Valikko"
             i18n-aria-label="@@Valikko"
