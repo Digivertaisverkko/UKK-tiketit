@@ -93,7 +93,14 @@ mat-icon {
 }
 
 .vertical-spacer {
-  height: 10px;
+  height: 1px;
+}
+
+.transfer-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 16em;
 }
 
 .invite-form {
