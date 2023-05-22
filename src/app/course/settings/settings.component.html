@@ -88,8 +88,17 @@
 </h3>
 
 <div class="transfer-buttons-wrapper">
-  <button i18n="@@Lataa tiedostona" mat-raised-button>Lataa tiedostona</button>
-  <button i18n="@@Lisää tiedostona" mat-raised-button>Lisää tiedostona</button>
+  <button i18n="@@Lataa tiedostona"
+          (click)="importFAQs()"
+          mat-raised-button
+          >
+    Lataa tiedostona
+  </button>
+  <!-- <button i18n="@@Lisää tiedostona"
+          mat-raised-button
+          >
+    Lisää tiedostona
+  </button> -->
 </div>
 
 <div class="vertical-spacer"></div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { Constants } from '@shared/utils';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -23,6 +23,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private courses: CourseService,
+    private renderer: Renderer2,
     private route: ActivatedRoute,
     private titleServ: Title
   ) {
@@ -51,6 +52,27 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
           Kysymysten lisäkenttien haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)
+  }
+
+  public importFAQs() {
+    const faq = $localize `:@@UKK:UKK`;
+    const course = $localize `:@@kurssi:kurssi`;
+    const filename = `${faq}-${course}-${this.courseID}.json`;
+    this.courses.importFAQs(this.courseID).then(response => {
+      let filecontent = JSON.stringify(response, null, 2);
+      const link = this.renderer.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute(
+          'href',
+          "data:text/json;charset=UTF-8," + encodeURIComponent(filecontent));
+      link.setAttribute('download', filename);
+      link.click();
+      link.remove();
+    })
+    .catch(error => {
+      this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
+                                        Tiedoston lataaminen epäonnistui` + '.';
+    });
   }
 
   public saveFields() {

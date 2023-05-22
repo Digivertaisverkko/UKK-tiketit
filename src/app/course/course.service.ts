@@ -21,7 +21,7 @@ export class CourseService {
 
   constructor(
     private errorService: ErrorService,
-    private http: HttpClient,
+    private http : HttpClient,
     private store: StoreService
   ) { }
 
@@ -52,6 +52,17 @@ export class CourseService {
       this.handleError(error);
     }
     return response['nimi'];
+  }
+
+  public async importFAQs(courseID: string): Promise<any> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk/vienti`;
+    try {
+      response = await firstValueFrom(this.http.get<any>(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
   }
 
   // Palauta listan kaikista kursseista, joilla käyttäjä on.

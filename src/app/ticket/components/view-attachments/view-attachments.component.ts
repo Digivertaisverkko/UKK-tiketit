@@ -34,8 +34,6 @@ export class ViewAttachmentsComponent {
   public downloadFile(ticketID: string, commentID: string, fileID: string,
       filename: string)
     {
-    console.warn(`commendID: ${commentID} fileID: ${fileID} filename: ${filename}
-    ticketID: ${ticketID}`);
     this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
