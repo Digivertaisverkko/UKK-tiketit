@@ -38,7 +38,7 @@
     "rxjs": "^7.8.1",
     "sha.js": "^2.4.11",
     "style-mod": "^4.0.3",
-    "tslib": "^2.3.0",
+    "tslib": "^2.5.2",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
