@@ -77,7 +77,7 @@ export class SettingsComponent implements OnInit {
 
   public onFileAdded(event: any) {
     this.message = '';
-    const file = event.target.files[0];
+    const file: File = event.target.files[0];
     if (!file) throw Error('Ei tiedostoa.');
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
