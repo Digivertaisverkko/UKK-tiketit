@@ -44,6 +44,7 @@ export class DataConsentComponent implements OnInit {
   }
 
   public dontGiveConsent() {
+    // Muuta tätä, lisää tallentamaan käyttäjäID.
     localStorage.setItem('NO_DATA_CONSENT', 'true');
     this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
       if (res?.success !== true) {

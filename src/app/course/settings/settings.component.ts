@@ -5,6 +5,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
 import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
+import { GenericResponse } from '@core/core.models';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -45,8 +46,7 @@ export class SettingsComponent implements OnInit {
     const faq = $localize `:@@UKK:UKK`;
     const course = $localize `:@@kurssi:kurssi`;
     const filename = `${faq}-${course}-${this.courseID}.json`;
-    this.courses.exportFAQs(this.courseID).then(response => {
-      let filecontent = JSON.stringify(response, null, 2);
+    this.courses.exportFAQs(this.courseID).then(filecontent => {
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
       link.setAttribute(
@@ -72,11 +72,38 @@ export class SettingsComponent implements OnInit {
     }).catch(e => {
       this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
           Kysymysten lisäkenttien haku epäonnistui` + '.';
-    }).finally( () => this.isLoaded = true)
+    }).finally( () => this.isLoaded = true )
   }
 
   public onFileAdded(event: any) {
-
+    this.message = '';
+    const file = event.target.files[0];
+    if (!file) throw Error('Ei tiedostoa.');
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      let jsonData: JSON;
+      try {
+        jsonData = JSON.parse(fileReader.result as string);
+      } catch {
+        this.errorMessage = $localize `:@@Tiedoston sisältö on virheellisessä muodossa:
+        Tiedoston sisältö on virheellisessä muodossa` + '.';
+        return
+      }
+        this.courses.importFAQs(this.courseID, jsonData)
+        .then((res: GenericResponse) => {
+          if (res.success === true) {
+            this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
+                Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
+          } else {
+            throw Error
+          }
+      }).catch(e => {
+        console.log('Ei onnistunut :-/');
+        this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
+          Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
+      })
+    }
+    fileReader.readAsText(file);
   }
 
   public saveFields() {

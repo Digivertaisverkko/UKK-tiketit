@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/error.service';
+import { GenericResponse } from '../core/core.models';
 import { Kenttapohja, Kurssini } from './course.models';
 import { StoreService } from '../core/store.service';
 
@@ -26,7 +27,8 @@ export class CourseService {
   ) {
   }
 
-  public async exportFAQs(courseID: string): Promise<any> {
+  // Vie kurssin UKK:t JSON--string muodossa.
+  public async exportFAQs(courseID: string): Promise<string> {
     let response: any;
     const url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk/vienti`;
     try {
@@ -34,7 +36,8 @@ export class CourseService {
     } catch (error: any) {
       this.handleError(error);
     }
-    return response;
+    let filecontent = JSON.stringify(response, null, 2);
+    return filecontent;
   }
 
   // Palauta listan kaikista kursseista.
@@ -95,11 +98,15 @@ export class CourseService {
     return response;
   }
 
-  public async importFAQs(courseID: string, file: File) {
-    let response: any;
+  // Lähetetään JSON-muotoiset UKK:t lisättäväksi kurssille. 
+  public async importFAQs(courseID: string, filecontent: JSON):
+      Promise<GenericResponse | any>{
+    let response;
     const url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk/vienti`;
+    const body = filecontent;
     try {
-      response = await firstValueFrom(this.http.post<any>(url, file));
+      response = await firstValueFrom(this.http.post<any>(url, body));
+      throw Error
     } catch (error: any) {
       this.handleError(error);
     }

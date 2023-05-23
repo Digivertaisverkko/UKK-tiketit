@@ -59,7 +59,7 @@
     i18n-title="@@Virhe"
     *ngIf="errorMessage.length > 0"
     message="{{ errorMessage }}"
-    [styles]="{ margin: '3em 20% 1em 20%' }"
+    [styles]="{ margin: '2em 0 1em 0' }"
     title="Virhe"
     >
 </app-error-card>
@@ -77,7 +77,7 @@
   </button>
 </div>
 
-<!----------------- Loput asetuksista ----------------------------------------->
+<!----------------- UKK Siirtäminen-- ----------------------------------------->
 
 <div class="vertical-spacer"></div>
 
@@ -87,8 +87,11 @@
   Usein kysyttyjen kysymysten siirtäminen
 </h3>
 
+<!-- <p ></p> -->
+
 <!---- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
-<input  aria-disabled="true"
+<input  accept="application/.json"
+        aria-disabled="true"
         (change)="onFileAdded($event)"
         class="file-input"
         #fileInput
@@ -105,12 +108,16 @@
           >
     Lataa tiedostona
   </button>
-  <!-- <button i18n="@@Lisää tiedostona"
+  <button i18n="@@Lisää tiedostona"
           mat-raised-button
+          (click)="fileInput.click()"
           >
     Lisää tiedostona
-  </button> -->
+  </button>
 </div>
+
+<!----------------------------------------------------------------------------->
+
 
 <div class="vertical-spacer"></div>
 
