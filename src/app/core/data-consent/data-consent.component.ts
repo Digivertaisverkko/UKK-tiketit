@@ -14,6 +14,8 @@ export class DataConsentComponent implements OnInit {
 
   public error;
   public accountExists: boolean | null = null;
+  private hasDeniedBefore: boolean = false;
+  private noDataConsentList: string[] = [];
   private tokenid: string | null = null;
 
   constructor(
@@ -31,24 +33,29 @@ export class DataConsentComponent implements OnInit {
     const urlParams = new URLSearchParams(window.location.search);
     this.tokenid = urlParams.get('tokenid');
     this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
+    const noDataConsent = localStorage.getItem('noDataConsent')
+    if (noDataConsent) {
+      this.noDataConsentList = JSON.parse(noDataConsent);
+    }
     console.log('on jo tili: ' + this.accountExists);
 
-    this.accountExists = true;
-
-    // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, jolloin voi
-    // selata kirjautumattomana.
-    if (localStorage.getItem('NO_DATA_CONSENT') === 'true') {
-      console.log('Ei ole annettu lupaa tietojen siirtoon.');
-      this.dontGiveConsent();
+    // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, annetaan kieltäytyminen
+    // ja ohjataan sisään.
+    if (this.tokenid && this.noDataConsentList?.includes(this.tokenid)) {
+      console.log('On kieltäydytty aiemmin.');
+      this.hasDeniedBefore = true;
+      this.denyConsent();
     }
   }
 
-  public dontGiveConsent() {
-    // Muuta tätä, lisää tallentamaan käyttäjäID.
-    localStorage.setItem('NO_DATA_CONSENT', 'true');
+  public denyConsent() {
     this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
       if (res?.success !== true) {
         throw Error;
+      }
+      if (this.hasDeniedBefore === false ) {
+        if (this.tokenid) this.noDataConsentList.push(this.tokenid);
+        localStorage.setItem('noDataConsent', JSON.stringify(this.noDataConsentList));
       }
       let courseID: string;
       if (res?.kurssi != null) {
@@ -63,9 +70,9 @@ export class DataConsentComponent implements OnInit {
   }
 
   public giveConsent() {
-    if (localStorage.getItem('NO_DATA_CONSENT')) {
-      localStorage.removeItem('NO_DATA_CONSENT')
-    }
+    // if (localStorage.getItem('NO_DATA_CONSENT')) {
+    //   localStorage.removeItem('NO_DATA_CONSENT')
+    // }
     this.auth.sendDataConsent(this.tokenid, true).then((res: any) => {
       if (res?.success == true) {
         if (res?.kurssi != null) {

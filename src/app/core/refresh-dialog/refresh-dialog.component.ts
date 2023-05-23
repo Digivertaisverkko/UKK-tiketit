@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 
 
@@ -26,13 +26,35 @@ import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
   styleUrls: ['./refresh-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RefreshDialogComponent {
+export class RefreshDialogComponent implements OnInit {
 
   constructor (public modalRef: MatDialogRef<RefreshDialogComponent>) {
   }
 
+  ngOnInit(): void {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenid: string | null = urlParams.get('tokenid');
+    if (!tokenid) {
+      console.error('Ei tokenid:ä.');
+    } else {
+      this.removeConsentInfo(tokenid);
+    }
+    // localStorage.removeItem('NO_DATA_CONSENT');
+  }
+
   public closeDialog() {
+    // Lisää tokenid uudestaan.
     this.modalRef.close('cancel');
+  }
+
+  private removeConsentInfo(tokenid: string) {
+    const noDataConsent = localStorage.getItem('noDataConsent')
+    let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
+    const index = noDataConsentList.indexOf(tokenid);
+    if (index !== -1) {
+      noDataConsentList.splice(index, 1);
+    }
+    localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
   }
 
 }

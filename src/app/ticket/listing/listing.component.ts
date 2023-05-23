@@ -83,7 +83,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: true }
     ];
-
+    
   }
 
   ngOnInit() {
@@ -175,15 +175,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public giveConsent() {
-    localStorage.removeItem('NO_DATA_CONSENT');
+
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.maxWidth = '30rem';
     const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
-    refreshDialog.afterClosed().subscribe(res => {
-      if (res === 'cancel') {
-        localStorage.setItem('NO_DATA_CONSENT', 'true');
-      }
-    })
+    // refreshDialog.afterClosed().subscribe(res => {
+    //   if (res === 'cancel') {
+    //     localStorage.setItem('NO_DATA_CONSENT', 'true');
+    //   }
+    // })
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.

@@ -22,7 +22,14 @@ export class NoDataConsentComponent {
   }
 
   public giveConsent() {
-    localStorage.removeItem('NO_DATA_CONSENT');
+    console.error('no-data-consent: päivitä tämä');
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenid: string | null = urlParams.get('tokenid');
+    if (!tokenid) {
+      console.error('Ei tokenid:ä.');
+    } else {
+      this.removeConsentInfo(tokenid);
+    }
     const dialogConfig = new MatDialogConfig();
     dialogConfig.maxWidth = '30rem';
     const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
@@ -31,6 +38,16 @@ export class NoDataConsentComponent {
         localStorage.setItem('NO_DATA_CONSENT', 'true');
       }
     })
+  }
+
+  private removeConsentInfo(tokenid: string) {
+    const noDataConsent = localStorage.getItem('noDataConsent')
+    let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
+    const index = noDataConsentList.indexOf(tokenid);
+    if (index !== -1) {
+      noDataConsentList.splice(index, 1);
+    }
+    localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
   }
 
 }

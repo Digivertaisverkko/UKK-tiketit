@@ -39,8 +39,8 @@
 
   <!-- Poista tili -->
 
-  <ng-container *ngIf="accountExists; else forNewUser">
-    <button (click)="dontGiveConsent()"
+  <ng-container *ngIf="accountExists === true; else forNewUser">
+    <button (click)="denyConsent()"
             i18n="@@Poista tili ja jatka kirjautumatta"
             mat-raised-button
             >
@@ -57,7 +57,7 @@
 </ng-container>
 
 <ng-template #forNewUser>
-  <button (click)="dontGiveConsent()"
+  <button (click)="denyConsent()"
           i18n="@@Jatka kirjautumatta"
           mat-raised-button
           >
