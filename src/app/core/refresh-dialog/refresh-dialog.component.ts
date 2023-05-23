@@ -32,29 +32,29 @@ export class RefreshDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenid: string | null = urlParams.get('tokenid');
-    if (!tokenid) {
-      console.error('Ei tokenid:ä.');
-    } else {
-      this.removeConsentInfo(tokenid);
-    }
-    // localStorage.removeItem('NO_DATA_CONSENT');
+    console.log('URL: ' + window.location.href);
+    this.removeConsentInfo();
   }
 
   public closeDialog() {
-    // Lisää tokenid uudestaan.
+    // TODO: Lisää tokenid uudestaan.
     this.modalRef.close('cancel');
   }
 
-  private removeConsentInfo(tokenid: string) {
-    const noDataConsent = localStorage.getItem('noDataConsent')
+  private removeConsentInfo() {
+    const noDataConsent: string | null = localStorage.getItem('noDataConsent')
     let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
-    const index = noDataConsentList.indexOf(tokenid);
+    const lastTokenid = localStorage.getItem('lastTokenid')
+    if (!lastTokenid) {
+      console.error('refresh-dialog: Ei tallennettuna viimeisintä tokenid:ä.');
+      return
+    }
+    const index = noDataConsentList.indexOf(lastTokenid);
     if (index !== -1) {
       noDataConsentList.splice(index, 1);
     }
     localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
+    console.log(JSON.stringify(localStorage.getItem('noDataConsent')));
   }
 
 }

@@ -31,8 +31,13 @@ export class DataConsentComponent implements OnInit {
     console.log('URL: ' + window.location.href);
     // route.snapshot.paramMap.get ei toiminut tässä.
     const urlParams = new URLSearchParams(window.location.search);
-    this.tokenid = urlParams.get('tokenid');
     this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
+    this.tokenid = urlParams.get('tokenid');
+    // Tallennetaan, jotta voidaan poistaa, jos käyttäjä haluaa antaa
+    // myöhemmin suostumuksen.
+    if (this.tokenid) {
+      localStorage.setItem('lastTokenid', this.tokenid);
+    }
     const noDataConsent = localStorage.getItem('noDataConsent')
     if (noDataConsent) {
       this.noDataConsentList = JSON.parse(noDataConsent);
@@ -57,6 +62,7 @@ export class DataConsentComponent implements OnInit {
         if (this.tokenid) this.noDataConsentList.push(this.tokenid);
         localStorage.setItem('noDataConsent', JSON.stringify(this.noDataConsentList));
       }
+      this.auth.updateDataConsent();
       let courseID: string;
       if (res?.kurssi != null) {
         courseID = String(res.kurssi);

@@ -62,6 +62,7 @@ export class AuthService {
   }
 
   public initialize() {
+    this.updateDataConsent();
     this.startUpdatingUserinfo();
   }
 
@@ -383,5 +384,25 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     this.errorService.handleServerError(error);
   }
+
+  // Aseta storageen onko datan luovutuksesta kieltäydytty sen mukaan, miten
+  // on local storageen tallennettu.
+  public updateDataConsent() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenid = urlParams.get('tokenid');
+    const noDataConsent = localStorage.getItem('noDataConsent')
+    let noDataConsentList: string[];
+    if (noDataConsent) {
+      noDataConsentList = JSON.parse(noDataConsent);
+      /* Listassa on kieltäytyneiden tokenid:t. Jos ei ole kieltäytynyt,
+      niin ei merkintää. */
+      if (tokenid && noDataConsentList?.includes(tokenid)) {
+        this.store.setDenyDataConsent(true);
+      } else {
+        this.store.setDenyDataConsent(false);
+      }
+    }
+  }
+
 
 }

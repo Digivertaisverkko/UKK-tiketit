@@ -87,7 +87,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.noDataConsent = this.getDataConsent();
     this.url = window.location.pathname;
     this.trackCourseID();
     this.trackIfParticipant();
@@ -131,7 +130,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public errorClickEvent(button: string) {
-    if (this.noDataConsent === true && this.isInIframe === true) {
+    if (this.store.getDenyDataConsent() === true && this.isInIframe === true) {
       this.giveConsent();
     } else if (this.noDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
@@ -303,7 +302,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
         buttonText: ''
       }
-      if (this.noDataConsent === true) {
+      if (this.store.getDenyDataConsent() === true) {
         this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
       } else if (!this.isInIframe) {
         this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
