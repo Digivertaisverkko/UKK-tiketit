@@ -1,25 +1,27 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Optional, Self, ViewEncapsulation
+    } from '@angular/core';
+import { ControlContainer, ControlValueAccessor, FormGroupDirective, NgControl
+    } from '@angular/forms';
 import { minimalSetup } from 'codemirror';
 import { javascript } from "@codemirror/lang-javascript"
-import { Editor, marks, nodes as basicNodes, Toolbar } from 'ngx-editor';
-import { node as codeMirrorNode, CodeMirrorView } from 'prosemirror-codemirror-6';
+import { Editor, Toolbar } from 'ngx-editor';
+import { CodeMirrorView } from 'prosemirror-codemirror-6';
 import { gapCursor } from 'prosemirror-gapcursor';
-import { Node as ProseMirrorNode, Schema } from 'prosemirror-model';
-import { Plugin, PluginKey } from "prosemirror-state";
+import { Node as ProseMirrorNode } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 
-const nodes = {
-  ...basicNodes,
-  code_mirror: codeMirrorNode,
-}
+import schema from './schema';
 
-const schema = new Schema({
-  nodes,
-  marks,
-});
+export const NOOP_VALUE_ACCESSOR: ControlValueAccessor = {
+  writeValue(): void {},
+  registerOnChange(): void {},
+  registerOnTouched(): void {}
+};
 
 const nodeViews = {
-  code_mirror: (node: ProseMirrorNode, view: EditorView, getPos: () => number): CodeMirrorView => {
+  code_mirror: (node: ProseMirrorNode,
+                view: EditorView,
+                getPos: () => number): CodeMirrorView => {
     return new CodeMirrorView({
       node,
       view,
@@ -34,24 +36,15 @@ const nodeViews = {
   },
 };
 
-// Tämä plugin sanitoi liitetyn tekstin ja palauttaa ainoastaan tesktin ilman mitään muotoiluja
-// TODO: rivinvaihdot pitäisi kuitenkin saada asianmukaisesti <br > tageina
-const sanitizePastedHTMLPlugin = new Plugin({
-  key: new PluginKey("PastePlugin"),
-  props: {
-    transformPastedHTML(inputHtml: string): string {
-      let tempDivElement = document.createElement("div");
-      tempDivElement.innerHTML = inputHtml;
-      return tempDivElement.textContent || tempDivElement.innerText || "";
-    },
-  },
-});
-
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [{
+    provide: ControlContainer,
+    useExisting: FormGroupDirective
+  }]
 })
 export class EditorComponent implements OnInit, OnDestroy {
   editor!: Editor;
@@ -62,9 +55,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     ['image']
   ];
 
-  @Input() disabled: boolean = false;
-  @Input() editorContent: string = '';
-  @Output() editorContentChange = new EventEmitter<string>();
+  @Input() formControlName: string = '';
+
+  constructor(@Self() @Optional() public ngControl: NgControl) {
+    if (this.ngControl) this.ngControl.valueAccessor = NOOP_VALUE_ACCESSOR;
+  }
 
   ngOnInit(): void {
     this.editor = new Editor({

@@ -4,7 +4,7 @@
 
 // Backendin api:n URL-osoite.
 
-const baseUrl = 'http://localhost:3000/api';
+const baseUrl = '/api';
 
 // clientID on 3rd party -tunnistautumista varten.
 

@@ -1,0 +1,33 @@
+@import "/src/variables.scss";
+
+.top-buttons-wrapper {
+  margin-top: 1.5rem;
+}
+
+h1 {
+  margin-top: 4rem;
+}
+
+h2 {
+  margin-bottom: 2.5rem;
+}
+
+.button-wrapper {
+  display: flex;
+  margin-top: 2em;
+  padding-right: 3em;
+}
+
+.spacer {
+  display: block;
+  flex: 1 1 auto;
+}
+
+button {
+  min-width: 8em;
+}
+
+p {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}

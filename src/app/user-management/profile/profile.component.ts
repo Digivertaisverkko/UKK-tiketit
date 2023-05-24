@@ -1,55 +1,85 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/core/auth.service';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
-import { TicketService } from 'src/app/ticket/ticket.service';
-import { UserManagementService } from 'src/app/user-management/user-management.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+
+import { MinunAsetukset, UserManagementService } from '../user-management.service';
+import { Constants } from '@shared/utils';
+import { ErrorService } from '@core/error.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
 
-  private courseId: string | null;
-  public courseName: string = '';
+export class ProfileComponent implements OnInit {
+  public emailSettingsForm!: FormGroup;
+  public emailSettingsErrorMessage: string = '';
+  public emailSettingsSuccessMessage: string = '';
   public errorMessage: string = '';
-  public isLoaded: boolean = false;
-  public isInIframe: boolean = getIsInIframe();
+  public isPersonalInfoLoaded: boolean = false;
   public isRemovePressed: boolean = false;
   public userEmail: string = '';
   public userName: string = '';
 
-  constructor(private authService: AuthService,
+  constructor(private errorService: ErrorService,
+              private formBuilder: FormBuilder,
               private renderer: Renderer2,
-              private route: ActivatedRoute,
-              private ticketService: TicketService,
-              private userManagementService: UserManagementService) {
-    this.courseId = this.route.snapshot.paramMap.get('courseid');
-  }
+              private titleServ: Title,
+              private userManagementService: UserManagementService)
+  {}
 
   ngOnInit(): void {
-    if (this.courseId !== null) {
-      this.ticketService.getCourseName(this.courseId).then(response => {
-        this.courseName = response;
-      });
-    } else {
-      throw new Error('Kurssi ID puuttuu URL:sta.');
-    }
-    this.userManagementService.getPersonalInfo().then(response => {
+    this.titleServ.setTitle(
+      Constants.baseTitle + $localize `:@@Profiili:Profiili`
+    );
+    this.userManagementService.getPersonalInfo()
+    .then(response => {
       this.userName = response.nimi;
       this.userEmail = response.sposti;
+      this.isPersonalInfoLoaded = true;
     });
-    this.isLoaded = true;
+    this.userManagementService.getSettings()
+    .then(response => {
+      this.emailSettingsForm = this.createEmailSettingsForm(response);
+    });
   }
 
   public changeRemoveButton(): void {
     setTimeout(() => this.isRemovePressed = true, 300);
   }
 
+  private createEmailSettingsForm(defaultSettings: MinunAsetukset): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      notify: [defaultSettings['sposti-ilmoitus']],
+      summary: [defaultSettings['sposti-kooste']],
+      feedback: [defaultSettings['sposti-palaute']],
+    });
+
+    form.valueChanges.subscribe(() => {
+      let settings: MinunAsetukset = {
+        "sposti-ilmoitus": this.emailSettingsForm.controls['notify'].value,
+        "sposti-kooste": this.emailSettingsForm.controls['summary'].value,
+        "sposti-palaute": this.emailSettingsForm.controls['feedback'].value
+      }
+
+      this.userManagementService.postSettings(settings)
+      .then(() => {
+        this.emailSettingsErrorMessage = '';
+        this.emailSettingsSuccessMessage = $localize `:@@Asetusten tallentaminen onnistui.:Asetusten tallentaminen onnistui.`;
+      })
+      .catch(() => {
+        this.emailSettingsSuccessMessage = '';
+        this.emailSettingsErrorMessage = $localize `:@@Asetusten tallentaminen epäonnistui.:Asetusten tallentaminen epäonnistui.`;
+      });
+    });
+
+    return form;
+  }
+
   public downloadPersonalData(): void {
-    this.userManagementService.getGdprData().then(response => {
+    this.userManagementService.getGdprData()
+    .then(response => {
       let gdprData = JSON.stringify(response, null, 2);
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
@@ -59,20 +89,28 @@ export class ProfileComponent implements OnInit {
       link.setAttribute('download', 'datadump.json');
       link.click();
       link.remove();
-    }).catch(error => {
-      this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:Tiedoston lataaminen epäonnistui` + '.';
+    })
+    .catch(error => {
+      this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
+                                        Tiedoston lataaminen epäonnistui`
+                                        + '.';
     });
   }
 
   public removeProfile(): void {
-    this.userManagementService.removeUser().then(response => {
+    this.userManagementService.removeUser()
+    .then(response => {
       if (response) {
-        this.authService.handleNotLoggedIn();
+        this.errorService.handleNotLoggedIn();
+
       } else {
         throw new Error;
       }
-    }).catch(error => {
-      this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:Profiilin poistaminen epäonnistui` + '.';
+    })
+    .catch(error => {
+      this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:
+                                        Profiilin poistaminen epäonnistui`
+                                        + '.';
     });
   }
 

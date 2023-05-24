@@ -1,8 +1,9 @@
 @import '/src/variables.scss';
 
+//----------------- Korkeudesta riippuvaiset osat ------------------------------
+
 // Skaalataan headerin korkeuden mukaan.
 @mixin height-dependant($header-height) {
-
   mat-toolbar {
     height: $header-height;
     padding-left: 1rem;
@@ -11,7 +12,6 @@
   $icon-size: calc($header-height * 0.8);
 
   #account-icon-button {
-    // border: solid red 1px;
     align-items: center;
     font-size: $icon-size;
     height: $icon-size;
@@ -21,7 +21,6 @@
     width: $icon-size;
 
     mat-icon {
-      // border: solid green 1px;
       font-size: $icon-size;
       position: absolute;
       top: 0;
@@ -32,21 +31,22 @@
   }
 }
 
+//----------------- Muut -------------------------------------------------------
+
 .logo {
-    // position: relative;
-    // -ms-transform: translateY(-50%);
-    // transform: translateY(-50%);
-    // background: no-repeat 50% contain;
-    // border-style: none;
-    margin: auto;
-    height: 80%;
+  margin: auto 1rem auto auto;
+  height: 80%;
 
-    img { height: 100%; }
+  img {
+    height: 100%;
+  }
 
-    &-clickable {
-      &:hover { filter: brightness(97%); }
-      cursor: pointer;
+  &-clickable {
+    &:hover {
+      filter: brightness(97%);
     }
+    cursor: pointer;
+  }
 }
 
 .user-info {
@@ -56,30 +56,6 @@
   gap: 0.2rem;
   margin-top: 0.1em;
   margin-right: 0.5em;
-  // border: solid red 1px;
-}
-
-.flag {
-  background-size: contain;
-  background-position: 50%;
-  background-repeat: no-repeat;
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  cursor: pointer;
-  line-height: 0.7em;
-  margin-right: 10px;
-  margin-left: 15px;
-}
-.flag:before { content: '\00a0'; }
-
-// Ikonit ovat täältä: https://flagicons.lipis.dev/
-.flag-fi {
-  background-image: url(../../../assets/flag-icons/fi.svg);
-}
-
-.flag-en {
-  background-image: url(../../../assets/flag-icons/gb.svg);
 }
 
 @media screen and (min-width: $XSmall) {

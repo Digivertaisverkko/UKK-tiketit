@@ -1,42 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { Constants } from '@shared/utils';
+import { Title } from '@angular/platform-browser';
+import { StoreService } from '../store.service';
+
 
 @Component({
   template: `
 
     <div *ngIf="courseID" class="top-buttons-wrapper">
-      <app-to-beginning-button></app-to-beginning-button>
+      <app-beginning-button></app-beginning-button>
     </div>
 
-    <h2 class="main-header"><span>404</span></h2>
+    <!-- <h1 class="main-header"><span>404</span></h1> -->
 
-    <h3 i18n="@@404-otsikko" class="sub-header">Sivua ei löytynyt</h3>
+    <app-headline [noCourseTitle]="true">404</app-headline>
+
+    <h2 i18n="@@404-otsikko" class="sub-header">
+      Sivua ei löytynyt
+    </h2>
 
     <div class="button-wrapper" *ngIf="!isLoggedIn">
       <div class="spacer"></div>
+
+    <!--
       <button align="end"
-      mat-raised-button color="primary" id="submitButton"
-      (click)="goToLogin()"
-      i18n="@@Kirjaudu sisään">
-      Kirjaudu sisään
-        </button>
+              (click)="goToLogin()"
+              id="submitButton"
+              i18n="@@Kirjaudu sisään"
+              mat-raised-button color="primary"
+              >
+        Kirjaudu sisään
+      </button>
+    -->
+
     </div>
     <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
       ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.</p>
     <p i18n="@@404-2">Todennäköisesti ensimmäinen.</p>
     `,
+
     styleUrls: ['./page-not-found.component.scss']
 })
+
 export class PageNotFoundComponent implements OnInit {
-  public isLoggedIn: Boolean = false;
+  public isLoggedIn: Boolean | null = null;
   public courseID: string | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute) {
-      this.isLoggedIn = this.authService.getIsUserLoggedIn();
+    private route : ActivatedRoute,
+    private store : StoreService,
+    private title : Title
+    ) {
+    this.title.setTitle(Constants.baseTitle + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
+      this.isLoggedIn = this.store.getIsLoggedIn();
       console.log(this.courseID);
   }
 
@@ -54,7 +74,7 @@ export class PageNotFoundComponent implements OnInit {
   }
 
   public async goToLogin() {
-    const loginUrl = await this.authService.sendAskLoginRequest('own');
+    const loginUrl = await this.authService.sendAskLoginRequest('own', this.courseID);
     this.router.navigateByUrl(loginUrl);
   }
 

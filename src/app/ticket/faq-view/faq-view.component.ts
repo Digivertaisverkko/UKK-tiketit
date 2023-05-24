@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, User } from 'src/app/core/auth.service';
-import { TicketService, Tiketti, Error } from '../ticket.service';
+import { Observable } from 'rxjs';
+import { TicketService } from '../ticket.service';
+import { Constants } from '@shared/utils';
+import { Tiketti } from '../ticket.models';
+import { Title } from '@angular/platform-browser';
+import { User, Error } from '@core/core.models';
+import { StoreService } from '@core/store.service';
 
 @Component({
   templateUrl: './faq-view.component.html',
@@ -9,48 +14,41 @@ import { TicketService, Tiketti, Error } from '../ticket.service';
 })
 
 export class FaqViewComponent implements OnInit {
-  public courseName: string = '';
   public errorMessage: string = '';
-  public isInIframe: boolean = true;
-  public isLoaded: boolean = false;
-  public ticket: Tiketti = {} as Tiketti;
-  public user: User = <User>{};
   public isArchivePressed: boolean = false;
   public isCopyToClipboardPressed: boolean = false;
+  public isLoaded: boolean = false;
+  public ticket: Tiketti = {} as Tiketti;
+  public user$: Observable<User | null>;
   private courseID: string | null;
   private faqID: string | null = this.route.snapshot.paramMap.get('id');
 
   constructor(
-    private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private store: StoreService,
     private ticketService: TicketService,
+    private titleServ: Title
   ) {
     this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.auth.trackUserInfo().subscribe(response => this.user = response);
+    this.user$ = this.store.trackUserInfo();
   }
 
   ngOnInit(): void {
-    this.getIfInIframe();
     if (this.courseID === null) {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
-    this.ticketService.getCourseName(this.courseID).then(response => {
-      this.courseName = response;
-    });
     if (this.faqID !== null) {
       this.ticketService.getTicketInfo(this.faqID)
         .then((response) => {
+          console.dir(response);
           this.ticket = response;
-          if (this.auth.getUserName.length == 0) {
-            try {
-              if (this.courseID !== null) this.auth.fetchUserInfo(this.courseID);
-            } catch {}
-          }
+          this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
         })
         .catch(error => {
           this.errorMessage =
-            $localize`:@@UKK näyttäminen epäonnistui:Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
+            $localize`:@@UKK näyttäminen epäonnistui:
+                Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
         })
         .finally(() => this.isLoaded = true );
     }
@@ -76,11 +74,6 @@ export class FaqViewComponent implements OnInit {
         this.errorMessage = $localize `:@@UKK poisto epäonnistui:Usein kysytyn kysymyksen poistaminen ei onnistunut.`
       }
     })
-  }
-
-  private getIfInIframe() {
-    const isInIframe = window.sessionStorage.getItem('IN-IFRAME');
-    this.isInIframe = (isInIframe === 'false') ? false : true;
   }
 
 }

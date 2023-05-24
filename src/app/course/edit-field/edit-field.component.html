@@ -1,132 +1,182 @@
-<mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
-
-<h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-  <span>{{courseName}}</span>
-</h2>
-
-<div class="vertical-spacer" *ngIf="isInIframe"></div>
+<app-headline></app-headline>
 
 <div class="top-buttons">
-  
-  <app-to-beginning-button></app-to-beginning-button>
+  <app-beginning-button
+      (clicked)="showConfirm = true"
+      [confirm]=form.dirty
+      >
+  </app-beginning-button>
 
-  <button
-    class="remove-button"
-    (click)="changeRemoveButton()"
-    *ngIf="fieldID !== null && isRemovePressed === false"
-    mat-raised-button
-    i18n="@@Poista">
+  <button class="remove-button"
+          (click)="changeRemoveButton()"
+          i18n="@@Poista"
+          mat-raised-button
+          *ngIf="fieldID !== null && isRemovePressed === false"
+          >
     Poista
   </button>
 
-  <button mat-raised-button (click)="sendField(true)"
-    *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto">
+  <button (click)="updateAllFields(true)"
+          color="accent"
+          i18n="@@Vahvista poisto"
+          *ngIf="isRemovePressed === true"
+          mat-raised-button
+          >
     Vahvista poisto
   </button>
-
 </div>
 
+<app-error-card
+    [confirmLeave]="true"
+    *ngIf="showConfirm"
+    [styles]="{ margin: '2rem 0 0 0' }"
+    >
+</app-error-card>
+
 <div class="view-wrapper" *ngIf="isLoaded">
+  <h2 class="sub-header" i18n="@@Kysymysten lisäkenttä">
+    Kysymysten lisäkenttä
+  </h2>
 
-<h3 class="sub-header" i18n="@@Kysymysten lisäkentät">Kysymysten lisäkentät</h3>
+  <form action=""
+        [formGroup]="form"
+        (ngSubmit)="updateAllFields()"
+        #submitForm="ngForm"
+        >
+    <mat-form-field class="field-title" appearance="fill">
+      <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
+      <input  formControlName="title"
+              i18n-placeholder="@@Kentän nimi"
+              matInput
+              maxlength="50"
+              name="kentta.otsikko"
+              placeholder="Kentän nimi"
+              />
+              <!-- [(ngModel)]="field.otsikko" -->
+      <mat-hint align="end">{{ field.otsikko.length }} / 50</mat-hint>
 
-<form action="" #submitForm="ngForm" accept-charset="UTF-8">
-
-  <mat-form-field class="field-title" appearance="fill">
-    <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
-    <input name="kentta.otsikko" [(ngModel)]="field.otsikko" matInput maxlength="50" placeholder="Kentän nimi" i18n-placeholder="@@Kentän nimi">
-    <mat-hint align="end">{{field.otsikko.length}} / 50</mat-hint>
-  </mat-form-field>
-
-  <div class="multiple-selection-wrapper">
-    <mat-checkbox [(ngModel)]="multipleSelection" name="checkbox" i18n="@@Monivalinta">Monivalinta</mat-checkbox>
-
-    <mat-form-field class="chip-list-form-field" appearance="fill" >
-      <mat-label i18n="@@Monivalinnan vaihtoehdot">Monivalinnan vaihtoehdot</mat-label>
-      <mat-chip-grid #chipGrid aria-label="Valitse monivalinnan vaihtoehtoja" [disabled]="!multipleSelection">
-
-        <mat-chip-row *ngFor="let valinta of field.valinnat"
-          [editable]="true"
-          (edited)="edit(valinta, $event)"
-          (removed)="remove(valinta)" 
-          [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
-          class="chipRow"
-          >
-          {{valinta}}
-          <button matChipRemove [attr.aria-label]="'poista valinta ' + valinta">
-            <mat-icon>cancel</mat-icon>
-          </button>
-        </mat-chip-row>
-
-        <input i18nplaceholder="@@Kentät chips placeholder" placeholder="Paina enter valinnan kirjoittamisen jälkeen."
-          [matChipInputFor]="chipGrid"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          [matChipInputAddOnBlur]="addOnBlur"
-          (matChipInputTokenEnd)="add($event)"
-          (keydown.arrowleft)="onArrowLeft($event)"
-        />
-
-      </mat-chip-grid>
+      <mat-error  i18n="@@Pakollinen kenttä."
+                  *ngIf="title.errors?.['required']"
+                  >
+        Pakollinen kenttä.
+      </mat-error>
     </mat-form-field>
-    
-  </div>
 
-  <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
+    <div class="multiple-selection-wrapper">
+      <mat-checkbox
+          name="checkbox"
+          i18n="@@Monivalinta"
+          [(ngModel)]="hasSelections"
+          [ngModelOptions]="{ standalone: true }"
+          >
+        Monivalinta
+      </mat-checkbox>
 
-  <mat-form-field class="text-area-wrapper">
-    <textarea
-      [(ngModel)]="field.ohje"
-      #autosize="cdkTextareaAutosize"
-      autocomplete="off"
-      cdkAutosizeMaxRows="5"
-      cdkAutosizeMinRows="3"
-      cdkTextareaAutosize
-      contenteditable
-      matInput
-      maxlength="255"
-      name="infoText"
-      placeholder="Info-teksti"
-      i18n-placeholder="@@Infoteksti"
-    ></textarea>
+      <mat-form-field class="chip-list-form-field" appearance="fill">
+        <mat-label i18n="@@Monivalinnan vaihtoehdot">
+          Monivalinnan vaihtoehdot
+        </mat-label>
+        <mat-chip-grid
+            #chipGrid
+            aria-label="Valitse monivalinnan vaihtoehtoja"
+            i18n-aria-label="@@Valitse monivalinnan vaihtoehtoja"
+            [disabled]="!hasSelections"
+            formControlName="selections"
+            >
+          <mat-chip-row
+              [aria-description]="'paina enter muokataksesi valintaa ' + valinta"
+              class="chipRow"
+              [editable]="true"
+              (edited)="editSelection(valinta, $event)"
+              *ngFor="let valinta of field.valinnat"
+              (removed)="removeSelection(valinta)"
+              >
+            {{ valinta }}
+            <button [attr.aria-label]="'poista valinta ' + valinta"
+                    matChipRemove
+                    type="button"
+                    >
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
 
-    <mat-hint align="end">{{field.ohje.length}} / 255</mat-hint>
-  
-  </mat-form-field>
+          <input  i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
+                  placeholder="Paina enter valinnan kirjoittamisen jälkeen."
+                  [matChipInputFor]="chipGrid"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="addSelection($event)"
+                  (keydown.arrowleft)="onArrowLeft($event)"
+                  />
+        </mat-chip-grid>
+      </mat-form-field>
+    </div>
 
-  <app-error-card
-    *ngIf="errorMessage.length > 0"
-    i18n-title="@@Virhe"
-    title="Virhe"
-    message="{{ errorMessage }}"
-    [styles]="{ margin: '1rem 1rem' }"
-  >
-  </app-error-card>
+    <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
 
-  <div class="bottom-buttons-wrapper">
-    <mat-checkbox class="mandatory-checkbox" [(ngModel)]="field.pakollinen"  name="checkbox-mandatory" i18n="@@Pakollinen">Pakollinen</mat-checkbox>
-    <mat-checkbox class="prefillable-checkbox" style="display: none" [(ngModel)]="field.esitaytettava" name="checkbox-prefillable" i18n="@@Esitäytettävä">Esitäytettävä</mat-checkbox>
+    <mat-form-field class="text-area-wrapper">
+      <textarea autocomplete="off"
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMaxRows="5"
+                cdkAutosizeMinRows="3"
+                cdkTextareaAutosize
+                contenteditable
+                formControlName="infoText"
+                i18n-placeholder="@@Infoteksti"
+                matInput
+                maxlength="255"
+                name="infoText"
+                placeholder="Info-teksti"
+                >
+      </textarea>
 
-    <div class="spacer bottom-spacer"></div>
+      <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
+    </mat-form-field>
 
-    <button
-      class="cancel-button"
-      [routerLink]="'/course/' + courseID + '/settings'"
-      mat-raised-button
-      i18n="@@Peru">
-      Peru
-    </button>
+    <app-error-card
+        *ngIf="errorMessage.length > 0"
+        i18n-title="@@Virhe"
+        title="Virhe"
+        message="{{ errorMessage }}"
+        [styles]="{ margin: '1rem 1rem' }"
+        >
+    </app-error-card>
 
-    <button
-      class="send-button"
-      (click)="sendField()"
-      color="primary"
-      mat-raised-button
-      i18n="@@Lähetä">
-      Lähetä
-    </button>
+    <div class="bottom-buttons-wrapper">
+      <mat-checkbox formControlName="mandatory"
+                    name="checkbox-mandatory"
+                    i18n="@@Pakollinen"
+                    >
+        Pakollinen
+      </mat-checkbox>
 
-  </div>
+      <mat-checkbox
+          style="display: none"
+          name="checkbox-prefillable"
+          i18n="@@Esitäytettävä"
+          >
+        Esitäytettävä
+      </mat-checkbox>
 
-</form>
+      <div class="spacer bottom-spacer"></div>
 
+      <button class="cancel-button"
+              i18n="@@Peru"
+              mat-raised-button
+              [routerLink]="'/course/' + courseID + '/settings'"
+              type="button"
+              >
+        Peru
+      </button>
+
+      <button class="send-button"
+              color="primary"
+              i18n="@@Tallenna"
+              mat-raised-button
+              type="submit"
+              >
+        Tallenna
+      </button>
+    </div>
+  </form>
 </div>

@@ -1,0 +1,195 @@
+
+<mat-card appearance="outlined" class="answer">
+
+<!----------------- Card header  ---------------------------------------------->
+
+<mat-card-header>
+
+  <app-sender-info
+      [aikaleima]="comment.aikaleima"
+      [alignLeft]=true
+      [user]="user"
+      >
+    </app-sender-info>
+
+  <div class="spacer"></div>
+
+  <ng-container *ngIf="editingCommentID !== comment.id">
+
+    <span class="comment-state more-info-needed" *ngIf="comment.tila === 3">
+        <!-- <mat-icon>question_mark</mat-icon> -->
+        {{ this.strings.get('moreInfoNeeded') }}
+    </span>
+
+    <span class="comment-state proposed-solution" *ngIf="comment.tila === 5">
+      {{ this.strings.get('proposedSolution') }}
+    </span>
+
+  </ng-container>
+
+  <!-- i18n-aria-label="@@Muokkaa kommenttia" -->
+    <button aria-label="Poista kommentti"
+            class="remove-btn"
+            (click)="changeRemoveBtn()"
+            [disabled]="state==='sending'"
+            i18n-aria-label="@Poista kommentti"
+            mat-icon-button
+            matTooltip="{{ strings.get('removeComment') }}"
+            matTooltipPosition="after"
+            *ngIf="(comment.lahettaja.id === user?.id) &&
+                  (editingCommentID === comment.id) &&
+                  isRemovePressed === false"
+            #tooltip="matTooltip"
+            >
+      <mat-icon>delete</mat-icon>
+    </button>
+
+    <button aria-label="Vahvista kommentin poistaminen"
+            class="remove-btn"
+            (click)="removeComment(comment.id)"
+            color="accent"
+            [disabled]="state==='sending'"
+            i18n-aria-label="@@Vahvista kommentin poistaminen"
+            mat-icon-button
+            matTooltip="{{ strings.get('confirmRemoveTooltip') }}"
+            matTooltipPosition="after"
+            *ngIf="(comment.lahettaja.id === user?.id) &&
+                (editingCommentID === comment.id) &&
+                isRemovePressed === true"
+            #tooltip="matTooltip"
+            >
+            <mat-icon>delete_forever</mat-icon>
+    </button>
+
+  <button aria-label="Muokkaa kommenttia"
+          (click)="editComment(comment.id)"
+          [disabled]="state==='sending'"
+          i18n-aria-label="@@Muokkaa kommenttia"
+          mat-icon-button
+          *ngIf="(comment.lahettaja.id === user?.id) &&
+                (editingCommentID !== comment.id)"
+          >
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <button aria-label="Peru kommentin muokkaaminen"
+          (click)="stopEditing()"
+          [disabled]="state==='sending'"
+          i18n-aria-label="@@Peru kommentin muokkaaminen"
+          mat-icon-button
+          *ngIf="editingCommentID === comment.id"
+          >
+    <mat-icon>close</mat-icon>
+  </button>
+
+</mat-card-header>
+
+<!----------------- Card content ---------------------------------------------->
+
+  <mat-card-content>
+    <ng-container *ngIf="editingCommentID !== comment.id; else editingComment">
+      <app-message [messageHtml]=comment.viesti></app-message>
+      <app-view-attachments
+          (errorMessage)="errorMessage = $event"
+          [files]="comment.liitteet"
+          *ngIf="comment.liitteet"
+          [ticketID]="ticketID"
+          >
+      </app-view-attachments>
+    </ng-container>
+  </mat-card-content>
+
+  <ng-template #editingComment>
+
+  <form [formGroup]="form" (ngSubmit)="sendComment(comment.id)">
+
+    <app-editor formControlName="message"
+                *ngIf="editingCommentID === comment.id"
+                >
+    </app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="message?.errors?.['required']"
+                >
+      Pakollinen kenttä.
+    </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="message?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    </mat-error>
+
+    <app-error-card
+        i18n-title="@@Virhe"
+        *ngIf="errorMessage.length > 0"
+        message="{{ errorMessage }}"
+        [styles]="{ 'margin-top': '1rem:' }"
+        title="Virhe"
+        >
+    </app-error-card>
+
+    <!----------------- Alaosan toiminnot ------------------------------------->
+
+    <div class="theme-actions">
+
+      <button [attr.aria-label]="attachFilesText"
+              class="attach-button"
+              (click)="uploadClick.next('add')"
+              [disabled]="state==='sending'"
+              mat-raised-button="attachFilesText"
+              type="button"
+              >
+        <mat-icon>attach_file</mat-icon>
+        {{ (user?.asema === 'opettaja' || user?.asema === 'admin') ?
+              strings.get('attach') : strings.get('attachFiles')}}
+      </button>
+
+      <div  class="actions-spacer spacer"
+            *ngIf="user?.asema === 'opettaja' || user?.asema ==='admin'; else spacerHere"
+            >
+      </div>
+
+      <mat-radio-group
+          align="start"
+          *ngIf="user?.asema === 'opettaja' || user?.asema ==='admin'"
+          formControlName="checkboxes"
+          >
+        <mat-radio-button [value]=4 i18n="@@Kommentti">
+          Kommentti
+        </mat-radio-button>
+        <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+          Lisätietoa tarvitaan
+        </mat-radio-button>
+        <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+          Ratkaisuehdotus
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <ng-template #spacerHere>
+        <div class="actions-spacer spacer"></div>
+      </ng-template>
+
+      <button class="send-button"
+              color="primary"
+              [disabled]="state==='sending'"
+              mat-raised-button
+              type="submit"
+              >
+        OK
+      </button>
+    </div>
+
+    <app-edit-attachments
+        (attachmentsMessages)="attachmentsMessages = $event"
+        (fileListOutput)="fileInfoList = $event"
+        formControlName="attachments"
+        id="attachments-{{comment.id}}"
+        [oldAttachments]="comment.liitteet"
+        [uploadClicks]="uploadClick.asObservable()"
+        >
+    </app-edit-attachments>
+
+  </form>
+
+  </ng-template>
+
+</mat-card>

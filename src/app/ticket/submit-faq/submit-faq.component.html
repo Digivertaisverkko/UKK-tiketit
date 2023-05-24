@@ -1,83 +1,106 @@
-<h2 class="main-header"
-    *ngIf="courseName.length > 0 && !isInIframe">
-  <span>{{ courseName }}</span>
-</h2>
+<app-headline></app-headline>
 
-<div class="submit-faq">
+<div class="view-wrapper">
 
-  <div class="vertical-spacer" *ngIf="isInIframe"></div>
+  <app-beginning-button
+      (clicked)="showConfirm = true"
+      [confirm]=form.dirty
+      [disabled]="state === 'sending'"
+      >
+  </app-beginning-button>
 
-  <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
+  <app-error-card
+      [confirmLeave]="true"
+      *ngIf="showConfirm"
+      [styles]="{ margin: '2rem 0 0 0' }"
+      >
+  </app-error-card>
 
   <form accept-charset="UTF-8"
-        action=""
         enctype="multipart/form-data"
-        #submitForm="ngForm">
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        >
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="sub-header">
-        <textarea [disabled]="state!=='editing'"
-                  autocomplete="off"
+        <textarea aria-label="Otsikko"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
                   cdkTextareaAutosize
-                  contenteditable
                   class="sub-header"
                   i18n-placeholder="@@Otsikko"
+                  formControlName="title"
                   matInput
                   maxlength="255"
-                  name="titleText"
-                  [(ngModel)]="title"
-                  placeholder="Otsikko"
-                  required>
-          </textarea>
+                  name="title"
+                  [placeholder]="titlePlaceholder"
+                  type="text"
+                  >
+        </textarea>
+        <mat-error  i18n="@@Pakollinen kenttä."
+                    *ngIf="title?.errors?.['required']"
+                    >
+          Pakollinen kenttä.
+        </mat-error>
       </mat-form-field>
     </div>
 
     <section class="short-field-wrapper">
 
-      <ng-container *ngFor="let kentta of ticketFields; let i = index">
+      <ng-container formArrayName="additionalFields"
+                    *ngFor="let af of additionalFields.controls; let i = index"
+                    >
+
         <mat-form-field appearance="fill">
-          <mat-label>{{ kentta.otsikko }}</mat-label>
-          <input  [disabled]="state==='sending'"
+          <mat-label>{{ ticketFields[i].otsikko }}</mat-label>
+          <input  formControlName="{{i}}"
+                  (keydown.enter)="$event.preventDefault()"
                   [matAutocomplete]="auto"
                   matInput
                   maxlength="50"
-                  name="kentta.otsikko_{{i}}"
-                  [(ngModel)]="ticketFields[i].arvo"
-                  placeholder=""
-                  [required]="kentta.pakollinen"
-                  name="title"
+                  name="{{ ticketFields[i].otsikko }}"
+                  type="text"
                   >
 
           <mat-icon matSuffix
-                    *ngIf="kentta.valinnat[0] !== ''"
-                    [ngStyle]="{ 'color': '#000000' }">
+                    *ngIf="ticketFields[i].valinnat[0] !== ''"
+                    [ngStyle]="{ 'color': '#000000' }"
+                    >
             keyboard_arrow_down
           </mat-icon>
 
           <mat-autocomplete #auto="matAutocomplete">
-            <!-- Jos lisäkenttä ei sisällä valintoja, niin kentta.valinnat[0]
-                  sisältää tyhjän merkkijonon, eikä suinkaan ole tyhjä. -->
-            <ng-container *ngIf="kentta.valinnat[0] !== ''">
-              <mat-option [disabled]="state==='sending'"
-                          *ngFor="let valinta of kentta.valinnat"
-                          [value]="valinta">
+            <!-- Jos lisäkenttä ei sisällä valintoja, niin
+              ticketFields[i].valinnat[0] sisältää tyhjän merkkijonon, eikä
+              suinkaan ole tyhjä. -->
+            <ng-container *ngIf="ticketFields[i].valinnat[0] !== ''">
+              <mat-option *ngFor="let valinta of ticketFields[i].valinnat"
+                          [value]="valinta"
+                          >
                 {{ valinta }}
               </mat-option>
             </ng-container>
           </mat-autocomplete>
 
-          <mat-hint align="end">{{ kentta.arvo.length }} / 50</mat-hint>
+          <mat-error  i18n="@@Pakollinen kenttä."
+                      *ngIf="af?.errors?.['required']"
+                      >
+            Pakollinen kenttä.
+          </mat-error>
+
+          <mat-hint align="end">{{ af.value.length }} / 50</mat-hint>
+
         </mat-form-field>
 
         <mat-icon (click)="tooltip.toggle()"
-                  matTooltip="{{ kentta.ohje }}"
+                  matTooltip="{{ ticketFields[i].ohje }}"
                   matTooltipPosition="after"
-                  *ngIf="kentta.ohje.length > 0"
+                  *ngIf="ticketFields[i].ohje.length > 0"
                   [ngStyle]="{ 'padding-left': '15px' }"
-                  #tooltip="matTooltip">
+                  #tooltip="matTooltip"
+                  >
           help_outline
         </mat-icon>
 
@@ -85,111 +108,117 @@
 
     </section>
 
-    <h2 i18n="@@Kysymys">Kysymys</h2>
-    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqMessage"></app-editor>
+    <h1><span i18n="@@Kysymys">Kysymys</span><span>*</span></h1>
+    <app-editor formControlName="question"></app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="question?.errors?.['required'] && question?.touched"
+                >
+      Pakollinen kenttä.
+    </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="question?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    </mat-error>
 
-    <h2 i18n="@@Vastaus">Vastaus</h2>
-    <app-editor [disabled]="state!=='editing'" [(editorContent)]="faqAnswer"></app-editor>
+    <h1><span i18n="@@Vastaus">Vastaus</span><span>*</span></h1>
+    <app-editor formControlName="answer"></app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="answer?.errors?.['required'] && answer?.touched"
+                >
+      Pakollinen kenttä.
+    </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="answer?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p *ngIf="state==='sending' || state==='done'" class="theme-success-message" i18n="@@UKK lähettäminen onnistui">Uuden usein kysytyn kysymyksen lähettäminen onnistui.</p>
-
-    <p class='attachments-message' *ngIf="state==='sending'" i18n="@@Lähetetään liitetiedostoja">
-      Lähetetään liitetiedostoja, ole hyvä ja odota hetki...</p>
+    <p  i18n="@@UKK lähettäminen onnistui"
+        *ngIf="isFaqSent"
+        >
+      Uuden usein kysytyn kysymyksen lähettäminen onnistui.
+    </p>
 
     <app-error-card i18n-title="@@Virhe"
-      message="{{ errorMessage }}"
-      *ngIf="errorMessage.length > 0"
-      [styles]="{ margin: '1em 0 1em 0' }"
-      title="Virhe">
+                    message="{{ errorMessage }}"
+                    *ngIf="errorMessage.length > 0"
+                    [styles]="{ margin: '1em 0' }"
+                    title="Virhe"
+                    >
     </app-error-card>
 
     <div class="theme-actions">
 
-      <!-- ! Tällä hetkellä ei tueta liitetiedostojen editointia. -->
       <button (click)="uploadClick.next('add')"
-              *ngIf="!editExisting"
               [disabled]="state!=='editing'"
               i18n="@@Liitä tiedostoja"
-              mat-raised-button>
+              mat-raised-button
+              type="button"
+              >
         <mat-icon>attach_file</mat-icon>
         Liitä tiedostoja
       </button>
 
       <div class="spacer"></div>
 
+      <div class="required-span">
+        *&nbsp;
+        <span i18n="@@Pakollinen">Pakollinen</span>
+      </div>
+
+      <!-- TicketId on asetettu, jos editoidaan olemassa olevaa UKK:a. -->
       <button class="cancel-button"
               [disabled]="state!=='editing'"
               i18n="@@Peru"
               mat-raised-button
-              *ngIf="editExisting"
-              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId">
+              *ngIf="ticketId"
+              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId"
+              type="button"
+              >
         Peru
       </button>
 
       <button class="submit-button"
-              *ngIf="state==='editing'"
-              (click)="sendFaq()"
               color="primary"
-              [disabled]="submitForm.invalid || this.faqMessage.length === 0 || this.faqAnswer.length === 0 || attachmentsMessages === 'faulty'"
+              *ngIf="state==='editing'"
               i18n="@@Julkaise"
               mat-raised-button
+              type="submit"
               >
         Julkaise
       </button>
 
       <button class="submit-button"
-        *ngIf="state==='done'"
-        (click)="goBack()"
-        color="primary"
-        mat-raised-button>
+              (click)="goBack()"
+              color="primary"
+              mat-raised-button
+              *ngIf=""
+              type="button"
+              >
         OK
       </button>
 
     </div>
 
-    <!-- ! (event) ei toiminut, jos käytti tähän omaa child komponenttia ja tuli Muokkaa-napin kautta. -->
-    <!-- <input type="file" class="file-input" multiple (change)="onFileChanged($event)" #fileUpload> -->
-    <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple name="file-input-{{url}}"
-      (change)="onFileChanged($event)" #fileUpload> -->
-
-<!--     <div class="file-list-wrapper" *ngIf="fileList !== null">
-      <div class="file-list-row" *ngFor="let file of fileInfoList; let index = index">
-        <div class="list-item">
-          <span class="filename" matTooltip="{{file.filename}}" [matTooltipShowDelay]="600">{{file.filename}}</span>
-          <div class="file-error-message" matError *ngIf="file.error" matTooltip="{{file?.errorToolTip}}"
-            [matTooltipShowDelay]="600">
-            <mat-icon>warning</mat-icon>{{file.error}}
-          </div>
-          <button mat-icon-button [disabled]="file.progress !== undefined" class="remove-file-button"
-            (click)="removeSelectedFile(index)"><mat-icon>close</mat-icon></button>
-        </div>
-        <mat-icon class="ok-icon" *ngIf="file.progress === 100">done</mat-icon>
-        <mat-icon class="error-icon" *ngIf="file.error">error</mat-icon>
-        <mat-progress-bar [value]="file.progress" *ngIf="file.progress" mode="determinate" value=100>
-        </mat-progress-bar>
-      </div>
-    </div> -->
-
     <!-- (fileListOutput)="fileList = $event" -->
-
-    <!-- Ylläoleva lapsikomponenttina -->
-    <app-edit-attachments
-
-      [uploadClicks]="uploadClick.asObservable()"
-      >
+    <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          formControlName="attachments"
+                          [oldAttachments]="oldAttachments"
+                          [uploadClicks]="uploadClick.asObservable()"
+                          >
     </app-edit-attachments>
-
 
   </form>
 
-  <!-------------- Alkuperäinen kysymys ----------------------------------------->
+<!--------------- Alkuperäinen kysymys ---------------------------------------->
 
-  <ng-container *ngIf="originalTicket !== undefined && !editExisting">
+  <ng-container *ngIf="originalTicket !== undefined && !ticketId">
     <hr class="theme-divider">
-    <h2 class="main-header" i18n="@@Alkuperäinen kysymys">
+    <h1 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
-    </h2>
+    </h1>
     <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
   </ng-container>
 

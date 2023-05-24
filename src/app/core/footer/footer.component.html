@@ -1,24 +1,60 @@
+
+
+<div class="curve-wrapper">
+  <svg viewBox="0 0 700 50" width="100%" height="20" preserveAspectRatio="none">
+    <path d="M0,10 c80,-22 240,0 350,18 c90,17 260,7.5 350,-20 v50 h-700"
+          fill="#009dd7"
+          />
+  </svg>
+</div>
+
 <footer class="theme-footer" color="primary">
-  <hr>
+
+  <!-- <hr> -->
 
   <div id="icon-container">
-    <img id="yo-logo" src="../../../assets/logos/oulun_yliopisto-white.png" alt="">
-    <img id="oamk-logo" src="../../../assets/logos/oamk-white.png" alt="">
-    <img id="vipuvoimaa-logo" src="../../../assets/logos/vipuvoimaa-eu-white.png" alt="">
-    <img id="eu-logo" src="../../../assets/logos/EU_ESR.png" alt="">
+    <img alt="" id="yo-logo" src="assets/logos/oulun_yliopisto-white.png">
+    <img alt="" id="oamk-logo" src="assets/logos/oamk-white.png">
+    <img alt="" id="vipuvoimaa-logo" src="assets/logos/vipuvoimaa-eu-white.png">
+    <img id="eu-logo" src="assets/logos/EU_ESR.png" alt="">
 
     <!-- <div class="spacer"></div> -->
 
     <mat-nav-list color="primary">
-      <a (click)="openPrivacyModal()" mat-list-item i18n="@@Tietoturvaseloste">Tietoturvaseloste</a>
-      <a href="https://www.oulu.fi/fi" target="_blank" mat-list-item i18n="@@Oulun Yliopisto">Oulun Yliopisto</a>
-      <a href="https://www.oamk.fi" target="_blank" mat-list-item i18n="@@OAMK">Oulun Ammattikorkeakoulu</a>
+      <a  (click)="openPrivacyModal()"
+          i18n="@@Tietoturvaseloste"
+          (keyup.enter)="openPrivacyModal()"
+          mat-list-item
+          tabindex=0
+          >
+        Tietoturvaseloste
+      </a>
+      <a  href="https://www.oulu.fi/fi"
+          i18n="@@Oulun Yliopisto"
+          mat-list-item
+          target="_blank"
+          >
+        Oulun Yliopisto
+        </a>
+      <a  href="https://www.oamk.fi"
+          i18n="@@OAMK"
+          mat-list-item
+          target="_blank"
+          >
+      Oulun Ammattikorkeakoulu
+    </a>
       <!-- (click)="onListItemClick($event)" -->
-      <a href="https://interact.oulu.fi/site/digivertaisverkko" target="_blank" mat-list-item i18n="@@Digivertaisverkko">Digivertaisverkko</a>
+      <a  href="https://interact.oulu.fi/site/digivertaisverkko"
+          target="_blank" mat-list-item i18n="@@Digivertaisverkko"
+          >
+          Digivertaisverkko
+      </a>
     </mat-nav-list>
 
-    <div id="about-software" i18n="@@Ohjelmistosta">Tämä on Digivertaisverkkohankkeen tuottama ohjelmisto. Digivertaisverkko on Euroopan
-      sosiaalirahaston rahoittama hanke, joka on toteutettu Oulun Yliopiston ja Oulun Ammattikorkeakoulun yhteistyönä.
+    <div class="about-software" i18n="@@Ohjelmistosta">
+      Tämä on Digivertaisverkkohankkeen tuottama ohjelmisto. Digivertaisverkko
+      on Euroopan sosiaalirahaston rahoittama hanke, joka on toteutettu Oulun
+      Yliopiston ja Oulun Ammattikorkeakoulun yhteistyönä.
     </div>
 
   </div>

@@ -1,25 +1,21 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Validators as EditorValidators } from 'ngx-editor';
+import { Observable, Subject } from 'rxjs';
 
-import { AuthService } from 'src/app/core/auth.service';
-import { KentanTiedot, TicketService, Tiketti, UusiTiketti, AddTicketResponse } from 'src/app/ticket/ticket.service';
-import { getIsInIframe } from 'src/app/ticket/functions/isInIframe';
-import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
-
-interface TiketinKentat extends KentanTiedot {
-  arvo: string;
-}
-
-interface FileInfo {
-  filename: string;
-  file: File;
-  error?: string;
-  errorToolTip?: string;
-  progress?: number;
-  uploadError?: string;
-  done?: boolean;
-}
+import { User } from '@core/core.models'
+import { StoreService } from '@core/store.service';
+import { CourseService } from 'src/app/course/course.service';
+import schema from 'src/app/shared/editor/schema';
+import { Constants } from 'src/app/shared/utils';
+import { EditAttachmentsComponent }
+    from 'src/app/ticket/components/edit-attachments/edit-attachments.component';
+import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
+    from 'src/app/ticket/ticket.models';
+import { TicketService } from 'src/app/ticket/ticket.service';
 
 @Component({
   selector: 'app-submit-ticket',
@@ -28,166 +24,216 @@ interface FileInfo {
 })
 
 export class SubmitTicketComponent implements OnInit {
-  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
-  @Input() public fileInfo: FileInfo[] = [];
   @Input() public attachmentsMessages: string = '';
-  private courseId: string | null = this.route.snapshot.paramMap.get('courseid');
-  public courseName: string = '';
-  public currentDate = new Date();
+  @Input() public fileInfoList: FileInfo[] = [];
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+
+  private commentID: string | null = null;
+  public readonly courseId: string | null = this.route.snapshot.paramMap.get('courseid');
+  public readonly currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
-  public isInIframe: boolean = getIsInIframe();
-  public message: string = '';
+  public form: FormGroup = this.buildForm();
+  public oldAttachments: Liite[] = [];
+  public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
-  public title: string = '';
-  public ticketFields: TiketinKentat[] = [];
+  public ticketFields: Kentta[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
-  public uploadClick: Subject<string> = new Subject<string>();
-  public userName: string | null = '';
+  public titlePlaceholder: string = '';
+  public uploadClick = new Subject<string>();
+  public user$: Observable<User | null>;
 
-  constructor(private auth: AuthService,
+  get additionalFields(): FormArray {
+    return this.form.controls["additionalFields"] as FormArray;
+  }
+
+  get message(): FormControl {
+    return this.form.get('message') as FormControl;
+  }
+
+  get title(): FormControl {
+    return this.form.get('title') as FormControl;
+  }
+
+  constructor(private courses: CourseService,
+              private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
-              private ticketService: TicketService) {}
+              private store: StoreService,
+              private ticketService: TicketService,
+              private titleServ: Title
+              ) {
+    this.user$ = this.store.trackUserInfo();
+  }
 
   ngOnInit(): void {
-    if (this.courseId === null) { throw new Error('Ei kurssi ID:ä.') }
-    this.auth.fetchUserInfo(this.courseId);
-    this.auth.trackUserInfo().subscribe(response => {
-      this.userName = response?.nimi ?? '';
-    });
-    this.ticketService.getCourseName(this.courseId).then(response => {
-      this.courseName = response;
-    }).catch(() => {});
-    this.ticketService.getTicketFieldInfo(this.courseId).then((response) => {
-      this.ticketFields = response as TiketinKentat[];
-      for (let field of this.ticketFields) {
-        field.arvo = '';
-      }
-    });
-    if (this.ticketId != null) this.fetchTicketInfo();
-  }
+    if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
+    this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
 
-  private fetchTicketInfo() {
-    if (this.ticketId == null) return
-    this.ticketService.getTicketInfo(this.ticketId).then(response => {
-      if (response?.id) {
-        this.title = response.otsikko;
-        this.message = response.viesti;
-
-        if (response.kentat !== undefined ) {
-          for (let tiketinKentta of response.kentat) {
-            for (let uusiKentta of this.ticketFields) {
-              if (tiketinKentta.otsikko === uusiKentta.otsikko) {
-                uusiKentta.arvo = tiketinKentta.arvo;
-                break;
-              }
-            }
-          }
-        }
-      }
-    }).catch(e => {})
-  }
-
-  public goBack() {
-    this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
-  }
-
-  public sendTicket(): void {
-    let ticket: UusiTiketti = {} as UusiTiketti;
-    ticket.otsikko = this.title;
-    ticket.viesti = this.message;
-    ticket.kentat = this.ticketFields.map((field) => {
-      return { id: Number(field.id), arvo: field.arvo }
-    });
-    if (this.courseId == null) { throw new Error('Ei kurssi ID:ä.') }
-    if (this.ticketId != null) {
-      this.ticketService.editTicket(this.ticketId, ticket)
-        .then( () => this.goBack()
-        ).catch(error => {
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-              Kysymyksen lähettäminen epäonnistui` + '.'
-          this.state = 'editing';
-        })
+    if (this.ticketId === null) {
+      this.titleServ.setTitle(
+        Constants.baseTitle + $localize `:@@Uusi kysymys: Uusi kysymys`
+      );
+      this.fetchAdditionalFields();
     } else {
-    this.ticketService.addOnlyTicket(this.courseId, ticket)
-      .then(response => {
-        if (this.attachments.fileInfoList.length === 0) this.goBack()
-        if (response == null || response?.success !== true) {
-          this.state = 'editing';
-          this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:Kysymyksen lähettäminen epäonnistui` + '.'
-          throw new Error('Kysymyksen lähettäminen epäonnistui.');
-        }
-        if (response?.uusi == null) {
-          this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
-          throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
-        }
-        response = response as AddTicketResponse;
-        const ticketID = response.uusi.tiketti;
-        const commentID = response.uusi.kommentti;
-        this.state = 'sending';
-        // this.attachments.sendFiles(ticketID, commentID).subscribe(response => {
-        //   this.state = "done";
-        //   console.log(response);
-        //   console.dir(response);
-        //   console.log(typeof response);
-        // })
-        this.attachments.sendFilesPromise(ticketID, commentID).
-          then((res) => {
-            console.log('komponentti: saatiin vastaus: ');
-            console.dir(res);
-            this.goBack();
-          })
-          .catch((res: any) => {
-            this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-            console.log('submit-ticket: saatiin virhe: ' + res);
-            this.state = 'editing';
-          })
-          .finally(() => {
-            console.log('Komponentti: Kaikki valmiita!');
-            // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-            // this.attachments.clear();
-          })
-        // this.attachments.sendFiles(ticketID, commentID).then(response => {
-        //   this.state = "done";
-        //   if (response === true) {
-        //     console.log('Kaikkien tiedostojen lähetys onnistui.');
-        //   // this.goBack();
-        //   } else {
-        //     console.log('Kaikkien tiedostojen lähetys ei onnistunut.');
-        //   }
-
-        // }).catch(error => {
-        //   this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
-        // })
-      }).catch( error => {
-        // ? lisää eri virhekoodeja?
-        this.state = 'editing';
-        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-            Kysymyksen lähettäminen epäonnistui` + '.'
-      });
+      this.fetchTicketInfo(this.ticketId);
     }
   }
 
-  private sendFiles(ticketID: string, commentID: string) {
+  private buildAdditionalFields(): void {
+    // Luodaan lomakkeelle controllit
+    for (const field of this.ticketFields) {
+      let validators = Validators.maxLength(50);
+      if (field.pakollinen) {
+        validators = Validators.required, Validators.maxLength(50);
+      }
+      let value = field.arvo ? field.arvo : '';
+      this.additionalFields.push(new FormControl(value, validators));
+    }
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      title: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)
+        ])
+      ],
+      additionalFields: this.formBuilder.array([]),
+      message: [
+        '',
+        Validators.compose([
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
+        ])
+      ],
+      attachments: [''],
+    });
+  }
+
+  private createTicket(): UusiTiketti {
+    let ticket: UusiTiketti = {} as UusiTiketti;
+    ticket.otsikko = this.form.controls['title'].value;
+    ticket.viesti = this.form.controls['message'].value;
+    ticket.kentat = [];
+    for (let i = 0; i < this.ticketFields.length; i++) {
+      ticket.kentat.push({
+        id: Number(this.ticketFields[i].id),
+        arvo: this.additionalFields.controls[i].value
+      });
+    }
+    return ticket;
+  }
+
+  private fetchAdditionalFields(): void {
+    if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
+    this.courses.getTicketFieldInfo(this.courseId)
+    .then((response) => {
+      this.ticketFields = response as Kentta[];
+      this.buildAdditionalFields();
+    });
+  }
+
+  private fetchTicketInfo(ticketId: string): void {
+    this.ticketService.getTicketInfo(ticketId)
+    .then(response => {
+      this.form.controls['title'].setValue(response.otsikko);
+      this.form.controls['message'].setValue(response.viesti);
+      this.oldAttachments = response.liitteet ?? [];
+      this.commentID = response.kommenttiID;
+      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
+      this.ticketFields = response.kentat as Kentta[];
+      this.buildAdditionalFields();
+    });
+  }
+
+  public goBack(): void {
+    this.router.navigateByUrl('course/' + this.courseId + '/list-tickets');
+  }
+
+  private prepareSendFiles(response: any): void {
+    if (response?.uusi == null) {
+      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
+    }
+    let ticketID, commentID;
+    ticketID = response.uusi.tiketti;
+    commentID = response.uusi.kommentti;
+    this.sendFiles(ticketID, commentID);
+  }
+
+  public submit(): void {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
     this.state = 'sending';
-    this.attachments.sendFilesPromise(ticketID, commentID).
-    then((res) => {
-      console.log('komponentti: saatiin vastaus: ');
-      console.dir(res);
+    this.form.disable();
+    let newTicket = this.createTicket();
+    if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
+    if (this.editExisting) {
+      this.submitEdited(newTicket);
+    } else {
+      this.submitNew(newTicket);
+    }
+  }
+
+  private submitEdited(newTicket: UusiTiketti): void {
+    if (this.ticketId === null || this.commentID === null) throw new Error;
+    this.ticketService.editTicket(this.ticketId, newTicket)
+    .then( () => {
+      if (this.oldAttachments.length === 0) this.goBack();
+      this.sendFiles(this.ticketId!, this.commentID!);
+    })
+    .catch(error => {
+      this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+          Kysymyksen lähettäminen epäonnistui` + '.';
+      this.state = 'editing';
+      this.form.enable();
+    });
+  }
+
+  private submitNew(ticket: UusiTiketti): void {
+    if (this.courseId === null) return;
+    this.ticketService.addTicket(this.courseId, ticket)
+    .then((response: AddTicketResponse) => {
+      if (this.attachments.fileInfoList.length === 0) this.goBack();
+      if (response === null || response?.success !== true) {
+        this.state = 'editing';
+        this.form.enable();
+        this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+            Kysymyksen lähettäminen epäonnistui` + '.';
+        throw new Error('Kysymyksen lähettäminen epäonnistui.');
+      }
+      this.prepareSendFiles(response);
+    })
+    .catch( error => {
+      // ? lisää eri virhekoodeja?
+      this.state = 'editing';
+      this.form.enable();
+      this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
+          Kysymyksen lähettäminen epäonnistui` + '.';
+    });
+  }
+
+  private sendFiles(ticketID: string, commentID: string): void {
+    this.attachments.sendFilesPromise(ticketID, commentID)
+    .then(() => {
+      this.state = 'done';
       this.goBack();
     })
     .catch((res: any) => {
-      this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen
-          ei onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log('submit-ticket: saatiin virhe: ' + res);
+      this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
+          onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
+      console.log(this.router.url + ': saatiin virhe: ' + res);
       this.state = 'editing';
+      this.form.enable();
     })
     .finally(() => {
       console.log('Komponentti: Kaikki valmiita!');
       // Kommentoi alla olevat, jos haluat, että jää näkyviin.
       // this.attachments.clear();
-    })
+    });
   }
 
 }

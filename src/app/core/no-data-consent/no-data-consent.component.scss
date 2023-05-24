@@ -1,0 +1,36 @@
+@import '/src/variables.scss';
+
+// app-headline {
+//   margin-top: 1.5em;
+//   margin-bottom: 1em;
+// }
+
+p {
+  margin-top: 2em;
+}
+
+.content-wrapper {
+  max-width: 40em;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8%;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+@media (max-width: $XSmall) {
+
+  p {
+    margin-top: 1em;
+  }
+
+  .buttons-wrapper {
+    gap: 4%;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+}

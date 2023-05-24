@@ -1,0 +1,21 @@
+
+.mat-column-aloittajanNimi,
+.mat-column-aikaleima {
+  text-align: right;
+}
+
+.mat-column-aloittajanNimi {
+  min-width: 11em;
+}
+
+.ticket-state-wrapper {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  width: 1.8rem;
+}

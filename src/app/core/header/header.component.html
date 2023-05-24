@@ -1,19 +1,19 @@
 <mat-toolbar color="primary">
-  <!--
-    Jos tulee tarve menulle.
-    <button mat-icon-button class="menu-icon" aria-label="Navigation menu">
-        <mat-icon>menu</mat-icon>
-    </button> -->
-
-    <!-- [disabled]="!isUserLoggedIn$" -->
 
     <div class="logo" *ngIf="courseID === null; else clickableLogo">
-      <img src="../../../assets/logos/dvv-white.svg" alt="">
+      <img alt="" src="assets/logos/dvv-white.svg">
     </div>
 
   <ng-template #clickableLogo>
-    <div class="logo logo-clickable" matRipple [matRippleUnbounded]="true" [matRippleRadius]="30">
-    <img src="../../../assets/logos/dvv-white.svg" (click)="goToFrontPage()" alt="">
+    <div class="logo logo-clickable"
+        matRipple
+        [matRippleRadius]="30"
+        [matRippleUnbounded]="true"
+        >
+    <img  alt=""
+          (click)="logoClicked()"
+          src="assets/logos/dvv-white.svg"
+          >
       </div>
   </ng-template>
 
@@ -22,43 +22,89 @@
   <!-- Näkymät voivat asettaa näiden tagien sisään sisältöä, jos tulee tarpeen. -->
   <ng-content></ng-content>
 
-  <!-- <mat-slide-toggle [checked]="sliderChecked" style="font-size: 1rem; color: white;">Upotus</mat-slide-toggle> -->
+  <section class="user-info" *ngIf="user">
 
+    <ng-container *ngIf="!(handsetPB$ | async)?.matches">
+      <div class="theme-header-text">
 
-  <section class="user-info">
+        {{ user.nimi.length > maxUserLength ?
+              (user.nimi | slice:0:maxUserLength) + '...' :
+              (user.nimi) | titlecase }}
+      </div>
 
-    <div class="theme-header-text" *ngIf="user.nimi.length > 0">
+      <!-- Voi olla tilanteita, missä käyttäjälle ei ole asetettu nimeä,
+      niin näytetään silloin sähköpostiosoite. -->
+      <div class="email theme-header-text"
+          *ngIf="user.nimi.length === 0 && user.sposti.length > 0">
+          {{ user.sposti.length > maxUserLength ?
+              (user.sposti | slice:0:maxUserLength) + '...':(user.sposti) }}
+      </div>
+    </ng-container>
 
-      <!-- <span class="flag flag-fi" (click)="changeLanguage('fi-FI')" *ngIf="language !== 'fi-FI'"
-      alt="Vaihda kieli suomeksi"></span>
-
-    <span class="flag flag-en" (click)="changeLanguage('en-US')" *ngIf="language !== 'en-US'"
-      alt="Vaihda kieli englanniksi"></span> -->
-
-      {{ (user.nimi.length > maxUserLength)? (user.nimi | slice:0:maxUserLength) + '...':(user.nimi) | titlecase}}
-    </div>
-
-    <div class="email" *ngIf="user.nimi.length === 0 && user.sposti.length > 0" class="theme-header-text">
-      {{ (user.sposti.length > maxUserLength)? (user.sposti | slice:0:maxUserLength) + '...':(user.sposti) }}
-    </div>
-
-    <div class="theme-header-text-small">{{userRole | titlecase}}</div>
+    <div class="theme-header-text-small">{{ user.asemaStr }}</div>
 
   </section>
 
-  <button mat-icon-button id="account-icon-button" class="material-symbols-outlined"
-    [matMenuTriggerFor]="accountMenu" aria-label="Tili" (click)="updateMenu()">
+  <button aria-label="Tili"
+          class="material-symbols-outlined"
+          id="account-icon-button"
+          i18n-aria-label="@@Tili"
+          mat-icon-button
+          [matMenuTriggerFor]="accountMenu"
+          >
+          <!-- (click)="updateMenu()" -->
     <mat-icon >account_circle</mat-icon>
   </button>
 
 </mat-toolbar>
 
+<!----------------- Valikko --------------------------------------------------->
 <mat-menu #accountMenu="matMenu">
-  <button mat-menu-item (click)="toggleLanguage()" i18n="@@vaihda kieli" [disabled]="disableLanguageSelection">Change to English</button>
-  <button mat-menu-item *ngIf="courseID !== null && isLoggedIn === true" [routerLink]="'/course/' + courseID + '/profile'" i18n="@@Profiili">Profiili</button>
-  <button mat-menu-item (click)="logOut()" *ngIf="isLoggedIn === true; else logIn" i18n="@@Kirjaudu ulos">Kirjaudu ulos</button>
+  <app-usermenu>
+  </app-usermenu>
+</mat-menu>
+<!--
+
+<mat-menu #accountMenu="matMenu">
+
+  <button mat-menu-item
+          (click)="toggleLanguage()"
+          [disabled]="disableLangSelect"
+          i18n="@@vaihda kieli"
+          >
+    Change to English
+  </button>
+
+  <button i18n="@@Profiili"
+          mat-menu-item
+          *ngIf="courseID !== null && isLoggedIn === true"
+          [routerLink]="'/course/' + courseID + '/profile'"
+          >
+    Profiili
+  </button>
+
+  <button (click)="logout()"
+          i18n="@@Kirjaudu ulos"
+          mat-menu-item
+          *ngIf="isLoggedIn === true; else logIn"
+          >
+    Kirjaudu ulos
+  </button>
+
   <ng-template #logIn>
-    <button mat-menu-item (click)="login()" i18n="@@Kirjaudu sisään">Kirjaudu sisään</button>
+    <button (click)="login()"
+            i18n="@@Kirjaudu sisään"
+            mat-menu-item
+            >
+      Kirjaudu sisään
+    </button>
   </ng-template>
 
+
+   + Kurssin asetukset
+        + Upotuksessa avaa uuteen välilehteen.
+
 </mat-menu>
+
+
+-->

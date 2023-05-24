@@ -1,59 +1,56 @@
 @import '/src/variables.scss';
-
-/* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
-   kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
-section, app-error-card, .theme-actions { width: 103%; }
-
-section, app-error-card, .theme-actions { margin-left: -15px; }
+@import '/src/app/shared/components/headline/headline.component.scss';
 
 .view-header {
   display: flex;
   justify-content: space-between;
 }
 
-.embedded-button {
-  font-size: 85%;
-  margin-top: 1rem;
-  white-space: nowrap;
+.main-header > span {
+  padding-right: 2em;
 }
 
-.settings-button {
-  align-self: center;
-  font-size: 2rem;
-  width: 1em;
-  height: 1em;
-  margin-top: 1rem;
-  position: relative;
-  // margin-bottom: 1.3rem;
-  mat-icon {
-    font-size: inherit;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: auto;
-    height: auto;
+/* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
+   kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
+section,
+app-error-card {
+  width: 103%;
+}
+
+section,
+app-error-card,
+.theme-actions {
+  margin-left: -15px;
+}
+
+.theme-actions {
+  row-gap: 1rem;
+}
+
+.feedback {
+  margin-top: 2rem;
+  margin-left: 0;
+
+  h2 {
+    margin-left: -1rem
   }
 }
 
-.feedback { margin-left: 0;
-  h3 { margin-left: -1rem }
+// Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
+h2 {
+  padding-left: 20px;
+  margin-right: 0.5em;
 }
 
-h2 { padding-right: 2rem; }
+.mdc-card__actions {
+  min-height: 30px;
+}
 
-// Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
-h3 { padding-left: 20px; }
+app-search-bar {
+  margin-left: auto;
+}
 
-.vertical-spacer { height: 1.5rem; }
-
-.mdc-card__actions { min-height: 30px; }
-
-// -------- Table -----------
-
-// table { width: 100%; line-height: 1.4rem; }
-
-// .mat-mdc-header-row { background-color: #D3D3D3; }
-// .mat-mdc-row:hover { background-color: #f2f2f2 !important; }
+// ----------------- Table -----------------------------------------------------
 
 a {
   color: unset;
@@ -64,68 +61,60 @@ a {
   padding-bottom: 0.6em;
 }
 
-.a-left-padding { padding-left: 16px; }
-
-.ticket-state-wrapper {
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
+.a-left-padding {
+  padding-left: 16px;
 }
 
-.icon-wrapper {
-  display: flex;
-  align-items: center;
-  // align-items: center;
-  // width: 90%;
-  // height: 90%;
-  // max-width: 2.5rem;
-  // min-width: 1.8rem;
-  width: 1.8rem;
-}
-
-// td.mat-mdc-cell  {
-//   padding-left: 1em;
-//   padding-right: 1em;
-//   text-align: left;
-// }
-// .mat-mdc-header-cell {
-//   padding-left: 1em;
-//   padding-right: 1em;
-//   text-align: left;
-// }
-
-.mat-column-aloittajanNimi, .mat-column-aikaleima, .mat-column-tyyppi {
+.mat-column-aikaleima {
   text-align: right;
 }
 
-.mat-column-aloittajanNimi { min-width: 11em; }
-
 // headereissa sorting-nuoli ottaa oikealta puolelta tilaa.
-.cell-align-right { padding-right: 2.1rem; }
+.cell-align-right {
+  padding-right: 2.1rem;
+}
 
-// Ainakin tätä kirjoitettaessa ng-deep oli tarvittava keino muuttaa näitä.
 // :host ei toimi, jos on styles.scss.
-:host ::ng-deep .align-right > .mat-sort-header-container {
+:host ::ng-deep .align-right>.mat-sort-header-container {
   justify-content: flex-end;
 }
 
-.mat-mdc-row:hover { background-color: #f2f2f2 !important }
-
-:host ::ng-deep .mat-sort-header-content { color: #595959; }
-
-:host ::ng-deep .mat-sort-header-sorted > .mat-sort-header-content {
-  color: #5379FC;
+.mat-mdc-row:hover {
+  background-color: #f2f2f2 !important
 }
 
-// ------------------------
+:host ::ng-deep .mat-sort-header-content {
+  color: #595959;
+}
 
-// th.mat-column-aloittajanNimi {
-//   text-align: right;
-// }
+:host ::ng-deep .mat-sort-header-sorted>.mat-sort-header-content {
+  color: #3F55A6;
+  // color: #5379FC;
+}
 
-[hidden] { display: none !important; }
+// -----------------------------------------------------------------------------
 
-button { margin-left: 1rem; margin-right: 0; }
+.no-items-box {
+  border: solid 2px #D3D3D3;
+  border-radius: 2px;
+  display: block;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.buttons-wrapper {
+  justify-content: flex-end;
+}
+
+button {
+  margin-left: 1rem;
+  margin-right: 0;
+  white-space: nowrap;
+}
 
 .input-field-wrapper {
   align-items: flex-end;
@@ -135,21 +124,18 @@ button { margin-left: 1rem; margin-right: 0; }
   justify-content: space-between;
 }
 
-.filteringField { align-self: flex-end; max-width: 220px; }
+.mat-mdc-form-field {
+  width: 97%;
+}
 
-.filter-FAQ { margin-top: 1.8rem; }
-
-// .noData-td {
-//   padding-top: 1em;
-//   padding-bottom: 1em;
-// }
-
-.no-items-message { margin-left: 1.3rem; }
-
-.mat-mdc-form-field { width: 97%; }
-
-button {
-  white-space: nowrap;
+.submit-faq-btn {
+  a {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-right: 1em;
+    padding-left: 1em;
+  }
 }
 
 @media (min-width: $XSmall) {
@@ -160,17 +146,24 @@ button {
     padding-bottom: 2em;
   }
 
-  tr > :first-child { padding-left: 1.5em; }
+  tr> :first-child {
+    padding-left: 1.5em;
+  }
 
-  mat-row > :last-child { padding-right: 50px; }
+  mat-row> :last-child {
+    padding-right: 50px;
+  }
 
-  // .mdc-data-table__header-row { height: 3em; }
 }
 
 @media (max-width: $XSmall) {
-  main { padding-right: 0; }
+  section,
+  app-error-card,
+  h2 {
+    margin-left: 0;
+  }
+
+  .table-header {
+    padding-left: 0;
+  }
 }
-
-// @media (max-width: $XSmall) {
-
-// }

@@ -1,53 +1,97 @@
 @import '/src/variables.scss';
 
-.vertical-spacer { height: var(--margin-top-embedded) }
-
-.top-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: $button-gap;
+.view-wrapper {
+  padding-right: $right-padding;
+  margin-bottom: 0.5em;
 }
 
-.short-field-value:last-child { margin-bottom: 1.5rem }
+.top-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $button-gap;
+  justify-content: space-between;
+  row-gap: calc($button-gap / 2);
+}
 
-// Muuten marginaalit menevät päällekkäin jostain syystä.
-// .short-vertical-spacer {
-//   height: 1px;
-// }
+.remove-btn {
+  // Merkitystä, kun menee toiselle riville.
+  margin-left: auto;
+}
+
+.ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  row-gap: 0;
+  margin-bottom: 0.5rem;
+  mat-form-field {
+    flex-grow: 3;
+  }
+  app-sender-info {
+    margin-left: auto;
+  }
+}
+
+.short-field-value:last-child {
+  margin-bottom: 1.5rem;
+}
 
 .message-label {
   margin-bottom: -0.8rem;
-  + p {
+
+  +p {
     margin-top: -2rem;
   }
 }
 
-mat-card {
-  margin: 0 auto 12px;
-  mat-card-subtitle { margin-top: 3px; }
-  .ticket-state {
-    color: var(--primary-color);
-    margin-right: 1em;
+.theme-actions {
+  gap: 0.8rem
+}
+
+
+mat-radio-button {
+  margin: auto 0.6rem auto;
+}
+
+.mdc-form-field>label {
+  padding-left: 0;
+}
+
+@media (max-width: 800px) {
+  .view-wrapper {
+    padding-right: 0;
   }
 }
 
-.theme-actions { gap: 0.8rem }
+@media (max-width: 765px) {
+  .attach-button {
+    order: 1;
+  }
 
-mat-radio-button { margin: 3px 1.7rem 3px 0px }
+  .action-spacer {
+    order: 2;
+  }
 
-.mdc-form-field > label { padding-left: 0 }
+  .send-button {
+    order: 3;
+  }
+}
 
-// ::ng-deep .mat-mdc-card-content:last-child {
-//   padding-bottom: 0 !important;
-// }
+@media (max-width: $XSmall) {
+  .sub-header {
+    order: 2;
+  }
+}
 
-@media (max-width: 775px) {
-  // Välttämättä ei mene useammalle riville.
-  // .user-info-block {
-  //   order: -1;
-  //   margin-bottom: -30px;
-  // }
-  .attach-button { order: 1; }
-  .spacer { order: 2 }
-  .send-button { order: 3; }
+@media (max-width: 370px) {
+  .top-buttons-wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .attach-button,
+  .remove-btn,
+  .send-button {
+    width: 100%;
+  }
 }

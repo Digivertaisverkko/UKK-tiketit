@@ -1,0 +1,40 @@
+@import '/src/variables.scss';
+
+.view-wrapper {
+  padding-right: calc($right-padding * 2);
+  margin-bottom: 0.5em;
+}
+
+.main-text {
+  margin-top: 2.5em;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8%;
+  row-gap: 1rem;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+@media (max-width: 800px) {
+  .view-wrapper {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: $XSmall) {
+
+  .main-text {
+    margin-top: 1.5em;
+  }
+
+  .buttons-wrapper {
+    gap: 4%;
+    row-gap: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+}

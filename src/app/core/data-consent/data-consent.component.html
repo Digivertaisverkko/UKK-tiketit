@@ -1,0 +1,78 @@
+<div class="view-wrapper">
+<app-headline i18n="@@Tervetuloa" [noCourseTitle]='true' [showInIframe]='true'>
+  Tervetuloa
+</app-headline>
+
+<p i18n="@@Tietojenkäyttösuostumus" class="main-text">
+  Tämä on Digivertaisverkkohankkeen rakentama tikettijärjestelmä kurssin
+  opettajien ja oppilaiden väliseen keskusteluun ja kysymysten kysymiseen.
+  Ohjelmiston tarvitsee henkilökohtaisen tilin, jotta voit esittää ja katsella
+  henkilökohtaisia kysymyksiä. Tätä varten tarvitaan tieto siitä, kuka olet, millä
+  kurssilla olet ja mitä olet kurssilla tekemässä. Tilin luomalla annat
+  luvan näiden tietojen siirtämiseen tikettijärjestelmän käyttöön. Jos olet
+  kiinnostunut siitä, miten käsittelemme tietojasi, voit lukea tietoturvaselosteen.
+</p>
+
+<span i18n="@@Tallennamme seuraavat tiedot">
+  Tallennamme seuraavat tiedot Moodlesta omaan tietokantaamme:
+</span>
+
+<ul>
+  <li i18n="@@Koko nimesi">Koko nimesi</li>
+  <li i18n="@@Sähköpostiosoitteesi">Sähköpostiosoitteesi</li>
+  <li i18n="@@Kurssialueen, jolla järjestelmä on käytössä">
+      Kurssialueen, jolla järjestelmä on käytössä
+  </li>
+  <li i18n="@@Roolisi kurssilla">Roolisi kurssilla (opettaja / opiskelija)</li>
+</ul>
+
+<app-error-card
+    i18n-title="{{ ticketsError.title }}"
+    message="{{ error.message }}"
+    *ngIf="error.title.length > 0"
+    #ticketError
+    title="{{ error.title }}"
+    >
+</app-error-card>
+
+<div class="buttons-wrapper">
+
+  <!-- Poista tili -->
+
+  <ng-container *ngIf="accountExists === true; else forNewUser">
+    <button (click)="denyConsent()"
+            i18n="@@Poista tili ja jatka kirjautumatta"
+            mat-raised-button
+            >
+      Poista tili ja jatka kirjautumatta
+    </button>
+
+  <button (click)="giveConsent()"
+          color="primary"
+          i18n="@@Jatka käyttämistä"
+          mat-raised-button
+          >
+    Jatka käyttämistä
+  </button>
+</ng-container>
+
+<ng-template #forNewUser>
+  <button (click)="denyConsent()"
+          i18n="@@Jatka kirjautumatta"
+          mat-raised-button
+          >
+    Jatka kirjautumatta
+  </button>
+
+  <button (click)="giveConsent()"
+          color="primary"
+          i18n="@@Luo tili"
+          mat-raised-button
+          >
+    Luo tili
+  </button>
+</ng-template>
+
+</div>
+
+</div>

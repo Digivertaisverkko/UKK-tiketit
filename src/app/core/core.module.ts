@@ -9,11 +9,10 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 // Material moduulit
+import { MatDialogConfig, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
 import { MaterialModule } from '../shared/material.module';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatRippleModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
+import { MatRippleModule } from '@angular/material/core';
 // import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 // Servicet
@@ -21,17 +20,25 @@ import { AuthService } from './auth.service';
 import { CustomHttpInterceptor } from './http-interceptor';
 
 // Komponentit
-import { HeaderComponent } from '../core/header/header.component';
+import { DataConsentComponent } from './data-consent/data-consent.component';
 import { FooterComponent } from './footer/footer.component';
-import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
+import { HeaderComponent } from '../core/header/header.component';
+import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
+import { NoDataConsentComponent } from './no-data-consent/no-data-consent.component';
+import { UsermenuComponent } from './usermenu/usermenu.component';
 
 @NgModule({
   declarations: [
-    HeaderComponent,
+    DataConsentComponent,
     FooterComponent,
+    HeaderComponent,
+    NoPrivilegesComponent,
+    PageNotFoundComponent,
     PrivacyModalComponent,
-    PageNotFoundComponent
+    NoDataConsentComponent,
+    UsermenuComponent,
   ],
   imports: [
     CommonModule,
@@ -39,18 +46,21 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatDialogModule,
     MaterialModule,
     MatListModule,
-    MatMenuModule,
     MatRippleModule,
     RouterModule,
     SharedModule,
   ],
   providers: [
     AuthService,
-    { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true},
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue:
+        { autoFocus: 'dialog' } as MatDialogConfig }
+
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UsermenuComponent
   ]
 })
 export class CoreModule { }

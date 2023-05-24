@@ -1,0 +1,35 @@
+$debug: false;
+
+.user-info-block {    // .text-info + ikoni
+  @if $debug { border: 1px dotted green; }
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  flex-shrink: 0;
+  gap: 0.8rem;
+
+  .theme-profile-name {
+    margin-top: 0.2rem;
+  }
+
+  .text-info {        // Käyttäjätiedot
+    @if $debug { border: 1px solid gray; }
+    .theme-profile-name {
+      display: block;
+      line-height: 1.15;
+      margin-bottom: 0.3rem;
+    }
+  }
+
+  img {
+    @if $debug { border: 1px solid lightblue; }
+    display: inline-block;
+    flex-shrink: 0;
+    height: 3rem;
+    margin: auto;
+    object-fit: cover;
+    position: relative;
+    width: 3rem;
+  }
+
+}

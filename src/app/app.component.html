@@ -1,17 +1,64 @@
-<div id="app-wrapper">
+<div class="app-wrapper">
 
   <app-header *ngIf="!isInIframe">
     <span class="spacer"></span>
   </app-header>
 
-  <main>
-    <!-- <mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar> -->
+  <!-- style="display: none" -->
+  <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
 
-    <!-- <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-      <span>{{courseName}}</span>
-    </h2> -->
+    <div class="logo" *ngIf="courseID === null; else clickableLogo">
+      <img alt="" src="assets/logos/dvv-white.svg">
+    </div>
+
+    <ng-template #clickableLogo>
+      <div  class="logo logo-clickable"
+            matRipple
+            >
+      <img  alt=""
+            (click)="logoClicked()"
+            src="assets/logos/dvv-white.svg"
+            >
+        </div>
+    </ng-template>
+  
+    <span class="spacer"></span>
+
+    <div class="role theme-header-text-small">{{ (user$ | async)?.asemaStr }}</div>
+    <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
+
+    <button aria-label="Valikko"
+            i18n-aria-label="@@Valikko"
+            i18n-matTooltip="@@Valikko"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            [matTooltipShowDelay]="600"
+            matTooltip="Valikko"
+            >
+      <mat-icon>menu</mat-icon>
+      <!-- <mat-icon>account_circle</mat-icon> -->
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <app-usermenu></app-usermenu>
+    </mat-menu>
+
+  </mat-toolbar>
+
+  <main>
+
+    <mat-progress-bar
+        class="theme-progress-bar"
+        mode="indeterminate"
+        *ngIf="isLoading | async"
+        [ngStyle]="{'margin-bottom': isInIframe ? '1rem' : '0'}"
+        >
+    </mat-progress-bar>
+
+    <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
     <router-outlet></router-outlet>
+
   </main>
 
   <app-footer></app-footer>

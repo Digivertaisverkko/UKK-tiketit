@@ -1,84 +1,101 @@
-<mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+<app-headline></app-headline>
 
-<div class="faq-view" *ngIf="isLoaded">
+<div class="view-wrapper" *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe">
-    <!-- Jos käytetään kirjautumisen tunnistinta. -->
-    <!-- <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe; else verticalSpacer"> -->
-    <span>{{ courseName }}</span>
-  </h2>
+  <!--------------- Ylänapit -------------------------------------------------->
 
-  <div class="vertical-spacer" *ngIf="isInIframe"></div>
-
-  <div id="top-buttons">
-    <app-to-beginning-button></app-to-beginning-button>
+  <div class="top-buttons-wrapper">
+    <app-beginning-button></app-beginning-button>
 
     <!-- Tiketin tilan tarkastamalla tietää, saatiinko tiedot haettua. -->
-    <div class="edit-buttons-wrapper">
-      <button *ngIf="(user.asema === 'opettaja' || user.asema === 'admin') && ticket.tila > 0" mat-raised-button i18n="@@Muokkaa"
-        (click)="editFaq()">
+      <button class="edit-btn"
+              (click)="editFaq()"
+              i18n="@@Muokkaa"
+              mat-raised-button
+              *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                    (user$ | async)?.asema === 'admin') &&
+                    ticket.tila > 0"
+              >
         Muokkaa
       </button>
 
-      <button mat-raised-button *ngIf="isArchivePressed === false && (user.asema === 'opettaja' || user.asema === 'admin') && ticket.tila > 0"
-        i18n="@@Poista" (click)="changeArchiveButton()">
+      <button class="remove-btn"
+              (click)="changeArchiveButton()"
+              i18n="@@Poista"
+              mat-raised-button
+              *ngIf="isArchivePressed === false &&
+                  ((user$ | async)?.asema === 'opettaja' ||
+                  (user$ | async)?.asema === 'admin') && ticket.tila > 0"
+              >
         Poista
       </button>
 
-      <button mat-raised-button (click)="archiveFaq()" *ngIf="isArchivePressed === true" color="accent" i18n="@@Vahvista poisto">
+      <button class="remove-btn"
+              (click)="archiveFaq()"
+              color="accent"
+              i18n="@@Vahvista poisto"
+              mat-raised-button
+              *ngIf="isArchivePressed === true"
+              >
         Vahvista poisto
       </button>
 
-      <button mat-raised-button
-        i18n="@@Kopioi linkki"
-        onclick="navigator.clipboard.writeText(window.location.href)"
-        *ngIf="isCopyToClipboardPressed === false"
-        (click)="isCopyToClipboardPressed = true"
-      >
+      <button class="copy-link-btn"
+              (click)="isCopyToClipboardPressed = true"
+              i18n="@@Kopioi linkki"
+              mat-raised-button
+              *ngIf="isCopyToClipboardPressed === false"
+              onclick="navigator.clipboard.writeText(window.location.href)"
+              >
         Kopioi linkki
       </button>
 
-      <button mat-raised-button
-        i18n="@@Kopioitu leikepöydälle"
-        onclick="navigator.clipboard.writeText(window.location.href)"
-        *ngIf="isCopyToClipboardPressed === true"
-      >
+      <button class="copy-link-btn"
+              mat-raised-button
+              i18n="@@Kopioitu leikepöydälle"
+              onclick="navigator.clipboard.writeText(window.location.href)"
+              *ngIf="isCopyToClipboardPressed === true"
+              >
         Kopioitu leikepöydälle
       </button>
 
-    </div>
-
   </div>
+
+  <!----------- Kysymys ------------------------------------------------------->
 
   <section *ngIf="ticket.viesti !== undefined">
 
-    <h3 class="sub-header">{{ ticket.otsikko }}</h3>
-
-    <!----------- Kysymys ----------->
+    <h2 class="sub-header">{{ ticket.otsikko }}</h2>
 
     <div *ngFor="let kentta of ticket.kentat">
       <p class="theme-label" >{{ kentta.otsikko }}</p>
       <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
-    <h4 class="sub-header" i18n="@@Kysymys">Kysymys</h4>
+    <h3 class="sub-header" i18n="@@Kysymys">Kysymys</h3>
 
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
-    <app-view-attachments *ngIf="ticket.liitteet" [ticketID]="ticket.id" [files]="ticket.liitteet">
+    <app-view-attachments
+        [files]="ticket.liitteet"
+        *ngIf="ticket.liitteet"
+        [ticketID]="ticket.id"
+        >
     </app-view-attachments>
 
     <hr class="theme-divider">
 
-    <!----------- Vastaus ----------->
+    <!----------- Vastaus ----------------------------------------------------->
 
-    <h4 class="sub-header" i18n="@@Vastaus">Vastaus</h4>
-
-    <div class="short-vertical-spacer"></div>
+    <h3 class="sub-header" i18n="@@Vastaus">Vastaus</h3>
 
     <div *ngFor="let comment of ticket.kommentit">
         <app-message [messageHtml]=comment.viesti></app-message>
-        <app-view-attachments *ngIf="comment.liitteet" [ticketID]="ticket.id" [files]="comment.liitteet">
+        <app-view-attachments
+            [files]="comment.liitteet"
+            *ngIf="comment.liitteet"
+            [ticketID]="ticket.id"
+            >
       </app-view-attachments>
     </div>
 
@@ -86,11 +103,11 @@
 
   <mat-card-content *ngIf="errorMessage.length > 0">
     <app-error-card
-      i18n-title="@@Virhe"
-      title="Virhe"
-      message="{{ errorMessage }}"
-      [styles]="{ margin: '1em 0' }"
-    >
+        i18n-title="@@Virhe"
+        message="{{ errorMessage }}"
+        [styles]="{ margin: '1em 0' }"
+        title="Virhe"
+        >
     </app-error-card>
   </mat-card-content>
 

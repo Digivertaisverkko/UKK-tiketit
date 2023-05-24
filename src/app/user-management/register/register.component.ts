@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/core/auth.service';
+import { AuthService } from '@core/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Output, EventEmitter} from '@angular/core';

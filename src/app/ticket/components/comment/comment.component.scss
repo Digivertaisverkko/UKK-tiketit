@@ -1,0 +1,63 @@
+mat-card {
+  margin: 0 auto 12px;
+
+  mat-card-subtitle {
+    margin-top: 3px;
+  }
+
+  .remove-btn {
+    top: 1px;
+    font-size: 120%;
+    mat-icon {
+      font-size: 120%;
+    }
+  }
+
+  .comment-state {
+    display: inline-block;
+    margin-top: 0.6em;
+    margin-right: 1em;
+  }
+
+  .more-info-needed {
+    color: #757575;
+  }
+
+  .proposed-solution {
+    color: var(--primary-color);
+  }
+}
+
+.theme-actions {
+  gap: 0.8rem
+}
+
+mat-radio-button {
+  margin: 3px 1.7rem 3px 0px
+}
+
+
+@media (max-width: 775px) {
+
+  // Välttämättä ei mene useammalle riville.
+  // .user-info-block {
+  //   order: -1;
+  //   margin-bottom: -30px;
+  // }
+
+  .theme-actions {
+    gap: 0.5rem
+  }
+
+  .attach-button {
+    order: 1;
+  }
+
+  .actions-spacer {
+    order: 2
+  }
+
+  .send-button {
+    order: 3;
+  }
+}

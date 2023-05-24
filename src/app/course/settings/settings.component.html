@@ -1,63 +1,135 @@
+<app-headline></app-headline>
 
-<h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe" id="courseName">
-  <span>{{courseName}}</span>
-</h2>
+<app-beginning-button
+    (clicked)="showConfirm = true"
+    [confirm]="isDirty === true"
+    >
+</app-beginning-button>
 
-<div class="top-vertical-spacer" *ngIf="isInIframe"></div>
+<app-error-card
+    [confirmLeave]="true"
+    *ngIf="showConfirm === true"
+    [styles]="{ margin: '2rem 0 0 0' }"
+    >
+</app-error-card>
 
-<app-to-beginning-button></app-to-beginning-button>
+<div class="view-wrapper" *ngIf="isLoaded">
 
-<div class="list-wrapper" *ngIf="isLoaded">
+  <h2 class="theme-subheader" i18n="@@Kurssin asetukset">
+      Kurssin asetukset
+  </h2>
 
-  <h3 class="sub-header table-header" i18n="@@Kysymysten lisäkentät">Kysymysten lisäkentät</h3>
+  <!----------------- Lisäkentät ---------------------------------------------->
 
-  <div class="container" *ngIf="errorMessage.length === 0" cdkDropList (cdkDropListDropped)="drop($event)">
+  <h3 class="table-header" i18n="@@Kysymysten lisäkentät">
+    Kysymysten lisäkentät
+  </h3>
+
+  <p i18n="@@Asetukset-kuvaus">
+    Voit asettaa kysymyksille lisäkenttiä, joita kysytään kaikilta uuden kysymyksen
+    esittäviltä käyttäjiltä. Lisäkenttiä voi asettaa pakollisiksi, antaa niille
+    valmiita vastausvaihtoehtoja sekä kuvaustekstejä. Voit muuttaa lisäkenttien
+    esitysjärjestystä muuttamalla alla olevan listan järjestystä.
+  </p>
+
+  <div  cdkDropList
+        (cdkDropListDropped)="drop($event)"
+        class="list-wrapper"
+        *ngIf="fieldList.length > 0; else noFieldsMessage"
+        >
     <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
-      <div class="title-column">{{field.otsikko}}</div>
-      <div class="info-text-column">{{field.ohje}}</div>
-      <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" ><mat-icon class="edit-icon">edit_indicator</mat-icon></a>
+      <div class="title-column">{{ field.otsikko }}</div>
+      <div class="info-text-column">{{ field.ohje }}</div>
+      <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" >
+        <mat-icon class="edit-icon">edit_indicator</mat-icon>
+      </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
     </div>
-    <p *ngIf="fieldList.length === 0" class="no-fields-p" i18n="@@Yhtään lisäkenttää ei ole lisätty">
-      Yhtään lisäkenttää ei ole lisätty.</p>
   </div>
+
+  <ng-template #noFieldsMessage>
+    <div class="list-wrapper">
+      <p class="no-fields-p"
+          i18n="@@Yhtään lisäkenttää ei ole lisätty"
+          >
+        Yhtään lisäkenttää ei ole lisätty.
+      </p>
+    </div>
+  </ng-template>
 
 </div>
 
-<app-error-card *ngIf="errorMessage.length > 0" i18n-title="@@Virhe" title="Virhe"
-  message="{{ errorMessage }}" [styles]="{ margin: '3em 20% 1em 20%' }">
+<app-error-card
+    i18n-title="@@Virhe"
+    *ngIf="errorMessage.length > 0"
+    message="{{ errorMessage }}"
+    [styles]="{ margin: '2em 0 1em 0' }"
+    title="Virhe"
+    >
 </app-error-card>
 
 <p *ngIf="message.length >0" class="theme-success-message">{{message}}</p>
 
 <div class="theme-actions" *ngIf="errorMessage.length === 0">
 
-  <button
-    class="add-button"
-    mat-raised-button
-    [routerLink]="'/course/' + this.courseID + '/settings/field'"
-    i18n="@@Lisää kenttä">
+  <button class="add-button"
+          i18n="@@Lisää kenttä"
+          mat-raised-button
+          [routerLink]="'/course/' + this.courseID + '/settings/field'"
+          >
     Lisää kenttä
   </button>
+</div>
 
-  <button
-    class="save-button"
-    color="primary"
-    mat-raised-button
-    (click)="saveFields()"
-    i18n="@@Tallenna">
-    Tallenna
+<!----------------- UKK Siirtäminen ------------------------------------------->
+
+<div class="vertical-spacer"></div>
+
+<h3 class="theme-subheader faq-transfer-h2"
+    i18n="@@Usein kysyttyjen kysymysten siirtäminen"
+    >
+  Usein kysyttyjen kysymysten siirtäminen
+</h3>
+
+<!-- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
+<input  accept=".json"
+        aria-disabled="true"
+        (change)="onFileAdded($event)"
+        class="file-input"
+        #fileInput
+        multiple
+        style="display: none"
+        type="file"
+        >
+
+<div class="transfer-buttons-wrapper">
+  <button i18n="@@Lataa tiedostona"
+          (click)="exportFAQs()"
+          mat-raised-button
+          type="button"
+          >
+    Lataa tiedostona
+  </button>
+  <button i18n="@@Lisää tiedostona"
+          mat-raised-button
+          (click)="fileInput.click()"
+          >
+    Lisää tiedostosta
   </button>
 </div>
+
+<!----------------------------------------------------------------------------->
 
 <div class="vertical-spacer"></div>
 
 <form class="invite-form" style="display: none">
 
-  <h3 class="sub-header">Kutsu ulkopuolisia kurssille</h3>
+  <h2 class="sub-header">Kutsu ulkopuolisia kurssille</h2>
 
-  <p>Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.</p>
+  <p>
+    Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
+  </p>
 
   <div class="invite-wrapper">
 
@@ -66,11 +138,11 @@
       <input matInput (value)="inviteEmail">
     </mat-form-field>
 
-    <button
-      class="invite-button"
-      color="primary"
-      mat-raised-button
-      i18n="@@Kutsu">
+    <button class="invite-button"
+            color="primary"
+            i18n="@@Kutsu"
+            mat-raised-button
+            >
       Kutsu
     </button>
 

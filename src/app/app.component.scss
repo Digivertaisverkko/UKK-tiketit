@@ -1,7 +1,7 @@
 @import '/src/variables.scss';
 
 // Jotta footer ei nouse sivun alaosasta.
-#app-wrapper {
+.app-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -14,41 +14,59 @@ main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin: 0 auto;
+  margin: 0 auto 0 auto;
   position: relative;
   width: 1024px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
   // min-height: calc(100vh - $header-height - $footer-height);
-  padding: 0 40px 50px 40px;
+  padding: 0 40px 70px 40px;
 }
 
-// .embedded-button-wrapper {
-//   display: flex;
-//   justify-content: flex-end;
-// }
+.embedded-wrapper {
+  width: 100%;
+  // align-items: space-between;
+  height: 2.3rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  // margin-right: -1rem;
+}
 
-// .embedded-button {
-//   display: inline-block;
-//   font-size: 75%;
-//   // width: 15em;
-// }
+.logo {
+  margin: auto;
+  height: 80%;
 
-
-  @media (max-width: 1024px) {
-    main {
-      width: 100%;
-      min-width: 280px;
-    }
+  img {
+    height: 100%;
   }
 
-  @media (max-width: 839.98px) {
-    main {
-      padding: 0 20px 20px 20px;
+  &-clickable {
+    &:hover {
+      filter: brightness(97%);
     }
+    cursor: pointer;
   }
+}
 
-  @media (max-width: $XSmall) {
-    main {
-      padding: 0 3px 3px 3px;
-    }
+.vertical-spacer {
+  height: 0.8rem;
+}
+
+@media (max-width: 1024px) {
+  main {
+    width: 100%;
+    min-width: 280px;
   }
+}
+
+@media (max-width: 840px) {
+  main {
+    padding: 0 20px 60px 20px;
+  }
+}
+
+@media (max-width: $XSmall) {
+  main {
+    padding: 0 20px 50px 3px;
+  }
+}

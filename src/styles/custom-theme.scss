@@ -73,10 +73,8 @@ $custom-accent: mat.define-palette($custom-accent-palette, 700);
 // $headline-2: mat.define-typography-level(20px, 20px, 500, $displayFont),
 // $headline-6: mat.define-typography-level(50px, 50px, 800, $displayFont),
 
-// TODO: fallback -fonttien määritys.
-
-$displayFont: Montserrat;
-$textFont: Roboto;
+$displayFont: Montserrat, Geneva, Verdana, sans-serif;
+$textFont: Roboto, Arial, Helvetica, sans-serif;
 
 // Tyylitiedostot voivat käyttää näitä ilman importtia. Alla pitää olla väriarvot eikä toimi muuttujat.
 :root {
@@ -93,6 +91,7 @@ $textFont: Roboto;
 
 // headline-5 = h1, headline6 = h2, subtitle1 = mm. footerin lista.
 $custom-typography-config: mat.define-typography-config(
+  $headline-4: mat.define-typography-level(2.5rem, 1.2, 900, $displayFont, normal),
   $headline-5: mat.define-typography-level(2.5rem, 1.2, 900, $displayFont, normal),
   $headline-6: mat.define-typography-level(1.66rem, 1.2, 700, $displayFont, normal),
   $subtitle-1: mat.define-typography-level(rem, rem, 600, $textFont, normal),
@@ -150,9 +149,13 @@ button[mat-raised-button] {
 
 // Important -ylikirjoitukset
 
-// FIXME: Miksei poimi teeman kontrastiväriä?
-.mat-primary { color: white !important; }
+// ? Miksei poimi teeman kontrastiväriä?
+.mat-primary {
+  color: white !important;
+}
 
-.mdc-button { height: 2.3em !important; }
+.mdc-button {
+  height: 2.3em !important;
+}
 
 /* ================================================= */

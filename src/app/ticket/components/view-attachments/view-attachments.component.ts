@@ -1,14 +1,21 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
-import { TicketService, Liite } from '../../ticket.service';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
+    from '@angular/core';
+import { TicketService } from '@ticket/ticket.service';
+import { Liite } from '@ticket/ticket.models';
 
 @Component({
   selector: 'app-view-attachments',
   template: `
     <div class="attachments-wrapper">
-      <button class="attachment" *ngFor="let file of files; let i = index"
-        (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
-          matTooltip="{{file.nimi}}" [matTooltipShowDelay]="600">
-          <div class="filename">{{file.nimi}}</div><mat-icon>download</mat-icon>
+      <button
+          class="attachment"
+          (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
+          matTooltip="{{file.nimi}}"
+          [matTooltipShowDelay]="600"
+          *ngFor="let file of files; let i = index"
+          >
+          <div class="filename">{{file.nimi}}</div>
+          <mat-icon>download</mat-icon>
       </button>
     </div>`,
 
@@ -24,8 +31,9 @@ export class ViewAttachmentsComponent {
 
   constructor(private ticketService: TicketService) {}
 
-  public downloadFile(ticketID: string, commentID: string, fileID: string, filename: string)
-  {
+  public downloadFile(ticketID: string, commentID: string, fileID: string,
+      filename: string)
+    {
     this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
@@ -36,7 +44,8 @@ export class ViewAttachmentsComponent {
       link.click();
       document.body.removeChild(link);
     }).catch(error => {
-      const errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:Tiedoston lataaminen epäonnistui` + '.';
+      const errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
+          Tiedoston lataaminen epäonnistui` + '.';
       this.errorMessage.emit(errorMessage);
     })
   }

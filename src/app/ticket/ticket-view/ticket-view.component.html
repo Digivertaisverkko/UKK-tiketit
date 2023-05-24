@@ -1,77 +1,114 @@
-<mat-progress-bar class="theme-progress-bar" mode="indeterminate" *ngIf="!isLoaded"></mat-progress-bar>
+  <app-headline></app-headline>
 
-<div *ngIf="isLoaded">
+  <div class="view-wrapper" *ngIf="isLoaded">
 
-  <h2 class="main-header" *ngIf="courseName.length > 0 && !isInIframe && !ticketIdFromParent">
-    <span>{{ courseName }}</span>
-  </h2>
+  <app-beginning-button
+        [disabled]="state==='sending'"
+        *ngIf="ticket.tila === undefined"
+        >
+  </app-beginning-button>
 
-  <div class="vertical-spacer" *ngIf="isInIframe"></div>
+  <div class="top-buttons-wrapper" *ngIf="!ticketIdFromParent && ticket.tila > 0">
 
-  <app-to-beginning-button *ngIf="ticket.tila === undefined" [disabled]="state==='sending'"></app-to-beginning-button>
-
-    <div class="top-buttons" *ngIf="!ticketIdFromParent && ticket.tila > 0">
-      <app-to-beginning-button [disabled]="state==='sending'"></app-to-beginning-button>
+      <app-beginning-button
+          (clicked)="showConfirm = true"
+          [confirm]="form.dirty || isEditingComment"
+          [disabled]="state==='sending'"
+          >
+      </app-beginning-button>
 
       <div class="spacer"></div>
 
-      <button *ngIf="isEditable" [disabled]="state==='sending'" mat-raised-button i18n="@@Muokkaa"
-        (click)="editTicket()">
+      <button class="edit-button"
+              [disabled]="state==='sending'"
+              i18n="@@Muokkaa"
+              mat-raised-button
+              *ngIf="isEditable"
+              (click)="editTicket()"
+              >
         Muokkaa
       </button>
 
-      <button mat-raised-button i18n="@@Kopioi UKK"
-        (click)="copyAsFAQ()"
-        *ngIf="(userRole === 'opettaja' || userRole === 'admin')"
-        [disabled]="state==='sending'">
+      <button (click)="copyAsFAQ()"
+              [disabled]="state==='sending'"
+              i18n="@@Kopioi UKK"
+              mat-raised-button
+              *ngIf="(user.asema === 'opettaja' || user.asema === 'admin')"
+              >
         Kopioi UKK:ksi
       </button>
 
-      <div
-        matTooltip="{{cantRemoveTicket}}"
-        [matTooltipDisabled]="isRemovable">
-        <button mat-raised-button *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
-          i18n="@@Poista" (click)="changeRemoveButton()"
-          [disabled]="!isRemovable || state==='sending'">
+      <button (click)="changeButton('archive')"
+              i18n="@@Arkistoi"
+              mat-raised-button
+              *ngIf="ticket.arkistoitava === true && !isArchivePressed"
+              [disabled]="state==='sending'"
+              >
+        Arkistoi
+      </button>
+
+      <button class="remove-btn"
+              (click)="archiveTicket()"
+              color="accent"
+              i18n="@@Vahvista"
+              mat-raised-button
+              *ngIf="isArchivePressed"
+              [disabled]="state==='sending'"
+              >
+        Vahvista
+      </button>
+
+      <div  class="remove-btn"
+            matTooltip="{{ cantRemoveTicket }}"
+            [matTooltipDisabled]="isRemovable"
+            >
+        <button class="remove-btn"
+                (click)="changeButton('remove')"
+                [disabled]="!isRemovable || state === 'sending'"
+                i18n="@@Poista"
+                mat-raised-button
+                *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
+                >
           Poista
         </button>
       </div>
 
-      <button mat-raised-button (click)="removeTicket()" *ngIf="isRemovePressed === true" color="accent" i18n="@@Vahvista poisto"
-        [disabled]="state==='sending'">
+      <button (click)="removeTicket()"
+              color="accent"
+              [disabled]="state==='sending'"
+              i18n="@@Vahvista poisto"
+              mat-raised-button
+              *ngIf="isRemovePressed === true"
+              >
         Vahvista poisto
       </button>
     </div>
 
+    <app-error-card
+        [confirmLeave]="true"
+        *ngIf="showConfirm"
+        [styles]="{ margin: '2rem 0 0 0' }"
+        >
+    </app-error-card>
+
+  <!-------------- Kysymys ---------------------------------------------------->
+
   <section *ngIf="ticket.tila > 0">
 
-  <!-------------- Kysymys ----------------------------------------->
-
     <div class="ticket-header">
-
-      <h3 class="sub-header">{{ ticket.otsikko }}</h3>
-
+      <h2 class="sub-header">{{ ticket.otsikko }}</h2>
       <div class="spacer"></div>
-
-      <div class="user-info-block">
-        <div class="text-info">
-          <span class="theme-profile-name">{{ ticket.aloittaja.nimi }}</span>
-          <div class="theme-label">
-            <span>{{getSenderTitle(ticket.aloittaja.nimi, ticket.aloittaja.asema)}} - </span>
-            <span *ngIf="isToday(ticket.aikaleima); else notToday" i18n="@@Tänään">Tänään</span>
-            <ng-template #notToday>
-              <span>{{ ticket.aikaleima | date: 'shortDate' }}</span>
-            </ng-template>
-            <span>&nbsp;{{ ticket.aikaleima | date: 'shortTime' }}</span>
-          </div>
-        </div>
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt="">
-      </div>
+      <app-sender-info
+          [aikaleima]="ticket.aikaleima"
+          [styles]="{'margin-top': '1.5rem' }"
+          [user]="ticket.aloittaja"
+          >
+      </app-sender-info>
 
     </div>
 
     <div *ngFor="let kentta of ticket.kentat">
-      <p class="theme-label" >{{ kentta.otsikko }}</p>
+      <p class="theme-label">{{ kentta.otsikko }}</p>
       <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
@@ -80,97 +117,133 @@
     <app-message [messageHtml]=ticket.viesti></app-message>
 
     <!----- Liitteet ---->
-    <app-view-attachments *ngIf="ticket.liitteet" [ticketID]="ticketID" [files]="ticket.liitteet"
-      (errorMessage)="errorMessage = $event">
+    <app-view-attachments
+        (errorMessage)="errorMessage = $event"
+        [files]="ticket.liitteet"
+        *ngIf="ticket.liitteet"
+        [ticketID]="ticketID"
+        >
     </app-view-attachments>
 
     <hr class="theme-divider">
 
-  <!-------------- Keskustelu ----------------------------------------->
+  <!-------------- Keskustelu ------------------------------------------------->
 
-  <h4 class="sub-header" i18n="@@Keskustelu">Keskustelu</h4>
+    <h3 class="sub-header" i18n="@@Keskustelu">Keskustelu</h3>
 
-    <mat-card appearance="outlined" class="answer" *ngFor="let comment of ticket.kommentit">
-
-      <mat-card-header>
-
-        <img mat-card-avatar src="../../../assets/logos/UniOulu.png" alt={{comment.lahettaja.nimi}}>
-        <mat-card-title class="theme-profile-name">
-          {{ comment.lahettaja.nimi }}
-        </mat-card-title>
-
-        <mat-card-subtitle class="theme-label">
-          <span>{{getSenderTitle(comment.lahettaja.nimi, comment.lahettaja.asema)}} - </span>
-          <span *ngIf="isToday(comment.aikaleima)" i18n="@@Tänään">Tänään</span>
-          <span *ngIf="!isToday(comment.aikaleima)">{{ comment.aikaleima | date: 'shortDate' }}</span>
-          {{ comment.aikaleima | date: 'shortTime' }}
-        </mat-card-subtitle>
-        <div class="spacer"></div>
-        <span class="ticket-state" *ngIf="comment.tila === 5">{{proposedSolution}}</span>
-
-      </mat-card-header>
-
-      <mat-card-content>
-        <app-message [messageHtml]=comment.viesti></app-message>
-        <app-view-attachments *ngIf="comment.liitteet" [ticketID]="ticketID" [files]="comment.liitteet"
-          (errorMessage)="errorMessage = $event">
-        </app-view-attachments>
-      </mat-card-content>
-    </mat-card>
+    <app-comment
+        [comment]="comment"
+        [(editingCommentID)]="editingCommentIDParent"
+        (messages)="listenMessagesFromComment($event)"
+        *ngFor="let comment of ticket.kommentit"
+        [ticketID]="ticket.id"
+        >
+    </app-comment>
 
     <div class="vertical-spacer"></div>
 
-    <app-editor [disabled]="state==='sending'" *ngIf="!ticketIdFromParent" [(editorContent)]="commentText"></app-editor>
-
   </section>
 
-  <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
+  <!-------------- Uuden kommentin tekeminen ---------------------------------->
 
-  <app-error-card
-    *ngIf="errorMessage.length > 0"
-    i18n-title="@@Virhe"
-    title="Virhe"
-    message="{{ errorMessage }}"
-    [styles]="{ margin: '0' }"
-    >
-  </app-error-card>
+  <form [formGroup]="form" (ngSubmit)="sendComment()">
 
-  <section *ngIf="ticket.tila > 0">
+    <app-editor formControlName="message"
+                *ngIf="!ticketIdFromParent"
+                >
+    </app-editor>
+    <mat-error  i18n="@@Pakollinen kenttä."
+                *ngIf="message?.errors?.['required'] && message?.touched"
+                >
+      Pakollinen kenttä.
+    </mat-error>
+    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."
+                *ngIf="message?.errors?.['maxlength']"
+                >
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    </mat-error>
 
-    <div class="theme-actions" *ngIf="!ticketIdFromParent">
+    <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
-      <button mat-raised-button class="attach-button" (click)="uploadClick.next('add')" [disabled]="state==='sending'">
-        <mat-icon>attach_file</mat-icon>{{attachFilesText}}
-      </button>
+    <app-error-card
+        *ngIf="errorMessage.length > 0"
+        i18n-title="@@Virhe"
+        message="{{ errorMessage }}"
+        [styles]="{ margin: '0' }"
+        title="Virhe"
+        >
+    </app-error-card>
 
-      <div class="spacer" *ngIf="userRole === 'opettaja' || userRole ==='admin'; else spacerHere"></div>
+    <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
+    <p  class="theme-success-message"
+        i18n="@@Kommentin lisääminen"
+        *ngIf="state==='sending'"
+        >
+      Uuden kommentin lähettäminen onnistui.
+    </p>
 
-      <mat-radio-group align="start" [(ngModel)]="newCommentState" *ngIf="userRole === 'opettaja' || userRole ==='admin'"
-        [disabled]="state==='sending'">
-        <mat-radio-button [value]=4 i18n="@@Kommentti">Kommentti</mat-radio-button>
-        <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">Lisätietoa tarvitaan</mat-radio-button>
-        <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">Ratkaisuehdotus</mat-radio-button>
-      </mat-radio-group>
+    <section *ngIf="ticket.tila > 0">
 
-      <ng-template #spacerHere><div class="spacer"></div></ng-template>
+      <div class="theme-actions" *ngIf="!ticketIdFromParent">
 
-      <button
-        mat-raised-button
-        color="primary"
-        class="send-button"
-        [disabled]="commentText.length < 1 || attachmentsMessages === 'faulty' || state==='sending'"
-        (click)="sendComment()"
-        i18n="@@Lähetä">
-        Lähetä
-      </button>
+        <!-- Nimi sidottu muuttujaan, koska eri rooleilla on eri teksti. -->
+        <button [attr.aria-label]="attachFilesText"
+                class="attach-button"
+                (click)="uploadClick.next('add')"
+                [disabled]="state==='sending'"
+                mat-raised-button="attachFilesText"
+                type="button"
+                >
+          <mat-icon>attach_file</mat-icon>{{attachFilesText}}
+        </button>
 
-    </div>
+        <!-- <div class="action-spacer spacer"
+            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
+        </div> -->
 
-    <app-edit-attachments [uploadClicks]="uploadClick.asObservable()"
-      (attachmentsMessages)="attachmentsMessages = $event"
-      (fileListOutput)="fileInfoList = $event">
-    </app-edit-attachments>
+        <mat-radio-group
+            align="start"
+            [disabled]="state === 'sending'"
+            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+            [(ngModel)]="newCommentState"
+            [ngModelOptions]="{standalone: true}"
+            >
+          <mat-radio-button [value]=4 i18n="@@Kommentti">
+            Kommentti
+          </mat-radio-button>
+          <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+            Lisätietoa tarvitaan
+          </mat-radio-button>
+          <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+            Ratkaisuehdotus
+          </mat-radio-button>
+        </mat-radio-group>
 
-  </section>
+        <!-- <ng-template #spacerHere> -->
+          <div class="action-spacer spacer"></div>
+        <!-- </ng-template> -->
+
+        <button class="send-button"
+                color="primary"
+                [disabled]="state ==='sending'"
+                i18n="@@Lähetä"
+                mat-raised-button
+                type="submit"
+                >
+          Lähetä
+        </button>
+
+      </div>
+
+      <app-edit-attachments
+          (attachmentsMessages)="attachmentsMessages = $event"
+          (fileListOutput)="fileInfoList = $event"
+          formControlName="attachments"
+          [uploadClicks]="uploadClick.asObservable()"
+          >
+      </app-edit-attachments>
+
+    </section>
+  </form>
 
 </div>

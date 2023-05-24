@@ -1,25 +1,166 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpEventType, HttpRequest } from '@angular/common/http';
+/* Tämä service on käsittelee tiketteihin eli kysymyksiin liittyvää tietoa.
+    UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
+    niistä vastaavassa servicessä. */
+
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders }
+    from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import '@angular/localize/init';
-import { firstValueFrom, map, Observable, catchError, Subject, of } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../core/auth.service';
 import { ErrorService } from '../core/error.service';
+import { Role } from '../core/core.models';
+import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse, SortableTicket,
+  TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
+import { StoreService } from '../core/store.service';
+
+interface GetTicketsOption {
+  option: 'onlyOwn' | 'archived';
+}
 
 @Injectable({ providedIn: 'root' })
 
-// Tämä service on käsittelee tiketteihin liittyvää tietoa.
 export class TicketService {
 
-  public $messages = new Subject<string>();
   private debug: boolean = false;
 
-  constructor (private auth: AuthService,
+  constructor (
+    private auth: AuthService,
     private errorService: ErrorService,
-    private http: HttpClient) {}
+    private http: HttpClient,
+    private store: StoreService
+    ) {}
 
-  trackMessages(): Observable<string> {
-    return this.$messages.asObservable();
+  // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
+  public async addComment(ticketID: string, message: string, tila?: number):
+      Promise<NewCommentResponse> {
+    if (isNaN(Number(ticketID))) {
+      throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
+    }
+    if (tila !== undefined) {
+      if (tila < 0 || tila > 6) {
+        throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
+      }
+    }
+    interface newComment {
+      viesti: string;
+      tila?: number;
+    }
+    let body: newComment = { viesti: message }
+    if (tila !== undefined) body.tila = tila
+    let response: any;
+    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
+    try {
+      response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
+      this.store.setLoggedIn();
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  // Sama kuin alla, mutta ei uppaa tiedostoja.
+  // editFaq: editoidaanko olemassa olevaa UKK:a.
+  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
+    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` :
+        `/kurssi/${ID}/ukk`;
+    url = environment.apiBaseUrl + url;
+    let response: any;
+    const body = newFaq;
+    try {
+      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  // Lisää tiketti ilman tiedostoja.
+  public async addTicket(courseID: string, newTicket: UusiTiketti):
+      Promise<AddTicketResponse> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
+    const body = newTicket;
+    try {
+      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+   // Arkistoi (poista) UKK.
+  public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.post<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  // Arkistoi tiketti.
+  public async archiveTicket(ticketID: string): Promise<{ success: boolean }> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/valmis`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.post<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  public async editComment(ticketID: string, commentID: string, comment: string,
+        state: number): Promise<boolean> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
+    let body;
+    if (state < 3 || state > 5) {
+      console.error('Muokattavan Kommentin tila täytyy olla 3, 4 tai 5.');
+      body = { viesti: comment }
+    } else {
+      body = { viesti: comment, tila: state }
+    }
+    try {
+      // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
+      response = await firstValueFrom(this.http.put(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return (response?.success === true) ? true : false;
+  }
+
+
+  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]):
+      Promise<boolean> {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    const body = ticket;
+    try {
+      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
+      response = await firstValueFrom(this.http.put(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response?.success !== true) return false
+    if (fileList?.length == 0 || !fileList ) return true
+    const firstCommentID = String(response.uusi.kommentti);
+    let sendFileResponse: any;
+    for (let file of fileList) {
+      try {
+        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+      } catch (error: any) {
+        this.handleError(error);
+      }
+    }
+    return true
   }
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
@@ -45,224 +186,59 @@ export class TicketService {
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
-  public getTicketState(numericalState: number): string {
-    let verbal: string;
+  public getTicketState(numericalState: number, role: Role | ''): string {
+    let string: string;
     switch (numericalState) {
-      case 0: verbal = $localize `:@@Virhetila:Virhetila`; break;
-      case 1: verbal = $localize `:@@Lähetetty:Lähetetty`; break;
-      case 2: verbal = $localize `:@@Luettu:Luettu`; break;
-      case 3: verbal = $localize `:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
-      case 4: verbal = $localize `:@@Kommentoitu:Kommentoitu`; break;
-      case 5: verbal = $localize `:@@Ratkaistu:Ratkaistu`; break;
-      case 6: verbal = $localize `:@@Arkistoitu:Arkistoitu`; break;
+      case 0: string = $localize`:@@Virhetila:Virhetila`; break;
+      case 1:
+        if (role === 'opettaja') {
+          string = $localize`:@@Lukematon:Lukematon`;
+        } else {
+          string = $localize`:@@Lähetetty:Lähetetty`;
+        }
+        break;
+      case 2: string = $localize`:@@Luettu:Luettu`; break;
+      case 3: string = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
+      case 4: string = $localize`:@@Kommentoitu:Kommentoitu`; break;
+      case 5: string = $localize`:@@Ratkaistu:Ratkaistu`; break;
+      case 6: string = $localize`:@@Arkistoitu:Arkistoitu`; break;
       default:
         throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
     }
-    return verbal;
-  }
-
-  // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string, tila?: number): Promise<NewCommentResponse> {
-    if (isNaN(Number(ticketID))) {
-      throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
-    }
-    if (tila !== undefined) {
-      if (tila < 0 || tila > 6) throw new Error('ticketService.addComment: tiketin tilan täytyy olla väliltä 0-6.');
-    }
-    interface newComment {
-      viesti: string;
-      tila?: number;
-    }
-    let body: newComment = { viesti: message }
-    if (tila !== undefined) body.tila = tila
-    let response: any;
-    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
-    try {
-      response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response
-  }
-
-  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot: /api/kurssi/:kurssi-id/uusitiketti/kentat/
-  public async getTicketFieldInfo(courseID: string, fieldID?: string): Promise <KentanTiedot[]> {
-    let response: any;
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
-    try {
-      response = await firstValueFrom( this.http.get<KentanTiedot[]>(url) );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (fieldID) response = response.filter((field: KentanTiedot) => field.id == fieldID);
-    return response;
-  }
-
-  // Luo uudet kentät tikettipohjalle.
-  public async setTicketFieldInfo(courseID: string, fields: KentanTiedot[]) {
-    for (let field of fields) {
-      if (field.id != null) delete field.id;
-    }
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
-    let response: any;
-    const body = { kentat: fields };
-    try {
-      console.log('Lähetetään GET-pyyntö urliin: ' + url);
-      response = await firstValueFrom( this.http.put(url, body) );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
-  }
-
-  /* editFaq = Muokataanko vanhaa UKK:a (vai lisätäänkö kokonaan uusi).
-     Edellisessä tapauksessa ID on UKK:n ID, jälkimmäisessä kurssi ID. */
-
-  // Sama kuin alla, mutta ei uppaa tiedostoja.
-  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
-    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;
-    url = environment.apiBaseUrl + url;
-    let response: any;
-    const body = newFaq;
-    try {
-      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response
-  }
-
-  // FIXME: eri muotoinen nimi kuin esim. addTicket.
-  public async sendFaq(ID: string, newFaq: UusiUKK, fileList: File[], editFaq?: boolean) {
-    let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` : `/kurssi/${ID}/ukk`;
-    url = environment.apiBaseUrl + url;
-    let response: any;
-    const body = newFaq;
-    try {
-      response = await firstValueFrom(this.http.post<UusiUKK>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (fileList?.length === 0 ) return
-    const ticketID = String(response.uusi.tiketti);
-    const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-  }
-
-  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]): Promise<boolean> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
-    const body = ticket;
-    try {
-      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
-      response = await firstValueFrom(this.http.put(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (response?.success !== true) return false
-    if (fileList?.length == 0 || !fileList ) return true
-    const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-    return true
-  }
-
-  // Lisää uusi tiketti. Palauttaa true, jos lisääminen onnistui.
-  public async addTicket(courseID: string, newTicket: UusiTiketti, fileList: File[]): Promise<boolean> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
-    const body = newTicket;
-    try {
-      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    if (response?.success !== true) return false
-    if (fileList.length == 0 ) return true
-    const ticketID = String(response.uusi.tiketti);
-    const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-    return true
-  }
-
-  // Lisää tiketti ilman tiedostoja.
-  public async addOnlyTicket(courseID: string, newTicket: UusiTiketti): Promise<AddTicketResponse> {
-    let response: any;
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
-    const body = newTicket;
-    try {
-      response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response
-  }
-
-  private getRandomInt(min: number, max: number) {
-    return Math.floor(Math.random() * max) + min;
+    // Numero edessä, koska järjestetään taulukossa sen mukaan.
+    string = numericalState + '-' + string;
+    return string;
   }
 
   // Lähetä tiedosto palauttaen edistymistietoja.
-  public newUploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+  public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
-/*     console.log("Tiedosto:");
-    console.dir(file);
-    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name); */
     const progress = new Subject<number>();
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    // const req = new HttpRequest('POST', url, formData, { reportProgress: true, observe: 'events' });
-
-/*     let post;
-    if (this.getRandomInt(1,2) === 2) {
-      post = this.testPost;
-      console.log('pitäisi feilata');
-    } else {
-      post = this.http.post;
-      console.log('pitäisi onnistua');
-    } */
     // Virheiden testaukseen vaihda http.post -> fakeHttpPost
-    this.http.post(url, formData, { reportProgress: true, observe: 'events' }, ).subscribe({
-      next: (event) => {
-        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-          const percentDone = Math.round(100 * event.loaded / event.total);
-          progress.next(percentDone);
-        } else if (event.type === HttpEventType.Response) {
-          progress.complete();
+    // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
+    this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
+      .subscribe({
+        next: (event) => {
+          if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+            const percentDone = Math.round(100 * event.loaded / event.total);
+            progress.next(percentDone);
+          } else if (event.type === HttpEventType.Response) {
+            progress.complete();
+          }
+        },
+        error: (error) => {
+          console.error('ticketService.newUploadFile: saatiin virhe.');
+          // this.handleError(error);
+          progress.error(error);
         }
-      },
-      error: (error) => {
-        console.error('ticketService.newUploadFile: saatiin virhe.');
-        // this.handleError(error);
-        progress.error(error);
-      }
-    })
+      })
     return progress.asObservable()
   }
 
   // Tiedoston lähetyksen testaamisessa voi http.post korvata tällä, niin saa virheitä.
-  fakeHttpPost(url: any, formData: any, options?: any): Observable<any> {
+  public fakeHttpPost(url?: any, formData?: any, options?: any): Observable<any> {
     const errorResponse = new HttpErrorResponse({
       error: 'File upload failed',
       status: 400,
@@ -274,7 +250,6 @@ export class TicketService {
     return fakePost
   }
 
-
   // Testaamista varten.
   public getError(x: any, y : any, z: any): Observable<any> {
     const errorResponse = new HttpErrorResponse({
@@ -285,68 +260,10 @@ export class TicketService {
     return of(errorResponse);
   }
 
-
-  // Lähetä tiedosto palauttaen edistymistietoja.
-/*   public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
-    let formData = new FormData();
-    formData.append('tiedosto', file);
-    console.log('ticketService: Yritetään lähettää tiedosto: ' + file.name);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-      .pipe(map(event => {
-        // console.log(event);
-        // console.dir(event);
-        // console.log('type: ' + event.type)
-
-        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-          const progress = Math.round(100 * event.loaded / event.total);
-          return progress;
-        } else if (event.type === HttpEventType.Response) {
-          return event.body  // pitäisi palauttaa onnistuessa { success: true }
-        } else return -1  // Ei huomioida näkymäss.
-      })
-    );
-    // return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-    //   .pipe(catchError(error => {
-    //     console.log(error);
-    //     return throwError(() => new Error(error));
-    //   }
-    // ));
-  } */
-
-    // Lähetä tiedosto palauttaen edistymistietoja.
-    public uploadFileExample(ticketID: string, commentID: string, file: File): Observable<any>{
-      let formData = new FormData();
-      formData.append('tiedosto', file);
-      const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-      return this.http.post(url, formData, { reportProgress: true, observe: 'events' })
-        .pipe(
-          map(event => {
-
-            let random = this.getRandomInt(1,15);
-            if (random == 3) {
-              throw new Error
-            }
-            if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-              const progress = Math.round(100 * event.loaded / event.total);
-              return progress;
-            } else if (event.type === HttpEventType.Response) {
-              return event.body  // pitäisi palauttaa onnistuessa { success: true }
-            } else return -1  // Ei huomioida näkymäss.
-          }
-        ),
-        catchError(() => {
-          throw { success: false }
-        })
-      );
-    }
-
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
   public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
-    console.log('ticketService: Yritetään lähettää formData:');
-    console.dir(formData);
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
@@ -358,9 +275,10 @@ export class TicketService {
     return (response?.success === true) ? true : false;
   }
 
-  // Lataa tiedosto.
+  // Lataa liitetiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
+    let url = environment.apiBaseUrl;
+    url += `/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
@@ -374,6 +292,20 @@ export class TicketService {
     return response
   }
 
+  public async removeComment(ticketID: string, commentID: string) {
+    let response: any;
+    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
+    try {
+      response = await firstValueFrom<{ success: boolean }>(
+        this.http.delete<{ success: boolean }>(url, {})
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  // Poista tiketti.
   public async removeTicket(ticketID: string): Promise<boolean> {
     let response: any;
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
@@ -385,87 +317,25 @@ export class TicketService {
     return response?.success === true ? true : false;
   }
 
-  // Arkistoi (poista) UKK.
-  public async archiveFAQ(ticketID: number): Promise<{success: boolean}> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
-    try {
-      response = await firstValueFrom<{success: boolean}>(this.http.post<{success: boolean}>(url, {}));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
 
-  // Palauta kurssin nimi.
-  public async getCourseName(courseID: string): Promise<string> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}`;
-    try {
-      response = await firstValueFrom( this.http.get<{'kurssi-nimi': string}[]>(url) );
-    } catch (error: any) {
-      this.handleError(error);
+  /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
+      lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
+      palauttaa ainoastaan itse luodut tiketit. */
+  public async getTicketList(courseID: string, option?: GetTicketsOption) {
+    const currentRoute = window.location.href;
+    if (currentRoute.indexOf('/list-tickets') === -1) {
+      return null
     }
-    return response['nimi'];
-  }
-
-  // Palauta listan kaikista kursseista.
-  public async getCourses(): Promise<Kurssi[]> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    let url = environment.apiBaseUrl + '/kurssit';
-    try {
-      response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
+    if (courseID === '') throw new Error('Ei kurssi ID:ä.');
+    let target;
+    switch (option?.option ?? '') {
+      case 'onlyOwn':
+        target = 'omat'; break;
+      case "archived":
+        target = "arkistoidut"; break;
+      default:
+        target = "kaikki"
     }
-    return response;
-  }
-
-  // Palauta listan kaikista kursseista, joilla käyttäjä on.
-  public async getMyCourses(): Promise<Kurssini[]> {
-    //const httpOptions = this.getHttpOptions();;
-    let response: any;
-    let url = environment.apiBaseUrl + '/kurssi/omatkurssit';
-    try {
-      response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
-      this.auth.setLoggedIn();
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
-
-  /* lähettää kirjautuneen käyttäjän luomat tiketit, jos hän on kurssilla opiskelijana.
-  Jos on kirjautunut opettajana, niin palautetaan kaikki kurssin tiketit.
-  onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketListOld(courseID: string, onlyOwn?: boolean): Promise<TiketinPerustiedot[]> {
-    if (courseID === '') {
-      throw new Error('Ei kurssi ID:ä.');
-    }
-    //const httpOptions = this.getHttpOptions();;
-    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
-    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
-    let response: any;
-    try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return response;
-  }
-
-  /* Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse lähettämät tiketit ja
-  opettajalle kaikki kurssin tiketit. onlyOwn = true palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketList(courseID: string, onlyOwn?: boolean): Promise<SortableTicket[]> {
-    if (courseID === '') {
-      throw new Error('Ei kurssi ID:ä.');
-    }
-    // //const httpOptions = this.getHttpOptions();;
-    let target = (onlyOwn == true) ? 'omat' : 'kaikki';
     let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
     let response: any;
     try {
@@ -474,12 +344,14 @@ export class TicketService {
       this.handleError(error);
     }
     // Muutetaan taulukkoon sopivaan muotoon.
-    const myName = this.auth.getUserInfo().nimi;
+    const user = this.store.getUserInfo();
+    const myName = user?.nimi ?? '';
+    const myRole = user?.asema ?? '';
     const me = $localize`:@@Minä:Minä`;
     let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
       {
         tilaID: ticket.tila,
-        tila: this.getTicketState(ticket.tila),
+        tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
         aikaleima: ticket.aikaleima,
@@ -499,11 +371,15 @@ export class TicketService {
       this.handleError(error);
     }
     let ticket: Tiketti = response;
+    // TODO: alla olevat kutsut voisi tehdä rinnakkain.
     response = await this.getFields(ticketID);
     ticket.kentat = response;
     response  = await this.getComments(ticketID);
     // Tiketin viestin sisältö on sen ensimmäinen kommentti.
+    /// TODO: 1. kommentti ei välttämättä viittaa tikettiin aina, vaan pitäisi
+    // ottaa aikaleiman mukaan vanhin.
     ticket.viesti = response[0].viesti;
+    ticket.kommenttiID = response[0].id;
     ticket.liitteet = response[0].liitteet;
     response.shift();
     ticket.kommentit = response;
@@ -521,8 +397,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    // if (Object.keys(response).length === 0) {
-    // }
     let comments: Kommentti[];
     comments = this.arrangeComments(response);
     return comments
@@ -562,153 +436,7 @@ export class TicketService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 403 && error?.error?.error?.tunnus == 1000) {
-        console.error('Virhe: Et ole kirjautunut. Ohjataan kirjautumiseen.');
-        this.auth.handleNotLoggedIn();
-    } else {
-      this.errorService.handleServerError(error);
-    }
+    this.errorService.handleServerError(error);
   }
 
-}
-
-// ========== Rajapinnat ==============
-
-// Jäsenmuuttujien järjestys pitäisi vastata palvelimen API-dokumenttia.
-
-export interface Error {
-  tunnus: number;
-  virheilmoitus: string;
-}
-
-// Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen API:a se vastaa.
-
-// Metodi: getCourses, API: /api/kurssit/
-export interface Kurssi {
-  id: string;
-  nimi: string;
-}
-
-// Metodi: getMyCourses, API: /api/kurssi/omatkurssit/
-export interface Kurssini {
-  kurssi: number;
-  asema: 'opiskelija' | 'opettaja' | 'admin';
-}
-
-export interface Kurssilainen {
-  id: number,
-  nimi: string;
-  sposti: string;
-  asema: string;
-}
-
-// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
-// Tikettilistan näyttämistä varten.
-export interface TiketinPerustiedot {
-  id: string;
-  otsikko: string;
-  aikaleima: string;
-  aloittaja: Kurssilainen;
-  tila: number;
-}
-
-export interface SortableTicket {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  aloittajanNimi: string
-  tilaID: number;
-  tila: string;
-}
-
-/* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
-  Lisäkentät ja kommentit ovat valinnaisia, koska ne haetaan
-  eri vaiheessa omilla kutsuillaan.
-  Backend palauttaa 1. kommentissa tiketin viestin sisällön, josta
-  tulee jäsenmuuttujan "viesti" -sisältö. Vastaavasti 1. kommentin liitteet
-  ovat tiketin liitteitä. */
-export interface Tiketti extends TiketinPerustiedot {
-  kurssi: number;
-  viesti: string;
-  ukk?: boolean;
-  kentat?: Array<Kentta>;
-  kommentit: Array<Kommentti>;
-  liitteet?: Array<Liite>;
-}
-
-export interface Liite {
-  kommentti: string;
-  tiedosto: string;
-  nimi: string;
-}
-
-// Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
-export interface UKK {
-  id: number;
-  otsikko: string;
-  aikaleima: string;
-  tila: number;
-}
-
-// Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/
-export interface UusiTiketti {
-  otsikko: string;
-  viesti: string;
-  kentat?: Array<{ id: number, arvo: string }>;
-}
-
-export interface AddTicketResponse {
-  success: Boolean;
-  uusi: {
-    tiketti: string;
-    kommentti: string;
-  }
-}
-
-// Metodi: sendFaq. API: /api/kurssi/:kurssi-id/ukk/
-export interface UusiUKK extends UusiTiketti {
-  vastaus: string;
-}
-
-/* Tiketin lisäkenttä.
-  Metodi: getTicketInfo -> getTickgetFields,
-  API: /api/tiketti/:tiketti-id/kentat/
-  Uusia propertyjä: tyyppi ja ohje.
-  Palautustyypit tarkistettu 25.1.23. */
-export interface Kentta {
-  otsikko: string;
-  arvo: string;
-  tyyppi: string;
-  ohje?: string;
-}
-
-/* Metodi: getTicketFieldInfo
-  API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,
-  api/kurssi/:kurssi-id/tiketinkentat/
-  id vapaaehtoinen, koska lähetettäessä sitä ei ole. */
-export interface KentanTiedot {
-  id?: string;
-  otsikko: string;
-  pakollinen: boolean;
-  esitaytettava: boolean;
-  ohje: string;
-  valinnat: string[];
-}
-
-// Tiketin kommentti
-// Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
-// TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
-export interface Kommentti {
-  id: string;
-  lahettaja: Kurssilainen;
-  aikaleima: Date;
-  tila: number;
-  viesti: string;
-  liitteet: Array<Liite>;
-}
-
-// Vastaus kommentin lisäämiseen.
-export interface NewCommentResponse {
-  success: boolean;
-  kommentti: string;
 }

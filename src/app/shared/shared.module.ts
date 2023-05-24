@@ -5,15 +5,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FilesizeModule } from './pipes/filesize.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
+
 import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
-import { ToBeginningButtonComponent } from './components/to-beginning-button/to-beginning-button.component';
+import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { HeadlineComponent } from './components/headline/headline.component';
+import { SenderInfoComponent } from './components/sender-info/sender-info.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -43,10 +48,13 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   declarations: [
     ErrorCardComponent,
     EditorComponent,
+    HeadlineComponent,
     MenuLinkComponent,
     MenuSrcComponent,
-    ToBeginningButtonComponent,
-    SafeHtmlPipe
+    BeginningButtonComponent,
+    SafeHtmlPipe,
+    SearchBarComponent,
+    SenderInfoComponent,
   ],
   imports: [
     CommonModule,
@@ -59,14 +67,19 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   exports: [
     CommonModule,
     BrowserAnimationsModule,
+    FilesizeModule,
     FormsModule,
     MaterialModule,
+    HeadlineComponent,
     ErrorCardComponent,
     EditorComponent,
     MenuLinkComponent,
     MenuSrcComponent,
-    ToBeginningButtonComponent,
+    BeginningButtonComponent,
     SafeHtmlPipe,
+    ReactiveFormsModule,
+    SearchBarComponent,
+    SenderInfoComponent,
   ],
   providers: [
     {

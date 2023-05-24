@@ -1,32 +1,93 @@
-@import '/src/variables.scss';
+@import "/src/variables.scss";
 
-.faq-view {
+.view-wrapper {
   padding-right: 80px;
   margin-bottom: 0.5em;
 }
 
-.vertical-spacer { height: var(--margin-top-embedded) }
+app-beginning-button {
+  margin-bottom: 0;
+}
 
-#top-buttons {
+.edit-btn {
+  margin-left: auto;
+}
+
+.top-buttons-wrapper {
   display: flex;
+  flex-wrap: wrap;
+  gap: $button-gap;
+  row-gap: calc($button-gap / 2);
   justify-content: space-between;
 }
 
-.edit-buttons-wrapper {
-  display: flex;
-  gap: $button-gap;
+.remove-btn {
+  margin-right: 0.5rem;
 }
 
 // .short-field-value:last-child {
 //   margin-bottom: 1.5rem;
 // }
 
-h3 { margin-bottom: 1em; }
+h2 {
+  margin-bottom: 1em;
+}
 
-mat-card { margin: 0 auto 1em; }
+mat-card {
+  margin: 0 auto 1em;
+}
 
 @media (max-width: 900px) {
-  .edit-buttons-wrapper {
+  .top-buttons-wrapper {
     gap: 0.5rem;
+  }
+  .remove-btn {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 370px) {
+  .copy-link-btn {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 800px) {
+  .view-wrapper {
+    padding-right: 0;
+  }
+}
+
+// 2 nappia per rivi.
+@media (max-width: 550px) {
+  .top-spacer {
+    order: 1;
+  }
+  .edit-btn {
+    margin-left: 0;
+    order: 3;
+  }
+  .remove-btn {
+    order: 2;
+  }
+  .copy-link-btn {
+    order: 4;
+  }
+}
+
+// @media (max-width: 500px) {
+//   .faq-view {
+//     padding-right: 1rem;
+//   }
+// }
+
+@media (max-width: 370px) {
+  .top-buttons-wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .copy-link-btn {
+    margin-left: 0;
   }
 }
