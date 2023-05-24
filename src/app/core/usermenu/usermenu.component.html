@@ -14,11 +14,11 @@
   Change to English
 </button>
 
-<button i18n="@@Profiili"
+<button (click)="goTo('profile')"
+        i18n="@@Profiili"
         i18n-aria-label="@@Profiili"
         mat-menu-item
-        *ngIf="courseID !== null && (isLoggedIn$ | async) === true"
-        [routerLink]="'/course/' + courseID + '/profile'"
+        *ngIf="(isLoggedIn$ | async) === true"
         >
   Profiili
 </button>
@@ -29,9 +29,9 @@
         *ngIf="((user$ | async)?.asema === 'opettaja' ||
                 (user$ | async)?.asema === 'admin') &&
               (isParticipant$ | async) === true"
-        [routerLink]="'/course/' + courseID + '/settings'"
+              (click)="goTo('settings')"
         >
-        Kurssin asetukset
+  Kurssin asetukset
 </button>
 
 <ng-container *ngIf="isDevBuild">
