@@ -70,8 +70,6 @@ export class AuthService {
   public startUpdatingUserinfo() {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
-        // const url = window.location.href;
-        // console.log('urli: ' + url);
         const courseID = getCourseIDfromURL();
         // Alla oleva antoi joskus null.
         // const courseID = event.snapshot.paramMap.get('courseid');
@@ -79,8 +77,6 @@ export class AuthService {
         const currentUrl = this.location.path();
         const isInLogin: boolean = currentUrl.includes('login');
         if (!isInLogin && (courseID !== undefined && courseID !== null)) {
-          // console.log('updateUserInfo: saatiin kurssi ID ' + courseID + ' url:sta');
-          // console.dir(event.snapshot.url);
           this.fetchUserInfo(courseID);
         }
       }

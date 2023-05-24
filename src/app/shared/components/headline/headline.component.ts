@@ -41,8 +41,6 @@ export class HeadlineComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    console.warn(this.noCourseTitle + ' ' + typeof this.noCourseTitle);
     if (this.login) {
       this.headlineText = "DVV-tikettijärjestelmä";
     } else if (this.noCourseTitle !== true) {
