@@ -1,11 +1,13 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Constants } from '@shared/utils';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
+
+import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
 import { GenericResponse } from '@core/core.models';
+import { StoreService } from '@core/store.service';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -18,14 +20,15 @@ export class SettingsComponent implements OnInit {
   public fieldList: Kenttapohja[] = [];
   public inviteEmail: string = '';
   public isDirty: boolean = false;
-  public showConfirm: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
+  public showConfirm: boolean = false;
 
   constructor(
     private courses: CourseService,
     private renderer: Renderer2,
     private route: ActivatedRoute,
+    private store: StoreService,
     private titleServ: Title
   ) {
   }
@@ -44,8 +47,8 @@ export class SettingsComponent implements OnInit {
 
   public exportFAQs() {
     const faq = $localize `:@@UKK:UKK`;
-    const course = $localize `:@@kurssi:kurssi`;
-    const filename = `${faq}-${course}-${this.courseID}.json`;
+    const courseName = this.store.getCourseName();
+    const filename = `${faq}-${courseName}.json`;
     this.courses.exportFAQs(this.courseID).then(filecontent => {
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
@@ -58,7 +61,7 @@ export class SettingsComponent implements OnInit {
     })
     .catch(error => {
       this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
-                                        Tiedoston lataaminen epäonnistui` + '.';
+          Tiedoston lataaminen epäonnistui` + '.';
     });
   }
 

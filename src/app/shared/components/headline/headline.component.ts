@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
 import { getIsInIframe } from 'src/app/shared/utils';
 import { CourseService } from 'src/app/course/course.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { StoreService } from '@core/store.service';
 
 @Component({
   selector: 'app-headline',
@@ -34,6 +35,7 @@ export class HeadlineComponent implements OnInit {
       private change: ChangeDetectorRef,
       private route : ActivatedRoute,
       private courses: CourseService,
+      private store: StoreService,
   ) {
     this.isInIframe = getIsInIframe();
   }
@@ -49,8 +51,8 @@ export class HeadlineComponent implements OnInit {
   private showCourseName(courseID: string) {
     this.courses.getCourseName(courseID).then(response => {
       this.headlineText = response ?? '';
-      // this.courseName = 'Testikurssi';
       this.change.detectChanges();
+      this.store.setCourseName(this.headlineText);
     }).catch( () => this.headlineText = '');
   }
 

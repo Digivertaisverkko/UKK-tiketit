@@ -11,6 +11,7 @@ import { Role, User } from './core.models';
 export class StoreService {
 
   // Kaikki jäsenmuuttujat tulisi olla privaatteja.
+  private courseName: string | null = null;
   private isLoading$: Subject<boolean> = new Subject();
   private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
@@ -24,6 +25,10 @@ export class StoreService {
   /* get -alkuiset palauttavat sen hetkisen arvon. Huomioi, että
     esimerkiksi käyttäjätietoja ei sivun latautumisen alussa ole
     välttämättä ehditty vielä hakea, vaan arvo on null. */
+
+  public getCourseName(): string | null {
+    return this.courseName ?? '';
+  }
 
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
@@ -74,6 +79,10 @@ export class StoreService {
 
   public sendMessage(message: string): void {
     this.messageEmitter$.next(message);
+  }
+
+  public setCourseName(courseName: string) {
+    this.courseName = courseName;
   }
 
   // Aseta tila kirjautuneeksi.
