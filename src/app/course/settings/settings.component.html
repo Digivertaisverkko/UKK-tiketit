@@ -19,7 +19,7 @@
       Kurssin asetukset
   </h2>
 
-<!----------------- Lisäkentät ------------------------------------------------>
+  <!----------------- Lisäkentät ---------------------------------------------->
 
   <h3 class="table-header" i18n="@@Kysymysten lisäkentät">
     Kysymysten lisäkentät
@@ -35,7 +35,7 @@
   <div  cdkDropList
         (cdkDropListDropped)="drop($event)"
         class="list-wrapper"
-        *ngIf="errorMessage.length === 0"
+        *ngIf="fieldList.length > 0; else noFieldsMessage"
         >
     <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
@@ -46,12 +46,17 @@
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
     </div>
-    <p  class="no-fields-p"
-        i18n="@@Yhtään lisäkenttää ei ole lisätty"
-        *ngIf="fieldList.length === 0"
-        >
-      Yhtään lisäkenttää ei ole lisätty.</p>
   </div>
+
+  <ng-template #noFieldsMessage>
+    <div class="list-wrapper">
+      <p class="no-fields-p"
+          i18n="@@Yhtään lisäkenttää ei ole lisätty"
+          >
+        Yhtään lisäkenttää ei ole lisätty.
+      </p>
+    </div>
+  </ng-template>
 
 </div>
 
