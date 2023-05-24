@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
+import { AuthService } from '@core/auth.service';
 
 
 @Component({
@@ -19,32 +20,14 @@ import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 })
 export class RefreshDialogComponent implements OnInit {
 
-  constructor (public modalRef: MatDialogRef<RefreshDialogComponent>) {
+  constructor (private auth: AuthService,
+               public modalRef: MatDialogRef<RefreshDialogComponent>
+              ) {
   }
 
   ngOnInit(): void {
     console.log('URL: ' + window.location.href);
-    this.removeConsentInfo();
-  }
-
-  private removeConsentInfo() {
-    const noDataConsent: string | null = localStorage.getItem('noDataConsent')
-    let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
-    const lastTokenid = localStorage.getItem('lastTokenid')
-    if (!lastTokenid) {
-      console.error('refresh-dialog: Ei tallennettuna viimeisintä tokenid:ä.');
-      return
-    }
-    const index = noDataConsentList.indexOf(lastTokenid);
-    if (index !== -1) {
-      noDataConsentList.splice(index, 1);
-    }
-    localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
-    console.log(JSON.stringify(localStorage.getItem('noDataConsent')));
-  }
-
-  private addDenyConsent() {
-
+    this.auth.removeDenyConsent();
   }
 
 }

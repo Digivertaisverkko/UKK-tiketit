@@ -262,6 +262,24 @@ export class AuthService {
     })
   }
 
+  // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+  public removeDenyConsent() {
+    const noDataConsent: string | null = localStorage.getItem('noDataConsent')
+    let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
+    const lastTokenid = localStorage.getItem('lastTokenid')
+    if (!lastTokenid) {
+      console.error('refresh-dialog: Ei tallennettuna viimeisintä tokenid:ä, ei voida jatkaa.');
+      return
+    }
+    const index = noDataConsentList.indexOf(lastTokenid);
+    if (index !== -1) {
+      noDataConsentList.splice(index, 1);
+      localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
+      this.store.setDenyDataConsent(false);
+    }
+    console.log(JSON.stringify(localStorage.getItem('noDataConsent')));
+  }
+
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
     loginType voi olla atm: 'own'. Jos courseID on annettu, niin palautetaan
      linkki sen kurssin näkymään.¶ */

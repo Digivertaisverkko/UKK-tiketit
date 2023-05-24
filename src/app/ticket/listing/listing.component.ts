@@ -131,7 +131,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public errorClickEvent(button: string) {
     if (this.store.getDenyDataConsent() === true && this.isInIframe === true) {
-      this.giveConsent();
+      this.showConsentPopup();
     } else if (this.noDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
     }
@@ -173,9 +173,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       .map(cd => cd.def);
   }
 
-  public giveConsent() {
-
-
+  public showConsentPopup() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.maxWidth = '30rem';
     const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);

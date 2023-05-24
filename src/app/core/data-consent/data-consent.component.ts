@@ -14,7 +14,6 @@ export class DataConsentComponent implements OnInit {
 
   public error;
   public accountExists: boolean | null = null;
-  private hasDeniedBefore: boolean = false;
   private noDataConsentList: string[] = [];
   private tokenid: string | null = null;
 
@@ -41,44 +40,44 @@ export class DataConsentComponent implements OnInit {
     const noDataConsent = localStorage.getItem('noDataConsent')
     if (noDataConsent) {
       this.noDataConsentList = JSON.parse(noDataConsent);
+      console.log('kieltäytyjälista: ' + this.noDataConsentList);
     }
-    console.log('on jo tili: ' + this.accountExists);
+    console.log('onko jo tili: ' + this.accountExists);
 
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, annetaan kieltäytyminen
     // ja ohjataan sisään.
     if (this.tokenid && this.noDataConsentList?.includes(this.tokenid)) {
       console.log('On kieltäydytty aiemmin.');
-      this.hasDeniedBefore = true;
-      this.denyConsent();
+      this.denyConsent(true);
+    } else {
+      console.log('Ei ole kieltäydytty aiemmin.');
     }
   }
 
-  public denyConsent() {
+  public denyConsent(hasDeniedBefore?: boolean) {
     this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
       if (res?.success !== true) {
         throw Error;
       }
-      if (this.hasDeniedBefore === false ) {
+      if (hasDeniedBefore !== true ) {
         if (this.tokenid) this.noDataConsentList.push(this.tokenid);
         localStorage.setItem('noDataConsent', JSON.stringify(this.noDataConsentList));
+        console.log('lista: ' + localStorage.getItem('noDataConsent'));
       }
       this.auth.updateDataConsent();
-      let courseID: string;
       if (res?.kurssi != null) {
-        courseID = String(res.kurssi);
+        const courseID = String(res.kurssi);
         this.navigateToListing(courseID);
-      } else if (res?.kurssi === null) {
+      } else {
         this.router.navigateByUrl('/no-data-consent');
       }
       // ? mitä jos ei saada id:ä?
-    }).catch (error => { 
+    }).catch (error => {
+      console.error('Ei saatu kurssi ID:ä, ei voida edetä kurssinäkymään.');
     })
   }
 
   public giveConsent() {
-    // if (localStorage.getItem('NO_DATA_CONSENT')) {
-    //   localStorage.removeItem('NO_DATA_CONSENT')
-    // }
     this.auth.sendDataConsent(this.tokenid, true).then((res: any) => {
       if (res?.success == true) {
         if (res?.kurssi != null) {

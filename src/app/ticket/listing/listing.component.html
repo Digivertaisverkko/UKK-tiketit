@@ -31,6 +31,7 @@
     message="{{ error.message }}"
     *ngIf="isLoaded && error !== null"
     #ticketError
+    [styles]="{ 'margin-top': '1rem' }"
     title="{{ error.title }}"
     >
 </app-error-card>
