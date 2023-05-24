@@ -15,7 +15,7 @@ import { StoreService } from '@core/store.service';
 })
 export class SettingsComponent implements OnInit {
 
-  public courseID: string = '';
+  public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
   public inviteEmail: string = '';
@@ -36,7 +36,11 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.titleServ.setTitle(Constants.baseTitle + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
-    this.trackRouteParameters();
+      if (this.courseID) {
+        this.fetchTicketFieldInfo(this.courseID);
+    } else {
+      console.error('Ei kurssi ID:ä, ei voida hakea tikettipohjan tietoja.');
+    }
   }
 
   public drop(event: CdkDragDrop<string[]>) {
@@ -46,6 +50,7 @@ export class SettingsComponent implements OnInit {
   }
 
   public exportFAQs() {
+    if (!this.courseID) throw Error('Ei kurssi ID:ä.');
     const faq = $localize `:@@UKK:UKK`;
     const courseName = this.store.getCourseName();
     const filename = `${faq}-${courseName}.json`;
@@ -92,14 +97,15 @@ export class SettingsComponent implements OnInit {
         Tiedoston sisältö on virheellisessä muodossa` + '.';
         return
       }
-        this.courses.importFAQs(this.courseID, jsonData)
-          .then((res: GenericResponse) => {
-            if (res.success === true) {
-              this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
-                  Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-            } else {
-              console.log('vastaus: ' + JSON.stringify(res));
-            }
+      if (!this.courseID) throw Error('Ei kurssi ID:ä.');
+      this.courses.importFAQs(this.courseID, jsonData)
+        .then((res: GenericResponse) => {
+          if (res.success === true) {
+            this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
+                Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
+          } else {
+            console.log('vastaus: ' + JSON.stringify(res));
+          }
       }).catch(e => {
         this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
           Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
@@ -109,12 +115,13 @@ export class SettingsComponent implements OnInit {
   }
 
   public saveFields() {
+    if (!this.courseID) throw Error('Ei kurssi ID:ä.');
     this.courses.setTicketFieldInfo(this.courseID, this.fieldList)
       .then(response => {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
           this.isDirty = false;
-          this.fetchTicketFieldInfo(this.courseID);
+          if (this.courseID) this.fetchTicketFieldInfo(this.courseID);
         } else {
           throw Error;
         }
@@ -122,23 +129,6 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
       Kenttäpohjan muuttaminen ei onnistunut.`;
     })
-  }
-
-  private trackRouteParameters() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) {
-        this.isLoaded = true;
-        return
-      }
-      this.courseID = courseID;
-      // FIXME: Palvelin voi palauttaa tyhjän taulun, niin väliaikainen fiksi.
-      // if (this.delayFetching == 'true') {
-        // setTimeout(() => { this.fetchTicketFieldInfo(this.courseID) }, 200);
-      // } else {
-      this.fetchTicketFieldInfo(courseID);
-      // }
-    });
   }
 
 }
