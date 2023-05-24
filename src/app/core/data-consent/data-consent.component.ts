@@ -15,7 +15,7 @@ export class DataConsentComponent implements OnInit {
   public error;
   public accountExists: boolean | null = null;
   private noDataConsentList: string[] = [];
-  private tokenid: string | null = null;
+  private tokenid: string | null;
 
   constructor(
       private auth: AuthService,
@@ -24,15 +24,15 @@ export class DataConsentComponent implements OnInit {
       ) {
         this.error = { title: '', message: ''};
         this.title.setTitle(Constants.baseTitle + $localize `:@@Tervetuloa:Tervetuloa`);
+        // route.snapshot.paramMap.get ei toiminut tässä.
+        const urlParams = new URLSearchParams(window.location.search);
+        this.tokenid = urlParams.get('tokenid');
+        this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
   }
 
   ngOnInit(): void {
     console.log('URL: ' + window.location.href);
-    // route.snapshot.paramMap.get ei toiminut tässä.
-    const urlParams = new URLSearchParams(window.location.search);
-    this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
-    this.tokenid = urlParams.get('tokenid');
-    // Tallennetaan, jotta voidaan poistaa, jos käyttäjä haluaa antaa
+    // Tallennetaan, jotta voidaan poistaa listasta, jos käyttäjä haluaa antaa
     // myöhemmin suostumuksen.
     if (this.tokenid) {
       localStorage.setItem('lastTokenid', this.tokenid);
@@ -43,9 +43,8 @@ export class DataConsentComponent implements OnInit {
       console.log('kieltäytyjälista: ' + this.noDataConsentList);
     }
     console.log('onko jo tili: ' + this.accountExists);
-
-    // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, annetaan kieltäytyminen
-    // ja ohjataan sisään.
+    // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, lähetetään kieltäytyminen,
+    // jotta saadaan kurssi id ja voidaan ohjata sisään.
     if (this.tokenid && this.noDataConsentList?.includes(this.tokenid)) {
       console.log('On kieltäydytty aiemmin.');
       this.denyConsent(true);
@@ -57,14 +56,13 @@ export class DataConsentComponent implements OnInit {
   public denyConsent(hasDeniedBefore?: boolean) {
     this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
       if (res?.success !== true) {
-        throw Error;
+        throw Error('Ei saatu palvelimelta kurssi id:ä, ei voida edetä.');
       }
       if (hasDeniedBefore !== true ) {
         if (this.tokenid) this.noDataConsentList.push(this.tokenid);
         localStorage.setItem('noDataConsent', JSON.stringify(this.noDataConsentList));
         console.log('lista: ' + localStorage.getItem('noDataConsent'));
       }
-      this.auth.updateDataConsent();
       if (res?.kurssi != null) {
         const courseID = String(res.kurssi);
         this.navigateToListing(courseID);

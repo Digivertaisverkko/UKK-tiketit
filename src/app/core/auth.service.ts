@@ -62,7 +62,6 @@ export class AuthService {
   }
 
   public initialize() {
-    this.updateDataConsent();
     this.startUpdatingUserinfo();
   }
 
@@ -247,6 +246,19 @@ export class AuthService {
     return response
   }
 
+  /* Palauta true, jos on tieto, että viimeisimmällä saadulla tokenid
+     on datan luovutuksesta kieltäytyneiden joukossa */
+  public getDenyDataConsent(): boolean {
+    const lastTokenid: string | null = localStorage.getItem('lastTokenid');
+    const noDataConsent = localStorage.getItem('noDataConsent')
+    if (!noDataConsent || !lastTokenid) return false
+    const noDataConsentList: string[] = JSON.parse(noDataConsent);
+    /* Listassa on kieltäytyneiden tokenid:t. Jos ei ole kieltäytynyt,
+    niin ei merkintää. */
+    return (noDataConsentList.includes(lastTokenid)) ? true : false;
+  }
+
+
   public async navigateToLogin(courseID: string | null) {
     // console.warn('logout: kurssi id: ' + this.courseID);
     if (courseID === null ) {
@@ -275,7 +287,6 @@ export class AuthService {
     if (index !== -1) {
       noDataConsentList.splice(index, 1);
       localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
-      this.store.setDenyDataConsent(false);
     }
     console.log(JSON.stringify(localStorage.getItem('noDataConsent')));
   }
@@ -402,25 +413,5 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     this.errorService.handleServerError(error);
   }
-
-  // Aseta storageen onko datan luovutuksesta kieltäydytty sen mukaan, miten
-  // on local storageen tallennettu.
-  public updateDataConsent() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenid = urlParams.get('tokenid');
-    const noDataConsent = localStorage.getItem('noDataConsent')
-    let noDataConsentList: string[];
-    if (noDataConsent) {
-      noDataConsentList = JSON.parse(noDataConsent);
-      /* Listassa on kieltäytyneiden tokenid:t. Jos ei ole kieltäytynyt,
-      niin ei merkintää. */
-      if (tokenid && noDataConsentList?.includes(tokenid)) {
-        this.store.setDenyDataConsent(true);
-      } else {
-        this.store.setDenyDataConsent(false);
-      }
-    }
-  }
-
 
 }

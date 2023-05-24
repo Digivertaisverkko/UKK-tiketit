@@ -18,17 +18,12 @@ export class StoreService {
   private messageEmitter$ = new Subject<string>();
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null>(null);
-  private noDataConsent: boolean | null = null;
 
   constructor() { }
 
   /* get -alkuiset palauttavat sen hetkisen arvon. Huomioi, että
     esimerkiksi käyttäjätietoja ei sivun latautumisen alussa ole
     välttämättä ehditty vielä hakea, vaan arvo on null. */
-
-  public getDenyDataConsent(): boolean | null {
-    return this.noDataConsent;
-  }
 
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
@@ -45,10 +40,6 @@ export class StoreService {
 
   public getUserName(): string | null {
     return this.user$.value?.nimi ?? null;
-  }
-
-  public setDenyDataConsent(denyDataConsent: boolean) {
-    this.noDataConsent = denyDataConsent;
   }
 
   public setUserInfo(newUserInfo: User | null): void {
