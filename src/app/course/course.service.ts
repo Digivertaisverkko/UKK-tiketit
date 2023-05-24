@@ -106,7 +106,6 @@ export class CourseService {
     const body = filecontent;
     try {
       response = await firstValueFrom(this.http.post<any>(url, body));
-      throw Error
     } catch (error: any) {
       this.handleError(error);
     }

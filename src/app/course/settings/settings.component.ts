@@ -90,15 +90,14 @@ export class SettingsComponent implements OnInit {
         return
       }
         this.courses.importFAQs(this.courseID, jsonData)
-        .then((res: GenericResponse) => {
-          if (res.success === true) {
-            this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
-                Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-          } else {
-            throw Error
-          }
+          .then((res: GenericResponse) => {
+            if (res.success === true) {
+              this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
+                  Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
+            } else {
+              console.log('vastaus: ' + JSON.stringify(res));
+            }
       }).catch(e => {
-        console.log('Ei onnistunut :-/');
         this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
           Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
       })

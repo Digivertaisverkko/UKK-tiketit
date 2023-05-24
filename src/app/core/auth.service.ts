@@ -1,16 +1,16 @@
 // Tämä service käsittelee käyttäjäautentikointiin liittyviä toimia.
 
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import cryptoRandomString from 'crypto-random-string';
+import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import * as shajs from 'sha.js';
-import { environment } from 'src/environments/environment';
-import { ErrorService } from './error.service';
 
-import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
-import { Inject, LOCALE_ID } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { getCourseIDfromURL } from '@shared/utils';
+import { ErrorService } from './error.service';
 import { GenericResponse, Role, User } from './core.models';
 import { Kurssini } from '../course/course.models';
 import { CourseService } from '../course/course.service';
@@ -72,8 +72,11 @@ export class AuthService {
       if (event instanceof ActivationEnd) {
         // const url = window.location.href;
         // console.log('urli: ' + url);
-        const courseID = event.snapshot.paramMap.get('courseid');
-        console.log('authService: huomattiin kurssi id ' + this.courseID);
+        const courseID = getCourseIDfromURL();
+        // Alla oleva antoi joskus null.
+        // const courseID = event.snapshot.paramMap.get('courseid');
+        console.log('authService: huomattiin kurssi id ' + this.courseID + ' ' +
+        this.router.url);
         const currentUrl = this.location.path();
         const isInLogin: boolean = currentUrl.includes('login');
         if (!isInLogin && (courseID !== undefined && courseID !== null)) {
