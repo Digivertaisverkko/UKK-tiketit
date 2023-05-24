@@ -75,8 +75,7 @@ export class AuthService {
         const courseID = getCourseIDfromURL();
         // Alla oleva antoi joskus null.
         // const courseID = event.snapshot.paramMap.get('courseid');
-        console.log('authService: huomattiin kurssi id ' + this.courseID + ' ' +
-        this.router.url);
+        console.log('authService: huomattiin kurssi id ' + courseID);
         const currentUrl = this.location.path();
         const isInLogin: boolean = currentUrl.includes('login');
         if (!isInLogin && (courseID !== undefined && courseID !== null)) {

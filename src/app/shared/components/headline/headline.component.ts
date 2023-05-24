@@ -25,7 +25,7 @@ import { StoreService } from '@core/store.service';
 export class HeadlineComponent implements OnInit {
 
   // login:a käytetään kirjautumissivulla.
-  @Input() public login: boolean = false
+  @Input() login: boolean = false
   @Input() noCourseTitle: boolean = false;
   @Input() showInIframe: boolean = false;
   public headlineText: string | null = null;
@@ -41,6 +41,8 @@ export class HeadlineComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    console.warn(this.noCourseTitle + ' ' + typeof this.noCourseTitle);
     if (this.login) {
       this.headlineText = "DVV-tikettijärjestelmä";
     } else if (this.noCourseTitle !== true) {

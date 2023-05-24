@@ -48,7 +48,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public screenSize: 'handset' | 'small' | 'other' = 'other';
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
-  public noDataConsent: boolean = false;
   public numberOfFAQ: number = 0;
   public user$: Observable<User | null>;
 
@@ -130,9 +129,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public errorClickEvent(button: string) {
-    if (this.authService.getDenyDataConsent() === true && this.isInIframe === true) {
+    const denyDataConsent: boolean = this.authService.getDenyDataConsent();
+    if (denyDataConsent === true && this.isInIframe === true) {
       this.showConsentPopup();
-    } else if (this.noDataConsent !== true && this.isInIframe === false) {
+    } else if (denyDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
     }
 }
@@ -163,10 +163,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  private getDataConsent(): boolean {
-    return (localStorage.getItem('NO_DATA_CONSENT') === "true") ? true : false
-  }
-
   public getDisplayedColumnFAQ(): string[] {
     return this.columnDefinitions
       .filter(cd => !this.isPhonePortrait || cd.showMobile)
@@ -176,12 +172,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public showConsentPopup() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.maxWidth = '30rem';
-    const refreshDialog = this.dialog.open(RefreshDialogComponent, dialogConfig);
-    // refreshDialog.afterClosed().subscribe(res => {
-    //   if (res === 'cancel') {
-    //     localStorage.setItem('NO_DATA_CONSENT', 'true');
-    //   }
-    // })
+    this.dialog.open(RefreshDialogComponent, dialogConfig);
   }
 
   // TODO: lisää virheilmoitusten käsittelyjä.

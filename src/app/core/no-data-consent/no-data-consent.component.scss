@@ -1,8 +1,12 @@
 @import '/src/variables.scss';
 
-h1 {
-  margin-top: 1.5em;
-  margin-bottom: 1em;
+// app-headline {
+//   margin-top: 1.5em;
+//   margin-bottom: 1em;
+// }
+
+p {
+  margin-top: 2em;
 }
 
 .content-wrapper {
@@ -14,14 +18,13 @@ h1 {
   flex-wrap: wrap;
   gap: 8%;
   justify-content: center;
-  margin-top: 5rem;
+  margin-top: 4rem;
 }
 
 @media (max-width: $XSmall) {
 
-  h1 {
+  p {
     margin-top: 1em;
-    margin-bottom: 1em;
   }
 
   .buttons-wrapper {
