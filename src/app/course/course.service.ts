@@ -5,10 +5,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
-import { ErrorService } from '../core/error.service';
-import { GenericResponse } from '../core/core.models';
+import { ErrorService } from '@core/error.service';
+import { GenericResponse } from '@core/core.models';
 import { Kenttapohja, Kurssini } from './course.models';
-import { StoreService } from '../core/store.service';
+import { StoreService } from '@core/store.service';
 
 // Metodi: getCourses, API: /api/kurssit/
 interface Kurssi {

@@ -118,6 +118,12 @@ $debug: false;
   text-align: center;
 }
 
+.theme-hyperlink {
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 // ---------------- Utilityt ---------------------------------------------------
 
 // Ottaa horisontaalisesti käytettävissä olevan tilan.

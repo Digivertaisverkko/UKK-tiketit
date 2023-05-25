@@ -4,6 +4,8 @@ import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../auth.service';
 import { Constants } from '@shared/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
 
 @Component({
   templateUrl: './data-consent.component.html',
@@ -19,6 +21,7 @@ export class DataConsentComponent implements OnInit {
 
   constructor(
       private auth: AuthService,
+      public dialog: MatDialog,
       private router: Router,
       private title: Title
       ) {
@@ -28,6 +31,7 @@ export class DataConsentComponent implements OnInit {
         const urlParams = new URLSearchParams(window.location.search);
         this.tokenid = urlParams.get('tokenid');
         this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
+        // this.accountExists = true;
   }
 
   ngOnInit(): void {
@@ -97,6 +101,10 @@ export class DataConsentComponent implements OnInit {
     }
     const route = `course/${courseID}/list-tickets`;
     this.router.navigateByUrl(route);
+  }
+
+  public openPrivacyModal() {
+    this.dialog.open(PrivacyModalComponent);
   }
 
 }
