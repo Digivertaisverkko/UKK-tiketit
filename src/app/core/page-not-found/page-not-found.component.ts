@@ -15,7 +15,9 @@ import { StoreService } from '../store.service';
 
     <!-- <h1 class="main-header"><span>404</span></h1> -->
 
-    <app-headline [noCourseTitle]="true">404</app-headline>
+    <app-headline [noCourseTitle]="true" [showInIframe]="true">
+      404
+    </app-headline>
 
     <h2 i18n="@@404-otsikko" class="sub-header">
       Sivua ei löytynyt
@@ -57,7 +59,6 @@ export class PageNotFoundComponent implements OnInit {
     ) {
     this.title.setTitle(Constants.baseTitle + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
       this.isLoggedIn = this.store.getIsLoggedIn();
-      console.log(this.courseID);
   }
 
   ngOnInit(): void {
@@ -68,7 +69,6 @@ export class PageNotFoundComponent implements OnInit {
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      console.log(courseID);
       this.courseID = courseID;
     });
   }
