@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component  } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from './privacy-modal/privacy-modal.component';
 
@@ -8,15 +8,19 @@ import { PrivacyModalComponent } from './privacy-modal/privacy-modal.component';
   styleUrls: ['./footer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FooterComponent {
+export class FooterComponent  {
 
-  constructor(public dialog: MatDialog) { }
+  public lang: string | null;
+
+  constructor(public dialog: MatDialog) {
+    this.lang = localStorage.getItem('language')?.substring(0,2) ?? 'fi';
+  }
 
   public openPrivacyModal() {
-    const privacyModal = this.dialog.open(PrivacyModalComponent);
-    privacyModal.afterClosed().subscribe(response => {
-      console.log({ response });
-    })
+    this.dialog.open(PrivacyModalComponent);
+    // privacyModal.afterClosed().subscribe(response => {
+    //   console.log({ response });
+    // })
   }
 
 }

@@ -84,7 +84,7 @@ export class CourseService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string, fieldID?: string | null):
+  public async getTicketFieldInfo(courseID: string):
       Promise<Kenttapohja[]> {
     let response: any;
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/tiketinkentat`;
@@ -94,7 +94,7 @@ export class CourseService {
       this.handleError(error);
     }
     if (response === null) response = [];
-    if (fieldID) response = response.filter((field: Kenttapohja) => field.id == fieldID);
+
     return response;
   }
 

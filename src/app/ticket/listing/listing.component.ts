@@ -118,7 +118,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private trackIfParticipant() {
     this.isParticipant$ = this.store.trackIfParticipant().subscribe(response => {
-      console.warn('listing: participant: ' + response);
       if (response === true) {
         this.isParticipant = true;
       } else if (response === false) {

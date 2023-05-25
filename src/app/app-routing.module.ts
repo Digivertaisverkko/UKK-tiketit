@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'forbidden', component: NoPrivilegesComponent },
   { path: 'course/:courseid/forbidden', component: NoPrivilegesComponent },
   { path: 'course/:courseid', pathMatch: 'full', redirectTo: '/course/:courseid/list-tickets' },
+  { path: '404', pathMatch: 'full', component: PageNotFoundComponent },
   { path: 'course/:courseid/:any',  component: PageNotFoundComponent },
   { path: 'course/:courseid/:any/:any',  component: PageNotFoundComponent },
   { path: 'course/:courseid/:any/:any/:any',  component: PageNotFoundComponent },
