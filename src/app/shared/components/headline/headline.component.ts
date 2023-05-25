@@ -29,7 +29,7 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
 
   // Kirjautumissivulla otsikko on erilainen.
   @Input() login: boolean = false
-  // Oletuksena näytetään kurssin nimi.
+  // Oletuksena näytetään kurssin nimi, tällä voi ohittaa sen.
   @Input() noCourseTitle: boolean = false;
   // Oletuksena otsikkoa ei näytetä upotuksessa. Tällä voi näyttää sen aina.
   @Input() showInIframe: boolean = false;
@@ -50,6 +50,7 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
   @ContentChild('projectedContent') projectedContent: any
 
   ngOnInit() {
+    this.hasProjectedContent = !!this.hasProjectedContent;
     if (this.login) {
       this.headlineText = "DVV-tikettijärjestelmä";
     } else if (this.noCourseTitle !== true) {
@@ -68,12 +69,12 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       this.change.detectChanges();
       this.store.setCourseName(this.headlineText);
     }).catch((response) => {
-        /* Jälkimmäinen testaa tyhjää objektia. Tulos tarkoittaa, että
-           kurssia ei ole olemassa. */ 
-        if (response === null || Object.keys(response).length === 0)  {
-          this.router.navigateByUrl('404');
-        } 
-        this.headlineText = '';
+      /* Jälkimmäinen testaa tyhjää objektia. Tulos tarkoittaa, että
+          kurssia ei ole olemassa. */ 
+      if (response === null || Object.keys(response).length === 0)  {
+        this.router.navigateByUrl('404');
+      } 
+      this.headlineText = '';
     });
   }
 
@@ -81,9 +82,10 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
       if (courseID === null) {
-        throw new Error('Virhe: ei kurssi ID:ä.');
+        console.error('Virhe: ei kurssi ID:ä.');
+      } else {
+        this.showCourseName(courseID);
       }
-      this.showCourseName(courseID);
     })
   }
 
