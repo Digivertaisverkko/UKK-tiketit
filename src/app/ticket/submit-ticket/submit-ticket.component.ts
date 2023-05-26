@@ -180,8 +180,8 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private submitEdited(newTicket: UusiTiketti): void {
-    if (this.ticketId === null || this.commentID === null) throw new Error;
-    this.ticketService.editTicket(this.ticketId, newTicket)
+    if (!this.ticketId || !this.commentID || !this.courseId) throw new Error;
+    this.ticketService.editTicket(this.ticketId, newTicket, this.courseId)
     .then( () => {
       if (this.oldAttachments.length === 0) this.goBack();
       if (!this.courseId) return

@@ -122,10 +122,13 @@ export class TicketService {
   public async archiveFAQ(ticketID: string, courseID: string): Promise<{ success: boolean }> {
     let response: any;
     // /api/kurssi/:kurssi-id/ukk/arkisto/:tiketti-id/
-    const url = `${this.api}/kurssi/${courseID}/ukk/arkisto/${ticketID}`;
+    const url = `${this.api}/kurssi/${courseID}/ukk/arkisto`;
+    const body = {
+      tiketti: Number(ticketID)
+    }
     try {
       response = await firstValueFrom<{ success: boolean }>(
-        this.http.post<{ success: boolean }>(url, {})
+        this.http.post<{ success: boolean }>(url, body)
       );
     } catch (error: any) {
       this.handleError(error);
@@ -139,11 +142,12 @@ export class TicketService {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/arkisto`;
     const body = {
-      tiketti: ticketID
+      tiketti: Number(ticketID)
     }
     try {
+      console.log('lähetetään body: ' + JSON.stringify(body));
       response = await firstValueFrom<{ success: boolean }>(
-        this.http.put<{ success: boolean }>(url, body)
+        this.http.post<{ success: boolean }>(url, body)
       );
     } catch (error: any) {
       this.handleError(error);
@@ -171,11 +175,10 @@ export class TicketService {
     return (response?.success === true) ? true : false;
   }
 
-
-  public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]):
-      Promise<boolean> {
+  public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string,
+        fileList?: File[]): Promise<boolean> {
     let response: any;
-    const url = `${this.api}/tiketti/${ticketID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     const body = ticket;
     try {
       console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
@@ -185,11 +188,12 @@ export class TicketService {
     }
     if (response?.success !== true) return false
     if (fileList?.length == 0 || !fileList ) return true
+    if (!courseID) return false
     const firstCommentID = String(response.uusi.kommentti);
     let sendFileResponse: any;
     for (let file of fileList) {
       try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file, courseID);
       } catch (error: any) {
         this.handleError(error);
       }
@@ -245,7 +249,8 @@ export class TicketService {
   }
 
   // Lähetä tiedosto palauttaen edistymistietoja.
-  public uploadFile(ticketID: string, commentID: string, courseID: string, file: File): Observable<any>{
+  public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
+      Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
@@ -296,10 +301,11 @@ export class TicketService {
   }
 
   // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
+  public async sendFile(ticketID: string, commentID: string, file: File, courseID?: string):
+      Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
-    const url = `${this.api}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
       // Huom. Ei toimi, jos asettaa headerin: 'Content-Type: multipart/form-data'
@@ -311,10 +317,11 @@ export class TicketService {
   }
 
   // Lataa liitetiedosto.
-  public async getFile(ticketID: string, commentID: string, fileID: string, courseID: string): Promise<Blob> {
-    let url = environment.apiBaseUrl;
-        // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite/:liite-id/tiedosto
-    url += `/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/tiedosto`;
+  public async getFile(ticketID: string, commentID: string, fileID: string,
+      courseID: string): Promise<Blob> {
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
+    // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite/:liite-id/tiedosto
+    url += `/kommentti/${commentID}/liite/${fileID}/tiedosto`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
