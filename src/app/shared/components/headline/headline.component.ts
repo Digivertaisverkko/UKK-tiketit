@@ -64,7 +64,6 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
 
   private showCourseName(courseID: string) {
     this.courses.getCourseName(courseID).then(response => {
-      console.warn(response);
       this.headlineText = response ?? '';
       this.change.detectChanges();
       this.store.setCourseName(this.headlineText);

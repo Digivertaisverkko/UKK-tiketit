@@ -82,7 +82,9 @@ export class StoreService {
   }
 
   public setCourseName(courseName: string) {
-    this.courseName = courseName;
+    if (this.courseName !== courseName) {
+      this.courseName = courseName;
+    }
   }
 
   // Aseta tila kirjautuneeksi.
