@@ -62,9 +62,22 @@ export class TicketService {
     return response
   }
 
-  // Sama kuin alla, mutta ei uppaa tiedostoja.
+  // Lisää uusi UKK.
+  public async addFaq(newFaq: UusiUKK, courseID: string) {
+    const url = `${this.api}/kurssi/${courseID}/ukk`;
+    let response: any;
+    const body = newFaq;
+    try {
+      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+    // Lisää tai muuta olemassa olevaa UKK:a.
   // editFaq: editoidaanko olemassa olevaa UKK:a.
-  public async addFaq(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
+  public async addFaqOld(ID: string, newFaq: UusiUKK, editFaq?: boolean) {
     let url = (editFaq?.toString() === 'true') ? `/tiketti/${ID}/muokkaaukk` :
         `/kurssi/${ID}/ukk`;
     url = environment.apiBaseUrl + url;
@@ -72,6 +85,19 @@ export class TicketService {
     const body = newFaq;
     try {
       response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
+  // Muokkaa UKK:a.
+  public async editFaq(ticketID: string, faq: UusiUKK, courseID: string) {
+    let response: any;
+    const url = `${this.api}/kurssi/${courseID}/ukk/${ticketID}`;
+    const body = faq;
+    try {
+      response = firstValueFrom(this.http.put<UusiUKK>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }

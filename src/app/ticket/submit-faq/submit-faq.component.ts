@@ -193,10 +193,59 @@ export class SubmitFaqComponent implements OnInit {
     this.form.disable();
     let newFaq: UusiUKK = this.createFaq();
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    this.submitNew(newFaq);
+    if (this.ticketId) {
+      this.submitEditedFAQ(newFaq, this.ticketId);
+    } else {
+      this.submitNewFAQ(newFaq);
+    }
   }
 
-  private submitNew(faq: UusiUKK): void {
+  private submitEditedFAQ(faq: UusiUKK, ticketId: string): void {
+    if (!this.courseId) return;
+    this.ticketService.editFaq(ticketId, faq, this.courseId)
+      .then((response: AddTicketResponse) => {
+        if (this.attachments.fileInfoList.length === 0) this.goBack();
+        if (response === null || response?.success !== true) {
+          throw new Error('UKK:n muokkaaminen epäonnistui.');
+        }
+        this.isFaqSent = true;
+        this.prepareSendFiles(response);
+      })
+      .catch( error => {
+        // ? lisää eri virhekoodeja?
+        this.state = 'editing';
+        this.form.enable();
+        // TODO: Muuta muokkaamiseksi.
+        this.errorMessage = $localize`:@@UKK muokkaaminen epäonnistui:
+            Usein kysytyn kysymyksen muokkaaminen ei onnistunut` + '.';
+      });
+  }
+
+  private submitNewFAQ(faq: UusiUKK): void {
+    if (this.courseId === null) return;
+    // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
+    // const id = this.ticketId ?? this.courseId;
+    // const editExisting = this.ticketId ? true : false;
+    this.ticketService.addFaq(faq, this.courseId)
+      .then((response: AddTicketResponse) => {
+        if (this.attachments.fileInfoList.length === 0) this.goBack();
+        if (response === null || response?.success !== true) {
+          throw new Error('Kysymyksen lähettäminen epäonnistui.');
+        }
+        this.isFaqSent = true;
+        this.prepareSendFiles(response);
+      })
+      .catch( error => {
+        // ? lisää eri virhekoodeja?
+        this.state = 'editing';
+        this.form.enable();
+        this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
+            Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
+      });
+  }
+
+  /*
+  private submitNewOld(faq: UusiUKK): void {
     if (this.courseId === null) return;
     // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
     const id = this.ticketId ?? this.courseId;
@@ -218,6 +267,7 @@ export class SubmitFaqComponent implements OnInit {
             Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
       });
   }
+  */
 
   private sendFiles(ticketID: string, commentID: string): void {
     this.attachments.sendFilesPromise(ticketID, commentID)
