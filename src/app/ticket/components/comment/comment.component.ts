@@ -112,7 +112,9 @@ export class CommentComponent implements AfterViewInit{
   }
 
   public removeComment(commentID: string) {
-    this.ticketService.removeComment(this.ticketID, commentID).then(res => {
+    const courseID = getCourseIDfromURL();
+    if (!courseID) return
+    this.ticketService.removeComment(this.ticketID, commentID, courseID).then(res => {
       this.stopEditing();
     }).catch((err: any) => {
       this.errorMessage = $localize `:@@Kommentin poistaminen ei onnistunut:

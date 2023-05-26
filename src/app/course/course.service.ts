@@ -45,7 +45,6 @@ export class CourseService {
 
   // Palauta listan kaikista kursseista.
   public async getCourses(): Promise<Kurssi[]> {
-    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
     try {
@@ -59,7 +58,6 @@ export class CourseService {
 
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
-    //const httpOptions = this.getHttpOptions();;
     let response: any;
     let url = `${this.api}/kurssi/${courseID}`;
     try {
@@ -74,7 +72,6 @@ export class CourseService {
 
   // Palauta listan kaikista kursseista, joilla käyttäjä on.
   public async getMyCourses(): Promise<Kurssini[]> {
-    //const httpOptions = this.getHttpOptions();
     let response: any;
     let url = environment.apiBaseUrl + '/minun/kurssit';
     try {

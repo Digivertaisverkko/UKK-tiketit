@@ -35,8 +35,8 @@ export class TicketService {
     }
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, courseID: string, message: string, tila?: number):
-      Promise<NewCommentResponse> {
+  public async addComment(ticketID: string, courseID: string, message: string,
+      tila?: number): Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
     }
@@ -203,7 +203,7 @@ export class TicketService {
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
-    let url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
+    const url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
@@ -335,9 +335,9 @@ export class TicketService {
     return response
   }
 
-  public async removeComment(ticketID: string, commentID: string) {
+  public async removeComment(ticketID: string, commentID: string, courseID: string) {
     let response: any;
-    const url = `${this.api}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const url = `${this.api}/kurssi/${courseID}}/tiketti/${ticketID}/kommentti/${commentID}`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.delete<{ success: boolean }>(url, {})
