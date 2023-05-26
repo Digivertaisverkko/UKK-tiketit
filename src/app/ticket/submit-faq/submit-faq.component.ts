@@ -27,6 +27,7 @@ export class SubmitFaqComponent implements OnInit {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   public readonly courseId: string | null = this.route.snapshot.paramMap.get('courseid');
+  public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
   public isFaqSent: boolean = false;
@@ -198,9 +199,8 @@ export class SubmitFaqComponent implements OnInit {
   private submitNew(faq: UusiUKK): void {
     if (this.courseId === null) return;
     // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
-    const id = this.ticketId ?? this.courseId;
-    const editExisting = this.ticketId ? true : false;
-    this.ticketService.addFaq(id, faq, editExisting)
+    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
+    this.ticketService.addFaq(id, faq, this.editExisting)
       .then((response: AddTicketResponse) => {
         if (this.attachments.fileInfoList.length === 0) this.goBack();
         if (response === null || response?.success !== true) {

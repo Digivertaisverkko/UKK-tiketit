@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component }
     from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -14,7 +14,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
   styleUrls: ['./usermenu.component.scss'],
 })
 
-export class UsermenuComponent implements OnInit {
+export class UsermenuComponent  {
   public disableLangSelect: boolean = false;
   public isDevBuild: boolean = false;
   public isInIframe: boolean;
@@ -36,10 +36,6 @@ export class UsermenuComponent implements OnInit {
     this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
     // this.isDevBuild = !environment.production;
-  }
-
-  ngOnInit() {
-    console.log('menu onOnit');
   }
 
   public goTo(view: 'profile' | 'settings') {

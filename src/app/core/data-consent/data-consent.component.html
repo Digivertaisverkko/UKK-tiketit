@@ -3,14 +3,30 @@
   Tervetuloa
 </app-headline>
 
-<p i18n="@@Tietojenkäyttösuostumus" class="main-text">
-  Tämä on Digivertaisverkkohankkeen rakentama tikettijärjestelmä kurssin
-  opettajien ja oppilaiden väliseen keskusteluun ja kysymysten kysymiseen.
-  Ohjelmiston tarvitsee henkilökohtaisen tilin, jotta voit esittää ja katsella
-  henkilökohtaisia kysymyksiä. Tätä varten tarvitaan tieto siitä, kuka olet, millä
-  kurssilla olet ja mitä olet kurssilla tekemässä. Tilin luomalla annat
-  luvan näiden tietojen siirtämiseen tikettijärjestelmän käyttöön. Jos olet
-  kiinnostunut siitä, miten käsittelemme tietojasi, voit lukea tietoturvaselosteen.
+<p class="main-text">
+  <span i18n="@@Tietojenkäyttösuostumus">
+    Tämä on Digivertaisverkkohankkeen rakentama tikettijärjestelmä kurssin
+    opettajien ja oppilaiden väliseen keskusteluun ja kysymysten kysymiseen.
+    Ohjelmisto tarvitsee henkilökohtaisen tilin, jotta voit esittää ja katsella
+    henkilökohtaisia kysymyksiä. Tätä varten tarvitaan tieto siitä, kuka olet, millä
+    kurssilla olet ja mitä olet kurssilla tekemässä.
+  </span>
+  
+  <span i18n="@@Jatkamalla käyttöä" *ngIf="accountExists; else newAccount">
+    Jatkamalla käyttämistä annat luvan näiden tietojen käyttämiseen
+    tikettijärjestelmässä.
+  </span>
+
+  <ng-template #newAccount>
+    <span i18n="@@Tilin luomalla">Tilin luomalla annat luvan näiden tietojen
+      siirtämiseen tikettijärjestelmän käyttöön. </span>
+  </ng-template>
+
+  <span i18n="@@Jos olet kiinnostunut">Jos olet kiinnostunut siitä, miten käsittelemme
+    tietojasi, voit lukea </span>
+
+  <a class="theme-hyperlink" (click)="openPrivacyModal()" i18n="@@Tietosuojaselosteen">
+    tietosuojaselosteen</a>.
 </p>
 
 <span i18n="@@Tallennamme seuraavat tiedot">
@@ -25,6 +41,9 @@
   </li>
   <li i18n="@@Roolisi kurssilla">Roolisi kurssilla (opettaja / opiskelija)</li>
 </ul>
+
+<p *ngIf="accountExists" i18n="@@Jos kieltäydyt" >Jos kieltäydyt tietojen käytöstä,
+  nykyinen tilisi poistetaan ja voit yhä lukea usein kysyttäjä kysymyksiä kirjautumattomana.</p>
 
 <app-error-card
     i18n-title="{{ ticketsError.title }}"

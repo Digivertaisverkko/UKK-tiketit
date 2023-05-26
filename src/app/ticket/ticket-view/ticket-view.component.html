@@ -149,7 +149,7 @@
   <form [formGroup]="form" (ngSubmit)="sendComment()">
 
     <app-editor formControlName="message"
-                *ngIf="!ticketIdFromParent"
+                *ngIf="!ticketIdFromParent && state !== 'error'"
                 >
     </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."

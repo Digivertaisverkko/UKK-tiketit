@@ -41,7 +41,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
   public newCommentState: 3 | 4 | 5 = 4;
-  public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
+  /* Error state = On jokin virhe, joka estää tiketin näyttämisen ja
+     kommentoinnin. */
+  public state: 'editing' | 'sending' | 'done' | 'error' = 'editing';  // Sivun tila
   public ticket: Tiketti = {} as Tiketti;
   public ticketID: string;
   public uploadClick = new Subject<string>();
@@ -70,15 +72,21 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
     this.courseID = this.route.snapshot.paramMap.get('courseid');
     this.ticketID = this.ticketIdFromParent !== null
-    ? this.ticketIdFromParent
-    : String(this.route.snapshot.paramMap.get('id'));
+        ? this.ticketIdFromParent
+        : String(this.route.snapshot.paramMap.get('id'));
   }
 
   ngOnInit(): void {
     this.store.trackUserInfo().subscribe(response => {
-      if (response?.id != null) {
+      if (response?.nimi != null) {
         this.user = response;
-        if (!this.isPolling) this.startPollingTicket();
+        if (this.user.asema === null) {
+          this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+          this.state = 'error';
+          this.isLoaded = true;
+        } else {
+         if (!this.isPolling) this.startPollingTicket();
+        }
       }
       if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
         this.attachFilesText = $localize `:@@Liitä:liitä`;
