@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
     from '@angular/core';
 import { TicketService } from '@ticket/ticket.service';
 import { Liite } from '@ticket/ticket.models';
+import { getCourseIDfromURL } from '@shared/utils';
 
 @Component({
   selector: 'app-view-attachments',
@@ -34,7 +35,12 @@ export class ViewAttachmentsComponent {
   public downloadFile(ticketID: string, commentID: string, fileID: string,
       filename: string)
     {
-    this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
+    const courseID = getCourseIDfromURL();
+    if (!courseID) {
+      console.error('Ei kurssi ID:ä.')
+      return
+    }
+    this.ticketService.getFile(ticketID, commentID, fileID, courseID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');

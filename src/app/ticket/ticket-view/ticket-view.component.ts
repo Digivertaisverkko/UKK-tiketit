@@ -31,6 +31,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
+  public courseID: string | null;
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -50,7 +51,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public user: User = {} as User;
   public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
-  private courseID: string | null;
   private isPolling: boolean = false;
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
@@ -103,10 +103,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.fetchTicketsSub?.unsubscribe();
   }
 
-  public archiveTicket() {
-    this.ticketService.archiveTicket(this.ticketID).then(response => {
+  public archiveTicket(ticketID: string, courseID: string | null) {
+    if (!courseID) return
+    this.ticketService.archiveTicket(ticketID, courseID).then(response => {
       if (response?.success === true) {
-        this.router.navigateByUrl('/course/' + this.courseID + '/list-tickets');
+        this.router.navigateByUrl('/course/' + courseID + '/list-tickets');
       } else {
         throw Error
       }
@@ -155,8 +156,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   // Hae tiketti ja päivitä näkymän tila.
   private fetchTicket(courseID: string | null) {
     // fetchaus sulkee editointiboxin.
-    if (this.editingCommentIDParent !== null) return
-    this.ticketService.getTicketInfo(this.ticketID).then(response => {
+    if (this.editingCommentIDParent !== null || !courseID) return
+    this.ticketService.getTicketInfo(this.ticketID, courseID).then(response => {
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
@@ -207,7 +208,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   //  Reagoi kommenttikomponenteilta tuleviin viesteihin.
   public listenMessagesFromComment(event: any) {
-    console.warn('saatiin viesti: ' + event);
     if (event === "done") {
       this.isEditingComment = false;
       this.state = 'editing';
@@ -223,11 +223,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public sendComment(): void {
     this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+    if (this.form.invalid || !this.courseID) return;
     const commentText = this.form.controls['message'].value;
-    this.ticketService.addComment(this.ticketID, commentText, this.newCommentState)
-      .then(response => {
-        if (response == null || response?.success !== true) {
+    this.ticketService.addComment(this.ticketID, this.courseID, commentText,
+      this.newCommentState).then(response => {
+        if (response == null || response?.success !== true || !this.courseID) {
           this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
               Kommentin lisääminen tikettiin epäonnistui.`;
           throw new Error('Kommentin lähettäminen epäonnistui.');
@@ -240,7 +240,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         }
         response = response as NewCommentResponse;
         const commentID = response.kommentti;
-        this.sendFiles(this.ticketID, commentID);
+        this.sendFiles(this.ticketID, commentID, this.courseID);
       }).catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
             Kommentin lisääminen tikettiin epäonnistui.`;
@@ -248,7 +248,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   // Lähetä komenttiin lisätyt liitetiedostot.
-  private sendFiles(ticketID: string, commentID: string) {
+  private sendFiles(ticketID: string, commentID: string, courseID: string) {
     this.state = 'sending';
     this.form.disable();
     this.attachments.sendFilesPromise(ticketID, commentID)

@@ -22,6 +22,7 @@ interface GetTicketsOption {
 
 export class TicketService {
 
+  private api: string;
   private debug: boolean = false;
 
   constructor (
@@ -29,10 +30,12 @@ export class TicketService {
     private errorService: ErrorService,
     private http: HttpClient,
     private store: StoreService
-    ) {}
+    ) {
+      this.api = environment.apiBaseUrl;
+    }
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
-  public async addComment(ticketID: string, message: string, tila?: number):
+  public async addComment(ticketID: string, courseID: string, message: string, tila?: number):
       Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
       throw new Error('Kommentin lisäämiseen tarvittava ticketID ei ole numero.')
@@ -49,7 +52,7 @@ export class TicketService {
     let body: newComment = { viesti: message }
     if (tila !== undefined) body.tila = tila
     let response: any;
-    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti`;
     try {
       response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
       this.store.setLoggedIn();
@@ -79,7 +82,7 @@ export class TicketService {
   public async addTicket(courseID: string, newTicket: UusiTiketti):
       Promise<AddTicketResponse> {
     let response: any;
-    const url = `${environment.apiBaseUrl}/kurssi/${courseID}/uusitiketti`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti`;
     const body = newTicket;
     try {
       response = await firstValueFrom(this.http.post<AddTicketResponse>(url, body));
@@ -92,7 +95,7 @@ export class TicketService {
    // Arkistoi (poista) UKK.
   public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
     let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${String(ticketID)}/arkistoiukk`;
+    const url = `${this.api}/tiketti/${String(ticketID)}/arkistoiukk`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.post<{ success: boolean }>(url, {})
@@ -104,12 +107,16 @@ export class TicketService {
   }
 
   // Arkistoi tiketti.
-  public async archiveTicket(ticketID: string): Promise<{ success: boolean }> {
+  public async archiveTicket(ticketID: string, courseID: string):
+      Promise<{ success: boolean }> {
     let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/valmis`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/arkisto`;
+    const body = {
+      tiketti: ticketID
+    }
     try {
       response = await firstValueFrom<{ success: boolean }>(
-        this.http.post<{ success: boolean }>(url, {})
+        this.http.put<{ success: boolean }>(url, body)
       );
     } catch (error: any) {
       this.handleError(error);
@@ -118,9 +125,9 @@ export class TicketService {
   }
 
   public async editComment(ticketID: string, commentID: string, comment: string,
-        state: number): Promise<boolean> {
+        state: number, courseID: string): Promise<boolean> {
     let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}`;
     let body;
     if (state < 3 || state > 5) {
       console.error('Muokattavan Kommentin tila täytyy olla 3, 4 tai 5.');
@@ -141,7 +148,7 @@ export class TicketService {
   public async editTicket(ticketID: string, ticket: UusiTiketti, fileList?: File[]):
       Promise<boolean> {
     let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    const url = `${this.api}/tiketti/${ticketID}`;
     const body = ticket;
     try {
       console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
@@ -165,7 +172,7 @@ export class TicketService {
 
   // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
   public async getFAQ(courseID: string): Promise<UKK[]> {
-    let url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk`;
+    let url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<UKK[]>(url));
@@ -211,11 +218,12 @@ export class TicketService {
   }
 
   // Lähetä tiedosto palauttaen edistymistietoja.
-  public uploadFile(ticketID: string, commentID: string, file: File): Observable<any>{
+  public uploadFile(ticketID: string, commentID: string, courseID: string, file: File): Observable<any>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     // Virheiden testaukseen vaihda http.post -> fakeHttpPost
     // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
     this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
@@ -264,7 +272,7 @@ export class TicketService {
   public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
     let formData = new FormData();
     formData.append('tiedosto', file);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+    const url = `${this.api}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
     let response: any;
     try {
       // Huom. Ei toimi, jos asettaa headerin: 'Content-Type: multipart/form-data'
@@ -276,9 +284,10 @@ export class TicketService {
   }
 
   // Lataa liitetiedosto.
-  public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
+  public async getFile(ticketID: string, commentID: string, fileID: string, courseID: string): Promise<Blob> {
     let url = environment.apiBaseUrl;
-    url += `/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/lataa`;
+        // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite/:liite-id/tiedosto
+    url += `/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/tiedosto`;
     const options = {
       responseType: 'blob' as 'json',
       headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
@@ -294,7 +303,7 @@ export class TicketService {
 
   public async removeComment(ticketID: string, commentID: string) {
     let response: any;
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const url = `${this.api}/tiketti/${ticketID}/kommentti/${commentID}`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.delete<{ success: boolean }>(url, {})
@@ -308,7 +317,7 @@ export class TicketService {
   // Poista tiketti.
   public async removeTicket(ticketID: string): Promise<boolean> {
     let response: any;
-    let url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
+    let url = `${this.api}/tiketti/${ticketID}`;
     try {
       response = await firstValueFrom(this.http.delete(url));
     } catch (error: any) {
@@ -332,11 +341,11 @@ export class TicketService {
       case 'onlyOwn':
         target = 'omat'; break;
       case "archived":
-        target = "arkistoidut"; break;
+        target = "arkisto"; break;
       default:
         target = "kaikki"
     }
-    let url = environment.apiBaseUrl + '/kurssi/' + String(courseID) + '/' + target;
+    let url = `${this.api}/kurssi/${String(courseID)}/tiketti/${target}`;
     let response: any;
     try {
       response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
@@ -362,9 +371,9 @@ export class TicketService {
   }
 
   // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
-  public async getTicketInfo(ticketID: string): Promise<Tiketti> {
+  public async getTicketInfo(ticketID: string, courseID: string): Promise<Tiketti> {
     let response: any;
-    let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url));
     } catch (error: any) {
@@ -372,9 +381,9 @@ export class TicketService {
     }
     let ticket: Tiketti = response;
     // TODO: alla olevat kutsut voisi tehdä rinnakkain.
-    response = await this.getFields(ticketID);
+    response = await this.getFields(ticketID, courseID);
     ticket.kentat = response;
-    response  = await this.getComments(ticketID);
+    response  = await this.getComments(ticketID, courseID);
     // Tiketin viestin sisältö on sen ensimmäinen kommentti.
     /// TODO: 1. kommentti ei välttämättä viittaa tikettiin aina, vaan pitäisi
     // ottaa aikaleiman mukaan vanhin.
@@ -387,9 +396,11 @@ export class TicketService {
   }
 
   // Palauta listan tiketin kommenteista.
-  private async getComments(ticketID: string): Promise<Kommentti[]>{
+  // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/kaikki
+  private async getComments(ticketID: string, courseID: string): Promise<Kommentti[]>{
     let response: any;
-    let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
+    // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/kaikki
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/kaikki`;
     try {
       response = await firstValueFrom<Kommentti[]>(
         this.http.get<any>(url)
@@ -419,9 +430,9 @@ export class TicketService {
   }
 
   // Hae listan tietyn tiketin lisäkentistä.
-  private async getFields(ticketID: string): Promise<Kentta[]> {
+  private async getFields(ticketID: string, courseID: string): Promise<Kentta[]> {
     let response: any;
-    let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kentat';
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
     try {
       response = await firstValueFrom<Kentta[]>( this.http.get<any>(url) );
     } catch (error: any) {

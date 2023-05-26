@@ -73,7 +73,7 @@ export class SubmitFaqComponent implements OnInit {
       );
       this.fetchAdditionalFields();
     } else {
-      this.fetchTicketInfo(this.ticketId);
+      this.fetchTicketInfo(this.ticketId, this.courseId);
     }
   }
 
@@ -139,8 +139,8 @@ export class SubmitFaqComponent implements OnInit {
     });
   }
 
-  private fetchTicketInfo(ticketId: string): void {
-    this.ticketService.getTicketInfo(ticketId)
+  private fetchTicketInfo(ticketId: string, courseId: string): void {
+    this.ticketService.getTicketInfo(ticketId, courseId)
     .then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
@@ -167,6 +167,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   private prepareSendFiles(response: any): void {
+    if (!this.courseId) return
     if (!this.ticketId && response?.uusi == null) {
       this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
