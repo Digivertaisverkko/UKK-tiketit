@@ -55,7 +55,7 @@ export class FaqViewComponent implements OnInit {
   }
 
   editFaq() {
-    let url = '/course/' + this.courseID + '/submit-faq/' + this.faqID;
+    let url = `/course/${this.courseID}/submit-faq/${this.faqID}`;
     this.router.navigate([url], { state: { editFaq: 'true' } });
   }
 
@@ -65,7 +65,8 @@ export class FaqViewComponent implements OnInit {
 
   archiveFaq() {
     this.isArchivePressed = false;
-    this.ticketService.archiveFAQ(Number(this.faqID)).then(response => {
+    if (!this.faqID || !this.courseID) return
+    this.ticketService.archiveFAQ(this.faqID, this.courseID).then(response => {
       this.router.navigateByUrl('course/' + this.courseID +  '/list-tickets');
     }).catch((error: Error) => {
       if (error.tunnus == 1003) {
