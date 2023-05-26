@@ -119,9 +119,10 @@ export class TicketService {
   }
 
    // Arkistoi (poista) UKK.
-  public async archiveFAQ(ticketID: number): Promise<{ success: boolean }> {
+  public async archiveFAQ(ticketID: string, courseID: string): Promise<{ success: boolean }> {
     let response: any;
-    const url = `${this.api}/tiketti/${String(ticketID)}/arkistoiukk`;
+    // /api/kurssi/:kurssi-id/ukk/arkisto/:tiketti-id/
+    const url = `${this.api}/kurssi/${courseID}/ukk/arkisto/${ticketID}`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.post<{ success: boolean }>(url, {})
