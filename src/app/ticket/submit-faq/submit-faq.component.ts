@@ -194,6 +194,7 @@ export class SubmitFaqComponent implements OnInit {
     this.form.disable();
     let newFaq: UusiUKK = this.createFaq();
     if (this.courseId === null) throw new Error('Kurssi ID puuttuu URL:sta.');
+    // Ei voi ticketID:n perusteella tehdä, kun kopioidessa UKK:ksi se on olemassa.
     if (this.editExisting) {
       if (!this.ticketId) return
       this.submitEditedFAQ(newFaq, this.ticketId);
@@ -268,8 +269,8 @@ export class SubmitFaqComponent implements OnInit {
         this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
             Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
       });
-  } */
-  
+  }
+  */
 
   private sendFiles(ticketID: string, commentID: string): void {
     this.attachments.sendFilesPromise(ticketID, commentID)
