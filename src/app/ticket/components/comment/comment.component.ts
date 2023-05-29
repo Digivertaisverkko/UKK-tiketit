@@ -25,7 +25,7 @@ export class CommentComponent implements AfterViewInit{
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
-  @Input() public user: User | null = null;
+  @Input() public sender: User | null = null;
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
   // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
@@ -39,6 +39,7 @@ export class CommentComponent implements AfterViewInit{
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
+  public user: User | null;
 
   get message(): FormControl {
     return this.form.get('message') as FormControl;
@@ -93,7 +94,7 @@ export class CommentComponent implements AfterViewInit{
   }
 
   public getSenderTitle(name: string, role: string | null): string {
-    if (name == this.user?.nimi) return $localize`:@@Minä:Minä`
+    if (name == this.sender?.nimi) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
         return $localize`:@@Opiskelija:Opiskelija`; break;

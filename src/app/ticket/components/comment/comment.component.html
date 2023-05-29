@@ -8,9 +8,9 @@
   <app-sender-info
       [aikaleima]="comment.aikaleima"
       [alignLeft]=true
-      [user]="user"
+      [user]="sender"
       >
-    </app-sender-info>
+  </app-sender-info>
 
   <div class="spacer"></div>
 
@@ -36,7 +36,7 @@
             mat-icon-button
             matTooltip="{{ strings.get('removeComment') }}"
             matTooltipPosition="after"
-            *ngIf="(comment.lahettaja.id === user?.id) &&
+            *ngIf= "(comment.lahettaja.id === user?.id) &&
                   (editingCommentID === comment.id) &&
                   isRemovePressed === false"
             #tooltip="matTooltip"
@@ -60,6 +60,13 @@
             >
             <mat-icon>delete_forever</mat-icon>
     </button>
+
+  <!--
+  <p>comment.lahettaja.id: {{ comment.lahettaja.id }}
+    user.id: {{ user?.id }}
+    editingCommentID: {{ editingCommentID }}
+    comment.id: {{ comment.id }}
+  </p> -->
 
   <button aria-label="Muokkaa kommenttia"
           (click)="editComment(comment.id)"
