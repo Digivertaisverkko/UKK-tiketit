@@ -16,6 +16,8 @@ import { getCourseIDfromURL } from '@shared/utils';
           *ngFor="let file of files; let i = index"
           >
           <div class="filename">{{file.nimi}}</div>
+          &nbsp;
+          <div>({{ file.koko | filesize }})</div>
           <mat-icon>download</mat-icon>
       </button>
     </div>`,
