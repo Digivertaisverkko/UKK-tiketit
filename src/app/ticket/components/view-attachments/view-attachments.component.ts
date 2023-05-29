@@ -15,7 +15,12 @@ import { getCourseIDfromURL } from '@shared/utils';
           [matTooltipShowDelay]="600"
           *ngFor="let file of files; let i = index"
           >
-          <div class="filename">{{file.nimi}}</div>
+          <div class="filename">{{ file.nimi }}</div>
+          &nbsp;
+          <div class="filesize">
+            ({{ file.koko | filesize : { locale: 'fi', round: 1,
+                separator: ",", pad: true } }})
+          </div>
           <mat-icon>download</mat-icon>
       </button>
     </div>`,
