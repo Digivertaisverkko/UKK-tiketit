@@ -1,12 +1,12 @@
 <!---- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
-  <input  aria-disabled="true"
-          (change)="onFileAdded($event)"
-          class="file-input"
-          #fileUpload
-          #fileInput
-          multiple
-          type="file"
-          >
+<input  aria-disabled="true"
+        (change)="onFileAdded($event)"
+        class="file-input"
+        #fileUpload
+        #fileInput
+        multiple
+        type="file"
+        >
 
 <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
 name="file-input-{{url}}"
@@ -16,7 +16,7 @@ name="file-input-{{url}}"
 
 <div class="vertical-spacer"></div>
 
-<!------ Aiemmin lähetetyt liitteet ------------------------------------------->
+<!----------------- Aiemmin lähetetyt liitteet -------------------------------->
 
 <div class="file-list" *ngIf="oldAttachments.length > 0">
   <div  class="file-list-row"
@@ -29,11 +29,16 @@ name="file-input-{{url}}"
           >
       {{ file.nimi }}
     </span>
+    (
+      <span> {{ file.koko | filesize: { locale: 'fi', round: 1,
+        separator: ",", pad: true } }}
+      </span>
+    )
     </div>
   </div>
 </div>
 
-<!------- Uudet liitteet ------------------------------------------------------>
+<!----------------- Uudet liitteet -------------------------------------------->
 
 <div class="file-list" *ngIf="fileInfoList !== null">
   <div  class="file-list-row"
@@ -42,47 +47,53 @@ name="file-input-{{url}}"
 
     <div class="list-item">
 
-    <span class="filename"
-          matTooltip="{{ file.filename }}"
-          [matTooltipShowDelay]="600"
-          >
-      {{ file.filename }}
-    </span>
-    <span class="in-brackets">
-      (<span *ngIf="oldAttachments.length > 0">
-          {{new}}
-        </span>
-        <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
-          separator: ",", pad: true } }}</span>)
-    </span>
-    <div  class="file-error-message"
-          matError
-          matTooltip="{{ file?.errorToolTip }}"
-          [matTooltipShowDelay]="600"
-          *ngIf="file.error"
-          >
-        <mat-icon>warning</mat-icon>{{ file.error }}
-    </div>
-
-    <button class="remove-file-button"
-            (click)="removeSelectedFile(index)"
-            [disabled]="isEditingDisabled"
-            mat-icon-button
+      <span class="filename"
+            matTooltip="{{ file.filename }}"
+            [matTooltipShowDelay]="600"
             >
-      <mat-icon>close</mat-icon>
-    </button>
+        {{ file.filename }}
+      </span>
+      <span class="in-brackets">
+        (
+          <span *ngIf="oldAttachments.length > 0">
+            {{new}}
+          </span>
+          <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
+            separator: ",", pad: true } }}
+          </span>
+        )
+      </span>
+      <div  class="file-error-message"
+            matError
+            matTooltip="{{ file?.errorToolTip }}"
+            [matTooltipShowDelay]="600"
+            *ngIf="file.error"
+            >
+          <mat-icon>warning</mat-icon>{{ file.error }}
+      </div>
+
+      <button class="remove-file-button"
+              (click)="removeSelectedFile(index)"
+              [disabled]="isEditingDisabled"
+              mat-icon-button
+              >
+        <mat-icon>close</mat-icon>
+      </button>
+
     </div>
 
     <mat-icon class="ok-icon" *ngIf="file.progress === 100 && !file.uploadError">
-    done
+      done
     </mat-icon>
     <mat-icon class="error-icon" *ngIf="file.uploadError">error</mat-icon>
     <span *ngIf="file.uploadError">{{ file.uploadError }}</span>
+
     <mat-progress-bar
         mode="determinate"
         *ngIf="file.progress && !file.uploadError"
         [value]="file.progress"
         >
     </mat-progress-bar>
+  
   </div>
 </div>
