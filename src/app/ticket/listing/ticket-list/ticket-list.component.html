@@ -157,7 +157,7 @@
             mat-raised-button
             *ngIf="!isArchivedShown else hideArchivedBtn"
             >
-        Näytä arkistoidut
+        Näytä ratkaistut
     </button>
 
     <ng-template #hideArchivedBtn>
@@ -166,7 +166,7 @@
               i18n="@@Piilota arkistoidut"
               mat-raised-button
               >
-          Piilota arkistoidut
+          Piilota ratkaistut
       </button>
     </ng-template>
 
@@ -190,10 +190,10 @@
 </div>
 
 
-<!-------------- Arkistoidut ------------------------------------------------>
+<!-------------- Ratkaistut ------------------------------------------------>
 
 <h2 class="sub-header" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
-  Arkistoidut kysymykset
+  Ratkaistut kysymykset
 </h2>
 
 <table  class="theme-table mat-elevation-z1"

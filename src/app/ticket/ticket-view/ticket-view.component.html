@@ -39,12 +39,12 @@
       </button>
 
       <button (click)="changeButton('archive')"
-              i18n="@@Arkistoi"
+              i18n="@@Ratkaistu"
               mat-raised-button
               *ngIf="ticket.arkistoitava === true && !isArchivePressed"
               [disabled]="state==='sending'"
               >
-        Arkistoi
+        Ratkaistu
       </button>
 
       <button class="remove-btn"

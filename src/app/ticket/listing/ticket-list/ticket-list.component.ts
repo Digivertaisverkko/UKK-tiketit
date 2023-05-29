@@ -19,8 +19,8 @@ interface ColumnDefinition {
 }
 
 enum IconFile {
-  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ratkaisu_64",
-  "Arkistoitu"
+  'Lahetetty' = 1, 'Kasittelyssa', 'Kysymys', "Kommentti", "Ehdotus",
+  "Ratkaisu_64"
 }
 
 interface ErrorNotification {

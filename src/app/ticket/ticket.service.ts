@@ -200,8 +200,8 @@ export class TicketService {
       case 2: string = $localize`:@@Luettu:Luettu`; break;
       case 3: string = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
       case 4: string = $localize`:@@Kommentoitu:Kommentoitu`; break;
-      case 5: string = $localize`:@@Ratkaistu:Ratkaistu`; break;
-      case 6: string = $localize`:@@Arkistoitu:Arkistoitu`; break;
+      case 5: string = $localize`:@@Ehdotettu:Ehdotettu`; break;
+      case 6: string = $localize`:@@Ratkaistu:Ratkaistu`; break;
       default:
         throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
     }
