@@ -129,11 +129,8 @@
     </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p  class="theme-success-message"
-        i18n="@@Uuden kysymyksen lähettäminen onnistui"
-        *ngIf="state==='sending' || state==='done'"
-        >
-      Uuden kysymyksen lähettäminen onnistui.
+    <p class="theme-success-message" *ngIf="successMessage">
+      {{ successMessage }}
     </p>
 
     <app-error-card i18n-title="@@Virhe"

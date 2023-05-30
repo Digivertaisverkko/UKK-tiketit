@@ -37,6 +37,7 @@ export class SubmitTicketComponent implements OnInit {
   public oldAttachments: Liite[] = [];
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
+  public successMessage: string = '';
   public ticketFields: Kentta[] = [];
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
@@ -183,6 +184,9 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.editTicket(this.ticketId, newTicket)
     .then( () => {
       if (this.oldAttachments.length === 0) this.goBack();
+      console.warn('onnistui!');
+      this.successMessage = $localize `:@@Uuden kysymyksen lähettäminen onnistui:
+        Uuden kysymyksen lähettäminen onnistui` + '.';
       this.sendFiles(this.ticketId!, this.commentID!);
     })
     .catch(error => {
@@ -204,6 +208,9 @@ export class SubmitTicketComponent implements OnInit {
         this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
             Kysymyksen lähettäminen epäonnistui` + '.';
         throw new Error('Kysymyksen lähettäminen epäonnistui.');
+      } else if (response?.success === true) {
+        this.successMessage = $localize `:@@Uuden kysymyksen lähettäminen onnistui:
+        Uuden kysymyksen lähettäminen onnistui`;
       }
       this.prepareSendFiles(response);
     })
