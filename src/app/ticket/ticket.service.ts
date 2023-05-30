@@ -155,7 +155,7 @@ export class TicketService {
     let sendFileResponse: any;
     for (let file of fileList) {
       try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+        sendFileResponse = await this.uploadFile(ticketID, firstCommentID, file);
       } catch (error: any) {
         this.handleError(error);
       }
@@ -258,21 +258,6 @@ export class TicketService {
       statusText: 'Bad Request',
     });
     return of(errorResponse);
-  }
-
-  // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
-    let formData = new FormData();
-    formData.append('tiedosto', file);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    let response: any;
-    try {
-      // Huom. Ei toimi, jos asettaa headerin: 'Content-Type: multipart/form-data'
-      response = await firstValueFrom<any>(this.http.post(url, formData));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
   }
 
   // Lataa liitetiedosto.
