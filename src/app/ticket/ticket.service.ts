@@ -290,6 +290,19 @@ export class TicketService {
     return response;
   }
 
+  // Lataa liitetiedosto.
+  public async removeFile(commentID: string, fileID: string) {
+    let url = environment.apiBaseUrl;
+    url += `/kommentti/${commentID}/liite/${fileID}`;
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.delete(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
+  }
+
   // Poista tiketti.
   public async removeTicket(ticketID: string): Promise<boolean> {
     let response: any;
