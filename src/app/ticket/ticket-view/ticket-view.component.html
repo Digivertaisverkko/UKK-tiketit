@@ -73,7 +73,7 @@
         </button>
       </div>
 
-      <button (click)="removeTicket()"
+      <button (click)="removeTicket(ticketID, courseID)"
               color="accent"
               [disabled]="state==='sending'"
               i18n="@@Vahvista poisto"
@@ -169,7 +169,7 @@
         *ngIf="errorMessage.length > 0"
         i18n-title="@@Virhe"
         message="{{ errorMessage }}"
-        [styles]="{ margin: '0' }"
+        [styles]="{ margin: '1rem, 0 0 0' }"
         title="Virhe"
         >
     </app-error-card>

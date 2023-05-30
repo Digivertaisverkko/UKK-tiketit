@@ -323,7 +323,7 @@ export class TicketService {
 
   public async removeComment(ticketID: string, commentID: string, courseID: string) {
     let response: any;
-    const url = `${this.api}/kurssi/${courseID}}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.delete<{ success: boolean }>(url, {})
@@ -335,9 +335,9 @@ export class TicketService {
   }
 
   // Poista tiketti.
-  public async removeTicket(ticketID: string): Promise<boolean> {
+  public async removeTicket(ticketID: string, courseID: string): Promise<boolean> {
     let response: any;
-    let url = `${this.api}/tiketti/${ticketID}`;
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
       response = await firstValueFrom(this.http.delete(url));
     } catch (error: any) {

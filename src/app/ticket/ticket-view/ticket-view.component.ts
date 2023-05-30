@@ -179,13 +179,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  public editTicket() {
+  public editTicket(): void {
     let url = `/course/${this.courseID}/submit/${this.ticketID}`;
     this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 
-  public removeTicket() {
-    this.ticketService.removeTicket(this.ticketID).then(response => {
+  public removeTicket(ticketID: string, courseID: string | null): void {
+    if (!courseID) return
+    this.ticketService.removeTicket(ticketID, courseID).then(response => {
       if (response === false ) {
         this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
             Kysymyksen poistaminen ei onnistunut.`;
