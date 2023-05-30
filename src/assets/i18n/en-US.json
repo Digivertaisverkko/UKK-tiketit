@@ -213,6 +213,7 @@
     "Toiminto epäonnistui": "Operation failed",
     "Tyyppi": "Type",
     "Tästä ei pääse": "You can't get here",
+    "UKK-lista ei saatu haettua": "Could not retrieve the FAQs added for this course",
     "UKK": "FAQ",
     "UKK lähettäminen onnistui": "Sending a new frequently asked question was successful.",
     "UKK näyttäminen epäonnistui": "Displaying a frequently asked question failed",

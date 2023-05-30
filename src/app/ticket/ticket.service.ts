@@ -163,8 +163,8 @@ export class TicketService {
     return true
   }
 
-  // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
-  public async getFAQ(courseID: string): Promise<UKK[]> {
+  // Hae kurssin UKK-kysymykset.
+  public async getFAQlist(courseID: string): Promise<UKK[]> {
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk`;
     let response: any;
     try {
