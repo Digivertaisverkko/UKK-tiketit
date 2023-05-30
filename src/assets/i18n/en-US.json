@@ -99,6 +99,8 @@
     "Kysymyksen lisäämisestä ei vahvistusta": "No confirmation of the success of adding the question was received.",
     "Kysymyksen lähettäminen epäonnistui": "Sending a question failed",
     "Kysymys lisättiin onnistuneesti": "The question was added successfully",
+    "Muokatun kysymyksen lähettäminen onnistui": "Sending an edited question was successful",
+    "Muokatun kysymyksen lähettäminen epäonnistui": "Failed to send edited question",
     "Kysymyksen näyttäminen epäonnistui": "Failed to display the question",
     "Kysymyksen poistaminen ei onnistunut": "Failed to delete the question",
     "Kysymys": "Question",

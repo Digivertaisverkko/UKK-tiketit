@@ -184,15 +184,13 @@ export class SubmitTicketComponent implements OnInit {
     this.ticketService.editTicket(this.ticketId, newTicket)
     .then( () => {
       if (this.oldAttachments.length === 0) this.goBack();
-      console.warn('onnistui!');
-      this.successMessage = $localize `:@@Uuden kysymyksen lähettäminen onnistui:
-        Uuden kysymyksen lähettäminen onnistui` + '.';
+      this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:
+          Muokatun kysymyksen lähettäminen onnistui` + '.';
       this.sendFiles(this.ticketId!, this.commentID!);
     })
     .catch(error => {
-      this.errorMessage = $localize`:@@Kysymyksen lähettäminen epäonnistui:
-          Kysymyksen lähettäminen epäonnistui` + '.';
-      this.state = 'editing';
+      this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
+          Muokatun kysymyksen lähettäminen epäonnistui` + '.'
       this.form.enable();
     });
   }
@@ -201,6 +199,7 @@ export class SubmitTicketComponent implements OnInit {
     if (this.courseId === null) return;
     this.ticketService.addTicket(this.courseId, ticket)
     .then((response: AddTicketResponse) => {
+      console.warn('uusi');
       if (this.attachments.fileInfoList.length === 0) this.goBack();
       if (response === null || response?.success !== true) {
         this.state = 'editing';
@@ -210,7 +209,7 @@ export class SubmitTicketComponent implements OnInit {
         throw new Error('Kysymyksen lähettäminen epäonnistui.');
       } else if (response?.success === true) {
         this.successMessage = $localize `:@@Uuden kysymyksen lähettäminen onnistui:
-        Uuden kysymyksen lähettäminen onnistui`;
+            Uuden kysymyksen lähettäminen onnistui` + '.';
       }
       this.prepareSendFiles(response);
     })
