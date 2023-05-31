@@ -230,7 +230,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       .then(response => {
         if (response == null || response?.success !== true) {
           this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
-              Kommentin lisääminen tikettiin epäonnistui.`;
+              Kommentin lisääminen kysymykseen epäonnistui.`;
           throw new Error('Kommentin lähettäminen epäonnistui.');
         }
         this.message.setValue('');
@@ -244,7 +244,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.sendFiles(this.ticketID, commentID);
       }).catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
-            Kommentin lisääminen tikettiin epäonnistui.`;
+            Kommentin lisääminen kysymykseen epäonnistui.`;
       })
   }
 
