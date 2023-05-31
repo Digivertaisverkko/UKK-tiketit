@@ -25,7 +25,7 @@
     Kysymysten lisäkentät
   </h3>
 
-  <p i18n="@@Asetukset-kuvaus">
+  <p i18n="@@Asetukset-kuvaus" *ngIf="!errorMessage">
     Voit asettaa kysymyksille lisäkenttiä, joita kysytään kaikilta uuden kysymyksen
     esittäviltä käyttäjiltä. Lisäkenttiä voi asettaa pakollisiksi, antaa niille
     valmiita vastausvaihtoehtoja sekä kuvaustekstejä. Voit muuttaa lisäkenttien
@@ -49,7 +49,7 @@
   </div>
 
   <ng-template #noFieldsMessage>
-    <div class="list-wrapper">
+    <div class="list-wrapper" *ngIf="!errorMessage">
       <p class="no-fields-p"
           i18n="@@Yhtään lisäkenttää ei ole lisätty"
           >

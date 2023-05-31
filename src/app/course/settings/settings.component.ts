@@ -72,6 +72,7 @@ export class SettingsComponent implements OnInit {
 
   private fetchTicketFieldInfo(courseID: string) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
+
       if (response[0]?.otsikko != null) {
         this.fieldList = response;
       }
