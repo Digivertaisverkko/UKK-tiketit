@@ -25,7 +25,7 @@
     Kysymysten lisäkentät
   </h3>
 
-  <p i18n="@@Asetukset-kuvaus">
+  <p class="help-text" i18n="@@Asetukset-kuvaus">
     Voit asettaa kysymyksille lisäkenttiä, joita kysytään kaikilta uuden kysymyksen
     esittäviltä käyttäjiltä. Lisäkenttiä voi asettaa pakollisiksi, antaa niille
     valmiita vastausvaihtoehtoja sekä kuvaustekstejä. Voit muuttaa lisäkenttien
@@ -127,8 +127,11 @@
 
   <h2 class="sub-header">Kutsu ulkopuolisia kurssille</h2>
 
-  <p>
-    Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
+  <p class="help-text">
+    Voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
+    Voit kutsua osallistujia kurssille, jos käytät ohjelmaa
+    sellaisenaan. Jos kurssin osa on luotu LTI:n kautta (mm. Moodleen),
+    voit kutsua käyttäjiä, joilla ei ole pääsyä kurssitilaan.
   </p>
 
   <div class="invite-wrapper">
@@ -143,13 +146,28 @@
       </mat-error>
     </mat-form-field>
 
-    <button class="invite-button"
-            color="primary"
-            i18n="@@Kutsu"
-            mat-raised-button
-            >
+
+      <button class="invite-button"
+      color="primary"
+      i18n="@@Kutsu"
+      mat-raised-button
+      >
       Kutsu
     </button>
 
-  </div>
+    </div>
+
+    <mat-label class="role-label">Rooli:</mat-label>
+    <mat-radio-group>
+      <mat-radio-button [value]='1' i18n="@@Kommentti">
+        Opiskelija
+      </mat-radio-button>
+      <mat-radio-button [value]='2' i18n="@@Lisätietoa tarvitaan">
+        Opettaja
+      </mat-radio-button>
+    </mat-radio-group>
+
+
+
+
 </form>

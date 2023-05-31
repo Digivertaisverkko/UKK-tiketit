@@ -56,7 +56,7 @@ export class SettingsComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       email: [ '', Validators.required ],
-      role: [ '' ]
+      role: ['1']
     })
   }
 
