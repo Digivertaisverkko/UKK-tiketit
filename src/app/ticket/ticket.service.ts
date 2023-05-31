@@ -52,7 +52,6 @@ export class TicketService {
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
     try {
       response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
-      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -129,7 +128,6 @@ export class TicketService {
       body = { viesti: comment, tila: state }
     }
     try {
-      // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
     } catch (error: any) {
       this.handleError(error);
@@ -144,7 +142,6 @@ export class TicketService {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
     const body = ticket;
     try {
-      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
     } catch (error: any) {
       this.handleError(error);

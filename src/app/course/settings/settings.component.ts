@@ -117,7 +117,7 @@ export class SettingsComponent implements OnInit {
 
   public saveFields() {
     if (!this.courseID) throw Error('Ei kurssi ID:ä.');
-    this.courses.setTicketFieldInfo(this.courseID, this.fieldList)
+    this.courses.setTicketField(this.courseID, this.fieldList)
       .then(response => {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
