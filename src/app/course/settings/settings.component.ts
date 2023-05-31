@@ -1,5 +1,6 @@
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Title } from '@angular/platform-browser';
 
@@ -18,7 +19,7 @@ export class SettingsComponent implements OnInit {
   public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
-  public inviteEmail: string = '';
+  public form: FormGroup = this.buildForm();
   public isDirty: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
@@ -26,11 +27,20 @@ export class SettingsComponent implements OnInit {
 
   constructor(
     private courses: CourseService,
+    private formBuilder: FormBuilder,
     private renderer: Renderer2,
     private route: ActivatedRoute,
     private store: StoreService,
     private titleServ: Title
   ) {
+  }
+
+  get email(): AbstractControl {
+    return this.form.get('email') as FormControl;
+  }
+
+  get role(): AbstractControl {
+    return this.form.get('role') as FormControl;
   }
 
   ngOnInit(): void {
@@ -41,6 +51,13 @@ export class SettingsComponent implements OnInit {
     } else {
       console.error('Ei kurssi ID:ä, ei voida hakea tikettipohjan tietoja.');
     }
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      email: [ '', Validators.required ],
+      role: [ '' ]
+    })
   }
 
   public drop(event: CdkDragDrop<string[]>) {
@@ -81,6 +98,10 @@ export class SettingsComponent implements OnInit {
       this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:
           Kysymysten lisäkenttien haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true )
+  }
+
+  public invite() {
+
   }
 
   public onFileAdded(event: any) {
