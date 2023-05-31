@@ -141,7 +141,7 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   private fetchTicketInfo(ticketId: string): void {
-    this.ticketService.getTicketInfo(ticketId)
+    this.ticketService.getTicket(ticketId)
     .then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);

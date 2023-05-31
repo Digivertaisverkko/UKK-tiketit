@@ -359,8 +359,9 @@ export class TicketService {
     return sortableData;
   }
 
-  // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
-  public async getTicketInfo(ticketID: string): Promise<Tiketti> {
+  /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
+    kommentit. */
+  public async getTicket(ticketID: string): Promise<Tiketti> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
@@ -389,9 +390,7 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
     try {
-      response = await firstValueFrom<Kommentti[]>(
-        this.http.get<any>(url)
-      );
+      response = await firstValueFrom<Kommentti[]>(this.http.get<any>(url));
     } catch (error: any) {
       this.handleError(error);
     }

@@ -85,7 +85,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           this.state = 'error';
           this.isLoaded = true;
         } else {
-         if (!this.isPolling) this.startPollingTicket();
+          if (!this.isPolling) this.startPollingTicket();
         }
       }
       if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
@@ -156,7 +156,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private fetchTicket(courseID: string | null) {
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null) return
-    this.ticketService.getTicketInfo(this.ticketID).then(response => {
+    this.ticketService.getTicket(this.ticketID).then(response => {
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
@@ -165,6 +165,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
       this.isLoaded = true;
     }).catch(error => {
+      this.state = 'error';
       switch (error.tunnus) {
         case 1003:
           this.errorMessage = $localize`:@@Ei oikeutta kysymykseen:
@@ -172,7 +173,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           break;
         default:
           this.errorMessage = $localize`:@@Kysymyksen näyttäminen epäonnistui:
-              Kysymyksen näyttäminen epäonnistui`;
+              Kysymyksen näyttäminen epäonnistui` + '.';
       }
       this.isLoaded = true;
     });
@@ -193,7 +194,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       }
     }).catch(error => {
       if (error?.tunnus == 1003) {
-        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä äyttäjäoikeuksia` + '.';
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
       } else {
         this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
             Kysymyksen poistaminen ei onnistunut.`;
@@ -215,9 +216,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     } else if (event === 'editingComment') {
       this.isEditingComment = true
     } else if (event === "sendingFiles") {
-      this.state='sending';
+      this.state = 'sending';
     } else if (event === "continue") {
-      this.state='editing';
+      this.state = 'editing';
     }
   }
 
