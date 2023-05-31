@@ -23,15 +23,15 @@
     <mat-form-field>
       <input  i18n-placeholder="@@Salasana"
               matInput
-              minlength="8"
+              minlength="1"
               name="password"
               [(ngModel)]="password"
               placeholder="Salasana"
               required
               type="password"
       />
-      <mat-error i18n="@@Salasanan pituus">
-        Vähintään {{ passwordMinLength }} pitkä salasana tarvitaan.
+      <mat-error i18n="@@Salasana tarvitaan">
+        Salasana tarvitaan.
       </mat-error>
       <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
@@ -48,7 +48,7 @@
 
     <button (click)="login()"
             color="primary"
-            [disabled]="email.length < 3 || password.length < passwordMinLength"
+            [disabled]="!email|| !password"
             i18n="@@Kirjaudu"
             mat-raised-button
             >
