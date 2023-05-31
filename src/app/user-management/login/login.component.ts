@@ -20,7 +20,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
   public isLoginRemembered: boolean = false;
   public lang: string | null = localStorage.getItem('language');
   public password: string = '';
-  public readonly passwordMinLength: number = 8;
   private loginID: string = '';
 
   constructor(

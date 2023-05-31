@@ -155,7 +155,7 @@ export class TicketService {
     let sendFileResponse: any;
     for (let file of fileList) {
       try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+        sendFileResponse = await this.uploadFile(ticketID, firstCommentID, file);
       } catch (error: any) {
         this.handleError(error);
       }
@@ -163,8 +163,8 @@ export class TicketService {
     return true
   }
 
-  // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
-  public async getFAQ(courseID: string): Promise<UKK[]> {
+  // Hae kurssin UKK-kysymykset.
+  public async getFAQlist(courseID: string): Promise<UKK[]> {
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk`;
     let response: any;
     try {
@@ -200,8 +200,8 @@ export class TicketService {
       case 2: string = $localize`:@@Luettu:Luettu`; break;
       case 3: string = $localize`:@@Lisätietoa pyydetty:Lisätietoa pyydetty`; break;
       case 4: string = $localize`:@@Kommentoitu:Kommentoitu`; break;
-      case 5: string = $localize`:@@Ratkaistu:Ratkaistu`; break;
-      case 6: string = $localize`:@@Arkistoitu:Arkistoitu`; break;
+      case 5: string = $localize`:@@Ehdotettu:Ehdotettu`; break;
+      case 6: string = $localize`:@@Ratkaistu:Ratkaistu`; break;
       default:
         throw new Error('getTicketState: Tiketin tilan numeerinen arvo täytyy olla välillä 0-6.');
     }
@@ -260,21 +260,6 @@ export class TicketService {
     return of(errorResponse);
   }
 
-  // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
-    let formData = new FormData();
-    formData.append('tiedosto', file);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    let response: any;
-    try {
-      // Huom. Ei toimi, jos asettaa headerin: 'Content-Type: multipart/form-data'
-      response = await firstValueFrom<any>(this.http.post(url, formData));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
-  }
-
   // Lataa liitetiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
     let url = environment.apiBaseUrl;
@@ -303,6 +288,19 @@ export class TicketService {
       this.handleError(error);
     }
     return response;
+  }
+
+  // Lataa liitetiedosto.
+  public async removeFile(commentID: string, fileID: string) {
+    let url = environment.apiBaseUrl;
+    url += `/kommentti/${commentID}/liite/${fileID}`;
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.delete(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
   }
 
   // Poista tiketti.

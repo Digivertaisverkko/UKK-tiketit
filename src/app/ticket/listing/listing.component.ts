@@ -19,12 +19,12 @@ import { User } from '@core/core.models';
 import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
-export interface ColumnDefinition {
+interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
 
-export interface ErrorNotification {
+interface ErrorNotification {
   title: string,
   message: string,
   buttonText?: string
@@ -82,7 +82,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: true }
     ];
-    
+
   }
 
   ngOnInit() {
@@ -115,7 +115,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }*/
   }
 
-
   private trackIfParticipant() {
     this.isParticipant$ = this.store.trackIfParticipant().subscribe(response => {
       if (response === true) {
@@ -138,7 +137,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
-    this.ticket.getFAQ(courseID).then(response => {
+    this.ticket.getFAQlist(courseID).then(response => {
       if (this.isLoaded === false) this.isLoaded = true;
         if (response.length > 0) {
           this.numberOfFAQ = response.length;
@@ -176,6 +175,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
+    this.setError('getFAQfailed');
     this.isLoaded = true;
   }
 
@@ -295,7 +295,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       } else if (!this.isInIframe) {
         this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
       }
-    } else {
+    }  else if (type === 'getFAQfailed') {
+      this.error = {
+        title: $localize`:@@Virhe:Virhe`,
+        message: $localize `:@@UKK-lista ei saatu haettua:
+          Ei saatu haettua tälle kurssille lisättyjä usein kysyttyjä kysymyksiä` + '.',
+        buttonText: ''
+      }
+    }
+    else {
       console.error('Ei virheviestiä tyypille: ' + type);
     }
   }

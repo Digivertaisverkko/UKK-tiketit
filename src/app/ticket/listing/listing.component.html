@@ -22,20 +22,6 @@
     >
 </app-error-card>
 
--->
-
-<app-error-card
-    buttonText="{{ error.buttonText }}"
-    (clickEvent)="errorClickEvent($event)"
-    i18n-title="{{ error.title }}"
-    message="{{ error.message }}"
-    *ngIf="isLoaded && error !== null"
-    #ticketError
-    title="{{ error.title }}"
-    >
-</app-error-card>
-<!-- [styles]="{ 'margin-top': '1rem' }" -->
-
 <!------------ UKK:t ---------------------------------------------------------->
 
 <!-- Älä korvaa ngIf:llä tai sorting ei toimi. -->
@@ -57,7 +43,7 @@
 
 </div>
 
-  <div class="no-items-box" *ngIf="numberOfFAQ === 0">
+  <div class="no-items-box" *ngIf="numberOfFAQ === 0 && !error">
     <p i18n="@@Ei yhtään UKK">
       Yhtään usein kysyttyä kysymystä ei ole lisätty.
     </p>
@@ -121,6 +107,17 @@
   </p>
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
+
+  <app-error-card
+      buttonText="{{ error.buttonText }}"
+      (clickEvent)="errorClickEvent($event)"
+      i18n-title="{{ error.title }}"
+      message="{{ error.message }}"
+      *ngIf="isLoaded && error !== null"
+      #ticketError
+      title="{{ error.title }}"
+      >
+  </app-error-card>
 
   <div  class="buttons-wrapper theme-actions"
         *ngIf="((user$ | async)?.asema === 'opettaja' ||

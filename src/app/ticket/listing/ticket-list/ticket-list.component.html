@@ -128,7 +128,7 @@
 
   <div  class="no-items-box"
         mat-elevation-z1
-        *ngIf="numberOfQuestions === 0 && !error"
+        *ngIf="numberOfQuestions === 0 && error === null"
         >
     <p i18n="@@Ei yhtään kysymystä esitetty"
       *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin';
@@ -142,7 +142,17 @@
     </ng-template>
   </div>
 
-<!----------------- Napit ----------------------------------------------------->
+<!----------------- Virheilm. ja napit ---------------------------------------->
+
+  <app-error-card
+      buttonText="{{ error.buttonText }}"
+      i18n-title="{{ error.title }}"
+      message="{{ error.message }}"
+      *ngIf="isLoaded && error"
+      #ticketError
+      title="{{ error.title }}"
+      >
+  </app-error-card>
 
   <div  class="buttons-wrapper theme-actions"
       [ngStyle]="numberOfQuestions === 0 ?
@@ -157,7 +167,7 @@
             mat-raised-button
             *ngIf="!isArchivedShown else hideArchivedBtn"
             >
-        Näytä arkistoidut
+        Näytä ratkaistut
     </button>
 
     <ng-template #hideArchivedBtn>
@@ -166,7 +176,7 @@
               i18n="@@Piilota arkistoidut"
               mat-raised-button
               >
-          Piilota arkistoidut
+          Piilota ratkaistut
       </button>
     </ng-template>
 
@@ -190,10 +200,10 @@
 </div>
 
 
-<!-------------- Arkistoidut ------------------------------------------------>
+<!-------------- Ratkaistut ------------------------------------------------>
 
 <h2 class="sub-header" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
-  Arkistoidut kysymykset
+  Ratkaistut kysymykset
 </h2>
 
 <table  class="theme-table mat-elevation-z1"
@@ -322,16 +332,6 @@
     Ei arkistoituja kysymyksiä.
   </p>
 </div>
-
-<app-error-card
-    buttonText="{{ error.buttonText }}"
-    i18n-title="{{ error.title }}"
-    message="{{ error.message }}"
-    *ngIf="isLoaded && error"
-    #ticketError
-    title="{{ error.title }}"
-    >
-</app-error-card>
 
 <!--------------------------------------------------------------------------->
 

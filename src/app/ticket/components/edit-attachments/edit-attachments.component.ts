@@ -42,11 +42,13 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
+  public isRemovingEnabled: boolean = false;
   public readonly new = $localize `:@@uusi:uusi` + ',';
   public readonly MAX_FILE_SIZE_MB=100;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
+  private filesToRemove: Liite[] = [];
 
   constructor(private renderer: Renderer2,
               private ticketService: TicketService
@@ -83,7 +85,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
             console.log('makeRequestChain: catchError: error napattu');
             this.fileInfoList[index].uploadError = $localize `:@@Liitteen
                 lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            // Koko upload loppuu kaikkien tiedostojen kohdalla jos *heitetään* virhe.
+            /* Virhettä ei heitetä, koska silloin tiedostojen lähetys loppuu
+              yhteen virheeseen. */
             return of('error');
           })
         )
@@ -136,6 +139,35 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.onTouched = onTouched;
   }
 
+  public markToBeRemoved(index: number) {
+    if (this.isEditingDisabled === true) return
+    this.markAsTouched();
+    this.filesToRemove.push(this.oldAttachments[index]);
+    this.oldAttachments.splice(index, 1);
+    console.log('poistetaan:');
+    console.dir(this.filesToRemove);
+  }
+
+  /* Lähetä poistopyyntö poistettavaksi merkityistä, aiemmin lähetetyistä tiedostoista.
+    Palauttaa true jos kaikki tiedostot poistettiin onnistuneesti, false jos
+    mikä tahansa epäonnistui. */
+  public removeOldFiles(files: Liite[]): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      if (files.length === 0) reject(false);
+      let success: boolean = true;
+      for (let file of files) {
+          this.ticketService.removeFile(file.kommentti, file.tiedosto).then(res => {
+            if (res.success === false) {
+              success = false;
+            }
+        }).catch (err => {
+          success = false;
+        })
+      }
+      resolve(success);
+    })
+  }
+
   public removeSelectedFile(index: number) {
     if (this.isEditingDisabled === true) return
     this.markAsTouched();
@@ -153,19 +185,31 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.fileListOutput.emit(this.fileInfoList);
   }
 
+  // Kutsutaan parent komponentista.
   public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
-    let requestArray = this.makeRequestArray(ticketID, commentID)
+    let requestArray = this.makeRequestArray(ticketID, commentID);
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
+
+          let errorsWithRemove: boolean = false;
+          if (this.isRemovingEnabled && this.filesToRemove.length > 0 ) {
+            this.removeOldFiles(this.filesToRemove).then(res => {
+              if (!res) errorsWithRemove = true;
+            }).catch(err => {
+              errorsWithRemove = true;
+            })
+          }
+
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
           } else {
             resolve(res)
           }
+
         },
         error: (error) => {
           console.log('sendFilesPromise: saatiin virhe: ' + error );

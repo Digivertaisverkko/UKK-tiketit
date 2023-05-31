@@ -12,28 +12,39 @@
 name="file-input-{{url}}"
 (change)="onFileChanged($event)" #fileUpload> -->
 
+<!-- "Lähetetään..." -viesti"  -->
 <p class="status-message-p" *ngIf="userMessage">{{ userMessage }}</p>
 
 <div class="vertical-spacer"></div>
 
-<!------ Aiemmin lähetetyt liitteet ------------------------------------------->
+<!----------------- Aiemmin lähetetyt liitteet -------------------------------->
 
 <div class="file-list" *ngIf="oldAttachments.length > 0">
   <div  class="file-list-row"
         *ngFor="let file of oldAttachments; let index = index"
         >
-  <div class="list-item">
-    <span class="filename"
-          matTooltip="{{ file.nimi }}"
-          [matTooltipShowDelay]="600"
-          >
-      {{ file.nimi }}
-    </span>
+    <div class="list-item">
+      <span class="filename"
+            matTooltip="{{ file.nimi }}"
+            [matTooltipShowDelay]="600"
+            >
+        {{ file.nimi }}
+      </span>
+
+      <button class="remove-file-button"
+              (click)="markToBeRemoved(index)"
+              [disabled]="isEditingDisabled"
+              mat-icon-button
+              *ngIf="isRemovingEnabled"
+              >
+        <mat-icon>close</mat-icon>
+      </button>
+
     </div>
   </div>
 </div>
 
-<!------- Uudet liitteet ------------------------------------------------------>
+<!----------------- Uudet liitteet -------------------------------------------->
 
 <div class="file-list" *ngIf="fileInfoList !== null">
   <div  class="file-list-row"
@@ -42,47 +53,52 @@ name="file-input-{{url}}"
 
     <div class="list-item">
 
-    <span class="filename"
-          matTooltip="{{ file.filename }}"
-          [matTooltipShowDelay]="600"
-          >
-      {{ file.filename }}
-    </span>
-    <span class="in-brackets">
-      (<span *ngIf="oldAttachments.length > 0">
-          {{new}}
-        </span>
-        <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
-          separator: ",", pad: true } }}</span>)
-    </span>
-    <div  class="file-error-message"
-          matError
-          matTooltip="{{ file?.errorToolTip }}"
-          [matTooltipShowDelay]="600"
-          *ngIf="file.error"
-          >
-        <mat-icon>warning</mat-icon>{{ file.error }}
-    </div>
-
-    <button class="remove-file-button"
-            (click)="removeSelectedFile(index)"
-            [disabled]="isEditingDisabled"
-            mat-icon-button
+      <span class="filename"
+            matTooltip="{{ file.filename }}"
+            [matTooltipShowDelay]="600"
             >
-      <mat-icon>close</mat-icon>
-    </button>
+        {{ file.filename }}
+      </span>
+      <span class="in-brackets">
+        (<span *ngIf="oldAttachments.length > 0">
+            {{new}}
+          </span>
+          <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
+            separator: ",", pad: true } }}</span>)
+      </span>
+      <div  class="file-error-message"
+            matError
+            matTooltip="{{ file?.errorToolTip }}"
+            [matTooltipShowDelay]="600"
+            *ngIf="file.error"
+            >
+          <mat-icon>warning</mat-icon>{{ file.error }}
+      </div>
+
+      <button class="remove-file-button"
+              (click)="removeSelectedFile(index)"
+              [disabled]="isEditingDisabled"
+              mat-icon-button
+              >
+        <mat-icon>close</mat-icon>
+      </button>
+
     </div>
 
     <mat-icon class="ok-icon" *ngIf="file.progress === 100 && !file.uploadError">
-    done
+      done
     </mat-icon>
+
     <mat-icon class="error-icon" *ngIf="file.uploadError">error</mat-icon>
+
     <span *ngIf="file.uploadError">{{ file.uploadError }}</span>
+
     <mat-progress-bar
         mode="determinate"
         *ngIf="file.progress && !file.uploadError"
         [value]="file.progress"
         >
     </mat-progress-bar>
+
   </div>
 </div>
