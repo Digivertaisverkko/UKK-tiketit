@@ -191,6 +191,7 @@ export class SubmitTicketComponent implements OnInit {
     .catch(error => {
       this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
           Muokatun kysymyksen lähettäminen epäonnistui` + '.'
+      this.state = 'editing';
       this.form.enable();
     });
   }
