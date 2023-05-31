@@ -153,7 +153,7 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    this.courses.setTicketFieldInfo(courseID, allFields)
+    this.courses.setTicketField(courseID, allFields)
       .then(response => {
         if (response === true ) {
           this.router.navigate(['/course/' + courseID + '/settings'],
