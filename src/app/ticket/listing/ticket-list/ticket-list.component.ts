@@ -84,6 +84,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trackScreenSize();
     this.startPollingTickets();
     if (this.isArchivedShown) this.fetchArchivedTickets();
+    console.log('user: ' + JSON.stringify(this.user));
   }
 
   ngAfterViewInit(): void {
