@@ -7,7 +7,7 @@ import { Title } from '@angular/platform-browser';
 import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
-import { GenericResponse } from '@core/core.models';
+import { GenericResponse, Role } from '@core/core.models';
 import { StoreService } from '@core/store.service';
 
 @Component({
@@ -20,6 +20,8 @@ export class SettingsComponent implements OnInit {
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
   public form: FormGroup = this.buildForm();
+  public inviteErrorMessage: string = '';
+  public inviteMessage: string = '';
   public isDirty: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
@@ -56,7 +58,7 @@ export class SettingsComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       email: [ '', Validators.required ],
-      role: ['1']
+      role: [ 1 ]
     })
   }
 
@@ -100,8 +102,33 @@ export class SettingsComponent implements OnInit {
     }).finally( () => this.isLoaded = true )
   }
 
-  public invite() {
+  private getRole(checkboxValue: Number): Role {
+    let role: Role;
+    switch (checkboxValue) {
+      case 1: role = 'opiskelija'; break;
+      case 2: role = "opettaja"; break;
+      default:
+        throw Error('Ei hyväksyttyä roolinumeroa.');
+    }
+    return role
+  }
 
+  public sendInvite() {
+    this.inviteErrorMessage = '';
+    if (!this.courseID) return
+    const email = this.form.controls['email'].value;
+    const checkboxValue = this.form.controls['role'].value;
+    const role: Role = this.getRole(checkboxValue);
+    console.log('lähetetään tiedot: email: ' + email + ', rooli: ' + role);
+    this.courses.sendInvitation(this.courseID, email, role).then(res => {
+      if (res?.success === true) {
+        this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin onnistuneesti kutsu ulkopuoliselle käyttäjälle` + '.';
+      } else {
+        console.log('kutsun lähettäminen epäonnistui.');
+      }
+    }).catch(err => {
+      this.inviteErrorMessage = $localize `:@@Käyttäjän kutsuminen epäonnistui:Kutsun lähettäminen ulkopuoliselle käyttäjälle ei onnistunut` + '.';
+    })
   }
 
   public onFileAdded(event: any) {
@@ -144,7 +171,7 @@ export class SettingsComponent implements OnInit {
           this.isDirty = false;
           if (this.courseID) this.fetchTicketFieldInfo(this.courseID);
         } else {
-          throw Error;
+          throw Error('Ei onnistunut.');
         }
     }).catch (error => {
       this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
