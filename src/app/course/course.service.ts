@@ -131,7 +131,7 @@ export class CourseService {
 
   // Kutsu ulkopuolinen käyttäjä kurssille.
   public async sendInvitation(courseID: string, email: string, role: Role):
-      Promise<{ success: boolean, kutsu: string }> {
+      Promise<{ success: boolean, kutsu: string } | any> {
     if (role === null) {
       throw Error('Ei roolia.');
     }
@@ -142,7 +142,8 @@ export class CourseService {
       rooli: role
     }
     try {
-      response = await firstValueFrom(this.http.post<any>(url, body));
+      // response = await firstValueFrom(this.http.post<any>(url, body));
+      throw Error
     } catch (error: any) {
       this.handleError(error);
     }
