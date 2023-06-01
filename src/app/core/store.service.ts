@@ -120,7 +120,7 @@ export class StoreService {
     return this.isLoggedIn$.asObservable();
   }
 
-  public trackIfParticipant(): Observable<Boolean | null> {
+  public trackIfParticipant(): Observable<boolean | null> {
     return this.isParticipant$.asObservable();
   }
 
