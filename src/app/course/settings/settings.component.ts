@@ -1,8 +1,8 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { Constants } from '@shared/utils';
@@ -15,7 +15,7 @@ import { StoreService } from '@core/store.service';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit, OnDestroy {
+export class SettingsComponent implements OnInit {
 
   public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public errorMessage: string = '';
@@ -26,9 +26,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public isDirty: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
-  public participant$: Subscription | null = null;
   public showConfirm: boolean = false;
-  public user$: Subscription | null = null;
 
   constructor(
     private courses: CourseService,
@@ -60,11 +58,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
     this.trackUserInfo();
     this.trackIfParticipant();
-  }
-
-  ngOnDestroy(): void {
-    this.user$?.unsubscribe();
-    this.participant$?.unsubscribe();
   }
 
   private buildForm(): FormGroup {
@@ -192,7 +185,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   private trackIfParticipant() {
-    this.participant$ = this.store.trackIfParticipant().subscribe(res => {
+    let participant: boolean | null = false;
+    this.store.trackIfParticipant().pipe(
+      takeWhile(res => participant === null)
+    ).subscribe(res => {
+      participant = res;
       if (res === false) {
         const route = `/course/${this.courseID}/forbidden`;
         this.router.navigateByUrl(route);
@@ -201,8 +198,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   private trackUserInfo() {
-    this.participant$ = this.store.trackUserInfo().subscribe(res => {
-      if (res?.asema !== 'opettaja' && res?.asema !== 'admin') {
+    let user: User | undefined | null = null;
+    this.store.trackUserInfo().pipe(
+      takeWhile((res) => user === undefined)
+      ).subscribe(res => {
+      if (res?.nimi ) user = res;
+      if (res?.asema === 'opiskelija') {
         const route = `/course/${this.courseID}/forbidden`;
         this.router.navigateByUrl(route);
       }
