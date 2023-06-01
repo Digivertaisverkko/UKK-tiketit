@@ -9,6 +9,7 @@ import { ErrorService } from '@core/error.service';
 import { GenericResponse } from '@core/core.models';
 import { Kenttapohja, Kurssini } from './course.models';
 import { StoreService } from '@core/store.service';
+import { Role } from '@core/core.models';
 
 // Metodi: getCourses, API: /api/kurssit/
 interface Kurssi {
@@ -28,6 +29,22 @@ export class CourseService {
     private store: StoreService
   ) {
     this.api = environment.apiBaseUrl;
+  }
+
+  // Liitä ulkopuolinen käyttäjä kurssille.
+  public async attachToCourse(courseID: string, UUID: string):
+      Promise<{ success: boolean }> {
+  let response;
+  const url = `${this.api}/kurssi/${courseID}/osallistujat`;
+  const body = {
+    kutsu: UUID,
+  }
+  try {
+    response = await firstValueFrom(this.http.post<any>(url, body));
+  } catch (error: any) {
+    this.handleError(error);
+  }
+  return response;
   }
 
   // Vie kurssin UKK:t JSON--string muodossa.
@@ -104,6 +121,26 @@ export class CourseService {
     let response;
     const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
     const body = filecontent;
+    try {
+      response = await firstValueFrom(this.http.post<any>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  // Kutsu ulkopuolinen käyttäjä kurssille.
+  public async sendInvitation(courseID: string, email: string, role: Role):
+      Promise<{ success: boolean, kutsu: string }> {
+    if (role === null) {
+      throw Error('Ei roolia.');
+    }
+    let response;
+    const url = `${this.api}/kurssi/${courseID}/osallistujat/kutsu`;
+    const body = {
+      sposti: email,
+      rooli: role
+    }
     try {
       response = await firstValueFrom(this.http.post<any>(url, body));
     } catch (error: any) {

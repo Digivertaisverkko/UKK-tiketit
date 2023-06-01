@@ -40,8 +40,8 @@ interface AuthRequestResponse {
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
-  // private isUserLoggedIn$ = new fromEvent<StorageEvent(window, "storage");
 
+  private api: string;
   // Onko käyttäjä osallisena aktiivisella kurssilla.
   // private user$ = new BehaviorSubject(null) ;
   // TODO: nämä oAuth tiedot yhteen tietotyyppiin.
@@ -59,10 +59,30 @@ export class AuthService {
               private store: StoreService,
               @Inject(LOCALE_ID) private localeDateFormat: string
               ) {
+    this.api = environment.apiBaseUrl;
   }
 
   public initialize() {
     this.startUpdatingUserinfo();
+  }
+
+  // Liitä ulkopuolinen käyttäjä kurssille.
+  public async createAccount(username: string, password: string, email: string,
+      UUID: string): Promise<{ success: boolean }> {
+  let response;
+  const url = `${this.api}/luotili`;
+  const body = {
+    ktunnus: username,
+    salasana: password,
+    sposti: email,
+    kutsu: UUID
+  }
+  try {
+    response = await firstValueFrom(this.http.post<any>(url, body));
+  } catch (error: any) {
+    this.handleError(error);
+  }
+    return response;
   }
 
   /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
@@ -152,18 +172,6 @@ export class AuthService {
       }
     }
   }
-
-  // public async handleNotLoggedIn() {
-  //   console.log('authService.handleNotLoggedIn(): et ole kirjaunut,' +
-  //         'ohjataan kirjautumiseen.');
-  //   this.store.setNotLoggegIn();
-  //   if (this.user$ !== null) this.user$.next(null);
-  //   window.localStorage.clear();
-  //   const courseID = getCourseIDfromURL();
-  //   this.saveRedirectURL();
-  //   const baseUrl = (courseID == null) ? '' : 'course/' + courseID  + '/';
-  //   this.router.navigateByUrl(baseUrl + 'forbidden');
-  // }
 
   // Luo käyttäjätili
   public async addUser(email: string, password: string): Promise<boolean> {
