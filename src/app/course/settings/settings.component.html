@@ -123,7 +123,10 @@
 
 <div class="vertical-spacer"></div>
 
-<form class="invite-form" [formGroup]="form" (ngSubmit)="sendInvite()">
+<form class="invite-form"
+      [formGroup]="form"
+      (ngSubmit)="sendInvite()"
+      >
 
   <h2 class="sub-header" i18n="@@Kutsu ulkopuolisia kurssille">
     Kutsu ulkopuolisia kurssille

@@ -1,20 +1,21 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
+import { GenericResponse, Role, User } from '@core/core.models';
 import { Kenttapohja } from '../course.models';
-import { GenericResponse, Role } from '@core/core.models';
 import { StoreService } from '@core/store.service';
 
 @Component({
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
 
   public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   public errorMessage: string = '';
@@ -25,16 +26,20 @@ export class SettingsComponent implements OnInit {
   public isDirty: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
+  public participant$: Subscription | null = null;
   public showConfirm: boolean = false;
+  public user$: Subscription | null = null;
 
   constructor(
     private courses: CourseService,
     private formBuilder: FormBuilder,
     private renderer: Renderer2,
+    private router: Router,
     private route: ActivatedRoute,
     private store: StoreService,
     private titleServ: Title
   ) {
+
   }
 
   get email(): AbstractControl {
@@ -53,6 +58,13 @@ export class SettingsComponent implements OnInit {
     } else {
       console.error('Ei kurssi ID:ä, ei voida hakea tikettipohjan tietoja.');
     }
+    this.trackUserInfo();
+    this.trackIfParticipant();
+  }
+
+  ngOnDestroy(): void {
+    this.user$?.unsubscribe();
+    this.participant$?.unsubscribe();
   }
 
   private buildForm(): FormGroup {
@@ -176,6 +188,24 @@ export class SettingsComponent implements OnInit {
     }).catch (error => {
       this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
       Kenttäpohjan muuttaminen ei onnistunut.`;
+    })
+  }
+
+  private trackIfParticipant() {
+    this.participant$ = this.store.trackIfParticipant().subscribe(res => {
+      if (res === false) {
+        const route = `/course/${this.courseID}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
+    })
+  }
+
+  private trackUserInfo() {
+    this.participant$ = this.store.trackUserInfo().subscribe(res => {
+      if (res?.asema !== 'opettaja' && res?.asema !== 'admin') {
+        const route = `/course/${this.courseID}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
     })
   }
 
