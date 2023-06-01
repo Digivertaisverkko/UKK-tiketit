@@ -1,40 +1,37 @@
 <app-headline></app-headline>
 
+<ng-container *ngIf="isLoaded">
+
+  <app-error-card
+      [buttonText]="noDataConsent ? strings.get('Luo tili') ?? '' :
+                    strings.get('Kirjaudu') ?? ''"
+      (clickEvent)="errorClickEvent($event)"
+      [message]="strings.get('Ei osallistujana-msg') ?? ''"
+      *ngIf="(isLoggedIn$ | async) === false; else notParticipant"
+      [title]="strings.get('Et ole kirjautunut-title') ?? ''"
+      >
+  </app-error-card>
+
+  <ng-template #notParticipant>
+    <app-error-card
+        [message]="strings.get('Ei osallistujana-msg') ?? ''"
+        *ngIf="(isParticipant$ | async) === false"
+        [title]="strings.get('Et osallistujana-title') ?? ''"
+        >
+    </app-error-card>
+
+  </ng-template>
+
+</ng-container>
+
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
-      *ngIf="isParticipant && (user$ | async)"
+      *ngIf="(isParticipant$ | async) && (user$ | async)"
       (ticketMessage)="newTicketMessage($event)"
       [user]="(user$ | async)"
       >
   </app-ticket-list>
 </section>
-
-<!--
-
-<app-error-card
-    buttonText="''"
-    (clickEvent)="errorClickEvent($event)"
-    i18n-title="{{ error.title }}"
-    message={{ $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`, }}
-    *ngIf="isLoaded && !isParticipant"
-    #ticketError
-    title={{ $localize `:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.` }}
-    >
-</app-error-card>
-
--->
-
-<app-error-card
-    buttonText="{{ error.buttonText }}"
-    (clickEvent)="errorClickEvent($event)"
-    i18n-title="{{ error.title }}"
-    message="{{ error.message }}"
-    *ngIf="isLoaded && error !== null"
-    #ticketError
-    title="{{ error.title }}"
-    >
-</app-error-card>
-<!-- [styles]="{ 'margin-top': '1rem' }" -->
 
 <!------------ UKK:t ---------------------------------------------------------->
 
@@ -57,7 +54,7 @@
 
 </div>
 
-  <div class="no-items-box" *ngIf="numberOfFAQ === 0">
+  <div class="no-items-box" *ngIf="numberOfFAQ === 0 && !error">
     <p i18n="@@Ei yhtään UKK">
       Yhtään usein kysyttyä kysymystä ei ole lisätty.
     </p>
@@ -122,10 +119,21 @@
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
+  <app-error-card
+      buttonText="{{ error.buttonText }}"
+      (clickEvent)="errorClickEvent($event)"
+      i18n-title="{{ error.title }}"
+      message="{{ error.message }}"
+      *ngIf="isLoaded && error !== null"
+      #ticketError
+      title="{{ error.title }}"
+      >
+  </app-error-card>
+
   <div  class="buttons-wrapper theme-actions"
         *ngIf="((user$ | async)?.asema === 'opettaja' ||
                 (user$ | async)?.asema === 'admin') &&
-                isParticipant"
+                (isParticipant$ | async)"
         >
 
     <button class="submit-faq-btn"

@@ -98,7 +98,7 @@ export class CourseService {
     return response;
   }
 
-  // Lähetetään JSON-muotoiset UKK:t lisättäväksi kurssille. 
+  // Lähetetään JSON-muotoiset UKK:t lisättäväksi kurssille.
   public async importFAQs(courseID: string, filecontent: JSON):
       Promise<GenericResponse | any>{
     let response;
@@ -113,7 +113,7 @@ export class CourseService {
   }
 
   // Luo uudet kentät tikettipohjalle.
-  public async setTicketFieldInfo(courseID: string, fields: Kenttapohja[]) {
+  public async setTicketField(courseID: string, fields: Kenttapohja[]) {
     for (let field of fields) {
       if (field.id != null) delete field.id;
     }

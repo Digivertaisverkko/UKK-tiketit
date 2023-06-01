@@ -52,7 +52,6 @@ export class TicketService {
     let url = `${environment.apiBaseUrl}/tiketti/${ticketID}/uusikommentti`;
     try {
       response = await firstValueFrom( this.http.post<NewCommentResponse>(url, body ) );
-      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -129,7 +128,6 @@ export class TicketService {
       body = { viesti: comment, tila: state }
     }
     try {
-      // console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
     } catch (error: any) {
       this.handleError(error);
@@ -144,7 +142,6 @@ export class TicketService {
     const url = `${environment.apiBaseUrl}/tiketti/${ticketID}`;
     const body = ticket;
     try {
-      console.log(`Lähetetään ${JSON.stringify(body)} osoitteeseen ${url}`)
       response = await firstValueFrom(this.http.put(url, body));
     } catch (error: any) {
       this.handleError(error);
@@ -155,7 +152,7 @@ export class TicketService {
     let sendFileResponse: any;
     for (let file of fileList) {
       try {
-        sendFileResponse = await this.sendFile(ticketID, firstCommentID, file);
+        sendFileResponse = await this.uploadFile(ticketID, firstCommentID, file);
       } catch (error: any) {
         this.handleError(error);
       }
@@ -163,8 +160,8 @@ export class TicketService {
     return true
   }
 
-  // Hae kurssin UKK-kysymykset taulukkoon sopivassa muodossa.
-  public async getFAQ(courseID: string): Promise<UKK[]> {
+  // Hae kurssin UKK-kysymykset.
+  public async getFAQlist(courseID: string): Promise<UKK[]> {
     let url = `${environment.apiBaseUrl}/kurssi/${courseID}/ukk`;
     let response: any;
     try {
@@ -260,21 +257,6 @@ export class TicketService {
     return of(errorResponse);
   }
 
-  // Lähetä yksi liitetiedosto. Palauttaa, onnistuiko tiedoston lähettäminen.
-  public async sendFile(ticketID: string, commentID: string, file: File): Promise<boolean> {
-    let formData = new FormData();
-    formData.append('tiedosto', file);
-    const url = `${environment.apiBaseUrl}/tiketti/${ticketID}/kommentti/${commentID}/liite`;
-    let response: any;
-    try {
-      // Huom. Ei toimi, jos asettaa headerin: 'Content-Type: multipart/form-data'
-      response = await firstValueFrom<any>(this.http.post(url, formData));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
-  }
-
   // Lataa liitetiedosto.
   public async getFile(ticketID: string, commentID: string, fileID: string): Promise<Blob> {
     let url = environment.apiBaseUrl;
@@ -303,6 +285,19 @@ export class TicketService {
       this.handleError(error);
     }
     return response;
+  }
+
+  // Lataa liitetiedosto.
+  public async removeFile(commentID: string, fileID: string) {
+    let url = environment.apiBaseUrl;
+    url += `/kommentti/${commentID}/liite/${fileID}`;
+    let response: any;
+    try {
+      response = await firstValueFrom(this.http.delete(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response
   }
 
   // Poista tiketti.
@@ -361,8 +356,9 @@ export class TicketService {
     return sortableData;
   }
 
-  // Palauta yhden tiketin kaikki tiedot mukaanlukien kommentit.
-  public async getTicketInfo(ticketID: string): Promise<Tiketti> {
+  /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
+    kommentit. */
+  public async getTicket(ticketID: string): Promise<Tiketti> {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID;
     try {
@@ -391,9 +387,7 @@ export class TicketService {
     let response: any;
     let url = environment.apiBaseUrl + '/tiketti/' + ticketID + '/kommentit';
     try {
-      response = await firstValueFrom<Kommentti[]>(
-        this.http.get<any>(url)
-      );
+      response = await firstValueFrom<Kommentti[]>(this.http.get<any>(url));
     } catch (error: any) {
       this.handleError(error);
     }

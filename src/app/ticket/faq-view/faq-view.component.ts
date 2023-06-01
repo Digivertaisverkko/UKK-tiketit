@@ -39,7 +39,7 @@ export class FaqViewComponent implements OnInit {
       throw new Error('Kurssi ID puuttuu URL:sta.');
     }
     if (this.faqID !== null) {
-      this.ticketService.getTicketInfo(this.faqID)
+      this.ticketService.getTicket(this.faqID)
         .then((response) => {
           console.dir(response);
           this.ticket = response;

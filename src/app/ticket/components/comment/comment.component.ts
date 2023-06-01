@@ -157,7 +157,7 @@ export class CommentComponent implements AfterViewInit{
       .catch((res:any) => {
         console.log('ticket view: napattiin virhe: ' + res);
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:
-            Kaikkien liitteiden lähettäminen ei onnistunut`;
+            Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
         this.state="editing";
         this.form.enable();
         this.messages.emit('continue')
