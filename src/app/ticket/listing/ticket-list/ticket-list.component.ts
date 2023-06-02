@@ -112,13 +112,14 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.courseID === null) return
     this.ticket.getTicketList(this.courseID, { option: 'archived' })
       .then(response => {
-        if (!response) return
+        if (response === null) response = [];
         if (response.length > 0) {
           this.dataSourceArchived = new MatTableDataSource(response);
           this.archivedCount = response.length;
           this.dataSourceArchived.sort = this.sortArchived;
         }
-    }).catch(error => this.handleError(error));
+    }).catch(error => {
+    });
   }
 
   // Hae tiketit kerran.
