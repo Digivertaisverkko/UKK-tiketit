@@ -1,12 +1,28 @@
 
-<app-headline></app-headline>
+<app-headline [noCourseTitle]="true" [showInIframe]="true">
+  Kutsun hyväksyminen
+</app-headline>
 
 <div class="view-wrapper">
 
+  <p>Sinut on kutsuttu UKK-tikettien kurssialueelle:</p>
+
+  <p class="courseName"><strong>{{courseName}}</strong></p>
+    
   <p>
-    Sinut on kutsuttu tälle UKK-tikettien kurssialueelle. Voit hyväksyä kutsun
-    painamalla alla olevaa painiketta. Tämän jälkeen sinut ohjataan kurssialueelle.
+    Voit hyväksyä kutsun painamalla alla olevaa painiketta. Tämän jälkeen sinut
+    ohjataan kurssialueelle.
   </p>
+
+  <ng-container *ngIf="user">
+
+    <p>Jos hyväksyt kutsun, sinut liitetään kurssille näillä tiedoilla:</p>
+    <ul>
+      <li>Nimi: {{user.nimi}}</li>
+      <li>Sähköposti: {{user.sposti}}</li>
+    </ul>
+
+  </ng-container>
 
   <div class="buttons-wrapper">
     <button (click)="joinCourse()"
