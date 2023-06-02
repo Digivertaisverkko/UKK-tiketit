@@ -36,9 +36,12 @@ export class SubmitFaqComponent implements OnInit {
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' = 'editing';
   public ticketFields: Kentta[] = [];
+  // Kokonaan uutta tikettiä tehtäessä ticketId voi olla asetettu, jos
+  // UKK on kopioitu tiketistä.
   public ticketId: string | null = this.route.snapshot.paramMap.get('id');
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
+  private isCopiedFromTicket: boolean = window.history.state.copiedFromTicket ?? false;
 
   get additionalFields(): FormArray {
     return this.form.controls["additionalFields"] as FormArray;
@@ -146,7 +149,9 @@ export class SubmitFaqComponent implements OnInit {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
-      this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
+      if (!this.isCopiedFromTicket) {
+        this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
+      }
       this.originalTicket = response;
       this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
       this.ticketFields = response.kentat as Kentta[];
