@@ -62,12 +62,16 @@
       </mat-error>
     </mat-form-field>
 
+    <!------------- Monivalinnat ---------------------------------------------->
+
     <div class="multiple-selection-wrapper">
+
       <mat-checkbox
+          (click)="enableSelections(areSelectionsEnabled.value)"
+          formControlName="areSelectionsEnabled"
           name="checkbox"
           i18n="@@Monivalinta"
-          [(ngModel)]="hasSelections"
-          [ngModelOptions]="{ standalone: true }"
+          type="checkbox"
           >
         Monivalinta
       </mat-checkbox>
@@ -76,11 +80,11 @@
         <mat-label i18n="@@Monivalinnan vaihtoehdot">
           Monivalinnan vaihtoehdot
         </mat-label>
+
         <mat-chip-grid
             #chipGrid
             aria-label="Valitse monivalinnan vaihtoehtoja"
             i18n-aria-label="@@Valitse monivalinnan vaihtoehtoja"
-            [disabled]="!hasSelections"
             formControlName="selections"
             >
           <mat-chip-row
@@ -100,7 +104,8 @@
             </button>
           </mat-chip-row>
 
-          <input  i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
+          <input  formControlName="selectionName"
+                  i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
                   placeholder="Paina enter valinnan kirjoittamisen jälkeen."
                   [matChipInputFor]="chipGrid"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -111,6 +116,8 @@
         </mat-chip-grid>
       </mat-form-field>
     </div>
+
+    <!------------------------------------------------------------------------->
 
     <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
 
