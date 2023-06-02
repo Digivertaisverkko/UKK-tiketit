@@ -173,12 +173,13 @@ export class SubmitFaqComponent implements OnInit {
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
     }
     let ticketID, commentID;
-    if (!this.ticketId) {
+    // if (!this.ticketId) {
+    if (!this.editExisting) {
       ticketID = response.uusi.tiketti;
       commentID = response.uusi.kommentti;
     } else {
-      commentID = this.originalTicket?.kommentit[0].id;
       ticketID = this.ticketId;
+      commentID = this.originalTicket?.kommentit[0].id;
       if (ticketID == null || commentID == null) {
         throw Error('Ei tarvittavia tietoja liitteiden lähettämiseen.');
       }
