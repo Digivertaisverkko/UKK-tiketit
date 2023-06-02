@@ -20,18 +20,17 @@ export class DataConsentComponent implements OnInit {
   private tokenid: string | null;
 
   constructor(
-      private auth: AuthService,
-      public dialog: MatDialog,
-      private router: Router,
-      private title: Title
-      ) {
-        this.error = { title: '', message: ''};
-        this.title.setTitle(Constants.baseTitle + $localize `:@@Tervetuloa:Tervetuloa`);
-        // route.snapshot.paramMap.get ei toiminut tässä.
-        const urlParams = new URLSearchParams(window.location.search);
-        this.tokenid = urlParams.get('tokenid');
-        this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
-        // this.accountExists = true;
+    private auth: AuthService,
+    public dialog: MatDialog,
+    private router: Router,
+    private title: Title
+    ) {
+      this.error = { title: '', message: ''};
+      this.title.setTitle(Constants.baseTitle + $localize `:@@Tervetuloa:Tervetuloa`);
+      // route.snapshot.paramMap.get ei toiminut tässä.
+      const urlParams = new URLSearchParams(window.location.search);
+      this.tokenid = urlParams.get('tokenid');
+      this.accountExists = urlParams.get('account-exists') === 'true' ? true : false;
   }
 
   ngOnInit(): void {

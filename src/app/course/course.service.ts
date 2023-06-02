@@ -32,7 +32,7 @@ export class CourseService {
   }
 
   // Liitä ulkopuolinen käyttäjä kurssille.
-  public async attachToCourse(courseID: string, UUID: string):
+  public async joinCourse(courseID: string, UUID: string):
       Promise<{ success: boolean }> {
   let response;
   const url = `${this.api}/kurssi/${courseID}/osallistujat`;

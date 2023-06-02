@@ -1,1 +1,20 @@
-<p>join works!</p>
+
+<app-headline></app-headline>
+
+<div class="view-wrapper">
+
+  <p>
+    Sinut on kutsuttu tälle UKK-tikettien kurssialueelle. Voit hyväksyä kutsun
+    painamalla alla olevaa painiketta. Tämän jälkeen sinut ohjataan kurssialueelle.
+  </p>
+
+  <div class="buttons-wrapper">
+    <button (click)="joinCourse()"
+            color="primary"
+            mat-raised-button
+            >
+      Hyväksy kutsu
+    </button>
+  </div>
+
+</div>
