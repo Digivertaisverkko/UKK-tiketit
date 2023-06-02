@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Constants } from '@shared/utils';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Kenttapohja } from '../course.models';
+
+import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
+import { Kenttapohja } from '../course.models';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -17,17 +18,23 @@ export class EditFieldComponent implements OnInit {
   public addOnBlur = true;
   public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.
   public courseID: string = '';
-  public courseName: string = '';
   public errorMessage: string = '';
   public field: Kenttapohja;
   public fieldID: string | null = null;
   public form: FormGroup = this.buildForm();
-  public hasSelections: boolean = false;
   public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public showConfirm: boolean = false;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
+
+  get areSelectionsEnabled(): FormControl {
+    return this.form.get('areSelectionsEnabled') as FormControl;
+  }
+
+  get selectionName(): AbstractControl<any, any> | null {
+    return this.form.get('selectionName');
+  }
 
   get selections(): AbstractControl<any, any> | null {
     return this.form.get('selections');
@@ -56,14 +63,12 @@ export class EditFieldComponent implements OnInit {
   ngOnInit(): void {
     this.trackRouteParameters();
   }
-
+  
   public addSelection(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      // this.selections?.markAsDirty();
-      const values = this.selections?.value || [];
-      values.push(value);
-      this.selections?.setValue(values);
+    const selection = (event.value || '').trim();
+    if (selection) {
+      this.selections?.markAsDirty();
+      this.field.valinnat.push(selection);
     }
     event.chipInput!.clear();
   }
@@ -71,7 +76,9 @@ export class EditFieldComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
+      areSelectionsEnabled: [ true ],
       selections: [ [] ],
+      selectionName: [ '' ],
       infoText: [ '' ],
       mandatory: [ '' ],
     })
@@ -90,7 +97,11 @@ export class EditFieldComponent implements OnInit {
     // TODO: Esitäytettävä ei vielä käytössä.
     field.esitaytettava = this.field.esitaytettava;
     field.ohje = controls['infoText'].value;
-    field.valinnat = controls['selections'].value;
+    if (this.areSelectionsEnabled.value) {
+      field.valinnat = controls['selections'].value;
+    } else {
+      field.valinnat = [];
+    }
     return field
   }
 
@@ -102,6 +113,17 @@ export class EditFieldComponent implements OnInit {
     }
     let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat[index] = value;
+  }
+
+  // Aseta monivalinnan chipsit ja input field enabled tai disabled -tilaan.
+  public enableSelections(enableSelections: boolean) {
+    if (enableSelections) {
+      this.selectionName?.enable();
+      this.selections?.enable();
+    } else {
+      this.selectionName?.disable();
+      this.selections?.disable();
+    }
   }
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
@@ -119,16 +141,18 @@ export class EditFieldComponent implements OnInit {
           throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
         }
         this.field = matchingField[0];
-              // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
+         // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
         // alkion "", mitä ei haluta.
         if (this.field.valinnat[0].length === 0) this.field.valinnat = [];
-        this.hasSelections = this.field.valinnat.length > 0 ? true : false;
+        const areSelections: boolean = this.field.valinnat.length > 0;
+        this.areSelectionsEnabled?.setValue(areSelections);
+        this.enableSelections(areSelections);
       }
 
       this.setControls();
       this.titleServ.setTitle(Constants.baseTitle + ' ' +
           $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
-      this.isLoaded = true
+      this.isLoaded = true;
       return
     }).catch(error => {
       console.dir(error);
@@ -153,19 +177,17 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    this.courses.setTicketField(courseID, allFields)
-      .then(response => {
-        if (response === true ) {
-          this.router.navigate(['/course/' + courseID + '/settings'],
-              { state: { delayFetching: 'true' } });
-        } else {
-          console.log('Tikettipohjan muuttaminen epäonnistui.');
-        }
-      }).catch (() => {
-        // TODO: käännä.
-        this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-        Kenttäpohjan muuttaminen ei onnistunut.`;
-      })
+    this.courses.setTicketField(courseID, allFields).then(response => {
+      if (response === true ) {
+        this.router.navigate(['/course/' + courseID + '/settings'],
+            { state: { delayFetching: 'true' } });
+      } else {
+        console.log('Tikettipohjan muuttaminen epäonnistui.');
+      }
+    }).catch (() => {
+      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
+      Kenttäpohjan muuttaminen ei onnistunut.`;
+    })
   }
 
   private setControls(): void {
@@ -178,14 +200,8 @@ export class EditFieldComponent implements OnInit {
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) {
-        // this.stopLoading();
-        throw new Error('Virhe: ei kurssi ID:ä.');
-      }
+      if (courseID === null) throw new Error('Virhe: ei kurssi ID:ä.');
       this.fieldID = paramMap.get('fieldid')
-      // console.log('fieldID tyyppi:');
-      // console.log(typeof this.fieldID);
-      // console.dir(this.fieldID);
       this.courseID = courseID;
       // Kentän id on uudella kentällä null.
       if  (!this.fieldID) {
@@ -198,22 +214,21 @@ export class EditFieldComponent implements OnInit {
     });
   }
 
-    // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
-    public updateAllFields(remove?: boolean): void {
-      if (this.form.invalid) return
-      if (this.hasSelections === false) this.field.valinnat = [];
-      const newField = this.createField();
-      if (this.fieldID == null) {   // Ellei ole uusi kenttä.
-        this.allFields.push(newField);
+  // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
+  public updateAllFields(remove?: boolean): void {
+    if (this.form.invalid) return
+    const newField = this.createField();
+    if (this.fieldID == null) {   // Ellei ole uusi kenttä.
+      this.allFields.push(newField);
+    } else {
+      const index = this.allFields.findIndex(field => field.id == this.fieldID);
+      if (remove) {
+        this.allFields.splice(index, 1);
       } else {
-        const index = this.allFields.findIndex(field => field.id == this.fieldID);
-        if (remove) {
-          this.allFields.splice(index, 1);
-        } else {
-          this.allFields.splice(index, 1, newField)
-        }
+        this.allFields.splice(index, 1, newField)
       }
-      this.sendAllFields(this.courseID, this.allFields);
     }
+    this.sendAllFields(this.courseID, this.allFields);
+  }
 
 }
