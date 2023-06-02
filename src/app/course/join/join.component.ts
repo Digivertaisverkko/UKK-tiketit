@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
+import { Component, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
+import { AuthService } from '@core/auth.service';
 import { Constants } from '@shared/utils';
 import { CourseService } from '@course/course.service';
 import { StoreService } from '@core/store.service';
-import { AuthService } from '@core/auth.service';
 import { User } from '@core/core.models';
 
 
