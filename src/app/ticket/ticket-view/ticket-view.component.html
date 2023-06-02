@@ -41,7 +41,8 @@
       <button (click)="changeButton('archive')"
               i18n="@@Ratkaistu"
               mat-raised-button
-              *ngIf="ticket.arkistoitava === true && !isArchivePressed"
+              *ngIf="ticket.arkistoitava === true && ticket.tila !== 6  &&
+                  !isArchivePressed"
               [disabled]="state==='sending'"
               >
         Ratkaistu

@@ -159,7 +159,7 @@
           {'justify-content': 'flex-start'} : {'justify-content': 'flex-end'}"
       >
 
-  <ng-container *ngIf="user?.asema !== 'opiskelija'">
+  <ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
 
     <button class="button"
             (click)="showArchived()"
@@ -201,6 +201,8 @@
 
 
 <!-------------- Ratkaistut ------------------------------------------------>
+
+<ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
 
 <h2 class="sub-header" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
   Ratkaistut kysymykset
@@ -329,9 +331,11 @@
       *ngIf="isArchivedShown && archivedCount === 0"
       >
   <p  i18n="@@Ei arkistoituja kysymyksiä">
-    Ei arkistoituja kysymyksiä.
+    Ei ratkaistuja kysymyksiä.
   </p>
 </div>
+
+</ng-container>
 
 <!--------------------------------------------------------------------------->
 

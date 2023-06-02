@@ -149,7 +149,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
     this.attachments.clear();
-    this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
+    const url = `/course/${this.courseID}/submit-faq/${this.ticketID}`;
+    this.router.navigate([url], { state: { copiedFromTicket: 'true' } });
+    // this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
   }
 
   // Hae tiketti ja päivitä näkymän tila.
