@@ -37,7 +37,7 @@ export class CourseService {
   let response;
   const url = `${this.api}/kurssi/${courseID}/osallistujat`;
   const body = {
-    kutsu: UUID,
+    kutsu: UUID
   }
   try {
     response = await firstValueFrom(this.http.post<any>(url, body));

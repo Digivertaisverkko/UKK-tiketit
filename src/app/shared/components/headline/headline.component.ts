@@ -1,17 +1,19 @@
 import {  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
           ContentChild, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+
 import { getIsInIframe } from 'src/app/shared/utils';
 import { CourseService } from 'src/app/course/course.service';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { StoreService } from '@core/store.service';
 
 @Component({
   selector: 'app-headline',
   template: `
 
+    <!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" -->
     <h1 class="mat-h1"
         [ngClass]="login ? 'login-h1' : ''"
-        *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)"
+        *ngIf="!isInIframe || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>

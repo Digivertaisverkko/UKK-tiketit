@@ -127,7 +127,7 @@ export class SettingsComponent implements OnInit {
     console.log('lähetetään tiedot: email: ' + email + ', rooli: ' + role);
     this.courses.sendInvitation(this.courseID, email, role).then(res => {
       if (res?.success === true) {
-        this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin onnistuneesti kutsu ulkopuoliselle käyttäjälle` + '.';
+        this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin kutsu onnistuneesti` + '.';
       } else {
         console.log('kutsun lähettäminen epäonnistui.');
       }

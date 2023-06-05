@@ -327,10 +327,7 @@ export class AuthService {
     if (response['login-url'] == undefined) {
       throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
     }
-    // console.warn('auth. service kurssi id: '+ courseID);
     const loginUrl = response['login-url'];
-    // if (courseID != null) loginUrl = `course/${courseID}${loginUrl}`;
-    // console.log('loginurl: ' + loginUrl);
     return loginUrl;
   }
 
@@ -354,7 +351,6 @@ export class AuthService {
       this.handleError(error);
     }
     if (response.success == true && response['login-code'] !== undefined) {
-      // console.log(' login-code: ' + response['login-code']);
       this.loginCode = response['login-code'];
       return this.sendAuthRequest(this.codeVerifier, this.loginCode);
     } else {
