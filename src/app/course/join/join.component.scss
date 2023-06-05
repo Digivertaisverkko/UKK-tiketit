@@ -15,27 +15,35 @@
   margin-top: 3rem;
   // outline: 1px gray solid;
   display: flex;
-  gap: 4rem;
   justify-content: center;
 }
 
 @media (max-width: 800px) {
-  .user-info-container {
-    gap: 2rem;
-  }
   .view-wrapper {
     padding-right: 0;
   }
 }
 
-@media (max-width: $XSmall) {
+@media (min-width: 500px) {
+  .buttons-wrapper {
+    gap: 8%;
+  }
+}
+
+@media (min-width: 450px) and (max-width: 499px) {
+  .buttons-wrapper {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 450px) {
   .user-info-container {
     gap: 1rem;
   }
   .buttons-wrapper {
-    row-gap: 1rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
     flex-direction: column;
+    row-gap: 1rem;
   }
 }
