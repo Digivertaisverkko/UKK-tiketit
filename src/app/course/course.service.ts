@@ -142,8 +142,7 @@ export class CourseService {
       rooli: role
     }
     try {
-      // response = await firstValueFrom(this.http.post<any>(url, body));
-      throw Error
+      response = await firstValueFrom(this.http.post<any>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
