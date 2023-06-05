@@ -19,7 +19,7 @@ export class JoinComponent implements OnInit {
   public courseName: string = '';
   public user: User | null | undefined;
   private readonly courseID: string | null;
-  private readonly UUID: string | null;
+  private readonly invitationID: string | null;
 
   constructor(
     private auth: AuthService,
@@ -32,14 +32,14 @@ export class JoinComponent implements OnInit {
     this.courseID = this.route.snapshot.paramMap.get('courseid');
     this.title.setTitle(Constants.baseTitle + 'Liity kurssialueelle');
     const urlParams = new URLSearchParams(window.location.search);
-    this.UUID = urlParams.get('UUID');
+    this.invitationID = urlParams.get('invitation');
   }
 
   ngOnInit(): void {
-    if (this.UUID === null) {
+    if (this.invitationID === null) {
       console.error('Virhe: Ei UUID:ä.');
     } else {
-      console.log('UUID: ' + this.UUID);
+      console.log('UUID: ' + this.invitationID);
     }
     if (this.courseID) this.trackCourseName(this.courseID);
     this.trackUserInfo();
@@ -49,10 +49,10 @@ export class JoinComponent implements OnInit {
     if (!this.courseID) {
       throw Error('Ei kurssi ID:ä, ei voida jatkaa.');
     }
-    if (!this.UUID) {
+    if (!this.invitationID) {
       throw Error('Ei UUID:ä, ei voida jatkaa.');
     }
-    this.courses.joinCourse(this.courseID, this.UUID).then(res => {
+    this.courses.joinCourse(this.courseID, this.invitationID).then(res => {
       if (res?.success === true) {
         if (this.store.getIsLoggedIn()) {
           const route = `course/${this.courseID}/list-tickets`
