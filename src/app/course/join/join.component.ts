@@ -33,7 +33,6 @@ export class JoinComponent implements OnInit, OnDestroy {
     private title: Title,
   ) {
     this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.title.setTitle(Constants.baseTitle + 'Liity kurssialueelle');
     const urlParams = new URLSearchParams(window.location.search);
     this.invitationID = urlParams.get('invitation');
   }
@@ -75,7 +74,6 @@ export class JoinComponent implements OnInit, OnDestroy {
       } else {
       this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
       }
-
     }).catch(err => {
       this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
     })
@@ -84,6 +82,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   private getCourseName(courseID: string) {
     this.courses.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
+      this.title.setTitle(Constants.baseTitle + 'Liity kurssialueelle ' + this.courseName);
     }).catch((response) => {
     });
   }
