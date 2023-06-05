@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import { takeWhile } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/auth.service';
@@ -14,10 +14,12 @@ import { User } from '@core/core.models';
   templateUrl: './join.component.html',
   styleUrls: ['./join.component.scss']
 })
-export class JoinComponent implements OnInit {
+export class JoinComponent implements OnInit, OnDestroy {
 
   public courseName: string = '';
   public user: User | null | undefined;
+  private isLoggedIn: boolean | null | undefined;
+  private loggedIn$ = new Subscription;
   private readonly courseID: string | null;
   private readonly invitationID: string | null;
 
@@ -41,8 +43,15 @@ export class JoinComponent implements OnInit {
     } else {
       console.log('UUID: ' + this.invitationID);
     }
-    if (this.courseID) this.trackCourseName(this.courseID);
+    if (this.courseID) {
+      this.getCourseName(this.courseID);
+    }
+    this.loginIfNeeded();
     this.trackUserInfo();
+  }
+
+  ngOnDestroy(): void {
+    this.loggedIn$.unsubscribe();
   }
 
   public joinCourse(): void{
@@ -52,14 +61,15 @@ export class JoinComponent implements OnInit {
     if (!this.invitationID) {
       throw Error('Ei UUID:ä, ei voida jatkaa.');
     }
+
     this.courses.joinCourse(this.courseID, this.invitationID).then(res => {
+      if (this.isLoggedIn !== true) {
+        this.auth.saveRedirectURL();
+        this.auth.navigateToLogin(this.courseID);
+      }
       if (res?.success === true) {
-        if (this.store.getIsLoggedIn()) {
-          const route = `course/${this.courseID}/list-tickets`
-          this.router.navigateByUrl(route);
-        } else {
-          this.auth.navigateToLogin(this.courseID);
-        }
+        const route = `course/${this.courseID}/list-tickets`
+        this.router.navigateByUrl(route);
       } else {
         console.error('Ei onnistunut liittyminen.');
       }
@@ -68,10 +78,22 @@ export class JoinComponent implements OnInit {
     })
   }
 
-  private trackCourseName(courseID: string) {
+  private getCourseName(courseID: string) {
     this.courses.getCourseName(courseID).then(response => {
       this.courseName = response ?? '';
     }).catch((response) => {
+    });
+  }
+
+  private loginIfNeeded(): void {
+    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
+      if (response === false) {
+        this.isLoggedIn = false;
+        this.auth.saveRedirectURL();
+        this.auth.navigateToLogin(this.courseID);
+      } else if (response === true) {
+        this.isLoggedIn = true;
+      }
     });
   }
 
