@@ -384,6 +384,7 @@ export class AuthService {
       }
       this.store.setLoggedIn();
       this.store.setParticipant(null);
+      window.sessionStorage.clear();
     } else {
       loginResult = { success: false };
     }
@@ -400,6 +401,7 @@ export class AuthService {
         this.handleError(error);
       } finally {
         window.localStorage.clear();
+        window.sessionStorage.clear();
         if (courseID != null) {
           this.navigateToLogin(courseID);
         }
