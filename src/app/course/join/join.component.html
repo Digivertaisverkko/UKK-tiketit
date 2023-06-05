@@ -24,6 +24,12 @@
 
   </ng-container>
 
+  <app-error-card
+    message="{{ errorMessage }}"
+    *ngIf="errorMessage"
+    >
+</app-error-card>
+
   <div class="buttons-wrapper">
     <button (click)="joinCourse()"
             color="primary"

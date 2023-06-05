@@ -17,6 +17,7 @@ import { User } from '@core/core.models';
 export class JoinComponent implements OnInit, OnDestroy {
 
   public courseName: string = '';
+  public errorMessage: string = '';
   public user: User | null | undefined;
   private isLoggedIn: boolean | null | undefined;
   private loggedIn$ = new Subscription;
@@ -63,6 +64,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     }
 
     this.courses.joinCourse(this.courseID, this.invitationID).then(res => {
+      this.errorMessage = '';
       if (this.isLoggedIn !== true) {
         this.auth.saveRedirectURL();
         this.auth.navigateToLogin(this.courseID);
@@ -71,10 +73,11 @@ export class JoinComponent implements OnInit, OnDestroy {
         const route = `course/${this.courseID}/list-tickets`
         this.router.navigateByUrl(route);
       } else {
-        console.error('Ei onnistunut liittyminen.');
+      this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
       }
 
     }).catch(err => {
+      this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
     })
   }
 
