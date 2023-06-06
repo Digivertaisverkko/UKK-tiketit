@@ -29,55 +29,51 @@
               placeholder="Sähköposti"
               required
               />
-      <mat-error i18n="@@Sähköposti tarvitaan">Sähköposti tarvitaan</mat-error>
+      <mat-error i18n="@@Sähköposti tarvitaan">
+        Sähköposti tarvitaan
+      </mat-error>
       <!-- <mat-icon matSuffix>email</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
-      <input
-        matInput
-        placeholder="Salasana"
-        i18n-placeholder="@@Salasana"
-        type="password"
-        required
-        minlength="8"
-      />
-      <mat-error *ngIf="newPassword.length === 0"
-      >
-        Salasana tarvitaan.
-      </mat-error>
+      <input  formControlName="password"
+              matInput
+              placeholder="Salasana"
+              i18n-placeholder="@@Salasana"
+              type="password"
+              required
+              />
+      <mat-error>Salasana tarvitaan.</mat-error>
       <mat-icon matSuffix>lock</mat-icon>
     </mat-form-field>
 
     <mat-form-field>
-      <input
-        matInput
-        placeholder="Salasana uudelleen"
-        i18n-placeholder="@@Salasana uudelleen"
-        type="password"
-        required
-        minlength="8"
-      />
-      <mat-error *ngIf="repassword.length === 0" i18n="@@Kirjoita salasana uudelleen">
+      <input  formControlName="repassword"
+              matInput
+              placeholder="Salasana uudelleen"
+              i18n-placeholder="@@Salasana uudelleen"
+              type="password"
+              required
+              />
+      <mat-error i18n="@@Kirjoita salasana uudelleen">
         Kirjoita salasana uudelleen.
       </mat-error>
-      <mat-error *ngIf="newPassword !== repassword" i18n="@@Salasanat eivät täsmää.">
+      <!-- <mat-error i18n="@@Salasanat eivät täsmää.">
         Salasanat eivät täsmää.
-      </mat-error>
+      </mat-error> -->
       <mat-icon matSuffix>lock</mat-icon>
     </mat-form-field>
 
     <app-error-card
-    *ngIf="serverMessage.length > 0"
-    i18n-title="@@Tilin luominen ei onnistunut"
-    title="Tilin luominen ei onnistunut"
-    message="{{ serverMessage }}"
-    [styles]="{ margin: '1em 10% 1em 10%' }"
-  >
-  </app-error-card>
+        *ngIf="serverMessage.length > 0"
+        i18n-title="@@Tilin luominen ei onnistunut"
+        title="Tilin luominen ei onnistunut"
+        message="{{ serverMessage }}"
+        [styles]="{ margin: '1em 10% 1em 10%' }"
+        >
+    </app-error-card>
 
-    <button [disabled]="newPassword.length < minPasswordLength || newPassword !== repassword"
-            class="login-button"
+    <button class="login-button"
             color="primary"
             i18n="@@Luo tili"
             mat-raised-button

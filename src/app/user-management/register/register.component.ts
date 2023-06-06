@@ -1,7 +1,7 @@
 
 import { AuthService } from '@core/auth.service';
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 
 // Shares same view with Login screen so they share same styleUrl.
@@ -12,22 +12,26 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
 })
 export class RegisterComponent {
 
-  public form: FormGroup = this.buildForm();
-  public newPassword: string;
-  public repassword: string;
-  public minPasswordLength: number = 8;
+  public form: FormGroup;
   public serverMessage: string = '';
 
   constructor(private auth: AuthService,
               private formBuilder: FormBuilder
               )
   {
-    this.newPassword  = '';
-    this.repassword = '';
+    this.form = this.buildForm();
   }
 
   get email(): FormControl {
     return this.form.get('email') as FormControl
+  }
+
+  get password(): FormControl {
+    return this.form.get('password') as FormControl
+  }
+
+  get repassword(): FormControl {
+    return this.form.get('repassword') as FormControl
   }
 
   private buildForm(): FormGroup {
@@ -37,13 +41,41 @@ export class RegisterComponent {
         Validators.compose([
           Validators.required,
           Validators.maxLength(255)
-        ])]
-    })
+        ])],
+      password:  [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)        
+        ])
+      ],
+      repassword:  [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ]
+    }, {
+      validators: [
+        this.matchPassword(this.password, this.repassword)
+      ]
+    });
+  }
+
+  public matchPassword(passwordCtrl: AbstractControl, repasswordCtrl: AbstractControl):
+      { [key: string]: boolean } | null {
+    const password = passwordCtrl.value;
+    const repassword = repasswordCtrl.value;
+    if (password && repassword && password !== repassword) {
+      return { mismatch: true };
+    }
+    return null;
   }
 
   public registerUser() {
     const email = this.form.controls['email'].value;
-    this.auth.addUser(email, this.newPassword).then(isSuccesful => {
+    const password = this.form.controls['password'].value;
+    this.auth.addUser(email, password).then(isSuccesful => {
     }).catch (error => {
 
     });
