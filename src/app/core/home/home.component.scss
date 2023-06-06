@@ -1,0 +1,42 @@
+.first-p {
+  margin-top: 2em;
+}
+
+p, h2 {
+  text-align: center;
+}
+
+h2 {
+  margin-top: 1.5em;
+}
+
+.buttons-wrapper {
+  margin-top: 2rem;
+  margin-right: 2.2rem;
+  // outline: 1px gray solid;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 500px) {
+  .buttons-wrapper {
+    gap: 13%;
+  }
+}
+
+@media (min-width: 450px) and (max-width: 499px) {
+  .buttons-wrapper {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 449px) {
+  .user-info-container {
+    gap: 1rem;
+  }
+  .buttons-wrapper {
+    margin: 1rem 0 1rem 0;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+}
