@@ -1,13 +1,9 @@
-.first-p {
-  margin-top: 2em;
+.paragraphs-wrapper {
+  margin: 2em 4em 2.3em 4em;
 }
 
 p, h2 {
   text-align: center;
-}
-
-h2 {
-  margin-top: 1.5em;
 }
 
 .buttons-wrapper {
@@ -17,6 +13,13 @@ h2 {
   display: flex;
   justify-content: center;
 }
+
+@media (max-width: 800px) and (min-width: 450px) {
+  .paragraphs-wrapper {
+    margin: 1m;
+  }
+}
+
 
 @media (min-width: 500px) {
   .buttons-wrapper {
@@ -34,9 +37,16 @@ h2 {
   .user-info-container {
     gap: 1rem;
   }
+
   .buttons-wrapper {
     margin: 1rem 0 1rem 0;
     flex-direction: column;
     row-gap: 1rem;
   }
+
+  .paragraphs-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
 }
