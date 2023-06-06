@@ -1,5 +1,11 @@
-<mat-card-content>
-  <form action="">
+
+<app-headline [appHeadline]="true"></app-headline>
+
+<div class="content">
+  <h2 class="sub-header" i18n="@@Sisäänkirjautuminen">
+    Tilin luominen
+  </h2>
+  <form [formGroup]="form" (ngSubmit)="registerUser">
     <!-- <mat-form-field>
       <input
         matInput
@@ -16,16 +22,15 @@
     </mat-form-field> -->
 
     <mat-form-field>
-      <input
-        matInput
-        placeholder="Sähköposti"
-        i18n-placeholder="@@Sähköposti"
-        required
-        name="email"
-        [(ngModel)]="email"
-      />
+      <input  formControlName="email"
+              i18n-placeholder="@@Sähköposti"
+              matInput
+              name="email"
+              placeholder="Sähköposti"
+              required
+              />
       <mat-error i18n="@@Sähköposti tarvitaan">Sähköposti tarvitaan</mat-error>
-      <mat-icon matSuffix>email</mat-icon>
+      <!-- <mat-icon matSuffix>email</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
@@ -36,12 +41,10 @@
         type="password"
         required
         minlength="8"
-        name="newPassword"
-        [(ngModel)]="newPassword"
       />
-      <mat-error *ngIf="newPassword.length < minPasswordLength" i18n="@@Salasanan pituus"
+      <mat-error *ngIf="newPassword.length === 0"
       >
-        Vähintään {{minPasswordLength}} merkkiä pitkä salasana tarvitaan.
+        Salasana tarvitaan.
       </mat-error>
       <mat-icon matSuffix>lock</mat-icon>
     </mat-form-field>
@@ -54,8 +57,6 @@
         type="password"
         required
         minlength="8"
-        name="repassword"
-        [(ngModel)]="repassword"
       />
       <mat-error *ngIf="repassword.length === 0" i18n="@@Kirjoita salasana uudelleen">
         Kirjoita salasana uudelleen.
@@ -75,14 +76,17 @@
   >
   </app-error-card>
 
-    <button mat-raised-button color="primary" class="login-button" i18n="@@Luo tili"
-    [disabled]="email.length < 3 || newPassword.length < minPasswordLength || newPassword !== repassword"
-    (click)="register()"
-    >
+    <button [disabled]="newPassword.length < minPasswordLength || newPassword !== repassword"
+            class="login-button"
+            color="primary"
+            i18n="@@Luo tili"
+            mat-raised-button
+            type="submit"
+            >
       Luo tili
     </button>
   </form>
+</div>
   <!-- <button (click)="changeActiveTab()" mat-raised-button>
     Vaihda tabia
   </button> -->
-</mat-card-content>
