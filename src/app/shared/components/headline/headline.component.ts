@@ -12,7 +12,7 @@ import { StoreService } from '@core/store.service';
 
     <!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" -->
     <h1 class="mat-h1"
-        [ngClass]="login ? 'login-h1' : ''"
+        [ngClass]="appHeadline ? 'login-h1' : ''"
         *ngIf="!isInIframe || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
@@ -30,7 +30,7 @@ import { StoreService } from '@core/store.service';
 export class HeadlineComponent implements OnInit, AfterViewInit {
 
   // Kirjautumissivulla otsikko on erilainen.
-  @Input() login: boolean = false
+  @Input() appHeadline: boolean = false
   // Oletuksena näytetään kurssin nimi, tällä voi ohittaa sen.
   @Input() noCourseTitle: boolean = false;
   // Oletuksena otsikkoa ei näytetä upotuksessa. Tällä voi näyttää sen aina.
@@ -53,8 +53,8 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.hasProjectedContent = !!this.hasProjectedContent;
-    if (this.login) {
-      this.headlineText = "DVV-tikettijärjestelmä";
+    if (this.appHeadline) {
+      this.headlineText = "Tukki-" + $localize `:@@tikettijärjestelmä:tikettijärjestelmä`;
     } else if (this.noCourseTitle !== true) {
       this.trackCourseID();
     }

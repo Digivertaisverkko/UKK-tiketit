@@ -4,11 +4,13 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 import { NoPrivilegesComponent } from './core/no-privileges/no-privileges.component';
 import { DataConsentComponent } from './core/data-consent/data-consent.component';
 import { NoDataConsentComponent } from './core/no-data-consent/no-data-consent.component';
+import { HomeComponent } from '@core/home/home.component';
 
 // ? viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
 // courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
 const routes: Routes = [
-  { path: '', redirectTo: '/course/1/list-tickets', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent},
   { path: 'data-consent', component: DataConsentComponent},
   { path: 'no-data-consent', component: NoDataConsentComponent},
   { path: 'forbidden', component: NoPrivilegesComponent },
