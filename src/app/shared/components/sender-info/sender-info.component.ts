@@ -12,7 +12,7 @@ import { StoreService } from '@core/store.service';
 })
 export class SenderInfoComponent implements OnInit {
 
-  @Input() aikaleima: string | Date = '';
+  @Input() aikaleima: string | Date | 'now' = '';
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
@@ -31,7 +31,8 @@ export class SenderInfoComponent implements OnInit {
     }
   }
 
-  public getSenderTitle(name: string, role: string | null): string {
+  private getSenderTitle(name: string, role: string | null): string {
+    if (name == this.currentUserName) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
         return $localize`:@@Opiskelija:Opiskelija`; break;
@@ -40,7 +41,6 @@ export class SenderInfoComponent implements OnInit {
       case 'admin':
         return $localize`:@@Admin:Admin`; break;
       default:
-        if (name == this.currentUserName) return $localize`:@@Minä:Minä`
         return '';
     }
   }

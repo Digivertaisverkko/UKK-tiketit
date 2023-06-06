@@ -47,7 +47,7 @@
       </mat-form-field>
 
       <app-sender-info
-          [aikaleima]="currentDate"
+          aikaleima="now"
           *ngIf="(user$ | async)"
           [user]="(user$ | async)">
       </app-sender-info>

@@ -13,7 +13,12 @@
     <p>Olet tällä hetkellä kirjautunut käyttäjänä:</p>
 
     <div class="user-info-container">
-      <app-sender-info [user]="user" [alignLeft]="true"></app-sender-info>
+      <app-sender-info
+          [alignLeft]="true"
+          aikaleima="now"
+          [user]="user"
+          >
+      </app-sender-info>
     </div>
 
   </ng-container>
@@ -21,6 +26,7 @@
   <app-error-card
       message="{{ errorMessage }}"
       *ngIf="errorMessage"
+      [styles]="{ 'margin-top': '1rem' }"
       >
 </app-error-card>
 
