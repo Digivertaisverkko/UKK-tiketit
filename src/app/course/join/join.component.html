@@ -4,13 +4,21 @@
 <div class="view-wrapper">
 
   <p>
-    Sinut on kutsuttu UKK-tikettien kurssialueelle <strong>{{courseName}}</strong>.
-    Jos et halua liittyä kurssille, sinulta ei vaadita muita toimenpiteitä.
+    <span i18n='@@Sinut on kutsuttu'>
+      Sinut on kutsuttu osallistumaan kurssille
+    </span>
+
+    <strong>{{ courseName }}</strong>.
+    <span i18n="@@Jos et halua liittyä kurssille">
+      Jos et halua liittyä kurssille, sinun ei tarvitse tehdä mitään.
+    </span>
   </p>
 
   <ng-container *ngIf="user">
 
-    <p>Olet tällä hetkellä kirjautunut käyttäjänä:</p>
+    <p i18n="@@Olet kirjautunut käyttäjänä">
+      Olet tällä hetkellä kirjautunut käyttäjänä:
+    </p>
 
     <div class="user-info-container">
       <app-sender-info
@@ -28,20 +36,22 @@
       *ngIf="errorMessage"
       [styles]="{ 'margin-top': '1rem' }"
       >
-</app-error-card>
+  </app-error-card>
 
   <div class="buttons-wrapper">
     <button (click)="joinCourse()"
             color="primary"
+            i18n="@@Kieltäydy kutsusta"
             mat-raised-button
             >
-      Kieltäydy&nbsp;kutsusta
+      Kieltäydy kutsusta
     </button>
     <button (click)="joinCourse()"
             color="primary"
+            i18n="@@Liity kurssille"
             mat-raised-button
             >
-      Liity&nbsp;kurssille
+      Liity kurssille
     </button>
   </div>
 

@@ -1,9 +1,14 @@
 @import '/src/variables.scss';
 
 .view-wrapper {
-  padding-right: right-padding;
+  padding-right: calc(right-padding * 2);
   margin-top: 2rem;
   margin-bottom: 0.5em;
+}
+
+// &nbsp; lisää useampia välilyöntejä.
+.span + strong {
+  margin-left: 0.5em;
 }
 
 .user-info-container {
@@ -16,6 +21,10 @@
   // outline: 1px gray solid;
   display: flex;
   justify-content: center;
+}
+
+button {
+  white-space: nowrap;
 }
 
 @media (max-width: 800px) {

@@ -9,11 +9,11 @@
         >
     <span class="theme-profile-name">{{ user?.nimi }}</span>
     <div class="theme-label">
-      <span>{{senderTitle}}</span>
+      <span>{{ senderTitle }}</span>
       –
 
       <span *ngIf="aikaleima === 'now'; else hasDate">
-        Nyt
+        {{ nyt }}
       </span>
 
       <ng-template #hasDate>

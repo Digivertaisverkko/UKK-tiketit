@@ -17,6 +17,7 @@ export class SenderInfoComponent implements OnInit {
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
   public isItToday: boolean;
+  public nyt = $localize `:@@Nyt:Nyt`;
   public senderTitle: string = '';
   private currentUserName: string | null;
 
