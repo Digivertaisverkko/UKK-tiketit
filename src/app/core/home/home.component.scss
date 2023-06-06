@@ -8,7 +8,7 @@ p, h2 {
 
 .buttons-wrapper {
   margin-top: 2rem;
-  margin-right: 2.2rem;
+  // margin-right: 2.2rem;
   // outline: 1px gray solid;
   display: flex;
   justify-content: center;
@@ -16,11 +16,11 @@ p, h2 {
 
 @media (max-width: 800px) and (min-width: 450px) {
   .paragraphs-wrapper {
-    margin: 1m;
+    margin: 1em;
   }
 }
 
-
+/*
 @media (min-width: 500px) {
   .buttons-wrapper {
     gap: 13%;
@@ -32,21 +32,17 @@ p, h2 {
     gap: 1rem;
   }
 }
+*/
 
 @media (max-width: 449px) {
-  .user-info-container {
-    gap: 1rem;
-  }
-
   .buttons-wrapper {
-    margin: 1rem 0 1rem 0;
+    // margin: 1rem 0 1rem 0;
     flex-direction: column;
     row-gap: 1rem;
   }
 
   .paragraphs-wrapper {
-    margin-left: 0;
-    margin-right: 0;
+    margin: 1em 0;
   }
 
 }

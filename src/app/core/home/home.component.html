@@ -18,16 +18,22 @@
 <div class="buttons-wrapper">
   <button (click)="true"
           color="primary"
+          style="display: none"
           i18n="@@Dokumentaatio"
           mat-raised-button
           >
     Dokumentaatio
   </button>
   <button (click)="true"
-          i18n="@@Hanke"
           mat-raised-button
           >
-    Hanke
+    <a  href="https://interact.oulu.fi/site/digivertaisverkko"
+        target="_blank"
+        mat-list-item
+        i18n="@@Hanke"
+        >
+      Hanke
+    </a>
   </button>
 </div>
 
