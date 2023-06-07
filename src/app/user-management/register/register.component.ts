@@ -1,10 +1,10 @@
+import { Component, Input } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
+from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AuthService } from '@core/auth.service';
-import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
-    from '@angular/forms';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
-
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
   selector: 'app-register',
@@ -13,13 +13,15 @@ import { stringsMatchValidator } from '@shared/directives/strings-match.directiv
 })
 export class RegisterComponent {
 
+  @Input() invitation: string = '';
+  @Input() courseid: string = '';
   public form: FormGroup;
-  public serverMessage: string = '';
+  public errorMessage: string = '';
 
   constructor(private auth: AuthService,
-              private formBuilder: FormBuilder
-              )
-  {
+              private formBuilder: FormBuilder,
+              private router: Router
+              ) {
     this.form = this.buildForm();
   }
 
@@ -71,12 +73,18 @@ export class RegisterComponent {
     return null;
   }
 
-  public registerUser() {
+  public submit() {
+    this.errorMessage = '';
     const email = this.form.controls['email'].value;
     const password = this.form.controls['password'].value;
-    this.auth.addUser(email, password).then(isSuccesful => {
+    this.auth.createAccount(email, password, this.invitation).then(res => {
+    if (res?.success === true) {
+      this.auth.navigateToLogin(this.courseid);
+    } else {
+      this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
+    }
     }).catch (error => {
-
+      this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     });
   }
 

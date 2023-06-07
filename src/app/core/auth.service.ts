@@ -67,12 +67,13 @@ export class AuthService {
   }
 
   // Liitä ulkopuolinen käyttäjä kurssille.
-  public async createAccount(username: string, password: string, email: string,
-      UUID: string): Promise<{ success: boolean }> {
+  public async createAccount(email: string, password: string, UUID: string):
+      Promise<{ success: boolean }> {
   let response;
   const url = `${this.api}/luotili`;
+  // ktunnus ja sposti ovat samoja.
   const body = {
-    ktunnus: username,
+    ktunnus: email,
     salasana: password,
     sposti: email,
     kutsu: UUID
@@ -171,25 +172,6 @@ export class AuthService {
         console.log('Löydettiin redirect URL, ei tallenneta päälle.');
       }
     }
-  }
-
-  // Luo käyttäjätili
-  public async addUser(email: string, password: string): Promise<boolean> {
-    // ktunnus on sama kuin sposti.
-    const body = {
-      'ktunnus': email,
-      'salasana': password,
-      'sposti': email
-    };
-    const url = environment.apiBaseUrl + '/luotili';
-    let response: any;
-    try {
-      console.log('Kutsu ' + url + ':ään. lähetetään (alla):');
-      response = await firstValueFrom(this.http.post<GenericResponse>(url, body));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    return (response?.success === true) ? true : false;
   }
 
   // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
@@ -331,7 +313,7 @@ export class AuthService {
     return loginUrl;
   }
 
-  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.*/
+  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
   public async sendLoginRequest(email: string, password: string, loginID: string):
       Promise<LoginResult> {
         const httpOptions =  {

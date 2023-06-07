@@ -82,7 +82,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       { def: 'otsikko', showMobile: true },
       { def: 'aikaleima', showMobile: true }
     ];
-    
+
   }
 
   ngOnInit() {
@@ -114,7 +114,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSourceFAQ.paginator.firstPage();
       }*/
   }
-
 
   private trackIfParticipant() {
     this.isParticipant$ = this.store.trackIfParticipant().subscribe(response => {

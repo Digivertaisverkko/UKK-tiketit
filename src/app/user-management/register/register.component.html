@@ -1,25 +1,11 @@
-
 <app-headline [appHeadline]="true"></app-headline>
 
 <div class="content">
   <h2 class="sub-header" i18n="@@Sisäänkirjautuminen">
     Tilin luominen
   </h2>
-  <form [formGroup]="form" (ngSubmit)="registerUser">
-    <!-- <mat-form-field>
-      <input
-        matInput
-        placeholder="Käyttäjätunnus"
-        i18n-placeholder="@@Käyttäjätunnus"
-        required
-        name="username"
-        [(ngModel)]="username"
-      />
-      <mat-icon matSuffix>perm_identity</mat-icon>
-      <mat-error *ngIf="username.length === 0" i18n="@@Käyttäjätunnus tarvitaan.">
-        Käyttäjätunnus tarvitaan.
-      </mat-error>
-    </mat-form-field> -->
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
 
     <mat-form-field>
       <input  formControlName="email"
@@ -72,11 +58,9 @@
     </mat-form-field>
 
     <app-error-card
-        *ngIf="serverMessage.length > 0"
-        i18n-title="@@Tilin luominen ei onnistunut"
-        title="Tilin luominen ei onnistunut"
-        message="{{ serverMessage }}"
-        [styles]="{ margin: '1em 10% 1em 10%' }"
+        *ngIf="errorMessage"
+        message="{{ errorMessage }}"
+        [styles]="{ 'margin-bottom': '1rem'}"
         >
     </app-error-card>
 
