@@ -247,7 +247,7 @@ export class AuthService {
   }
 
 
-  public async navigateToLogin(courseID: string | null) {
+  public async navigateToLogin(courseID: string | null, notification?: { message: string }) {
     // console.warn('logout: kurssi id: ' + this.courseID);
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
@@ -258,6 +258,9 @@ export class AuthService {
         return
       }
       const loginURL = response;
+      if (notification) {
+        this.router.navigate(loginURL, { state: { notification: notification } })
+      }
       this.router.navigateByUrl(loginURL);
     })
   }
