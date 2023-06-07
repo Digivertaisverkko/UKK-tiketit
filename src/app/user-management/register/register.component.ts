@@ -3,6 +3,7 @@ import { AuthService } from '@core/auth.service';
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
+import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
@@ -46,7 +47,7 @@ export class RegisterComponent {
         '',
         Validators.compose([
           Validators.required,
-          Validators.maxLength(255)        
+          Validators.maxLength(255)
         ])
       ],
       repassword:  [
@@ -56,9 +57,7 @@ export class RegisterComponent {
         ])
       ]
     }, {
-      validators: [
-        this.matchPassword(this.password, this.repassword)
-      ]
+      validators: [ stringsMatchValidator('password', 'repassword') ]
     });
   }
 

@@ -44,7 +44,7 @@
               required
               />
       <mat-error>Salasana tarvitaan.</mat-error>
-      <mat-icon matSuffix>lock</mat-icon>
+      <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
@@ -55,13 +55,20 @@
               type="password"
               required
               />
-      <mat-error i18n="@@Kirjoita salasana uudelleen">
+      <mat-error  i18n="@@Salasanat eivät täsmää"
+                  *ngIf="repassword.errors?.['notEqual']"
+                  >
+        Salasanat eivät täsmää.
+      </mat-error>
+      <mat-error  i18n="@@Kirjoita salasana uudelleen"
+                  *ngIf="repassword.errors?.['required']"
+                  >
         Kirjoita salasana uudelleen.
       </mat-error>
       <!-- <mat-error i18n="@@Salasanat eivät täsmää.">
         Salasanat eivät täsmää.
       </mat-error> -->
-      <mat-icon matSuffix>lock</mat-icon>
+      <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
     <app-error-card
