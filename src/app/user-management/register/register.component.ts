@@ -1,9 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
 from '@angular/forms';
 import { Router } from '@angular/router';
+import { takeWhile } from 'rxjs';
 
 import { AuthService } from '@core/auth.service';
+import { StoreService } from '@core/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
@@ -11,18 +13,24 @@ import { stringsMatchValidator } from '@shared/directives/strings-match.directiv
   templateUrl: './register.component.html',
   styleUrls: ['../login/login.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
 
   @Input() invitation: string = '';
   @Input() courseid: string = '';
   public form: FormGroup;
   public errorMessage: string = '';
+  public isLoggedIn: boolean | null | undefined;
 
   constructor(private auth: AuthService,
               private formBuilder: FormBuilder,
-              private router: Router
+              private router: Router,
+              private store: StoreService
               ) {
     this.form = this.buildForm();
+  }
+
+  ngOnInit(): void {
+    this.trackLoggedStatus();
   }
 
   get email(): FormControl {
@@ -63,28 +71,31 @@ export class RegisterComponent {
     });
   }
 
-  public matchPassword(passwordCtrl: AbstractControl, repasswordCtrl: AbstractControl):
-      { [key: string]: boolean } | null {
-    const password = passwordCtrl.value;
-    const repassword = repasswordCtrl.value;
-    if (password && repassword && password !== repassword) {
-      return { mismatch: true };
-    }
-    return null;
-  }
-
   public submit() {
     this.errorMessage = '';
     const email = this.form.controls['email'].value;
     const password = this.form.controls['password'].value;
     this.auth.createAccount(email, password, this.invitation).then(res => {
     if (res?.success === true) {
-      this.auth.navigateToLogin(this.courseid);
+      if (this.isLoggedIn) {
+        this.auth.logout(this.courseid);
+      } else {
+        this.auth.navigateToLogin(this.courseid);
+      }
     } else {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     }
     }).catch (error => {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
+    });
+  }
+
+  private trackLoggedStatus(): void {
+    this.store.onIsUserLoggedIn().pipe(
+      takeWhile((res) => res !== undefined)
+    ).subscribe(res => {
+      console.log('logged: ' + res);
+      this.isLoggedIn = res;
     });
   }
 

@@ -11,7 +11,7 @@ import * as shajs from 'sha.js';
 import { environment } from 'src/environments/environment';
 import { getCourseIDfromURL } from '@shared/utils';
 import { ErrorService } from './error.service';
-import { GenericResponse, Role, User } from './core.models';
+import { Role, User } from './core.models';
 import { Kurssini } from '../course/course.models';
 import { CourseService } from '../course/course.service';
 import { StoreService } from './store.service';
@@ -67,16 +67,16 @@ export class AuthService {
   }
 
   // Liitä ulkopuolinen käyttäjä kurssille.
-  public async createAccount(email: string, password: string, UUID: string):
+  public async createAccount(email: string, password: string, inviteID: string):
       Promise<{ success: boolean }> {
   let response;
   const url = `${this.api}/luotili`;
-  // ktunnus ja sposti ovat samoja.
+  // ktunnus ja sposti ovat tarkoituksella samoja.
   const body = {
     ktunnus: email,
     salasana: password,
     sposti: email,
-    kutsu: UUID
+    kutsu: inviteID
   }
   try {
     response = await firstValueFrom(this.http.post<any>(url, body));
