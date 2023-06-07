@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
-import { NoPrivilegesComponent } from './core/no-privileges/no-privileges.component';
+
 import { DataConsentComponent } from './core/data-consent/data-consent.component';
-import { NoDataConsentComponent } from './core/no-data-consent/no-data-consent.component';
 import { HomeComponent } from '@core/home/home.component';
+import { NoDataConsentComponent } from './core/no-data-consent/no-data-consent.component';
+import { NoPrivilegesComponent } from './core/no-privileges/no-privileges.component';
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 
 // ? viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
 // courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
@@ -29,7 +30,11 @@ const routes: Routes = [
 // { path: 'users', loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule) },
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot([], {
+      bindToComponentInputs: true
+    })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
