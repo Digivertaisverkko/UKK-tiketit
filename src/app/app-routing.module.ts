@@ -10,17 +10,17 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 // ? viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
 // courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent},
-  { path: 'data-consent', component: DataConsentComponent},
-  { path: 'no-data-consent', component: NoDataConsentComponent},
-  { path: 'forbidden', component: NoPrivilegesComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'data-consent', component: DataConsentComponent },
+  { path: 'no-data-consent', component: NoDataConsentComponent },
   { path: 'course/:courseid/forbidden', component: NoPrivilegesComponent },
+  { path: 'forbidden', component: NoPrivilegesComponent },
   { path: 'course/:courseid', pathMatch: 'full', redirectTo: '/course/:courseid/list-tickets' },
   { path: '404', pathMatch: 'full', component: PageNotFoundComponent },
-  { path: 'course/:courseid/:any',  component: PageNotFoundComponent },
-  { path: 'course/:courseid/:any/:any',  component: PageNotFoundComponent },
-  { path: 'course/:courseid/:any/:any/:any',  component: PageNotFoundComponent },
+  { path: 'course/:courseid/:any', component: PageNotFoundComponent },
+  { path: 'course/:courseid/:any/:any', component: PageNotFoundComponent },
+  { path: 'course/:courseid/:any/:any/:any', component: PageNotFoundComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -31,7 +31,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot([], {
+    RouterModule.forRoot(routes, {
       bindToComponentInputs: true
     })
   ],
