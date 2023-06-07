@@ -27,8 +27,8 @@ export class ErrorService {
     var logMessage: string = ''; // Pastetaan consoleen.
 
 
-    console.log('backendResponse: ' + JSON.stringify(backendResponse) +
-    ' backendError: ' + JSON.stringify(backendError))
+    // console.log('backendResponse: ' + JSON.stringify(backendResponse) +
+    // ' backendError: ' + JSON.stringify(backendError))
 
     if (error.status === 0) {
       logMessage = "Saatiin virhe statuskoodilla 0. Yleensä tapahtuu," +
@@ -108,10 +108,12 @@ export class ErrorService {
     if (currentRoute.indexOf('/login') !== -1) return
     const pathArray = window.location.pathname.split('/');
     let baseRoute = '';
-    if (pathArray[1] === 'course' && pathArray[2] != null)  {
-      baseRoute = '/course/' + pathArray[2];
+    const courseid = pathArray[2];
+    if (pathArray[1] === 'course' && courseid != null)  {
+      this.router.navigateByUrl('/course/' + courseid + '/forbidden');
+    } else {
+    this.router.navigateByUrl('forbidden');
     }
-    this.router.navigateByUrl(baseRoute + '/forbidden');
   }
 
   public saveRedirectURL() {
