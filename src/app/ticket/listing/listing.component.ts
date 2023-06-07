@@ -19,12 +19,12 @@ import { User } from '@core/core.models';
 import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
-export interface ColumnDefinition {
+interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
 
-export interface ErrorNotification {
+interface ErrorNotification {
   title: string,
   message: string,
   buttonText?: string
@@ -126,6 +126,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  //
   public errorClickEvent(button: string) {
     const denyDataConsent: boolean = this.authService.getDenyDataConsent();
     if (denyDataConsent === true && this.isInIframe === true) {

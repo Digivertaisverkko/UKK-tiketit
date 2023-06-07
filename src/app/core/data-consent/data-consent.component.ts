@@ -25,7 +25,7 @@ export class DataConsentComponent implements OnInit {
     private router: Router,
     private title: Title
     ) {
-      this.error = { title: '', message: ''};
+      this.error = { title: '', message: '' };
       this.title.setTitle(Constants.baseTitle + $localize `:@@Tervetuloa:Tervetuloa`);
       // route.snapshot.paramMap.get ei toiminut tässä.
       const urlParams = new URLSearchParams(window.location.search);
@@ -43,7 +43,6 @@ export class DataConsentComponent implements OnInit {
     const noDataConsent = localStorage.getItem('noDataConsent')
     if (noDataConsent) {
       this.noDataConsentList = JSON.parse(noDataConsent);
-      console.log('kieltäytyjälista: ' + this.noDataConsentList);
     }
     console.log('onko jo tili: ' + this.accountExists);
     // Käyttäjä on kieltäytynyt tietojen luovuttamisesta, lähetetään kieltäytyminen,
@@ -64,7 +63,6 @@ export class DataConsentComponent implements OnInit {
       if (hasDeniedBefore !== true ) {
         if (this.tokenid) this.noDataConsentList.push(this.tokenid);
         localStorage.setItem('noDataConsent', JSON.stringify(this.noDataConsentList));
-        console.log('lista: ' + localStorage.getItem('noDataConsent'));
       }
       if (res?.kurssi != null) {
         const courseID = String(res.kurssi);
