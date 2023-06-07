@@ -277,7 +277,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Aseta virheviestejä.
-  private setError(type: string): void {
+  private setError(type: 'notParticipant' | 'notLoggedIn'): void {
     if (type === 'notParticipant') {
       this.error = {
         title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
