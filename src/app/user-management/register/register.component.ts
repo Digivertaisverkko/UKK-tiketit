@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 import { Router } from '@angular/router';
-import { takeWhile } from 'rxjs';
+import { Subscription, takeWhile } from 'rxjs';
 
 import { AuthService } from '@core/auth.service';
 import { InvitedInfo } from '@course/course.models'; 
@@ -15,13 +15,14 @@ import { CourseService } from '@course/course.service';
   templateUrl: './register.component.html',
   styleUrls: ['../login/login.component.scss']
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit, OnDestroy{
 
   @Input() invitation: string = '';
   @Input() courseid: string = '';
   public form: FormGroup;
   public errorMessage: string = '';
   public invitedInfo: InvitedInfo | undefined;
+  public isLoggedIn$: Subscription | null = null;
   public isLoggedIn: boolean | null | undefined;
 
   constructor(private auth: AuthService,
@@ -31,11 +32,6 @@ export class RegisterComponent implements OnInit{
               private store: StoreService
               ) {
     this.form = this.buildForm()
-  }
-
-  ngOnInit(): void {
-    this.getInvitedInfo(this.courseid, this.invitation);
-    this.trackLoggedStatus();
   }
 
   get email(): FormControl {
@@ -48,6 +44,28 @@ export class RegisterComponent implements OnInit{
 
   get repassword(): FormControl {
     return this.form.get('repassword') as FormControl
+  }
+
+  ngOnInit(): void {
+    this.trackLoggedStatus();
+    this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
+      console.log('saatiin vastaus: ' + JSON.stringify(res));
+      if (res.id != null) {
+        window.localStorage.removeItem('redirectUrl');
+        if (this.isLoggedIn) this.auth.logout();
+        this.invitedInfo = res;
+      }
+      if (res.sposti != null) {
+        console.log('sposti: ' + res.sposti);
+        this.email.setValue(res.sposti);
+      }
+    }).catch(err => {
+      console.error('Tietojen haku ei onnistunut.');
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.isLoggedIn$?.unsubscribe();
   }
 
   private buildForm(): FormGroup {
@@ -75,28 +93,13 @@ export class RegisterComponent implements OnInit{
     );
   }
 
-  private getInvitedInfo(courseid: string, invitation: string) {
-    this.courses.getInvitedInfo(courseid, invitation).then(res => {
-      if (res.sposti != null) {
-        console.log('sposti: ' + res.sposti);
-        this.email.setValue(res.sposti);
-      }
-    }).catch(err => {
-      console.error('Tietojen haku ei onnistunut.');
-    })
-  }
-
   public submit() {
     this.errorMessage = '';
     const email = this.form.controls['email'].value;
     const password = this.form.controls['password'].value;
     this.auth.createAccount(email, password, this.invitation).then(res => {
     if (res?.success === true) {
-      if (this.isLoggedIn) {
-        this.auth.logout(this.courseid);
-      } else {
-        this.auth.navigateToLogin(this.courseid);
-      }
+      this.auth.navigateToLogin(this.courseid);
     } else {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     }
@@ -106,11 +109,12 @@ export class RegisterComponent implements OnInit{
   }
 
   private trackLoggedStatus(): void {
-    this.store.onIsUserLoggedIn().pipe(
-      takeWhile((res) => res !== undefined)
-    ).subscribe(res => {
+    this.isLoggedIn$ = this.store.onIsUserLoggedIn().subscribe(res => {
       console.log('logged: ' + res);
       this.isLoggedIn = res;
+      if (res === true && this.invitedInfo) {
+        this.auth.logout();
+      }
     });
   }
 
