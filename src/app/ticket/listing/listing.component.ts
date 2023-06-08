@@ -126,7 +126,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  //
   public errorClickEvent(button: string) {
     const denyDataConsent: boolean = this.authService.getDenyDataConsent();
     if (denyDataConsent === true && this.isInIframe === true) {
@@ -287,12 +286,19 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (type === 'notLoggedIn') {
       this.error = {
         title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
-        message: $localize`:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`,
+        message: '',
         buttonText: ''
       }
+      
+      if (this.isInIframe && this.authService.getDenyDataConsent() !== true) {
+        this.error.message = $localize `:@@Ei kirjautunut upotuksessa:Tämä voi johtua siitä, että käytät selainta, joka kieltää kolmannnen osapuolen evästeet. Voit kokeilla muuttaa selaimen asetuksia tai käyttää eri selainta, esim. Chrome.`;
+      } else {
+        this.error.message = $localize `:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`
+      }
+
       if (this.authService.getDenyDataConsent() === true) {
         this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
-      } else if (!this.isInIframe) {
+      } else if (this.isInIframe === false) {
         this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
       }
     } else {
