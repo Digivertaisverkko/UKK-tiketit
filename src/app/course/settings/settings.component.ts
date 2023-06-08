@@ -1,7 +1,7 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -17,7 +17,7 @@ import { StoreService } from '@core/store.service';
 })
 export class SettingsComponent implements OnInit {
 
-  public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
+  @Input() courseid: string | null = null;
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
   public form: FormGroup = this.buildForm();
@@ -33,7 +33,6 @@ export class SettingsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private renderer: Renderer2,
     private router: Router,
-    private route: ActivatedRoute,
     private store: StoreService,
     private titleServ: Title
   ) {
@@ -51,8 +50,8 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.titleServ.setTitle(Constants.baseTitle + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
-      if (this.courseID) {
-        this.fetchTicketFieldInfo(this.courseID);
+      if (this.courseid) {
+        this.fetchTicketFieldInfo(this.courseid);
     } else {
       console.error('Ei kurssi ID:ä, ei voida hakea tikettipohjan tietoja.');
     }
@@ -74,11 +73,11 @@ export class SettingsComponent implements OnInit {
   }
 
   public exportFAQs() {
-    if (!this.courseID) throw Error('Ei kurssi ID:ä.');
+    if (!this.courseid) throw Error('Ei kurssi ID:ä.');
     const faq = $localize `:@@UKK:UKK`;
     const courseName = this.store.getCourseName();
     const filename = `${faq}-${courseName}.json`;
-    this.courses.exportFAQs(this.courseID).then(filecontent => {
+    this.courses.exportFAQs(this.courseid).then(filecontent => {
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
       link.setAttribute(
@@ -94,8 +93,8 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  private fetchTicketFieldInfo(courseID: string) {
-    this.courses.getTicketFieldInfo(courseID).then(response => {
+  private fetchTicketFieldInfo(courseid: string) {
+    this.courses.getTicketFieldInfo(courseid).then(response => {
       if (response[0]?.otsikko != null) {
         this.fieldList = response;
       }
@@ -120,12 +119,12 @@ export class SettingsComponent implements OnInit {
 
   public sendInvite() {
     this.inviteErrorMessage = '';
-    if (!this.courseID) return
+    if (!this.courseid) return
     const email = this.form.controls['email'].value;
     const checkboxValue = this.form.controls['role'].value;
     const role: Role = this.getRole(checkboxValue);
     console.log('lähetetään tiedot: email: ' + email + ', rooli: ' + role);
-    this.courses.sendInvitation(this.courseID, email, role).then(res => {
+    this.courses.sendInvitation(this.courseid, email, role).then(res => {
       if (res?.success === true) {
         this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin kutsu onnistuneesti` + '.';
       } else {
@@ -150,8 +149,8 @@ export class SettingsComponent implements OnInit {
         Tiedoston sisältö on virheellisessä muodossa` + '.';
         return
       }
-      if (!this.courseID) throw Error('Ei kurssi ID:ä.');
-      this.courses.importFAQs(this.courseID, jsonData)
+      if (!this.courseid) throw Error('Ei kurssi ID:ä.');
+      this.courses.importFAQs(this.courseid, jsonData)
         .then((res: GenericResponse) => {
           if (res.success === true) {
             this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
@@ -168,13 +167,13 @@ export class SettingsComponent implements OnInit {
   }
 
   public saveFields() {
-    if (!this.courseID) throw Error('Ei kurssi ID:ä.');
-    this.courses.setTicketFieldInfo(this.courseID, this.fieldList)
+    if (!this.courseid) throw Error('Ei kurssi ID:ä.');
+    this.courses.setTicketFieldInfo(this.courseid, this.fieldList)
       .then(response => {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
           this.isDirty = false;
-          if (this.courseID) this.fetchTicketFieldInfo(this.courseID);
+          if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
         } else {
           throw Error('Ei onnistunut.');
         }
@@ -191,7 +190,7 @@ export class SettingsComponent implements OnInit {
     ).subscribe(res => {
       participant = res;
       if (res === false) {
-        const route = `/course/${this.courseID}/forbidden`;
+        const route = `/course/${this.courseid}/forbidden`;
         this.router.navigateByUrl(route);
       }
     })
@@ -204,7 +203,7 @@ export class SettingsComponent implements OnInit {
       ).subscribe(res => {
       if (res?.nimi ) user = res;
       if (res?.asema === 'opiskelija') {
-        const route = `/course/${this.courseID}/forbidden`;
+        const route = `/course/${this.courseid}/forbidden`;
         this.router.navigateByUrl(route);
       }
     })

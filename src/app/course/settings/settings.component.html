@@ -41,7 +41,7 @@
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
       <div class="title-column">{{ field.otsikko }}</div>
       <div class="info-text-column">{{ field.ohje }}</div>
-      <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" >
+      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id" >
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
@@ -76,7 +76,7 @@
   <button class="add-button"
           i18n="@@Lisää kenttä"
           mat-raised-button
-          [routerLink]="'/course/' + this.courseID + '/settings/field'"
+          [routerLink]="'/course/' + this.courseid + '/settings/field'"
           >
     Lisää kenttä
   </button>
