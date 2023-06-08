@@ -9,6 +9,7 @@ import { InvitedInfo } from '@course/course.models';
 import { StoreService } from '@core/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 import { CourseService } from '@course/course.service';
+import { LoginInfo } from '@core/core.models';
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
   selector: 'app-register',
@@ -98,12 +99,24 @@ export class RegisterComponent implements OnInit, OnDestroy{
     const email = this.form.controls['email'].value;
     const password = this.form.controls['password'].value;
     this.auth.createAccount(email, password, this.invitation).then(res => {
-    if (res?.success === true) {
-      this.auth.navigateToLogin(this.courseid);
-    } else {
-      this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
-    }
-    }).catch (error => {
+      if (res?.success === true) {
+        return;
+      } else {
+        this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
+        throw Error;
+      }
+    }).then(() => {
+      return this.auth.getLoginInfo('own', this.courseid);
+    }).then((res: LoginInfo) => {
+      const loginID = res['login-id'];
+      return this.auth.login(email, password, loginID);
+    }).then (res => {
+      if (res?.success === true) {
+        const route = 'course/' + this.courseid + '/list-tickets';
+        this.router.navigateByUrl(route);
+      }
+    })
+    .catch (error => {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     });
   }

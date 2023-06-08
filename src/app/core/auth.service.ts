@@ -11,7 +11,7 @@ import * as shajs from 'sha.js';
 import { environment } from 'src/environments/environment';
 import { getCourseIDfromURL } from '@shared/utils';
 import { ErrorService } from './error.service';
-import { Role, User } from './core.models';
+import { LoginInfo, Role, User } from './core.models';
 import { Kurssini } from '../course/course.models';
 import { CourseService } from '../course/course.service';
 import { StoreService } from './store.service';
@@ -251,12 +251,13 @@ export class AuthService {
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
-    this.sendAskLoginRequest('own', courseID).then((response: any) => {
+    this.getLoginInfo('own', courseID).then((response: any) => {
       if (response === undefined) {
         console.log('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
         return
       }
-      const loginURL = response;
+      const loginURL = response['login-url'];
+      // const loginURL = response;
       if (notification) {
         this.router.navigate(loginURL, { state: { notification: notification } })
       }
@@ -284,7 +285,8 @@ export class AuthService {
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
     loginType voi olla atm: 'own'. Jos courseID on annettu, niin palautetaan
      linkki sen kurssin näkymään.¶ */
-  public async sendAskLoginRequest(loginType: string, courseID: string | null) {
+  public async getLoginInfo(loginType: string, courseID: string | null):
+      Promise<LoginInfo> {
     if (courseID === null) {
       throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
     }
@@ -304,19 +306,20 @@ export class AuthService {
     };
     let response: any;
     try {
-      response = await firstValueFrom(this.http.post<{'login-url': string}>(url, null, httpOptions));
+      response = await firstValueFrom(this.http.post(url, null, httpOptions));
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response['login-url'] == undefined) {
-      throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
-    }
-    const loginUrl = response['login-url'];
-    return loginUrl;
+    // if (response['login-url'] == undefined) {
+    //   throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
+    // }
+    return response
+    // const loginUrl = response['login-url'];
+    // return loginUrl;
   }
 
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
-  public async sendLoginRequest(email: string, password: string, loginID: string):
+  public async login(email: string, password: string, loginID: string):
       Promise<LoginResult> {
         const httpOptions =  {
           headers: new HttpHeaders({
@@ -336,14 +339,14 @@ export class AuthService {
     }
     if (response.success == true && response['login-code'] !== undefined) {
       this.loginCode = response['login-code'];
-      return this.sendAuthRequest(this.codeVerifier, this.loginCode);
+      return this.authenticate(this.codeVerifier, this.loginCode);
     } else {
       return { success: false };
     }
   }
 
   /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
-  private async sendAuthRequest(codeVerifier: string, loginCode: string):
+  private async authenticate(codeVerifier: string, loginCode: string):
       Promise<LoginResult> {
     const httpOptions =  {
       headers: new HttpHeaders({
