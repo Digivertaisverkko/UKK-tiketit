@@ -136,6 +136,10 @@ export class StoreService {
     return this.messageEmitter$.asObservable();
   }
 
+  public unsetPosition() {
+    this.positions = {};
+  }
+
   public untrackMessages(): void {
     this.messageEmitter$.unsubscribe;
   }

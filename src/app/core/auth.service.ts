@@ -246,7 +246,6 @@ export class AuthService {
     return (noDataConsentList.includes(lastTokenid)) ? true : false;
   }
 
-
   public async navigateToLogin(courseID: string | null, notification?: { message: string }) {
     // console.warn('logout: kurssi id: ' + this.courseID);
     if (courseID === null ) {
@@ -380,19 +379,24 @@ export class AuthService {
   }
 
   // Suorita uloskirjautuminen.
-  public async logout(courseID: string | null) {
+  public async logout(): Promise<boolean> {
       let response: any;
       let url = environment.apiBaseUrl + '/kirjauduulos';
       try {
         response = await firstValueFrom(this.http.post(url, {}));
       } catch (error: any) {
-        this.handleError(error);
-      } finally {
-        window.localStorage.clear();
-        if (courseID != null) {
-          this.navigateToLogin(courseID);
-        }
+        return false
       }
+      this.store.setNotLoggegIn();
+      this.store.setUserInfo(null);
+      this.store.setParticipant(null);
+      this.store.unsetPosition();
+      this.store.setCourseName('');
+      window.sessionStorage.clear();
+      return true
+        // if (courseID != null) {
+        //   this.navigateToLogin(courseID);
+        // }
   }
 
   // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
