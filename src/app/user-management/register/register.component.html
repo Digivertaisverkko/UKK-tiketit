@@ -8,11 +8,12 @@
   <form [formGroup]="form" (ngSubmit)="submit()">
 
     <mat-form-field>
-      <input  formControlName="email"
-              i18n-placeholder="@@Sähköposti"
+      <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
+
+      <input
+              formControlName="email"
               matInput
               name="email"
-              placeholder="Sähköposti"
               required
               />
       <mat-error i18n="@@Sähköposti tarvitaan">
@@ -22,10 +23,9 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label i18n="@@Salasana">Salasana</mat-label>
       <input  formControlName="password"
               matInput
-              placeholder="Salasana"
-              i18n-placeholder="@@Salasana"
               type="password"
               required
               />
@@ -34,10 +34,9 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label i18n="@@Salasana uudelleen">Salasana uudelleen</mat-label>
       <input  formControlName="repassword"
               matInput
-              placeholder="Salasana uudelleen"
-              i18n-placeholder="@@Salasana uudelleen"
               type="password"
               required
               />

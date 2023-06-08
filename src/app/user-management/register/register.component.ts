@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
-from '@angular/forms';
+    from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeWhile } from 'rxjs';
 
 import { AuthService } from '@core/auth.service';
+import { InvitedInfo } from '@course/course.models'; 
 import { StoreService } from '@core/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
+import { CourseService } from '@course/course.service';
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
   selector: 'app-register',
@@ -19,17 +21,20 @@ export class RegisterComponent implements OnInit{
   @Input() courseid: string = '';
   public form: FormGroup;
   public errorMessage: string = '';
+  public invitedInfo: InvitedInfo | undefined;
   public isLoggedIn: boolean | null | undefined;
 
   constructor(private auth: AuthService,
+              private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
               private store: StoreService
               ) {
-    this.form = this.buildForm();
+    this.form = this.buildForm()
   }
 
   ngOnInit(): void {
+    this.getInvitedInfo(this.courseid, this.invitation);
     this.trackLoggedStatus();
   }
 
@@ -47,12 +52,10 @@ export class RegisterComponent implements OnInit{
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      email: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.maxLength(255)
-        ])],
+      email: [{
+        value: '',
+        disabled: true
+      }],
       password:  [
         '',
         Validators.compose([
@@ -68,7 +71,19 @@ export class RegisterComponent implements OnInit{
       ]
     }, {
       validators: [ stringsMatchValidator('password', 'repassword') ]
-    });
+    }
+    );
+  }
+
+  private getInvitedInfo(courseid: string, invitation: string) {
+    this.courses.getInvitedInfo(courseid, invitation).then(res => {
+      if (res.sposti != null) {
+        console.log('sposti: ' + res.sposti);
+        this.email.setValue(res.sposti);
+      }
+    }).catch(err => {
+      console.error('Tietojen haku ei onnistunut.');
+    })
   }
 
   public submit() {

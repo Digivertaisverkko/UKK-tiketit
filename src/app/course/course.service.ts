@@ -101,6 +101,9 @@ export class CourseService {
 
   public async getInvitedInfo(courseID: string, inviteID: string):
         Promise<InvitedInfo> {
+    if (inviteID.length === 0) {
+      throw Error('Ei kutsu ID:ä.');
+    }
     let response;
     const url = `${this.api}/kurssi/${courseID}/osallistujat/kutsu/${inviteID}`;
     try {
