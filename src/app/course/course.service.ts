@@ -6,10 +6,9 @@ import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '@core/error.service';
-import { GenericResponse } from '@core/core.models';
-import { Kenttapohja, Kurssini } from './course.models';
+import { GenericResponse, Role } from '@core/core.models';
+import { InvitedInfo, Kenttapohja, Kurssini } from './course.models';
 import { StoreService } from '@core/store.service';
-import { Role } from '@core/core.models';
 
 // Metodi: getCourses, API: /api/kurssit/
 interface Kurssi {
@@ -34,17 +33,17 @@ export class CourseService {
   // Liitä ulkopuolinen käyttäjä kurssille.
   public async joinCourse(courseID: string, UUID: string):
       Promise<{ success: boolean }> {
-  let response;
-  const url = `${this.api}/kurssi/${courseID}/osallistujat`;
-  const body = {
-    kutsu: UUID
-  }
-  try {
-    response = await firstValueFrom(this.http.post<any>(url, body));
-  } catch (error: any) {
-    this.handleError(error);
-  }
-  return response;
+    let response;
+    const url = `${this.api}/kurssi/${courseID}/osallistujat`;
+    const body = {
+      kutsu: UUID
+    }
+    try {
+      response = await firstValueFrom(this.http.post<any>(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
   }
 
   // Vie kurssin UKK:t JSON--string muodossa.
@@ -94,6 +93,18 @@ export class CourseService {
     try {
       response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
       this.store.setLoggedIn();
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
+  }
+
+  public async getInvitedInfo(courseID: string, inviteID: string):
+        Promise<InvitedInfo> {
+    let response;
+    const url = `${this.api}/kurssi/${courseID}/osallistujat/kutsu/${inviteID}`;
+    try {
+      response = await firstValueFrom(this.http.get<any>(url));
     } catch (error: any) {
       this.handleError(error);
     }
