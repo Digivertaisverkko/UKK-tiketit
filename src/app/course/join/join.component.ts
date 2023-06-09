@@ -6,9 +6,15 @@ import { Title } from '@angular/platform-browser';
 import { AuthService } from '@core/auth.service';
 import { Constants } from '@shared/utils';
 import { CourseService } from '@course/course.service';
+import { InvitedInfo } from '@course/course.models'; 
 import { StoreService } from '@core/store.service';
 import { User } from '@core/core.models';
 
+interface ErrorNotification {
+  title: string,
+  message: string,
+  buttonText?: string
+}
 
 @Component({
   templateUrl: './join.component.html',
@@ -19,7 +25,9 @@ export class JoinComponent implements OnInit, OnDestroy {
   @Input() courseid: string | null = null;
   @Input() invitation: string | null = null;
   public courseName: string = '';
-  public errorMessage: string = '';
+  public error: ErrorNotification | null = null;
+  public invitedInfo: InvitedInfo | undefined;
+  public state: 'editing' | 'wrongUser' = 'editing';
   public user: User | null | undefined;
   private isLoggedIn: boolean | null | undefined;
   private loggedIn$ = new Subscription;
@@ -39,15 +47,37 @@ export class JoinComponent implements OnInit, OnDestroy {
     } else {
       console.log('UUID: ' + this.invitation);
     }
-    if (this.courseid) {
-      this.getCourseName(this.courseid);
-    }
     this.loginIfNeeded();
     this.trackUserInfo();
+    this.getInvitedInfo();
   }
 
   ngOnDestroy(): void {
     this.loggedIn$.unsubscribe();
+  }
+
+  public getInvitedInfo() {
+    if (!this.courseid || !this.invitation) return
+    this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
+      if (res === null) {
+        throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
+      }
+      if (res.id != null) {
+        this.invitedInfo = res;
+        console.log('this.user?.sposti ' + this.user?.sposti );
+        console.log('res.sposti ' + res.sposti);
+        this.getCourseName(this.invitedInfo.kurssi);
+        if (this.user?.sposti && res.sposti !== this.user.sposti) {
+          console.log('getInvitedInfo asettaa väärän userin.');
+          this.setNotRightUser();
+        }
+      }
+    }).catch(err => {
+      this.error = {
+        title: $localize `:@@Virhe:Virhe`,
+        message: $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Kutsu on voinut vanhentua.`
+      }
+    })
   }
 
   public goToHome() {
@@ -61,9 +91,8 @@ export class JoinComponent implements OnInit, OnDestroy {
     if (!this.invitation) {
       throw Error('Ei UUID:ä, ei voida jatkaa.');
     }
-
     this.courses.joinCourse(this.courseid, this.invitation).then(res => {
-      this.errorMessage = '';
+      this.error = null;
       if (this.isLoggedIn !== true) {
         this.auth.saveRedirectURL();
         this.auth.navigateToLogin(this.courseid);
@@ -72,10 +101,13 @@ export class JoinComponent implements OnInit, OnDestroy {
         const route = `course/${this.courseid}/list-tickets`
         this.router.navigateByUrl(route);
       } else {
-      this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
+      throw Error('Ei onnistunut liittyminen.');
       }
     }).catch(err => {
-      this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
+      this.error = {
+        title: $localize `:@@Virhe:Virhe`,
+         message: $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.'
+      }
     })
   }
 
@@ -99,14 +131,38 @@ export class JoinComponent implements OnInit, OnDestroy {
     });
   }
 
+  public logout() {
+    this.auth.logout().then(res => {
+      this.auth.saveRedirectURL();
+      this.auth.navigateToLogin(this.courseid);
+    }).catch(err => {
+
+    })
+  }
+
+  private setNotRightUser() {
+    console.log('asetetaan väärä käyttäjä');
+    this.state = 'wrongUser';
+    this.error = {
+      title: $localize `:@@Väärä käyttäjä:Väärä käyttäjä`,
+      message: `Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, joka käyttää sähköpostia ${this.invitedInfo?.sposti}.`
+    }
+  }
+
   private trackUserInfo() {
     this.store.trackUserInfo().pipe(
-      takeWhile(() => this.user === undefined)
+        takeWhile(() => this.user === undefined)
       ).subscribe(res => {
       if (res?.nimi ) this.user = res;
+      console.log('this.user?.sposti ' + this.user?.sposti );
+      console.log('res.sposti ' + res?.sposti);
+      if (this.user?.sposti && this.invitedInfo?.sposti) {
+        if (this.user.sposti !== this.invitedInfo?.sposti) {
+          console.log('trackuserinfo asettaa väärän userin.');
+          this.setNotRightUser();
+        }
+      }
     })
   }
   
-
-
 }

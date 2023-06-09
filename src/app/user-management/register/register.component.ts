@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
-    from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription, takeWhile } from 'rxjs';
 
@@ -10,6 +9,7 @@ import { StoreService } from '@core/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';
+
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
   selector: 'app-register',

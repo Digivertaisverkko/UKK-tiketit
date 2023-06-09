@@ -32,27 +32,42 @@
   </ng-container>
 
   <app-error-card
-      message="{{ errorMessage }}"
-      *ngIf="errorMessage"
+      title="{{ error.title }}"
+      message="{{ error.message }}"
+      *ngIf="error"
       [styles]="{ 'margin-top': '1rem' }"
       >
   </app-error-card>
 
   <div class="buttons-wrapper">
-    <button (click)="goToHome()"
+
+    <ng-container *ngIf="state !== 'wrongUser'; else wrongUser">
+      <button (click)="goToHome()"
+              color="primary"
+              i18n="@@Kieltäydy kutsusta"
+              mat-raised-button
+              >
+        Kieltäydy kutsusta
+      </button>
+      <button (click)="joinCourse()"
+              color="primary"
+              i18n="@@Liity kurssille"
+              mat-raised-button
+              >
+        Liity kurssille
+      </button>
+  </ng-container>
+
+  <ng-template #wrongUser>
+    <button (click)="logout()"
             color="primary"
-            i18n="@@Kieltäydy kutsusta"
+            i18n="@@Kirjaudu ulos"
             mat-raised-button
             >
-      Kieltäydy kutsusta
+      Kirjaudu ulos
     </button>
-    <button (click)="joinCourse()"
-            color="primary"
-            i18n="@@Liity kurssille"
-            mat-raised-button
-            >
-      Liity kurssille
-    </button>
+  </ng-template>
+
   </div>
 
 </div>
