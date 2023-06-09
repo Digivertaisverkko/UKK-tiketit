@@ -2,8 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription, takeWhile } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/auth.service';
+import { Constants } from '@shared/utils';
 import { InvitedInfo } from '@course/course.models'; 
 import { StoreService } from '@core/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
@@ -20,6 +22,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
   @Input() courseid: string = '';
   @Input() invitation: string = '';
+  public courseName: string = '';
   public form: FormGroup;
   public errorMessage: string = '';
   public invitedInfo: InvitedInfo | undefined;
@@ -30,7 +33,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
               private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private store : StoreService
+              private store : StoreService,
+              private title: Title,
               ) {
     this.form = this.buildForm()
   }
@@ -57,6 +61,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
         window.localStorage.removeItem('redirectUrl');
         if (this.isLoggedIn) this.auth.logout();
         this.invitedInfo = res;
+        this.getCourseName(this.invitedInfo.kurssi);
       }
       if (res.sposti != null) {
         this.email.setValue(res.sposti);
@@ -93,6 +98,14 @@ export class RegisterComponent implements OnInit, OnDestroy{
       validators: [ stringsMatchValidator('password', 'repassword') ]
     }
     );
+  }
+
+  private getCourseName(courseid: string) {
+    this.courses.getCourseName(courseid).then(response => {
+      this.courseName = response ?? '';
+      this.title.setTitle(Constants.baseTitle + 'Luo käyttäjätili kurssialueelle ' + this.courseName);
+    }).catch((response) => {
+    });
   }
 
   public submit() {

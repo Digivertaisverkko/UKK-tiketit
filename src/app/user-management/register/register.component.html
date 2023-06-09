@@ -5,6 +5,17 @@
     Tilin luominen
   </h2>
 
+  <p>
+    <span i18n='@@Sinut on kutsuttu'>
+      Sinut on kutsuttu osallistumaan kurssille
+    </span>
+
+    <strong>{{ courseName }}</strong>.
+    <span i18n="@@Jos et halua liittyä kurssille">
+      Jos et halua liittyä kurssille, sinun ei tarvitse tehdä mitään.
+    </span>
+  </p>
+
   <form [formGroup]="form" (ngSubmit)="submit()">
 
     <mat-form-field>
