@@ -61,6 +61,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
         this.email.setValue(res.sposti);
       }
     }).catch(err => {
+      // TODO: näytä virhe.
       console.error('Tietojen haku ei onnistunut.');
     })
   }
@@ -100,6 +101,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     const password = this.form.controls['password'].value;
     this.auth.createAccount(email, password, this.invitation).then(res => {
       if (res?.success === true) {
+        console.log('luonti onnistui');
         return;
       } else {
         this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
@@ -109,6 +111,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
       return this.auth.getLoginInfo('own', this.courseid);
     }).then((res: LoginInfo) => {
       const loginID = res['login-id'];
+      this.isLoggedIn$?.unsubscribe();
       return this.auth.login(email, password, loginID);
     }).then (res => {
       if (res?.success === true) {
@@ -117,15 +120,19 @@ export class RegisterComponent implements OnInit, OnDestroy{
       }
     })
     .catch (error => {
+      console.log(error);
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     });
   }
 
   private trackLoggedStatus(): void {
-    this.isLoggedIn$ = this.store.onIsUserLoggedIn().subscribe(res => {
+    this.isLoggedIn$ = this.store.onIsUserLoggedIn().pipe(
+      takeWhile(() => this.isLoggedIn === undefined, true)
+    ).subscribe(res => {
       console.log('logged: ' + res);
       this.isLoggedIn = res;
-      if (res === true && this.invitedInfo) {
+      // Jos kutsun tietojen haku on onnistunut ja voidaan jatkaa.
+      if (this.isLoggedIn === true && this.invitedInfo) {
         this.auth.logout();
       }
     });
