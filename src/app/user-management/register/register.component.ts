@@ -51,7 +51,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     this.trackLoggedStatus();
     this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
       if (res === null) {
-        this.errorMessage = "Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista osoitteen oikeinkirjoitus.";
         throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
       }
       if (res.id != null) {
@@ -60,12 +59,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
         this.invitedInfo = res;
       }
       if (res.sposti != null) {
-        console.log('sposti: ' + res.sposti);
         this.email.setValue(res.sposti);
       }
     }).catch(err => {
-      // TODO: näytä virhe.
-      console.error('Tietojen haku ei onnistunut.');
+      this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoitteen oikeinkirjoitus` + '.';
     })
   }
 

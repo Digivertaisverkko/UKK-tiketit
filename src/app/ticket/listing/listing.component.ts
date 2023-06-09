@@ -117,8 +117,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private checkSuccessMessage() {
-    // const message: string | null = window.history.state.message;
-    const message = 'account created';
+    const message: string | null = window.history.state.message;
     if (message) {
       if (message === 'account created') {
         this.successMessage = $localize `:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti` + '.';
