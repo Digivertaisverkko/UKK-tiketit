@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -16,35 +16,31 @@ import { User } from '@core/core.models';
 })
 export class JoinComponent implements OnInit, OnDestroy {
 
+  @Input() courseid: string | null = null;
+  @Input() invitation: string | null = null;
   public courseName: string = '';
   public errorMessage: string = '';
   public user: User | null | undefined;
   private isLoggedIn: boolean | null | undefined;
   private loggedIn$ = new Subscription;
-  private readonly courseID: string | null;
-  private readonly invitationID: string | null;
 
   constructor(
     private auth: AuthService,
     private courses: CourseService,
-    private route: ActivatedRoute,
     private router: Router,
     private store: StoreService,
     private title: Title,
   ) {
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
-    const urlParams = new URLSearchParams(window.location.search);
-    this.invitationID = urlParams.get('invitation');
   }
 
   ngOnInit(): void {
-    if (this.invitationID === null) {
+    if (this.invitation === null) {
       console.error('Virhe: Ei UUID:ä.');
     } else {
-      console.log('UUID: ' + this.invitationID);
+      console.log('UUID: ' + this.invitation);
     }
-    if (this.courseID) {
-      this.getCourseName(this.courseID);
+    if (this.courseid) {
+      this.getCourseName(this.courseid);
     }
     this.loginIfNeeded();
     this.trackUserInfo();
@@ -54,22 +50,26 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.loggedIn$.unsubscribe();
   }
 
+  public goToHome() {
+   this.router.navigateByUrl('home');
+  }
+
   public joinCourse(): void{
-    if (!this.courseID) {
+    if (!this.courseid) {
       throw Error('Ei kurssi ID:ä, ei voida jatkaa.');
     }
-    if (!this.invitationID) {
+    if (!this.invitation) {
       throw Error('Ei UUID:ä, ei voida jatkaa.');
     }
 
-    this.courses.joinCourse(this.courseID, this.invitationID).then(res => {
+    this.courses.joinCourse(this.courseid, this.invitation).then(res => {
       this.errorMessage = '';
       if (this.isLoggedIn !== true) {
         this.auth.saveRedirectURL();
-        this.auth.navigateToLogin(this.courseID);
+        this.auth.navigateToLogin(this.courseid);
       }
       if (res?.success === true) {
-        const route = `course/${this.courseID}/list-tickets`
+        const route = `course/${this.courseid}/list-tickets`
         this.router.navigateByUrl(route);
       } else {
       this.errorMessage = $localize `:@@Liittyminen epäonnistui:Kurssille liittyminen ei onnistunut` + '.';
@@ -79,8 +79,8 @@ export class JoinComponent implements OnInit, OnDestroy {
     })
   }
 
-  private getCourseName(courseID: string) {
-    this.courses.getCourseName(courseID).then(response => {
+  private getCourseName(courseid: string) {
+    this.courses.getCourseName(courseid).then(response => {
       this.courseName = response ?? '';
       this.title.setTitle(Constants.baseTitle + 'Liity kurssialueelle ' + this.courseName);
     }).catch((response) => {
@@ -92,7 +92,7 @@ export class JoinComponent implements OnInit, OnDestroy {
       if (response === false) {
         this.isLoggedIn = false;
         this.auth.saveRedirectURL();
-        this.auth.navigateToLogin(this.courseID);
+        this.auth.navigateToLogin(this.courseid);
       } else if (response === true) {
         this.isLoggedIn = true;
       }
