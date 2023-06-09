@@ -3,7 +3,7 @@
 
 <div class="view-wrapper">
 
-  <p>
+  <p *ngIf="state !== 'error'">
     <span i18n='@@Sinut on kutsuttu'>
       Sinut on kutsuttu osallistumaan kurssille
     </span>
@@ -14,7 +14,7 @@
     </span>
   </p>
 
-  <ng-container *ngIf="user">
+  <ng-container *ngIf="user && state !== 'error'">
 
     <p i18n="@@Olet kirjautunut käyttäjänä">
       Olet tällä hetkellä kirjautunut käyttäjänä:
@@ -41,7 +41,7 @@
 
   <div class="buttons-wrapper">
 
-    <ng-container *ngIf="state !== 'wrongUser'; else wrongUser">
+    <ng-container *ngIf="state === 'editing'">
       <button (click)="goToHome()"
               color="primary"
               i18n="@@Kieltäydy kutsusta"
@@ -58,7 +58,7 @@
       </button>
   </ng-container>
 
-  <ng-template #wrongUser>
+  <ng-container *ngIf="state === 'wrongUser'">
     <button (click)="logout()"
             color="primary"
             i18n="@@Kirjaudu ulos"
@@ -66,7 +66,7 @@
             >
       Kirjaudu ulos
     </button>
-  </ng-template>
+  </ng-container>
 
   </div>
 

@@ -27,7 +27,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   public courseName: string = '';
   public error: ErrorNotification | null = null;
   public invitedInfo: InvitedInfo | undefined;
-  public state: 'editing' | 'wrongUser' = 'editing';
+  public state: 'editing' | 'wrongUser' | 'error' = 'editing';
   public user: User | null | undefined;
   private isLoggedIn: boolean | null | undefined;
   private loggedIn$ = new Subscription;
@@ -73,6 +73,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         }
       }
     }).catch(err => {
+      this.state = 'error';
       this.error = {
         title: $localize `:@@Virhe:Virhe`,
         message: $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Kutsu on voinut vanhentua.`
