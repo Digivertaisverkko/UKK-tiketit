@@ -98,7 +98,6 @@ export class SettingsComponent implements OnInit {
       if (response[0]?.otsikko != null) {
         this.fieldList = response;
       }
-      console.dir(this.fieldList);
       return
     }).catch(e => {
       this.errorMessage = $localize `:@@Kysymysten lisäkenttien haku epäonnistui:

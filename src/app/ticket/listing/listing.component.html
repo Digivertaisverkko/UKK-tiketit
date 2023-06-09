@@ -1,5 +1,9 @@
 <app-headline></app-headline>
 
+<p class="success-message theme-success-message" *ngIf="successMessage">
+  {{ successMessage }}
+</p>
+
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
       *ngIf="isParticipant && (user$ | async)"
@@ -95,8 +99,13 @@
   <ng-container i18n-sortActionDescription="@@Järjestä päivämäärän mukaan"
                 matColumnDef="aikaleima"
                 >
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
-      sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
+    <th class="align-right"
+        *matHeaderCellDef
+        i18n="@@Päivämäärä"
+        mat-header-cell
+        mat-sort-header
+        sortActionDescription="Järjestä päivämäärän mukaan"
+        >
       Päivämäärä
     </th>
     <td class="cell-align-right" mat-cell *matCellDef="let element">

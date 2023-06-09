@@ -1,10 +1,9 @@
-import { ActivatedRoute, ParamMap, Router} from '@angular/router';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-// import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -49,6 +48,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfFAQ: number = 0;
+  public successMessage: string | null = null;
   public user$: Observable<User | null>;
 
   private fetchFAQsSub$: Subscription | null = null;
@@ -87,6 +87,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.url = window.location.pathname;
+    this.checkSuccessMessage();
     this.trackCourseID();
     this.trackIfParticipant();
     this.trackLoggedStatus();
@@ -115,6 +116,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }*/
   }
 
+  private checkSuccessMessage() {
+    // const message: string | null = window.history.state.message;
+    const message = 'account created';
+    if (message) {
+      if (message === 'account created') {
+        this.successMessage = $localize `:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti` + '.';
+      }
+    } 
+  }
+
   private trackIfParticipant() {
     this.isParticipant$ = this.store.trackIfParticipant().subscribe(response => {
       if (response === true) {
@@ -133,7 +144,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (denyDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
     }
-}
+  }
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {

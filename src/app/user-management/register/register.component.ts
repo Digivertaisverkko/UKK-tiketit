@@ -26,11 +26,11 @@ export class RegisterComponent implements OnInit, OnDestroy{
   public isLoggedIn$: Subscription | null = null;
   public isLoggedIn: boolean | null | undefined;
 
-  constructor(private auth: AuthService,
+  constructor(private auth : AuthService,
               private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private store: StoreService
+              private store : StoreService
               ) {
     this.form = this.buildForm()
   }
@@ -50,7 +50,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.trackLoggedStatus();
     this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
-      console.log('saatiin vastaus: ' + JSON.stringify(res));
+      if (res === null) {
+        this.errorMessage = "Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista osoitteen oikeinkirjoitus.";
+        throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
+      }
       if (res.id != null) {
         window.localStorage.removeItem('redirectUrl');
         if (this.isLoggedIn) this.auth.logout();
@@ -116,7 +119,9 @@ export class RegisterComponent implements OnInit, OnDestroy{
     }).then (res => {
       if (res?.success === true) {
         const route = 'course/' + this.courseid + '/list-tickets';
-        this.router.navigateByUrl(route);
+        const data = { message: 'account created' };
+        console.log('routataan: ' + route);
+        this.router.navigate([route], { state: data });
       }
     })
     .catch (error => {

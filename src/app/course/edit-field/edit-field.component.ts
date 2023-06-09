@@ -156,8 +156,7 @@ export class EditFieldComponent implements OnInit {
     this.courses.setTicketFieldInfo(courseID, allFields)
       .then(response => {
         if (response === true ) {
-          this.router.navigate(['/course/' + courseID + '/settings'],
-              { state: { delayFetching: 'true' } });
+          this.router.navigateByUrl('/course/' + courseID + '/settings')
         } else {
           console.log('Tikettipohjan muuttaminen epäonnistui.');
         }
