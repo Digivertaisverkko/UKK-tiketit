@@ -4,7 +4,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Constants } from 'src/app/shared/utils';
 import { RefreshDialogComponent } from '../refresh-dialog/refresh-dialog.component';
 import { Title } from '@angular/platform-browser';
-import { AuthService } from '@core/auth.service';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   templateUrl: './no-data-consent.component.html',

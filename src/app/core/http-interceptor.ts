@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpEvent, HttpResponse, HttpRequest, HttpHandler }
     from '@angular/common/http';
 import { Observable, PartialObserver, tap } from 'rxjs';
 import { truncate } from '../shared/utils';
-import { StoreService } from './store.service';
+import { StoreService } from './services/store.service';
 
 @Injectable({ providedIn: 'root' })
 

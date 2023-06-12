@@ -4,7 +4,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 import { getIsInIframe } from 'src/app/shared/utils';
 import { CourseService } from 'src/app/course/course.service';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   selector: 'app-headline',

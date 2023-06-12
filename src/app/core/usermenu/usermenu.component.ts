@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component }
     from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { getIsInIframe } from '@shared/utils';
 import { User } from '@core/core.models';
-import { StoreService } from '../store.service';
+import { StoreService } from '../services/store.service';
 import { getCourseIDfromURL } from '@shared/utils';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 

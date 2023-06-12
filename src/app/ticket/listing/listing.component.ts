@@ -8,11 +8,11 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService } from '@core/auth.service';
+import { AuthService } from '@core/services/auth.service';
 import { Constants, getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from '@core/core.models';
 import { UKK } from '../ticket.models';

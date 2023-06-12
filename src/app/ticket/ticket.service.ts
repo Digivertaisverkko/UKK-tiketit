@@ -8,11 +8,11 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { ErrorService } from '../core/error.service';
+import { ErrorService } from '../core/services/error.service';
 import { Role } from '../core/core.models';
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse, SortableTicket,
   TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
-import { StoreService } from '../core/store.service';
+import { StoreService } from '../core/services/store.service';
 
 interface GetTicketsOption {
   option: 'onlyOwn' | 'archived';

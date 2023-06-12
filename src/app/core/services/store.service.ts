@@ -4,7 +4,7 @@ ulkopuolella. Tämä tulisi olla ainut service, jossa näin tehdään. */
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Role, User } from './core.models';
+import { Role, User } from '../core.models';
 
 @Injectable({ providedIn: 'root' })
 

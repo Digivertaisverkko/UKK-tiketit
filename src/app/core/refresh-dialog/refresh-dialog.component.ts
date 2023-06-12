@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { AuthService } from '@core/auth.service';
+import { AuthService } from '@core/services/auth.service';
 
 
 @Component({

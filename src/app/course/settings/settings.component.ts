@@ -9,7 +9,7 @@ import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
 import { GenericResponse, Role, User } from '@core/core.models';
 import { Kenttapohja } from '../course.models';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   templateUrl: './settings.component.html',

@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService } from '@core/auth.service';
+import { AuthService } from '@core/services/auth.service';
 import { Constants } from '@shared/utils';
 import { InvitedInfo } from '@course/course.models'; 
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';

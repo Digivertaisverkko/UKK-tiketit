@@ -16,7 +16,7 @@ import { MatRippleModule } from '@angular/material/core';
 // import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 // Servicet
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { CustomHttpInterceptor } from './http-interceptor';
 
 // Komponentit

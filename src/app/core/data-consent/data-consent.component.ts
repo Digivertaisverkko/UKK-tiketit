@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { Constants } from '@shared/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';

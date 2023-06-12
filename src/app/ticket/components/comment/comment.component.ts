@@ -9,7 +9,7 @@ import { getCourseIDfromURL } from '@shared/utils';
 import { isToday } from '@shared/utils';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
 import { User } from '@core/core.models';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 
 import schema from '@shared/editor/schema';
 

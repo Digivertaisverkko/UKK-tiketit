@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
 import { Constants } from '@shared/utils';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from '@core/core.models';
 import { SortableTicket } from '../../ticket.models';

@@ -7,7 +7,7 @@ import { Validators as EditorValidators } from 'ngx-editor';
 import { Observable, Subject } from 'rxjs';
 
 import { User } from '@core/core.models'
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 import { CourseService } from 'src/app/course/course.service';
 import schema from 'src/app/shared/editor/schema';
 import { Constants } from 'src/app/shared/utils';

@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { AuthService } from './core/auth.service';
+import { AuthService } from './core/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { StoreService } from './core/store.service';
+import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 // import { TicketService } from './ticket/ticket.service';

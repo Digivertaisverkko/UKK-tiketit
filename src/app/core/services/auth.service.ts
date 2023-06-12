@@ -11,9 +11,9 @@ import * as shajs from 'sha.js';
 import { environment } from 'src/environments/environment';
 import { getCourseIDfromURL } from '@shared/utils';
 import { ErrorService } from './error.service';
-import { LoginInfo, Role, User } from './core.models';
-import { Kurssini } from '../course/course.models';
-import { CourseService } from '../course/course.service';
+import { LoginInfo, Role, User } from '../core.models';
+import { Kurssini } from '../../course/course.models';
+import { CourseService } from '../../course/course.service';
 import { StoreService } from './store.service';
 
 interface LoginResponse {
