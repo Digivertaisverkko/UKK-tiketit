@@ -235,7 +235,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         }
         this.message.setValue('');
         this.form = this.buildForm();
-        if (this.fileInfoList.length === 0) {
+        if (!this.fileInfoList || this.fileInfoList.length === 0) {
           this.fetchTicket(this.courseID);
           return
         }
