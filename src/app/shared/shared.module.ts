@@ -13,7 +13,7 @@ import { ErrorCardComponent } from './error-card/error-card.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
-import { SafeHtmlPipe } from './safe-html.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
