@@ -1,3 +1,5 @@
+@import '../styles/financier-logos.scss';
+
 $debug: false;
 
 .curve-wrapper {
@@ -13,9 +15,7 @@ footer {
   margin: 0;
   width: 100%;
 
-  #icon-container {
-
-    @if $debug { border: dashed white 1px; }
+  .icon-container {
 
     align-items: flex-end;
     box-sizing: border-box;
@@ -27,38 +27,6 @@ footer {
     min-width: 300px;
     padding: 12px 8px 30px 4px;
     width: 100%;
-  }
-
-  img {
-    display: block;
-    height: 100%;
-    margin-left: 15px;
-    margin-right: 15px;
-    @if $debug { border: dashed green 1px; }
-  }
-
-  #yo-logo {
-    height: 80px;
-    padding-bottom: 22px;;
-    padding-left: 5px;
-  }
-
-  #oamk-logo {
-    height: 70px;
-    margin-left: 0;
-    margin-right: 0;
-    padding-top: 4px;
-    padding-bottom: 15px;
-  }
-
-  #vipuvoimaa-logo {
-    height: 80px;
-    padding-bottom: 15px;
-  }
-
-  #eu-logo {
-    height: 80px;
-    padding: 12px 16px 12px 16px;
   }
 
   mat-nav-list {

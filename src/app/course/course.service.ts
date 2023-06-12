@@ -20,14 +20,13 @@ interface Kurssi {
 
 export class CourseService {
 
-  private api: string;
+  private api: string = environment.apiBaseUrl;
 
   constructor(
     private errorService: ErrorService,
     private http : HttpClient,
     private store: StoreService
   ) {
-    this.api = environment.apiBaseUrl;
   }
 
   // Liitä ulkopuolinen käyttäjä kurssille.

@@ -17,6 +17,7 @@ main {
   margin: 0 auto 0 auto;
   position: relative;
   width: 1024px;
+  min-width: 250px;
   // Jotta footer asemoitaisiin oikealle korkeudelle.
   // min-height: calc(100vh - $header-height - $footer-height);
   padding: 0 40px 70px 40px;
