@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
         this.email.setValue(res.sposti);
       }
     }).catch(err => {
-      this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoitteen oikeinkirjoitus` + '.';
+      this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
     })
   }
 

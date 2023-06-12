@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -64,11 +64,8 @@ export class JoinComponent implements OnInit, OnDestroy {
       }
       if (res.id != null) {
         this.invitedInfo = res;
-        console.log('this.user?.sposti ' + this.user?.sposti );
-        console.log('res.sposti ' + res.sposti);
         this.getCourseName(this.invitedInfo.kurssi);
         if (this.user?.sposti && res.sposti !== this.user.sposti) {
-          console.log('getInvitedInfo asettaa väärän userin.');
           this.setNotRightUser();
         }
       }
@@ -146,7 +143,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.state = 'wrongUser';
     this.error = {
       title: $localize `:@@Väärä käyttäjä:Väärä käyttäjä`,
-      message: `Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, joka käyttää sähköpostia ${this.invitedInfo?.sposti}.`
+      message: `Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, jolle kutsu on lähetetty.`
     }
   }
 
