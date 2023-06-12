@@ -5,6 +5,7 @@ import { Subject, Subscription, first } from 'rxjs';
 
 import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
+import { getCourseIDfromURL } from '@shared/utils';
 import { isToday } from '@shared/utils';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
 import { User } from '@core/core.models';
@@ -112,7 +113,9 @@ export class CommentComponent implements AfterViewInit{
   }
 
   public removeComment(commentID: string) {
-    this.ticketService.removeComment(this.ticketID, commentID).then(res => {
+    const courseID = getCourseIDfromURL();
+    if (!courseID) return
+    this.ticketService.removeComment(this.ticketID, commentID, courseID).then(res => {
       this.stopEditing();
     }).catch((err: any) => {
       this.errorMessage = $localize `:@@Kommentin poistaminen ei onnistunut:
@@ -123,13 +126,14 @@ export class CommentComponent implements AfterViewInit{
 
   public sendComment(commentID: string) {
     this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+    const courseID = getCourseIDfromURL();
+    if (this.form.invalid || !courseID) return;
     this.state = 'sending';
     this.form.disable();
     const commentText = this.form.controls['message'].value;
     const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
-        commentState)
+        commentState, courseID)
       .then(() => {
         if (this.fileInfoList.length === 0) {
           this.stopEditing();

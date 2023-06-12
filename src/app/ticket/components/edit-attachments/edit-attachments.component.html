@@ -1,12 +1,12 @@
 <!---- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
-  <input  aria-disabled="true"
-          (change)="onFileAdded($event)"
-          class="file-input"
-          #fileUpload
-          #fileInput
-          multiple
-          type="file"
-          >
+<input  aria-disabled="true"
+        (change)="onFileAdded($event)"
+        class="file-input"
+        #fileUpload
+        #fileInput
+        multiple
+        type="file"
+        >
 
 <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
 name="file-input-{{url}}"
@@ -23,22 +23,27 @@ name="file-input-{{url}}"
   <div  class="file-list-row"
         *ngFor="let file of oldAttachments; let index = index"
         >
-    <div class="list-item">
-      <span class="filename"
-            matTooltip="{{ file.nimi }}"
-            [matTooltipShowDelay]="600"
-            >
-        {{ file.nimi }}
+  <div class="list-item">
+    <span class="filename"
+          matTooltip="{{ file.nimi }}"
+          [matTooltipShowDelay]="600"
+          >
+      {{ file.nimi }}
+    </span>
+    (
+      <span> {{ file.koko | filesize: { locale: 'fi', round: 1,
+        separator: ",", pad: true } }}
       </span>
+    )
 
-      <button class="remove-file-button"
-              (click)="markToBeRemoved(index)"
-              [disabled]="isEditingDisabled"
-              mat-icon-button
-              *ngIf="isRemovingEnabled"
-              >
-        <mat-icon>close</mat-icon>
-      </button>
+    <button class="remove-file-button"
+            (click)="markToBeRemoved(index)"
+            [disabled]="isEditingDisabled"
+            mat-icon-button
+            *ngIf="isRemovingEnabled"
+            >
+      <mat-icon>close</mat-icon>
+    </button>
 
     </div>
   </div>
@@ -60,11 +65,14 @@ name="file-input-{{url}}"
         {{ file.filename }}
       </span>
       <span class="in-brackets">
-        (<span *ngIf="oldAttachments.length > 0">
+        (
+          <span *ngIf="oldAttachments.length > 0">
             {{new}}
           </span>
           <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
-            separator: ",", pad: true } }}</span>)
+            separator: ",", pad: true } }}
+          </span>
+        )
       </span>
       <div  class="file-error-message"
             matError

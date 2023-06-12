@@ -19,6 +19,15 @@ button {
   margin: 0 auto 1em auto;
 }
 
+.required-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  span {
+    display: inline-block;
+  }
+  margin-bottom: 0.5rem;
+}
+
 @media screen and (max-width: $XSmall) {
   .content {
     max-width: 100%;

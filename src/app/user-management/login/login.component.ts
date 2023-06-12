@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     // this.isEmailValid = this.validateEmail(this.email);
     // Lisää ensin custom ErrorStateMatcher
     // console.log('login id: ' + this.loginID);
-    this.authService.sendLoginRequest(this.email, this.password, this.loginID)
+    this.authService.login(this.email, this.password, this.loginID)
       .then(response => {
         if (response?.success == true) {
           var redirectUrl: string;

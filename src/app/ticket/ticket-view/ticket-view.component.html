@@ -49,7 +49,7 @@
       </button>
 
       <button class="remove-btn"
-              (click)="archiveTicket()"
+              (click)="archiveTicket(ticketID, courseID)"
               color="accent"
               i18n="@@Vahvista"
               mat-raised-button
@@ -74,7 +74,7 @@
         </button>
       </div>
 
-      <button (click)="removeTicket()"
+      <button (click)="removeTicket(ticketID, courseID)"
               color="accent"
               [disabled]="state==='sending'"
               i18n="@@Vahvista poisto"

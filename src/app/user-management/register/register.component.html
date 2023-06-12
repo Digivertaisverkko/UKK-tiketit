@@ -1,88 +1,94 @@
-<mat-card-content>
-  <form action="">
-    <!-- <mat-form-field>
-      <input
-        matInput
-        placeholder="Käyttäjätunnus"
-        i18n-placeholder="@@Käyttäjätunnus"
-        required
-        name="username"
-        [(ngModel)]="username"
-      />
-      <mat-icon matSuffix>perm_identity</mat-icon>
-      <mat-error *ngIf="username.length === 0" i18n="@@Käyttäjätunnus tarvitaan.">
-        Käyttäjätunnus tarvitaan.
-      </mat-error>
-    </mat-form-field> -->
+<app-headline [appHeadline]="true"></app-headline>
+
+<div class="content">
+  <h2 class="sub-header" i18n="@@Sisäänkirjautuminen">
+    Tilin luominen
+  </h2>
+
+  <p>
+    <span i18n='@@Sinut on kutsuttu'>
+      Sinut on kutsuttu osallistumaan kurssille
+    </span>
+
+    <strong>{{ courseName }}</strong>.
+    <span i18n="@@Jos et halua liittyä kurssille">
+      Jos et halua liittyä kurssille, sinun ei tarvitse tehdä mitään.
+    </span>
+  </p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
 
     <mat-form-field>
-      <input
-        matInput
-        placeholder="Sähköposti"
-        i18n-placeholder="@@Sähköposti"
-        required
-        name="email"
-        [(ngModel)]="email"
-      />
-      <mat-error i18n="@@Sähköposti tarvitaan">Sähköposti tarvitaan</mat-error>
-      <mat-icon matSuffix>email</mat-icon>
+      <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
+
+      <input  formControlName="email"
+              matInput
+              name="email"
+              required
+              />
+      <mat-error i18n="@@Sähköposti tarvitaan">
+        Sähköposti tarvitaan
+      </mat-error>
+      <!-- <mat-icon matSuffix>email</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
-      <input
-        matInput
-        placeholder="Salasana"
-        i18n-placeholder="@@Salasana"
-        type="password"
-        required
-        minlength="8"
-        name="newPassword"
-        [(ngModel)]="newPassword"
-      />
-      <mat-error *ngIf="newPassword.length < minPasswordLength" i18n="@@Salasanan pituus"
-      >
-        Vähintään {{minPasswordLength}} merkkiä pitkä salasana tarvitaan.
-      </mat-error>
-      <mat-icon matSuffix>lock</mat-icon>
+      <mat-label i18n="@@Salasana">Salasana</mat-label>
+      <input  formControlName="password"
+              matInput
+              type="password"
+              required
+              />
+      <mat-error>Salasana tarvitaan.</mat-error>
+      <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
-      <input
-        matInput
-        placeholder="Salasana uudelleen"
-        i18n-placeholder="@@Salasana uudelleen"
-        type="password"
-        required
-        minlength="8"
-        name="repassword"
-        [(ngModel)]="repassword"
-      />
-      <mat-error *ngIf="repassword.length === 0" i18n="@@Kirjoita salasana uudelleen">
-        Kirjoita salasana uudelleen.
-      </mat-error>
-      <mat-error *ngIf="newPassword !== repassword" i18n="@@Salasanat eivät täsmää.">
+      <mat-label i18n="@@Salasana uudelleen">Salasana uudelleen</mat-label>
+      <input  formControlName="repassword"
+              matInput
+              type="password"
+              required
+              />
+      <mat-error  i18n="@@Salasanat eivät täsmää"
+                  *ngIf="repassword.errors?.['notEqual']"
+                  >
         Salasanat eivät täsmää.
       </mat-error>
-      <mat-icon matSuffix>lock</mat-icon>
+      <mat-error  i18n="@@Kirjoita salasana uudelleen"
+                  *ngIf="repassword.errors?.['required']"
+                  >
+        Kirjoita salasana uudelleen.
+      </mat-error>
+      <!-- <mat-error i18n="@@Salasanat eivät täsmää.">
+        Salasanat eivät täsmää.
+      </mat-error> -->
+      <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
     <app-error-card
-    *ngIf="serverMessage.length > 0"
-    i18n-title="@@Tilin luominen ei onnistunut"
-    title="Tilin luominen ei onnistunut"
-    message="{{ serverMessage }}"
-    [styles]="{ margin: '1em 10% 1em 10%' }"
-  >
-  </app-error-card>
+        *ngIf="errorMessage"
+        message="{{ errorMessage }}"
+        [styles]="{ 'margin-bottom': '1rem'}"
+        >
+    </app-error-card>
 
-    <button mat-raised-button color="primary" class="login-button" i18n="@@Luo tili"
-    [disabled]="email.length < 3 || newPassword.length < minPasswordLength || newPassword !== repassword"
-    (click)="register()"
-    >
+    <button class="login-button"
+            color="primary"
+            i18n="@@Luo tili"
+            mat-raised-button
+            type="submit"
+            >
       Luo tili
     </button>
   </form>
+
+  <div class="required-wrapper">
+    *&nbsp;
+    <span i18n="@@Pakollinen">Pakollinen</span>
+  </div>
+  
+</div>
   <!-- <button (click)="changeActiveTab()" mat-raised-button>
     Vaihda tabia
   </button> -->
-</mat-card-content>

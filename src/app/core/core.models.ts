@@ -1,6 +1,11 @@
 // Tähän tiedostoon modelit, joita käytetään core-moduulissa sekä
 // feature-moduuleissa.
 
+export interface LoginInfo  {
+  'login-url': string;
+  'login-id': string;
+}
+
 export interface Error {
   tunnus: number;
   virheilmoitus: string;

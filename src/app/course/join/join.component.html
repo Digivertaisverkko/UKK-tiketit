@@ -1,0 +1,73 @@
+
+<app-headline [showInIframe]="true"></app-headline>
+
+<div class="view-wrapper">
+
+  <p *ngIf="state !== 'error'">
+    <span i18n='@@Sinut on kutsuttu'>
+      Sinut on kutsuttu osallistumaan kurssille
+    </span>
+
+    <strong>{{ courseName }}</strong>.
+    <span i18n="@@Jos et halua liittyä kurssille">
+      Jos et halua liittyä kurssille, sinun ei tarvitse tehdä mitään.
+    </span>
+  </p>
+
+  <ng-container *ngIf="user && state !== 'error'">
+
+    <p i18n="@@Olet kirjautunut käyttäjänä">
+      Olet tällä hetkellä kirjautunut käyttäjänä:
+    </p>
+
+    <div class="user-info-container">
+      <app-sender-info
+          [alignLeft]="true"
+          aikaleima="now"
+          [user]="user"
+          >
+      </app-sender-info>
+    </div>
+
+  </ng-container>
+
+  <app-error-card
+      title="{{ error.title }}"
+      message="{{ error.message }}"
+      *ngIf="error"
+      [styles]="{ 'margin-top': '1rem' }"
+      >
+  </app-error-card>
+
+  <div class="buttons-wrapper">
+
+    <ng-container *ngIf="state === 'editing'">
+      <button (click)="goToHome()"
+              color="primary"
+              i18n="@@Kieltäydy kutsusta"
+              mat-raised-button
+              >
+        Kieltäydy kutsusta
+      </button>
+      <button (click)="joinCourse()"
+              color="primary"
+              i18n="@@Liity kurssille"
+              mat-raised-button
+              >
+        Liity kurssille
+      </button>
+  </ng-container>
+
+  <ng-container *ngIf="state === 'wrongUser'">
+    <button (click)="logout()"
+            color="primary"
+            i18n="@@Kirjaudu ulos"
+            mat-raised-button
+            >
+      Kirjaudu ulos
+    </button>
+  </ng-container>
+
+  </div>
+
+</div>

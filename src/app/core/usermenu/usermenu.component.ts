@@ -79,13 +79,19 @@ export class UsermenuComponent  {
     if (courseID === null) {
       throw new Error('header.component.ts.login: ei kurssi ID:ä.');
     }
-    this.authService.saveRedirectURL();
-    this.authService.navigateToLogin(courseID);
+    const currentRoute = window.location.pathname + window.location.search;
+    if (currentRoute.indexOf('/register') !== -1 &&
+        currentRoute.indexOf('/login') !== -1) {
+      this.authService.saveRedirectURL();
+    }
+      this.authService.navigateToLogin(courseID);
   }
 
   public logout() {
     const courseID = getCourseIDfromURL();
-    this.authService.logout(courseID);
+    this.authService.logout().then(res => {
+      this.authService.navigateToLogin(courseID);
+    })
   }
 
   public openInNewTab(): void {

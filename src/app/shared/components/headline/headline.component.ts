@@ -1,17 +1,19 @@
 import {  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
           ContentChild, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+
 import { getIsInIframe } from 'src/app/shared/utils';
 import { CourseService } from 'src/app/course/course.service';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { StoreService } from '@core/store.service';
 
 @Component({
   selector: 'app-headline',
   template: `
 
+    <!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" -->
     <h1 class="mat-h1"
-        [ngClass]="login ? 'login-h1' : ''"
-        *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)"
+        [ngClass]="appHeadline ? 'login-h1' : ''"
+        *ngIf="!isInIframe || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>
@@ -28,7 +30,7 @@ import { StoreService } from '@core/store.service';
 export class HeadlineComponent implements OnInit, AfterViewInit {
 
   // Kirjautumissivulla otsikko on erilainen.
-  @Input() login: boolean = false
+  @Input() appHeadline: boolean = false
   // Oletuksena näytetään kurssin nimi, tällä voi ohittaa sen.
   @Input() noCourseTitle: boolean = false;
   // Oletuksena otsikkoa ei näytetä upotuksessa. Tällä voi näyttää sen aina.
@@ -51,8 +53,8 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.hasProjectedContent = !!this.hasProjectedContent;
-    if (this.login) {
-      this.headlineText = "DVV-tikettijärjestelmä";
+    if (this.appHeadline) {
+      this.headlineText = "Tukki-" + $localize `:@@tikettijärjestelmä:tikettijärjestelmä`;
     } else if (this.noCourseTitle !== true) {
       this.trackCourseID();
     }

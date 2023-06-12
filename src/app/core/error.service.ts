@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+
+import { Error } from "./core.models";
 import { StoreService } from "./store.service";
-import { getCourseIDfromURL } from '../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 
@@ -23,7 +24,11 @@ export class ErrorService {
   public handleServerError(error: any) {
     var backendResponse = error?.error;
     var backendError: Error = backendResponse?.error;
-    var logMessage: string; // Pastetaan consoleen.
+    var logMessage: string = ''; // Pastetaan consoleen.
+
+
+    // console.log('backendResponse: ' + JSON.stringify(backendResponse) +
+    // ' backendError: ' + JSON.stringify(backendError))
 
     if (error.status === 0) {
       logMessage = "Saatiin virhe statuskoodilla 0. Yleensä tapahtuu," +
@@ -46,7 +51,7 @@ export class ErrorService {
       logMessage += this.getBackendErrorLog(backendError, logMessage);
     }
 
-    console.error(logMessage + ". Alkuperäinen vastaus alla.");
+    console.error(logMessage + " Alkuperäinen vastaus alla.");
 
     if (backendError !== undefined) {
       console.dir(backendError);
@@ -59,6 +64,7 @@ export class ErrorService {
     // }
     const eiKirjautunut = 1000;
     const eiOikeuksia = 1003;
+
     if (error.status === 403 && backendError?.tunnus === eiKirjautunut)  {
       this.handleNotLoggedIn();
     } else if (backendError?.tunnus === eiOikeuksia) {
@@ -67,6 +73,7 @@ export class ErrorService {
       // Komponentin on tarkoitus catchata tämä.
       throw (backendError !== undefined) ? backendError : error;
     }
+
   }
 
   private getBackendErrorLog(backendError: Error, logMessage: string): string {
@@ -77,7 +84,7 @@ export class ErrorService {
       logMessage += ".";
     }
     if (backendError.originaali && backendError.originaali.length > 1) {
-      logMessage += " Alkuperäinen virheilmoitus: " + backendError.originaali;
+      logMessage += " Alkuperäinen palvelimen virheilmoitus: " + backendError.originaali;
     }
     return logMessage
   }
@@ -101,10 +108,12 @@ export class ErrorService {
     if (currentRoute.indexOf('/login') !== -1) return
     const pathArray = window.location.pathname.split('/');
     let baseRoute = '';
-    if (pathArray[1] === 'course' && pathArray[2] != null)  {
-      baseRoute = '/course/' + pathArray[2];
+    const courseid = pathArray[2];
+    if (pathArray[1] === 'course' && courseid != null)  {
+      this.router.navigateByUrl('/course/' + courseid + '/forbidden');
+    } else {
+    this.router.navigateByUrl('forbidden');
     }
-    this.router.navigateByUrl(baseRoute + '/forbidden');
   }
 
   public saveRedirectURL() {
@@ -120,11 +129,4 @@ export class ErrorService {
     }
   }
 
-
-}
-
-export interface Error {
-  tunnus: number;
-  virheilmoitus: string;
-  originaali?: string;
 }

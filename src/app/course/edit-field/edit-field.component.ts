@@ -177,17 +177,18 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    this.courses.setTicketField(courseID, allFields).then(response => {
-      if (response === true ) {
-        this.router.navigate(['/course/' + courseID + '/settings'],
-            { state: { delayFetching: 'true' } });
-      } else {
-        console.log('Tikettipohjan muuttaminen epäonnistui.');
-      }
-    }).catch (() => {
-      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-      Kenttäpohjan muuttaminen ei onnistunut.`;
-    })
+    this.courses.setTicketField(courseID, allFields)
+      .then(response => {
+        if (response === true ) {
+          this.router.navigateByUrl('/course/' + courseID + '/settings')
+        } else {
+          console.log('Tikettipohjan muuttaminen epäonnistui.');
+        }
+      }).catch (() => {
+        // TODO: käännä.
+        this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
+        Kenttäpohjan muuttaminen ei onnistunut.`;
+      })
   }
 
   private setControls(): void {

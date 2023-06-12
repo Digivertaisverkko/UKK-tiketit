@@ -5,6 +5,7 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
+import { getCourseIDfromURL } from '@shared/utils';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;
@@ -74,7 +75,12 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      return this.ticketService.uploadFile(ticketID, commentID, fileinfo.file)
+      const courseID = getCourseIDfromURL();
+      if (!courseID) {
+        console.error('makeRequestArray: Ei kurssi ID:ä.');
+        return
+      }
+      return this.ticketService.uploadFile(ticketID, commentID, courseID, fileinfo.file)
         .pipe(
           tap(progress => {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +

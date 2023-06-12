@@ -77,7 +77,7 @@ export class SubmitTicketComponent implements OnInit {
       );
       this.fetchAdditionalFields();
     } else {
-      this.fetchTicketInfo(this.ticketId);
+      this.fetchTicketInfo(this.ticketId, this.courseId);
     }
   }
 
@@ -137,8 +137,8 @@ export class SubmitTicketComponent implements OnInit {
     });
   }
 
-  private fetchTicketInfo(ticketId: string): void {
-    this.ticketService.getTicket(ticketId)
+  private fetchTicketInfo(ticketId: string, courseID: string): void {
+    this.ticketService.getTicket(ticketId, courseID)
     .then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);
@@ -155,6 +155,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private prepareSendFiles(response: any): void {
+    if (!this.courseId) return
     if (response?.uusi == null) {
       this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
@@ -162,7 +163,7 @@ export class SubmitTicketComponent implements OnInit {
     let ticketID, commentID;
     ticketID = response.uusi.tiketti;
     commentID = response.uusi.kommentti;
-    this.sendFiles(ticketID, commentID);
+    this.sendFiles(ticketID, commentID, this.courseId);
   }
 
   public submit(): void {
@@ -180,13 +181,14 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private submitEdited(newTicket: UusiTiketti): void {
-    if (this.ticketId === null || this.commentID === null) throw new Error;
-    this.ticketService.editTicket(this.ticketId, newTicket)
+    if (!this.ticketId || !this.commentID || !this.courseId) throw new Error;
+    this.ticketService.editTicket(this.ticketId, newTicket, this.courseId)
     .then( () => {
       if (this.oldAttachments.length === 0) this.goBack();
       this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:
-          Muokatun kysymyksen lähettäminen onnistui` + '.';
-      this.sendFiles(this.ticketId!, this.commentID!);
+      Muokatun kysymyksen lähettäminen onnistui` + '.';
+      if (!this.courseId) return
+      this.sendFiles(this.ticketId!, this.commentID!, this.courseId);
     })
     .catch(error => {
       this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
@@ -223,7 +225,7 @@ export class SubmitTicketComponent implements OnInit {
     });
   }
 
-  private sendFiles(ticketID: string, commentID: string): void {
+  private sendFiles(ticketID: string, commentID: string, courseID: string): void {
     this.attachments.sendFilesPromise(ticketID, commentID)
     .then(() => {
       this.state = 'done';

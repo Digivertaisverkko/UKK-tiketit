@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
-import { AuthService } from '@core/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subscription, takeWhile } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
-import { Output, EventEmitter} from '@angular/core';
+import { AuthService } from '@core/auth.service';
+import { Constants } from '@shared/utils';
+import { InvitedInfo } from '@course/course.models'; 
+import { StoreService } from '@core/store.service';
+import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
+import { CourseService } from '@course/course.service';
+import { LoginInfo } from '@core/core.models';
 
 // Shares same view with Login screen so they share same styleUrl.
 @Component({
@@ -10,43 +18,139 @@ import { Output, EventEmitter} from '@angular/core';
   templateUrl: './register.component.html',
   styleUrls: ['../login/login.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy{
 
-  @Output() event = new EventEmitter<boolean>();
+  @Input() courseid: string = '';
+  @Input() invitation: string = '';
+  public courseName: string = '';
+  public form: FormGroup;
+  public errorMessage: string = '';
+  public invitedInfo: InvitedInfo | undefined;
+  public isLoggedIn$: Subscription | null = null;
+  public isLoggedIn: boolean | null | undefined;
 
-  public email: string;
-  public newPassword: string;
-  public repassword: string;
-  public minPasswordLength: number = 8;
-  public serverMessage: string = '';
-
-  constructor(private auth: AuthService,
-    private _snackBar: MatSnackBar)
-  {
-    this.email = '';
-    this.newPassword  = '';
-    this.repassword = '';
+  constructor(private auth : AuthService,
+              private courses: CourseService,
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private store : StoreService,
+              private title: Title,
+              ) {
+    this.form = this.buildForm()
   }
 
-  changeActiveTab() {
-    this.event.emit(true);
+  get email(): FormControl {
+    return this.form.get('email') as FormControl
   }
 
-  register() {
-    this.auth.addUser(this.email, this.newPassword).then(isSuccesful => {
-      if (isSuccesful) {
-        this.clearScreen();
-        this.event.emit(true);
+  get password(): FormControl {
+    return this.form.get('password') as FormControl
+  }
+
+  get repassword(): FormControl {
+    return this.form.get('repassword') as FormControl
+  }
+
+  ngOnInit(): void {
+    this.trackLoggedStatus();
+    this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
+      if (res === null) {
+        throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
       }
-    }).catch (error => {
-      console.error(error.message);
+      if (res.id != null) {
+        window.localStorage.removeItem('redirectUrl');
+        if (this.isLoggedIn) this.auth.logout();
+        this.invitedInfo = res;
+        this.getCourseName(this.invitedInfo.kurssi);
+      }
+      if (res.sposti != null) {
+        this.email.setValue(res.sposti);
+      }
+    }).catch(err => {
+      this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.isLoggedIn$?.unsubscribe();
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      email: [{
+        value: '',
+        disabled: true
+      }],
+      password:  [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)
+        ])
+      ],
+      repassword:  [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ]
+    }, {
+      validators: [ stringsMatchValidator('password', 'repassword') ]
+    }
+    );
+  }
+
+  private getCourseName(courseid: string) {
+    this.courses.getCourseName(courseid).then(response => {
+      this.courseName = response ?? '';
+      this.title.setTitle(Constants.baseTitle + 'Luo käyttäjätili kurssialueelle ' + this.courseName);
+    }).catch((response) => {
     });
   }
 
-  private clearScreen() {
-    this.email = '';
-    this.newPassword  = '';
-    this.repassword = '';
+  public submit() {
+    this.errorMessage = '';
+    const email = this.form.controls['email'].value;
+    const password = this.form.controls['password'].value;
+    this.auth.createAccount(email, password, this.invitation).then(res => {
+      if (res?.success === true) {
+        console.log('luonti onnistui');
+        return;
+      } else {
+        this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
+        throw Error;
+      }
+    }).then(() => {
+      return this.auth.getLoginInfo('own', this.courseid);
+    }).then((res: LoginInfo) => {
+      const loginID = res['login-id'];
+      this.isLoggedIn$?.unsubscribe();
+      return this.auth.login(email, password, loginID);
+    }).then (res => {
+      if (res?.success === true) {
+        const route = 'course/' + this.courseid + '/list-tickets';
+        const data = { message: 'account created' };
+        console.log('routataan: ' + route);
+        this.router.navigate([route], { state: data });
+      }
+    })
+    .catch (error => {
+      console.log(error);
+      this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
+    });
+  }
+
+  private trackLoggedStatus(): void {
+    this.isLoggedIn$ = this.store.onIsUserLoggedIn().pipe(
+      takeWhile(() => this.isLoggedIn === undefined, true)
+    ).subscribe(res => {
+      console.log('logged: ' + res);
+      this.isLoggedIn = res;
+      // Jos kutsun tietojen haku on onnistunut ja voidaan jatkaa.
+      if (this.isLoggedIn === true && this.invitedInfo) {
+        this.auth.logout();
+      }
+    });
   }
 
 }

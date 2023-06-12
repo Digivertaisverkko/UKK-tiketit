@@ -1,10 +1,9 @@
-import { ActivatedRoute, ParamMap, Router} from '@angular/router';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-// import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -51,10 +50,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfFAQ: number = 0;
   public noDataConsent: boolean | null;
   public isLoggedIn$: Observable<boolean | null>;
+  public successMessage: string | null = null;
   public user$: Observable<User | null>;
 
   private fetchFAQsSub$: Subscription | null = null;
-  // private isParticipant$: Subscription | null = null;
   private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
@@ -99,6 +98,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.url = window.location.pathname;
+    this.checkSuccessMessage();
     this.trackCourseID();
     // this.trackLoggedStatus();
     this.trackScreenSize();
@@ -112,7 +112,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     console.warn('listaus: ngOnDestroy ajettu.');
     window.removeEventListener('scroll', this.onScroll);
     this.loggedIn$.unsubscribe();
-    // this.isParticipant$?.unsubscribe();
     this.stopPolling();
   }
 
@@ -130,6 +129,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.courseID) return
     this.authService.navigateToLogin(this.courseID)
   }
+   
+  private checkSuccessMessage() {
+    const message: string | null = window.history.state.message;
+    if (message) {
+      if (message === 'account created') {
+        this.successMessage = $localize `:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti` + '.';
+      }
+    } 
+  }
 
   public errorClickEvent(button: string) {
     if (this.noDataConsent === true && this.isInIframe === true) {
@@ -137,7 +145,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (this.noDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
     }
-}
+  }
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
@@ -268,6 +276,48 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
+  private trackLoggedStatus(): void {
+    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
+      if (response === false) {
+        console.log('Listing: saatiin tieto, ettei olla kirjautuneina.');
+        this.isLoaded = true;
+        this.setError('notLoggedIn');
+      } else if (response === true) {
+        this.error === null;
+      }
+    });
+  }
+
+  // Aseta virheviestejä.
+  private setError(type: 'notParticipant' | 'notLoggedIn'): void {
+    if (type === 'notParticipant') {
+      this.error = {
+        title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+        message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+        buttonText: ''
+      }
+    } else if (type === 'notLoggedIn') {
+      this.error = {
+        title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+        message: '',
+        buttonText: ''
+      }
+      
+      if (this.isInIframe && this.authService.getDenyDataConsent() !== true) {
+        this.error.message = $localize `:@@Ei kirjautunut upotuksessa:Tämä voi johtua siitä, että käytät selainta, joka kieltää kolmannnen osapuolen evästeet. Voit kokeilla muuttaa selaimen asetuksia tai käyttää eri selainta, esim. Chrome.`;
+      } else {
+        this.error.message = $localize `:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`
+      }
+
+      if (this.authService.getDenyDataConsent() === true) {
+        this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
+      } else if (this.isInIframe === false) {
+        this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
+      }
+    } else {
+      console.error('Ei virheviestiä tyypille: ' + type);
+    }
+  }
 
   private startPollingFAQ(): void {
     this.fetchFAQsSub$?.unsubscribe();

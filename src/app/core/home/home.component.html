@@ -1,0 +1,39 @@
+<app-headline [appHeadline]="true" [showInIframe]="true">
+</app-headline>
+
+<div class="paragraphs-wrapper">
+
+  <p class="first-p" i18n="@@Järjestelmän kuvaus">
+  Tukki on  Digivertaisverkko-hankkeen toteuttama ohjelmisto,  jonka tarkoitus on parantaa opiskelijoiden ja opettajien välistä kanssakäymistä etäopiskellessa. Järjestelmän avullla opiskelijat voivat lähettää ongelmistaan ja kysymyksistään opettajille tikettejä, joiihn opettajat voivat vastata. Järjestelmä sopii hyvin kursseilla, joissa on viikottaisia tehtäviä tai muuta aktiivista puuhaa opiskelijoille, joiden parissa opiskelijoilla voi tulla haasteita tai ongelmia. Se on kuitenkin pyritty suunnittelemaan mahdollisimman monipuoliseksi, jotta se sopisi mahdollisimman monelle kurssille.
+  </p>
+
+  <p i18n="@@Projektista">
+    Digivertaisverkko on Euroopan sosiaalirahaston rahoittama hanke, jonka tarkoituksena on kehittää yliopistolle teknisiä ja pedagogisia ratkaisuja etäopiskelun parantamiseksi. Hanke toteutetaan yhteistyössä Oulun yliopiston ja Oulun ammattikorkeakoulun kanssa.
+  </p>
+
+</div>
+
+<h2 i18n="@@Lue lisää">Lue lisää</h2>
+
+<div class="buttons-wrapper">
+  <button (click)="true"
+          color="primary"
+          style="display: none"
+          i18n="@@Dokumentaatio"
+          mat-raised-button
+          >
+    Dokumentaatio
+  </button>
+  <button (click)="true"
+          mat-raised-button
+          >
+    <a  href="https://interact.oulu.fi/site/digivertaisverkko"
+        target="_blank"
+        mat-list-item
+        i18n="@@Hanke"
+        >
+      Hanke
+    </a>
+  </button>
+</div>
+
