@@ -97,7 +97,7 @@
   <section *ngIf="ticket.tila > 0">
 
     <div class="ticket-header">
-      <h2 class="sub-header">{{ ticket.otsikko }}</h2>
+      <h2 class="ticket-headline sub-header">{{ ticket.otsikko }}</h2>
       <div class="spacer"></div>
       <app-sender-info
           [aikaleima]="ticket.aikaleima"
@@ -130,7 +130,21 @@
 
   <!-------------- Keskustelu ------------------------------------------------->
 
-    <h3 class="sub-header" i18n="@@Keskustelu">Keskustelu</h3>
+  <div class="h3-wrapper">
+    <h3 class="discussion-h3 sub-header" i18n="@@Keskustelu">Keskustelu</h3>
+
+    <button aria-label="Virkistä näkymä"
+            (click)="fetchTicket(courseID)"
+            [disabled]="state==='sending'"
+            i18n-aria-label="@Virkistä näkymä"
+            mat-icon-button
+            matTooltip="Virkistä näkymä"
+            matTooltipPosition="after"
+            #tooltip="matTooltip"
+            >
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 
     <app-comment
         [comment]="comment"

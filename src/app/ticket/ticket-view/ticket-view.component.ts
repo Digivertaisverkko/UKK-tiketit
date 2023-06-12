@@ -156,7 +156,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   // Hae tiketti ja päivitä näkymän tila.
-  private fetchTicket(courseID: string | null) {
+  public fetchTicket(courseID: string | null) {
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null || !courseID) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
