@@ -6,7 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
-import { UserManagementRoutingModule } from './user-management-routing.module';
+import { UserRoutingModule } from './user-routing.module';
 
 @NgModule({
   declarations: [
@@ -17,11 +17,11 @@ import { UserManagementRoutingModule } from './user-management-routing.module';
   imports: [
     MatDividerModule,
     SharedModule,
-    UserManagementRoutingModule
+    UserRoutingModule
   ],
   providers: [
   ]
 })
 
-export class UserManagementModule { }
+export class UserModule { }
  

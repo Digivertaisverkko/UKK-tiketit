@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
-import { MinunAsetukset, UserManagementService } from '../user-management.service';
+import { MinunAsetukset, UserService } from '../user.service';
 import { Constants } from '@shared/utils';
 import { ErrorService } from '@core/error.service';
 
@@ -26,20 +26,20 @@ export class ProfileComponent implements OnInit {
               private formBuilder: FormBuilder,
               private renderer: Renderer2,
               private titleServ: Title,
-              private userManagementService: UserManagementService)
+              private userService: UserService)
   {}
 
   ngOnInit(): void {
     this.titleServ.setTitle(
       Constants.baseTitle + $localize `:@@Profiili:Profiili`
     );
-    this.userManagementService.getPersonalInfo()
+    this.userService.getPersonalInfo()
     .then(response => {
       this.userName = response.nimi;
       this.userEmail = response.sposti;
       this.isPersonalInfoLoaded = true;
     });
-    this.userManagementService.getSettings()
+    this.userService.getSettings()
     .then(response => {
       this.emailSettingsForm = this.createEmailSettingsForm(response);
     });
@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
         "sposti-palaute": this.emailSettingsForm.controls['feedback'].value
       }
 
-      this.userManagementService.postSettings(settings)
+      this.userService.postSettings(settings)
       .then(() => {
         this.emailSettingsErrorMessage = '';
         this.emailSettingsSuccessMessage = $localize `:@@Asetusten tallentaminen onnistui.:Asetusten tallentaminen onnistui.`;
@@ -78,7 +78,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public downloadPersonalData(): void {
-    this.userManagementService.getGdprData()
+    this.userService.getGdprData()
     .then(response => {
       let gdprData = JSON.stringify(response, null, 2);
       const link = this.renderer.createElement('a');
@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit {
   }
 
   public removeProfile(): void {
-    this.userManagementService.removeUser()
+    this.userService.removeUser()
     .then(response => {
       if (response) {
         this.errorService.handleNotLoggedIn();

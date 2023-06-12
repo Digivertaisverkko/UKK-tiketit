@@ -27,7 +27,7 @@ const routes: Routes = [
 // redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }
 // lazy-loading esimerkki:
 // { path: 'front', loadChildren: () => import('./front/front.module').then(m => m.FrontModule) }
-// { path: 'users', loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule) },
+// { path: 'users', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
 
 @NgModule({
   imports: [

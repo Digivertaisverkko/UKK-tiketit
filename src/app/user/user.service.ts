@@ -4,13 +4,13 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '@core/auth.service';
 import { ErrorService } from '@core/error.service';
 import { environment } from 'src/environments/environment';
-import { User } from '../core/core.models';
-import { StoreService } from '../core/store.service';
+import { User } from '@core/core.models';
+import { StoreService } from '@core/store.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserManagementService {
+export class UserService {
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,

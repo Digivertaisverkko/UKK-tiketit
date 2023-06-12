@@ -7,7 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { TicketModule } from './ticket/ticket.module';
-import { UserManagementModule } from './user-management/user-management.module';
+import { UserModule } from './user/user.module';
 import { CourseModule } from './course/course.module';
 
 import { AppComponent } from './app.component';
@@ -26,7 +26,7 @@ import { initializeLanguage  } from "./app.initializers";
     CoreModule,
     SharedModule,
     TicketModule,
-    UserManagementModule,
+    UserModule,
     CourseModule,
     AppRoutingModule,
   ],

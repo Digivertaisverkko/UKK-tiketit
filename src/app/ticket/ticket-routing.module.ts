@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from '../user-management/auth.guard';
+import { authGuard } from '../user/auth.guard';
 
 import { TicketViewComponent } from './ticket-view/ticket-view.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
