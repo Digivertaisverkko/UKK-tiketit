@@ -50,7 +50,6 @@ export class ProfileComponent implements OnInit {
     this.userService.getSettings()
     .then(response => {
       this.setEmailSettingsFormValues(response);
-      this.emailSettingsForm.enable();
     });
   }
 
@@ -119,6 +118,8 @@ export class ProfileComponent implements OnInit {
 
     this.emailSettingsForm.controls['feedback']
     .setValue(defaultSettings['sposti-palaute']);
+
+    this.emailSettingsForm.enable();
 
     this.emailSettingsForm.valueChanges.subscribe(() => {
       let settings: MinunAsetukset = {
