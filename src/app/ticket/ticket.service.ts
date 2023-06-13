@@ -65,7 +65,7 @@ export class TicketService {
     let response: any;
     const body = newFaq;
     try {
-      response = firstValueFrom(this.http.post<UusiUKK>(url, body));
+      response = await firstValueFrom(this.http.post<UusiUKK>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -148,7 +148,7 @@ export class TicketService {
     const url = `${this.api}/kurssi/${courseID}/ukk/${ticketID}`;
     const body = faq;
     try {
-      response = firstValueFrom(this.http.put<UusiUKK>(url, body));
+       response = await firstValueFrom(this.http.put<UusiUKK>(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
