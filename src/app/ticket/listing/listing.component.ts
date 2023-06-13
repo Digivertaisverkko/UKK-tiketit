@@ -129,14 +129,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.courseID) return
     this.authService.navigateToLogin(this.courseID)
   }
-   
+
   private checkSuccessMessage() {
     const message: string | null = window.history.state.message;
     if (message) {
       if (message === 'account created') {
         this.successMessage = $localize `:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti` + '.';
       }
-    } 
+    }
   }
 
   public errorClickEvent(button: string) {
@@ -302,7 +302,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         message: '',
         buttonText: ''
       }
-      
+
       if (this.isInIframe && this.authService.getDenyDataConsent() !== true) {
         this.error.message = $localize `:@@Ei kirjautunut upotuksessa:Tämä voi johtua siitä, että käytät selainta, joka kieltää kolmannnen osapuolen evästeet. Voit kokeilla muuttaa selaimen asetuksia tai käyttää eri selainta, esim. Chrome.`;
       } else {

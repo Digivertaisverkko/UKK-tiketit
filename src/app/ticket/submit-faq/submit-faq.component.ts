@@ -277,7 +277,7 @@ export class SubmitFaqComponent implements OnInit {
   */
 
   private sendFiles(ticketID: string, commentID: string): void {
-    this.attachments.sendFilesPromise(ticketID, commentID)
+    this.attachments.sendFiles(ticketID, commentID)
     .then(() => {
       this.goBack()
     })

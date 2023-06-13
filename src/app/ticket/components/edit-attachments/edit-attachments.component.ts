@@ -192,7 +192,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   }
 
   // Kutsutaan parent komponentista.
-  public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
+  public async sendFiles(ticketID: string, commentID: string): Promise<any> {
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
@@ -218,7 +218,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
         },
         error: (error) => {
-          console.log('sendFilesPromise: saatiin virhe: ' + error );
+          console.log('edit-attachments.sendFiles: saatiin virhe: ' + error );
           reject('error')
         },
         complete: () => {

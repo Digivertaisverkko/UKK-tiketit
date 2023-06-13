@@ -429,35 +429,35 @@ export class TicketService {
     this.errorService.handleServerError(error);
   }
 
-    // Lähetä tiedosto palauttaen edistymistietoja.
-    public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
-    Observable<any>{
-  let formData = new FormData();
-  formData.append('tiedosto', file);
-  const progress = new Subject<number>();
-  // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite
-  let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/
-      ${commentID}/liite`;
-  // Virheiden testaukseen vaihda http.post -> fakeHttpPost
-  // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
-  this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
-    .subscribe({
-      next: (event) => {
-        if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
-          const percentDone = Math.round(100 * event.loaded / event.total);
-          progress.next(percentDone);
-        } else if (event.type === HttpEventType.Response) {
-          progress.complete();
+  // Lähetä tiedosto palauttaen edistymistietoja.
+  public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
+      Observable<any>{
+    let formData = new FormData();
+    formData.append('tiedosto', file);
+    const progress = new Subject<number>();
+    // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/
+        ${commentID}/liite`;
+    // Virheiden testaukseen vaihda http.post -> fakeHttpPost
+    // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
+    this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
+      .subscribe({
+        next: (event) => {
+          if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
+            const percentDone = Math.round(100 * event.loaded / event.total);
+            progress.next(percentDone);
+          } else if (event.type === HttpEventType.Response) {
+            progress.complete();
+          }
+        },
+        error: (error) => {
+          console.error('ticketService.uploadFile: saatiin virhe.');
+          // TODO: Testaa toimiiko usean tiedoston kanssa.
+          // this.handleError(error);
+          progress.error(error);
         }
-      },
-      error: (error) => {
-        console.error('ticketService.uploadFile: saatiin virhe.');
-        // TODO: Testaa toimiiko usean tiedoston kanssa.
-        // this.handleError(error);
-        progress.error(error);
-      }
-    })
-  return progress.asObservable()
-}
+      })
+    return progress.asObservable()
+  }
 
 }

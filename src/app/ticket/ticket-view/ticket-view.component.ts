@@ -253,7 +253,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   private sendFiles(ticketID: string, commentID: string, courseID: string) {
     this.state = 'sending';
     this.form.disable();
-    this.attachments.sendFilesPromise(ticketID, commentID)
+    this.attachments.sendFiles(ticketID, commentID)
       .then((res:any) => {
       })
       .catch((res:any) => {

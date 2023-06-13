@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild }
+    from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Validators as EditorValidators } from 'ngx-editor';
-import { Subject, Subscription, first } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
@@ -148,7 +149,7 @@ export class CommentComponent implements AfterViewInit{
 
   private sendFiles(ticketID: string, commentID: string) {
     this.messages.emit('sendingFiles')
-    this.attachments.sendFilesPromise(ticketID, commentID)
+    this.attachments.sendFiles(ticketID, commentID)
       .then((res:any) => {
         console.log('kaikki tiedostot valmiita.');
         this.stopEditing();
@@ -163,7 +164,7 @@ export class CommentComponent implements AfterViewInit{
       })
   }
 
-  // Lopeta kommentin
+  // Lopeta kommentin editointi.
   public stopEditing() {
     this.state = 'done';
     this.fileInfoList = [];

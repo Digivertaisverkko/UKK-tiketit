@@ -202,7 +202,6 @@ export class SubmitTicketComponent implements OnInit {
     if (this.courseId === null) return;
     this.ticketService.addTicket(this.courseId, ticket)
     .then((response: AddTicketResponse) => {
-      console.warn('uusi');
       if (this.attachments.fileInfoList.length === 0) this.goBack();
       if (response === null || response?.success !== true) {
         this.state = 'editing';
@@ -226,7 +225,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private sendFiles(ticketID: string, commentID: string, courseID: string): void {
-    this.attachments.sendFilesPromise(ticketID, commentID)
+    this.attachments.sendFiles(ticketID, commentID)
     .then(() => {
       this.state = 'done';
       this.goBack();
