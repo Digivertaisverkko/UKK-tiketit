@@ -24,44 +24,15 @@ export class ErrorService {
   public handleServerError(error: any) {
     var backendResponse = error?.error;
     var backendError: Error = backendResponse?.error;
-    var logMessage: string = ''; // Pastetaan consoleen.
 
+    var logMessage = this.getHttpErrorLog(error);
 
-    // console.log('backendResponse: ' + JSON.stringify(backendResponse) +
-    // ' backendError: ' + JSON.stringify(backendError))
-
-    if (error.status === 0) {
-      logMessage = "Saatiin virhe statuskoodilla 0. Yleensä tapahtuu," +
-          "kun palvelimeen ei saada yhteyttä.";
-      if (error.error !== undefined) {
-        logMessage += ": " + error.error;
-      }
-    } else {
-      logMessage = "Saatin virhe ";
-      if (error.status !== undefined) {
-        logMessage += "HTTP-tilakoodilla " + error.status;
-      }
-    }
-
-    if (error.message != undefined) {
-      logMessage += ", viestillä: " + error.message;
-    }
+    console.error(logMessage);
 
     if (backendError !== undefined) {
-      logMessage += this.getBackendErrorLog(backendError, logMessage);
+      console.error(this.getBackendErrorLog(backendError));
     }
 
-    console.error(logMessage + " Alkuperäinen vastaus alla.");
-
-    if (backendError !== undefined) {
-      console.dir(backendError);
-    } else {
-      console.dir(error);
-    }
-
-    // if (error.status === 403 && error?.error?.error?.tunnus == 1000)  {
-    //   this.handleNotLoggedIn();
-    // }
     const eiKirjautunut = 1000;
     const eiOikeuksia = 1003;
 
@@ -76,18 +47,43 @@ export class ErrorService {
 
   }
 
-  private getBackendErrorLog(backendError: Error, logMessage: string): string {
-    logMessage += ", palvelimen tilakoodilla " + backendError.tunnus;
+  private getBackendErrorLog(backendError: Error): string {
+    let logMessage = "Palvelimen virheen tilakoodi " + backendError.tunnus;
+
     if (backendError.virheilmoitus?.length > 1) {
-      logMessage += " ja viestillä: " + backendError.virheilmoitus;
+      logMessage += ' ja viesti: "' + backendError.virheilmoitus + '".';
     } else {
       logMessage += ".";
     }
+
     if (backendError.originaali && backendError.originaali.length > 1) {
       logMessage += " Alkuperäinen palvelimen virheilmoitus: " + backendError.originaali;
     }
-    return logMessage
+
+    return logMessage;
   }
+
+  private getHttpErrorLog(error: any): string {
+    let logMessage = '';
+    if (error.status === 0) {
+      logMessage = "Saatiin virhe statuskoodilla 0. Yleensä tapahtuu," +
+          "kun palvelimeen ei saada yhteyttä.";
+      if (error.error !== undefined) {
+        logMessage += ": " + error.error;
+      }
+    } else {
+      logMessage = "Saatin virhe";
+      if (error.status !== undefined) {
+        logMessage += " HTTP-tilakoodilla " + error.status;
+      }
+      if (error.message != undefined) {
+        logMessage += ' ja viestillä: "' + error.message;
+      }
+      logMessage += '.';
+    }
+    return logMessage;
+  }
+
 
   public handleNotLoggedIn() {
     console.log('errorService.handleNotLoggedIn(): et ole kirjaunut,' +
