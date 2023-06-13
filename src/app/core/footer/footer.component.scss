@@ -31,17 +31,11 @@ footer {
 
   mat-nav-list {
     align-self: flex-start;
+    font-weight: 500;
     padding: 18px 0 10px 0;
     margin-left: auto;
     max-width: 16em;
     text-align: right;
-    @if $debug {
-      border: {
-        style: dashed;
-        color: gray;
-        width: 1px;
-      }
-    }
   }
 
   .spacer {
@@ -65,10 +59,10 @@ footer {
     height: 22px;
   }
 
+  // Tärkeää olla footerin sisällä, vaikuttaa muuten muihin menuihin.
   ::ng-deep .mdc-list-item__primary-text {
     color: var(--contrast-color) !important;
   }
-
 }
 
 @media (max-width: 1015px) {
