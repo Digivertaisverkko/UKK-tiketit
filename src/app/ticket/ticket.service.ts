@@ -436,8 +436,8 @@ export class TicketService {
   formData.append('tiedosto', file);
   const progress = new Subject<number>();
   // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite
-  let url = `${this.api}/kurssi/${courseID}`
-  url = `/tiketti/${ticketID}/kommentti/${commentID}/liite`;
+  let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/
+      ${commentID}/liite`;
   // Virheiden testaukseen vaihda http.post -> fakeHttpPost
   // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
   this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
