@@ -13,7 +13,7 @@ import { StoreService } from '@core/services/store.service';
 })
 
 export class ProfileComponent implements OnInit {
-  public emailSettingsForm!: FormGroup;
+  public emailSettingsForm: FormGroup = this.buildEmailSettingsForm();
   public emailSettingsErrorMessage: string = '';
   public emailSettingsSuccessMessage: string = '';
   public errorMessage: string = '';
@@ -42,40 +42,20 @@ export class ProfileComponent implements OnInit {
     });
     this.userService.getSettings()
     .then(response => {
-      this.emailSettingsForm = this.createEmailSettingsForm(response);
+      this.setEmailSettingsFormValues(response);
+    });
+  }
+
+  private buildEmailSettingsForm(): FormGroup {
+    return this.formBuilder.group({
+      notify: [null],
+      summary: [null],
+      feedback: [null],
     });
   }
 
   public changeRemoveButton(): void {
     setTimeout(() => this.isRemovePressed = true, 300);
-  }
-
-  private createEmailSettingsForm(defaultSettings: MinunAsetukset): FormGroup {
-    let form: FormGroup = this.formBuilder.group({
-      notify: [defaultSettings['sposti-ilmoitus']],
-      summary: [defaultSettings['sposti-kooste']],
-      feedback: [defaultSettings['sposti-palaute']],
-    });
-
-    form.valueChanges.subscribe(() => {
-      let settings: MinunAsetukset = {
-        "sposti-ilmoitus": this.emailSettingsForm.controls['notify'].value,
-        "sposti-kooste": this.emailSettingsForm.controls['summary'].value,
-        "sposti-palaute": this.emailSettingsForm.controls['feedback'].value
-      }
-
-      this.userService.postSettings(settings)
-      .then(() => {
-        this.emailSettingsErrorMessage = '';
-        this.emailSettingsSuccessMessage = $localize `:@@Asetusten tallentaminen onnistui.:Asetusten tallentaminen onnistui.`;
-      })
-      .catch(() => {
-        this.emailSettingsSuccessMessage = '';
-        this.emailSettingsErrorMessage = $localize `:@@Asetusten tallentaminen epäonnistui.:Asetusten tallentaminen epäonnistui.`;
-      });
-    });
-
-    return form;
   }
 
   public downloadPersonalData(): void {
@@ -112,6 +92,35 @@ export class ProfileComponent implements OnInit {
       this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:
                                         Profiilin poistaminen epäonnistui`
                                         + '.';
+    });
+  }
+
+  private setEmailSettingsFormValues(defaultSettings: MinunAsetukset): void {
+    this.emailSettingsForm.controls['notify']
+    .setValue(defaultSettings['sposti-ilmoitus']);
+
+    this.emailSettingsForm.controls['summary']
+    .setValue(defaultSettings['sposti-kooste']);
+
+    this.emailSettingsForm.controls['feedback']
+    .setValue(defaultSettings['sposti-palaute']);
+
+    this.emailSettingsForm.valueChanges.subscribe(() => {
+      let settings: MinunAsetukset = {
+        "sposti-ilmoitus": this.emailSettingsForm.controls['notify'].value,
+        "sposti-kooste": this.emailSettingsForm.controls['summary'].value,
+        "sposti-palaute": this.emailSettingsForm.controls['feedback'].value
+      }
+
+      this.userService.postSettings(settings)
+      .then(() => {
+        this.emailSettingsErrorMessage = '';
+        this.emailSettingsSuccessMessage = $localize `:@@Asetusten tallentaminen onnistui.:Asetusten tallentaminen onnistui.`;
+      })
+      .catch(() => {
+        this.emailSettingsSuccessMessage = '';
+        this.emailSettingsErrorMessage = $localize `:@@Asetusten tallentaminen epäonnistui.:Asetusten tallentaminen epäonnistui.`;
+      });
     });
   }
 
