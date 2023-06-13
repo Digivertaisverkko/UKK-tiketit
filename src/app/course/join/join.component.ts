@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { AuthService } from '@core/services/auth.service';
 import { Constants } from '@shared/utils';
 import { CourseService } from '@course/course.service';
-import { InvitedInfo } from '@course/course.models'; 
+import { InvitedInfo } from '@course/course.models';
 import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
 
@@ -79,7 +79,8 @@ export class JoinComponent implements OnInit, OnDestroy {
   }
 
   public goToHome() {
-   this.router.navigateByUrl('home');
+    const route = `course/${this.courseid}/home`
+   this.router.navigateByUrl(route);
   }
 
   public joinCourse(): void{
@@ -162,5 +163,5 @@ export class JoinComponent implements OnInit, OnDestroy {
       }
     })
   }
-  
+
 }

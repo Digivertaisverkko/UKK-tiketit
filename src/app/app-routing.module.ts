@@ -11,7 +11,8 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 // courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: 'course/:courseid/home', component: HomeComponent },
+  { path: 'home', component: HomeComponent},
   { path: 'data-consent', component: DataConsentComponent },
   { path: 'no-data-consent', component: NoDataConsentComponent },
   { path: 'course/:courseid/forbidden', component: NoPrivilegesComponent },
