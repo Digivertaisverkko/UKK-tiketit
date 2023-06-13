@@ -1,18 +1,17 @@
-import { Router, ActivatedRoute } from '@angular/router';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Validators as EditorValidators } from 'ngx-editor';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { Validators as EditorValidators } from 'ngx-editor';
 
-import { TicketService  } from '../ticket.service';
-import { AuthService } from '@core/services/auth.service';
 import { Constants } from '@shared/utils';
-import { environment } from 'src/environments/environment';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
-import { User } from '@core/core.models'
+import { environment } from 'src/environments/environment';
 import { FileInfo, NewCommentResponse, Tiketti } from '../ticket.models';
 import { StoreService } from '@core/services/store.service';
+import { TicketService  } from '../ticket.service';
+import { User } from '@core/core.models'
 
 import schema from '@shared/editor/schema';
 
@@ -60,11 +59,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private auth : AuthService,
     private formBuilder: FormBuilder,
     private route : ActivatedRoute,
     private router: Router,
-    private store: StoreService,
+    private store : StoreService,
     private ticketService: TicketService,
     private titleServ: Title
   ) {
