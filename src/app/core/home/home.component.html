@@ -33,24 +33,29 @@
 <h2 i18n="@@Lue lisää">Lue lisää</h2>
 
 <div class="buttons-wrapper">
+
   <button (click)="true"
           color="primary"
-          style="display: none"
-          i18n="@@Dokumentaatio"
           mat-raised-button
           >
-    Dokumentaatio
+    <a href="https://github.com/Digivertaisverkko/UKK-tiketit/wiki"
+       target="_blank"
+       i18n="@@Dokumentaatio"
+      >
+      Dokumentaatio
+    </a>
   </button>
+
   <button (click)="true"
           mat-raised-button
           >
     <a  href="https://interact.oulu.fi/site/digivertaisverkko"
         target="_blank"
-        mat-list-item
         i18n="@@Hanke"
         >
       Hanke
     </a>
   </button>
+
 </div>
 
