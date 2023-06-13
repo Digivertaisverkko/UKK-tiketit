@@ -55,11 +55,6 @@ export class CommentComponent implements AfterViewInit{
       this.strings = new Map ([
         ['attach', $localize `:@@Liitä:Liitä` ],
         ['attachFiles', $localize `:@@Liitä tiedostoja:Liitä tiedostoja`],
-        ['confirmRemoveTooltip', $localize `:@@Vahvista kommentin poistaminen:
-          Vahvista kommentin poistaminen`],
-        ['proposedSolution', $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`],
-        ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`],
-        ['moreInfoNeeded', $localize `:@@Lisätietoa tarvitaan:Lisätietoa tarvitaan`]
       ]);
       this.attachFilesText = this.strings.get('attachFiles')!;
   }
