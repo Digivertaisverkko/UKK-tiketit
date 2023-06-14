@@ -106,14 +106,17 @@
 
           <input  formControlName="selectionName"
                   i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
-                  placeholder="Paina enter valinnan kirjoittamisen jälkeen."
+                  (keydown.arrowleft)="onArrowLeft($event)"
                   [matChipInputFor]="chipGrid"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="addOnBlur"
                   (matChipInputTokenEnd)="addSelection($event)"
-                  (keydown.arrowleft)="onArrowLeft($event)"
+                  placeholder="Paina enter valinnan kirjoittamisen jälkeen."
                   />
         </mat-chip-grid>
+        <mat-hint align="end">
+          {{ getArraysStringLength(field.valinnat) }} / 255
+        </mat-hint>
       </mat-form-field>
     </div>
 

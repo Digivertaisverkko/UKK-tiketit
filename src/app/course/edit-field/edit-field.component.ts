@@ -63,7 +63,7 @@ export class EditFieldComponent implements OnInit {
   ngOnInit(): void {
     this.trackRouteParameters();
   }
-  
+
   public addSelection(event: MatChipInputEvent): void {
     const selection = (event.value || '').trim();
     if (selection) {
@@ -82,6 +82,17 @@ export class EditFieldComponent implements OnInit {
       infoText: [ '' ],
       mandatory: [ '' ],
     })
+  }
+
+  public getArraysStringLength(array: String[]): number {
+    if (array.length === 0 ) return 0
+    let totalLength = 0;
+    for (let string of array) {
+      totalLength += string.length;
+    }
+    // Muuttujien välilä on palvelimella välimerkki.
+    totalLength += array.length - 1;
+    return totalLength;
   }
 
   public changeRemoveButton() {
