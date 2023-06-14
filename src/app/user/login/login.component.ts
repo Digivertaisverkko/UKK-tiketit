@@ -46,28 +46,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.store.setParticipant(null);
   }
 
-  public login(): void {
-    if (!this.loginid) throw new Error('Login ID puuttuu URL:sta.');
-
-    // this.isEmailValid = this.validateEmail(this.email);
-    // Lisää ensin custom ErrorStateMatcher
-    // console.log('login id: ' + this.loginID);
-    this.auth.login(this.email, this.password, this.loginid)
-      .then(response => {
-        if (response?.success == true) {
-          var redirectUrl: string;
-          if (response.redirectUrl == undefined) {
-            // TODO: Yritä session storagesta etsiä tallennettua?
-            redirectUrl = 'course/' + this.courseid +  '/list-tickets';
-          } else {
-            redirectUrl = response.redirectUrl;
-          }
-          this.router.navigateByUrl(redirectUrl);
-        }
-      })
-      .catch(error => this.handleError(error));
-  }
-
   private handleError (error: any) {
     switch (error?.tunnus) {
       case 1001:
@@ -86,6 +64,25 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.errorMessage = $localize`:@@Kirjautuminen ei onnistunut:
             Kirjautuminen ei onnistunut` + '.';
     }
+  }
+
+  public login(): void {
+    if (!this.loginid) throw new Error('Login ID puuttuu URL:sta.');
+
+    this.auth.login(this.email, this.password, this.loginid)
+    .then(response => {
+      if (response?.success === true) {
+        var redirectUrl: string;
+        if (response.redirectUrl === undefined) {
+          // TODO: Yritä session storagesta etsiä tallennettua?
+          redirectUrl = 'course/' + this.courseid +  '/list-tickets';
+        } else {
+          redirectUrl = response.redirectUrl;
+        }
+        this.router.navigateByUrl(redirectUrl);
+      }
+    })
+    .catch(error => this.handleError(error));
   }
 
 }
