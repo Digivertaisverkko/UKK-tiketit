@@ -96,8 +96,9 @@ export class ProfileComponent implements OnInit {
     this.userService.removeUser()
     .then(response => {
       if (response) {
+        // Käyttäjä menettää kirjautumisen tilan, kun tili poistetaan.
+        // Ohjataan käyttäjä oikeaan paikkaan tässä tilanteessa.
         this.errorService.handleNotLoggedIn();
-
       } else {
         throw new Error;
       }

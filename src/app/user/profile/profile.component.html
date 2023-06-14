@@ -9,7 +9,8 @@
 
     <mat-form-field appearance="fill">
       <mat-label i18n="@@Nimi">Nimi</mat-label>
-      <input  formControlName="name"
+      <input  data-testid="name-input"
+              formControlName="name"
               matInput
               maxlength="50"
               name="name"
@@ -31,7 +32,8 @@
 
     <mat-form-field appearance="fill">
       <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-      <input  formControlName="email"
+      <input  data-testid="email-input"
+              formControlName="email"
               matInput
               maxlength="50"
               name="email"
@@ -58,16 +60,19 @@
     <h2 class="theme-subheading" i18n="@@Sähköpostiasetukset">Sähköpostiasetukset</h2>
     <mat-checkbox formControlName="notify"
                   i18n="@@Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista"
+                  id="email-notify"
                   >
       Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista
     </mat-checkbox>
     <mat-checkbox formControlName="summary"
                   i18n="@@Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista"
+                  id="email-summary"
                   >
       Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista
     </mat-checkbox>
     <mat-checkbox formControlName="feedback"
                   i18n="@@Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi"
+                  id="email-feedback"
                   >
       Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
     </mat-checkbox>
@@ -94,6 +99,7 @@
   <div class="personal-data-row">
     <span>
       <button (click)="downloadPersonalData()"
+              data-testid="personal-data-download"
               i18n="@@Lataa kaikki datani"
               mat-raised-button
               type="button"
@@ -114,6 +120,7 @@
       <div>
         <button (click)="changeRemoveButton()"
                 color="accent"
+                data-testid="personal-data-delete"
                 i18n="@@Poista tili ja data"
                 mat-raised-button
                 *ngIf="isRemovePressed === false"
@@ -124,6 +131,7 @@
       </div>
       <button (click)="removeProfile()"
               color="accent"
+              data-testid="personal-data-delete-confirm"
               i18n="@@Vahvista poisto"
               mat-raised-button
               *ngIf="isRemovePressed === true"
