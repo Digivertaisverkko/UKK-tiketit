@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
 import { ErrorService } from '@core/services/error.service';
@@ -19,8 +19,15 @@ export class ProfileComponent implements OnInit {
   public errorMessage: string = '';
   public isPersonalInfoLoaded: boolean = false;
   public isRemovePressed: boolean = false;
-  public userEmail: string = '';
-  public userName: string = '';
+  public personalInfoForm: FormGroup = this.buildPersonalInfoForm();
+
+  get personalInfoEmail(): FormControl {
+    return this.personalInfoForm.get('email') as FormControl;
+  }
+
+  get personalInfoName(): FormControl {
+    return this.personalInfoForm.get('name') as FormControl;
+  }
 
   constructor(private errorService: ErrorService,
               private formBuilder: FormBuilder,
@@ -31,13 +38,14 @@ export class ProfileComponent implements OnInit {
   {}
 
   ngOnInit(): void {
+    this.personalInfoForm.disable();
     this.titleServ.setTitle(
       this.store.getBaseTitle() + $localize `:@@Profiili:Profiili`
     );
     this.userService.getPersonalInfo()
     .then(response => {
-      this.userName = response.nimi;
-      this.userEmail = response.sposti;
+      this.personalInfoForm.controls['name'].setValue(response.nimi);
+      this.personalInfoForm.controls['email'].setValue(response.sposti);
       this.isPersonalInfoLoaded = true;
     });
     this.userService.getSettings()
@@ -52,6 +60,13 @@ export class ProfileComponent implements OnInit {
       summary: [null],
       feedback: [null],
     });
+  }
+
+  private buildPersonalInfoForm(): FormGroup {
+    return this.formBuilder.group({
+      name: [ '' ],
+      email: [ '' ],
+    })
   }
 
   public changeRemoveButton(): void {

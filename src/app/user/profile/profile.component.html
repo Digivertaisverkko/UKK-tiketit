@@ -4,56 +4,55 @@
 <div *ngIf="isPersonalInfoLoaded">
 
   <section class="personal-info">
-    <h2 class="theme-subheading" i18n="@@Henkilökohtaiset tiedot">
-      Henkilökohtaiset tiedot
-    </h2>
+    <form [formGroup]="personalInfoForm">
+      <h2 class="theme-subheading" i18n="@@Henkilökohtaiset tiedot">
+        Henkilökohtaiset tiedot
+      </h2>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Nimi">Nimi</mat-label>
-      <input  disabled
-              matInput
-              maxlength="50"
-              name="name"
-              [(ngModel)]="userName"
-              placeholder=""
-              >
+      <mat-form-field appearance="fill">
+        <mat-label i18n="@@Nimi">Nimi</mat-label>
+        <input  formControlName="name"
+                matInput
+                maxlength="50"
+                name="name"
+                placeholder=""
+                >
 
-      <mat-hint align="end">{{ userName.length }} / 50</mat-hint>
-    </mat-form-field>
+        <mat-hint align="end">{{ personalInfoName.value.length }} / 50</mat-hint>
+      </mat-form-field>
 
-    <mat-icon (click)="tooltip.toggle()"
-              i18n-matTooltip="@@Järjestelmään tallennettu nimesi."
-              matTooltip="Järjestelmään tallennettu nimesi."
-              matTooltipPosition="after"
-              [ngStyle]="{ 'padding-left': '15px' }"
-              #tooltip="matTooltip"
-              >
-      help_outline
-    </mat-icon>
+      <mat-icon (click)="tooltip.toggle()"
+                i18n-matTooltip="@@Järjestelmään tallennettu nimesi."
+                matTooltip="Järjestelmään tallennettu nimesi."
+                matTooltipPosition="after"
+                [ngStyle]="{ 'padding-left': '15px' }"
+                #tooltip="matTooltip"
+                >
+        help_outline
+      </mat-icon>
 
-    <mat-form-field appearance="fill">
-      <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-      <input  disabled
-              matInput
-              maxlength="50"
-              name="email"
-              [(ngModel)]="userEmail"
-              placeholder=""
-              >
+      <mat-form-field appearance="fill">
+        <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
+        <input  formControlName="email"
+                matInput
+                maxlength="50"
+                name="email"
+                placeholder=""
+                >
 
-      <mat-hint align="end">{{ userEmail.length }} / 50</mat-hint>
-    </mat-form-field>
+        <mat-hint align="end">{{ personalInfoEmail.value.length }} / 50</mat-hint>
+      </mat-form-field>
 
-    <mat-icon (click)="tooltip.toggle()"
-              i18n-matTooltip="@@Järjestelmään tallennettu sähköpostiosoitteesi."
-              matTooltip="Järjestelmään tallennettu sähköpostiosoitteesi."
-              matTooltipPosition="after"
-              [ngStyle]="{ 'padding-left': '15px' }"
-              #tooltip="matTooltip"
-              >
-      help_outline
-    </mat-icon>
-
+      <mat-icon (click)="tooltip.toggle()"
+                i18n-matTooltip="@@Järjestelmään tallennettu sähköpostiosoitteesi."
+                matTooltip="Järjestelmään tallennettu sähköpostiosoitteesi."
+                matTooltipPosition="after"
+                [ngStyle]="{ 'padding-left': '15px' }"
+                #tooltip="matTooltip"
+                >
+        help_outline
+      </mat-icon>
+    </form>
   </section>
 
   <section class="e-mail-settings">
