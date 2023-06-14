@@ -17,7 +17,6 @@ export class ProfileComponent implements OnInit {
   public emailSettingsForm: FormGroup = this.buildEmailSettingsForm();
   public emailSettingsSuccessMessage: string = '';
   public errorMessage: string = '';
-  public isPersonalInfoLoaded: boolean = false;
   public isRemovePressed: boolean = false;
   public personalInfoForm: FormGroup = this.buildPersonalInfoForm();
 
@@ -39,6 +38,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.personalInfoForm.disable();
+    this.emailSettingsForm.disable();
     this.titleServ.setTitle(
       this.store.getBaseTitle() + $localize `:@@Profiili:Profiili`
     );
@@ -46,11 +46,11 @@ export class ProfileComponent implements OnInit {
     .then(response => {
       this.personalInfoForm.controls['name'].setValue(response.nimi);
       this.personalInfoForm.controls['email'].setValue(response.sposti);
-      this.isPersonalInfoLoaded = true;
     });
     this.userService.getSettings()
     .then(response => {
       this.setEmailSettingsFormValues(response);
+      this.emailSettingsForm.enable();
     });
   }
 

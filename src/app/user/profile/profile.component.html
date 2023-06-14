@@ -1,155 +1,151 @@
 <app-headline></app-headline>
 <app-beginning-button></app-beginning-button>
 
-<div *ngIf="isPersonalInfoLoaded">
-
-  <section class="personal-info">
-    <form [formGroup]="personalInfoForm">
-      <h2 class="theme-subheading" i18n="@@Henkilökohtaiset tiedot">
-        Henkilökohtaiset tiedot
-      </h2>
-
-      <mat-form-field appearance="fill">
-        <mat-label i18n="@@Nimi">Nimi</mat-label>
-        <input  formControlName="name"
-                matInput
-                maxlength="50"
-                name="name"
-                placeholder=""
-                >
-
-        <mat-hint align="end">{{ personalInfoName.value.length }} / 50</mat-hint>
-      </mat-form-field>
-
-      <mat-icon (click)="tooltip.toggle()"
-                i18n-matTooltip="@@Järjestelmään tallennettu nimesi."
-                matTooltip="Järjestelmään tallennettu nimesi."
-                matTooltipPosition="after"
-                [ngStyle]="{ 'padding-left': '15px' }"
-                #tooltip="matTooltip"
-                >
-        help_outline
-      </mat-icon>
-
-      <mat-form-field appearance="fill">
-        <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-        <input  formControlName="email"
-                matInput
-                maxlength="50"
-                name="email"
-                placeholder=""
-                >
-
-        <mat-hint align="end">{{ personalInfoEmail.value.length }} / 50</mat-hint>
-      </mat-form-field>
-
-      <mat-icon (click)="tooltip.toggle()"
-                i18n-matTooltip="@@Järjestelmään tallennettu sähköpostiosoitteesi."
-                matTooltip="Järjestelmään tallennettu sähköpostiosoitteesi."
-                matTooltipPosition="after"
-                [ngStyle]="{ 'padding-left': '15px' }"
-                #tooltip="matTooltip"
-                >
-        help_outline
-      </mat-icon>
-    </form>
-  </section>
-
-  <section class="e-mail-settings">
-    <form [formGroup]="emailSettingsForm">
-      <h2 class="theme-subheading" i18n="@@Sähköpostiasetukset">Sähköpostiasetukset</h2>
-      <mat-checkbox formControlName="notify"
-                    i18n="@@Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista"
-                    >
-        Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista
-      </mat-checkbox>
-      <mat-checkbox formControlName="summary"
-                    i18n="@@Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista"
-                    >
-        Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista
-      </mat-checkbox>
-      <mat-checkbox formControlName="feedback"
-                    i18n="@@Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi"
-                    >
-        Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
-      </mat-checkbox>
-    </form>
-    <p  class="theme-success-message"
-        *ngIf="emailSettingsSuccessMessage.length > 0"
-        >
-      {{ emailSettingsSuccessMessage }}
-    </p>
-    <app-error i18n-title="@@Virhe"
-                    message="{{ emailSettingsErrorMessage }}"
-                    *ngIf="emailSettingsErrorMessage.length > 0"
-                    [styles]="{ margin: '0' }"
-                    title="Virhe"
-                    >
-    </app-error>
-  </section>
-
-  <section class="personal-data">
-    <h2 class="theme-subheading" i18n="@@Henkilötietojen hallinta">
-      Henkilötietojen hallinta
+<section class="personal-info">
+  <form [formGroup]="personalInfoForm">
+    <h2 class="theme-subheading" i18n="@@Henkilökohtaiset tiedot">
+      Henkilökohtaiset tiedot
     </h2>
 
-    <div class="personal-data-row">
-      <span>
-        <button (click)="downloadPersonalData()"
-                i18n="@@Lataa kaikki datani"
-                mat-raised-button
-                type="button"
-                >
-          Lataa kaikki datani
-        </button>
-      </span>
-      <span>
-        <p i18n="@@Yleisen tietosuoja-asetuksen mukainen tiedonhankinta pyyntö. Voit ladata kaikki omat tietosi.">
-          Yleisen tietosuoja-asetuksen mukainen tiedonhankinta pyyntö. Voit
-          ladata kaikki omat tietosi.
-        </p>
-      </span>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label i18n="@@Nimi">Nimi</mat-label>
+      <input  formControlName="name"
+              matInput
+              maxlength="50"
+              name="name"
+              placeholder=""
+              >
 
-    <div class="personal-data-row">
-      <span>
-        <div>
-          <button (click)="changeRemoveButton()"
-                  color="accent"
-                  i18n="@@Poista tili ja data"
-                  mat-raised-button
-                  *ngIf="isRemovePressed === false"
-                  type="button"
+      <mat-hint align="end">{{ personalInfoName.value.length }} / 50</mat-hint>
+    </mat-form-field>
+
+    <mat-icon (click)="tooltip.toggle()"
+              i18n-matTooltip="@@Järjestelmään tallennettu nimesi."
+              matTooltip="Järjestelmään tallennettu nimesi."
+              matTooltipPosition="after"
+              [ngStyle]="{ 'padding-left': '15px' }"
+              #tooltip="matTooltip"
+              >
+      help_outline
+    </mat-icon>
+
+    <mat-form-field appearance="fill">
+      <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
+      <input  formControlName="email"
+              matInput
+              maxlength="50"
+              name="email"
+              placeholder=""
+              >
+
+      <mat-hint align="end">{{ personalInfoEmail.value.length }} / 50</mat-hint>
+    </mat-form-field>
+
+    <mat-icon (click)="tooltip.toggle()"
+              i18n-matTooltip="@@Järjestelmään tallennettu sähköpostiosoitteesi."
+              matTooltip="Järjestelmään tallennettu sähköpostiosoitteesi."
+              matTooltipPosition="after"
+              [ngStyle]="{ 'padding-left': '15px' }"
+              #tooltip="matTooltip"
+              >
+      help_outline
+    </mat-icon>
+  </form>
+</section>
+
+<section class="e-mail-settings">
+  <form [formGroup]="emailSettingsForm">
+    <h2 class="theme-subheading" i18n="@@Sähköpostiasetukset">Sähköpostiasetukset</h2>
+    <mat-checkbox formControlName="notify"
+                  i18n="@@Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista"
                   >
-            Poista tili ja data
-          </button>
-        </div>
-        <button (click)="removeProfile()"
-                color="accent"
-                i18n="@@Vahvista poisto"
-                mat-raised-button
-                *ngIf="isRemovePressed === true"
-                type="button"
-                >
-            Vahvista poisto
-        </button>
-      </span>
-      <span>
-        <p i18n="@@Poistaa kaiken järjestelmään tallennetut tietosi, mukaan lukien henkilötiedot, kysymykset, kommentit, liitteet ja kirjautumistiedot.">
-          Poistaa kaiken järjestelmään tallennetut tietosi, mukaan lukien
-          henkilötiedot, kysymykset, kommentit, liitteet ja kirjautumistiedot.
-        </p>
-      </span>
-    </div>
-
-  </section>
-
+      Lähetä minulle sähköpostia tulleista kysymyksistä ja kommenteista
+    </mat-checkbox>
+    <mat-checkbox formControlName="summary"
+                  i18n="@@Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista"
+                  >
+      Lähetä minulle sähköpostitse päivittäinen kooste tulleista kysymyksistä ja kommenteista
+    </mat-checkbox>
+    <mat-checkbox formControlName="feedback"
+                  i18n="@@Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi"
+                  >
+      Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
+    </mat-checkbox>
+  </form>
+  <p  class="theme-success-message"
+      *ngIf="emailSettingsSuccessMessage.length > 0"
+      >
+    {{ emailSettingsSuccessMessage }}
+  </p>
   <app-error i18n-title="@@Virhe"
-                  message="{{ errorMessage }}"
-                  *ngIf="errorMessage.length > 0"
+                  message="{{ emailSettingsErrorMessage }}"
+                  *ngIf="emailSettingsErrorMessage.length > 0"
                   [styles]="{ margin: '0' }"
                   title="Virhe"
                   >
   </app-error>
+</section>
 
-</div>
+<section class="personal-data">
+  <h2 class="theme-subheading" i18n="@@Henkilötietojen hallinta">
+    Henkilötietojen hallinta
+  </h2>
+
+  <div class="personal-data-row">
+    <span>
+      <button (click)="downloadPersonalData()"
+              i18n="@@Lataa kaikki datani"
+              mat-raised-button
+              type="button"
+              >
+        Lataa kaikki datani
+      </button>
+    </span>
+    <span>
+      <p i18n="@@Yleisen tietosuoja-asetuksen mukainen tiedonhankinta pyyntö. Voit ladata kaikki omat tietosi.">
+        Yleisen tietosuoja-asetuksen mukainen tiedonhankinta pyyntö. Voit
+        ladata kaikki omat tietosi.
+      </p>
+    </span>
+  </div>
+
+  <div class="personal-data-row">
+    <span>
+      <div>
+        <button (click)="changeRemoveButton()"
+                color="accent"
+                i18n="@@Poista tili ja data"
+                mat-raised-button
+                *ngIf="isRemovePressed === false"
+                type="button"
+                >
+          Poista tili ja data
+        </button>
+      </div>
+      <button (click)="removeProfile()"
+              color="accent"
+              i18n="@@Vahvista poisto"
+              mat-raised-button
+              *ngIf="isRemovePressed === true"
+              type="button"
+              >
+          Vahvista poisto
+      </button>
+    </span>
+    <span>
+      <p i18n="@@Poistaa kaiken järjestelmään tallennetut tietosi, mukaan lukien henkilötiedot, kysymykset, kommentit, liitteet ja kirjautumistiedot.">
+        Poistaa kaiken järjestelmään tallennetut tietosi, mukaan lukien
+        henkilötiedot, kysymykset, kommentit, liitteet ja kirjautumistiedot.
+      </p>
+    </span>
+  </div>
+
+</section>
+
+<app-error  i18n-title="@@Virhe"
+            message="{{ errorMessage }}"
+            *ngIf="errorMessage.length > 0"
+            [styles]="{ margin: '0' }"
+            title="Virhe"
+            >
+</app-error>
