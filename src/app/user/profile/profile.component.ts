@@ -2,9 +2,9 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
-import { MinunAsetukset, UserService } from '../user.service';
 import { ErrorService } from '@core/services/error.service';
 import { StoreService } from '@core/services/store.service';
+import { MinunAsetukset, UserService } from '@user/user.service';
 
 @Component({
   selector: 'app-profile',
