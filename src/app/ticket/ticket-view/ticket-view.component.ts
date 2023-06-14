@@ -24,13 +24,13 @@ import schema from '@shared/editor/schema';
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
+  @Input() courseid: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
-  public courseID: string | null;
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -68,7 +68,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ) {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
     this.ticketID = this.ticketIdFromParent !== null
         ? this.ticketIdFromParent
         : String(this.route.snapshot.paramMap.get('id'));
@@ -148,7 +147,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
     this.attachments.clear();
-    const url = `/course/${this.courseID}/submit-faq/${this.ticketID}`;
+    const url = `/course/${this.courseid}/submit-faq/${this.ticketID}`;
     this.router.navigate([url], { state: { copiedFromTicket: 'true' } });
     // this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
   }
@@ -181,7 +180,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public editTicket(): void {
-    let url = `/course/${this.courseID}/submit/${this.ticketID}`;
+    let url = `/course/${this.courseid}/submit/${this.ticketID}`;
     this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 
@@ -192,7 +191,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
             Kysymyksen poistaminen ei onnistunut.`;
       } else {
-        this.router.navigateByUrl('/course/' + this.courseID + '/list-tickets');
+        this.router.navigateByUrl('/course/' + this.courseid + '/list-tickets');
       }
     }).catch(error => {
       if (error?.tunnus == 1003) {
@@ -213,7 +212,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (event === "done") {
       this.isEditingComment = false;
       this.state = 'editing';
-      this.fetchTicket(this.courseID);
+      this.fetchTicket(this.courseid);
     } else if (event === 'editingComment') {
       this.isEditingComment = true
     } else if (event === "sendingFiles") {
@@ -225,11 +224,11 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public sendComment(): void {
     this.form.markAllAsTouched();
-    if (this.form.invalid || !this.courseID) return;
+    if (this.form.invalid || !this.courseid) return;
     const commentText = this.form.controls['message'].value;
-    this.ticketService.addComment(this.ticketID, this.courseID, commentText,
+    this.ticketService.addComment(this.ticketID, this.courseid, commentText,
       this.newCommentState).then(response => {
-        if (response == null || response?.success !== true || !this.courseID) {
+        if (response == null || response?.success !== true || !this.courseid) {
           this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
               Kommentin lisääminen kysymykseen epäonnistui.`;
           throw new Error('Kommentin lähettäminen epäonnistui.');
@@ -237,12 +236,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.message.setValue('');
         this.form = this.buildForm();
         if (!this.fileInfoList || this.fileInfoList.length === 0) {
-          this.fetchTicket(this.courseID);
+          this.fetchTicket(this.courseid);
           return
         }
         response = response as NewCommentResponse;
         const commentID = response.kommentti;
-        this.sendFiles(this.ticketID, commentID, this.courseID);
+        this.sendFiles(this.ticketID, commentID, this.courseid);
       }).catch(error => {
         this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
             Kommentin lisääminen kysymykseen epäonnistui.`;
@@ -265,7 +264,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.attachments.clear();
         this.state = 'editing';
         this.form.enable();
-        this.fetchTicket(this.courseID);
+        this.fetchTicket(this.courseid);
       })
   }
 
@@ -276,7 +275,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.fetchTicketsSub = timer(0, pollRate)
       .pipe(
         takeUntil(this.unsubscribe$),
-        tap(() => this.fetchTicket(this.courseID))
+        tap(() => this.fetchTicket(this.courseid))
       )
       .subscribe();
     }

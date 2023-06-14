@@ -11,7 +11,7 @@
           (click)="changeRemoveButton()"
           i18n="@@Poista"
           mat-raised-button
-          *ngIf="fieldID !== null && isRemovePressed === false"
+          *ngIf="fieldid !== null && isRemovePressed === false"
           >
     Poista
   </button>
@@ -173,7 +173,7 @@
       <button class="cancel-button"
               i18n="@@Peru"
               mat-raised-button
-              [routerLink]="'/course/' + courseID + '/settings'"
+              [routerLink]="'/course/' + courseid + '/settings'"
               type="button"
               >
         Peru

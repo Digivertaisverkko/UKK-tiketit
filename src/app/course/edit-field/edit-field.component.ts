@@ -1,8 +1,10 @@
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
+    from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
 
 import { Constants } from '@shared/utils';
@@ -15,12 +17,12 @@ import { Kenttapohja } from '../course.models';
 })
 
 export class EditFieldComponent implements OnInit {
+  @Input() courseid: string = '';
+  @Input() fieldid: string | null = null;
   public addOnBlur = true;
   public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.
-  public courseID: string = '';
   public errorMessage: string = '';
   public field: Kenttapohja;
-  public fieldID: string | null = null;
   public form: FormGroup = this.buildForm();
   public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
@@ -61,7 +63,15 @@ export class EditFieldComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.trackRouteParameters();
+    // Kentän id on uutta kenttää tehdessä null.
+    if (this.fieldid === null) {
+      this.titleServ.setTitle(Constants.baseTitle + $localize
+          `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
+    } else {
+    /* Lähetykseen tarvitaan kaikkien kenttien tiedot, vaikka lähetettäisiin
+       uusi kenttä. */
+       this.getFieldInfo(this.courseid, this.fieldid);
+    }
   }
 
   public addSelection(event: MatChipInputEvent): void {
@@ -146,7 +156,7 @@ export class EditFieldComponent implements OnInit {
       // Tarvitaan tietojen lähettämiseen.
       this.allFields = response;
 
-      if (this.allFields.length > 0 && this.fieldID) {
+      if (this.allFields.length > 0 && this.fieldid) {
         let matchingField = response.filter(field => String(field.id) === fieldID);
         if (matchingField == null) {
           throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
@@ -193,10 +203,9 @@ export class EditFieldComponent implements OnInit {
         if (response === true ) {
           this.router.navigateByUrl('/course/' + courseID + '/settings')
         } else {
-          console.log('Tikettipohjan muuttaminen epäonnistui.');
+          throw Error;
         }
       }).catch (() => {
-        // TODO: käännä.
         this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
         Kenttäpohjan muuttaminen ei onnistunut.`;
       })
@@ -209,38 +218,21 @@ export class EditFieldComponent implements OnInit {
     this.form.controls['selections'].setValue(this.field.valinnat);
   }
 
-  private trackRouteParameters() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) throw new Error('Virhe: ei kurssi ID:ä.');
-      this.fieldID = paramMap.get('fieldid')
-      this.courseID = courseID;
-      // Kentän id on uudella kentällä null.
-      if  (!this.fieldID) {
-        this.titleServ.setTitle(Constants.baseTitle + $localize
-            `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
-      }
-      // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
-      // uusi kenttä.
-      this.getFieldInfo(courseID, this.fieldID);
-    });
-  }
-
   // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
   public updateAllFields(remove?: boolean): void {
-    if (this.form.invalid) return
+    if (this.form.invalid || !this.courseid) return
     const newField = this.createField();
-    if (this.fieldID == null) {   // Ellei ole uusi kenttä.
+    if (this.fieldid == null) {   // Ellei ole uusi kenttä.
       this.allFields.push(newField);
     } else {
-      const index = this.allFields.findIndex(field => field.id == this.fieldID);
+      const index = this.allFields.findIndex(field => field.id == this.fieldid);
       if (remove) {
         this.allFields.splice(index, 1);
       } else {
         this.allFields.splice(index, 1, newField)
       }
     }
-    this.sendAllFields(this.courseID, this.allFields);
+    this.sendAllFields(this.courseid, this.allFields);
   }
 
 }
