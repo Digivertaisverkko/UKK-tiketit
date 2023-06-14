@@ -1,0 +1,27 @@
+$debug: false;
+
+p {
+  align-items: center;
+  display: flex;
+  padding: 0.5rem;
+  // background-color: #C8E6C9;
+  border: #4CAF50 solid 3px;
+  border-radius: 4px;
+  justify-content: center;
+}
+
+mat-icon {
+  @if $debug { border: 1px dotted gray }
+  color: #388E3C;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 0.5rem;
+  font-size: 2.3rem;
+  height: 2.3rem;
+  @if $debug { border: 1px dotted blue }
+  width: 2.3rem;
+}
+
+span {
+  @if $debug {  border: 1px dotted gray }
+}

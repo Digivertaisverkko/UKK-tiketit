@@ -1,4 +1,4 @@
-<app-headline></app-headline>
+<app-headline></app-headline>
 
 <app-beginning-button
     (clicked)="showConfirm = true"
@@ -69,7 +69,9 @@
     >
 </app-error>
 
-<p *ngIf="message.length >0" class="theme-success-message">{{message}}</p>
+<!-- <p *ngIf="message.length >0" class="theme-success-message">{{message}}</p> -->
+
+<app-success *ngIf="message.length >0">{{ message }}</app-success>
 
 <div class="theme-actions" *ngIf="errorMessage.length === 0">
 
