@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.auth.login(this.email, this.password, this.loginid)
     .then(response => {
       if (response?.success === true) {
-        var redirectUrl: string;
+        let redirectUrl: string;
         if (response.redirectUrl === undefined) {
           // TODO: Yritä session storagesta etsiä tallennettua?
           redirectUrl = 'course/' + this.courseid +  '/list-tickets';
