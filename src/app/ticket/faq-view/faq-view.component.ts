@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TicketService } from '../ticket.service';
-import { Constants } from '@shared/utils';
 import { Tiketti } from '../ticket.models';
 import { Title } from '@angular/platform-browser';
 import { User, Error } from '@core/core.models';
@@ -43,7 +42,7 @@ export class FaqViewComponent implements OnInit {
         .then((response) => {
           console.dir(response);
           this.ticket = response;
-          this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
+          this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
         })
         .catch(error => {
           this.errorMessage =

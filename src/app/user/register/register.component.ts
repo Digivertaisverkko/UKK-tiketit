@@ -5,7 +5,6 @@ import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
-import { Constants } from '@shared/utils';
 import { InvitedInfo } from '@course/course.models';
 import { StoreService } from '@core/services/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
@@ -103,7 +102,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
   private getCourseName(courseid: string) {
     this.courses.getCourseName(courseid).then(response => {
       this.courseName = response ?? '';
-      this.title.setTitle(Constants.baseTitle + $localize `:@@Luo käyttäjätili kurssille:
+      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Luo käyttäjätili kurssille:
           Luo käyttäjätili kurssille` + this.courseName);
     }).catch((response) => {
     });

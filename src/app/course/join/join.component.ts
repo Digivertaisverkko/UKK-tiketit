@@ -4,7 +4,6 @@ import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
-import { Constants } from '@shared/utils';
 import { CourseService } from '@course/course.service';
 import { InvitedInfo } from '@course/course.models';
 import { StoreService } from '@core/services/store.service';
@@ -113,7 +112,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   private getCourseName(courseid: string) {
     this.courses.getCourseName(courseid).then(response => {
       this.courseName = response ?? '';
-      this.title.setTitle(Constants.baseTitle + $localize `:@@Liity kurssille:
+      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Liity kurssille:
           Liity kurssille` + this.courseName);
     }).catch((response) => {
     });

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Constants } from '@shared/utils';
 import { Title } from '@angular/platform-browser';
 import { StoreService } from '../services/store.service';
 
@@ -45,7 +44,7 @@ export class NoPrivilegesComponent implements OnInit {
     private store: StoreService,
     private title: Title
     ) {
-      this.title.setTitle(Constants.baseTitle + $localize
+      this.title.setTitle(this.store.getBaseTitle() + $localize
             `:@@Tästä ei pääse:Tästä ei pääse`);
       this.isLoggedIn = this.store.getIsLoggedIn();
   }

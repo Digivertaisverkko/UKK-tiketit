@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../services/auth.service';
-import { Constants } from '@shared/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   templateUrl: './data-consent.component.html',
@@ -23,10 +23,11 @@ export class DataConsentComponent implements OnInit {
     private auth: AuthService,
     public dialog: MatDialog,
     private router: Router,
+    private store: StoreService,
     private title: Title
     ) {
       this.error = { title: '', message: '' };
-      this.title.setTitle(Constants.baseTitle + $localize `:@@Tervetuloa:Tervetuloa`);
+      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Tervetuloa:Tervetuloa`);
       // route.snapshot.paramMap.get ei toiminut tässä.
       const urlParams = new URLSearchParams(window.location.search);
       this.tokenid = urlParams.get('tokenid');

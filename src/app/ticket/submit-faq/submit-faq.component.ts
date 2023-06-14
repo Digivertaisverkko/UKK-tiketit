@@ -8,12 +8,12 @@ import { Subject } from 'rxjs';
 
 import { CourseService } from '@course/course.service';
 import schema from '@shared/editor/schema';
-import { Constants } from '@shared/utils';
 import { EditAttachmentsComponent }
     from '@ticket/components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, FileInfo, Kentta, Liite, Tiketti, UusiUKK }
     from '@ticket/ticket.models';
 import { TicketService } from '@ticket/ticket.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   selector: 'app-submit-faq',
@@ -63,6 +63,7 @@ export class SubmitFaqComponent implements OnInit {
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
+              private store: StoreService,
               private ticketService: TicketService,
               private titleServ: Title)
   {}
@@ -73,7 +74,7 @@ export class SubmitFaqComponent implements OnInit {
 
     if (this.ticketId === null) {
       this.titleServ.setTitle(
-        Constants.baseTitle + $localize `:@@Uusi UKK:Uusi UKK`
+        this.store.getBaseTitle() + $localize `:@@Uusi UKK:Uusi UKK`
       );
       this.fetchAdditionalFields();
     } else {
@@ -153,7 +154,7 @@ export class SubmitFaqComponent implements OnInit {
         this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       }
       this.originalTicket = response;
-      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
+      this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
 

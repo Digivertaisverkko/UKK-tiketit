@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
 import { MinunAsetukset, UserService } from '../user.service';
-import { Constants } from '@shared/utils';
 import { ErrorService } from '@core/services/error.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,13 +25,14 @@ export class ProfileComponent implements OnInit {
   constructor(private errorService: ErrorService,
               private formBuilder: FormBuilder,
               private renderer: Renderer2,
+              private store: StoreService,
               private titleServ: Title,
               private userService: UserService)
   {}
 
   ngOnInit(): void {
     this.titleServ.setTitle(
-      Constants.baseTitle + $localize `:@@Profiili:Profiili`
+      this.store.getBaseTitle() + $localize `:@@Profiili:Profiili`
     );
     this.userService.getPersonalInfo()
     .then(response => {

@@ -1,15 +1,15 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Router } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
 
-import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -49,8 +49,8 @@ export class EditFieldComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
     private courses: CourseService,
+    private store: StoreService,
     private titleServ: Title
   ) {
     this.field = {
@@ -65,7 +65,7 @@ export class EditFieldComponent implements OnInit {
   ngOnInit(): void {
     // Kentän id on uutta kenttää tehdessä null.
     if (this.fieldid === null) {
-      this.titleServ.setTitle(Constants.baseTitle + $localize
+      this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
     } else {
     /* Lähetykseen tarvitaan kaikkien kenttien tiedot, vaikka lähetettäisiin
@@ -171,7 +171,7 @@ export class EditFieldComponent implements OnInit {
       }
 
       this.setControls();
-      this.titleServ.setTitle(Constants.baseTitle + ' ' +
+      this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
           $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       this.isLoaded = true;
       return

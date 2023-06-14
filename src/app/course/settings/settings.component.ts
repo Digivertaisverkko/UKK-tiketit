@@ -1,11 +1,10 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { Constants } from '@shared/utils';
 import { CourseService } from '../course.service';
 import { GenericResponse, Role, User } from '@core/core.models';
 import { Kenttapohja } from '../course.models';
@@ -48,7 +47,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleServ.setTitle(Constants.baseTitle + $localize
+    this.titleServ.setTitle(this.store.getBaseTitle() + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
       if (this.courseid) {
         this.fetchTicketFieldInfo(this.courseid);

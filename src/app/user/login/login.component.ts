@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
-import { Constants } from '@shared/utils';
 import { getIsInIframe } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 
@@ -36,7 +35,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (!this.loginid && !getIsInIframe()) {
       this.auth.navigateToLogin(this.courseid);
     }
-    this.title.setTitle(Constants.baseTitle +
+    this.title.setTitle(this.store.getBaseTitle() +
         $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
     this.store.setUserInfo(null);
     if (this.courseid === null) {

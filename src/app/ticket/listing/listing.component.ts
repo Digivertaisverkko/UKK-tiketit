@@ -9,7 +9,7 @@ import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
-import { Constants, getIsInIframe } from '@shared/utils';
+import { getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
@@ -77,7 +77,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private title : Title
   ) {
     this.noDataConsent = this.authService.getDenyDataConsent();
-    this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:
+    this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isInIframe = getIsInIframe();
@@ -322,7 +322,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private startPollingFAQ(): void {
     this.fetchFAQsSub$?.unsubscribe();
     console.warn('Aloitetaan UKK pollaus.');
-    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    const pollRate = this.POLLING_RATE_MIN * this.store.getMsInMin();
     this.fetchFAQsSub$ = timer(0, pollRate)
         .pipe(
           takeUntil(this.unsubscribe$)

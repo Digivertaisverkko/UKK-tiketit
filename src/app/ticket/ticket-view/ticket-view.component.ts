@@ -5,7 +5,6 @@ import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { Validators as EditorValidators } from 'ngx-editor';
 
-import { Constants } from '@shared/utils';
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { environment } from 'src/environments/environment';
 import { FileInfo, NewCommentResponse, Tiketti } from '../ticket.models';
@@ -162,7 +161,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.isEditable = true;
         this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
       }
-      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
+      this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       this.isLoaded = true;
     }).catch(error => {
       this.state = 'error';
@@ -269,7 +268,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   private startPollingTicket() {
-    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    const pollRate = this.POLLING_RATE_MIN * this.store.getMsInMin();
     this.fetchTicketsSub?.unsubscribe();
     this.isPolling = true;
     this.fetchTicketsSub = timer(0, pollRate)

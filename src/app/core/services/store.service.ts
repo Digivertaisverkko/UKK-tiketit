@@ -1,5 +1,5 @@
-/* Voidaan tallentaa ja palauttaa muistissa olevia muuttujia, joita tarvitaan
-globaalisti useamman kuin yhden komponentin ja sen lapsien tai vanhempien
+/* Voidaan tallentaa ja palauttaa muistissa olevia muuttujia ja vakioita, joita
+tarvitaan globaalisti useamman kuin yhden komponentin ja sen lapsien tai vanhempien
 ulkopuolella. Tämä tulisi olla ainut service, jossa näin tehdään. */
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -16,15 +16,25 @@ export class StoreService {
   private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
   // Voidaan välittää viestejä komponenttien välillä.
+  private constants;
   private messageEmitter$ = new Subject<string>();
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null>(null);
 
-  constructor() { }
+  constructor() {
+    this.constants = {
+      baseTitle: 'UKK Tiketit - ',
+      MILLISECONDS_IN_MIN: 60000,
+    }
+  }
 
   /* get -alkuiset palauttavat sen hetkisen arvon. Huomioi, että
     esimerkiksi käyttäjätietoja ei sivun latautumisen alussa ole
     välttämättä ehditty vielä hakea, vaan arvo on null. */
+
+  public getBaseTitle(): string {
+    return this.constants.baseTitle;
+  }
 
   public getCourseName(): string | null {
     return this.courseName ?? '';
@@ -32,6 +42,10 @@ export class StoreService {
 
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
+  }
+
+  public getMsInMin(): number {
+    return this.constants.MILLISECONDS_IN_MIN;
   }
 
   public getUserRole(): Role | null {

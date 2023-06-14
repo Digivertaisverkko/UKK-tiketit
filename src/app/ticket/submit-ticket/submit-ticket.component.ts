@@ -10,7 +10,6 @@ import { User } from '@core/core.models'
 import { StoreService } from '@core/services/store.service';
 import { CourseService } from '@course/course.service';
 import schema from '@shared/editor/schema';
-import { Constants } from '@shared/utils';
 import { EditAttachmentsComponent }
     from '@ticket/components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
@@ -73,7 +72,7 @@ export class SubmitTicketComponent implements OnInit {
 
     if (this.ticketId === null) {
       this.titleServ.setTitle(
-        Constants.baseTitle + $localize `:@@Uusi kysymys: Uusi kysymys`
+        this.store.getBaseTitle() + $localize `:@@Uusi kysymys: Uusi kysymys`
       );
       this.fetchAdditionalFields();
     } else {
@@ -144,7 +143,7 @@ export class SubmitTicketComponent implements OnInit {
       this.form.controls['message'].setValue(response.viesti);
       this.oldAttachments = response.liitteet ?? [];
       this.commentID = response.kommenttiID;
-      this.titleServ.setTitle(Constants.baseTitle + response.otsikko);
+      this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
     });

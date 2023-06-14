@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
-import { Constants } from 'src/app/shared/utils';
 import { RefreshDialogComponent } from '../refresh-dialog/refresh-dialog.component';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from '@core/services/auth.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   templateUrl: './no-data-consent.component.html',
@@ -15,9 +15,10 @@ export class NoDataConsentComponent {
   constructor(
     private auth: AuthService,
     private dialog: MatDialog,
+    private store: StoreService,
     private title: Title
   ) {
-    this.title.setTitle(Constants.baseTitle + $localize `:@@OKurssialuetta ei ole luotu:
+    this.title.setTitle(this.store.getBaseTitle() + $localize `:@@OKurssialuetta ei ole luotu:
         Kurssialuetta ei ole luotu`);
   }
 

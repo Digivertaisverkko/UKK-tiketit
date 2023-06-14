@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { Constants } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { Title } from '@angular/platform-browser';
 

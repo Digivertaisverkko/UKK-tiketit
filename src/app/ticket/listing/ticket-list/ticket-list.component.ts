@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
-import { Constants } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from '@core/core.models';
@@ -212,7 +211,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   private startPollingTickets() {
     this.fetchTicketsSub$?.unsubscribe();
     console.warn('Aloitetaan tikettien pollaus.');
-    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
+    const pollRate = this.POLLING_RATE_MIN * this.store.getMsInMin();
     // throttleTime(pollTime),
     this.fetchTicketsSub$ = timer(0, pollRate)
         .pipe(
