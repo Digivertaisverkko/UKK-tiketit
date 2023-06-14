@@ -49,7 +49,20 @@ export class ProfileComponent implements OnInit {
     });
     this.userService.getSettings()
     .then(response => {
-      this.setEmailSettingsFormValues(response);
+      this.emailSettingsForm.controls['notify']
+      .setValue(response['sposti-ilmoitus']);
+
+      this.emailSettingsForm.controls['summary']
+      .setValue(response['sposti-kooste']);
+
+      this.emailSettingsForm.controls['feedback']
+      .setValue(response['sposti-palaute']);
+
+      // lähtöarvot asetettu lomakkeelle, joten nyt lomakkeen voi ottaa käyttöön
+      this.emailSettingsForm.enable();
+
+      // kun arvot muuttuvat, niin lähetetään päivitetyt arvot backendille
+      this.emailSettingsFormValueChanges();
     });
   }
 
@@ -92,36 +105,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  public removeProfile(): void {
-    this.userService.removeUser()
-    .then(response => {
-      if (response) {
-        // Käyttäjä menettää kirjautumisen tilan, kun tili poistetaan.
-        // Ohjataan käyttäjä oikeaan paikkaan tässä tilanteessa.
-        this.errorService.handleNotLoggedIn();
-      } else {
-        throw new Error;
-      }
-    })
-    .catch(error => {
-      this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:
-                                        Profiilin poistaminen epäonnistui`
-                                        + '.';
-    });
-  }
-
-  private setEmailSettingsFormValues(defaultSettings: MinunAsetukset): void {
-    this.emailSettingsForm.controls['notify']
-    .setValue(defaultSettings['sposti-ilmoitus']);
-
-    this.emailSettingsForm.controls['summary']
-    .setValue(defaultSettings['sposti-kooste']);
-
-    this.emailSettingsForm.controls['feedback']
-    .setValue(defaultSettings['sposti-palaute']);
-
-    this.emailSettingsForm.enable();
-
+  private emailSettingsFormValueChanges(): void {
     this.emailSettingsForm.valueChanges.subscribe(() => {
       let settings: MinunAsetukset = {
         "sposti-ilmoitus": this.emailSettingsForm.controls['notify'].value,
@@ -138,6 +122,24 @@ export class ProfileComponent implements OnInit {
         this.emailSettingsSuccessMessage = '';
         this.emailSettingsErrorMessage = $localize `:@@Asetusten tallentaminen epäonnistui.:Asetusten tallentaminen epäonnistui.`;
       });
+    });
+  }
+
+  public removeProfile(): void {
+    this.userService.removeUser()
+    .then(response => {
+      if (response) {
+        // Käyttäjä menettää kirjautumisen tilan, kun tili poistetaan.
+        // Ohjataan käyttäjä oikeaan paikkaan tässä tilanteessa.
+        this.errorService.handleNotLoggedIn();
+      } else {
+        throw new Error;
+      }
+    })
+    .catch(error => {
+      this.errorMessage = $localize `:@@Profiilin poistaminen epäonnistui:
+                                        Profiilin poistaminen epäonnistui`
+                                        + '.';
     });
   }
 
