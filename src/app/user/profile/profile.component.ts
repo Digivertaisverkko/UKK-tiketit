@@ -13,8 +13,8 @@ import { StoreService } from '@core/services/store.service';
 })
 
 export class ProfileComponent implements OnInit {
-  public emailSettingsForm: FormGroup = this.buildEmailSettingsForm();
   public emailSettingsErrorMessage: string = '';
+  public emailSettingsForm: FormGroup = this.buildEmailSettingsForm();
   public emailSettingsSuccessMessage: string = '';
   public errorMessage: string = '';
   public isPersonalInfoLoaded: boolean = false;
