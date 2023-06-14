@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Constants } from '@shared/utils';
@@ -9,7 +9,7 @@ import { StoreService } from '../services/store.service';
 @Component({
   template: `
 
-    <div *ngIf="courseID" class="top-buttons-wrapper">
+    <div *ngIf="courseid" class="top-buttons-wrapper">
       <app-beginning-button></app-beginning-button>
     </div>
 
@@ -48,7 +48,7 @@ import { StoreService } from '../services/store.service';
 
 export class PageNotFoundComponent implements OnInit {
   public isLoggedIn: Boolean | null = null;
-  public courseID: string | null = null;
+  @Input() courseid: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -62,19 +62,19 @@ export class PageNotFoundComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
+    this.courseid = this.route.snapshot.paramMap.get('courseid');
     this.trackRouteParameters();
   }
 
   private trackRouteParameters() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       var courseID: string | null = paramMap.get('courseid');
-      this.courseID = courseID;
+      this.courseid = courseID;
     });
   }
 
   public async goToLogin() {
-    const res = await this.authService.getLoginInfo('own', this.courseID);
+    const res = await this.authService.getLoginInfo('own', this.courseid);
     const loginUrl = res['login-url'];
     this.router.navigateByUrl(loginUrl);
   }
