@@ -103,7 +103,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
   private getCourseName(courseid: string) {
     this.courses.getCourseName(courseid).then(response => {
       this.courseName = response ?? '';
-      this.title.setTitle(Constants.baseTitle + 'Luo käyttäjätili kurssialueelle ' + this.courseName);
+      this.title.setTitle(Constants.baseTitle + $localize `:@@Luo käyttäjätili kurssille:
+          Luo käyttäjätili kurssille` + this.courseName);
     }).catch((response) => {
     });
   }

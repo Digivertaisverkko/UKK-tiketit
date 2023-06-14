@@ -97,7 +97,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         this.auth.navigateToLogin(this.courseid);
       }
       if (res?.success === true) {
-        const route = `course/${this.courseid}/list-tickets`
+        const route = `course/${this.courseid}/list-tickets`;
         this.router.navigateByUrl(route);
       } else {
       throw Error('Ei onnistunut liittyminen.');
@@ -113,7 +113,8 @@ export class JoinComponent implements OnInit, OnDestroy {
   private getCourseName(courseid: string) {
     this.courses.getCourseName(courseid).then(response => {
       this.courseName = response ?? '';
-      this.title.setTitle(Constants.baseTitle + 'Liity kurssialueelle ' + this.courseName);
+      this.title.setTitle(Constants.baseTitle + $localize `:@@Liity kurssille:
+          Liity kurssille` + this.courseName);
     }).catch((response) => {
     });
   }
@@ -144,7 +145,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.state = 'wrongUser';
     this.error = {
       title: $localize `:@@Väärä käyttäjä:Väärä käyttäjä`,
-      message: `Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, jolle kutsu on lähetetty.`
+      message: `:@@Liittyäksesi kurssille:Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, jolle kutsu on lähetetty` + '.'
     }
   }
 
@@ -153,8 +154,6 @@ export class JoinComponent implements OnInit, OnDestroy {
         takeWhile(() => this.user === undefined)
       ).subscribe(res => {
       if (res?.nimi ) this.user = res;
-      console.log('this.user?.sposti ' + this.user?.sposti );
-      console.log('res.sposti ' + res?.sposti);
       if (this.user?.sposti && this.invitedInfo?.sposti) {
         if (this.user.sposti !== this.invitedInfo?.sposti) {
           console.log('trackuserinfo asettaa väärän userin.');
