@@ -80,13 +80,13 @@
         >
       {{ emailSettingsSuccessMessage }}
     </p>
-    <app-error-card i18n-title="@@Virhe"
+    <app-error i18n-title="@@Virhe"
                     message="{{ emailSettingsErrorMessage }}"
                     *ngIf="emailSettingsErrorMessage.length > 0"
                     [styles]="{ margin: '0' }"
                     title="Virhe"
                     >
-    </app-error-card>
+    </app-error>
   </section>
 
   <section class="personal-data">
@@ -145,12 +145,12 @@
 
   </section>
 
-  <app-error-card i18n-title="@@Virhe"
+  <app-error i18n-title="@@Virhe"
                   message="{{ errorMessage }}"
                   *ngIf="errorMessage.length > 0"
                   [styles]="{ margin: '0' }"
                   title="Virhe"
                   >
-  </app-error-card>
+  </app-error>
 
 </div>

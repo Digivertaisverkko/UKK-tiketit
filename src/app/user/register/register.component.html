@@ -68,12 +68,12 @@
       <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
-    <app-error-card
+    <app-error
         *ngIf="errorMessage"
         message="{{ errorMessage }}"
         [styles]="{ 'margin-bottom': '1rem'}"
         >
-    </app-error-card>
+    </app-error>
 
     <button class="login-button"
             color="primary"

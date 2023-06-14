@@ -26,12 +26,12 @@
   </button>
 </div>
 
-<app-error-card
+<app-error
     [confirmLeave]="true"
     *ngIf="showConfirm"
     [styles]="{ margin: '2rem 0 0 0' }"
     >
-</app-error-card>
+</app-error>
 
 <div class="view-wrapper" *ngIf="isLoaded">
   <h2 class="theme-subheading" i18n="@@Kysymysten lisäkenttä">
@@ -143,14 +143,14 @@
       <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
     </mat-form-field>
 
-    <app-error-card
+    <app-error
         *ngIf="errorMessage.length > 0"
         i18n-title="@@Virhe"
         title="Virhe"
         message="{{ errorMessage }}"
         [styles]="{ margin: '1rem 0' }"
         >
-    </app-error-card>
+    </app-error>
 
     <div class="bottom-buttons-wrapper">
       <mat-checkbox formControlName="mandatory"

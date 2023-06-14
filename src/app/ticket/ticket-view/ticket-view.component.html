@@ -85,12 +85,12 @@
       </button>
     </div>
 
-    <app-error-card
+    <app-error
         [confirmLeave]="true"
         *ngIf="showConfirm"
         [styles]="{ margin: '2rem 0 0 0' }"
         >
-    </app-error-card>
+    </app-error>
 
   <!-------------- Kysymys ---------------------------------------------------->
 
@@ -182,14 +182,14 @@
 
     <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
-    <app-error-card
+    <app-error
         *ngIf="errorMessage.length > 0"
         i18n-title="@@Virhe"
         message="{{ errorMessage }}"
         [styles]="{ margin: '1rem 0 0 0' }"
         title="Virhe"
         >
-    </app-error-card>
+    </app-error>
 
     <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
     <p  class="theme-success-message"

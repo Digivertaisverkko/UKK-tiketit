@@ -11,7 +11,7 @@
     henkilökohtaisia kysymyksiä. Tätä varten tarvitaan tieto siitä, kuka olet,
     millä kurssilla olet ja mitä olet kurssilla tekemässä.
   </span>
-  
+
   <span i18n="@@Jatkamalla käyttöä" *ngIf="accountExists; else newAccount">
     Jatkamalla käyttämistä annat luvan näiden tietojen käyttämiseen
     tikettijärjestelmässä.
@@ -47,14 +47,14 @@
   usein kysyttäjä kysymyksiä kirjautumattomana.
 </p>
 
-<app-error-card
+<app-error
     i18n-title="{{ ticketsError.title }}"
     message="{{ error.message }}"
     *ngIf="error.title.length > 0"
     #ticketError
     title="{{ error.title }}"
     >
-</app-error-card>
+</app-error>
 
 <div class="buttons-wrapper">
 

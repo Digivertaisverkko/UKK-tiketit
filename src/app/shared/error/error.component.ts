@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { StoreService } from '@core/services/store.service';
 
 @Component({
-  selector: 'app-error-card',
+  selector: 'app-error',
   template: `
 
     <div class="border-area" [ngStyle]="styles">

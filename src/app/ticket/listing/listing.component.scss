@@ -8,12 +8,12 @@
 /* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
    kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
 section,
-app-error-card {
+app-error {
   width: 103%;
 }
 
 section,
-app-error-card,
+app-error,
 .theme-actions {
   margin-left: -15px;
 }
@@ -153,7 +153,7 @@ button {
 
 @media (max-width: $XSmall) {
   section,
-  app-error-card,
+  app-error,
   h2 {
     margin-left: 0;
   }

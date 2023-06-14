@@ -9,12 +9,12 @@
       >
   </app-beginning-button>
 
-  <app-error-card
+  <app-error
       [confirmLeave]="true"
       *ngIf="showConfirm"
       [styles]="{ margin: '2rem 0 0 0' }"
       >
-  </app-error-card>
+  </app-error>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
@@ -141,13 +141,13 @@
       Uuden usein kysytyn kysymyksen lähettäminen onnistui.
     </p>
 
-    <app-error-card i18n-title="@@Virhe"
+    <app-error i18n-title="@@Virhe"
                     message="{{ errorMessage }}"
                     *ngIf="errorMessage.length > 0"
                     [styles]="{ margin: '1em 0' }"
                     title="Virhe"
                     >
-    </app-error-card>
+    </app-error>
 
     <div class="theme-actions">
 

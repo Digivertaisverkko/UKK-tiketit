@@ -40,14 +40,14 @@
     </mat-form-field>
 
     <!-- Custom-komponentti shared-moduulista. -->
-    <app-error-card
+    <app-error
         i18n-title="@@Kirjautuminen ei onnistunut"
         message="{{ errorMessage }}"
         *ngIf="errorMessage.length > 0"
         [styles]="{ margin: '1em 10% 1em 10%;'}"
         title="Kirjautuminen ei onnistunut"
         >
-    </app-error-card>
+    </app-error>
 
     <button (click)="login()"
             color="primary"

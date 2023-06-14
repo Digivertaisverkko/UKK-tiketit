@@ -144,7 +144,7 @@
 
 <!----------------- Virheilm. ja napit ---------------------------------------->
 
-  <app-error-card
+  <app-error
       buttonText="{{ error.buttonText }}"
       i18n-title="{{ error.title }}"
       message="{{ error.message }}"
@@ -152,7 +152,7 @@
       #ticketError
       title="{{ error.title }}"
       >
-  </app-error-card>
+  </app-error>
 
   <div  class="buttons-wrapper theme-actions"
       [ngStyle]="numberOfQuestions === 0 ?

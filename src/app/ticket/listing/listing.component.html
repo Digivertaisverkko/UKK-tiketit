@@ -2,7 +2,7 @@
 
 <ng-container *ngIf="isLoaded">
 
-  <app-error-card
+  <app-error
       [buttonText]="noDataConsent ? strings.get('Luo tili') ?? '' :
                     strings.get('Kirjaudu') ?? ''"
       (clickEvent)="errorClickEvent($event)"
@@ -10,15 +10,15 @@
       *ngIf="(isLoggedIn$ | async) === false; else notParticipant"
       [title]="strings.get('Et ole kirjautunut-title') ?? ''"
       >
-  </app-error-card>
+  </app-error>
 
   <ng-template #notParticipant>
-    <app-error-card
+    <app-error
         [message]="strings.get('Ei osallistujana-msg') ?? ''"
         *ngIf="(isParticipant$ | async) === false"
         [title]="strings.get('Et osallistujana-title') ?? ''"
         >
-    </app-error-card>
+    </app-error>
 
   </ng-template>
 
@@ -127,7 +127,7 @@
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-  <app-error-card
+  <app-error
       buttonText="{{ error.buttonText }}"
       (clickEvent)="errorClickEvent($event)"
       i18n-title="{{ error.title }}"
@@ -136,7 +136,7 @@
       #ticketError
       title="{{ error.title }}"
       >
-  </app-error-card>
+  </app-error>
 
   <div  class="buttons-wrapper theme-actions"
         *ngIf="((user$ | async)?.asema === 'opettaja' ||
