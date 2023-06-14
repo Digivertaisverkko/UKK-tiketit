@@ -25,11 +25,11 @@ import { StoreService } from '@core/services/store.service';
     </div>
 
   `,
-  styleUrls: ['./error-card.component.scss'],
+  styleUrls: ['./error.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ErrorCardComponent implements OnInit {
+export class ErrorComponent implements OnInit {
 
   // styles: voi laittaa CSS:ää. Komponenttiin esim:
   // [styles]="{ margin: '1em 0 1em' }"
