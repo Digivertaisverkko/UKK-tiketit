@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { Constants, isValidEmail } from '@shared/utils';
+import { Constants } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { Title } from '@angular/platform-browser';
 
@@ -13,18 +13,17 @@ import { Title } from '@angular/platform-browser';
 })
 
 export class LoginComponent implements OnInit, AfterViewInit {
-  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
+  @Input() courseid: string | null = null;
+  @Input() loginid: string | null = null;
   public email: string = '';
   public errorMessage: string = '';
   public isEmailValid: boolean = false;
   public isLoginRemembered: boolean = false;
   public lang: string | null = localStorage.getItem('language');
   public password: string = '';
-  private loginID: string = '';
 
   constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService,
+    private auth: AuthService,
     private router: Router,
     private store: StoreService,
     private titleServ: Title
@@ -32,11 +31,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    if (!this.loginid) this.auth.navigateToLogin(this.courseid);
     this.titleServ.setTitle(Constants.baseTitle +
         $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
-    this.setLoginID();
     this.store.setUserInfo(null);
-    if (this.courseID === null) {
+    if (this.courseid === null) {
       console.error('Ei kurssi ID:ä URL:ssa, käytetään oletuksena 1:stä.');
     }
   }
@@ -49,16 +48,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   public login(): void {
+    if (!this.loginid) return
     // this.isEmailValid = this.validateEmail(this.email);
     // Lisää ensin custom ErrorStateMatcher
     // console.log('login id: ' + this.loginID);
-    this.authService.login(this.email, this.password, this.loginID)
+    this.auth.login(this.email, this.password, this.loginid)
       .then(response => {
         if (response?.success == true) {
           var redirectUrl: string;
           if (response.redirectUrl == undefined) {
             // TODO: Yritä session storagesta etsiä tallennettua?
-            redirectUrl = 'course/' + this.courseID +  '/list-tickets';
+            redirectUrl = 'course/' + this.courseid +  '/list-tickets';
           } else {
             redirectUrl = response.redirectUrl;
           }
@@ -87,21 +87,5 @@ export class LoginComponent implements OnInit, AfterViewInit {
             Kirjautuminen ei onnistunut` + '.';
     }
   }
-
-  private setLoginID() {
-    this.route.queryParams.subscribe({
-      next: (params) => {
-        if (params['loginid'] !== undefined) {
-          this.loginID = params['loginid'];
-        }
-      }, error: () => {}
-    });
-  }
-
-  // TODO: ota käyttöön, kun tunnukset ovat emaileja.
-  // private getIsEmailValid(email: string): boolean {
-  //   return isValidEmail(email);
-  // }
-
 
 }
