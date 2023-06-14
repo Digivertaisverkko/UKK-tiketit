@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -16,11 +17,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
   @Input() courseid: string | undefined;
   @Input() loginid: string | undefined;
 
-  public email: string = '';
   public errorMessage: string = '';
-  public password: string = '';
+  public form: FormGroup = this.buildForm();
+
+  get email(): FormControl {
+    return this.form.get('email') as FormControl;
+  }
+
+  get password(): FormControl {
+    return this.form.get('password') as FormControl;
+  }
 
   constructor(private auth: AuthService,
+              private formBuilder: FormBuilder,
               private router: Router,
               private store: StoreService,
               private title: Title)
@@ -46,6 +55,24 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.store.setParticipant(null);
   }
 
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      email: [
+        '',
+        Validators.compose([
+          //Validators.email, TODO: kun loginit on emaileja, niin uncomment
+          Validators.required
+        ])
+      ],
+      password: [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ],
+    });
+  }
+
   private handleError (error: any) {
     switch (error?.tunnus) {
       case 1001:
@@ -68,8 +95,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   public login(): void {
     if (!this.loginid) throw new Error('Login ID puuttuu URL:sta.');
+    if (this.form.invalid) return;
 
-    this.auth.login(this.email, this.password, this.loginid)
+    // disabloidaan lomake odotellessa
+    this.form.disable();
+
+    const email = this.form.controls['email'].value;
+    const password = this.form.controls['password'].value;
+
+    this.auth.login(email, password, this.loginid)
     .then(response => {
       if (response?.success === true) {
         let redirectUrl: string;
@@ -82,7 +116,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.router.navigateByUrl(redirectUrl);
       }
     })
-    .catch(error => this.handleError(error));
+    .catch(error => {
+      this.handleError(error);
+    });
+
+    this.form.enable();
   }
 
 }

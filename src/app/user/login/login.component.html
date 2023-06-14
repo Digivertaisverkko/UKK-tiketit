@@ -7,32 +7,32 @@
     Sisäänkirjautuminen
   </h2>
 
-  <form action="">
+  <form [formGroup]="form" (ngSubmit)="login()">
     <mat-form-field>
-      <input  i18n-placeholder="@@Käyttäjätunnus"
+      <input  formControlName="email"
+              i18n-placeholder="@@Käyttäjätunnus"
               matInput
               name="email"
-              [(ngModel)]="email"
-              ng-change="validateEmail()"
               placeholder="Käyttäjätunnus"
-              required
               >
-      <mat-error i18n="@@Käyttäjätunnus tarvitaan.">
+      <mat-error  i18n="@@Käyttäjätunnus tarvitaan."
+                  *ngIf="email?.errors?.['required']"
+                  >
         Käyttäjätunnus tarvitaan.
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input  i18n-placeholder="@@Salasana"
+      <input  formControlName="password"
+              i18n-placeholder="@@Salasana"
               matInput
-              minlength="1"
               name="password"
-              [(ngModel)]="password"
               placeholder="Salasana"
-              required
               type="password"
               >
-      <mat-error i18n="@@Salasana tarvitaan">
+      <mat-error  i18n="@@Salasana tarvitaan"
+                  *ngIf="password?.errors?.['required']"
+                  >
         Salasana tarvitaan.
       </mat-error>
     </mat-form-field>
@@ -47,11 +47,11 @@
         >
     </app-error>
 
-    <button (click)="login()"
-            color="primary"
-            [disabled]="!email|| !password"
+    <button color="primary"
+            [disabled]="!form.valid"
             i18n="@@Kirjaudu"
             mat-raised-button
+            type="submit"
             >
       Kirjaudu
     </button>
