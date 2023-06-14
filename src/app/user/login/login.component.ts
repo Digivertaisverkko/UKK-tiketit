@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 import { AuthService } from '@core/services/auth.service';
 import { Constants } from '@shared/utils';
+import { getIsInIframe } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
-import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -26,13 +28,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private auth: AuthService,
     private router: Router,
     private store: StoreService,
-    private titleServ: Title
+    private title: Title
   ) {
   }
 
   ngOnInit(): void {
-    if (!this.loginid) this.auth.navigateToLogin(this.courseid);
-    this.titleServ.setTitle(Constants.baseTitle +
+    if (!this.loginid && !getIsInIframe()) {
+      this.auth.navigateToLogin(this.courseid);
+    }
+    this.title.setTitle(Constants.baseTitle +
         $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
     this.store.setUserInfo(null);
     if (this.courseid === null) {
