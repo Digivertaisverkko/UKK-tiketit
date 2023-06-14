@@ -66,9 +66,9 @@ name="file-input-{{url}}"
       </span>
       <span class="in-brackets">
         (
-          <span *ngIf="oldAttachments.length > 0">
-            {{new}}
-          </span>
+          <ng-container *ngIf="oldAttachments.length > 0">
+            <span i18n="@@uusi">uusi</span>,
+          </ng-container>
           <span>{{ file.filesize | filesize: { locale: 'fi', round: 1,
             separator: ",", pad: true } }}
           </span>
