@@ -1,11 +1,10 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
-import { getIsInIframe } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
-
+import { getIsInIframe } from '@shared/utils';
 
 @Component({
   selector: 'app-login',
@@ -18,18 +17,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
   @Input() loginid: string | null = null;
   public email: string = '';
   public errorMessage: string = '';
-  public isEmailValid: boolean = false;
-  public isLoginRemembered: boolean = false;
-  public lang: string | null = localStorage.getItem('language');
+  private loginID: string = '';
   public password: string = '';
 
-  constructor(
-    private auth: AuthService,
-    private router: Router,
-    private store: StoreService,
-    private title: Title
-  ) {
-  }
+  constructor(private auth: AuthService,
+              private router: Router,
+              private store: StoreService,
+              private title: Title)
+  {}
 
   ngOnInit(): void {
     if (!this.loginid && !getIsInIframe()) {
@@ -43,8 +38,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Jos tullaan näkymistä tänne, virheilmoituksia voidaa näyttää, jos
-  // nämä asetetaan aiemmin.
+  // Jos tullaan näkymistä tänne, virheilmoituksia voidaa näyttää, jos nämä
+  // asetetaan aiemmin.
   ngAfterViewInit(): void {
     this.store.setNotLoggegIn();
     this.store.setParticipant(null);

@@ -1,26 +1,25 @@
 <div class="vertical-spacer"></div>
 
-<app-headline class="headline" [appHeadline]="true"></app-headline>
+<app-headline [appHeadline]="true"></app-headline>
 
 <div class="content">
   <h2 class="theme-subheading" i18n="@@Sisäänkirjautuminen">
     Sisäänkirjautuminen
   </h2>
-  <form action="">
 
+  <form action="">
     <mat-form-field>
-      <input matInput
-            i18n-placeholder="@@Käyttäjätunnus"
-            name="email"
-            [(ngModel)]="email"
-            ng-change="validateEmail()"
-            placeholder="Käyttäjätunnus"
-            required
-            />
+      <input  i18n-placeholder="@@Käyttäjätunnus"
+              matInput
+              name="email"
+              [(ngModel)]="email"
+              ng-change="validateEmail()"
+              placeholder="Käyttäjätunnus"
+              required
+              >
       <mat-error i18n="@@Käyttäjätunnus tarvitaan.">
         Käyttäjätunnus tarvitaan.
       </mat-error>
-      <!-- <mat-icon matSuffix>email</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
@@ -32,11 +31,10 @@
               placeholder="Salasana"
               required
               type="password"
-      />
+              >
       <mat-error i18n="@@Salasana tarvitaan">
         Salasana tarvitaan.
       </mat-error>
-      <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
     <!-- Custom-komponentti shared-moduulista. -->
@@ -58,9 +56,5 @@
       Kirjaudu
     </button>
 
-    <!-- TODO: Jostain toiminnallisuutta tälle. -->
-    <!--- <button mat-raised-button i18n="@@Kirjautumisongelmia?">
-      Kirjautumisongelmia?
-    </button>  -->
   </form>
 </div>
