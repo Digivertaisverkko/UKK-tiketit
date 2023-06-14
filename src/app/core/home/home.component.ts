@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { Constants } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -10,14 +12,15 @@ import { StoreService } from '@core/services/store.service';
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnInit{
 
   @Input() courseid: string | null = null;
   public lang: string | null;
 
   constructor(
     private router: Router,
-    private store: StoreService
+    private store: StoreService,
+    private title: Title
   ) {
     // Kun esim. headerin logoa klikataan.
     this.store.trackMessages().pipe(
@@ -28,6 +31,10 @@ export class HomeComponent {
         }
       });
     this.lang = localStorage.getItem('language')?.substring(0,2) ?? 'fi';
+  }
+
+  ngOnInit(): void {
+    this.title.setTitle("Tukki-" + $localize `:@@tikettijärjestelmä:tikettijärjestelmä`);
   }
 
 
