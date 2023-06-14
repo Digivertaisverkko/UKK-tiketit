@@ -2,7 +2,7 @@
 <div [ngStyle]="{ 'display': 'isLoaded' ? 'block' : 'none' }">
 
 <div class="input-field-wrapper">
-  <h2 class="sub-header table-header" *ngIf="headline.length > 0">
+  <h2 class="theme-subheading table-header" *ngIf="headline.length > 0">
     {{ headline }}
   </h2>
 
@@ -204,7 +204,7 @@
 
 <ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
 
-<h2 class="sub-header" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
+<h2 class="theme-subheading" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
   Ratkaistut kysymykset
 </h2>
 

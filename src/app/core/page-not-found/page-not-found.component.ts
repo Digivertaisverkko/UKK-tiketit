@@ -19,7 +19,7 @@ import { StoreService } from '../services/store.service';
       404
     </app-headline>
 
-    <h2 i18n="@@404-otsikko" class="sub-header">
+    <h2 i18n="@@404-otsikko" class="theme-subheading">
       Sivua ei löytynyt
     </h2>
 

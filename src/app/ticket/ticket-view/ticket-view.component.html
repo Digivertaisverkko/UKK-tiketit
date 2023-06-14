@@ -97,7 +97,7 @@
   <section *ngIf="ticket.tila > 0">
 
     <div class="ticket-header">
-      <h2 class="ticket-headline sub-header">{{ ticket.otsikko }}</h2>
+      <h2 class="ticket-headline theme-subheading">{{ ticket.otsikko }}</h2>
       <div class="spacer"></div>
       <app-sender-info
           [aikaleima]="ticket.aikaleima"
@@ -131,7 +131,7 @@
   <!-------------- Keskustelu ------------------------------------------------->
 
   <div class="h3-wrapper">
-    <h3 class="discussion-h3 sub-header" i18n="@@Keskustelu">Keskustelu</h3>
+    <h3 class="discussion-h3 theme-subheading" i18n="@@Keskustelu">Keskustelu</h3>
 
     <button aria-label="Virkistä näkymä"
             (click)="fetchTicket(courseID)"
