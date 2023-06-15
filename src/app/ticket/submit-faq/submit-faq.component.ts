@@ -253,30 +253,6 @@ export class SubmitFaqComponent implements OnInit {
       });
   }
 
-  /*
-  private submitNewOld(faq: UusiUKK): void {
-    if (this.courseId === null) return;
-    // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
-    let id = this.editExisting ? this.ticketId ?? '' : this.courseId;
-    this.ticketService.addFaq(id, faq, this.editExisting)
-      .then((response: AddTicketResponse) => {
-        if (this.attachments.fileInfoList.length === 0) this.goBack();
-        if (response === null || response?.success !== true) {
-          throw new Error('Kysymyksen lähettäminen epäonnistui.');
-        }
-        this.isFaqSent = true;
-        this.prepareSendFiles(response);
-      })
-      .catch( error => {
-        // ? lisää eri virhekoodeja?
-        this.state = 'editing';
-        this.form.enable();
-        this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
-            Usein kysytyn kysymyksen lähettäminen epäonnistui` + '.';
-      });
-  }
-  */
-
   private sendFiles(ticketID: string, commentID: string): void {
     this.attachments.sendFiles(ticketID, commentID)
     .then(() => {
