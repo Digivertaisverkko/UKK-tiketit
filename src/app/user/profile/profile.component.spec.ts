@@ -1,16 +1,17 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed
     } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
 
+import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { ErrorService } from '@core/services/error.service';
 import { click, findEl } from '@shared/spec-helpers/element.spec-helper';
 import { Minun, MinunAsetukset, UserService } from '@user/user.service';
@@ -25,7 +26,9 @@ describe('ProfileComponent', () => {
 
   beforeEach(async () => {
 
-    fakeErrorService = jasmine.createSpyObj('ErrorService', ['handleNotLoggedIn']);
+    fakeErrorService = jasmine.createSpyObj('ErrorService', {
+      handleNotLoggedIn: undefined
+    });
 
     fakeUserService = {
       async getGdprData(): Promise<any> {
@@ -53,12 +56,14 @@ describe('ProfileComponent', () => {
     spyOn(fakeUserService, 'removeUser').and.callThrough();
 
     await TestBed.configureTestingModule({
-      declarations: [ ProfileComponent ],
+      declarations: [
+        MockComponent(BeginningButtonComponent),
+        MockComponent(HeadlineComponent),
+        ProfileComponent
+      ],
       imports: [
         BrowserAnimationsModule,
-        FormsModule,
         MatCheckboxModule,
-        MatFormFieldModule,
         MatInputModule,
         MatTooltipModule,
         ReactiveFormsModule,
@@ -67,8 +72,7 @@ describe('ProfileComponent', () => {
         { provide: ComponentFixtureAutoDetect, useValue: true },
         { provide: ErrorService, useValue: fakeErrorService },
         { provide: UserService, useValue: fakeUserService }
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ],
+      ]
     })
     .compileComponents();
 
