@@ -18,7 +18,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     fakeAuthService = jasmine.createSpyObj('AuthService', {
-      createAccount:undefined,
+      createAccount: undefined,
       getLoginInfo: undefined,
       login: undefined,
       logout: undefined
