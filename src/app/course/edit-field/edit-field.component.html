@@ -52,7 +52,7 @@
               placeholder="Kentän nimi"
               />
               <!-- [(ngModel)]="field.otsikko" -->
-      <mat-hint align="end">{{ field.otsikko.length }} / 50</mat-hint>
+      <mat-hint align="end">{{ title.value.length }} / 50</mat-hint>
 
       <mat-error  i18n="@@Pakollinen kenttä."
                   *ngIf="title.errors?.['required']"
@@ -143,7 +143,7 @@
                 placeholder="Info-teksti"
                 >
       </textarea>
-      <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
+      <mat-hint align="end">{{ infoText.value.length }} / 255</mat-hint>
     </mat-form-field>
 
     <app-error *ngIf="errorMessage.length > 0"

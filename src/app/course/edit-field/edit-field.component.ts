@@ -35,6 +35,10 @@ export class EditFieldComponent implements OnInit {
     return this.form.get('areSelectionsEnabled') as FormControl;
   }
 
+  get infoText(): FormControl {
+    return this.form.get('infoText') as FormControl;
+  }
+
   get selectionName(): AbstractControl<any, any> | null {
     return this.form.get('selectionName');
   }
