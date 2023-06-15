@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Title } from '@angular/platform-browser';
 import { StoreService } from '../services/store.service';
@@ -52,11 +52,11 @@ export class PageNotFoundComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route : ActivatedRoute,
     private store : StoreService,
     private title : Title
     ) {
-    this.title.setTitle(this.store.getBaseTitle() + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
+    this.title.setTitle(this.store.getBaseTitle() + $localize
+        `:@@@@404-otsikko:Sivua ei löytynyt`);
       this.isLoggedIn = this.store.getIsLoggedIn();
   }
 
