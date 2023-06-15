@@ -6,11 +6,10 @@
     >
 </app-beginning-button>
 
-<app-error
-    [confirmLeave]="true"
-    *ngIf="showConfirm === true"
-    [styles]="{ margin: '2rem 0 0 0' }"
-    >
+<app-error  [confirmLeave]="true"
+            *ngIf="showConfirm === true"
+            [styles]="{ margin: '2rem 0 0 0' }"
+            >
 </app-error>
 
 <div class="view-wrapper" *ngIf="isLoaded">
@@ -60,13 +59,12 @@
 
 </div>
 
-<app-error
-    i18n-title="@@Virhe"
-    *ngIf="errorMessage.length > 0"
-    message="{{ errorMessage }}"
-    [styles]="{ margin: '2em 0 1em 0' }"
-    title="Virhe"
-    >
+<app-error  i18n-title="@@Virhe"
+            *ngIf="errorMessage.length > 0"
+            message="{{ errorMessage }}"
+            [styles]="{ margin: '2em 0 1em 0' }"
+            title="Virhe"
+            >
 </app-error>
 
 <!-- <p *ngIf="message.length >0" class="theme-success-message">{{message}}</p> -->
@@ -138,13 +136,12 @@
     Voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
   </p>
 
-  <app-error
-      i18n-title="@@Virhe"
-      *ngIf="inviteErrorMessage.length > 0"
-      message="{{ inviteErrorMessage }}"
-      [styles]="{ margin: '1em 0 1em 0' }"
-      title="Virhe"
-      >
+  <app-error  i18n-title="@@Virhe"
+              *ngIf="inviteErrorMessage.length > 0"
+              message="{{ inviteErrorMessage }}"
+              [styles]="{ margin: '1em 0 1em 0' }"
+              title="Virhe"
+              >
   </app-error>
 
   <div class="invite-wrapper">

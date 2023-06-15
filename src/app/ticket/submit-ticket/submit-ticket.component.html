@@ -9,11 +9,10 @@
       >
   </app-beginning-button>
 
-  <app-error
-      [confirmLeave]="true"
-      *ngIf="showConfirm"
-      [styles]="{ margin: '2rem 0 0 0' }"
-      >
+  <app-error  [confirmLeave]="true"
+              *ngIf="showConfirm"
+              [styles]="{ margin: '2rem 0 0 0' }"
+              >
   </app-error>
 
   <form accept-charset="UTF-8"
@@ -133,12 +132,12 @@
       {{ successMessage }}
     </p>
 
-    <app-error i18n-title="@@Virhe"
-                    message="{{ errorMessage }}"
-                    *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 0' }"
-                    title="Virhe"
-                    >
+    <app-error  i18n-title="@@Virhe"
+                message="{{ errorMessage }}"
+                *ngIf="errorMessage.length > 0"
+                [styles]="{ margin: '1em 0' }"
+                title="Virhe"
+                >
     </app-error>
 
     <div class="theme-actions">

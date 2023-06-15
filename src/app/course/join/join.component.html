@@ -30,12 +30,11 @@
 
   </ng-container>
 
-  <app-error
-      title="{{ error.title }}"
-      message="{{ error.message }}"
-      *ngIf="error"
-      [styles]="{ 'margin-top': '1rem' }"
-      >
+  <app-error  title="{{ error.title }}"
+              message="{{ error.message }}"
+              *ngIf="error"
+              [styles]="{ 'margin-top': '1rem' }"
+              >
   </app-error>
 
   <div class="buttons-wrapper">

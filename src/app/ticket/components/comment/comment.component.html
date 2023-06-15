@@ -133,13 +133,12 @@
       Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
     </mat-error>
 
-    <app-error
-        i18n-title="@@Virhe"
-        *ngIf="errorMessage.length > 0"
-        message="{{ errorMessage }}"
-        [styles]="{ 'margin-top': '1rem' }"
-        title="Virhe"
-        >
+    <app-error  i18n-title="@@Virhe"
+                *ngIf="errorMessage.length > 0"
+                message="{{ errorMessage }}"
+                [styles]="{ 'margin-top': '1rem' }"
+                title="Virhe"
+                >
     </app-error>
 
     <!----------------- Alaosan toiminnot ------------------------------------->

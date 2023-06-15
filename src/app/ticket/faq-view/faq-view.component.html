@@ -102,12 +102,11 @@
   </section>
 
   <mat-card-content *ngIf="errorMessage.length > 0">
-    <app-error
-        i18n-title="@@Virhe"
-        message="{{ errorMessage }}"
-        [styles]="{ margin: '1em 0' }"
-        title="Virhe"
-        >
+    <app-error  i18n-title="@@Virhe"
+                message="{{ errorMessage }}"
+                [styles]="{ margin: '1em 0' }"
+                title="Virhe"
+                >
     </app-error>
   </mat-card-content>
 

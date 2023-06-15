@@ -47,13 +47,12 @@
   usein kysyttäjä kysymyksiä kirjautumattomana.
 </p>
 
-<app-error
-    i18n-title="{{ ticketsError.title }}"
-    message="{{ error.message }}"
-    *ngIf="error.title.length > 0"
-    #ticketError
-    title="{{ error.title }}"
-    >
+<app-error  i18n-title="{{ ticketsError.title }}"
+            message="{{ error.message }}"
+            *ngIf="error.title.length > 0"
+            #ticketError
+            title="{{ error.title }}"
+            >
 </app-error>
 
 <div class="buttons-wrapper">

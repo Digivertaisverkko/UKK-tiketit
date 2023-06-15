@@ -127,15 +127,14 @@
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-  <app-error
-      buttonText="{{ error.buttonText }}"
-      (clickEvent)="errorClickEvent($event)"
-      i18n-title="{{ error.title }}"
-      message="{{ error.message }}"
-      *ngIf="isLoaded && error !== null"
-      #ticketError
-      title="{{ error.title }}"
-      >
+  <app-error buttonText="{{ error.buttonText }}"
+            (clickEvent)="errorClickEvent($event)"
+            i18n-title="{{ error.title }}"
+            message="{{ error.message }}"
+            *ngIf="isLoaded && error !== null"
+            #ticketError
+            title="{{ error.title }}"
+            >
   </app-error>
 
   <div  class="buttons-wrapper theme-actions"
