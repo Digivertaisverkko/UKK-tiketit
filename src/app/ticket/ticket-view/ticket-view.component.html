@@ -49,7 +49,7 @@
       </button>
 
       <button class="remove-btn"
-              (click)="archiveTicket(ticketID, courseid)"
+              (click)="archiveTicket(ticketID, courseid!)"
               color="accent"
               i18n="@@Vahvista"
               mat-raised-button
@@ -74,7 +74,7 @@
         </button>
       </div>
 
-      <button (click)="removeTicket(ticketID, courseid)"
+      <button (click)="removeTicket(ticketID, courseid!)"
               color="accent"
               [disabled]="state==='sending'"
               i18n="@@Vahvista poisto"
@@ -133,7 +133,7 @@
     <h3 class="discussion-h3 theme-subheading" i18n="@@Keskustelu">Keskustelu</h3>
 
     <button aria-label="Virkistä näkymä"
-            (click)="fetchTicket(courseid)"
+            (click)="fetchTicket(courseid!)"
             [disabled]="state==='sending'"
             i18n-aria-label="@@Virkistä näkymä"
             i18n-matTooltip="@@Virkistä näkymä"

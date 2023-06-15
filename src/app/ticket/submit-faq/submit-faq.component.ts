@@ -25,7 +25,7 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public attachmentsMessages: string = '';
   @Input() courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
-  @Input() ticketid: string | undefined;
+  @Input() id!: string;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   public editExisting: boolean = window.history.state.editFaq ?? false;
@@ -36,6 +36,7 @@ export class SubmitFaqComponent implements OnInit {
   public originalTicket: Tiketti | undefined;
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' = 'editing';
+  public ticketid!: string;
   public ticketFields: Kentta[] = [];
   // Kokonaan uutta tikettiä tehtäessä ticketId voi olla asetettu, jos
   // UKK on kopioitu tiketistä.
@@ -68,6 +69,7 @@ export class SubmitFaqComponent implements OnInit {
   {}
 
   ngOnInit(): void {
+    this.ticketid = this.id;
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
 
     if (!this.ticketid) {

@@ -23,13 +23,14 @@ import schema from '@shared/editor/schema';
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
-  @Input() courseid!: string;
+  // @Input() courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
+  public courseid: string | null = this.route.snapshot.paramMap.get('courseid');
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -209,7 +210,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (event === "done") {
       this.isEditingComment = false;
       this.state = 'editing';
-      this.fetchTicket(this.courseid);
+      this.fetchTicket(this.courseid!);
     } else if (event === 'editingComment') {
       this.isEditingComment = true
     } else if (event === "sendingFiles") {
@@ -223,7 +224,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     const commentText = this.form.controls['message'].value;
-    this.ticketService.addComment(this.ticketID, this.courseid, commentText,
+    this.ticketService.addComment(this.ticketID, this.courseid!, commentText,
       this.newCommentState).then(response => {
         if (response == null || response?.success !== true || !this.courseid) {
           this.errorMessage = $localize `:@@Kommentin lisääminen epäonistui:
@@ -261,7 +262,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.attachments.clear();
         this.state = 'editing';
         this.form.enable();
-        this.fetchTicket(this.courseid);
+        this.fetchTicket(this.courseid!);
       })
   }
 
@@ -272,7 +273,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.fetchTicketsSub = timer(0, pollRate)
       .pipe(
         takeUntil(this.unsubscribe$),
-        tap(() => this.fetchTicket(this.courseid))
+        tap(() => this.fetchTicket(this.courseid!))
       )
       .subscribe();
     }
