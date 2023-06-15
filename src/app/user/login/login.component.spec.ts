@@ -1,14 +1,14 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed
     } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
 
 import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '@core/services/store.service';
 import { LoginComponent } from '@user/login/login.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,45 +17,38 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
-    fakeAuthService = jasmine.createSpyObj(
-      'AuthService',
-      [
-        'login',
-        'navigateToLogin',
-      ]
-    );
+    fakeAuthService = jasmine.createSpyObj('AuthService', {
+      login: undefined,
+      navigateToLogin: undefined
+    });
 
-    fakeStoreService = jasmine.createSpyObj(
-      'StoreService',
-      [
-        'getBaseTitle',
-        'setNotLoggedIn',
-        'setParticipant',
-        'setUserInfo'
-      ]
-    );
+    fakeStoreService = jasmine.createSpyObj('StoreService', {
+      getBaseTitle: undefined,
+      setNotLoggedIn: undefined,
+      setParticipant: undefined,
+      setUserInfo: undefined
+    });
 
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
+      declarations: [
+        LoginComponent,
+        MockComponent(HeadlineComponent)
+      ],
       imports: [
         BrowserAnimationsModule,
-        FormsModule,
-        MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule,
+        ReactiveFormsModule
       ],
       providers: [
         { provide: ComponentFixtureAutoDetect, useValue: true },
         { provide: AuthService, useValue: fakeAuthService },
         { provide: StoreService, useValue: fakeStoreService }
-      ],
-      schemas: [ NO_ERRORS_SCHEMA ],
+      ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
