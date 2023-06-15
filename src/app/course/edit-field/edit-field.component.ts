@@ -7,6 +7,7 @@ import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
 
+import { arrayLengthValidator } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
@@ -47,9 +48,9 @@ export class EditFieldComponent implements OnInit {
   }
 
   constructor(
+    private courses: CourseService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private courses: CourseService,
     private store: StoreService,
     private titleServ: Title
   ) {
@@ -87,13 +88,14 @@ export class EditFieldComponent implements OnInit {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
       areSelectionsEnabled: [ true ],
-      selections: [ [] ],
+      selections: [ [], [arrayLengthValidator()] ],
       selectionName: [ '' ],
       infoText: [ '' ],
       mandatory: [ '' ],
     })
   }
 
+  // Monivalintojen merkkijonojen yhteismäärä välimerkit huomioiden.
   public getArraysStringLength(array: String[]): number {
     if (array.length === 0 ) return 0
     let totalLength = 0;

@@ -257,6 +257,7 @@
     "Vahvista": "Confirm",
     "vaihda kieli": "Vaihda kieli suomeksi",
     "Vaihtoehtoinen teksti": "Alt text",
+    "Vaihtoehtojen merkkimäärä ylittyy": "The total number of characters, including punctuation, exceeds the 255-character limit.",
     "Valikko": "Menu",
     "Valitse monivalinnan vaihtoehtoja": "Select multiple choice options",
     "Vastaus": "Answer",
