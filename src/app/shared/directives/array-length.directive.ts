@@ -15,7 +15,7 @@ export function arrayLengthValidator(): ValidatorFn {
   };
 }
 
-function getArraysStringLength(array: string[]): number {
+export function getArraysStringLength(array: string[]): number {
   if (array.length === 0) return 0;
   let totalLength = 0;
   for (const string of array) {

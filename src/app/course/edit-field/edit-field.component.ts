@@ -7,7 +7,7 @@ import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
 import { Title } from '@angular/platform-browser';
 
-import { arrayLengthValidator } from '@shared/directives/array-length.directive';
+import { arrayLengthValidator, getArraysStringLength } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
@@ -99,18 +99,6 @@ export class EditFieldComponent implements OnInit {
     })
   }
 
-  // Monivalintojen merkkijonojen yhteismäärä välimerkit huomioiden.
-  public getArraysStringLength(array: String[]): number {
-    if (array.length === 0 ) return 0
-    let totalLength = 0;
-    for (let string of array) {
-      totalLength += string.length;
-    }
-    // Muuttujien välilä on palvelimella välimerkki.
-    totalLength += array.length - 1;
-    return totalLength;
-  }
-
   public changeRemoveButton() {
     setTimeout(() => this.isRemovePressed = true, 300);
   }
@@ -151,6 +139,10 @@ export class EditFieldComponent implements OnInit {
       this.selectionName?.disable();
       this.selections?.disable();
     }
+  }
+
+  public getArraysStringLength(array: string[]): number {
+    return getArraysStringLength(array);
   }
 
   // Hae kentän tiedot editoidessa olemassa olevaa.
