@@ -182,12 +182,16 @@ export class SubmitTicketComponent implements OnInit {
   private submitEdited(newTicket: UusiTiketti): void {
     if (!this.ticketId || !this.commentID || !this.courseid) throw new Error;
     this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
-    .then( () => {
-      if (this.oldAttachments.length === 0) this.goBack();
-      this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:
-      Muokatun kysymyksen lähettäminen onnistui` + '.';
-      if (!this.courseid) return
-      this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
+    .then(res => {
+      if (res?.success === true) {
+        if (this.oldAttachments.length === 0) this.goBack();
+        this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:
+        Muokatun kysymyksen lähettäminen onnistui` + '.';
+        if (!this.courseid) return
+        this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
+      } else {
+        throw Error
+      }
     })
     .catch(error => {
       this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:

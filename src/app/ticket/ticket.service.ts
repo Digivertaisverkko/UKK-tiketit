@@ -2,7 +2,7 @@
     UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
     niistä vastaavassa servicessä. */
 
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders }
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, firstValueFrom, of } from 'rxjs';
@@ -10,8 +10,9 @@ import { Observable, Subject, firstValueFrom, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
 import { Role } from '../core/core.models';
-import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse, SortableTicket,
-  TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK } from './ticket.models';
+import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
+  SortableTicket, TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK }
+  from './ticket.models';
 import { StoreService } from '../core/services/store.service';
 
 interface GetTicketsOption {
@@ -22,15 +23,13 @@ interface GetTicketsOption {
 
 export class TicketService {
 
-  private api: string;
+  private api: string = environment.apiBaseUrl
 
   constructor (
     private errorService: ErrorService,
     private http: HttpClient,
     private store: StoreService
-    ) {
-      this.api = environment.apiBaseUrl;
-    }
+    ) {}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
   public async addComment(ticketID: string, courseID: string, message: string,
@@ -60,7 +59,7 @@ export class TicketService {
   }
 
   // Lisää uusi UKK.
-  public async addFaq(newFaq: UusiUKK, courseID: string) {
+  public async addFaq(newFaq: UusiUKK, courseID: string): Promise<AddTicketResponse> {
     const url = `${this.api}/kurssi/${courseID}/ukk`;
     let response: any;
     const body = newFaq;
@@ -87,7 +86,8 @@ export class TicketService {
   }
 
    // Arkistoi (poista) UKK.
-  public async archiveFAQ(ticketID: string, courseID: string): Promise<{ success: boolean }> {
+  public async archiveFAQ(ticketID: string, courseID: string):
+      Promise<{ success: boolean }> {
     let response: any;
     // /api/kurssi/:kurssi-id/ukk/arkisto/:tiketti-id/
     const url = `${this.api}/kurssi/${courseID}/ukk/arkisto`;
@@ -124,9 +124,10 @@ export class TicketService {
   }
 
   public async editComment(ticketID: string, commentID: string, comment: string,
-        state: number, courseID: string): Promise<boolean> {
+        state: number, courseID: string): Promise<{ success: boolean }> {
     let response: any;
-    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/
+        ${commentID}`;
     let body;
     if (state < 3 || state > 5) {
       console.error('Muokattavan Kommentin tila täytyy olla 3, 4 tai 5.');
@@ -139,11 +140,12 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    return (response?.success === true) ? true : false;
+    return response
   }
 
   // Muokkaa UKK:a.
-  public async editFaq(ticketID: string, faq: UusiUKK, courseID: string) {
+  public async editFaq(ticketID: string, faq: UusiUKK, courseID: string):
+      Promise<{ success: boolean }> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/ukk/${ticketID}`;
     const body = faq;
@@ -156,7 +158,7 @@ export class TicketService {
   }
 
   public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string,
-        fileList?: File[]): Promise<boolean> {
+        fileList?: File[]): Promise<{ success: boolean }> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     const body = ticket;
@@ -165,9 +167,9 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response?.success !== true) return false
-    if (fileList?.length == 0 || !fileList ) return true
-    if (!courseID) return false
+    if (response?.success !== true) return { success: false }
+    if (fileList?.length == 0 || !fileList ) return { success: false }
+    if (!courseID) return { success: false }
     const firstCommentID = String(response.uusi.kommentti);
     let sendFileResponse: any;
     for (let file of fileList) {
@@ -177,7 +179,7 @@ export class TicketService {
         this.handleError(error);
       }
     }
-    return true
+    return { success: true }
   }
 
   // Hae kurssin UKK-kysymykset.
@@ -241,7 +243,7 @@ export class TicketService {
   }
 
   // Testaamista varten.
-  public getError(x: any, y : any, z: any): Observable<any> {
+  public getError(x: any, y : any, z: any): Observable<HttpErrorResponse> {
     const errorResponse = new HttpErrorResponse({
       error: 'File upload failed',
       status: 400,
@@ -269,9 +271,11 @@ export class TicketService {
     return response
   }
 
-  public async removeComment(ticketID: string, commentID: string, courseID: string) {
+  public async removeComment(ticketID: string, commentID: string, courseID: string):
+      Promise<{ success: boolean}>{
     let response: any;
-    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/
+      ${commentID}`;
     try {
       response = await firstValueFrom<{ success: boolean }>(
         this.http.delete<{ success: boolean }>(url, {})
@@ -283,7 +287,8 @@ export class TicketService {
   }
 
   // Lataa liitetiedosto.
-  public async removeFile(commentID: string, fileID: string) {
+  public async removeFile(commentID: string, fileID: string):
+      Promise<{ success: boolean}> {
     let url = environment.apiBaseUrl;
     url += `/kommentti/${commentID}/liite/${fileID}`;
     let response: any;
@@ -296,7 +301,8 @@ export class TicketService {
   }
 
   // Poista tiketti.
-  public async removeTicket(ticketID: string, courseID: string): Promise<boolean> {
+  public async removeTicket(ticketID: string, courseID: string):
+      Promise<{ success: boolean}> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
@@ -304,13 +310,14 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    return response?.success === true ? true : false;
+    return response;
   }
 
   /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
       lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
       palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketList(courseID: string, option?: GetTicketsOption) {
+  public async getTicketList(courseID: string, option?: GetTicketsOption):
+      Promise<SortableTicket[] | null> {
     const currentRoute = window.location.href;
     if (currentRoute.indexOf('/list-tickets') === -1) {
       return null
@@ -429,9 +436,9 @@ export class TicketService {
     this.errorService.handleServerError(error);
   }
 
-  // Lähetä tiedosto palauttaen edistymistietoja.
+  // Lähetä tiedosto palauttaen edistymisprosentin.
   public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
-      Observable<any>{
+      Observable<number>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
@@ -442,7 +449,7 @@ export class TicketService {
     // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
     this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
       .subscribe({
-        next: (event) => {
+        next: (event: HttpEvent<any>) => {
           if (event.type === HttpEventType.UploadProgress && event.total !== undefined) {
             const percentDone = Math.round(100 * event.loaded / event.total);
             progress.next(percentDone);

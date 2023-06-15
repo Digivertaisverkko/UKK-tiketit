@@ -212,7 +212,7 @@ export class SubmitFaqComponent implements OnInit {
   private submitEditedFAQ(faq: UusiUKK, ticketId: string): void {
     if (!this.courseId) return;
     this.ticketService.editFaq(ticketId, faq, this.courseId)
-      .then((response: AddTicketResponse) => {
+      .then(response => {
         if (this.attachments.fileInfoList.length === 0) this.goBack();
         if (response === null || response?.success !== true) {
           throw new Error('UKK:n muokkaaminen epäonnistui.');

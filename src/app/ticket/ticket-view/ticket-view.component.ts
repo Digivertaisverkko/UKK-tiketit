@@ -186,7 +186,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public removeTicket(ticketID: string, courseID: string | null): void {
     if (!courseID) return
     this.ticketService.removeTicket(ticketID, courseID).then(response => {
-      if (response === false ) {
+      if (response?.success !== true ) {
         this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
             Kysymyksen poistaminen ei onnistunut.`;
       } else {
