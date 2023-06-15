@@ -167,13 +167,13 @@
         <span i18n="@@Pakollinen">Pakollinen</span>
       </div>
 
-      <!-- TicketId on asetettu, jos editoidaan olemassa olevaa UKK:a. -->
+      <!-- ticketid on asetettu, jos editoidaan olemassa olevaa UKK:a. -->
       <button class="cancel-button"
               [disabled]="state!=='editing'"
               i18n="@@Peru"
               mat-raised-button
-              *ngIf="ticketId"
-              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId"
+              *ngIf="ticketid"
+              [routerLink]="'/course/' + courseid + '/faq-view/' + ticketid"
               type="button"
               >
         Peru
@@ -213,12 +213,12 @@
 
 <!--------------- Alkuperäinen kysymys ---------------------------------------->
 
-  <ng-container *ngIf="originalTicket !== undefined && !ticketId">
+  <ng-container *ngIf="originalTicket !== undefined && !ticketid">
     <hr class="theme-divider">
     <h1 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
     </h1>
-    <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
+    <app-ticket-view [ticketIdFromParent]="ticketid"></app-ticket-view>
   </ng-container>
 
 </div>
