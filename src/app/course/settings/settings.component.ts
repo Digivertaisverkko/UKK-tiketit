@@ -16,7 +16,7 @@ import { StoreService } from '@core/services/store.service';
 })
 export class SettingsComponent implements OnInit {
 
-  @Input() courseid: string | null = null;
+  @Input() courseid!: string;
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
   public form: FormGroup = this.buildForm();
@@ -72,7 +72,6 @@ export class SettingsComponent implements OnInit {
   }
 
   public exportFAQs() {
-    if (!this.courseid) throw Error('Ei kurssi ID:ä.');
     const faq = $localize `:@@UKK:UKK`;
     const courseName = this.store.getCourseName();
     const filename = `${faq}-${courseName}.json`;
@@ -117,7 +116,6 @@ export class SettingsComponent implements OnInit {
 
   public sendInvite() {
     this.inviteErrorMessage = '';
-    if (!this.courseid) return
     const email = this.form.controls['email'].value;
     const checkboxValue = this.form.controls['role'].value;
     const role: Role = this.getRole(checkboxValue);

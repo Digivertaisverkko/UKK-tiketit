@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 
 export class HomeComponent implements OnInit{
 
-  @Input() courseid: string | null = null;
+  @Input() courseid: string | undefined;
   public lang: string | null;
 
   constructor(

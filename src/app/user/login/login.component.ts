@@ -14,7 +14,7 @@ import { getIsInIframe } from '@shared/utils';
 })
 
 export class LoginComponent implements OnInit, AfterViewInit {
-  @Input() courseid: string | undefined;
+  @Input() courseid!: string;
   @Input() loginid: string | undefined;
 
   public errorMessage: string = '';
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   {}
 
   ngOnInit(): void {
-    if (!this.loginid && !getIsInIframe() && this.courseid) {
+    if (!this.loginid && !getIsInIframe()) {
       // Hakee loginid:n.
       this.auth.navigateToLogin(this.courseid);
     }

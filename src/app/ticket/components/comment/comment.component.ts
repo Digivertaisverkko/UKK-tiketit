@@ -4,13 +4,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject, Subscription } from 'rxjs';
 
-import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
+import { FileInfo, Kommentti } from '@ticket//ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
 import { isToday } from '@shared/utils';
-import { FileInfo, Kommentti } from '@ticket//ticket.models';
-import { User } from '@core/core.models';
 import { StoreService } from '@core/services/store.service';
+import { TicketService } from '@ticket/ticket.service';
+import { User } from '@core/core.models';
 
 import schema from '@shared/editor/schema';
 
@@ -26,8 +26,8 @@ export class CommentComponent implements AfterViewInit{
   @Input() public comment: Kommentti = {} as Kommentti;
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
-  @Input() public ticketID: string = '';
   @Input() public sender: User | null = null;
+  @Input() public ticketID: string = '';
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
   // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
@@ -63,7 +63,6 @@ export class CommentComponent implements AfterViewInit{
   ngAfterViewInit(): void {
     this.trackWhenEditing();
   }
-
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({

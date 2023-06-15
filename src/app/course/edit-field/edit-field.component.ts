@@ -18,7 +18,7 @@ import { StoreService } from '@core/services/store.service';
 })
 
 export class EditFieldComponent implements OnInit {
-  @Input() courseid: string = '';
+  @Input() courseid!: string;
   @Input() fieldid: string | null = null;
   public addOnBlur = true;
   public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.

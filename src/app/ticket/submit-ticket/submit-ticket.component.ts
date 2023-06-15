@@ -24,7 +24,7 @@ import { TicketService } from 'src/app/ticket/ticket.service';
 
 export class SubmitTicketComponent implements OnInit {
   @Input() public attachmentsMessages: string = '';
-  @Input() courseid: string | null = null;
+  @Input() courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 

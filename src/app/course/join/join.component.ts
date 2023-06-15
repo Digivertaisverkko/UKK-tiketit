@@ -21,7 +21,7 @@ interface ErrorNotification {
 })
 export class JoinComponent implements OnInit, OnDestroy {
 
-  @Input() courseid: string | null = null;
+  @Input() courseid!: string;
   @Input() invitation: string | null = null;
   public courseName: string = '';
   public error: ErrorNotification | null = null;
@@ -56,7 +56,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   }
 
   public getInvitedInfo() {
-    if (!this.courseid || !this.invitation) return
+    if (!this.invitation) return
     this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
       if (res === null) {
         throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')

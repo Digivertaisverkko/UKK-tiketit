@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Title } from '@angular/platform-browser';
@@ -45,9 +45,9 @@ import { StoreService } from '../services/store.service';
     styleUrls: ['./page-not-found.component.scss']
 })
 
-export class PageNotFoundComponent implements OnInit {
+export class PageNotFoundComponent {
   public isLoggedIn: Boolean | null = null;
-  @Input() courseid: string | null = null;
+  @Input() courseid: string | undefined;
 
   constructor(
     private authService: AuthService,
@@ -60,19 +60,8 @@ export class PageNotFoundComponent implements OnInit {
       this.isLoggedIn = this.store.getIsLoggedIn();
   }
 
-  ngOnInit(): void {
-    this.courseid = this.route.snapshot.paramMap.get('courseid');
-    this.trackRouteParameters();
-  }
-
-  private trackRouteParameters() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      this.courseid = courseID;
-    });
-  }
-
   public async goToLogin() {
+    if (!this.courseid) return
     const res = await this.authService.getLoginInfo('own', this.courseid);
     const loginUrl = res['login-url'];
     this.router.navigateByUrl(loginUrl);

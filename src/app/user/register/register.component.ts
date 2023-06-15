@@ -19,7 +19,7 @@ import { LoginInfo } from '@core/core.models';
 })
 export class RegisterComponent implements OnInit, OnDestroy{
 
-  @Input() courseid: string = '';
+  @Input() courseid!: string;
   @Input() invitation: string = '';
   public courseName: string = '';
   public form: FormGroup;

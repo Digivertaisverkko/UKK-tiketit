@@ -15,8 +15,8 @@ export class StoreService {
   private isLoading$: Subject<boolean> = new Subject();
   private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
-  // Voidaan välittää viestejä komponenttien välillä.
   private constants;
+  // Voidaan välittää viestejä komponenttien välillä.
   private messageEmitter$ = new Subject<string>();
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null>(null);

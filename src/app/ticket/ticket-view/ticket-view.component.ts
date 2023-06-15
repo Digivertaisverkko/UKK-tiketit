@@ -23,7 +23,7 @@ import schema from '@shared/editor/schema';
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
-  @Input() courseid: string | null = null;
+  @Input() courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
   @Input() ticketIdFromParent: string | null = null;
@@ -99,8 +99,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.fetchTicketsSub?.unsubscribe();
   }
 
-  public archiveTicket(ticketID: string, courseID: string | null) {
-    if (!courseID) return
+  public archiveTicket(ticketID: string, courseID: string) {
     this.ticketService.archiveTicket(ticketID, courseID).then(response => {
       if (response?.success === true) {
         this.router.navigateByUrl('/course/' + courseID + '/list-tickets');
@@ -152,9 +151,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   // Hae tiketti ja päivitä näkymän tila.
-  public fetchTicket(courseID: string | null) {
+  public fetchTicket(courseID: string) {
     // fetchaus sulkee editointiboxin.
-    if (this.editingCommentIDParent !== null || !courseID) return
+    if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
@@ -183,8 +182,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 
-  public removeTicket(ticketID: string, courseID: string | null): void {
-    if (!courseID) return
+  public removeTicket(ticketID: string, courseID: string): void {
     this.ticketService.removeTicket(ticketID, courseID).then(response => {
       if (response?.success !== true ) {
         this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
@@ -223,7 +221,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public sendComment(): void {
     this.form.markAllAsTouched();
-    if (this.form.invalid || !this.courseid) return;
+    if (this.form.invalid) return;
     const commentText = this.form.controls['message'].value;
     this.ticketService.addComment(this.ticketID, this.courseid, commentText,
       this.newCommentState).then(response => {
