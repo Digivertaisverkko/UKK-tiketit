@@ -36,11 +36,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   {}
 
   ngOnInit(): void {
-    if (!this.courseid) {
-      console.error('Ei kurssi ID:ä URL:ssa, käytetään oletuksena 1:stä.');
-      this.courseid = '1';
-    }
-    if (!this.loginid && !getIsInIframe()) {
+    if (!this.loginid && !getIsInIframe() && this.courseid) {
+      // Hakee loginid:n.
       this.auth.navigateToLogin(this.courseid);
     }
     this.title.setTitle(this.store.getBaseTitle() +

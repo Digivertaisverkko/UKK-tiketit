@@ -8,7 +8,6 @@ import { RegisterComponent } from './register/register.component';
 const routes: Routes = [
   { path: 'course/:courseid/login', component: LoginComponent },
   { path: 'course/:courseid/register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
   {
     path: 'course/:courseid/profile',
     component: ProfileComponent
