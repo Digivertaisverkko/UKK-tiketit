@@ -80,14 +80,14 @@ export class StoreService {
     return this.positions[url] || 0;
   }
 
-  public startLoading() {
+  public startLoading(): void {
     /* Laittaa muutoksen seuraavaan change detectionin macrotaskiin,
       jotta vältytään dev buildissa virheeltä:
       Error:ExpressionChangedAfterItHasBeenCheckedError */
     setTimeout( () => this.isLoading$.next(true) );
   }
 
-  public stopLoading() {
+  public stopLoading(): void {
     setTimeout( () => this.isLoading$.next(false) );
   }
 
@@ -95,24 +95,23 @@ export class StoreService {
     this.messageEmitter$.next(message);
   }
 
-  public setCourseName(courseName: string) {
+  public setCourseName(courseName: string): void {
     if (this.courseName !== courseName) {
       this.courseName = courseName;
     }
   }
 
   // Aseta tila kirjautuneeksi.
-  public setLoggedIn() {
+  public setLoggedIn(): void {
     if (this.isLoggedIn$.value !== true) {
       // this.setSessionID('loggedin');
       this.isLoggedIn$.next(true);
       console.log('authService: asetettiin kirjautuminen.');
-    } else {
     }
   }
 
   // Aseta tila kirjautumattomaksi.
-  public setNotLoggegIn() {
+  public setNotLoggegIn(): void {
     if (this.isLoggedIn$.value !== false) {
       this.isLoggedIn$.next(false);
     }
@@ -150,7 +149,7 @@ export class StoreService {
     return this.messageEmitter$.asObservable();
   }
 
-  public unsetPosition() {
+  public unsetPosition(): void {
     this.positions = {};
   }
 

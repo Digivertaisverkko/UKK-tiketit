@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 
 import { Error } from "../core.models";
 import { StoreService } from "./store.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({ providedIn: 'root' })
 
@@ -21,7 +22,7 @@ export class ErrorService {
       tarpeen mukaan näyttää käyttäjällle virheilmoituksia.
   */
 
-  public handleServerError(error: any) {
+  public handleServerError(error: HttpErrorResponse) {
     var backendResponse = error?.error;
     var backendError: Error = backendResponse?.error;
 
@@ -85,7 +86,7 @@ export class ErrorService {
   }
 
 
-  public handleNotLoggedIn() {
+  public handleNotLoggedIn(): void {
     console.log('errorService.handleNotLoggedIn(): et ole kirjaunut,' +
           'ohjataan virhesivulle.');
     this.store.setNotLoggegIn();
@@ -97,7 +98,7 @@ export class ErrorService {
     // this.router.navigateByUrl(baseUrl + 'forbidden');
   }
 
-  private routeToNoPrivileges() {
+  private routeToNoPrivileges(): void {
     // Ei toimi tässä this.route.snapshot.paramMap.get('courseid').
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumisnäkymässä ei koskaan haluta ohjata tähän näkymään.
@@ -112,7 +113,7 @@ export class ErrorService {
     }
   }
 
-  public saveRedirectURL() {
+  public saveRedirectURL(): void {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
     if (currentRoute.indexOf('/login') === -1) {

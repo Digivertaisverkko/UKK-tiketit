@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '@core/services/auth.service';
 import { ErrorService } from '@core/services/error.service';
 import { environment } from 'src/environments/environment';
 import { User } from '@core/core.models';
