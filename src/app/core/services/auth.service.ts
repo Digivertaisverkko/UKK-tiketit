@@ -88,7 +88,7 @@ export class AuthService {
 
   /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
      Käyttäjää on voitu vaihtaa eri tabissa/ikkunassa. */
-  public startUpdatingUserinfo() {
+  public startUpdatingUserinfo(): void {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
         const courseID = getCourseIDfromURL();
@@ -161,7 +161,7 @@ export class AuthService {
     return this.getMethodName.caller.name
   }
 
-  public saveRedirectURL() {
+  public saveRedirectURL(): void {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
     if (currentRoute.indexOf('/login') === -1) {
@@ -246,7 +246,8 @@ export class AuthService {
     return (noDataConsentList.includes(lastTokenid)) ? true : false;
   }
 
-  public async navigateToLogin(courseID: string | null, notification?: { message: string }) {
+  public async navigateToLogin(courseID: string | null,
+        notification?: { message: string }) {
     // console.warn('logout: kurssi id: ' + this.courseID);
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
@@ -266,7 +267,7 @@ export class AuthService {
   }
 
   // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
-  public removeDenyConsent() {
+  public removeDenyConsent(): void {
     const noDataConsent: string | null = localStorage.getItem('noDataConsent')
     let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
     const lastTokenid = localStorage.getItem('lastTokenid')
@@ -383,13 +384,13 @@ export class AuthService {
   }
 
   // Suorita uloskirjautuminen.
-  public async logout(): Promise<boolean> {
+  public async logout(): Promise<{ success: boolean }> {
       let response: any;
       let url = environment.apiBaseUrl + '/kirjauduulos';
       try {
         response = await firstValueFrom(this.http.post(url, {}));
       } catch (error: any) {
-        return false
+        return { success: false }
       }
       this.store.setNotLoggegIn();
       this.store.setUserInfo(null);
@@ -397,7 +398,7 @@ export class AuthService {
       this.store.unsetPosition();
       this.store.setCourseName('');
       window.sessionStorage.clear();
-      return true
+      return { success: true }
         // if (courseID != null) {
         //   this.navigateToLogin(courseID);
         // }
@@ -405,7 +406,7 @@ export class AuthService {
 
   // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
   // virheen käsittelyä.
-  private handleError(error: HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse): void {
     this.errorService.handleServerError(error);
   }
 
