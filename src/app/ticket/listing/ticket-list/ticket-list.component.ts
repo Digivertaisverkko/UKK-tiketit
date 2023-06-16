@@ -55,6 +55,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   public isArchivedShown: boolean;
 
   private fetchTicketsTimer$: Observable<number>;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 1;
   private trackMessages$: Observable<string>;
 
   @ViewChild('sortQuestions', { static: false }) sortQuestions = new MatSort();
@@ -66,8 +67,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     private store : StoreService,
     private ticket: TicketService,
   ) {
-    const POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 1;
-    const POLLING_RATE_MS = POLLING_RATE_MIN * this.store.getMsInMin();
+    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
     this.fetchTicketsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
     this.trackMessages$ = this.store.trackMessages().pipe(takeUntilDestroyed());
 
@@ -85,7 +85,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.headline = this.getHeadline();
     this.trackScreenSize();
-    this.startPollingTickets();
+    this.startPollingTickets(this.POLLING_RATE_MIN);
     if (this.isArchivedShown && (this.user?.asema === 'opettaja'
       || this.user?.asema === 'admin')) {
       this.fetchArchivedTickets();
@@ -207,16 +207,21 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.store.stopLoading();
   }
 
-  private startPollingTickets() {
-    console.log('Aloitetaan tikettien pollaus.');
+  // Hae tiketit tietyn ajan välein.
+  private startPollingTickets(POLLING_RATE_MIN: number) {
+    console.log(`Aloitetaan tikettien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
     let fetchStartTime: number | undefined;
     let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
     this.fetchTicketsTimer$.subscribe(() => {
       this.fetchTickets(this.courseID!);
       if (fetchStartTime) {
         elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
         console.log('Tikettien pollauksen viime kutsusta kulunut aikaa ' +
           `${elapsedTime} sekuntia.`);
+        if (elapsedTime !== POLLING_RATE_SEC) {
+          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+        }
       }
       fetchStartTime = Date.now();
     });
