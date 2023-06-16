@@ -2,13 +2,15 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { takeWhile } from 'rxjs';
+import { Observable, takeWhile, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { CourseService } from '../course.service';
+import { environment } from 'src/environments/environment';
 import { GenericResponse, Role, User } from '@core/core.models';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -26,6 +28,8 @@ export class SettingsComponent implements OnInit {
   public isLoaded: boolean = false;
   public message: string = '';
   public showConfirm: boolean = false;
+  private fetchFieldTimer$: Observable<number>;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
 
   constructor(
     private courses: CourseService,
@@ -35,7 +39,8 @@ export class SettingsComponent implements OnInit {
     private store: StoreService,
     private titleServ: Title
   ) {
-
+    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchFieldTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   get email(): AbstractControl {
@@ -49,13 +54,10 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.titleServ.setTitle(this.store.getBaseTitle() + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
-      if (this.courseid) {
-        this.fetchTicketFieldInfo(this.courseid);
-    } else {
-      console.error('Ei kurssi ID:ä, ei voida hakea tikettipohjan tietoja.');
-    }
+
     this.trackUserInfo();
     this.trackIfParticipant();
+    this.startPollingFields(this.POLLING_RATE_MIN);
   }
 
   private buildForm(): FormGroup {
@@ -190,6 +192,26 @@ export class SettingsComponent implements OnInit {
         this.router.navigateByUrl(route);
       }
     })
+  }
+
+  // Hae tiketit tietyn ajan välein.
+  private startPollingFields(POLLING_RATE_MIN: number) {
+    console.log(`Aloitetaan kenttäpohjien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
+    this.fetchFieldTimer$.subscribe(() => {
+      this.fetchTicketFieldInfo(this.courseid!);
+      if (fetchStartTime) {
+        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
+          `${elapsedTime} sekuntia.`);
+        if (elapsedTime !== POLLING_RATE_SEC) {
+          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+        }
+      }
+      fetchStartTime = Date.now();
+    });
   }
 
   private trackUserInfo() {
