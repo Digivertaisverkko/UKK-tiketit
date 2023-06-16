@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component }
+import { ChangeDetectorRef, Component }
     from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { getIsInIframe } from '@shared/utils';
 import { User } from '@core/core.models';
 import { StoreService } from '../services/store.service';
 import { getCourseIDfromURL } from '@shared/utils';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usermenu',
@@ -31,7 +30,8 @@ export class UsermenuComponent  {
     private store: StoreService
     ) {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    this.isInIframe = getIsInIframe();
+    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
+        true : false;
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();

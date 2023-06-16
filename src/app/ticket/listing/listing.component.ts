@@ -9,7 +9,6 @@ import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
-import { getIsInIframe } from '@shared/utils';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
@@ -50,6 +49,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfFAQ: number = 0;
   public noDataConsent: boolean | null;
   public isLoggedIn$: Observable<boolean | null>;
+  public strings: Map<string, string>;
   public successMessage: string | null = null;
   public user$: Observable<User | null>;
 
@@ -58,7 +58,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
   private scrollPosition: number = 0;
-  public strings: Map<string, string>;
   private readonly POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
@@ -80,7 +79,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
     this.isLoggedIn$ = this.store.trackLoggedIn();
-    this.isInIframe = getIsInIframe();
+    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
+        true : false;
     this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
