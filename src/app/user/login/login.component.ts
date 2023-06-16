@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '@core/services/store.service';
-import { getIsInIframe } from '@shared/utils';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +35,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   {}
 
   ngOnInit(): void {
-    if (!this.loginid && !getIsInIframe()) {
+    const isInIframe: string | null = window.sessionStorage.getItem('IN-IFRAME');
+    if (!this.loginid && isInIframe !== 'true') {
       // Hakee loginid:n.
       this.auth.navigateToLogin(this.courseid);
     }

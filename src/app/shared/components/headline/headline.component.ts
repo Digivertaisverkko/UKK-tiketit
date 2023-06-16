@@ -2,7 +2,6 @@ import {  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
           ContentChild, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
-import { getIsInIframe } from 'src/app/shared/utils';
 import { CourseService } from 'src/app/course/course.service';
 import { StoreService } from '@core/services/store.service';
 
@@ -13,7 +12,7 @@ import { StoreService } from '@core/services/store.service';
     <!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" -->
     <h1 class="mat-h1"
         [ngClass]="appHeadline ? 'login-h1' : ''"
-        *ngIf="!isInIframe || showInIframe"
+        *ngIf="isInIframe === 'false' || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>
@@ -37,7 +36,7 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
   @Input() showInIframe: boolean = false;
   public hasProjectedContent = false;
   public headlineText: string | null = null;
-  public isInIframe: boolean;
+  public isInIframe: string | null;
 
   constructor(
       private change: ChangeDetectorRef,
@@ -46,7 +45,8 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       private courses: CourseService,
       private store: StoreService,
   ) {
-    this.isInIframe = getIsInIframe();
+    // this.isInIframe = getIsInIframe();
+    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME');
   }
 
   @ContentChild('projectedContent') projectedContent: any
@@ -71,10 +71,10 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       this.store.setCourseName(this.headlineText);
     }).catch((response) => {
       /* Jälkimmäinen testaa tyhjää objektia. Tulos tarkoittaa, että
-          kurssia ei ole olemassa. */ 
+          kurssia ei ole olemassa. */
       if (response === null || Object.keys(response).length === 0)  {
         this.router.navigateByUrl('404');
-      } 
+      }
       this.headlineText = '';
     });
   }
