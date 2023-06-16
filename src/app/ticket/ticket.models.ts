@@ -5,7 +5,7 @@ ja joita on tarkoitus käyttää tämän feature-moduulin sisällä.
   API:a se vastaa. Rajapintojen jäsenmuuttujien arvojen järjestys noudattaa
   API-dokumentin järjestystä. */
 
-import { User } from "../core/core.models";
+import { User } from "@core/core.models";
 
 export interface AddTicketResponse {
   success: Boolean;
