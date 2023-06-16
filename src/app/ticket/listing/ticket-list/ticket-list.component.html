@@ -6,6 +6,21 @@
     {{ headline }}
   </h2>
 
+  <div class="spacer"></div>
+
+  <button aria-label="Virkistä näkymä"
+          class="refresh-button"
+          (click)="fetchTickets(courseID!)"
+          i18n-aria-label="@@Virkistä näkymä"
+          i18n-matTooltip="@@Virkistä näkymä"
+          mat-icon-button
+          matTooltip="Virkistä näkymä"
+          matTooltipPosition="after"
+          #tooltip="matTooltip"
+          >
+    <mat-icon>refresh</mat-icon>
+  </button>
+
   <app-search-bar (searchResult)="applyFilter($event)" i18n="@@Suodata kysymyksiä">
     Suodata kysymyksiä
   </app-search-bar>

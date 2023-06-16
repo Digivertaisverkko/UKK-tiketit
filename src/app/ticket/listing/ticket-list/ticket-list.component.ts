@@ -122,7 +122,7 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Hae tiketit kerran.
-  private fetchTickets(courseID: string) {
+  public fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then(response => {
       if (!response) return
       if (response.length > 0) {
