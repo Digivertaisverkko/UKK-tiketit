@@ -12,7 +12,7 @@ import { StoreService } from '@core/services/store.service';
     <!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" -->
     <h1 class="mat-h1"
         [ngClass]="appHeadline ? 'login-h1' : ''"
-        *ngIf="isInIframe === 'false' || showInIframe"
+        *ngIf="isInIframe !== 'true' || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>
@@ -45,7 +45,6 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       private courses: CourseService,
       private store: StoreService,
   ) {
-    // this.isInIframe = getIsInIframe();
     this.isInIframe = window.sessionStorage.getItem('IN-IFRAME');
   }
 
