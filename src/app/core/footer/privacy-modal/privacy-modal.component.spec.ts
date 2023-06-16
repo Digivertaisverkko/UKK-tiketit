@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { PrivacyModalComponent } from './privacy-modal.component';
 
@@ -8,7 +9,13 @@ describe('PrivacyModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrivacyModalComponent ]
+      declarations: [ PrivacyModalComponent ],
+      imports: [
+        MatDialogModule
+      ],
+      providers: [
+        { provide: MatDialogRef, useValue : {} }
+      ]
     })
     .compileComponents();
 
