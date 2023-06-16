@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -29,6 +30,7 @@ describe('TicketListComponent', () => {
       imports: [
         BrowserAnimationsModule,
         MatButtonModule,
+        MatIconModule,
         MatSortModule,
         MatTableModule,
         MatTooltipModule,
