@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 
 import { TicketListComponent } from './ticket-list.component';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { TicketService } from '@ticket/ticket.service';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
 
 describe('TicketListComponent', () => {
   let component: TicketListComponent;
@@ -30,6 +31,7 @@ describe('TicketListComponent', () => {
         MatButtonModule,
         MatSortModule,
         MatTableModule,
+        MatTooltipModule,
         RouterTestingModule
       ],
       providers: [
