@@ -185,7 +185,7 @@
 
   <button class="button"
           (click)="saveRedirectUrl()"
-          color="primary"
+          [color]="user?.asema === 'opiskelija' ? 'primary' : ''"
           mat-raised-button
           [routerLink]="'/course/' + this.courseID + '/submit'"
           target="_blank"
