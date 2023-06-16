@@ -5,12 +5,15 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
+import { Observable, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { arrayLengthValidator, getArraysStringLength } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
+import { environment } from 'src/environments/environment';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -30,6 +33,8 @@ export class EditFieldComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public showConfirm: boolean = false;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
+  private fetchFieldTimer$: Observable<number>;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
 
   get areSelectionsEnabled(): FormControl {
     return this.form.get('areSelectionsEnabled') as FormControl;
@@ -65,6 +70,8 @@ export class EditFieldComponent implements OnInit {
       ohje: '',
       valinnat: []
     }
+    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchFieldTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
@@ -73,9 +80,7 @@ export class EditFieldComponent implements OnInit {
       this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
     } else {
-    /* Lähetykseen tarvitaan kaikkien kenttien tiedot, vaikka lähetettäisiin
-       uusi kenttä. */
-       this.getFieldInfo(this.courseid, this.fieldid);
+      this.startPollingFields(this.POLLING_RATE_MIN);
     }
   }
 
@@ -214,6 +219,26 @@ export class EditFieldComponent implements OnInit {
     this.form.controls['infoText'].setValue(this.field.ohje);
     this.form.controls['mandatory'].setValue(this.field.pakollinen);
     this.form.controls['selections'].setValue(this.field.valinnat);
+  }
+
+  // Hae kenttäpohjat tietyn ajan välein.
+  private startPollingFields(POLLING_RATE_MIN: number) {
+    console.log(`Aloitetaan kenttäpohjien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
+    this.fetchFieldTimer$.subscribe(() => {
+      this.getFieldInfo(this.courseid, this.fieldid);
+      if (fetchStartTime) {
+        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
+          `${elapsedTime} sekuntia.`);
+        if (elapsedTime !== POLLING_RATE_SEC) {
+          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+        }
+      }
+      fetchStartTime = Date.now();
+    });
   }
 
   // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
