@@ -39,7 +39,7 @@
     "sha.js": "^2.4.11",
     "style-mod": "^4.0.3",
     "tslib": "^2.5.3",
-    "zone.js": "~0.13.0"
+    "zone.js": "^0.13.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.1.0",
