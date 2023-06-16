@@ -26,7 +26,6 @@ export class CommentComponent implements AfterViewInit{
   @Input() public comment: Kommentti = {} as Kommentti;
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
-  @Input() public sender: User | null = null;
   @Input() public ticketID: string = '';
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
@@ -38,6 +37,7 @@ export class CommentComponent implements AfterViewInit{
   public form: FormGroup = this.buildForm();
   public errorMessage: string = '';
   public isRemovePressed: boolean = false;
+  public sender = this.comment.lahettaja;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();

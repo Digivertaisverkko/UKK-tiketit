@@ -152,7 +152,6 @@
         (messages)="listenMessagesFromComment($event)"
         *ngFor="let comment of ticket.kommentit"
         [ticketID]="ticket.id"
-        [sender]="comment.lahettaja"
         >
     </app-comment>
 

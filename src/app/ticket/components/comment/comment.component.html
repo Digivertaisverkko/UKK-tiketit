@@ -43,7 +43,7 @@
             mat-icon-button
             matTooltip="Poista kommentti"
             matTooltipPosition="after"
-            *ngIf= "(comment.lahettaja.id === user?.id) &&
+            *ngIf= "(sender?.id === user?.id) &&
                     (editingCommentID === comment.id) &&
                     isRemovePressed === false"
             #tooltip="matTooltip"
@@ -61,7 +61,7 @@
             mat-icon-button
             matTooltip="Vahvista kommentin poistaminen"
             matTooltipPosition="after"
-            *ngIf="(comment.lahettaja.id === user?.id) &&
+            *ngIf="(sender?.id === user?.id) &&
                 (editingCommentID === comment.id) &&
                 isRemovePressed === true"
             #tooltip="matTooltip"
@@ -81,7 +81,7 @@
           [disabled]="state==='sending'"
           i18n-aria-label="@@Muokkaa kommenttia"
           mat-icon-button
-          *ngIf="(comment.lahettaja.id === user?.id) &&
+          *ngIf="(sender?.id === user?.id) &&
                 (editingCommentID !== comment.id)"
           >
     <mat-icon>edit</mat-icon>
