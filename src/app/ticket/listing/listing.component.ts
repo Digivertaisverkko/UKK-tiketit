@@ -4,8 +4,9 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
@@ -53,12 +54,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public successMessage: string | null = null;
   public user$: Observable<User | null>;
 
-  private fetchFAQsSub$: Subscription | null = null;
+  private fetchFAQsTimer$: Observable<number>;
   private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
   private scrollPosition: number = 0;
-  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
 
@@ -94,6 +95,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       ['Kirjaudu', $localize`:@@Kirjaudu:Kirjaudu`],
       ['Luo tili', $localize`:@@Luo tili:Luo tili`]
     ]);
+    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchFAQsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   ngOnInit() {
@@ -112,7 +115,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     console.warn('listaus: ngOnDestroy ajettu.');
     window.removeEventListener('scroll', this.onScroll);
     this.loggedIn$.unsubscribe();
-    this.stopPolling();
   }
 
   //hakutoiminto, jossa paginointi kommentoitu pois
@@ -215,12 +217,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('scroll', this.onScroll);
   }
 
-  public stopPolling(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    if (this.fetchFAQsSub$) this.fetchFAQsSub$.unsubscribe();
-  }
-
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages(): void {
     this.store.trackMessages()
@@ -258,7 +254,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
-    this.stopPolling();
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     if (this.store.getIsLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
@@ -272,7 +267,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       const courseID = paramMap.get('courseid');
       if (courseID != null) this.courseID = courseID;
       // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-      this.startPollingFAQ();
+      this.startPollingFAQ(this.POLLING_RATE_MIN);
     })
   }
 
@@ -319,14 +314,24 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private startPollingFAQ(): void {
-    this.fetchFAQsSub$?.unsubscribe();
-    console.warn('Aloitetaan UKK pollaus.');
-    const pollRate = this.POLLING_RATE_MIN * this.store.getMsInMin();
-    this.fetchFAQsSub$ = timer(0, pollRate)
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        ).subscribe(() => this.fetchFAQ(this.courseID));
+  // Hae UKK:t tietyn ajan välein.
+  private startPollingFAQ(POLLING_RATE_MIN: number): void {
+    console.log(`Aloitetaan UKK pollaus joka ${POLLING_RATE_MIN} minuutti.`);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
+    this.fetchFAQsTimer$.subscribe(() => {
+      this.fetchFAQ(this.courseID!);
+      if (fetchStartTime) {
+        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log('UKK-pollauksen viime kutsusta kulunut aikaa ' +
+            `${elapsedTime} sekuntia.`);
+        if (elapsedTime !== POLLING_RATE_SEC) {
+          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+        }
+      }
+      fetchStartTime = Date.now();
+    });
   }
 
 }
