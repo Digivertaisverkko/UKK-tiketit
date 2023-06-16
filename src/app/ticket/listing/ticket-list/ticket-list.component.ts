@@ -1,11 +1,12 @@
+import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy,
+  OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy, OnInit,
-          ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, Subscription, takeUntil, timer } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { Observable, timer } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '../../ticket.service';
@@ -33,9 +34,9 @@ interface ErrorNotification {
   styleUrls: [ '../listing.component.scss' , './ticket-list.component.scss']
 })
 
-export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TicketListComponent implements OnInit, AfterViewInit {
 
-  // @Input() public courseID: string = '';
+  // UKK:sta kopioitaessa @Input:na courseid oli undefined.
   public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
   @Input() public user: User | null = null;
   @Output() ticketMessage = new EventEmitter<string>();
@@ -53,9 +54,8 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfQuestions: number = 0;
   public isArchivedShown: boolean;
 
-  private fetchTicketsSub$: Subscription | null  = null;
-  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 15;
-  private unsubscribe$ = new Subject<void>();
+  private fetchTicketsTimer$: Observable<number>;
+  private trackMessages$: Observable<string>;
 
   @ViewChild('sortQuestions', { static: false }) sortQuestions = new MatSort();
   @ViewChild('sortArchived',  { static: false }) sortArchived  = new MatSort();
@@ -66,6 +66,11 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
     private store : StoreService,
     private ticket: TicketService,
   ) {
+    const POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 1;
+    const POLLING_RATE_MS = POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchTicketsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
+    this.trackMessages$ = this.store.trackMessages().pipe(takeUntilDestroyed());
+
     this.columnDefinitions = [
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
@@ -89,11 +94,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.trackMessages();
-  }
-
-  ngOnDestroy(): void {
-    console.warn('tikettilista: ngOnDestroy ajettu.');
-    this.stopPolling();
   }
 
   //hakutoiminto, jossa paginointi kommentoitu pois
@@ -186,7 +186,6 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
-    this.stopPolling();
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
     window.localStorage.setItem('REDIRECT_URL', link);
@@ -209,36 +208,29 @@ export class TicketListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private startPollingTickets() {
-    this.fetchTicketsSub$?.unsubscribe();
-    console.warn('Aloitetaan tikettien pollaus.');
-    const pollRate = this.POLLING_RATE_MIN * this.store.getMsInMin();
-    // throttleTime(pollTime),
-    this.fetchTicketsSub$ = timer(0, pollRate)
-        .pipe(
-            takeUntil(this.unsubscribe$)
-        ).subscribe(() => {
-          if (this.courseID) this.fetchTickets(this.courseID)
-        });
-  }
-
-  public stopPolling(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    if (this.fetchTicketsSub$) this.fetchTicketsSub$.unsubscribe();
+    console.log('Aloitetaan tikettien pollaus.');
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    this.fetchTicketsTimer$.subscribe(() => {
+      this.fetchTickets(this.courseID!);
+      if (fetchStartTime) {
+        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log('Tikettien pollauksen viime kutsusta kulunut aikaa ' +
+          `${elapsedTime} sekuntia.`);
+      }
+      fetchStartTime = Date.now();
+    });
   }
 
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages(): void {
-    this.store.trackMessages()
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      ).subscribe(response => {
-      if (response === 'refresh') {
-        console.log('trackMessages: saatiin refresh pyyntö.');
-        this.startLoading();
-        setTimeout(() => this.stopLoading(), 800);
-        if (this.courseID)  this.fetchTickets(this.courseID);
-      }
+    this.trackMessages$.subscribe(response => {
+        if (response === 'refresh') {
+          console.log('trackMessages: saatiin refresh pyyntö.');
+          this.startLoading();
+          setTimeout(() => this.stopLoading(), 800);
+          this.fetchTickets(this.courseID!);
+        }
     });
   }
 
