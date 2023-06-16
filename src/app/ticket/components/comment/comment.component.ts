@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild }
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild }
     from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Validators as EditorValidators } from 'ngx-editor';
@@ -20,7 +20,7 @@ import schema from '@shared/editor/schema';
   styleUrls: ['./comment.component.scss']
 })
 
-export class CommentComponent implements AfterViewInit{
+export class CommentComponent implements AfterViewInit, OnInit{
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
@@ -37,7 +37,7 @@ export class CommentComponent implements AfterViewInit{
   public form: FormGroup = this.buildForm();
   public errorMessage: string = '';
   public isRemovePressed: boolean = false;
-  public sender = this.comment.lahettaja;
+  public sender: User = {} as User;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
@@ -62,6 +62,10 @@ export class CommentComponent implements AfterViewInit{
 
   ngAfterViewInit(): void {
     this.trackWhenEditing();
+  }
+
+  ngOnInit(): void {
+    this.sender = this.comment.lahettaja;
   }
 
   private buildForm(): FormGroup {
