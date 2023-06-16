@@ -108,7 +108,7 @@
     </section>
 
     <h1><span i18n="@@Kysymys">Kysymys</span><span>*</span></h1>
-    <app-editor formControlName="question"></app-editor>
+    <app-editor formControlName="question" ngDefaultControl></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="question?.errors?.['required'] && question?.touched"
                 >
@@ -121,7 +121,7 @@
     </mat-error>
 
     <h1><span i18n="@@Vastaus">Vastaus</span><span>*</span></h1>
-    <app-editor formControlName="answer"></app-editor>
+    <app-editor formControlName="answer" ngDefaultControl></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="answer?.errors?.['required'] && answer?.touched"
                 >
