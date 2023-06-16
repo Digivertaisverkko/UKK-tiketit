@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockComponent } from 'ng-mocks';
 
 import { HomeComponent } from './home.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -8,7 +10,10 @@ describe('HomeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent]
+      declarations: [
+        HomeComponent,
+        MockComponent(HeadlineComponent)
+      ]
     });
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
