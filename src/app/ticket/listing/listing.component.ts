@@ -14,7 +14,7 @@ import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
-import { User } from '@core/core.models';
+import { Error, User } from '@core/core.models';
 import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
@@ -41,6 +41,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public courseID: string = '';
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
+  public errorFromComponent: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public screenSize: 'handset' | 'small' | 'other' = 'other';
@@ -101,7 +102,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.url = window.location.pathname;
-    this.checkSuccessMessage();
+    this.checkRouterData();
     this.trackCourseID();
     // this.trackLoggedStatus();
     this.trackScreenSize();
@@ -132,13 +133,15 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.navigateToLogin(this.courseID)
   }
 
-  private checkSuccessMessage() {
+  private checkRouterData() {
     const message: string | null = window.history.state.message;
     if (message) {
       if (message === 'account created') {
         this.successMessage = $localize `:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti` + '.';
       }
     }
+    const errorMsg: string | null = window.history.state.error;
+    this.errorFromComponent = errorMsg ?? null;
   }
 
   public errorClickEvent(button: string) {

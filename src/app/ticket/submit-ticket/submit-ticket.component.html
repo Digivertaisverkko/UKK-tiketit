@@ -196,6 +196,7 @@
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
                           formControlName="attachments"
                           [oldAttachments]="oldAttachments"
+                          [ticketID]="ticketId"
                           [uploadClicks]="uploadClick.asObservable()"
                           >
     </app-edit-attachments>

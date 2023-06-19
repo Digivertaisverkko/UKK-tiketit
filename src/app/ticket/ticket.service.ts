@@ -168,7 +168,7 @@ export class TicketService {
       this.handleError(error);
     }
     if (response?.success !== true) return { success: false }
-    if (fileList?.length == 0 || !fileList ) return { success: false }
+    if (fileList?.length == 0 || !fileList ) return { success: true }
     if (!courseID) return { success: false }
     const firstCommentID = String(response.uusi.kommentti);
     let sendFileResponse: any;
@@ -287,10 +287,9 @@ export class TicketService {
   }
 
   // Lataa liitetiedosto.
-  public async removeFile(commentID: string, fileID: string):
-      Promise<{ success: boolean}> {
-    let url = environment.apiBaseUrl;
-    url += `/kommentti/${commentID}/liite/${fileID}`;
+  public async removeFile(ticketID: string, commentID: string, fileID: string,
+      courseID: string): Promise<{ success: boolean}> {
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
     let response: any;
     try {
       response = await firstValueFrom(this.http.delete(url));

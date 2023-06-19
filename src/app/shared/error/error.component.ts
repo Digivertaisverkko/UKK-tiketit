@@ -15,7 +15,6 @@ import { StoreService } from '@core/services/store.service';
 
         <p>{{ message }}</p>
 
-        <!-- Lähettää '1' jos implementoidaan useampia nappeja. -->
         <button (click)="click()"
                 mat-raised-button
                 *ngIf="buttonText.length > 0"
@@ -58,6 +57,8 @@ export class ErrorComponent implements OnInit {
     if (this.confirmLeave) {
       this.store.sendMessage('go begin');
     } else {
+      /*  1 vittaa ensimmäiseen näppäimeen siltä varalta, jos lisätään useampia
+          näppäimiä */
       this.clickEvent.emit('1')
     }
   }

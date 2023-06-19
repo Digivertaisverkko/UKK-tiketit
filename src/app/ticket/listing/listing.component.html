@@ -22,6 +22,11 @@
 
   </ng-template>
 
+  <app-error  *ngIf="errorFromComponent"
+              [message]="errorFromComponent"
+              >
+  </app-error>
+
 </ng-container>
 
 <app-success  *ngIf="successMessage"

@@ -35,6 +35,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks = new Observable();
+  @Input() ticketID?: string | null = '';
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -43,15 +44,14 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
-  public isRemovingEnabled: boolean = false;
   public readonly MAX_FILE_SIZE_MB=100;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
-  private filesToRemove: Liite[] = [];
+  public filesToRemove: Liite[] = [];
 
   constructor(private renderer: Renderer2,
-              private ticketService: TicketService
+              private tickets: TicketService
               ) {
   }
 
@@ -79,7 +79,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         console.error('makeRequestArray: Ei kurssi ID:ä.');
         return
       }
-      return this.ticketService.uploadFile(ticketID, commentID, courseID, fileinfo.file)
+      return this.tickets.uploadFile(ticketID, commentID, courseID, fileinfo.file)
         .pipe(
           tap(progress => {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
@@ -149,29 +149,65 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.markAsTouched();
     this.filesToRemove.push(this.oldAttachments[index]);
     this.oldAttachments.splice(index, 1);
-    console.log('poistetaan:');
+    console.log('tullaan poistamaan:');
     console.dir(this.filesToRemove);
   }
 
   /* Lähetä poistopyyntö poistettavaksi merkityistä, aiemmin lähetetyistä tiedostoista.
     Palauttaa true jos kaikki tiedostot poistettiin onnistuneesti, false jos
     mikä tahansa epäonnistui. */
-  public removeOldFiles(files: Liite[]): Promise<boolean> {
+  public removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (files.length === 0) reject(false);
+      console.log('pitäisi poistaa:');
+      if (this.filesToRemove.length === 0) reject(false);
       let success: boolean = true;
-      for (let file of files) {
-          this.ticketService.removeFile(file.kommentti, file.tiedosto).then(res => {
+      if (!this.ticketID) {
+        throw Error('Ei tiketti ID:ä.');
+      }
+      const courseID = getCourseIDfromURL();
+      if (!courseID) console.error('course id: ' + courseID);
+      for (let file of this.filesToRemove) {
+          this.tickets.removeFile(this.ticketID, file.kommentti, file.tiedosto,
+              courseID!).then(res => {
             if (res.success === false) {
               success = false;
             }
         }).catch (err => {
+          console.log(err);
           success = false;
+          console.log('asetetaan success false');
         })
       }
       resolve(success);
     })
   }
+
+  public newRemoveSentFiles(): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    console.log('01');
+    if (this.filesToRemove.length === 0) reject(false);
+    const courseID = getCourseIDfromURL();
+    if (!courseID) console.error('course id: ' + courseID);
+    const promises = this.filesToRemove.map(file => {
+    console.log('02');
+      if (this.ticketID === null || this.ticketID === undefined) {
+        throw Error(' ei ticketID:ä');
+        // reject(new Error('Ei tiketti ID:ä.'));
+      }
+    console.log('03');
+      return this.tickets.removeFile(this.ticketID, file.kommentti, file.tiedosto,
+          courseID!).then(res => res.success)
+        .catch(() => false);
+    });
+
+    Promise.all(promises)
+      .then(results => {
+        const success = results.every(result => result === true);
+        resolve(success);
+      })
+      .catch(() => resolve(false));
+  });
+}
 
   public removeSelectedFile(index: number) {
     if (this.isEditingDisabled === true) return
@@ -201,8 +237,12 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         next: (res: any) => {
 
           let errorsWithRemove: boolean = false;
-          if (this.isRemovingEnabled && this.filesToRemove.length > 0 ) {
-            this.removeOldFiles(this.filesToRemove).then(res => {
+
+          console.log('this.filesToRemove.length: ' + this.filesToRemove.length);
+
+          if (this.filesToRemove.length > 0 ) {
+            console.log(1);
+            this.removeSentFiles().then(res => {
               if (!res) errorsWithRemove = true;
             }).catch(err => {
               errorsWithRemove = true;

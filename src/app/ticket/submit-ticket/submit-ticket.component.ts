@@ -180,25 +180,47 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private submitEdited(newTicket: UusiTiketti): void {
-    if (!this.ticketId || !this.commentID || !this.courseid) throw new Error;
+    if (!this.ticketId || !this.commentID) throw new Error;
     this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
-    .then(res => {
-      if (res?.success === true) {
-        if (this.oldAttachments.length === 0) this.goBack();
+      .then(res => {
+        if (res?.success === false) {
+          throw Error
+        } 
+        console.log('this.attachments.filesToRemove.length: ' + this.attachments.filesToRemove.length);
+        if (this.attachments.filesToRemove.length === 0) return
+        this.attachments.newRemoveSentFiles().then(res => {
+          console.log(1);
+          if (res === false) {
+            throw new Error('Ei onnistunut poistaminen.')
+          }
+          return
+        }).catch(err => {
+          console.log('error: ' + err);
+          this.errorMessage = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
+          return
+        })
+      }).then(() => {   
+        console.log(2);
+        if (!this.fileInfoList) {
+          console.log(3);
+          if (this.errorMessage.length > 0) {
+            const route = 'course/' + this.courseid + '/list-tickets';
+            const data = { error: this.errorMessage };
+            this.router.navigate([route], { state: data });
+          } else {
+            this.goBack();
+          }
+        }
         this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:
         Muokatun kysymyksen lähettäminen onnistui` + '.';
-        if (!this.courseid) return
-        this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
-      } else {
-        throw Error
-      }
-    })
-    .catch(error => {
-      this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
-          Muokatun kysymyksen lähettäminen epäonnistui` + '.'
-      this.state = 'editing';
-      this.form.enable();
-    });
+        return this.sendFiles(this.ticketId!, this.commentID!, this.courseid)
+      })
+      .catch(error => {
+        this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
+            Muokatun kysymyksen lähettäminen epäonnistui` + '.'
+        this.state = 'editing';
+        this.form.enable();
+      });
   }
 
   private submitNew(ticket: UusiTiketti): void {
@@ -227,11 +249,17 @@ export class SubmitTicketComponent implements OnInit {
     });
   }
 
-  private sendFiles(ticketID: string, commentID: string, courseID: string): void {
-    this.attachments.sendFiles(ticketID, commentID)
+  private sendFiles(ticketID: string, commentID: string, courseID: string):
+      Promise<any> {
+    return this.attachments.sendFiles(ticketID, commentID)
     .then(() => {
-      this.state = 'done';
-      this.goBack();
+      if (this.errorMessage) {
+        this.state = 'editing';
+        return
+      } else {
+        this.state = 'done';
+        this.goBack();
+      }
     })
     .catch((res: any) => {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
