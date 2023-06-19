@@ -67,8 +67,6 @@
             >
 </app-error>
 
-<!-- <p *ngIf="message.length >0" class="theme-success-message">{{message}}</p> -->
-
 <app-success *ngIf="message.length >0">{{ message }}</app-success>
 
 <div class="theme-actions" *ngIf="errorMessage.length === 0">
@@ -177,9 +175,9 @@
       </mat-radio-button>
     </mat-radio-group>
 
-  <p *ngIf="inviteMessage.length >0" class="theme-success-message">
+  <app-success *ngIf="inviteMessage.length >0">
     {{ inviteMessage }}
-  </p>
+  </app-success>
 
 
 </form>

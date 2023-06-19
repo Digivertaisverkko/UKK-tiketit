@@ -66,14 +66,14 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.store.sendMessage('go begin'); 
   }
 
-    // Seurataan kurssi ID:ä URL:sta.
-    private trackCourseID(): void {
-      this.route.paramMap.subscribe((paramMap: ParamMap) => {
-        const courseID = paramMap.get('courseid');
-        if (courseID != null) this.courseID = courseID;
-        // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-      })
-    }
+  // Seurataan kurssi ID:ä URL:sta.
+  private trackCourseID(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      const courseID = paramMap.get('courseid');
+      if (courseID != null) this.courseID = courseID;
+      // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
+    })
+  }
 
   private trackLoginStatus() {
     this.store.onIsUserLoggedIn()

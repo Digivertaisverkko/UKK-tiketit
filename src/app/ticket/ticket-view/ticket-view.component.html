@@ -189,12 +189,12 @@
     </app-error>
 
     <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
-    <p  class="theme-success-message"
+    <app-success
         i18n="@@Kommentin lisääminen"
         *ngIf="state==='sending'"
         >
       Uuden kommentin lähettäminen onnistui.
-    </p>
+    </app-success>
 
     <section *ngIf="ticket.tila > 0">
 

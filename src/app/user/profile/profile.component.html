@@ -77,11 +77,11 @@
       Minulle saa lähettää sähköpostia käyttäjäpalautteen keräämiseksi
     </mat-checkbox>
   </form>
-  <p  class="theme-success-message"
+  <app-success
       *ngIf="emailSettingsSuccessMessage.length > 0"
       >
     {{ emailSettingsSuccessMessage }}
-  </p>
+  </app-success>
   <app-error i18n-title="@@Virhe"
                   message="{{ emailSettingsErrorMessage }}"
                   *ngIf="emailSettingsErrorMessage.length > 0"

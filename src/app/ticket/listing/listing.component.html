@@ -23,9 +23,12 @@
   </ng-template>
 
 </ng-container>
-<p class="success-message theme-success-message" *ngIf="successMessage">
+
+<app-success  *ngIf="successMessage"
+              styles="margin-top: 1.5rem; margin-bottom: -0.5rem"
+              >
   {{ successMessage }}
-</p>
+</app-success>
 
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list

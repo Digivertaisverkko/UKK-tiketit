@@ -38,7 +38,8 @@ import { StoreService } from '../services/store.service';
 
     </div>
     <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
-      ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.</p>
+      ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.
+    </p>
     <p i18n="@@404-2">Todennäköisesti ensimmäinen.</p>
     `,
 

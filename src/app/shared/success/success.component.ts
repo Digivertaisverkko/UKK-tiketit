@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-success',
   template: `
-  <p>
+  <p [ngStyle]="styles">
     <mat-icon fontIcon="done"></mat-icon>
     <span>
       <ng-content></ng-content>
@@ -14,5 +14,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SuccessComponent {
+
+  @Input() styles: any;
 
 }

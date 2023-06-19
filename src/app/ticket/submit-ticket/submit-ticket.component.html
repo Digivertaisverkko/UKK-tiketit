@@ -128,9 +128,9 @@
     </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p class="theme-success-message" *ngIf="successMessage">
+    <app-success *ngIf="successMessage">
       {{ successMessage }}
-    </p>
+    </app-success>
 
     <app-error  i18n-title="@@Virhe"
                 message="{{ errorMessage }}"
