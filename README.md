@@ -1,37 +1,44 @@
 # UKK-tiketit
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli).
+Tämä on Digivertaisverkkohanketta varten toteutetun opetuskäyttöön tarkoitetun tikettijärjestelmän web-käyttöliittymä. Web-käyttöliittymä on toteutettu [Angularilla](https://angular.io/). Web-käyttöliittymä kommunikoi erikseen asennettavan tikettijärjestelmän rajapinnan [UKK-Tiketit-backend](https://github.com/Digivertaisverkko/UKK-tiketit-backend) kanssa.
 
 ## Asennus
 
-Asenna Angular, kloonaa tämä repo ja asenna npm:llä riippuvuudet (projektihakemistossa): npm install
+Web-käyttöliittymä tarvitsee toimiakseen tikettijärjestelmän rajapinnan [UKK-Tiketit-backend](https://github.com/Digivertaisverkko/UKK-tiketit-backend). Katso ohjeet sen asentamiseksi projektin GitHub sivulta. Sieltä löytyy myös ohjeet tämän web-käyttöliittymän ajamiseen yhdessä rajapinnan kanssa.
 
-## Development server
+## Kehitysympäristö
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Alla on ohjeet miten käytät tätä projektia kehitystyössä. Ohjeet olettavat sinun asentaneen tikettijärjestelmän rajapinnan sen ohjeiden mukaan.
 
-## Code scaffolding
+### Asennus kehitysympäristössä
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Asenna nodejs ja npm tietokoneellesi.
+- Asenna [Angular-CLI](https://angular.io/cli) globaalisti npm:llä komennolla `npm install -g @angular/cli`
+- Lataa tai kloonaa tämä repo. Aseta tikettijärjestelmän rajapinnassa ympäristömuuttuja `FRONTEND_DIRECTORY` osoittamaan kyseisessä kansiossa olevaan /dist/tikettisysteemi -hakemistoon. Esimerkiksi `FRONTEND_DIRECTORY=/home/user/UKK-tiketit/dist/tikettisysteemi/`
+- Aja komento `npm ci` asentaaksesi projektin riippuvuudet
+- Aja komento `npm run build` kääntääksesi projektin.
 
-## Build
+### Kääntäminen
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Aja komento `npm run build` kääntääksesi projektin `production` versiona.
 
-## Running unit tests
+Aja komento `npm run watch`, jos haluat tehdä kehitystyötä. Tällöin projekti käännetään `development` versiona ja kääntäminen tapahtuu tiedostojen muuttumisen yhteydessä.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Projektin käännetty versio sijaitsee `dist/tikettisysteemi/` hakemistossa.
 
-## Running end-to-end tests
+### Testien ajaminen
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Aja komento `ng test` ajaaksesi kaikki projektin testit [Karmalla](https://karma-runner.github.io). Testit sijaitsevat *.spec.ts -tiedostoissa jokaisen komponentin, servicen ja pipen yhteydessä.
 
-## Further help
+Testejä voi ajaa myös testitiedosto kerrallaan käyttäen `--include` argumenttia. Esimerkiksi SubmitTicketComponent testit voi ajaa komennolla `ng test --include **/submit-ticket.component.spec.ts`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Testit ajetaan käyttäen Google Chrome -selainta. Joissain tapauksissa testiympäristö ei havaitse automaattisesti Chromen binaaria ja tällöin joudut asettamaan ympäristömuuttujan `CHROME_BIN`. Esimerkiksi `CHROME_BIN=chromium ng test`.
 
-## Hyödyllisiä linkkejä
+# Hyödyllisiä linkkejä
 
-* [Angular - Angular coding style
-guide](https://angular.io/guide/styleguide#overall-structural-guidelines)
+* [Web-käyttöliittymän käyttöohjeet](https://github.com/Digivertaisverkko/UKK-tiketit/wiki)
+* [Tikettijärjestelmän REST rajapinta](https://github.com/Digivertaisverkko/UKK-tiketit-backend/blob/main/docs/rajapinta/api.md)
+* [Angular - Angular coding style guide](https://angular.io/guide/styleguide#overall-structural-guidelines)
 * [Angular Material UI component library](https://material.angular.io/)
+* [Angular - Testing](https://angular.io/guide/testing)
+* [Testing Angular - A Guide to Robust Angular Applications](https://testing-angular.com/)
