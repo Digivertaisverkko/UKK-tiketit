@@ -4,7 +4,8 @@
                     [toolbar]="toolbar"
                     >
   </ngx-editor-menu>
-  <ngx-editor [editor]="editor"
+  <ngx-editor *ngIf="formControlName"
+              [editor]="editor"
               [formControlName]="formControlName"
               [placeholder]="''"
               >
