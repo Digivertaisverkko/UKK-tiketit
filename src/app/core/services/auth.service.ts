@@ -16,6 +16,15 @@ import { Kurssini } from '@course/course.models';
 import { CourseService } from '@course/course.service';
 import { StoreService } from './store.service';
 
+
+interface UserRights {
+  oikeudet: User,
+  login: {
+    lti_login: boolean,
+    perus: boolean
+  }
+}
+
 interface LoginResponse {
   success: boolean,
   'login-code': string
@@ -189,13 +198,13 @@ export class AuthService {
       joka paikassa odottaa observablen arvoa? */
       /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
-      response = await firstValueFrom<User>(this.http.get<any>(url));
+      response = await firstValueFrom<UserRights>(this.http.get<any>(url));
     } catch (error: any) {
       response = null;
     }
     let newUserInfo: any;
-    if (response != null && response?.id != null)  {
-      newUserInfo = response;
+    if (response != null && response.oikeudet != null)  {
+      newUserInfo = response.oikeudet;
       newUserInfo.asemaStr = this.getRoleString(newUserInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
