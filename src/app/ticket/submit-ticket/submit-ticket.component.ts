@@ -222,9 +222,11 @@ export class SubmitTicketComponent implements OnInit {
         } else {
           console.log('this.fileInfoList on false');
         }
+        console.log('fileinfolist sisältö alla:');
         console.log(JSON.stringify(this.fileInfoList));
-        console.log('this.fileInfoList.length: ' + this.fileInfoList.length);
-        if (this.fileInfoList && this.fileInfoList?.length > 0) {
+        console.log(typeof this.fileInfoList);
+        if (this.fileInfoList !== undefined) {
+          if (this.fileInfoList.length === 0 ) this.goBack();
           console.log('lähetetään tiedostoja.');
           this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
           this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
