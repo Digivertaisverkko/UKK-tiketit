@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   public logoClicked() {
-    this.store.sendMessage('go begin'); 
+    this.store.sendMessage('go begin');
   }
 
   // Seurataan kurssi ID:ä URL:sta.

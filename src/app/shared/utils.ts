@@ -32,6 +32,7 @@ export function getCourseIDfromURL(): string | null {
     return url.protocol === "http:" || url.protocol === "https:";
   }
 
+  // Onko merkkijono muodoltaan email:ksi tunnistettavissa.
   export function isValidEmail(email: string): boolean {
     let validationString = new String(email)
       .toLowerCase()

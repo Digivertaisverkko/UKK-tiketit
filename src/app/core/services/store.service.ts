@@ -6,12 +6,20 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Role, User } from '../core.models';
 
+interface Headline {
+  text?: string;
+  appHeadline?: boolean;
+  noCourseTitle?: boolean;
+  showInIframe?: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 
 export class StoreService {
 
   // Kaikki jäsenmuuttujat tulisi olla privaatteja.
   private courseName: string | null = null;
+  private headline: Headline | null = null;
   private isLoading$: Subject<boolean> = new Subject();
   private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
@@ -40,6 +48,10 @@ export class StoreService {
     return this.courseName ?? '';
   }
 
+  public getHeadline(): Headline | null {
+    return this.headline;
+  }
+
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
   }
@@ -59,6 +71,10 @@ export class StoreService {
 
   public getUserName(): string | null {
     return this.user$.value?.nimi ?? null;
+  }
+
+  public setHeadline(headline: Headline): void {
+    this.headline = headline;
   }
 
   public setUserInfo(newUserInfo: User | null): void {
