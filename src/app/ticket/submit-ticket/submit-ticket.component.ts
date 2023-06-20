@@ -151,13 +151,15 @@ export class SubmitTicketComponent implements OnInit {
 
   public goBack(): void {
     // TODO: kaikkia erroreita ei haluta listassa näyttää.
+    /*
     if (this.errorMessage) {
       console.log('näytetään virhe listassa ennen poistumista: ' + this.errorMessage);
       const route = 'course/' + this.courseid + '/list-tickets';
       const data = { error: this.errorMessage };
       this.router.navigate([route], { state: data });
     }
-    this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
+    */
+    this.router.navigateByUrl('course/' + this.courseid + '/list-tickets')
   }
 
   private prepareSendFiles(response: any): void {
@@ -203,7 +205,7 @@ export class SubmitTicketComponent implements OnInit {
           return
         }
         console.log('poistetaan tiedostoja');
-        return this.attachments.secondRemoveSentFiles().then(res => {
+        return this.attachments.removeFilesLoop().then(res => {
           console.log('newRemoveSentFiles palautti: ' + res);
           if (res === false) {
             return Promise.reject;

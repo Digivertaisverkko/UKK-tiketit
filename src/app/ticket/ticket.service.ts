@@ -301,7 +301,6 @@ export class TicketService {
       courseID: string): Promise<{ success: boolean}> {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
     let response: any;
-    //return firstValueFrom(this.http.delete(url));
     try {
       response = await firstValueFrom(this.http.delete(url)).then((value) => {
         console.log('asd');
@@ -310,7 +309,6 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    console.log('vastaus oli: ' + response);
     return response
   }
 

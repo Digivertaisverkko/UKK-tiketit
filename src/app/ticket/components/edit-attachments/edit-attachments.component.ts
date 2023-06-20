@@ -183,6 +183,29 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     })
   }
 
+  public async removeFilesLoop(): Promise<boolean> {
+    const courseID = getCourseIDfromURL();
+    let isSuccess: boolean = true;
+    if (!courseID || !this.ticketID) {
+      console.error('course id: ' + courseID + ' ticketID: ' + this.ticketID);
+    }
+    return new Promise((resolve) => {
+      for (let file of this.filesToRemove) {
+        console.log('yritetään poistaa: ' + file.tiedosto);
+        this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+            courseID!).then(res => {
+          if (res.success === false) {
+            isSuccess = false;
+          }
+      }).catch (err => {
+        isSuccess = false;
+        console.log('asetetaan success false');
+      })
+    }
+    resolve(isSuccess);
+    })
+  }
+
   public async thirdRemoveSentFiles(): Promise<boolean> {
     const courseID = getCourseIDfromURL();
     if (!courseID || !this.ticketID) {
@@ -317,6 +340,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   // Kutsutaan parent komponentista.
   public async sendFiles(ticketID: string, commentID: string): Promise<any> {
+    console.log('commentID: ' + commentID);
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
@@ -325,6 +349,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
 
+          /* Tiedostojen poistamisen koodia.
           let errorsWithRemove: boolean = false;
 
           console.log('this.filesToRemove.length: ' + this.filesToRemove.length);
@@ -335,7 +360,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
             }).catch(err => { 
               errorsWithRemove = true;
             })
-          }
+          } */
 
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
