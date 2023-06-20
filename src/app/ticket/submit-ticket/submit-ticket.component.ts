@@ -150,6 +150,13 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public goBack(): void {
+    // TODO: kaikkia erroreita ei haluta listassa näyttää.
+    if (this.errorMessage) {
+      console.log('näytetään virhe listassa ennen poistumista: ' + this.errorMessage);
+      const route = 'course/' + this.courseid + '/list-tickets';
+      const data = { error: this.errorMessage };
+      this.router.navigate([route], { state: data });
+    }
     this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
   }
 
@@ -181,41 +188,52 @@ export class SubmitTicketComponent implements OnInit {
 
   private submitEdited(newTicket: UusiTiketti): void {
     if (!this.ticketId || !this.commentID) throw new Error;
+    console.log('lähetetään: ticket id: '+ this.ticketId + ' '+ newTicket +
+    ' course id: ' + this.courseid)
     this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
       .then(res => {
+        console.log('saatiin vastaus editointiin: ' + JSON.stringify(res));
         if (res?.success === false) {
-          throw Error
-        } 
+          console.log('editointi ei onnistunut, heitetään virhe.');
+          throw Error();
+        }
         console.log('this.attachments.filesToRemove.length: ' + this.attachments.filesToRemove.length);
-        if (this.attachments.filesToRemove.length === 0) return
-        this.attachments.newRemoveSentFiles().then(res => {
-          console.log(1);
-          if (res === false) {
-            throw new Error('Ei onnistunut poistaminen.')
-          }
+        if (this.attachments.filesToRemove.length === 0) {
+          console.log('ei poistettavaa');
           return
+        }
+        console.log('poistetaan tiedostoja');
+        this.attachments.thirdRemoveSentFiles().then(res => {
+          console.log('newRemoveSentFiles palautti: ' + res);
+          if (res === false) {
+            throw new Error('Jokin poistamisista epäonnistui.');
+          } else {
+            return
+          }
         }).catch(err => {
-          console.log('error: ' + err);
+          console.log('thirdRemoveSentFiles.catch: error: ' + err);
           this.errorMessage = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
           return
         })
-      }).then(() => {   
-        console.log(2);
-        if (!this.fileInfoList) {
-          console.log(3);
-          if (this.errorMessage.length > 0) {
-            const route = 'course/' + this.courseid + '/list-tickets';
-            const data = { error: this.errorMessage };
-            this.router.navigate([route], { state: data });
-          } else {
-            this.goBack();
-          }
+        return
+      }).then(() => {
+        if (this.fileInfoList) {
+          console.log(' this.fileInfoList on true');
+        } else {
+          console.log('this.fileInfoList on false');
         }
-        this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:
-        Muokatun kysymyksen lähettäminen onnistui` + '.';
-        return this.sendFiles(this.ticketId!, this.commentID!, this.courseid)
-      })
-      .catch(error => {
+        console.log(JSON.stringify(this.fileInfoList));
+        console.log('this.fileInfoList.length: ' + this.fileInfoList.length);
+        if (this.fileInfoList && this.fileInfoList?.length > 0) {
+          console.log('lähetetään tiedostoja.');
+          this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
+          this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
+        } else {
+          console.log('Ei lähetettäviä tiedostoja.');
+          this.goBack();
+        }
+      }).catch(error => {
+        console.log('ketjun error: ' + JSON.stringify(error));
         this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
             Muokatun kysymyksen lähettäminen epäonnistui` + '.'
         this.state = 'editing';

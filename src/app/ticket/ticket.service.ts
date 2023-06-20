@@ -286,7 +286,7 @@ export class TicketService {
     return response;
   }
 
-  // Lataa liitetiedosto.
+  // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
