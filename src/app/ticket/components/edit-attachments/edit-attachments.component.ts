@@ -186,7 +186,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public async thirdRemoveSentFiles(): Promise<boolean> {
     const courseID = getCourseIDfromURL();
     if (!courseID || !this.ticketID) {
-      console.log('course id: ' + courseID + ' ticketID: ' + this.ticketID);
+      console.error('course id: ' + courseID + ' ticketID: ' + this.ticketID);
     }
     const removalPromises = this.filesToRemove.map((liite: Liite) =>
     this.tickets.removeFile(this.ticketID!, liite.kommentti, liite.tiedosto,
@@ -205,29 +205,97 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     }
   }
 
-  public secondRemoveSentFiles(): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    if (this.filesToRemove.length === 0) reject(false);
+  public async fourthRemoveSentFiles(): Promise<boolean> {
+    if (this.filesToRemove.length === 0) throw new Error('No files to remove.');
     const courseID = getCourseIDfromURL();
+    if (!courseID) console.error('course id: ' + courseID);
+    if (!this.ticketID) throw new Error('No ticket ID.');
+  
+    try {
+      const results = await Promise.all(
+        this.filesToRemove.map(file =>
+          this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto, courseID!)
+            .then(res => res.success)
+            .catch(() => false)
+        )
+      );
+      const success = results.every(result => result === true);
+      return success;
+    } catch (error) {
+      console.error('secondRemoveSentFiles.catch: error: ' + error);
+      return false;
+    }
+  }
+
+
+  public async secondRemoveSentFiles(): Promise<boolean> {
+    console.log(1);
+  return new Promise((resolve, reject) => {
+    console.log(2);
+    if (this.filesToRemove.length === 0) {
+      console.log('edit-attachments: ei poistettavia tiedostoja.')
+      reject(false);
+    }
+      const courseID = getCourseIDfromURL();
     if (!courseID) console.error('course id: ' + courseID);
     if (this.ticketID === null || this.ticketID === undefined) {
       throw Error(' ei ticketID:ä');
       // reject(new Error('Ei tiketti ID:ä.'));
     }
-    const promises = this.filesToRemove.map(file => {
 
+    let promise: any = null;
+    this.filesToRemove.forEach((file) => {
+      if (promise === null) {
+        promise = this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+          courseID!)
+      } else {
+      promise = promise.then(() => {
+        return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+          courseID!)
+        })
+      } 
+    })
+
+    promise.then(() =>{
+      resolve(true);
+    } )
+    .catch((error: any) => {
+      resolve(false);
+    })
+/*
+    console.dir(this.filesToRemove);
+    const promises = this.filesToRemove.map(file => {
+        console.log(JSON.stringify(file));
         return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
             courseID!)
-          .then(res => res.success)
-          .catch(() => false);
+          .then(res => {
+            console.log('res : ' + res);
+            return res.success
+          })
+          .catch((err) => {
+              console.log('err: ' + err);
+            return false
+          });
     });
+    console.log(3);
+
+    for (let promise of promises) {
+      console.log(promise instanceof Promise === true)
+    }
 
     Promise.all(promises).then(results => {
-        const success = results.every(result => result === true);
-        resolve(success);
-      })
-      .catch(() => resolve(false));
+      console.log(4);
+      // console.log('promises: ' + JSON.stringify(promises));
+      //   const success = results.every(result => result === true);
+      resolve(true);
+      // resolve(success);
+      }).catch(() => {
+        console.log(5);
+          resolve(false)
+      });
   });
+  */
+  })
 }
 
   public removeSelectedFile(index: number) {
@@ -262,10 +330,9 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
           console.log('this.filesToRemove.length: ' + this.filesToRemove.length);
 
           if (this.filesToRemove.length > 0 ) {
-            console.log(1);
             this.removeSentFiles().then(res => {
               if (!res) errorsWithRemove = true;
-            }).catch(err => {
+            }).catch(err => { 
               errorsWithRemove = true;
             })
           }
@@ -275,7 +342,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
           } else {
             resolve(res)
           }
-
         },
         error: (error) => {
           console.log('edit-attachments.sendFiles: saatiin virhe: ' + error );

@@ -195,7 +195,7 @@ export class SubmitTicketComponent implements OnInit {
         console.log('saatiin vastaus editointiin: ' + JSON.stringify(res));
         if (res?.success === false) {
           console.log('editointi ei onnistunut, heitetään virhe.');
-          throw Error();
+          return Promise.reject;
         }
         console.log('this.attachments.filesToRemove.length: ' + this.attachments.filesToRemove.length);
         if (this.attachments.filesToRemove.length === 0) {
@@ -203,19 +203,17 @@ export class SubmitTicketComponent implements OnInit {
           return
         }
         console.log('poistetaan tiedostoja');
-        this.attachments.thirdRemoveSentFiles().then(res => {
+        return this.attachments.secondRemoveSentFiles().then(res => {
           console.log('newRemoveSentFiles palautti: ' + res);
           if (res === false) {
-            throw new Error('Jokin poistamisista epäonnistui.');
+            return Promise.reject;
           } else {
-            return
+            return Promise.resolve;
           }
         }).catch(err => {
           console.log('thirdRemoveSentFiles.catch: error: ' + err);
           this.errorMessage = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
-          return
         })
-        return
       }).then(() => {
         if (this.fileInfoList) {
           console.log(' this.fileInfoList on true');

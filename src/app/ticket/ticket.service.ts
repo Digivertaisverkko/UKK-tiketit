@@ -5,7 +5,7 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, firstValueFrom, of } from 'rxjs';
+import { Observable, Subject, first, firstValueFrom, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
@@ -287,15 +287,30 @@ export class TicketService {
   }
 
   // Poista liitetiedosto.
+  public removeFileObservable(ticketID: string, commentID: string, fileID: string,
+      courseID: string): Observable<any> {
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
+    let response: any;
+    //return firstValueFrom(this.http.delete(url));
+    return this.http.delete(url);
+
+  }
+
+  // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
     let response: any;
+    //return firstValueFrom(this.http.delete(url));
     try {
-      response = await firstValueFrom(this.http.delete(url));
+      response = await firstValueFrom(this.http.delete(url)).then((value) => {
+        console.log('asd');
+        return value;
+      });
     } catch (error: any) {
       this.handleError(error);
     }
+    console.log('vastaus oli: ' + response);
     return response
   }
 
