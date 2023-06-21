@@ -88,13 +88,11 @@ export class ProfileComponent implements OnInit {
   public downloadPersonalData(): void {
     this.userService.getGdprData()
     .then(response => {
-      let gdprData = JSON.stringify(response, null, 2);
+      const blob = new Blob([response], { type: 'application/octet-stream' });
+      const downloadUrl = URL.createObjectURL(blob);
       const link = this.renderer.createElement('a');
-      link.setAttribute('target', '_blank');
-      link.setAttribute(
-          'href',
-          "data:text/json;charset=UTF-8," + encodeURIComponent(gdprData));
-      link.setAttribute('download', 'datadump.json');
+      link.href = downloadUrl;
+      link.download = 'datadump.zip';
       link.click();
       link.remove();
     })

@@ -1,10 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { ErrorService } from '@core/services/error.service';
-import { environment } from 'src/environments/environment';
+
 import { User } from '@core/core.models';
+import { ErrorService } from '@core/services/error.service';
 import { StoreService } from '@core/services/store.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,15 @@ export class UserService {
               ) { }
 
   // GET /api/gdpr - GDPR data
-  public async getGdprData(): Promise<any> {
+  public async getGdprData(): Promise<Blob> {
+    let url = environment.apiBaseUrl + '/minun/gdpr/kaikki/zip';
+    const options = {
+      responseType: 'blob' as 'json',
+      headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
+    };
     let response: any;
-    let url = environment.apiBaseUrl + '/minun/gdpr';
     try {
-      response = await firstValueFrom(this.http.get<any>(url));
+      response = await firstValueFrom(this.http.get<Blob>(url, options));
     } catch (error: any) {
       this.handleError(error);
     }
