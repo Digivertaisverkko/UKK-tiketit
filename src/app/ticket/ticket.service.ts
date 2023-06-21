@@ -5,7 +5,8 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, first, firstValueFrom, of } from 'rxjs';
+import { Observable, Subject, catchError, firstValueFrom, mergeMap, of, retry,
+  retryWhen, throwError, timeout, timer } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
@@ -187,7 +188,15 @@ export class TicketService {
     const url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
     let response: any;
     try {
-      response = await firstValueFrom(this.http.get<UKK[]>(url));
+      console.log('tehdään kutsu URL:iin ' + url);
+      response = await firstValueFrom(
+        this.http.get<UKK[]>(url).pipe(
+          timeout(3000),
+          retry(3)
+        )
+      )
+      // response = await firstValueFrom(this.http.get<UKK[]>(url));
+      console.log('haettiin UKK:t');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -347,7 +356,14 @@ export class TicketService {
     let url = `${this.api}/kurssi/${String(courseID)}/tiketti/${target}`;
     let response: any;
     try {
-      response = await firstValueFrom(this.http.get<TiketinPerustiedot[]>(url));
+      console.log('tehdään kutsu URL:iin ' + url);
+      response = await firstValueFrom(
+        this.http.get<TiketinPerustiedot[]>(url).pipe(
+          timeout(3000),
+          retry(3)
+        )
+      )
+    console.log('haettiin tiketit.');
     } catch (error: any) {
       this.handleError(error);
     }
