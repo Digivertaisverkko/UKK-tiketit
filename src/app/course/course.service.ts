@@ -1,6 +1,6 @@
 /* Tämä service käsittelee kursseihin liittyvää tietoa. */
 
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, retry, timeout } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -77,8 +77,14 @@ export class CourseService {
     let url = `${this.api}/kurssi/${courseID}`;
     try {
       response = await firstValueFrom(
+        this.http.get<{ 'kurssi-nimi': string }[]>(url).pipe(
+          timeout(3000),
+          retry(3)
+        )
+      )
+      /* response = await firstValueFrom(
         this.http.get<{ 'kurssi-nimi': string }[]>(url)
-      );
+      ); */
     } catch (error: any) {
       this.handleError(error);
     }
