@@ -153,173 +153,33 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     console.dir(this.filesToRemove);
   }
 
-  /* Lähetä poistopyyntö poistettavaksi merkityistä, aiemmin lähetetyistä tiedostoista.
-    Palauttaa true jos kaikki tiedostot poistettiin onnistuneesti, false jos
-    mikä tahansa epäonnistui. */
-  public removeSentFiles(): Promise<boolean> {
+  public async removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      console.log('pitäisi poistaa:');
-      if (this.filesToRemove.length === 0) reject(false);
-      let success: boolean = true;
-      if (!this.ticketID) {
-        throw Error('Ei tiketti ID:ä.');
-      }
+      if (this.filesToRemove.length === 0) resolve(true);
       const courseID = getCourseIDfromURL();
-      if (!courseID) console.error('course id: ' + courseID);
-      for (let file of this.filesToRemove) {
-          console.log('yritetään poistaa: ' + file.tiedosto);
-          this.tickets.removeFile(this.ticketID, file.kommentti, file.tiedosto,
-              courseID!).then(res => {
-            if (res.success === false) {
-              success = false;
-            }
-        }).catch (err => {
-          console.log(err);
-          success = false;
-          console.log('asetetaan success false');
-        })
+      if (this.ticketID == null) {
+        // throw Error(' ei ticketID:ä');
+        reject(new Error('Ei tiketti ID:ä.'));
       }
-      resolve(success);
-    })
-  }
-
-  public async removeFilesLoop(): Promise<boolean> {
-    const courseID = getCourseIDfromURL();
-    let isSuccess: boolean = true;
-    if (!courseID || !this.ticketID) {
-      console.error('course id: ' + courseID + ' ticketID: ' + this.ticketID);
-    }
-    return new Promise((resolve) => {
-      for (let file of this.filesToRemove) {
-        console.log('yritetään poistaa: ' + file.tiedosto);
-        this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-            courseID!).then(res => {
-          if (res.success === false) {
-            isSuccess = false;
-          }
-      }).catch (err => {
-        isSuccess = false;
-        console.log('asetetaan success false');
-      })
-    }
-    resolve(isSuccess);
-    })
-  }
-
-  public async thirdRemoveSentFiles(): Promise<boolean> {
-    const courseID = getCourseIDfromURL();
-    if (!courseID || !this.ticketID) {
-      console.error('course id: ' + courseID + ' ticketID: ' + this.ticketID);
-    }
-    const removalPromises = this.filesToRemove.map((liite: Liite) =>
-    this.tickets.removeFile(this.ticketID!, liite.kommentti, liite.tiedosto,
-      courseID!)
-    );
-
-    try {
-      const results = await Promise.all(removalPromises);
-      const allSucceeded = results.every(result => result.success);
-      console.log('resulst: ' + results);
-      console.log('allCucceeded: ' + allSucceeded);
-      return allSucceeded;
-    } catch (error) {
-      console.log('epäonnistuttiin Promise.all')
-      return false;
-    }
-  }
-
-  public async fourthRemoveSentFiles(): Promise<boolean> {
-    if (this.filesToRemove.length === 0) throw new Error('No files to remove.');
-    const courseID = getCourseIDfromURL();
-    if (!courseID) console.error('course id: ' + courseID);
-    if (!this.ticketID) throw new Error('No ticket ID.');
-  
-    try {
-      const results = await Promise.all(
-        this.filesToRemove.map(file =>
-          this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto, courseID!)
-            .then(res => res.success)
-            .catch(() => false)
-        )
-      );
-      const success = results.every(result => result === true);
-      return success;
-    } catch (error) {
-      console.error('secondRemoveSentFiles.catch: error: ' + error);
-      return false;
-    }
-  }
-
-
-  public async secondRemoveSentFiles(): Promise<boolean> {
-    console.log(1);
-  return new Promise((resolve, reject) => {
-    console.log(2);
-    if (this.filesToRemove.length === 0) {
-      console.log('edit-attachments: ei poistettavia tiedostoja.')
-      reject(false);
-    }
-      const courseID = getCourseIDfromURL();
-    if (!courseID) console.error('course id: ' + courseID);
-    if (this.ticketID === null || this.ticketID === undefined) {
-      throw Error(' ei ticketID:ä');
-      // reject(new Error('Ei tiketti ID:ä.'));
-    }
-
-    let promise: any = null;
-    this.filesToRemove.forEach((file) => {
-      if (promise === null) {
-        promise = this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-          courseID!)
-      } else {
-      promise = promise.then(() => {
-        return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-          courseID!)
-        })
-      } 
-    })
-
-    promise.then(() =>{
-      resolve(true);
-    } )
-    .catch((error: any) => {
-      resolve(false);
-    })
-/*
-    console.dir(this.filesToRemove);
-    const promises = this.filesToRemove.map(file => {
-        console.log(JSON.stringify(file));
-        return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+      let promise: Promise<{ success: boolean }>;
+      this.filesToRemove.forEach((file: Liite) => {
+        if (!promise) {
+          promise = this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
             courseID!)
-          .then(res => {
-            console.log('res : ' + res);
-            return res.success
+        } else {
+          promise = promise.then(() => {
+            return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+              courseID!)
           })
-          .catch((err) => {
-              console.log('err: ' + err);
-            return false
-          });
-    });
-    console.log(3);
-
-    for (let promise of promises) {
-      console.log(promise instanceof Promise === true)
-    }
-
-    Promise.all(promises).then(results => {
-      console.log(4);
-      // console.log('promises: ' + JSON.stringify(promises));
-      //   const success = results.every(result => result === true);
-      resolve(true);
-      // resolve(success);
-      }).catch(() => {
-        console.log(5);
-          resolve(false)
-      });
-  });
-  */
-  })
-}
+        }
+      })
+      promise!.then(() =>{
+        resolve(true);
+      }).catch((error: any) => {
+        resolve(false);
+      })
+    })
+  }
 
   public removeSelectedFile(index: number) {
     if (this.isEditingDisabled === true) return
@@ -357,7 +217,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
           if (this.filesToRemove.length > 0 ) {
             this.removeSentFiles().then(res => {
               if (!res) errorsWithRemove = true;
-            }).catch(err => { 
+            }).catch(err => {
               errorsWithRemove = true;
             })
           } */

@@ -133,6 +133,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.navigateToLogin(this.courseID)
   }
 
+  // Näytä mahdollisesti routen mukana tullut viesti tai virheilmoitus.
   private checkRouterData() {
     const message: string | null = window.history.state.message;
     if (message) {

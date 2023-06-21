@@ -213,7 +213,9 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     let fetchStartTime: number | undefined;
     let elapsedTime: number | undefined;
     const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
+    console.log('startPollingTickets 1');
     this.fetchTicketsTimer$.subscribe(() => {
+      console.log('startPollingTickets 2');
       this.fetchTickets(this.courseID!);
       if (fetchStartTime) {
         elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);

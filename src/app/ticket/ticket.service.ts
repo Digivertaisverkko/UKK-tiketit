@@ -305,16 +305,19 @@ export class TicketService {
 
   }
 
+  // Testaamista varten.
+  private getRandomArbitrary(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+
   // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
     let response: any;
     try {
-      response = await firstValueFrom(this.http.delete(url)).then((value) => {
-        console.log('asd');
-        return value;
-      });
+      // throw Error
+      response = firstValueFrom(this.http.delete(url));
     } catch (error: any) {
       this.handleError(error);
     }

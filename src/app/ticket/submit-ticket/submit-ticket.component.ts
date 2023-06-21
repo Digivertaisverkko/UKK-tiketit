@@ -42,6 +42,8 @@ export class SubmitTicketComponent implements OnInit {
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
   public user$: Observable<User | null>;
+  // Listausnäkymään palattaessa näytä virheviesti.
+  private errorForListing: string | undefined;
 
   get additionalFields(): FormArray {
     return this.form.controls["additionalFields"] as FormArray;
@@ -150,16 +152,13 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public goBack(): void {
-    // TODO: kaikkia erroreita ei haluta listassa näyttää.
-    /*
-    if (this.errorMessage) {
-      console.log('näytetään virhe listassa ennen poistumista: ' + this.errorMessage);
+    if (this.errorForListing) {
       const route = 'course/' + this.courseid + '/list-tickets';
-      const data = { error: this.errorMessage };
+      const data = { error: this.errorForListing };
       this.router.navigate([route], { state: data });
+    } else {
+      this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
     }
-    */
-    this.router.navigateByUrl('course/' + this.courseid + '/list-tickets')
   }
 
   private prepareSendFiles(response: any): void {
@@ -190,50 +189,38 @@ export class SubmitTicketComponent implements OnInit {
 
   private submitEdited(newTicket: UusiTiketti): void {
     if (!this.ticketId || !this.commentID) throw new Error;
-    console.log('lähetetään: ticket id: '+ this.ticketId + ' '+ newTicket +
-    ' course id: ' + this.courseid)
     this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
-      .then(res => {
+      .then((res: { success: boolean }) => {
         console.log('saatiin vastaus editointiin: ' + JSON.stringify(res));
         if (res?.success === false) {
           console.log('editointi ei onnistunut, heitetään virhe.');
-          return Promise.reject;
+          throw Error
         }
-        console.log('this.attachments.filesToRemove.length: ' + this.attachments.filesToRemove.length);
         if (this.attachments.filesToRemove.length === 0) {
           console.log('ei poistettavaa');
-          return
+          return true
         }
         console.log('poistetaan tiedostoja');
-        return this.attachments.removeFilesLoop().then(res => {
-          console.log('newRemoveSentFiles palautti: ' + res);
+        return this.attachments.removeSentFiles();
+      }).then((res: boolean | undefined) => {
+        if (res !== undefined) {
+          console.log('tiedostojen poistaminen palautti: ' + res);
           if (res === false) {
-            return Promise.reject;
-          } else {
-            return Promise.resolve;
+            this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
           }
-        }).catch(err => {
-          console.log('thirdRemoveSentFiles.catch: error: ' + err);
-          this.errorMessage = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
-        })
-      }).then(() => {
-        if (this.fileInfoList) {
-          console.log(' this.fileInfoList on true');
-        } else {
-          console.log('this.fileInfoList on false');
         }
-        console.log('fileinfolist sisältö alla:');
-        console.log(JSON.stringify(this.fileInfoList));
-        console.log(typeof this.fileInfoList);
+        // this.printFileInfoListLog();
         if (this.fileInfoList !== undefined) {
-          if (this.fileInfoList.length === 0 ) this.goBack();
+          if (this.fileInfoList.length === 0 ) return
           console.log('lähetetään tiedostoja.');
           this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
-          this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
+          return this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
         } else {
           console.log('Ei lähetettäviä tiedostoja.');
-          this.goBack();
+          return
         }
+      }).then(() => {
+        this.goBack();
       }).catch(error => {
         console.log('ketjun error: ' + JSON.stringify(error));
         this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
@@ -241,6 +228,17 @@ export class SubmitTicketComponent implements OnInit {
         this.state = 'editing';
         this.form.enable();
       });
+  }
+
+  private printFileInfoListLog() {
+    if (this.fileInfoList) {
+      console.log(' this.fileInfoList on true');
+    } else {
+      console.log('this.fileInfoList on false');
+    }
+    console.log('fileinfolist sisältö alla:');
+    console.log(JSON.stringify(this.fileInfoList));
+    console.log(typeof this.fileInfoList);
   }
 
   private submitNew(ticket: UusiTiketti): void {
