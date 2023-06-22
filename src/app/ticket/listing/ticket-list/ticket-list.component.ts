@@ -1,6 +1,5 @@
-import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy,
-  OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {  AfterViewInit, Component, EventEmitter, Input, Output,
+    OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { environment } from 'src/environments/environment';
 import { MatSort } from '@angular/material/sort';
@@ -37,7 +36,7 @@ interface ErrorNotification {
 export class TicketListComponent implements OnInit, AfterViewInit {
 
   // UKK:sta kopioitaessa @Input:na courseid oli undefined.
-  public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
+  @Input() public courseid: string = '';
   @Input() public user: User | null = null;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
@@ -63,7 +62,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private responsive: BreakpointObserver,
-    private route: ActivatedRoute,
     private store : StoreService,
     private ticket: TicketService,
   ) {
@@ -96,20 +94,16 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.trackMessages();
   }
 
-  //hakutoiminto, jossa paginointi kommentoitu pois
   public applyFilter(event: Event) {
     let filterValue = (event.target as HTMLInputElement).value;
     filterValue = filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue;
-      /*if (this.dataSourceFAQ.paginator) {
-        this.dataSourceFAQ.paginator.firstPage();
-      }*/
   }
 
   // Hae arkistoidut tiketit.
   public fetchArchivedTickets() {
-    if (this.courseID === null) return
-    this.ticket.getTicketList(this.courseID, { option: 'archived' })
+    if (this.courseid === null) return
+    this.ticket.getTicketList(this.courseid, { option: 'archived' })
       .then(response => {
         if (response === null) response = [];
         if (response.length > 0) {
@@ -134,7 +128,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
         this.dataSource.sort = this.sortQuestions;
       }
       return
-      // this.dataSource.paginator = this.paginator;
     }).catch(error => {
       this.handleError(error)
     }).finally(() => {
@@ -184,9 +177,9 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.archivedCount = 0;
   }
 
-    // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
+  // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
-    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
+    const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
     window.localStorage.setItem('REDIRECT_URL', link);
   }
@@ -213,10 +206,8 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     let fetchStartTime: number | undefined;
     let elapsedTime: number | undefined;
     const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
-    console.log('startPollingTickets 1');
     this.fetchTicketsTimer$.subscribe(() => {
-      console.log('startPollingTickets 2');
-      this.fetchTickets(this.courseID!);
+      this.fetchTickets(this.courseid!);
       if (fetchStartTime) {
         elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
         console.log('Tikettien pollauksen viime kutsusta kulunut aikaa ' +
@@ -236,7 +227,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
           console.log('trackMessages: saatiin refresh pyyntö.');
           this.startLoading();
           setTimeout(() => this.stopLoading(), 800);
-          this.fetchTickets(this.courseID!);
+          this.fetchTickets(this.courseid!);
         }
     });
   }
