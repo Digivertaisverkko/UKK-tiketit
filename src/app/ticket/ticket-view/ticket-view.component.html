@@ -20,11 +20,11 @@
       <div class="spacer"></div>
 
       <button class="edit-button"
+              (click)="editTicket()"
               [disabled]="state==='sending'"
               i18n="@@Muokkaa"
               mat-raised-button
               *ngIf="isEditable"
-              (click)="editTicket()"
               >
         Muokkaa
       </button>
@@ -39,11 +39,11 @@
       </button>
 
       <button (click)="changeButton('archive')"
+              [disabled]="state==='sending'"
               i18n="@@Ratkaistu"
               mat-raised-button
               *ngIf="ticket.arkistoitava === true && ticket.tila !== 6  &&
                   !isArchivePressed"
-              [disabled]="state==='sending'"
               >
         Ratkaistu
       </button>
@@ -51,10 +51,10 @@
       <button class="remove-btn"
               (click)="archiveTicket(ticketID, courseid!)"
               color="accent"
+              [disabled]="state==='sending'"
               i18n="@@Vahvista"
               mat-raised-button
               *ngIf="isArchivePressed"
-              [disabled]="state==='sending'"
               >
         Vahvista
       </button>
@@ -146,13 +146,12 @@
     </button>
   </div>
 
-    <app-comment
-        [comment]="comment"
-        [(editingCommentID)]="editingCommentIDParent"
-        (messages)="listenMessagesFromComment($event)"
-        *ngFor="let comment of ticket.kommentit"
-        [ticketID]="ticket.id"
-        >
+    <app-comment  [comment]="comment"
+                  [(editingCommentID)]="editingCommentIDParent"
+                  (messages)="listenMessagesFromComment($event)"
+                  *ngFor="let comment of ticket.kommentit"
+                  [ticketID]="ticket.id"
+                  >
     </app-comment>
 
     <div class="vertical-spacer"></div>
@@ -189,10 +188,9 @@
     </app-error>
 
     <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
-    <app-success
-        i18n="@@Kommentin lisääminen"
-        *ngIf="state==='sending'"
-        >
+    <app-success  i18n="@@Kommentin lisääminen"
+                  *ngIf="state==='sending'"
+                  >
       Uuden kommentin lähettäminen onnistui.
     </app-success>
 

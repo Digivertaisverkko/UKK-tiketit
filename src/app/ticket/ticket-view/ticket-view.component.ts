@@ -23,14 +23,13 @@ import schema from '@shared/editor/schema';
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
-  // @Input() courseid!: string;
+  @Input() public courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
-  public courseid: string | null = this.route.snapshot.paramMap.get('courseid');
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
