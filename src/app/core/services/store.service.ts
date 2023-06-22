@@ -32,6 +32,7 @@ export class StoreService {
   constructor() {
     this.constants = {
       baseTitle: 'UKK Tiketit - ',
+      MAX_FILE_SIZE_MB: 100,
       MILLISECONDS_IN_MIN: 60000,
     }
   }
@@ -54,6 +55,10 @@ export class StoreService {
 
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
+  }
+
+  public getMAX_FILE_SIZE_MB(): number {
+    return this.constants.MAX_FILE_SIZE_MB;
   }
 
   public getMsInMin(): number {

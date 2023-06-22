@@ -6,6 +6,7 @@ import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
+import { StoreService } from '@core/services/store.service';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;
@@ -44,13 +45,13 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
-  public readonly MAX_FILE_SIZE_MB=100;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
   public filesToRemove: Liite[] = [];
 
   constructor(private renderer: Renderer2,
+              private store: StoreService,
               private tickets: TicketService
               ) {
   }
@@ -75,11 +76,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
       const courseID = getCourseIDfromURL();
-      if (!courseID) {
-        console.error('makeRequestArray: Ei kurssi ID:ä.');
-        return
-      }
-      return this.tickets.uploadFile(ticketID, commentID, courseID, fileinfo.file)
+      return this.tickets.uploadFile(ticketID, commentID, courseID!, fileinfo.file)
         .pipe(
           tap(progress => {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
@@ -120,10 +117,10 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         filesize: filesizeNumber,
         progress: 0
       };
-      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
+      if (file.size > this.store.getMAX_FILE_SIZE_MB() * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
-            Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+            Tiedoston koko ylittää ${this.store.getMAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.isInvalid = true;
         this.errors = { size: 'overMax' };
         this.onChange(this.isInvalid);
