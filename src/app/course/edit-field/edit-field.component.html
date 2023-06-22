@@ -11,7 +11,7 @@
           (click)="changeRemoveButton()"
           i18n="@@Poista"
           mat-raised-button
-          *ngIf="fieldID !== null && isRemovePressed === false"
+          *ngIf="fieldid !== null && isRemovePressed === false"
           >
     Poista
   </button>
@@ -26,15 +26,14 @@
   </button>
 </div>
 
-<app-error-card
-    [confirmLeave]="true"
-    *ngIf="showConfirm"
-    [styles]="{ margin: '2rem 0 0 0' }"
-    >
-</app-error-card>
+<app-error  [confirmLeave]="true"
+            *ngIf="showConfirm"
+            [styles]="{ margin: '2rem 0 0 0' }"
+            >
+</app-error>
 
 <div class="view-wrapper" *ngIf="isLoaded">
-  <h2 class="sub-header" i18n="@@Kysymysten lisäkenttä">
+  <h2 class="theme-subheading" i18n="@@Kysymysten lisäkenttä">
     Kysymysten lisäkenttä
   </h2>
 
@@ -53,7 +52,7 @@
               placeholder="Kentän nimi"
               />
               <!-- [(ngModel)]="field.otsikko" -->
-      <mat-hint align="end">{{ field.otsikko.length }} / 50</mat-hint>
+      <mat-hint align="end">{{ title.value.length }} / 50</mat-hint>
 
       <mat-error  i18n="@@Pakollinen kenttä."
                   *ngIf="title.errors?.['required']"
@@ -106,14 +105,22 @@
 
           <input  formControlName="selectionName"
                   i18n-placeholder="@@Paina enter valinnan kirjoittamisen jälkeen."
-                  placeholder="Paina enter valinnan kirjoittamisen jälkeen."
+                  (keydown.arrowleft)="onArrowLeft($event)"
                   [matChipInputFor]="chipGrid"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="addOnBlur"
                   (matChipInputTokenEnd)="addSelection($event)"
-                  (keydown.arrowleft)="onArrowLeft($event)"
+                  placeholder="Paina enter valinnan kirjoittamisen jälkeen."
                   />
         </mat-chip-grid>
+        <mat-hint align="end">
+          {{ getArraysStringLength(field.valinnat) }} / 255
+        </mat-hint>
+        <mat-error  i18n="@@Vaihtoehtojen merkkimäärä ylittyy"
+                    *ngIf="selections?.errors?.['maxLengthExceeded']"
+                    >
+          Vaihtoehtojen yhteenlaskettu merkkimäärä välimerkkeineen ylittää 255 merkin ylärajan.
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -136,18 +143,16 @@
                 placeholder="Info-teksti"
                 >
       </textarea>
-
-      <mat-hint align="end">{{ field.ohje.length }} / 255</mat-hint>
+      <mat-hint align="end">{{ infoText.value.length }} / 255</mat-hint>
     </mat-form-field>
 
-    <app-error-card
-        *ngIf="errorMessage.length > 0"
-        i18n-title="@@Virhe"
-        title="Virhe"
-        message="{{ errorMessage }}"
-        [styles]="{ margin: '1rem 0' }"
-        >
-    </app-error-card>
+    <app-error *ngIf="errorMessage.length > 0"
+                i18n-title="@@Virhe"
+                title="Virhe"
+                message="{{ errorMessage }}"
+                [styles]="{ margin: '1rem 0' }"
+                >
+    </app-error>
 
     <div class="bottom-buttons-wrapper">
       <mat-checkbox formControlName="mandatory"
@@ -170,7 +175,7 @@
       <button class="cancel-button"
               i18n="@@Peru"
               mat-raised-button
-              [routerLink]="'/course/' + courseID + '/settings'"
+              [routerLink]="'/course/' + courseid + '/settings'"
               type="button"
               >
         Peru

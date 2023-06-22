@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 
 import { isToday } from '@shared/utils';
 import { User } from '@core/core.models';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   selector: 'app-sender-info',
@@ -12,11 +12,12 @@ import { StoreService } from '@core/store.service';
 })
 export class SenderInfoComponent implements OnInit {
 
-  @Input() aikaleima: string | Date = '';
+  @Input() aikaleima: string | Date | 'now' = '';
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
   public isItToday: boolean;
+  public nyt = $localize `:@@Nyt:Nyt`;
   public senderTitle: string = '';
   private currentUserName: string | null;
 
@@ -31,7 +32,8 @@ export class SenderInfoComponent implements OnInit {
     }
   }
 
-  public getSenderTitle(name: string, role: string | null): string {
+  private getSenderTitle(name: string, role: string | null): string {
+    if (name == this.currentUserName) return $localize`:@@Minä:Minä`
     switch (role) {
       case 'opiskelija':
         return $localize`:@@Opiskelija:Opiskelija`; break;
@@ -40,7 +42,6 @@ export class SenderInfoComponent implements OnInit {
       case 'admin':
         return $localize`:@@Admin:Admin`; break;
       default:
-        if (name == this.currentUserName) return $localize`:@@Minä:Minä`
         return '';
     }
   }

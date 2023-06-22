@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { Constants } from '@shared/utils';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { Title } from '@angular/platform-browser';
-import { StoreService } from '../store.service';
+import { StoreService } from '../services/store.service';
 
 
 @Component({
   template: `
 
-    <div *ngIf="courseID" class="top-buttons-wrapper">
+    <div *ngIf="courseid" class="top-buttons-wrapper">
       <app-beginning-button></app-beginning-button>
     </div>
 
@@ -19,7 +18,7 @@ import { StoreService } from '../store.service';
       404
     </app-headline>
 
-    <h2 i18n="@@404-otsikko" class="sub-header">
+    <h2 i18n="@@404-otsikko" class="theme-subheading">
       Sivua ei löytynyt
     </h2>
 
@@ -39,42 +38,33 @@ import { StoreService } from '../store.service';
 
     </div>
     <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
-      ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.</p>
+      ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.
+    </p>
     <p i18n="@@404-2">Todennäköisesti ensimmäinen.</p>
     `,
 
     styleUrls: ['./page-not-found.component.scss']
 })
 
-export class PageNotFoundComponent implements OnInit {
+export class PageNotFoundComponent {
   public isLoggedIn: Boolean | null = null;
-  public courseID: string | null = null;
+  @Input() courseid: string | undefined;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route : ActivatedRoute,
     private store : StoreService,
     private title : Title
     ) {
-    this.title.setTitle(Constants.baseTitle + $localize `:@@@@404-otsikko:Sivua ei löytynyt`);
+    this.title.setTitle(this.store.getBaseTitle() + $localize
+        `:@@@@404-otsikko:Sivua ei löytynyt`);
       this.isLoggedIn = this.store.getIsLoggedIn();
   }
 
-  ngOnInit(): void {
-    this.courseID = this.route.snapshot.paramMap.get('courseid');
-    this.trackRouteParameters();
-  }
-
-  private trackRouteParameters() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      this.courseID = courseID;
-    });
-  }
-
   public async goToLogin() {
-    const loginUrl = await this.authService.sendAskLoginRequest('own', this.courseID);
+    if (!this.courseid) return
+    const res = await this.authService.getLoginInfo('own', this.courseid);
+    const loginUrl = res['login-url'];
     this.router.navigateByUrl(loginUrl);
   }
 

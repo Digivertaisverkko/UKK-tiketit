@@ -5,6 +5,7 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
+import { getCourseIDfromURL } from '@shared/utils';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;
@@ -34,6 +35,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks = new Observable();
+  @Input() ticketID: string | null = '';
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -42,16 +44,14 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
-  public isRemovingEnabled: boolean = false;
-  public readonly new = $localize `:@@uusi:uusi` + ',';
   public readonly MAX_FILE_SIZE_MB=100;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
-  private filesToRemove: Liite[] = [];
+  public filesToRemove: Liite[] = [];
 
   constructor(private renderer: Renderer2,
-              private ticketService: TicketService
+              private tickets: TicketService
               ) {
   }
 
@@ -74,7 +74,12 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      return this.ticketService.uploadFile(ticketID, commentID, fileinfo.file)
+      const courseID = getCourseIDfromURL();
+      if (!courseID) {
+        console.error('makeRequestArray: Ei kurssi ID:ä.');
+        return
+      }
+      return this.tickets.uploadFile(ticketID, commentID, courseID, fileinfo.file)
         .pipe(
           tap(progress => {
             console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
@@ -144,27 +149,36 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.markAsTouched();
     this.filesToRemove.push(this.oldAttachments[index]);
     this.oldAttachments.splice(index, 1);
-    console.log('poistetaan:');
+    console.log('tullaan poistamaan:');
     console.dir(this.filesToRemove);
   }
 
-  /* Lähetä poistopyyntö poistettavaksi merkityistä, aiemmin lähetetyistä tiedostoista.
-    Palauttaa true jos kaikki tiedostot poistettiin onnistuneesti, false jos
-    mikä tahansa epäonnistui. */
-  public removeOldFiles(files: Liite[]): Promise<boolean> {
+  public async removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (files.length === 0) reject(false);
-      let success: boolean = true;
-      for (let file of files) {
-          this.ticketService.removeFile(file.kommentti, file.tiedosto).then(res => {
-            if (res.success === false) {
-              success = false;
-            }
-        }).catch (err => {
-          success = false;
-        })
+
+      if (this.filesToRemove.length === 0) resolve(true);
+      const courseID = getCourseIDfromURL();
+      if (this.ticketID == null) {
+        // throw Error(' ei ticketID:ä');
+        reject(new Error('Ei tiketti ID:ä.'));
       }
-      resolve(success);
+      let promise: Promise<{ success: boolean }>;
+      this.filesToRemove.forEach((file: Liite) => {
+        if (!promise) {
+          promise = this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+            courseID!)
+        } else {
+          promise = promise.then(() => {
+            return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
+              courseID!)
+          })
+        }
+      })
+      promise!.then(() =>{
+        resolve(true);
+      }).catch((error: any) => {
+        resolve(false);
+      })
     })
   }
 
@@ -186,7 +200,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   }
 
   // Kutsutaan parent komponentista.
-  public async sendFilesPromise(ticketID: string, commentID: string): Promise<any> {
+  public async sendFiles(ticketID: string, commentID: string): Promise<any> {
+    console.log('commentID: ' + commentID);
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
@@ -195,24 +210,27 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
 
+          /* Tiedostojen poistamisen koodia.
           let errorsWithRemove: boolean = false;
-          if (this.isRemovingEnabled && this.filesToRemove.length > 0 ) {
-            this.removeOldFiles(this.filesToRemove).then(res => {
+
+          console.log('this.filesToRemove.length: ' + this.filesToRemove.length);
+
+          if (this.filesToRemove.length > 0 ) {
+            this.removeSentFiles().then(res => {
               if (!res) errorsWithRemove = true;
             }).catch(err => {
               errorsWithRemove = true;
             })
-          }
+          } */
 
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
           } else {
             resolve(res)
           }
-
         },
         error: (error) => {
-          console.log('sendFilesPromise: saatiin virhe: ' + error );
+          console.log('edit-attachments.sendFiles: saatiin virhe: ' + error );
           reject('error')
         },
         complete: () => {

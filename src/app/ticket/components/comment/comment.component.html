@@ -16,13 +16,19 @@
 
   <ng-container *ngIf="editingCommentID !== comment.id">
 
-    <span class="comment-state more-info-needed" *ngIf="comment.tila === 3">
+    <span class="comment-state more-info-needed"
+          i18n="@@Lisätietoa tarvitaan"
+          *ngIf="comment.tila === 3"
+          >
         <!-- <mat-icon>question_mark</mat-icon> -->
-        {{ this.strings.get('moreInfoNeeded') }}
+        Lisätietoa tarvitaan
     </span>
 
-    <span class="comment-state proposed-solution" *ngIf="comment.tila === 5">
-      {{ this.strings.get('proposedSolution') }}
+    <span class="comment-state proposed-solution"
+          i18n="@@Ratkaisuehdotus"
+          *ngIf="comment.tila === 5"
+          >
+      Ratkaisuehdotus
     </span>
 
   </ng-container>
@@ -32,13 +38,14 @@
             class="remove-btn"
             (click)="changeRemoveBtn()"
             [disabled]="state==='sending'"
-            i18n-aria-label="@Poista kommentti"
+            i18n-aria-label="@@Poista kommentti"
+            i18n-matTooltip="@@Poista kommentti"
             mat-icon-button
-            matTooltip="{{ strings.get('removeComment') }}"
+            matTooltip="Poista kommentti"
             matTooltipPosition="after"
-            *ngIf= "(comment.lahettaja.id === user?.id) &&
-                  (editingCommentID === comment.id) &&
-                  isRemovePressed === false"
+            *ngIf= "(sender?.id === user?.id) &&
+                    (editingCommentID === comment.id) &&
+                    isRemovePressed === false"
             #tooltip="matTooltip"
             >
       <mat-icon>delete</mat-icon>
@@ -50,10 +57,11 @@
             color="accent"
             [disabled]="state==='sending'"
             i18n-aria-label="@@Vahvista kommentin poistaminen"
+            i18n-matTooltip="@@Vahvista kommentin poistaminen"
             mat-icon-button
-            matTooltip="{{ strings.get('confirmRemoveTooltip') }}"
+            matTooltip="Vahvista kommentin poistaminen"
             matTooltipPosition="after"
-            *ngIf="(comment.lahettaja.id === user?.id) &&
+            *ngIf="(sender?.id === user?.id) &&
                 (editingCommentID === comment.id) &&
                 isRemovePressed === true"
             #tooltip="matTooltip"
@@ -73,7 +81,7 @@
           [disabled]="state==='sending'"
           i18n-aria-label="@@Muokkaa kommenttia"
           mat-icon-button
-          *ngIf="(comment.lahettaja.id === user?.id) &&
+          *ngIf="(sender?.id === user?.id) &&
                 (editingCommentID !== comment.id)"
           >
     <mat-icon>edit</mat-icon>
@@ -125,14 +133,13 @@
       Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
     </mat-error>
 
-    <app-error-card
-        i18n-title="@@Virhe"
-        *ngIf="errorMessage.length > 0"
-        message="{{ errorMessage }}"
-        [styles]="{ 'margin-top': '1rem' }"
-        title="Virhe"
-        >
-    </app-error-card>
+    <app-error  i18n-title="@@Virhe"
+                *ngIf="errorMessage.length > 0"
+                message="{{ errorMessage }}"
+                [styles]="{ 'margin-top': '1rem' }"
+                title="Virhe"
+                >
+    </app-error>
 
     <!----------------- Alaosan toiminnot ------------------------------------->
 
@@ -191,6 +198,7 @@
         formControlName="attachments"
         id="attachments-{{comment.id}}"
         [oldAttachments]="comment.liitteet"
+        [ticketID]="ticketID"
         [uploadClicks]="uploadClick.asObservable()"
         >
     </app-edit-attachments>

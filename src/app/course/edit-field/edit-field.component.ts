@@ -1,13 +1,19 @@
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
+import { Router } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid } from '@angular/material/chips';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
+    from '@angular/material/chips';
+import { Observable, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { Constants } from '@shared/utils';
+import { arrayLengthValidator, getArraysStringLength } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
+import { environment } from 'src/environments/environment';
 import { Kenttapohja } from '../course.models';
+import { StoreService } from '@core/services/store.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -15,21 +21,27 @@ import { Kenttapohja } from '../course.models';
 })
 
 export class EditFieldComponent implements OnInit {
+  @Input() courseid!: string;
+  @Input() fieldid: string | null = null;
   public addOnBlur = true;
   public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.
-  public courseID: string = '';
   public errorMessage: string = '';
   public field: Kenttapohja;
-  public fieldID: string | null = null;
   public form: FormGroup = this.buildForm();
   public isLoaded: boolean = false;
   public isRemovePressed: boolean = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public showConfirm: boolean = false;
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
+  private fetchFieldTimer$: Observable<number>;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
 
   get areSelectionsEnabled(): FormControl {
     return this.form.get('areSelectionsEnabled') as FormControl;
+  }
+
+  get infoText(): FormControl {
+    return this.form.get('infoText') as FormControl;
   }
 
   get selectionName(): AbstractControl<any, any> | null {
@@ -45,10 +57,10 @@ export class EditFieldComponent implements OnInit {
   }
 
   constructor(
+    private courses: CourseService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
-    private courses: CourseService,
+    private store: StoreService,
     private titleServ: Title
   ) {
     this.field = {
@@ -58,12 +70,20 @@ export class EditFieldComponent implements OnInit {
       ohje: '',
       valinnat: []
     }
+    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchFieldTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
-    this.trackRouteParameters();
+    // Kentän id on uutta kenttää tehdessä null.
+    if (this.fieldid === null) {
+      this.titleServ.setTitle(this.store.getBaseTitle() + $localize
+          `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
+    } else {
+      this.startPollingFields(this.POLLING_RATE_MIN);
+    }
   }
-  
+
   public addSelection(event: MatChipInputEvent): void {
     const selection = (event.value || '').trim();
     if (selection) {
@@ -77,7 +97,7 @@ export class EditFieldComponent implements OnInit {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
       areSelectionsEnabled: [ true ],
-      selections: [ [] ],
+      selections: [ [], [arrayLengthValidator()] ],
       selectionName: [ '' ],
       infoText: [ '' ],
       mandatory: [ '' ],
@@ -126,6 +146,10 @@ export class EditFieldComponent implements OnInit {
     }
   }
 
+  public getArraysStringLength(array: string[]): number {
+    return getArraysStringLength(array);
+  }
+
   // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
@@ -135,7 +159,7 @@ export class EditFieldComponent implements OnInit {
       // Tarvitaan tietojen lähettämiseen.
       this.allFields = response;
 
-      if (this.allFields.length > 0 && this.fieldID) {
+      if (this.allFields.length > 0 && this.fieldid) {
         let matchingField = response.filter(field => String(field.id) === fieldID);
         if (matchingField == null) {
           throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
@@ -150,7 +174,7 @@ export class EditFieldComponent implements OnInit {
       }
 
       this.setControls();
-      this.titleServ.setTitle(Constants.baseTitle + ' ' +
+      this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
           $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       this.isLoaded = true;
       return
@@ -177,17 +201,17 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    this.courses.setTicketField(courseID, allFields).then(response => {
-      if (response === true ) {
-        this.router.navigate(['/course/' + courseID + '/settings'],
-            { state: { delayFetching: 'true' } });
-      } else {
-        console.log('Tikettipohjan muuttaminen epäonnistui.');
-      }
-    }).catch (() => {
-      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-      Kenttäpohjan muuttaminen ei onnistunut.`;
-    })
+    this.courses.setTicketField(courseID, allFields)
+      .then(response => {
+        if (response === true ) {
+          this.router.navigateByUrl('/course/' + courseID + '/settings')
+        } else {
+          throw Error;
+        }
+      }).catch (() => {
+        this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
+        Kenttäpohjan muuttaminen ei onnistunut.`;
+      })
   }
 
   private setControls(): void {
@@ -197,38 +221,41 @@ export class EditFieldComponent implements OnInit {
     this.form.controls['selections'].setValue(this.field.valinnat);
   }
 
-  private trackRouteParameters() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      var courseID: string | null = paramMap.get('courseid');
-      if (courseID === null) throw new Error('Virhe: ei kurssi ID:ä.');
-      this.fieldID = paramMap.get('fieldid')
-      this.courseID = courseID;
-      // Kentän id on uudella kentällä null.
-      if  (!this.fieldID) {
-        this.titleServ.setTitle(Constants.baseTitle + $localize
-            `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
+  // Hae kenttäpohjat tietyn ajan välein.
+  private startPollingFields(POLLING_RATE_MIN: number) {
+    console.log(`Aloitetaan kenttäpohjien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
+    this.fetchFieldTimer$.subscribe(() => {
+      this.getFieldInfo(this.courseid, this.fieldid);
+      if (fetchStartTime) {
+        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
+          `${elapsedTime} sekuntia.`);
+        if (elapsedTime !== POLLING_RATE_SEC) {
+          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+        }
       }
-      // Lähetykseen tarvitaan tiedot kaikista kentistä, vaikka lähetetään
-      // uusi kenttä.
-      this.getFieldInfo(courseID, this.fieldID);
+      fetchStartTime = Date.now();
     });
   }
 
   // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
   public updateAllFields(remove?: boolean): void {
-    if (this.form.invalid) return
+    if (this.form.invalid || !this.courseid) return
     const newField = this.createField();
-    if (this.fieldID == null) {   // Ellei ole uusi kenttä.
+    if (this.fieldid == null) {   // Ellei ole uusi kenttä.
       this.allFields.push(newField);
     } else {
-      const index = this.allFields.findIndex(field => field.id == this.fieldID);
+      const index = this.allFields.findIndex(field => field.id == this.fieldid);
       if (remove) {
         this.allFields.splice(index, 1);
       } else {
         this.allFields.splice(index, 1, newField)
       }
     }
-    this.sendAllFields(this.courseID, this.allFields);
+    this.sendAllFields(this.courseid, this.allFields);
   }
 
 }

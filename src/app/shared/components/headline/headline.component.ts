@@ -1,17 +1,18 @@
 import {  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
           ContentChild, Input, OnInit } from '@angular/core';
-import { getIsInIframe } from 'src/app/shared/utils';
-import { CourseService } from 'src/app/course/course.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { StoreService } from '@core/store.service';
+
+import { CourseService } from 'src/app/course/course.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   selector: 'app-headline',
   template: `
 
+    <!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" -->
     <h1 class="mat-h1"
-        [ngClass]="login ? 'login-h1' : ''"
-        *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)"
+        [ngClass]="appHeadline ? 'login-h1' : ''"
+        *ngIf="isInIframe !== 'true' || showInIframe"
         >
       <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->
       <span>
@@ -28,14 +29,14 @@ import { StoreService } from '@core/store.service';
 export class HeadlineComponent implements OnInit, AfterViewInit {
 
   // Kirjautumissivulla otsikko on erilainen.
-  @Input() login: boolean = false
+  @Input() appHeadline: boolean = false
   // Oletuksena näytetään kurssin nimi, tällä voi ohittaa sen.
   @Input() noCourseTitle: boolean = false;
   // Oletuksena otsikkoa ei näytetä upotuksessa. Tällä voi näyttää sen aina.
   @Input() showInIframe: boolean = false;
   public hasProjectedContent = false;
   public headlineText: string | null = null;
-  public isInIframe: boolean;
+  public isInIframe: string | null;
 
   constructor(
       private change: ChangeDetectorRef,
@@ -44,15 +45,15 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       private courses: CourseService,
       private store: StoreService,
   ) {
-    this.isInIframe = getIsInIframe();
+    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME');
   }
 
   @ContentChild('projectedContent') projectedContent: any
 
   ngOnInit() {
     this.hasProjectedContent = !!this.hasProjectedContent;
-    if (this.login) {
-      this.headlineText = "DVV-tikettijärjestelmä";
+    if (this.appHeadline) {
+      this.headlineText = "Tukki-" + $localize `:@@tikettijärjestelmä:tikettijärjestelmä`;
     } else if (this.noCourseTitle !== true) {
       this.trackCourseID();
     }
@@ -69,10 +70,10 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       this.store.setCourseName(this.headlineText);
     }).catch((response) => {
       /* Jälkimmäinen testaa tyhjää objektia. Tulos tarkoittaa, että
-          kurssia ei ole olemassa. */ 
+          kurssia ei ole olemassa. */
       if (response === null || Object.keys(response).length === 0)  {
         this.router.navigateByUrl('404');
-      } 
+      }
       this.headlineText = '';
     });
   }

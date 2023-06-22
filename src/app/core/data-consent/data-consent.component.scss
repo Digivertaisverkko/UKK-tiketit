@@ -1,8 +1,8 @@
 @import '/src/variables.scss';
 
 .view-wrapper {
-  padding-right: calc($right-padding * 2);
   margin-bottom: 0.5em;
+  padding-right: calc($right-padding * 2);
 }
 
 .main-text {
@@ -13,9 +13,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8%;
-  row-gap: 1rem;
   justify-content: center;
   margin-top: 4rem;
+  row-gap: 1rem;
 }
 
 @media (max-width: 800px) {
@@ -32,9 +32,9 @@
 
   .buttons-wrapper {
     gap: 4%;
-    row-gap: 1rem;
-    margin-top: 2rem;
     margin-bottom: 1rem;
+    margin-top: 2rem;
+    row-gap: 1rem;
   }
 
 }

@@ -9,12 +9,11 @@
       >
   </app-beginning-button>
 
-  <app-error-card
-      [confirmLeave]="true"
-      *ngIf="showConfirm"
-      [styles]="{ margin: '2rem 0 0 0' }"
-      >
-  </app-error-card>
+  <app-error  [confirmLeave]="true"
+              *ngIf="showConfirm"
+              [styles]="{ margin: '2rem 0 0 0' }"
+              >
+  </app-error>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
@@ -23,13 +22,13 @@
         >
 
     <div class="ticket-header">
-      <mat-form-field appearance="fill" class="sub-header">
+      <mat-form-field appearance="fill" class="theme-subheading">
         <textarea aria-label="Otsikko"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
                   cdkTextareaAutosize
-                  class="sub-header"
+                  class="theme-subheading"
                   i18n-placeholder="@@Otsikko"
                   formControlName="title"
                   matInput
@@ -47,7 +46,7 @@
       </mat-form-field>
 
       <app-sender-info
-          [aikaleima]="currentDate"
+          aikaleima="now"
           *ngIf="(user$ | async)"
           [user]="(user$ | async)">
       </app-sender-info>
@@ -115,8 +114,8 @@
 
     </section>
 
-    <h2 class="sub-header"><span i18n="@@Viesti">Viesti</span><span>*</span></h2>
-    <app-editor formControlName="message"></app-editor>
+    <h2 class="theme-subheading"><span i18n="@@Viesti">Viesti</span><span>*</span></h2>
+    <app-editor formControlName="message" ngDefaultControl></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="message?.errors?.['required'] && message?.touched"
                 >
@@ -129,17 +128,17 @@
     </mat-error>
 
     <!-- Kun lähetetään liitetiedostoja -->
-    <p class="theme-success-message" *ngIf="successMessage">
+    <app-success *ngIf="successMessage">
       {{ successMessage }}
-    </p>
+    </app-success>
 
-    <app-error-card i18n-title="@@Virhe"
-                    message="{{ errorMessage }}"
-                    *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 0' }"
-                    title="Virhe"
-                    >
-    </app-error-card>
+    <app-error  i18n-title="@@Virhe"
+                message="{{ errorMessage }}"
+                *ngIf="errorMessage.length > 0"
+                [styles]="{ margin: '1em 0' }"
+                title="Virhe"
+                >
+    </app-error>
 
     <div class="theme-actions">
 
@@ -165,7 +164,7 @@
               i18n="@@Peru"
               mat-raised-button
               *ngIf="editExisting"
-              [routerLink]="'/course/' + courseId + '/ticket-view/' + ticketId"
+              [routerLink]="'/course/' + courseid + '/ticket-view/' + ticketId"
               type="button"
               >
         Peru
@@ -195,8 +194,10 @@
 
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          (fileListOutput)="fileInfoList = $event"
                           formControlName="attachments"
                           [oldAttachments]="oldAttachments"
+                          [ticketID]="ticketId"
                           [uploadClicks]="uploadClick.asObservable()"
                           >
     </app-edit-attachments>

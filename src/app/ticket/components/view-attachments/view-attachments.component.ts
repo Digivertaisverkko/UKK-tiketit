@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
     from '@angular/core';
 import { TicketService } from '@ticket/ticket.service';
 import { Liite } from '@ticket/ticket.models';
+import { getCourseIDfromURL } from '@shared/utils';
 
 @Component({
   selector: 'app-view-attachments',
@@ -14,7 +15,12 @@ import { Liite } from '@ticket/ticket.models';
           [matTooltipShowDelay]="600"
           *ngFor="let file of files; let i = index"
           >
-          <div class="filename">{{file.nimi}}</div>
+          <div class="filename">{{ file.nimi }}</div>
+          &nbsp;
+          <div class="filesize">
+            ({{ file.koko | filesize : { locale: 'fi', round: 1,
+                separator: ",", pad: true } }})
+          </div>
           <mat-icon>download</mat-icon>
       </button>
     </div>`,
@@ -34,7 +40,12 @@ export class ViewAttachmentsComponent {
   public downloadFile(ticketID: string, commentID: string, fileID: string,
       filename: string)
     {
-    this.ticketService.getFile(ticketID, commentID, fileID).then(response => {
+    const courseID = getCourseIDfromURL();
+    if (!courseID) {
+      console.error('Ei kurssi ID:ä.')
+      return
+    }
+    this.ticketService.getFile(ticketID, commentID, fileID, courseID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');

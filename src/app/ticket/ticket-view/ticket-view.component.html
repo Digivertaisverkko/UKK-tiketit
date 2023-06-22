@@ -1,4 +1,4 @@
-  <app-headline></app-headline>
+  <app-headline *ngIf="!ticketIdFromParent"></app-headline>
 
   <div class="view-wrapper" *ngIf="isLoaded">
 
@@ -49,7 +49,7 @@
       </button>
 
       <button class="remove-btn"
-              (click)="archiveTicket()"
+              (click)="archiveTicket(ticketID, courseid!)"
               color="accent"
               i18n="@@Vahvista"
               mat-raised-button
@@ -74,7 +74,7 @@
         </button>
       </div>
 
-      <button (click)="removeTicket()"
+      <button (click)="removeTicket(ticketID, courseid!)"
               color="accent"
               [disabled]="state==='sending'"
               i18n="@@Vahvista poisto"
@@ -85,19 +85,18 @@
       </button>
     </div>
 
-    <app-error-card
-        [confirmLeave]="true"
-        *ngIf="showConfirm"
-        [styles]="{ margin: '2rem 0 0 0' }"
-        >
-    </app-error-card>
+    <app-error  [confirmLeave]="true"
+                *ngIf="showConfirm"
+                [styles]="{ margin: '2rem 0 0 0' }"
+                >
+    </app-error>
 
   <!-------------- Kysymys ---------------------------------------------------->
 
   <section *ngIf="ticket.tila > 0">
 
     <div class="ticket-header">
-      <h2 class="sub-header">{{ ticket.otsikko }}</h2>
+      <h2 class="ticket-headline theme-subheading">{{ ticket.otsikko }}</h2>
       <div class="spacer"></div>
       <app-sender-info
           [aikaleima]="ticket.aikaleima"
@@ -130,7 +129,22 @@
 
   <!-------------- Keskustelu ------------------------------------------------->
 
-    <h3 class="sub-header" i18n="@@Keskustelu">Keskustelu</h3>
+  <div class="h3-wrapper">
+    <h3 class="discussion-h3 theme-subheading" i18n="@@Keskustelu">Keskustelu</h3>
+
+    <button aria-label="Virkistä näkymä"
+            (click)="fetchTicket(courseid!)"
+            [disabled]="state==='sending'"
+            i18n-aria-label="@@Virkistä näkymä"
+            i18n-matTooltip="@@Virkistä näkymä"
+            mat-icon-button
+            matTooltip="Virkistä näkymä"
+            matTooltipPosition="after"
+            #tooltip="matTooltip"
+            >
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 
     <app-comment
         [comment]="comment"
@@ -138,7 +152,6 @@
         (messages)="listenMessagesFromComment($event)"
         *ngFor="let comment of ticket.kommentit"
         [ticketID]="ticket.id"
-        [sender]="comment.lahettaja"
         >
     </app-comment>
 
@@ -167,22 +180,21 @@
 
     <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
-    <app-error-card
-        *ngIf="errorMessage.length > 0"
-        i18n-title="@@Virhe"
-        message="{{ errorMessage }}"
-        [styles]="{ margin: '1rem 0 0 0' }"
-        title="Virhe"
-        >
-    </app-error-card>
+    <app-error  *ngIf="errorMessage.length > 0"
+                i18n-title="@@Virhe"
+                message="{{ errorMessage }}"
+                [styles]="{ margin: '1rem 0 0 0' }"
+                title="Virhe"
+                >
+    </app-error>
 
     <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
-    <p  class="theme-success-message"
+    <app-success
         i18n="@@Kommentin lisääminen"
         *ngIf="state==='sending'"
         >
       Uuden kommentin lähettäminen onnistui.
-    </p>
+    </app-success>
 
     <section *ngIf="ticket.tila > 0">
 

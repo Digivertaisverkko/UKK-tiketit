@@ -9,17 +9,27 @@
         >
     <span class="theme-profile-name">{{ user?.nimi }}</span>
     <div class="theme-label">
-      <span>{{senderTitle}}</span>
+      <span>{{ senderTitle }}</span>
       –
-      <span *ngIf="isItToday; else notToday" i18n="@@Tänään">
-        Tänään
+
+      <span *ngIf="aikaleima === 'now'; else hasDate">
+        {{ nyt }}
       </span>
 
-      <ng-template #notToday>
-        <span>{{ aikaleima | date: 'shortDate' }}</span>
+      <ng-template #hasDate>
+
+        <span *ngIf="isItToday; else notToday" i18n="@@Tänään">
+          Tänään
+        </span>
+
+        <ng-template #notToday>
+          <span>{{ aikaleima | date: 'shortDate' }}</span>
+        </ng-template>
+
+        <span>&nbsp;{{ aikaleima | date: 'shortTime' }}</span>
+
       </ng-template>
 
-      <span>&nbsp;{{ aikaleima | date: 'shortTime' }}</span>
     </div>
   </div>
 

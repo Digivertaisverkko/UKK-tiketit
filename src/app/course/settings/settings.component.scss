@@ -8,6 +8,10 @@ p {
   margin-bottom: 1.5rem;
 }
 
+.help-text {
+  max-width: 40rem;
+}
+
 // ----- Lista --------------------------
 
 .list-wrapper {
@@ -103,19 +107,29 @@ mat-icon {
   max-width: 16em;
 }
 
+//----------- Ulkopuolisten kutsuminen -------------------------------------
+
 .invite-form {
   margin-top: 2rem;
 }
 
 .invite-wrapper {
   display: flex;
-  align-items:baseline;
-  gap: 1rem;
+  align-items: baseline;
+  gap: 1.5rem;
 }
 
 .invite-field {
-  margin-top: 1em;
+  // margin-top: 1em;
   width: 22em;
+}
+
+.role-label {
+  margin-right: 1rem;
+}
+
+mat-radio-button {
+  margin: 0 1.3rem 3px 0px
 }
 
 @media (max-width: $XSmall) {

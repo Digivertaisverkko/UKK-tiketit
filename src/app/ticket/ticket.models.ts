@@ -5,7 +5,7 @@ ja joita on tarkoitus käyttää tämän feature-moduulin sisällä.
   API:a se vastaa. Rajapintojen jäsenmuuttujien arvojen järjestys noudattaa
   API-dokumentin järjestystä. */
 
-import { User } from "../core/core.models";
+import { User } from "@core/core.models";
 
 export interface AddTicketResponse {
   success: Boolean;
@@ -59,6 +59,7 @@ export interface Liite {
   kommentti: string;
   tiedosto: string;
   nimi: string;
+  koko: number;
 }
 
 // Vastaus kommentin lisäämiseen.
@@ -84,6 +85,7 @@ export interface TiketinPerustiedot {
   aikaleima: string;
   aloittaja: User;
   tila: number;
+  viimeisin: string;
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]

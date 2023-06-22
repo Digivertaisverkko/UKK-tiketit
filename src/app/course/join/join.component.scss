@@ -1,0 +1,58 @@
+@import '/src/variables.scss';
+
+.view-wrapper {
+  padding-right: calc(right-padding * 2);
+  margin-top: 2rem;
+  margin-bottom: 0.5em;
+}
+
+// &nbsp; lisää useampia välilyöntejä.
+.span + strong {
+  margin-left: 0.5em;
+}
+
+.user-info-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.buttons-wrapper {
+  margin-top: 3rem;
+  // outline: 1px gray solid;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  white-space: nowrap;
+}
+
+@media (max-width: 800px) {
+  .view-wrapper {
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 500px) {
+  .buttons-wrapper {
+    gap: 8%;
+  }
+}
+
+@media (min-width: 450px) and (max-width: 499px) {
+  .buttons-wrapper {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .user-info-container {
+    gap: 1rem;
+  }
+  .buttons-wrapper {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+}

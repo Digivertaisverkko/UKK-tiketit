@@ -9,16 +9,17 @@ import { FilesizeModule } from './pipes/filesize.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 
-import { ErrorCardComponent } from './error-card/error-card.component';
+import { ErrorComponent } from './error/error.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
-import { SafeHtmlPipe } from './safe-html.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { MenuLinkComponent } from './editor/menu-link/menu-link.component';
 import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { HeadlineComponent } from './components/headline/headline.component';
 import { SenderInfoComponent } from './components/sender-info/sender-info.component';
+import { SuccessComponent } from './success/success.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -46,7 +47,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
 
 @NgModule({
   declarations: [
-    ErrorCardComponent,
+    ErrorComponent,
     EditorComponent,
     HeadlineComponent,
     MenuLinkComponent,
@@ -55,6 +56,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     SafeHtmlPipe,
     SearchBarComponent,
     SenderInfoComponent,
+    SuccessComponent,
   ],
   imports: [
     CommonModule,
@@ -71,7 +73,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     FormsModule,
     MaterialModule,
     HeadlineComponent,
-    ErrorCardComponent,
+    ErrorComponent,
     EditorComponent,
     MenuLinkComponent,
     MenuSrcComponent,
@@ -80,6 +82,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     ReactiveFormsModule,
     SearchBarComponent,
     SenderInfoComponent,
+    SuccessComponent
   ],
   providers: [
     {

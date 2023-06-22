@@ -1,5 +1,15 @@
 import { Role } from "../core/core.models";
 
+// Metodi: getInvitedInfo
+// API: /api/kurssi/:kurssi-id/osallistujat/kutsu/:kutsu-id
+export interface InvitedInfo {
+  id: string;
+  kurssi: string;
+  sposti: string;
+  vanhenee: string;
+  rooli: Role;
+}
+
 /* Tiketin lisäkentän tiedot sisältävä kenttäpohja.
   Metodi: getTicketFieldInfo
   API: /api/kurssi/:kurssi-id/uusitiketti/kentat/,

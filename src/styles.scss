@@ -17,7 +17,7 @@ body {
   background-color: mat.get-color-from-palette($custom-primary-palette, 500);
 }
 
-.theme-header-text, .theme-header-text-small, .main-header, .sub-header {
+.theme-header-text, .theme-header-text-small, .main-header, .theme-subheading {
   font-family: $displayFont;
 }
 
@@ -37,7 +37,7 @@ body {
 $debug: false;
 
 // Alaotsikko, yleensä H2.
-.sub-header {
+.theme-subheading {
   font-size: 1.66rem;
   font-weight: 700;
   line-height: 1.2;
@@ -94,7 +94,6 @@ mat-hint {
 $debug: false;
 
 
-
 .theme-table {
   width: 100%; line-height: 1.4rem;
   .mat-mdc-header-row {
@@ -110,13 +109,6 @@ $debug: false;
       height: 3em;
     }
   }
-
-.theme-success-message {
-  padding: 1rem;
-  background-color: #C8E6C9;
-  border-radius: 4px;
-  text-align: center;
-}
 
 .theme-hyperlink {
   color: var(--primary-color);
@@ -137,7 +129,7 @@ $debug: false;
 @media (max-width: $XSmall) {
 
 
-  .sub-header {
+  .theme-subheading {
     font-family: $displayFont;
     font-size: 1.66rem * 0.8;
     line-height: 1;

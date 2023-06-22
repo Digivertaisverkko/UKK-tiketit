@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MockComponent } from 'ng-mocks';
+import { NgxEditorModule } from 'ngx-editor';
 
 import { EditorComponent } from './editor.component';
+import { MenuLinkComponent } from './menu-link/menu-link.component';
+import { MenuSrcComponent } from './menu-src/menu-src.component';
 
 describe('EditorComponent', () => {
   let component: EditorComponent;
@@ -8,7 +13,15 @@ describe('EditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditorComponent ]
+      declarations: [
+        EditorComponent,
+        MockComponent(MenuLinkComponent),
+        MockComponent(MenuSrcComponent)
+      ],
+      imports: [
+        NgxEditorModule,
+        ReactiveFormsModule
+      ]
     })
     .compileComponents();
 

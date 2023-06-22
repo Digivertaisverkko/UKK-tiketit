@@ -1,10 +1,11 @@
+import { EditFieldComponent } from './edit-field/edit-field.component';
+import { JoinComponent } from './join/join.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from '../user-management/auth.guard';
 import { SettingsComponent } from './settings/settings.component';
-import { EditFieldComponent } from './edit-field/edit-field.component';
 
 const routes: Routes = [
+  { path: 'course/:courseid/join', component: JoinComponent },
   { path: 'course/:courseid/settings', component: SettingsComponent },
   {
     path: 'course/:courseid/settings/field/:fieldid',
@@ -17,6 +18,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class CourseRoutingModule { }
+export class CourseRoutingModule {}

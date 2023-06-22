@@ -1,14 +1,16 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild }
+    from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Validators as EditorValidators } from 'ngx-editor';
-import { Subject, Subscription, first } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
-import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
-import { isToday } from '@shared/utils';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
+import { getCourseIDfromURL } from '@shared/utils';
+import { isToday } from '@shared/utils';
+import { StoreService } from '@core/services/store.service';
+import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
-import { StoreService } from '@core/store.service';
 
 import schema from '@shared/editor/schema';
 
@@ -18,14 +20,13 @@ import schema from '@shared/editor/schema';
   styleUrls: ['./comment.component.scss']
 })
 
-export class CommentComponent implements AfterViewInit{
+export class CommentComponent implements AfterViewInit, OnInit{
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
-  @Input() public sender: User | null = null;
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
   // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
@@ -36,6 +37,7 @@ export class CommentComponent implements AfterViewInit{
   public form: FormGroup = this.buildForm();
   public errorMessage: string = '';
   public isRemovePressed: boolean = false;
+  public sender: User = {} as User;
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
@@ -54,11 +56,6 @@ export class CommentComponent implements AfterViewInit{
       this.strings = new Map ([
         ['attach', $localize `:@@Liitä:Liitä` ],
         ['attachFiles', $localize `:@@Liitä tiedostoja:Liitä tiedostoja`],
-        ['confirmRemoveTooltip', $localize `:@@Vahvista kommentin poistaminen:
-          Vahvista kommentin poistaminen`],
-        ['proposedSolution', $localize `:@@Ratkaisuehdotus:Ratkaisuehdotus`],
-        ['removeComment', $localize `:@@Poista kommentti:Poista kommentti`],
-        ['moreInfoNeeded', $localize `:@@Lisätietoa tarvitaan:Lisätietoa tarvitaan`]
       ]);
       this.attachFilesText = this.strings.get('attachFiles')!;
   }
@@ -67,6 +64,9 @@ export class CommentComponent implements AfterViewInit{
     this.trackWhenEditing();
   }
 
+  ngOnInit(): void {
+    this.sender = this.comment.lahettaja;
+  }
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
@@ -112,7 +112,9 @@ export class CommentComponent implements AfterViewInit{
   }
 
   public removeComment(commentID: string) {
-    this.ticketService.removeComment(this.ticketID, commentID).then(res => {
+    const courseID = getCourseIDfromURL();
+    if (!courseID) return
+    this.ticketService.removeComment(this.ticketID, commentID, courseID).then(res => {
       this.stopEditing();
     }).catch((err: any) => {
       this.errorMessage = $localize `:@@Kommentin poistaminen ei onnistunut:
@@ -123,14 +125,23 @@ export class CommentComponent implements AfterViewInit{
 
   public sendComment(commentID: string) {
     this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+    const courseID = getCourseIDfromURL();
+    if (this.form.invalid || !courseID) return;
     this.state = 'sending';
     this.form.disable();
     const commentText = this.form.controls['message'].value;
     const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
-        commentState)
-      .then(() => {
+      commentState, courseID).then(() => {
+        if (this.attachments.filesToRemove.length === 0) {
+          return true
+        }
+        return this.attachments.removeSentFiles();
+      })
+      .then((res: boolean) => {
+        if (res === false) {
+          this.errorMessage = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
+        }
         if (this.fileInfoList.length === 0) {
           this.stopEditing();
           return
@@ -149,7 +160,7 @@ export class CommentComponent implements AfterViewInit{
 
   private sendFiles(ticketID: string, commentID: string) {
     this.messages.emit('sendingFiles')
-    this.attachments.sendFilesPromise(ticketID, commentID)
+    this.attachments.sendFiles(ticketID, commentID)
       .then((res:any) => {
         console.log('kaikki tiedostot valmiita.');
         this.stopEditing();
@@ -164,7 +175,7 @@ export class CommentComponent implements AfterViewInit{
       })
   }
 
-  // Lopeta kommentin
+  // Lopeta kommentin editointi.
   public stopEditing() {
     this.state = 'done';
     this.fileInfoList = [];

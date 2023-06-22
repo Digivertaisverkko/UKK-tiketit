@@ -3,7 +3,7 @@ import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/l
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
     from '@angular/core';
 import { Observable } from 'rxjs';
-import { StoreService } from '../store.service';
+import { StoreService } from '../services/store.service';
 import { User } from '@core/core.models';
 
 

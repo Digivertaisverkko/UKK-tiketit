@@ -7,11 +7,13 @@ import { MatChipsModule } from '@angular/material/chips';
 
 import { SettingsComponent } from './settings/settings.component';
 import { EditFieldComponent } from './edit-field/edit-field.component';
+import { JoinComponent } from './join/join.component';
 
 @NgModule({
   declarations: [
     SettingsComponent,
-    EditFieldComponent
+    EditFieldComponent,
+    JoinComponent
   ],
   imports: [
     CommonModule,

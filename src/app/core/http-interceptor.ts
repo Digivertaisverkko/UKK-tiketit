@@ -3,7 +3,7 @@ import { HttpInterceptor, HttpEvent, HttpResponse, HttpRequest, HttpHandler }
     from '@angular/common/http';
 import { Observable, PartialObserver, tap } from 'rxjs';
 import { truncate } from '../shared/utils';
-import { StoreService } from './store.service';
+import { StoreService } from './services/store.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -37,12 +37,19 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 
   private consoleLogError(request: any, event: any): void {
     const responseBody = JSON.stringify(event.body);
+
+    let huomautus: string;
+    if (event.body === null) {
+      huomautus = ' Voi olla myös tyhjä objekti "{}".'
+    } else {
+      huomautus = '';
+    }
+
     console.log(`Tehtiin ${request.method}-pyyntö URL:iin "${request.url}` +
       `". Tilakoodi ${event.status}. ` +
-      `Saatiin vastaukseksi "${truncate(responseBody, 500, true)}".`);
-    if (event.body === null) {
-      console.log('Huom! Vastaus voi olla myös tyhjä objekti {}.');
-    }
+      `Saatiin vastaukseksi "${truncate(responseBody, 1000, true)}".` +
+      huomautus);
+
     if (request.body != null && request.body.length > 0) {
       const requestBody = JSON.stringify(request.body);
       console.log(`Pyynnön body: "$${truncate(requestBody, 500, true)}"`);

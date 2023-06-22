@@ -16,7 +16,7 @@ import { MatRippleModule } from '@angular/material/core';
 // import { MatSlideToggle, MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 // Servicet
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { CustomHttpInterceptor } from './http-interceptor';
 
 // Komponentit
@@ -28,6 +28,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 import { NoDataConsentComponent } from './no-data-consent/no-data-consent.component';
 import { UsermenuComponent } from './usermenu/usermenu.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { UsermenuComponent } from './usermenu/usermenu.component';
     PrivacyModalComponent,
     NoDataConsentComponent,
     UsermenuComponent,
+    HomeComponent,
   ],
   imports: [
     CommonModule,

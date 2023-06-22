@@ -6,12 +6,11 @@
     >
 </app-beginning-button>
 
-<app-error-card
-    [confirmLeave]="true"
-    *ngIf="showConfirm === true"
-    [styles]="{ margin: '2rem 0 0 0' }"
-    >
-</app-error-card>
+<app-error  [confirmLeave]="true"
+            *ngIf="showConfirm === true"
+            [styles]="{ margin: '2rem 0 0 0' }"
+            >
+</app-error>
 
 <div class="view-wrapper" *ngIf="isLoaded">
 
@@ -41,7 +40,7 @@
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
       <div class="title-column">{{ field.otsikko }}</div>
       <div class="info-text-column">{{ field.ohje }}</div>
-      <a [routerLink]="'/course/' + courseID + '/settings/field/' + field.id" >
+      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id" >
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
@@ -60,23 +59,22 @@
 
 </div>
 
-<app-error-card
-    i18n-title="@@Virhe"
-    *ngIf="errorMessage.length > 0"
-    message="{{ errorMessage }}"
-    [styles]="{ margin: '2em 0 1em 0' }"
-    title="Virhe"
-    >
-</app-error-card>
+<app-error  i18n-title="@@Virhe"
+            *ngIf="errorMessage.length > 0"
+            message="{{ errorMessage }}"
+            [styles]="{ margin: '2em 0 1em 0' }"
+            title="Virhe"
+            >
+</app-error>
 
-<p *ngIf="message.length >0" class="theme-success-message">{{message}}</p>
+<app-success *ngIf="message.length >0">{{ message }}</app-success>
 
 <div class="theme-actions" *ngIf="errorMessage.length === 0">
 
   <button class="add-button"
           i18n="@@Lisää kenttä"
           mat-raised-button
-          [routerLink]="'/course/' + this.courseID + '/settings/field'"
+          [routerLink]="'/course/' + this.courseid + '/settings/field'"
           >
     Lisää kenttä
   </button>
@@ -119,24 +117,43 @@
   </button>
 </div>
 
-<!----------------------------------------------------------------------------->
+<!---------------- Ulkopuolisten kutsuminen --------------------------------->
 
 <div class="vertical-spacer"></div>
 
-<form class="invite-form" style="display: none">
+<form class="invite-form"
+      [formGroup]="form"
+      (ngSubmit)="sendInvite()"
+      >
 
-  <h2 class="sub-header">Kutsu ulkopuolisia kurssille</h2>
+  <h2 class="theme-subheading" i18n="@@Kutsu ulkopuolisia kurssille">
+    Kutsu ulkopuolisia kurssille
+  </h2>
 
-  <p>
-    Tästä voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
+  <p class="help-text" i18n="@@Kutsumisohje">
+    Voit kutsua kurssin ulkopuolisia toimijoita osallistumaan kurssille.
   </p>
+
+  <app-error  i18n-title="@@Virhe"
+              *ngIf="inviteErrorMessage.length > 0"
+              message="{{ inviteErrorMessage }}"
+              [styles]="{ margin: '1em 0 1em 0' }"
+              title="Virhe"
+              >
+  </app-error>
 
   <div class="invite-wrapper">
 
     <mat-form-field class="invite-field">
       <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-      <input matInput (value)="inviteEmail">
+      <input formControlName="email" matInput (value)="email">
+      <mat-error  i18n="@@Pakollinen kenttä."
+                  *ngIf="email.errors?.['required']"
+                  >
+        Pakollinen kenttä.
+      </mat-error>
     </mat-form-field>
+
 
     <button class="invite-button"
             color="primary"
@@ -146,5 +163,21 @@
       Kutsu
     </button>
 
-  </div>
+    </div>
+
+    <mat-label class="role-label"><span i18n="@@Rooli">Rooli</span>:</mat-label>
+    <mat-radio-group formControlName="role">
+      <mat-radio-button [value]=1 i18n="@@Opiskelija">
+        Opiskelija
+      </mat-radio-button>
+      <mat-radio-button [value]=2 i18n="@@Opettaja">
+        Opettaja
+      </mat-radio-button>
+    </mat-radio-group>
+
+  <app-success *ngIf="inviteMessage.length >0">
+    {{ inviteMessage }}
+  </app-success>
+
+
 </form>

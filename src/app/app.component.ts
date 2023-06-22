@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
-import { AuthService } from './core/auth.service';
+import { AuthService } from './core/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { StoreService } from './core/store.service';
+import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 // import { TicketService } from './ticket/ticket.service';
@@ -63,17 +63,17 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   public logoClicked() {
-    this.store.sendMessage('go begin'); 
+    this.store.sendMessage('go begin');
   }
 
-    // Seurataan kurssi ID:ä URL:sta.
-    private trackCourseID(): void {
-      this.route.paramMap.subscribe((paramMap: ParamMap) => {
-        const courseID = paramMap.get('courseid');
-        if (courseID != null) this.courseID = courseID;
-        // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-      })
-    }
+  // Seurataan kurssi ID:ä URL:sta.
+  private trackCourseID(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      const courseID = paramMap.get('courseid');
+      if (courseID != null) this.courseID = courseID;
+      // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
+    })
+  }
 
   private trackLoginStatus() {
     this.store.onIsUserLoggedIn()

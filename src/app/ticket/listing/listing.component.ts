@@ -1,21 +1,20 @@
-import { ActivatedRoute, ParamMap, Router} from '@angular/router';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild }
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-// import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService } from '@core/auth.service';
-import { Constants, getIsInIframe } from '@shared/utils';
+import { AuthService } from '@core/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
-import { User } from '@core/core.models';
+import { Error, User } from '@core/core.models';
 import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
@@ -42,6 +41,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public courseID: string = '';
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
+  public errorFromComponent: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public screenSize: 'handset' | 'small' | 'other' = 'other';
@@ -51,16 +51,16 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public numberOfFAQ: number = 0;
   public noDataConsent: boolean | null;
   public isLoggedIn$: Observable<boolean | null>;
+  public strings: Map<string, string>;
+  public successMessage: string | null = null;
   public user$: Observable<User | null>;
 
-  private fetchFAQsSub$: Subscription | null = null;
-  // private isParticipant$: Subscription | null = null;
+  private fetchFAQsTimer$: Observable<number>;
   private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
   private loggedIn$ = new Subscription;
+  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
   private scrollPosition: number = 0;
-  public strings: Map<string, string>;
-  private readonly POLLING_RATE_MIN = (environment.production == true ) ? 5 : 15;
   private unsubscribe$ = new Subject<void>();
   private url: string = '';
 
@@ -78,10 +78,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private title : Title
   ) {
     this.noDataConsent = this.authService.getDenyDataConsent();
-    this.title.setTitle(Constants.baseTitle + $localize `:@@Otsikko-Kysymykset:
+    this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
     this.isLoggedIn$ = this.store.trackLoggedIn();
-    this.isInIframe = getIsInIframe();
+    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
+        true : false;
     this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
@@ -95,10 +96,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       ['Kirjaudu', $localize`:@@Kirjaudu:Kirjaudu`],
       ['Luo tili', $localize`:@@Luo tili:Luo tili`]
     ]);
+    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchFAQsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   ngOnInit() {
     this.url = window.location.pathname;
+    this.checkRouterData();
     this.trackCourseID();
     // this.trackLoggedStatus();
     this.trackScreenSize();
@@ -112,8 +116,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     console.warn('listaus: ngOnDestroy ajettu.');
     window.removeEventListener('scroll', this.onScroll);
     this.loggedIn$.unsubscribe();
-    // this.isParticipant$?.unsubscribe();
-    this.stopPolling();
   }
 
   //hakutoiminto, jossa paginointi kommentoitu pois
@@ -131,13 +133,25 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authService.navigateToLogin(this.courseID)
   }
 
+  // Näytä mahdollisesti routen mukana tullut viesti tai virheilmoitus.
+  private checkRouterData() {
+    const message: string | null = window.history.state.message;
+    if (message) {
+      if (message === 'account created') {
+        this.successMessage = $localize `:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti` + '.';
+      }
+    }
+    const errorMsg: string | null = window.history.state.error;
+    this.errorFromComponent = errorMsg ?? null;
+  }
+
   public errorClickEvent(button: string) {
     if (this.noDataConsent === true && this.isInIframe === true) {
       this.showConsentPopup();
     } else if (this.noDataConsent !== true && this.isInIframe === false) {
       this.authService.navigateToLogin(this.courseID);
     }
-}
+  }
 
   // refresh = Jos on saatu refresh-pyyntö muualta.
   private fetchFAQ(courseID: string, refresh?: boolean) {
@@ -207,12 +221,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('scroll', this.onScroll);
   }
 
-  public stopPolling(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    if (this.fetchFAQsSub$) this.fetchFAQsSub$.unsubscribe();
-  }
-
   // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
   private trackMessages(): void {
     this.store.trackMessages()
@@ -250,7 +258,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
-    this.stopPolling();
     const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
     if (this.store.getIsLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
@@ -264,19 +271,71 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       const courseID = paramMap.get('courseid');
       if (courseID != null) this.courseID = courseID;
       // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-      this.startPollingFAQ();
+      this.startPollingFAQ(this.POLLING_RATE_MIN);
     })
   }
 
+  private trackLoggedStatus(): void {
+    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
+      if (response === false) {
+        console.log('Listing: saatiin tieto, ettei olla kirjautuneina.');
+        this.isLoaded = true;
+        this.setError('notLoggedIn');
+      } else if (response === true) {
+        this.error === null;
+      }
+    });
+  }
 
-  private startPollingFAQ(): void {
-    this.fetchFAQsSub$?.unsubscribe();
-    console.warn('Aloitetaan UKK pollaus.');
-    const pollRate = this.POLLING_RATE_MIN * Constants.MILLISECONDS_IN_MIN;
-    this.fetchFAQsSub$ = timer(0, pollRate)
-        .pipe(
-          takeUntil(this.unsubscribe$)
-        ).subscribe(() => this.fetchFAQ(this.courseID));
+  // Aseta virheviestejä.
+  private setError(type: 'notParticipant' | 'notLoggedIn'): void {
+    if (type === 'notParticipant') {
+      this.error = {
+        title: $localize`:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.`,
+        message: $localize`:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.`,
+        buttonText: ''
+      }
+    } else if (type === 'notLoggedIn') {
+      this.error = {
+        title: $localize`:@@Et ole kirjautunut:Et ole kirjautunut` + '.',
+        message: '',
+        buttonText: ''
+      }
+
+      if (this.isInIframe && this.authService.getDenyDataConsent() !== true) {
+        this.error.message = $localize `:@@Ei kirjautunut upotuksessa:Tämä voi johtua siitä, että käytät selainta, joka kieltää kolmannnen osapuolen evästeet. Voit kokeilla muuttaa selaimen asetuksia tai käyttää eri selainta, esim. Chrome.`;
+      } else {
+        this.error.message = $localize `:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.`
+      }
+
+      if (this.authService.getDenyDataConsent() === true) {
+        this.error.buttonText = $localize `:@@Luo tili:Luo tili`;
+      } else if (this.isInIframe === false) {
+        this.error.buttonText = $localize `:@@Kirjaudu:Kirjaudu`;
+      }
+    } else {
+      console.error('Ei virheviestiä tyypille: ' + type);
+    }
+  }
+
+  // Hae UKK:t tietyn ajan välein.
+  private startPollingFAQ(POLLING_RATE_MIN: number): void {
+    console.log(`Aloitetaan UKK pollaus joka ${POLLING_RATE_MIN} minuutti.`);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
+    this.fetchFAQsTimer$.subscribe(() => {
+      this.fetchFAQ(this.courseID!);
+      if (fetchStartTime) {
+        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log('UKK-pollauksen viime kutsusta kulunut aikaa ' +
+            `${elapsedTime} sekuntia.`);
+        if (elapsedTime !== POLLING_RATE_SEC) {
+          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+        }
+      }
+      fetchStartTime = Date.now();
+    });
   }
 
 }

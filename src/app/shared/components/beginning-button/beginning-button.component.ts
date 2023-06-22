@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output,
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { StoreService } from '@core/store.service';
+import { StoreService } from '@core/services/store.service';
 
 @Component({
   selector: 'app-beginning-button',

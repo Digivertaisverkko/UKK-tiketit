@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MockPipe } from 'ng-mocks';
 
 import { MessageComponent } from './message.component';
+import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 
 describe('MessageComponent', () => {
   let component: MessageComponent;
@@ -8,7 +10,10 @@ describe('MessageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MessageComponent ]
+      declarations: [
+        MessageComponent,
+        MockPipe(SafeHtmlPipe, (...args) => args[0])
+      ]
     })
     .compileComponents();
 

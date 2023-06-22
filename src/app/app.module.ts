@@ -9,7 +9,7 @@ import localeEn from '@angular/common/locales/en';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { TicketModule } from './ticket/ticket.module';
-import { UserManagementModule } from './user-management/user-management.module';
+import { UserModule } from './user/user.module';
 import { CourseModule } from './course/course.module';
 
 import { AppComponent } from './app.component';
@@ -32,7 +32,7 @@ registerLocaleData(localeEn);
     CoreModule,
     SharedModule,
     TicketModule,
-    UserManagementModule,
+    UserModule,
     CourseModule,
     AppRoutingModule,
   ],

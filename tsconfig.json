@@ -27,7 +27,7 @@
       "@core/*": ["src/app/core/*"],
       "@ticket/*": ["src/app/ticket/*"],
       "@course/*": ["src/app/course/*"],
-      "@user-management/*": ["src/app/user-management/*"],
+      "@user/*": ["src/app/user/*"],
 
     },
     "useDefineForClassFields": false

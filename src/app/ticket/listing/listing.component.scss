@@ -1,24 +1,19 @@
 @import '/src/variables.scss';
-@import '/src/app/shared/components/headline/headline.component.scss';
 
-.view-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.main-header > span {
-  padding-right: 2em;
+.success-message {
+  margin-top: 1.5rem;
+  margin-bottom: -0.5rem;
 }
 
 /* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
    kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
 section,
-app-error-card {
+app-error {
   width: 103%;
 }
 
 section,
-app-error-card,
+app-error,
 .theme-actions {
   margin-left: -15px;
 }
@@ -158,7 +153,7 @@ button {
 
 @media (max-width: $XSmall) {
   section,
-  app-error-card,
+  app-error,
   h2 {
     margin-left: 0;
   }

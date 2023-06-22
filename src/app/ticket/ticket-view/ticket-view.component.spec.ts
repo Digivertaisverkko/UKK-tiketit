@@ -1,14 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockComponent } from 'ng-mocks';
 
 import { TicketViewComponent } from './ticket-view.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
+import { TicketService } from '@ticket/ticket.service';
 
 describe('TicketViewComponent', () => {
   let component: TicketViewComponent;
+  let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketViewComponent>;
 
   beforeEach(async () => {
+    fakeTicketService = jasmine.createSpyObj('TicketService', {
+      getBaseTitle: undefined,
+      onIsUserLoggedIn: undefined
+    });
+
     await TestBed.configureTestingModule({
-      declarations: [ TicketViewComponent ]
+      declarations: [
+        MockComponent(HeadlineComponent),
+        TicketViewComponent
+      ],
+      imports: [
+        RouterTestingModule
+      ],
+      providers: [
+        { provide: TicketService, useValue: fakeTicketService }
+      ]
     })
     .compileComponents();
 

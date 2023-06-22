@@ -65,14 +65,14 @@
 
   <section *ngIf="ticket.viesti !== undefined">
 
-    <h2 class="sub-header">{{ ticket.otsikko }}</h2>
+    <h2 class="theme-subheading">{{ ticket.otsikko }}</h2>
 
     <div *ngFor="let kentta of ticket.kentat">
       <p class="theme-label" >{{ kentta.otsikko }}</p>
       <p class="short-field-value">{{ kentta.arvo }}</p>
     </div>
 
-    <h3 class="sub-header" i18n="@@Kysymys">Kysymys</h3>
+    <h3 class="theme-subheading" i18n="@@Kysymys">Kysymys</h3>
 
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
@@ -87,7 +87,7 @@
 
     <!----------- Vastaus ----------------------------------------------------->
 
-    <h3 class="sub-header" i18n="@@Vastaus">Vastaus</h3>
+    <h3 class="theme-subheading" i18n="@@Vastaus">Vastaus</h3>
 
     <div *ngFor="let comment of ticket.kommentit">
         <app-message [messageHtml]=comment.viesti></app-message>
@@ -102,13 +102,12 @@
   </section>
 
   <mat-card-content *ngIf="errorMessage.length > 0">
-    <app-error-card
-        i18n-title="@@Virhe"
-        message="{{ errorMessage }}"
-        [styles]="{ margin: '1em 0' }"
-        title="Virhe"
-        >
-    </app-error-card>
+    <app-error  i18n-title="@@Virhe"
+                message="{{ errorMessage }}"
+                [styles]="{ margin: '1em 0' }"
+                title="Virhe"
+                >
+    </app-error>
   </mat-card-content>
 
 </div>

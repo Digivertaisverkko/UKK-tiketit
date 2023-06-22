@@ -1,0 +1,59 @@
+<div class="vertical-spacer"></div>
+
+<app-headline [appHeadline]="true"></app-headline>
+
+<div class="content">
+  <h2 class="theme-subheading" i18n="@@Sisäänkirjautuminen">
+    Sisäänkirjautuminen
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <mat-form-field>
+      <input  formControlName="email"
+              i18n-placeholder="@@Käyttäjätunnus"
+              matInput
+              name="email"
+              placeholder="Käyttäjätunnus"
+              >
+      <mat-error  i18n="@@Käyttäjätunnus tarvitaan."
+                  *ngIf="email?.errors?.['required']"
+                  >
+        Käyttäjätunnus tarvitaan.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input  formControlName="password"
+              i18n-placeholder="@@Salasana"
+              matInput
+              name="password"
+              placeholder="Salasana"
+              type="password"
+              >
+      <mat-error  i18n="@@Salasana tarvitaan"
+                  *ngIf="password?.errors?.['required']"
+                  >
+        Salasana tarvitaan.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Custom-komponentti shared-moduulista. -->
+    <app-error  i18n-title="@@Kirjautuminen ei onnistunut"
+                message="{{ errorMessage }}"
+                *ngIf="errorMessage.length > 0"
+                [styles]="{ margin: '1em 10% 1em 10%;'}"
+                title="Kirjautuminen ei onnistunut"
+                >
+    </app-error>
+
+    <button color="primary"
+            [disabled]="!form.valid"
+            i18n="@@Kirjaudu"
+            mat-raised-button
+            type="submit"
+            >
+      Kirjaudu
+    </button>
+
+  </form>
+</div>

@@ -9,12 +9,11 @@
       >
   </app-beginning-button>
 
-  <app-error-card
-      [confirmLeave]="true"
-      *ngIf="showConfirm"
-      [styles]="{ margin: '2rem 0 0 0' }"
-      >
-  </app-error-card>
+  <app-error  [confirmLeave]="true"
+              *ngIf="showConfirm"
+              [styles]="{ margin: '2rem 0 0 0' }"
+              >
+  </app-error>
 
   <form accept-charset="UTF-8"
         enctype="multipart/form-data"
@@ -23,13 +22,13 @@
         >
 
     <div class="ticket-header">
-      <mat-form-field appearance="fill" class="sub-header">
+      <mat-form-field appearance="fill" class="theme-subheading">
         <textarea aria-label="Otsikko"
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
                   cdkTextareaAutosize
-                  class="sub-header"
+                  class="theme-subheading"
                   i18n-placeholder="@@Otsikko"
                   formControlName="title"
                   matInput
@@ -109,7 +108,7 @@
     </section>
 
     <h1><span i18n="@@Kysymys">Kysymys</span><span>*</span></h1>
-    <app-editor formControlName="question"></app-editor>
+    <app-editor formControlName="question" ngDefaultControl></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="question?.errors?.['required'] && question?.touched"
                 >
@@ -122,7 +121,7 @@
     </mat-error>
 
     <h1><span i18n="@@Vastaus">Vastaus</span><span>*</span></h1>
-    <app-editor formControlName="answer"></app-editor>
+    <app-editor formControlName="answer" ngDefaultControl></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="answer?.errors?.['required'] && answer?.touched"
                 >
@@ -141,13 +140,13 @@
       Uuden usein kysytyn kysymyksen lähettäminen onnistui.
     </p>
 
-    <app-error-card i18n-title="@@Virhe"
-                    message="{{ errorMessage }}"
-                    *ngIf="errorMessage.length > 0"
-                    [styles]="{ margin: '1em 0' }"
-                    title="Virhe"
-                    >
-    </app-error-card>
+    <app-error  i18n-title="@@Virhe"
+                message="{{ errorMessage }}"
+                *ngIf="errorMessage.length > 0"
+                [styles]="{ margin: '1em 0' }"
+                title="Virhe"
+                >
+    </app-error>
 
     <div class="theme-actions">
 
@@ -168,13 +167,13 @@
         <span i18n="@@Pakollinen">Pakollinen</span>
       </div>
 
-      <!-- TicketId on asetettu, jos editoidaan olemassa olevaa UKK:a. -->
+      <!-- ticketid on asetettu, jos editoidaan olemassa olevaa UKK:a. -->
       <button class="cancel-button"
               [disabled]="state!=='editing'"
               i18n="@@Peru"
               mat-raised-button
-              *ngIf="ticketId"
-              [routerLink]="'/course/' + courseId + '/faq-view/' + ticketId"
+              *ngIf="ticketid"
+              [routerLink]="'/course/' + courseid + '/faq-view/' + ticketid"
               type="button"
               >
         Peru
@@ -206,6 +205,7 @@
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
                           formControlName="attachments"
                           [oldAttachments]="oldAttachments"
+                          [ticketID]="ticketid"
                           [uploadClicks]="uploadClick.asObservable()"
                           >
     </app-edit-attachments>
@@ -214,12 +214,12 @@
 
 <!--------------- Alkuperäinen kysymys ---------------------------------------->
 
-  <ng-container *ngIf="originalTicket !== undefined && !ticketId">
+  <ng-container *ngIf="originalTicket !== undefined && !editExisting">
     <hr class="theme-divider">
     <h1 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
     </h1>
-    <app-ticket-view [ticketIdFromParent]="ticketId"></app-ticket-view>
+    <app-ticket-view [ticketIdFromParent]="ticketid"></app-ticket-view>
   </ng-container>
 
 </div>

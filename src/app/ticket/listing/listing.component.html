@@ -2,7 +2,7 @@
 
 <ng-container *ngIf="isLoaded">
 
-  <app-error-card
+  <app-error
       [buttonText]="noDataConsent ? strings.get('Luo tili') ?? '' :
                     strings.get('Kirjaudu') ?? ''"
       (clickEvent)="errorClickEvent($event)"
@@ -10,19 +10,30 @@
       *ngIf="(isLoggedIn$ | async) === false; else notParticipant"
       [title]="strings.get('Et ole kirjautunut-title') ?? ''"
       >
-  </app-error-card>
+  </app-error>
 
   <ng-template #notParticipant>
-    <app-error-card
+    <app-error
         [message]="strings.get('Ei osallistujana-msg') ?? ''"
         *ngIf="(isParticipant$ | async) === false"
         [title]="strings.get('Et osallistujana-title') ?? ''"
         >
-    </app-error-card>
+    </app-error>
 
   </ng-template>
 
+  <app-error  *ngIf="errorFromComponent"
+              [message]="errorFromComponent"
+              >
+  </app-error>
+
 </ng-container>
+
+<app-success  *ngIf="successMessage"
+              styles="margin-top: 1.5rem; margin-bottom: -0.5rem"
+              >
+  {{ successMessage }}
+</app-success>
 
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
@@ -39,7 +50,7 @@
 <section [ngStyle]="{ 'display': 'isLoaded' ? 'block' : 'none' }">
 
 <div class="input-field-wrapper">
-  <h2 class="sub-header table-header" i18n="@@Usein kysytyt kysymykset">
+  <h2 class="theme-subheading table-header" i18n="@@Usein kysytyt kysymykset">
     Usein kysytyt kysymykset
   </h2>
 
@@ -92,8 +103,13 @@
   <ng-container i18n-sortActionDescription="@@Järjestä päivämäärän mukaan"
                 matColumnDef="aikaleima"
                 >
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
-      sortActionDescription="Järjestä päivämäärän mukaan" i18n="@@Päivämäärä">
+    <th class="align-right"
+        *matHeaderCellDef
+        i18n="@@Päivämäärä"
+        mat-header-cell
+        mat-sort-header
+        sortActionDescription="Järjestä päivämäärän mukaan"
+        >
       Päivämäärä
     </th>
     <td class="cell-align-right" mat-cell *matCellDef="let element">
@@ -119,16 +135,15 @@
 <!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"
         showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->
 
-  <app-error-card
-      buttonText="{{ error.buttonText }}"
-      (clickEvent)="errorClickEvent($event)"
-      i18n-title="{{ error.title }}"
-      message="{{ error.message }}"
-      *ngIf="isLoaded && error !== null"
-      #ticketError
-      title="{{ error.title }}"
-      >
-  </app-error-card>
+  <app-error buttonText="{{ error.buttonText }}"
+            (clickEvent)="errorClickEvent($event)"
+            i18n-title="{{ error.title }}"
+            message="{{ error.message }}"
+            *ngIf="isLoaded && error !== null"
+            #ticketError
+            title="{{ error.title }}"
+            >
+  </app-error>
 
   <div  class="buttons-wrapper theme-actions"
         *ngIf="((user$ | async)?.asema === 'opettaja' ||
@@ -155,7 +170,7 @@
 
 <!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. -->
 <section class="feedback">
-  <h2 class="sub-header" i18n="@@Onko sinulla ongelmia tämän järjestelmän kanssa?">Onko sinulla ongelmia tämän järjestelmän kanssa?</h2>
+  <h2 class="theme-subheading" i18n="@@Onko sinulla ongelmia tämän järjestelmän kanssa?">Onko sinulla ongelmia tämän järjestelmän kanssa?</h2>
   <p i18n="@@Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?">
     Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?
   </p>

@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component }
+import { ChangeDetectorRef, Component }
     from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { getIsInIframe } from '@shared/utils';
+import { AuthService } from '../services/auth.service';
 import { User } from '@core/core.models';
-import { StoreService } from '../store.service';
+import { StoreService } from '../services/store.service';
 import { getCourseIDfromURL } from '@shared/utils';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-usermenu',
@@ -31,7 +30,8 @@ export class UsermenuComponent  {
     private store: StoreService
     ) {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    this.isInIframe = getIsInIframe();
+    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
+        true : false;
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
@@ -79,13 +79,19 @@ export class UsermenuComponent  {
     if (courseID === null) {
       throw new Error('header.component.ts.login: ei kurssi ID:ä.');
     }
-    this.authService.saveRedirectURL();
-    this.authService.navigateToLogin(courseID);
+    const currentRoute = window.location.pathname + window.location.search;
+    if (currentRoute.indexOf('/register') !== -1 &&
+        currentRoute.indexOf('/login') !== -1) {
+      this.authService.saveRedirectURL();
+    }
+      this.authService.navigateToLogin(courseID);
   }
 
   public logout() {
     const courseID = getCourseIDfromURL();
-    this.authService.logout(courseID);
+    this.authService.logout().then(res => {
+      this.authService.navigateToLogin(courseID);
+    })
   }
 
   public openInNewTab(): void {

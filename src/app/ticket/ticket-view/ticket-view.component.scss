@@ -44,6 +44,19 @@
   }
 }
 
+.h3-wrapper {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  button {
+    margin-bottom: 0.7rem;
+  }
+}
+
+.discussion-h3 {
+  display: inline-block;
+}
+
 .theme-actions {
   gap: 0.8rem
 }
@@ -78,7 +91,7 @@ mat-radio-button {
 }
 
 @media (max-width: $XSmall) {
-  .sub-header {
+  .ticket-headline {
     order: 2;
   }
 }
