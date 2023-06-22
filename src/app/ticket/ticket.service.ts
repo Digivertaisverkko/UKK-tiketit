@@ -316,7 +316,6 @@ export class TicketService {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
     let response: any;
     try {
-      // throw Error
       response = firstValueFrom(this.http.delete(url));
     } catch (error: any) {
       this.handleError(error);
@@ -381,7 +380,7 @@ export class TicketService {
         tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
-        aikaleima: ticket.aikaleima,
+        aikaleima: ticket.viimeisin,
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
       }
     ));

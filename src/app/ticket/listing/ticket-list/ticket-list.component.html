@@ -112,8 +112,9 @@
     <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
         sortActionDescription="Järjestä luodun päivämäärän mukaan"
         i18n-sortActionDescription="@@Järjestä luodun mukaan"
-        i18n="@@Luotu">
-      Luotu
+        i18n="@@Muokattu"
+        >
+      Muokattu
     </th>
     <td mat-cell *matCellDef="let element" class="cell-align-right">
       <a  aria-disabled="true"
@@ -305,14 +306,14 @@
 
 <ng-container matColumnDef="aikaleima">
 <th class="align-right"
-    i18n-sortActionDescription="@@Järjestä luodun mukaan"
-    i18n="@@Luotu"
+    i18n-sortActionDescription="@@Järjestä muokatun mukaan"
+    i18n="@@Muokattu"
     mat-header-cell
     *matHeaderCellDef
     mat-sort-header
-    sortActionDescription="Järjestä luodun päivämäärän mukaan"
+    sortActionDescription="Järjestä muokkauksen päivämäärän mukaan"
     >
-  Luotu
+  Muokattu
 </th>
 <td mat-cell *matCellDef="let element" class="cell-align-right">
   <a  aria-disabled="true"
