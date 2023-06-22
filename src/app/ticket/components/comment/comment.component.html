@@ -198,6 +198,7 @@
         formControlName="attachments"
         id="attachments-{{comment.id}}"
         [oldAttachments]="comment.liitteet"
+        [ticketID]="ticketID"
         [uploadClicks]="uploadClick.asObservable()"
         >
     </app-edit-attachments>

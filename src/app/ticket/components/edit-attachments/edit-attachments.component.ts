@@ -35,7 +35,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   @Input() oldAttachments: Liite[] = [];
   @Input() uploadClicks = new Observable();
-  @Input() ticketID?: string | null = '';
+  @Input() ticketID: string | null = '';
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -155,6 +155,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   public async removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
+
       if (this.filesToRemove.length === 0) resolve(true);
       const courseID = getCourseIDfromURL();
       if (this.ticketID == null) {

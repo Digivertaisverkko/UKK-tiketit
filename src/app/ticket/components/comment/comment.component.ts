@@ -132,8 +132,16 @@ export class CommentComponent implements AfterViewInit, OnInit{
     const commentText = this.form.controls['message'].value;
     const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
-        commentState, courseID)
-      .then(() => {
+      commentState, courseID).then(() => {
+        if (this.attachments.filesToRemove.length === 0) {
+          return true
+        }
+        return this.attachments.removeSentFiles();
+      })
+      .then((res: boolean) => {
+        if (res === false) {
+          this.errorMessage = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
+        }
         if (this.fileInfoList.length === 0) {
           this.stopEditing();
           return
