@@ -42,6 +42,7 @@ export class SubmitFaqComponent implements OnInit {
   // UKK on kopioitu tiketistä.
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
+  private errorForListing: string | undefined;
   private isCopiedFromTicket: boolean = window.history.state.copiedFromTicket ?? false;
 
   get additionalFields(): FormArray {
@@ -168,10 +169,16 @@ export class SubmitFaqComponent implements OnInit {
   }
 
   public goBack(): void {
-    this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
+    if (this.errorForListing) {
+      const route = 'course/' + this.courseid + '/list-tickets';
+      const data = { error: this.errorForListing };
+      this.router.navigate([route], { state: data });
+    } else {
+      this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
+    }
   }
 
-  private prepareSendFiles(response: any): void {
+  private prepareSendFiles(response?: any): void {
     if (!this.editExisting && response?.uusi == null) {
       this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
@@ -208,13 +215,23 @@ export class SubmitFaqComponent implements OnInit {
 
   private submitEditedFAQ(faq: UusiUKK, ticketId: string): void {
     this.ticketService.editFaq(ticketId, faq, this.courseid)
-      .then(response => {
-        if (this.attachments.fileInfoList.length === 0) this.goBack();
+      .then((response: { success: boolean }) => {
         if (response === null || response?.success !== true) {
           throw new Error('UKK:n muokkaaminen epäonnistui.');
         }
+        console.log('poistettavia tiedostoja: ' + this.attachments.filesToRemove.length);
+        if (this.attachments.filesToRemove.length === 0) {
+          console.log('ei poistettavaa');
+          return true
+        }
+        return this.attachments.removeSentFiles();
+      }).then((res: boolean) => {
+        if (res === false) {
+          this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
+        }
+        if (this.attachments.fileInfoList.length === 0) this.goBack();
         this.isFaqSent = true;
-        this.prepareSendFiles(response);
+        this.prepareSendFiles();
       })
       .catch( error => {
         // ? lisää eri virhekoodeja?
