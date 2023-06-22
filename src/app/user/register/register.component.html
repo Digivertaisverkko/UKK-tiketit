@@ -28,20 +28,37 @@
               name="email"
               required
               />
-      <mat-error i18n="@@Sähköposti tarvitaan">
-        Sähköposti tarvitaan
-      </mat-error>
       <!-- <mat-icon matSuffix>email</mat-icon> -->
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label i18n="@@Muille näkyvä nimesi">Muille näkyvä nimesi</mat-label>
+      <input  formControlName="name"
+              matInput
+              maxlength="255"
+              type="name"
+              required
+              />
+      <mat-error  i18n="@@Nimi tarvitaan"
+                  *ngIf="name?.errors?.['required']"
+                  >
+        Nimi tarvitaan.
+      </mat-error>
+      <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 
     <mat-form-field>
       <mat-label i18n="@@Salasana">Salasana</mat-label>
       <input  formControlName="password"
               matInput
+              maxlength="255"
               type="password"
               required
               />
-      <mat-error>Salasana tarvitaan.</mat-error>
+      <mat-error  i18n="@@Salasana tarvitaan"
+                  *ngIf="password?.errors?.['required']"
+                  >
+        Salasana tarvitaan.</mat-error>
       <!-- <mat-icon matSuffix>lock</mat-icon> -->
     </mat-form-field>
 

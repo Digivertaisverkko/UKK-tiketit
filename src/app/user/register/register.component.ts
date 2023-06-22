@@ -42,6 +42,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
     return this.form.get('email') as FormControl
   }
 
+  get name(): FormControl {
+    return this.form.get('name') as FormControl
+  }
+
   get password(): FormControl {
     return this.form.get('password') as FormControl
   }
@@ -80,14 +84,21 @@ export class RegisterComponent implements OnInit, OnDestroy{
         value: '',
         disabled: true
       }],
-      password:  [
+      name: [
         '',
         Validators.compose([
           Validators.required,
           Validators.maxLength(255)
         ])
       ],
-      repassword:  [
+      password: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)
+        ])
+      ],
+      repassword: [
         '',
         Validators.compose([
           Validators.required
@@ -109,10 +120,13 @@ export class RegisterComponent implements OnInit, OnDestroy{
   }
 
   public submit() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
     this.errorMessage = '';
     const email = this.form.controls['email'].value;
+    const name = this.form.controls['name'].value;
     const password = this.form.controls['password'].value;
-    this.auth.createAccount(email, password, this.invitation).then(res => {
+    this.auth.createAccount(name, email, password, this.invitation).then(res => {
       if (res?.success === true) {
         console.log('luonti onnistui');
         return;

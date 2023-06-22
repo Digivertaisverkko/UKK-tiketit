@@ -76,13 +76,12 @@ export class AuthService {
   }
 
   // Liitä ulkopuolinen käyttäjä kurssille.
-  public async createAccount(email: string, password: string, inviteID: string):
+  public async createAccount(name: string, email: string, password: string, inviteID: string):
       Promise<{ success: boolean }> {
   let response;
   const url = `${this.api}/luotili`;
-  // ktunnus ja sposti ovat tarkoituksella samoja.
   const body = {
-    ktunnus: email,
+    nimi: name,
     salasana: password,
     sposti: email,
     kutsu: inviteID
