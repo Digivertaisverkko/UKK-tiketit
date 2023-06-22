@@ -182,24 +182,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 
-  public removeTicket(ticketID: string, courseID: string): void {
-    this.ticketService.removeTicket(ticketID, courseID).then(response => {
-      if (response?.success !== true ) {
-        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
-            Kysymyksen poistaminen ei onnistunut.`;
-      } else {
-        this.router.navigateByUrl('/course/' + this.courseid + '/list-tickets');
-      }
-    }).catch(error => {
-      if (error?.tunnus == 1003) {
-        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
-      } else {
-        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
-            Kysymyksen poistaminen ei onnistunut.`;
-      }
-    })
-  }
-
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila, this.user.asema);
   }
@@ -217,6 +199,24 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     } else if (event === "continue") {
       this.state = 'editing';
     }
+  }
+
+  public removeTicket(ticketID: string, courseID: string): void {
+    this.ticketService.removeTicket(ticketID, courseID).then(response => {
+      if (response?.success !== true ) {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
+            Kysymyksen poistaminen ei onnistunut.`;
+      } else {
+        this.router.navigateByUrl('/course/' + this.courseid + '/list-tickets');
+      }
+    }).catch(error => {
+      if (error?.tunnus == 1003) {
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+      } else {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
+            Kysymyksen poistaminen ei onnistunut.`;
+      }
+    })
   }
 
   public sendComment(): void {
