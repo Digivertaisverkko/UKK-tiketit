@@ -85,6 +85,7 @@ export interface TiketinPerustiedot {
   aikaleima: string;
   aloittaja: User;
   tila: number;
+  viimeisin: string;
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
