@@ -1,4 +1,3 @@
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
@@ -14,7 +13,7 @@ import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
-import { Error, User } from '@core/core.models';
+import { User } from '@core/core.models';
 import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
@@ -36,9 +35,9 @@ interface ErrorNotification {
 })
 
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() public courseid: string = '';
   @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
   public columnDefinitions: ColumnDefinition[];
-  public courseID: string = '';
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
   public errorFromComponent: string | null = null;
@@ -72,7 +71,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
-    private route : ActivatedRoute,
     private store : StoreService,
     private ticket:TicketService,
     private title : Title
@@ -103,7 +101,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.url = window.location.pathname;
     this.checkRouterData();
-    this.trackCourseID();
+    this.startPollingFAQ(this.POLLING_RATE_MIN);
     // this.trackLoggedStatus();
     this.trackScreenSize();
   }
@@ -129,8 +127,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public GoToLogin(): void {
-    if (!this.courseID) return
-    this.authService.navigateToLogin(this.courseID)
+    if (!this.courseid) return
+    this.authService.navigateToLogin(this.courseid)
   }
 
   // Näytä mahdollisesti routen mukana tullut viesti tai virheilmoitus.
@@ -149,7 +147,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.noDataConsent === true && this.isInIframe === true) {
       this.showConsentPopup();
     } else if (this.noDataConsent !== true && this.isInIframe === false) {
-      this.authService.navigateToLogin(this.courseID);
+      this.authService.navigateToLogin(this.courseid);
     }
   }
 
@@ -231,7 +229,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('listing.trackMessages: saatiin refresh pyyntö.');
         this.isLoaded = false;
         setTimeout(() => this.isLoaded = true, 800);
-        this.fetchFAQ(this.courseID, true);
+        this.fetchFAQ(this.courseid, true);
       }
     });
   }
@@ -258,21 +256,11 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
-    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
+    const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     if (this.store.getIsLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
       window.localStorage.setItem('REDIRECT_URL', link);
     }
-  }
-
-  // Seurataan kurssi ID:ä URL:sta.
-  private trackCourseID(): void {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      const courseID = paramMap.get('courseid');
-      if (courseID != null) this.courseID = courseID;
-      // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
-      this.startPollingFAQ(this.POLLING_RATE_MIN);
-    })
   }
 
   private trackLoggedStatus(): void {
@@ -325,7 +313,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     let elapsedTime: number | undefined;
     const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
     this.fetchFAQsTimer$.subscribe(() => {
-      this.fetchFAQ(this.courseID!);
+      this.fetchFAQ(this.courseid!);
       if (fetchStartTime) {
         elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
         console.log('UKK-pollauksen viime kutsusta kulunut aikaa ' +
