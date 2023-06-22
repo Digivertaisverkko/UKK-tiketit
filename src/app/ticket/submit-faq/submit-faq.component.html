@@ -219,7 +219,10 @@
     <h1 class="main-header" i18n="@@Alkuperäinen kysymys">
       Alkuperäinen kysymys
     </h1>
-    <app-ticket-view [ticketIdFromParent]="ticketid"></app-ticket-view>
+    <app-ticket-view  [courseid]="courseid"
+                      [ticketIdFromParent]="ticketid"
+                      >
+    </app-ticket-view>
   </ng-container>
 
 </div>
