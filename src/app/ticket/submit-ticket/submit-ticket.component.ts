@@ -197,17 +197,12 @@ export class SubmitTicketComponent implements OnInit {
           throw Error
         }
         if (this.attachments.filesToRemove.length === 0) {
-          console.log('ei poistettavaa');
           return true
         }
-        console.log('poistetaan tiedostoja');
         return this.attachments.removeSentFiles();
-      }).then((res: boolean | undefined) => {
-        if (res !== undefined) {
-          console.log('tiedostojen poistaminen palautti: ' + res);
-          if (res === false) {
-            this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
-          }
+      }).then((res: boolean) => {
+        if (res === false) {
+          this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
         }
         // this.printFileInfoListLog();
         if (this.fileInfoList !== undefined) {
