@@ -306,7 +306,7 @@ export class TicketService {
   }
 
   // Testaamista varten.
-  private getRandomArbitrary(min: number, max: number) {
+  private getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
@@ -381,9 +381,11 @@ export class TicketService {
         otsikko: ticket.otsikko,
         aikaleima: ticket.viimeisin,
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
-        kentat: ticket.kentat
+        kentat: ticket.kentat,
+        liite: ticket.liite ?? false
       }
-    ));
+      // liite: this.getRandomInt(1,5) === 2 ? true : false
+      ));
     return sortableData;
   }
 

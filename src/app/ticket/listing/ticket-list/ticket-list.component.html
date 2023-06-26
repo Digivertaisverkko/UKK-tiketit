@@ -122,8 +122,20 @@
           [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
           tabindex="-1"
           >
-        {{element.aikaleima | date: 'shortDate' }}
+        {{ element.aikaleima | date: 'shortDate' }}
       </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="liite">
+    <th class="align-right" mat-header-cell *matHeaderCellDef>
+    </th>
+    <td class="attachment-cell"mat-cell *matCellDef="let element">
+      <mat-icon
+                *ngIf="element.liite"
+                >
+        attach_file
+      </mat-icon>
     </td>
   </ng-container>
 
@@ -215,7 +227,7 @@
 </div>
 
 
-<!-------------- Ratkaistut ------------------------------------------------>
+<!-------------- Ratkaistut --------------------------------------------------->
 
 <ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
 

@@ -62,9 +62,11 @@ a {
 
 .mat-column-aikaleima {
   text-align: right;
+  max-width: 7rem;
 }
 
-// headereissa sorting-nuoli ottaa oikealta puolelta tilaa.
+/* Jotta menee on samassa tasossa headerien kanssa, joilla sorting-nuoli ottaa
+   oikealta puolelta tilaa. */
 .cell-align-right {
   padding-right: 2.1rem;
 }
@@ -141,6 +143,8 @@ button {
     padding-bottom: 2em;
   }
 
+  // Oikeimman sarakkeen sorting-nuoli ottaa tilaa,
+  // niin komsenoidaan sitä.
   tr> :first-child {
     padding-left: 1.5em;
   }

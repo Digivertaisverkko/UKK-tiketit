@@ -68,7 +68,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   @Input() public user: User | null = null;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
-  public columnDefinitions: ColumnDefinition[];
+  public columnDefinitions!: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
   public error: ErrorNotification | null = null;
@@ -96,14 +96,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
     this.fetchTicketsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
     this.trackMessages$ = this.store.trackMessages().pipe(takeUntilDestroyed());
-
-    this.columnDefinitions = [
-      { def: 'tila', showMobile: true },
-      { def: 'otsikko', showMobile: true },
-      { def: 'aloittajanNimi', showMobile: false },
-      { def: 'aikaleima', showMobile: false }
-    ];
-
+    this.setBaseColumnDefinitions();
     this.isArchivedShown = window.sessionStorage.getItem('SHOW_ARCHIVED') === 'true' ?
         true : false;
   }
@@ -149,11 +142,16 @@ export class TicketListComponent implements OnInit, AfterViewInit {
 
   // Hae tiketit kerran.
   public fetchTickets(courseID: string) {
-    this.ticket.getTicketList(courseID).then(response => {
+    this.ticket.getTicketList(courseID).then((response: SortableTicket[] | null) => {
       if (!response) return
       if (response.length > 0) {
         this.error = null;
         console.dir(response);
+        const hasAttachment = response.some(ticket => ticket.liite === true);
+        this.setBaseColumnDefinitions();
+        if (hasAttachment) {
+          this.columnDefinitions.push({ def: 'liite', showMobile: false })
+        }
         this.dataSource = new MatTableDataSource(response);
         this.numberOfQuestions = response.length;
         // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
@@ -216,6 +214,15 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
     window.localStorage.setItem('REDIRECT_URL', link);
+  }
+
+  private setBaseColumnDefinitions() {
+    this.columnDefinitions = [
+      { def: 'tila', showMobile: true },
+      { def: 'otsikko', showMobile: true },
+      { def: 'aloittajanNimi', showMobile: false },
+      { def: 'aikaleima', showMobile: false }
+    ];
   }
 
   public showArchived() {

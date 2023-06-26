@@ -75,6 +75,7 @@ export interface SortableTicket {
   aloittajanNimi: string
   tilaID: number;
   tila: string;
+  liite?: boolean;
   kentat: [{
     tiketti: string;
     arvo: string;
@@ -96,6 +97,7 @@ interface Tikettipohja {
 // Tikettilistan näyttämistä varten.
 export interface TikettiListassa extends Tikettipohja {
   viimeisin: string;
+  liite?: boolean;
   kentat: [{
     tiketti: number;
     arvo: string;
