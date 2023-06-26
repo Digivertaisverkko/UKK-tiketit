@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
 import { Role } from '../core/core.models';
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
-  SortableTicket, TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK }
+  SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
   from './ticket.models';
 import { StoreService } from '../core/services/store.service';
 
@@ -360,12 +360,11 @@ export class TicketService {
     try {
       console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
-        this.http.get<TiketinPerustiedot[]>(url).pipe(
+        this.http.get<TikettiListassa[]>(url).pipe(
           timeout(3000),
           retry(3)
         )
       )
-    console.log('haettiin tiketit.');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -374,14 +373,15 @@ export class TicketService {
     const myName = user?.nimi ?? '';
     const myRole = user?.asema ?? '';
     const me = $localize`:@@Minä:Minä`;
-    let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
+    let sortableData: SortableTicket[] = response.map((ticket: TikettiListassa) => (
       {
         tilaID: ticket.tila,
         tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
         aikaleima: ticket.viimeisin,
-        aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
+        aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
+        kentat: ticket.kentat
       }
     ));
     return sortableData;

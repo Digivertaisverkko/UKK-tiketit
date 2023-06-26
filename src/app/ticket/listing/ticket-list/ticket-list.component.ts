@@ -27,6 +27,34 @@ interface ErrorNotification {
   buttonText?: string
 }
 
+/* Tämä tarvitaan mat-tablen oletuksen sijaan, jotta voi etsiä myös lisäkenttien
+tiedoilla. */
+const customFilterPredicate = (data: SortableTicket, filter: string) => {
+  const filterValue = filter.toLowerCase();
+
+  const kentatMatch = data.kentat.some((item) => {
+    const tiketti = item.tiketti ? item.tiketti : '';
+    const arvo = item.arvo ? item.arvo.toLowerCase() : '';
+    const otsikko = item.otsikko ? item.otsikko.toLowerCase() : '';
+
+    return (
+      tiketti === filterValue ||
+      arvo.includes(filterValue) ||
+      otsikko.includes(filterValue)
+    );
+  });
+
+  const mainDataMatch = (
+    data.id.toString() === filterValue ||
+    data.otsikko.toLowerCase().includes(filterValue) ||
+    data.aikaleima.toLowerCase().includes(filterValue) ||
+    data.aloittajanNimi.toLowerCase().includes(filterValue) ||
+    data.tila.toLowerCase().includes(filterValue)
+  );
+
+  return kentatMatch || mainDataMatch;
+};
+
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
@@ -100,6 +128,10 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
+  private static customFilterPredicate(data: SortableTicket, filter: string): boolean {
+    return customFilterPredicate(data, filter);
+  }
+
   // Hae arkistoidut tiketit.
   public fetchArchivedTickets() {
     if (this.courseid === null) return
@@ -121,11 +153,13 @@ export class TicketListComponent implements OnInit, AfterViewInit {
       if (!response) return
       if (response.length > 0) {
         this.error = null;
+        console.dir(response);
         this.dataSource = new MatTableDataSource(response);
         this.numberOfQuestions = response.length;
         // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
         // jotta sorting toimii.
         this.dataSource.sort = this.sortQuestions;
+        this.dataSource.filterPredicate = TicketListComponent.customFilterPredicate;
       }
       return
     }).catch(error => {

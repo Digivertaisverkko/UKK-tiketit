@@ -75,17 +75,32 @@ export interface SortableTicket {
   aloittajanNimi: string
   tilaID: number;
   tila: string;
+  kentat: [{
+    tiketti: string;
+    arvo: string;
+    otsikko: string;
+  }]
 }
 
-// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
-// Tikettilistan näyttämistä varten.
-export interface TiketinPerustiedot {
+// Käytetään pohjana muihin interfaceihin.
+interface Tikettipohja {
   id: string;
   otsikko: string;
   aikaleima: string;
   aloittaja: User;
   tila: number;
+  ukk: boolean;
+}
+
+// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
+// Tikettilistan näyttämistä varten.
+export interface TikettiListassa extends Tikettipohja {
   viimeisin: string;
+  kentat: [{
+    tiketti: number;
+    arvo: string;
+    otsikko: string;
+  }]
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
@@ -94,10 +109,9 @@ export interface TiketinPerustiedot {
   viestin sisällön, josta tulee jäsenmuuttujan "viesti" -sisältö ja sen id:stä
   kommenttiID. Tätä tarvitaan mm.  Vastaavasti 1. kommentin liitteet
   ovat tiketin liitteitä. */
-export interface Tiketti extends TiketinPerustiedot {
+export interface Tiketti extends Tikettipohja {
   kurssi: number;
   viesti: string;
-  ukk?: boolean;
   arkistoitava: boolean;
   kentat?: Array<Kentta>;
   kommenttiID: string;
