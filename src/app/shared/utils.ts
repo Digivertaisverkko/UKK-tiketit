@@ -1,3 +1,5 @@
+import { Role } from "@core/core.models";
+
 export function getCourseIDfromURL(): string | null {
   const pathArray = window.location.pathname.split('/');
   let courseID: string | null;
@@ -7,6 +9,22 @@ export function getCourseIDfromURL(): string | null {
     courseID = null;
   }
   return courseID
+}
+
+// Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
+export function getRoleString(asema: Role | null): string {
+  let role: string;
+    switch (asema) {
+      case 'opiskelija':
+        role = $localize`:@@Opiskelija:Opiskelija`; break;
+      case 'opettaja':
+        role = $localize`:@@Opettaja:Opettaja`; break;
+      case 'admin':
+        role = $localize`:@@Admin:Admin`; break;
+      default:
+        role = '';
+    }
+    return role;
 }
 
   // Onko annettu aikaleima tänään.

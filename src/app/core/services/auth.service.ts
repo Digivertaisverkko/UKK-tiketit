@@ -12,6 +12,7 @@ import { CourseService } from '@course/course.service';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 import { getCourseIDfromURL } from '@shared/utils';
+import { getRoleString } from '@shared/utils';
 import { Kurssini } from '@course/course.models';
 import { LoginInfo, Role, User } from '../core.models';
 import { StoreService } from './store.service';
@@ -55,8 +56,6 @@ export class AuthService {
   // private user$ = new BehaviorSubject(null) ;
   // TODO: nämä oAuth tiedot yhteen tietotyyppiin.
   private codeVerifier: string = '';
-  private codeChallenge: string = '';
-  private loginCode: string = '';
 
   private courseID: string | null = null;
 
@@ -130,22 +129,6 @@ export class AuthService {
     })
   }
 
-  // Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
-  private getRoleString(asema: Role | null): string {
-    let role: string;
-      switch (asema) {
-        case 'opiskelija':
-          role = $localize`:@@Opiskelija:Opiskelija`; break;
-        case 'opettaja':
-          role = $localize`:@@Opettaja:Opettaja`; break;
-        case 'admin':
-          role = $localize`:@@Admin:Admin`; break;
-        default:
-          role = '';
-      }
-      return role;
-  }
-
   public async sendDataConsent(tokenid: string | null, allow: boolean):
       Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
@@ -204,7 +187,7 @@ export class AuthService {
     let newUserInfo: any;
     if (response != null && response.oikeudet != null)  {
       newUserInfo = response.oikeudet;
-      newUserInfo.asemaStr = this.getRoleString(newUserInfo.asema);
+      newUserInfo.asemaStr = getRoleString(newUserInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
     } else {
@@ -300,7 +283,7 @@ export class AuthService {
       throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
     }
     this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
+    const codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
     // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
     // Jos haluaa storageen tallentaa:
     // this.storage.set('state', state);
@@ -309,7 +292,7 @@ export class AuthService {
     const httpOptions =  {
       headers: new HttpHeaders({
         'login-type': loginType,
-        'code-challenge': this.codeChallenge,
+        'code-challenge': codeChallenge,
         'kurssi': courseID
       })
     };
@@ -347,8 +330,8 @@ export class AuthService {
       this.handleError(error);
     }
     if (response.success == true && response['login-code'] !== undefined) {
-      this.loginCode = response['login-code'];
-      return this.authenticate(this.codeVerifier, this.loginCode);
+      const loginCode = response['login-code'];
+      return this.authenticate(this.codeVerifier, loginCode);
     } else {
       return { success: false };
     }
