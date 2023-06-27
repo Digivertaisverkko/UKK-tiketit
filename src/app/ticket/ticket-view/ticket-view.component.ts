@@ -156,6 +156,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
       this.ticket = response;
+      console.dir(response);
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
         this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
