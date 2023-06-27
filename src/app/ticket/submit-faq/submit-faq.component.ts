@@ -237,7 +237,6 @@ export class SubmitFaqComponent implements OnInit {
         // ? lisää eri virhekoodeja?
         this.state = 'editing';
         this.form.enable();
-        // TODO: Muuta muokkaamiseksi.
         this.errorMessage = $localize`:@@UKK muokkaaminen epäonnistui:
             Usein kysytyn kysymyksen muokkaaminen ei onnistunut` + '.';
       });

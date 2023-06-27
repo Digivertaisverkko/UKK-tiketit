@@ -57,7 +57,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
       email: [
         '',
         Validators.compose([
-          //Validators.email, TODO: kun loginit on emaileja, niin uncomment
           Validators.required
         ])
       ],

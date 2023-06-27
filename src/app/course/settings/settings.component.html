@@ -123,7 +123,7 @@
 
 <form class="invite-form"
       [formGroup]="form"
-      (ngSubmit)="sendInvite()"
+      (ngSubmit)="submitInvite()"
       >
 
   <h2 class="theme-subheading" i18n="@@Kutsu ulkopuolisia kurssille">
@@ -151,6 +151,11 @@
                   *ngIf="email.errors?.['required']"
                   >
         Pakollinen kenttä.
+      </mat-error>
+      <mat-error  i18n="@@Ei ole sähköpostiosoite"
+                  *ngIf="email.errors?.['notEmail']"
+                  >
+        Ei ole sähköpostiosoite.
       </mat-error>
     </mat-form-field>
 

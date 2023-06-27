@@ -191,7 +191,6 @@ export class TicketService {
         )
       )
       // response = await firstValueFrom(this.http.get<UKK[]>(url));
-      console.log('haettiin UKK:t');
     } catch (error: any) {
       this.handleError(error);
     }

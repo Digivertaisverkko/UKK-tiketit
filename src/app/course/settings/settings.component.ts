@@ -11,6 +11,7 @@ import { GenericResponse, Role, User } from '@core/core.models';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { isEmail } from '@shared/directives/is-email.directive';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -62,9 +63,18 @@ export class SettingsComponent implements OnInit {
 
   private buildForm(): FormGroup {
     return this.formBuilder.group({
-      email: [ '', Validators.required ],
+      email: [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ],
       role: [ 1 ]
-    })
+    }, {
+      validators: [ isEmail('email') ]
+    }
+    
+    )
   }
 
   public drop(event: CdkDragDrop<string[]>) {
@@ -116,8 +126,10 @@ export class SettingsComponent implements OnInit {
     return role
   }
 
-  public sendInvite() {
+  public submitInvite() {
+    this.form.markAllAsTouched();
     this.inviteErrorMessage = '';
+    if (this.form.invalid) return;
     const email = this.form.controls['email'].value;
     const checkboxValue = this.form.controls['role'].value;
     const role: Role = this.getRole(checkboxValue);

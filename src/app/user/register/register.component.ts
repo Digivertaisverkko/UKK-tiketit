@@ -158,7 +158,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     this.isLoggedIn$ = this.store.onIsUserLoggedIn().pipe(
       takeWhile(() => this.isLoggedIn === undefined, true)
     ).subscribe(res => {
-      console.log('logged: ' + res);
       this.isLoggedIn = res;
       // Jos kutsun tietojen haku on onnistunut ja voidaan jatkaa.
       if (this.isLoggedIn === true && this.invitedInfo) {
