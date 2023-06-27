@@ -17,20 +17,22 @@ export class SenderInfoComponent implements OnInit {
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
-  public isCreatedToday: boolean;
+  public isCreatedToday: boolean | undefined;
   public isEditedToday: boolean | undefined;
   public senderTitle: string = '';
   private currentUserName: string | null;
 
   constructor(private store: StoreService) {
+    console.log('aikaleima: ' + this.aikaleima);
     this.currentUserName = this.store.getUserName();
+
+  }
+
+  ngOnInit() {
     this.isCreatedToday = isToday(this.aikaleima);
     if (this.muokattu) {
       this.isEditedToday = isToday(this.muokattu);
     }
-  }
-
-  ngOnInit() {
     if (this.user != null) {
       this.senderTitle = this.getSenderTitle(this.user.nimi, this.user.asema);
     }
