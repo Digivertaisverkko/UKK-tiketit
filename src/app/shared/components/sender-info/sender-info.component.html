@@ -12,21 +12,36 @@
       <span>{{ senderTitle }}</span>
       –
 
-      <span *ngIf="aikaleima === 'now'; else hasDate">
-        {{ nyt }}
+      <span i18n="@@Nyt" *ngIf="aikaleima === 'now'; else hasDate">
+        Nyt
       </span>
 
       <ng-template #hasDate>
 
-        <span *ngIf="isItToday; else notToday" i18n="@@Tänään">
+        <span i18n="@@Tänään" *ngIf="isCreatedToday; else notCreatedToday">
           Tänään
         </span>
 
-        <ng-template #notToday>
+        <ng-template #notCreatedToday>
           <span>{{ aikaleima | date: 'shortDate' }}</span>
         </ng-template>
 
         <span>&nbsp;{{ aikaleima | date: 'shortTime' }}</span>
+
+        <ng-container *ngIf="muokattu && aikaleima !== muokattu">
+          –
+          <span i18n="@@Muokattu">Muokattu</span>
+            &nbsp;
+          <span i18n="@@Tänään" *ngIf="isEditedToday; else notEditedToday">
+            Tänään
+          </span>
+
+          <ng-template #notEditedToday>
+            <span>{{ muokattu | date: 'shortDate' }}</span>
+          </ng-template>
+
+          <span>&nbsp;{{ muokattu | date: 'shortTime' }}</span>
+        </ng-container>
 
       </ng-template>
 

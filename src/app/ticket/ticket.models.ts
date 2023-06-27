@@ -50,6 +50,7 @@ export interface Kommentti {
   id: string;
   lahettaja: User;
   aikaleima: Date;
+  muokattu: Date;
   tila: number;
   viesti: string;
   liitteet: Array<Liite>;

@@ -13,17 +13,21 @@ import { StoreService } from '@core/services/store.service';
 export class SenderInfoComponent implements OnInit {
 
   @Input() aikaleima: string | Date | 'now' = '';
+  @Input() muokattu?: Date;
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
-  public isItToday: boolean;
-  public nyt = $localize `:@@Nyt:Nyt`;
+  public isCreatedToday: boolean;
+  public isEditedToday: boolean | undefined;
   public senderTitle: string = '';
   private currentUserName: string | null;
 
   constructor(private store: StoreService) {
     this.currentUserName = this.store.getUserName();
-    this.isItToday = isToday(this.aikaleima);
+    this.isCreatedToday = isToday(this.aikaleima);
+    if (this.muokattu) {
+      this.isEditedToday = isToday(this.muokattu);
+    }
   }
 
   ngOnInit() {
