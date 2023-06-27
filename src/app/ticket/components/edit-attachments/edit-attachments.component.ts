@@ -1,8 +1,9 @@
+import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
+  NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
-    NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
+
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
@@ -35,8 +36,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     OnDestroy, Validator {
 
   @Input() oldAttachments: Liite[] = [];
-  @Input() uploadClicks = new Observable();
   @Input() ticketID: string | null = '';
+  @Input() uploadClicks = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -57,7 +58,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   }
 
   ngOnInit() {
-    // const element: HTMLElement = document.querySelector() as HTMLElement;
     this.uploadClickSub = this.uploadClicks.subscribe(action => {
       if (action === 'add') {
         this.renderer.selectRootElement(this.fileInput.nativeElement).click();

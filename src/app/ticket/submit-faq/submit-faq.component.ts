@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject } from 'rxjs';
 
@@ -23,9 +23,9 @@ import { StoreService } from '@core/services/store.service';
 
 export class SubmitFaqComponent implements OnInit {
   @Input() public attachmentsMessages: string = '';
-  @Input() courseid!: string;
+  @Input() public courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
-  @Input() id!: string;
+  @Input() public id!: string;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
   public editExisting: boolean = window.history.state.editFaq ?? false;
