@@ -21,7 +21,6 @@ interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
-
 interface ErrorNotification {
   title: string,
   message: string,
@@ -37,7 +36,6 @@ interface ErrorNotification {
 export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public courseid: string = '';
   @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
-  public columnDefinitions: ColumnDefinition[];
   public dataSource = new MatTableDataSource<UKK>();
   public error: ErrorNotification | null = null;
   public errorFromComponent: string | null = null;
@@ -54,6 +52,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public successMessage: string | null = null;
   public user$: Observable<User | null>;
 
+  private columnDefinitions: ColumnDefinition[];
   private fetchFAQsTimer$: Observable<number>;
   private isPolling: boolean = false;
   private isTicketsLoaded: boolean = false;
@@ -64,8 +63,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   private url: string = '';
 
   @ViewChild('sortFaq', { static: false }) sort = new MatSort();
-  // @ViewChild('paginatorQuestions') paginator: MatPaginator | null = null;
-  // @ViewChild('paginatorFaq') paginatorFaq: MatPaginator | null = null;
 
   constructor(
     private authService: AuthService,
