@@ -1,19 +1,19 @@
 // Tämä service käsittelee käyttäjäautentikointiin liittyviä toimia.
 
+import { ActivationEnd, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
-import cryptoRandomString from 'crypto-random-string';
-import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
 import * as shajs from 'sha.js';
+import cryptoRandomString from 'crypto-random-string';
 
-import { environment } from 'src/environments/environment';
-import { getCourseIDfromURL } from '@shared/utils';
-import { ErrorService } from './error.service';
-import { LoginInfo, Role, User } from '../core.models';
-import { Kurssini } from '@course/course.models';
 import { CourseService } from '@course/course.service';
+import { environment } from 'src/environments/environment';
+import { ErrorService } from './error.service';
+import { getCourseIDfromURL } from '@shared/utils';
+import { Kurssini } from '@course/course.models';
+import { LoginInfo, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 
 
