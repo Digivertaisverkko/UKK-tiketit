@@ -5,8 +5,7 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, catchError, firstValueFrom, mergeMap, of, retry,
-  retryWhen, throwError, timeout, timer } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of, retry, timeout } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
@@ -15,10 +14,6 @@ import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
   SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
   from './ticket.models';
 import { StoreService } from '../core/services/store.service';
-
-interface GetTicketsOption {
-  option: 'onlyOwn' | 'archived';
-}
 
 @Injectable({ providedIn: 'root' })
 
@@ -339,8 +334,8 @@ export class TicketService {
   /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
       lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
       palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketList(courseID: string, option?: GetTicketsOption):
-      Promise<SortableTicket[] | null> {
+  public async getTicketList(courseID: string, option?: {
+      option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
     const currentRoute = window.location.href;
     if (currentRoute.indexOf('/list-tickets') === -1) {
       return null
@@ -401,18 +396,28 @@ export class TicketService {
     }
     let ticket: Tiketti = response;
     // TODO: alla olevat kutsut voisi tehdä rinnakkain.
-    response = await this.getFields(ticketID, courseID);
-    ticket.kentat = response;
-    response  = await this.getComments(ticketID, courseID);
-    // Tiketin viestin sisältö on sen ensimmäinen kommentti.
-    /// TODO: 1. kommentti ei välttämättä viittaa tikettiin aina, vaan pitäisi
-    // ottaa aikaleiman mukaan vanhin.
-    ticket.viesti = response[0].viesti;
-    ticket.kommenttiID = response[0].id;
-    ticket.liitteet = response[0].liitteet;
-    response.shift();
-    ticket.kommentit = response;
+    const fields: Kentta[] = await this.getFields(ticketID, courseID);
+    ticket.kentat = fields;
+    let comments: Kommentti[] = await this.getComments(ticketID, courseID);
+    // Tiketin tiedot sisältyvät 1. kommentissa.
+    const originalComment: Kommentti | null = this.getOldestComment(comments);
+    ticket.kommenttiID = originalComment!.id;
+    ticket.viesti = originalComment!.viesti;
+    ticket.liitteet = originalComment!.liitteet;
+    comments = comments.filter(comment => comment !== originalComment);
+    ticket.kommentit = comments;
     return ticket
+  }
+
+  // Palauta kommentti, jonka aikaleima on vanhin.
+  private getOldestComment(comments: Kommentti[]): Kommentti | null {
+    return comments.reduce((oldestComment: Kommentti | null,
+          currentComment: Kommentti) => {
+      if (!oldestComment || currentComment.aikaleima < oldestComment.aikaleima) {
+        return currentComment;
+      }
+      return oldestComment;
+    }, null);
   }
 
   // Palauta listan tiketin kommenteista.
