@@ -75,6 +75,7 @@ export interface SortableTicket {
   tila: string;
   liite?: boolean;
   viimeisin: Date;
+  aikaleimaTanaan: boolean;
   kentat: [{
     tiketti: string;
     arvo: string;

@@ -13,6 +13,7 @@ import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
 export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
+import { isToday } from '@shared/utils';
 import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
 
@@ -369,10 +370,12 @@ export class TicketService {
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
         kentat: ticket.kentat,
         liite: ticket.liite ?? false,
-        viimeisin: new Date(ticket.viimeisin)
+        viimeisin: new Date(ticket.viimeisin),
+        viimeisinTanaan: isToday(new Date(ticket.viimeisin))
       }
       // liite: this.getRandomInt(1,5) === 2 ? true : false
       ));
+      console.dir(sortableData);
     return sortableData;
   }
 
@@ -396,6 +399,9 @@ export class TicketService {
     ticket.kommenttiID = originalComment!.id;
     ticket.viesti = originalComment!.viesti;
     ticket.liitteet = originalComment!.liitteet;
+    if (originalComment?.aikaleima) {
+      ticket.aikaleima = new Date(originalComment?.aikaleima);
+    }
     if (originalComment!.muokattu) {
       ticket.muokattu = new Date(originalComment!.muokattu);
     }
