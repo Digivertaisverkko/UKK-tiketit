@@ -1,6 +1,7 @@
 import {  AfterViewInit, Component, EventEmitter, Input, Output,
     OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -43,11 +44,11 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
       otsikko.includes(filterValue)
     );
   });
-
+  const datePipe = new DatePipe('fi-FI');
   const mainDataMatch = (
     data.id.toString() === filterValue ||
     data.otsikko.toLowerCase().includes(filterValue) ||
-    data.aikaleima.toString().includes(filterValue) ||
+    datePipe.transform(data.aikaleima, 'shortDate')?.includes(filterValue) ||
     data.aloittajanNimi.toLowerCase().includes(filterValue) ||
     data.tila.toLowerCase().includes(filterValue)
   );
@@ -146,7 +147,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
       if (!response) return
       if (response.length > 0) {
         this.error = null;
-        console.dir(response);
         const hasAttachment = response.some(ticket => ticket.liite === true);
         this.setBaseColumnDefinitions();
         if (hasAttachment) {
