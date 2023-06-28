@@ -12,7 +12,8 @@ import { StoreService } from '@core/services/store.service';
 })
 export class SenderInfoComponent implements OnInit {
 
-  @Input() aikaleima: string | Date | 'now' = '';
+  // 'now' näyttää aikaleimaksi "Nyt".
+  @Input() aikaleima: Date | 'now' = new Date;
   @Input() muokattu?: Date;
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
@@ -21,15 +22,15 @@ export class SenderInfoComponent implements OnInit {
   public isEditedToday: boolean | undefined;
   public senderTitle: string = '';
   private currentUserName: string | null;
-
+  private readonly CURRENT_DATE = new Date();
   constructor(private store: StoreService) {
-    console.log('aikaleima: ' + this.aikaleima);
     this.currentUserName = this.store.getUserName();
-
   }
 
   ngOnInit() {
-    this.isCreatedToday = isToday(this.aikaleima);
+    if (this.aikaleima !== 'now') {
+      this.isCreatedToday = isToday(this.aikaleima);
+    }
     if (this.muokattu) {
       this.isEditedToday = isToday(this.muokattu);
     }
@@ -51,5 +52,6 @@ export class SenderInfoComponent implements OnInit {
         return '';
     }
   }
+
 
 }

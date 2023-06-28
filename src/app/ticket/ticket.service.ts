@@ -393,8 +393,8 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
+    response.aikaleima = new Date(response.aikaleima);
     let ticket: Tiketti = response;
-    // TODO: alla olevat kutsut voisi tehdä rinnakkain.
     const fields: Kentta[] = await this.getFields(ticketID, courseID);
     ticket.kentat = fields;
     let comments: Kommentti[] = await this.getComments(ticketID, courseID);

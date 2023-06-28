@@ -7,7 +7,6 @@ import { Subject, Subscription } from 'rxjs';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
-import { isToday } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
@@ -105,10 +104,6 @@ export class CommentComponent implements AfterViewInit, OnInit{
       default:
         return '';
     }
-  }
-
-  public isToday(timestamp: string | Date) {
-    return isToday(timestamp);
   }
 
   public removeComment(commentID: string) {

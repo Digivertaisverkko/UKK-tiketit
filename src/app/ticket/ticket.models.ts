@@ -16,7 +16,7 @@ export interface AddTicketResponse {
 }
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
-// lähetysvaiheessa.
+// lähetysvaiheessa. Käytetään liitetiedostoja lisättäessä.
 export interface FileInfo {
   filename: string;
   file: File;
@@ -28,10 +28,8 @@ export interface FileInfo {
 }
 
 /* Tiketin lisäkenttä.
-Metodi: getTicketInfo -> getTickgetFields,
-API: /api/tiketti/:tiketti-id/kentat/
-Uusia propertyjä: tyyppi ja ohje.
-Palautustyypit tarkistettu 27.4.23. */
+Metodi: getFields
+API: /api/tiketti/:tiketti-id/kentat/ */
 export interface Kentta {
   id: string;
   otsikko: string;
@@ -45,7 +43,6 @@ export interface Kentta {
 
 // Tiketin kommentti
 // Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
-// TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
 export interface Kommentti {
   id: string;
   lahettaja: User;
@@ -88,13 +85,13 @@ export interface SortableTicket {
 interface Tikettipohja {
   id: string;
   otsikko: string;
-  aikaleima: string;
+  aikaleima: Date;
   aloittaja: User;
   tila: number;
   ukk: boolean;
 }
 
-// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
+// Metodi: getTicketList, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
 // Tikettilistan näyttämistä varten.
 export interface TikettiListassa extends Tikettipohja {
   viimeisin: string;

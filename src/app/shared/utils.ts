@@ -28,15 +28,17 @@ export function getRoleString(asema: Role | null): string {
 }
 
   // Onko annettu aikaleima tänään.
-  export function isToday(timestamp: string | Date) : boolean {
-    if (typeof timestamp === 'string') {
-      var dateString = new Date(timestamp).toDateString();
-    } else {
-      var dateString = timestamp.toDateString();
+  export function isToday(date: Date) : boolean {
+    const isDate = date instanceof Date;
+    if (!isDate) {
+      throw Error('Virhe: "' + JSON.stringify(date) + '" on tyyppiä: ' + typeof date);
     }
-    // console.log(' vertaillaan: ' + dateString + ' ja ' + this.currentDate);
-    const CURRENT_DATE = new Date().toDateString();
-    return dateString == CURRENT_DATE ? true : false
+    const CURRENT_DATE = new Date();
+    const isToday: boolean =
+      date.getFullYear() === CURRENT_DATE.getFullYear() &&
+      date.getMonth() === CURRENT_DATE.getMonth() &&
+      date.getDate() === CURRENT_DATE.getDate();
+    return isToday
   }
 
   // Onko string muodoltaan HTTP URL.
