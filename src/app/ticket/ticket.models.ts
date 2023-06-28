@@ -119,12 +119,18 @@ export interface Tiketti extends Tikettipohja {
   liitteet?: Array<Liite>;
 }
 
-// Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
+// Metodit: getFAQ, getFAQlist API: /api/kurssi/:kurssi-id/ukk/
 export interface UKK {
   id: number;
   otsikko: string;
   aikaleima: Date;
   tila: number;
+  kentat: [{
+    tiketti: number;
+    arvo: string;
+    otsikko: string;
+    ohje: string;
+  }]
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/

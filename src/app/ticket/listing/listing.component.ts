@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
     from '@angular/core';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
+import { DatePipe } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -14,7 +15,7 @@ import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.comp
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from '@core/core.models';
-import { UKK } from '../ticket.models';
+import { Tiketti, UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
 interface ColumnDefinition {
@@ -25,6 +26,33 @@ interface ErrorNotification {
   title: string,
   message: string,
   buttonText?: string
+}
+
+const customFilterPredicate = (data: UKK, filter: string) => {
+  const filterValue = filter.toLowerCase();
+
+  const kentatMatch = data.kentat?.some((item) => {
+    const arvo = item.arvo ? item.arvo.toLowerCase() : '';
+    const otsikko = item.otsikko ? item.otsikko.toLowerCase() : '';
+    const ohje = item.ohje ? item.ohje.toLowerCase() : '';
+
+    return (
+      arvo.includes(filterValue) ||
+      otsikko.includes(filterValue) ||
+      ohje.includes(filterValue)
+    );
+  });
+
+  const datePipe = new DatePipe('fi-FI');
+
+  let mainDataMatch: boolean | undefined = (
+    data.id.toString() === filterValue ||
+    data.otsikko.toLowerCase().includes(filterValue) ||
+    datePipe.transform(data.aikaleima, 'shortDate')?.includes(filterValue)
+  );
+  if (mainDataMatch === undefined) mainDataMatch = false;
+  return kentatMatch || mainDataMatch
+
 }
 
 @Component({
@@ -123,6 +151,10 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       }*/
   }
 
+  private static customFilterPredicate(data: UKK, filter: string): boolean {
+    return customFilterPredicate(data, filter);
+  }
+
   public GoToLogin(): void {
     if (!this.courseid) return
     this.authService.navigateToLogin(this.courseid)
@@ -156,6 +188,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.numberOfFAQ = response.length;
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = ListingComponent.customFilterPredicate;
           // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
         return
