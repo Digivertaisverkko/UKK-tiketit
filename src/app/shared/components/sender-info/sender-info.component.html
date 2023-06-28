@@ -12,29 +12,47 @@
       <span>{{ senderTitle }}</span>
       –
 
+      <!----- Aikaleima ------------------------------------------------------->
+
       <span i18n="@@Nyt" *ngIf="aikaleima === 'now'; else hasDate">
         Nyt
       </span>
-
       <ng-template #hasDate>
 
-        <span i18n="@@Tänään" *ngIf="isCreatedToday; else notCreatedToday">
-          Tänään</span><span>&nbsp;</span>
-        <ng-template #notCreatedToday>
-          <span>{{ aikaleima | date: 'shortDate' }}</span>
-        </ng-template>
+        <ng-container *ngIf="isCreatedToday">
+          <span i18n="@@Tänään">Tänään</span><span>&nbsp;</span>
+        </ng-container>
+
+        <ng-container *ngIf="isCreatedYesterday">
+          <span i18n="@@Eilen">Eilen</span><span>&nbsp;</span>
+        </ng-container>
+
+        <ng-container *ngIf="!isCreatedToday && !isCreatedYesterday">
+          <span>
+            {{ aikaleima | date: 'shortDate' }}&nbsp;</span>
+        </ng-container>
 
         <span i18n="@@klo">klo</span>
         <span>&nbsp;{{ aikaleima | date: 'shortTime'}}</span>
 
-        <!----- Muokattu ------------------------------------------------------>
+        <!----- Muokkauksen aikaleima ----------------------------------------->
+
         <ng-container *ngIf="muokattu && aikaleima !== muokattu">,
+
           <span i18n="@@muokattu">muokattu</span><span>&nbsp;</span>
+
+          <ng-container *ngIf="isEditedYesterday">
+            <span i18n="@@Eilen">{{ 'eilen' | lowercase }}</span>
+            <span>&nbsp;</span>
+          </ng-container>
+
           <ng-template *ngIf="!isEditedToday">
             <span>{{muokattu | date: 'shortDate'}}</span>
           </ng-template>
+
           <span i18n="@@klo">klo</span>
           <span>&nbsp;{{muokattu | date: 'shortTime'}}</span>
+
         </ng-container>
 
       </ng-template>

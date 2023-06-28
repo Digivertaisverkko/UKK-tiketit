@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
-import { isToday } from '@shared/utils';
+import { isYesterday, isToday } from '@shared/utils';
 import { User } from '@core/core.models';
 import { StoreService } from '@core/services/store.service';
 
@@ -19,20 +19,30 @@ export class SenderInfoComponent implements OnInit {
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
   public isCreatedToday: boolean | undefined;
+  public isCreatedYesterday: boolean | undefined;
   public isEditedToday: boolean | undefined;
+  public isEditedYesterday: boolean | undefined;
   public senderTitle: string = '';
   private currentUserName: string | null;
-  private readonly CURRENT_DATE = new Date();
+
   constructor(private store: StoreService) {
     this.currentUserName = this.store.getUserName();
   }
 
   ngOnInit() {
     if (this.aikaleima !== 'now') {
+      // const currentDate = new Date();
+      // this.aikaleima.setDate(currentDate.getDate() -1 );
       this.isCreatedToday = isToday(this.aikaleima);
+      if (!this.isCreatedToday) {
+        this.isCreatedYesterday = isYesterday(this.aikaleima);
+      }
     }
     if (this.muokattu) {
       this.isEditedToday = isToday(this.muokattu);
+      if (!this.isEditedToday) {
+        this.isEditedYesterday = isYesterday(this.muokattu);
+      }
     }
     if (this.user != null) {
       this.senderTitle = this.getSenderTitle(this.user.nimi, this.user.asema);

@@ -41,6 +41,22 @@ export function getRoleString(asema: Role | null): string {
     return isToday
   }
 
+  export function isYesterday(date: Date): boolean {
+    const isDate = date instanceof Date;
+    if (!isDate) {
+      throw Error('Virhe: "' + JSON.stringify(date) + '" on tyyppiä: ' + typeof date);
+    }
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const yesterday: Date = new Date(currentDate);
+    yesterday.setDate(currentDate.getDate() - 1);
+    const isYesterday: boolean =
+      date.getFullYear() === yesterday.getFullYear() &&
+      date.getMonth() === yesterday.getMonth() &&
+      date.getDate() === yesterday.getDate();
+    return isYesterday
+  }
+
   // Onko string muodoltaan HTTP URL.
   export function isValidHttpUrl(testString: string): boolean {
     let url: URL;

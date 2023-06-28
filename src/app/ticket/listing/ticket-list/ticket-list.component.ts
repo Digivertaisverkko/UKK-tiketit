@@ -1,5 +1,5 @@
-import {  AfterViewInit, Component, EventEmitter, Input, Output,
-    OnInit, ViewChild } from '@angular/core';
+import {  AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
+    ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
@@ -52,7 +52,6 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
     data.aloittajanNimi.toLowerCase().includes(filterValue) ||
     data.tila.toLowerCase().includes(filterValue)
   );
-
   return kentatMatch || mainDataMatch;
 };
 
