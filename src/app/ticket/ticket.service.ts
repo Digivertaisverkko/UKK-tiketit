@@ -373,7 +373,7 @@ export class TicketService {
         tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
-        aikaleima: ticket.viimeisin,
+        aikaleima: new Date(ticket.viimeisin),
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
         kentat: ticket.kentat,
         liite: ticket.liite ?? false

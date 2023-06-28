@@ -47,7 +47,7 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
   const mainDataMatch = (
     data.id.toString() === filterValue ||
     data.otsikko.toLowerCase().includes(filterValue) ||
-    data.aikaleima.toLowerCase().includes(filterValue) ||
+    data.aikaleima.toString().includes(filterValue) ||
     data.aloittajanNimi.toLowerCase().includes(filterValue) ||
     data.tila.toLowerCase().includes(filterValue)
   );

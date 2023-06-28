@@ -69,7 +69,7 @@ export interface NewCommentResponse {
 export interface SortableTicket {
   id: number;
   otsikko: string;
-  aikaleima: string;
+  aikaleima: Date;
   aloittajanNimi: string
   tilaID: number;
   tila: string;
