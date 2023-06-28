@@ -31,7 +31,7 @@
         [dataSource]="dataSource"
         [hidden]="dataSource.filteredData.length === 0"
         matSort
-        matSortActive="aikaleima"
+        matSortActive="viimeisin"
         matSortDirection="desc"
         mat-table
         #sortQuestions="matSort"
@@ -91,7 +91,10 @@
   </ng-container>
 
   <ng-container matColumnDef="aloittajanNimi">
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
+    <th class="align-right"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
         sortActionDescription="Järjestä lähettäjän mukaan"
         i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"
         i18n="@@Lähettäjä">
@@ -108,8 +111,11 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="aikaleima">
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
+  <ng-container matColumnDef="viimeisin">
+    <th class="align-right"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
         sortActionDescription="Järjestä luodun päivämäärän mukaan"
         i18n-sortActionDescription="@@Järjestä luodun mukaan"
         i18n="@@Muokattu"
@@ -122,7 +128,7 @@
           [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
           tabindex="-1"
           >
-        {{ element.aikaleima | date: 'shortDate' }}
+        {{ element.viimeisin | date: 'shortDate' }}
       </a>
     </td>
   </ng-container>
@@ -131,7 +137,8 @@
     <th class="align-right" mat-header-cell *matHeaderCellDef>
     </th>
     <td class="attachment-cell"mat-cell *matCellDef="let element">
-      <mat-icon
+      <mat-icon aria-label="Liite"
+                i18n-aria-label="@@Liite"
                 *ngIf="element.liite"
                 >
         attach_file
@@ -240,7 +247,7 @@
         [dataSource]="dataSourceArchived"
         [hidden]="dataSourceArchived.filteredData.length === 0"
         matSort
-        matSortActive="aikaleima"
+        matSortActive="viimeisin"
         matSortDirection="desc"
         *ngIf="archivedCount > 0"
         #sortArchived="matSort"
@@ -316,7 +323,7 @@
 </td>
 </ng-container>
 
-<ng-container matColumnDef="aikaleima">
+<ng-container matColumnDef="viimeisin">
 <th class="align-right"
     i18n-sortActionDescription="@@Järjestä muokatun mukaan"
     i18n="@@Muokattu"
@@ -333,7 +340,7 @@
       [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
       tabindex="-1"
       >
-    {{ element.aikaleima | date: 'shortDate' }}
+    {{ element.viimeisin | date: 'shortDate' }}
   </a>
 </td>
 </ng-container>

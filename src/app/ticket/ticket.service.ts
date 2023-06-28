@@ -7,12 +7,13 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
 import { Injectable } from '@angular/core';
 import { Observable, Subject, firstValueFrom, of, retry, timeout } from 'rxjs';
 
-import { environment } from 'src/environments/environment';
-import { ErrorService } from '../core/services/error.service';
-import { Role } from '../core/core.models';
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
   SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
   from './ticket.models';
+export * from './ticket.models';
+import { environment } from 'src/environments/environment';
+import { ErrorService } from '../core/services/error.service';
+import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
 
 @Injectable({ providedIn: 'root' })
@@ -290,16 +291,6 @@ export class TicketService {
     return response;
   }
 
-  // Poista liitetiedosto.
-  public removeFileObservable(ticketID: string, commentID: string, fileID: string,
-      courseID: string): Observable<any> {
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
-    let response: any;
-    //return firstValueFrom(this.http.delete(url));
-    return this.http.delete(url);
-
-  }
-
   // Testaamista varten.
   private getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -374,10 +365,11 @@ export class TicketService {
         tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
-        aikaleima: new Date(ticket.viimeisin),
+        aikaleima: new Date(ticket.aikaleima),
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
         kentat: ticket.kentat,
-        liite: ticket.liite ?? false
+        liite: ticket.liite ?? false,
+        viimeisin: new Date(ticket.viimeisin)
       }
       // liite: this.getRandomInt(1,5) === 2 ? true : false
       ));

@@ -49,6 +49,7 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
     data.id.toString() === filterValue ||
     data.otsikko.toLowerCase().includes(filterValue) ||
     datePipe.transform(data.aikaleima, 'shortDate')?.includes(filterValue) ||
+    datePipe.transform(data.viimeisin, 'shortDate')?.includes(filterValue) ||
     data.aloittajanNimi.toLowerCase().includes(filterValue) ||
     data.tila.toLowerCase().includes(filterValue)
   );
@@ -220,7 +221,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
       { def: 'tila', showMobile: true },
       { def: 'otsikko', showMobile: true },
       { def: 'aloittajanNimi', showMobile: false },
-      { def: 'aikaleima', showMobile: false }
+      { def: 'viimeisin', showMobile: false }
     ];
   }
 
