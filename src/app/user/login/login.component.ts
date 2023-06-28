@@ -99,8 +99,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     const email = this.form.controls['email'].value;
     const password = this.form.controls['password'].value;
 
-    this.auth.login(email, password, this.loginid)
-    .then(response => {
+    this.auth.login(email, password, this.loginid).then(response => {
       if (response?.success === true) {
         let redirectUrl: string;
         if (response.redirectUrl === undefined) {

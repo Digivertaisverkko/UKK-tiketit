@@ -29,7 +29,8 @@
 
         <ng-container *ngIf="!isCreatedToday && !isCreatedYesterday">
           <span>
-            {{ aikaleima | date: 'shortDate' }}&nbsp;</span>
+            {{ aikaleima | date: isCreatedThisYear ? 'd MMM' : 'shortDate' }}
+          </span>
         </ng-container>
 
         <span i18n="@@klo">klo</span>

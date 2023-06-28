@@ -20,6 +20,7 @@ export class SenderInfoComponent implements OnInit {
   @Input() styles: any;
   public isCreatedToday: boolean | undefined;
   public isCreatedYesterday: boolean | undefined;
+  public isCreatedThisYear: boolean | undefined;
   public isEditedToday: boolean | undefined;
   public isEditedYesterday: boolean | undefined;
   public senderTitle: string = '';
@@ -36,8 +37,15 @@ export class SenderInfoComponent implements OnInit {
       this.isCreatedToday = isToday(this.aikaleima);
       if (!this.isCreatedToday) {
         this.isCreatedYesterday = isYesterday(this.aikaleima);
+        const currentYear = new Date().getFullYear();
+        if (this.aikaleima.getFullYear() === currentYear) {
+          this.isCreatedThisYear = true;
+        }
+      } else {
+        this.isCreatedThisYear = true;
       }
     }
+
     if (this.muokattu instanceof Date) {
       this.isEditedToday = isToday(this.muokattu);
       if (!this.isEditedToday) {
