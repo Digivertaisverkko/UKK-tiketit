@@ -123,7 +123,7 @@ export interface Tiketti extends Tikettipohja {
 export interface UKK {
   id: number;
   otsikko: string;
-  aikaleima: string;
+  aikaleima: Date;
   tila: number;
 }
 

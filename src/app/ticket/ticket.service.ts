@@ -204,6 +204,7 @@ export class TicketService {
     //     tila: faq.tila
     //   }
     // ));
+    response.aikaleima = new Date(response.aikaleima);
     return response;
   }
 
