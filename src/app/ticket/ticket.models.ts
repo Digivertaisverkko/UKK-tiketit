@@ -118,6 +118,7 @@ export interface Tiketti extends Tikettipohja {
   kommenttiID: string;
   kommentit: Array<Kommentti>;
   liitteet?: Array<Liite>;
+  muokattu?: Date;
 }
 
 // Metodit: getFAQ, getFAQlist API: /api/kurssi/:kurssi-id/ukk/

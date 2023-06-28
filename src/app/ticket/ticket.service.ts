@@ -396,6 +396,9 @@ export class TicketService {
     ticket.kommenttiID = originalComment!.id;
     ticket.viesti = originalComment!.viesti;
     ticket.liitteet = originalComment!.liitteet;
+    if (originalComment!.muokattu) {
+      ticket.muokattu = new Date(originalComment!.muokattu);
+    }
     comments = comments.filter(comment => comment !== originalComment);
     ticket.kommentit = comments;
     return ticket

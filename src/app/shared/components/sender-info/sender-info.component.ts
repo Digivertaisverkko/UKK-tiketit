@@ -38,7 +38,7 @@ export class SenderInfoComponent implements OnInit {
         this.isCreatedYesterday = isYesterday(this.aikaleima);
       }
     }
-    if (this.muokattu) {
+    if (this.muokattu instanceof Date) {
       this.isEditedToday = isToday(this.muokattu);
       if (!this.isEditedToday) {
         this.isEditedYesterday = isYesterday(this.muokattu);
