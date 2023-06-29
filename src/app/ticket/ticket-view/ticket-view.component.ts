@@ -115,7 +115,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       if (error?.tunnus == 1003) {
         this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
       } else {
-        this.errorMessage = "Kysymyksen arkistointi ei onnistunut.";
+        this.errorMessage = $localize `:Kysymyksen asettaminen ratkaistuksi ei onnistunut:
+            Kysymyksen asettaminen ratkaistuksi ei onnistunut` + '.';
       }
     })
   }
