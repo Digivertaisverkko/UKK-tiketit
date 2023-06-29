@@ -148,7 +148,7 @@ export class SubmitTicketComponent implements OnInit {
       this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
     }).catch(() => {
-      this.errorMessage = $localize `:@@Muokattavan kysymyksen tietoja ei saatu haettua
+      this.errorMessage = $localize `:@@Muokattavan kysymyksen tietoja ei saatu haettua:
         Muokattavan kysymyksen tietoja ei saatu haettua` + '.';
     });
   }
