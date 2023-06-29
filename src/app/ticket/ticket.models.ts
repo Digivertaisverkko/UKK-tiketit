@@ -127,6 +127,7 @@ export interface UKK {
   id: number;
   otsikko: string;
   aikaleima: Date;
+  aikaleimaStr: string
   tila: number;
   kentat: [{
     tiketti: number;

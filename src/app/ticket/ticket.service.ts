@@ -193,22 +193,17 @@ export class TicketService {
           retry(3)
         )
       )
-      // response = await firstValueFrom(this.http.get<UKK[]>(url));
     } catch (error: any) {
       this.handleError(error);
     }
-    // Jos tarvitsee muokata dataa.
-    // let tableData = response.map((faq: UKK ) => (
-    //   {
-    //     id: faq.id,
-    //     otsikko: faq.otsikko,
-    //     aikaleima: faq.aikaleima,
-    //     tyyppi: faq. tyyppi,
-    //     tila: faq.tila
-    //   }
-    // ));
-    response.aikaleima = new Date(response.aikaleima);
-    return response;
+    let FAQlist = response;
+    const thisYear = new Date().getFullYear();
+    FAQlist.forEach((faq: any) => {
+      faq.aikaleima = new Date(faq.aikaleima)
+      faq.aikaleimaStr = getDateString(faq.aikaleima, thisYear)
+    })
+
+    return FAQlist;
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.

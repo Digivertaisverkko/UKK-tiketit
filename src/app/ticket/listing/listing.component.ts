@@ -15,7 +15,7 @@ import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.comp
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from '@core/core.models';
-import { Tiketti, UKK } from '../ticket.models';
+import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
 
 interface ColumnDefinition {
@@ -97,7 +97,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private dialog: MatDialog,
     private responsive: BreakpointObserver,
     private store : StoreService,
-    private ticket:TicketService,
+    private ticket: TicketService,
     private title : Title
   ) {
     this.noDataConsent = this.authService.getDenyDataConsent();
