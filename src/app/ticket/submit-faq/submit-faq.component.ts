@@ -180,7 +180,8 @@ export class SubmitFaqComponent implements OnInit {
 
   private prepareSendFiles(response?: any): void {
     if (!this.editExisting && response?.uusi == null) {
-      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
+        onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
     }
     let ticketID, commentID;
