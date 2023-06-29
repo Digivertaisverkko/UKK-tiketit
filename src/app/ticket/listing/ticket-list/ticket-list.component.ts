@@ -194,7 +194,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // TODO: lisää virheilmoitusten käsittelyjä.
   private handleError(error: any) {
     this.error = {
       title: $localize`:@@Virhe:Virhe`,

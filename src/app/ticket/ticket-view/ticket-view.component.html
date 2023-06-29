@@ -13,7 +13,7 @@
       <app-beginning-button
           (clicked)="showConfirm = true"
           [confirm]="form.dirty || isEditingComment"
-          [disabled]="state==='sending'"
+          [disabled]="state === 'sending'"
           >
       </app-beginning-button>
 
@@ -164,7 +164,7 @@
   <form [formGroup]="form" (ngSubmit)="sendComment()">
 
     <app-editor formControlName="message"
-                *ngIf="!ticketIdFromParent && state !== 'error'"
+                *ngIf="!ticketIdFromParent && state !== 'error' && isPolling"
                 >
     </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."

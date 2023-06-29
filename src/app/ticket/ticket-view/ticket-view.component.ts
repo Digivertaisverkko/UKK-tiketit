@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { Validators as EditorValidators } from 'ngx-editor';
 
@@ -13,6 +13,7 @@ import { TicketService  } from '../ticket.service';
 import { User } from '@core/core.models'
 
 import schema from '@shared/editor/schema';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-ticket-view',
@@ -37,6 +38,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public isEditable: boolean = false;
   public isEditingComment: boolean = false;
   public isLoaded: boolean = false;
+  public isPolling: boolean = false;
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
   public newCommentState: 3 | 4 | 5 = 4;
@@ -49,7 +51,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public user: User = {} as User;
   public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
-  private isPolling: boolean = false;
+  private loggedIn$: Observable<boolean|null>
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -67,13 +69,16 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ) {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
-    this.ticketID = this.ticketIdFromParent !== null
+        this.ticketID = this.ticketIdFromParent !== null
         ? this.ticketIdFromParent
         : String(this.route.snapshot.paramMap.get('id'));
+        this.loggedIn$ = this.store.onIsUserLoggedIn().pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
+    this.trackLoggedIn();
     this.store.trackUserInfo().subscribe(response => {
+      this.isLoaded = true;
       if (response?.nimi != null) {
         this.user = response;
         if (this.user.asema === null) {
@@ -277,5 +282,15 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
     }
+
+
+  private trackLoggedIn() {
+    this.loggedIn$.subscribe(res => {
+      if (res === false) {
+        const route = `course/${this.courseid}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
+    })
+  }
 
 }
