@@ -12,16 +12,13 @@ import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 import { getCourseIDfromURL } from '@shared/utils';
 import { getRoleString } from '@shared/utils';
-import { LoginInfo, Role, User } from '../core.models';
+import { AuthInfo, LoginInfo, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 
 
 interface UserRights {
   oikeudet: User,
-  login: {
-    lti_login: boolean,
-    perus: boolean
-  }
+  login: AuthInfo,
 }
 
 interface LoginResponse {
@@ -144,6 +141,9 @@ export class AuthService {
     let newUserInfo: any;
     if (response != null && response.oikeudet != null)  {
       newUserInfo = response.oikeudet;
+      const authInfo = response.login;
+      if (authInfo) this.store.setAuthInfo(authInfo);
+      console.warn(this.store.getAuthInfo());
       newUserInfo.asemaStr = getRoleString(newUserInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);

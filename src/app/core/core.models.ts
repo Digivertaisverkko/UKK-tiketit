@@ -6,6 +6,12 @@ export interface LoginInfo  {
   'login-id': string;
 }
 
+// Saadaan palvelimelta kirjauduttua.
+export interface AuthInfo {
+  lti_login: boolean,
+  perus: boolean
+}
+
 export interface Error {
   tunnus: number;
   virheilmoitus: string;
