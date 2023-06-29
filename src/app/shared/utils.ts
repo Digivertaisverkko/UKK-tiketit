@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Role } from "@core/core.models";
 
 export function getCourseIDfromURL(): string | null {
@@ -10,6 +11,22 @@ export function getCourseIDfromURL(): string | null {
   }
   return courseID
 }
+
+export function getDateString(date: Date, thisYear: number): string {
+  let dateString: string = '';
+  const datePipe = new DatePipe('fi-FI');
+  if (isToday(date)) {
+    dateString = $localize `:@@Tänään:Tänään`;
+  } else if (isYesterday(date)) {
+    dateString = $localize `:@@Eilen:Eilen`;
+  } else if (date.getFullYear() === thisYear) {
+    dateString = datePipe.transform(date, 'd.M') ?? '';
+  } else {
+    dateString = datePipe.transform(date, 'shortDate') ?? '';
+  }
+  return dateString
+}
+
 
 // Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
 export function getRoleString(asema: Role | null): string {

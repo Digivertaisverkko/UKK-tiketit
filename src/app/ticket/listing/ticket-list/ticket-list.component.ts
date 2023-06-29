@@ -50,6 +50,7 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
     data.otsikko.toLowerCase().includes(filterValue) ||
     datePipe.transform(data.aikaleima, 'shortDate')?.includes(filterValue) ||
     datePipe.transform(data.viimeisin, 'shortDate')?.includes(filterValue) ||
+    data.viimeisinStr.toLowerCase().includes(filterValue) ||
     data.aloittajanNimi.toLowerCase().includes(filterValue) ||
     data.tila.toLowerCase().includes(filterValue)
   );
@@ -70,7 +71,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
   public columnDefinitions!: ColumnDefinition[];
-  public readonly currentYear = new Date().getFullYear();
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
   public error: ErrorNotification | null = null;

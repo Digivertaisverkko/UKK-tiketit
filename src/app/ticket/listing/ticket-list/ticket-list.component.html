@@ -128,9 +128,10 @@
           [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
           tabindex="-1"
           >
-        {{ element?.viimeisinTanaan === true ? 'Tänään' : (element.viimeisin |
+          {{ element.viimeisinStr }}
+<!--         {{ element?.viimeisinTanaan === true ? 'Tänään' : (element.viimeisin |
             date: element.viimeisin.getFullYear() === currentYear ?
-            'd.M' : 'shortDate' )}}
+            'd.M' : 'shortDate' )}} -->
       </a>
     </td>
   </ng-container>

@@ -2,6 +2,7 @@
     UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
     niistä vastaavassa servicessä. */
 
+
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -13,7 +14,7 @@ import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
 export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
-import { isToday } from '@shared/utils';
+import { getDateString, isToday, isYesterday } from '@shared/utils';
 import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
 
@@ -360,8 +361,10 @@ export class TicketService {
     const myName = user?.nimi ?? '';
     const myRole = user?.asema ?? '';
     const me = $localize`:@@Minä:Minä`;
-    let sortableData: SortableTicket[] = response.map((ticket: TikettiListassa) => (
-      {
+    const thisYear = new Date().getFullYear();
+    let sortableData: SortableTicket[] = response.map((ticket: TikettiListassa) => {
+      const viimeisinDate = new Date(ticket.viimeisin);
+      return {
         tilaID: ticket.tila,
         tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
@@ -370,14 +373,14 @@ export class TicketService {
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
         kentat: ticket.kentat,
         liite: ticket.liite ?? false,
-        viimeisin: new Date(ticket.viimeisin),
-        viimeisinTanaan: isToday(new Date(ticket.viimeisin))
+        viimeisin: viimeisinDate,
+        viimeisinStr: getDateString(viimeisinDate, thisYear)
       }
       // liite: this.getRandomInt(1,5) === 2 ? true : false
-      ));
-      console.dir(sortableData);
+    });
     return sortableData;
   }
+
 
   /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
     kommentit. */
