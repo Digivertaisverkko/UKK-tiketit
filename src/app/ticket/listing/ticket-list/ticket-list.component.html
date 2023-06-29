@@ -348,6 +348,19 @@
 </td>
 </ng-container>
 
+<ng-container matColumnDef="liite">
+  <th class="align-right" mat-header-cell *matHeaderCellDef>
+  </th>
+  <td class="attachment-cell"mat-cell *matCellDef="let element">
+    <mat-icon aria-label="Liite"
+              i18n-aria-label="@@Liite"
+              *ngIf="element.liite"
+              >
+      attach_file
+    </mat-icon>
+  </td>
+</ng-container>
+
 <!--  ***** Rivit **** -->
 
 <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
