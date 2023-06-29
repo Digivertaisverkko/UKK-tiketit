@@ -65,7 +65,7 @@ export class SubmitTicketComponent implements OnInit {
               ) {
     this.user$ = this.store.trackUserInfo();
   }
-  
+
   ngOnInit(): void {
     this.ticketId = this.id ?? null;
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
@@ -128,10 +128,12 @@ export class SubmitTicketComponent implements OnInit {
 
   private fetchAdditionalFields(): void {
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    this.courses.getTicketFieldInfo(this.courseid)
-    .then((response) => {
+    this.courses.getTicketFieldInfo(this.courseid).then(response => {
       this.ticketFields = response as Kentta[];
       this.buildAdditionalFields();
+    }).catch(() => {
+      this.errorMessage = $localize `:@@Kysymysten tietoja ei saatu haettua:
+        Tarvittavia kysymysten tietoja ei saatu haettua` + '.';
     });
   }
 
@@ -145,6 +147,9 @@ export class SubmitTicketComponent implements OnInit {
       this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
+    }).catch(() => {
+      this.errorMessage = $localize `:@@Muokattavan kysymyksen tietoja ei saatu haettua
+        Muokattavan kysymyksen tietoja ei saatu haettua` + '.';
     });
   }
 
@@ -161,7 +166,7 @@ export class SubmitTicketComponent implements OnInit {
   private prepareSendFiles(response: any): void {
     if (!this.courseid) return
     if (response?.uusi == null) {
-      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
     }
     let ticketID, commentID;
@@ -188,9 +193,7 @@ export class SubmitTicketComponent implements OnInit {
     if (!this.ticketId || !this.commentID) throw new Error;
     this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
       .then((res: { success: boolean }) => {
-        console.log('saatiin vastaus editointiin: ' + JSON.stringify(res));
         if (res?.success === false) {
-          console.log('editointi ei onnistunut, heitetään virhe.');
           throw Error
         }
         if (this.attachments.filesToRemove.length === 0) {
