@@ -8,16 +8,13 @@ import { TicketViewComponent } from './ticket-view/ticket-view.component';
 import { SubmitTicketComponent } from './submit-ticket/submit-ticket.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog'; 
-import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // import { MatInputModule } from '@angular/material/input';
 // import { MatFormFieldModule } from '@angular/material/form-field';
 // MatFormFieldModule,
 // MatInputModule,
 
-// import { MatPaginatorIntl } from '@angular/material/paginator';
-// import { CustomPaginator } from './functions/CustomPaginator';
 import { FaqViewComponent } from './faq-view/faq-view.component';
 import { MessageComponent } from './components/message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
@@ -45,7 +42,6 @@ import { TicketListComponent } from './listing/ticket-list/ticket-list.component
     CommonModule,
     MatCardModule,
     MatDialogModule,
-    MatListModule,
     MatSortModule,
     SharedModule,
     TicketRoutingModule,
@@ -55,8 +51,4 @@ import { TicketListComponent } from './listing/ticket-list/ticket-list.component
   ]
 })
 
-// providers: [
-//   Jos paginatorin haluaa.
-//   { provide: MatPaginatorIntl, useValue: CustomPaginator() }
-// ]
 export class TicketModule { }
