@@ -45,10 +45,9 @@
         </mat-error>
       </mat-form-field>
 
-      <app-sender-info
-          aikaleima="now"
-          *ngIf="(user$ | async)"
-          [user]="(user$ | async)">
+      <app-sender-info  aikaleima="now"
+                        *ngIf="(user$ | async)"
+                        [user]="(user$ | async)">
       </app-sender-info>
 
     </div>
@@ -65,7 +64,7 @@
                   (keydown.enter)="$event.preventDefault()"
                   [matAutocomplete]="auto"
                   matInput
-                  maxlength="50"
+                  maxlength="255"
                   name="{{ ticketFields[i].otsikko }}"
                   type="text"
                   >
@@ -96,7 +95,7 @@
             Pakollinen kenttä.
           </mat-error>
 
-          <mat-hint align="end">{{ af.value.length }} / 50</mat-hint>
+          <mat-hint align="end">{{ af.value.length }} / 255</mat-hint>
 
         </mat-form-field>
 
