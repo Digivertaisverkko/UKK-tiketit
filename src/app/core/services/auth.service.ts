@@ -143,7 +143,6 @@ export class AuthService {
       newUserInfo = response.oikeudet;
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
-      console.warn(this.store.getAuthInfo());
       newUserInfo.asemaStr = getRoleString(newUserInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
