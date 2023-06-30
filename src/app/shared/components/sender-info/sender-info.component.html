@@ -19,19 +19,7 @@
       </span>
       <ng-template #hasDate>
 
-        <ng-container *ngIf="isCreatedToday">
-          <span i18n="@@Tänään">Tänään</span><span>&nbsp;</span>
-        </ng-container>
-
-        <ng-container *ngIf="isCreatedYesterday">
-          <span i18n="@@Eilen">Eilen</span><span>&nbsp;</span>
-        </ng-container>
-
-        <ng-container *ngIf="!isCreatedToday && !isCreatedYesterday">
-          <span>
-            {{ aikaleima | date: isCreatedThisYear ? 'd.M' : 'shortDate' }}
-          </span>
-        </ng-container>
+        <span>{{createdString}}&nbsp;</span>
 
         <span i18n="@@klo">klo</span>
         <span>&nbsp;{{ aikaleima | date: 'shortTime'}}</span>
