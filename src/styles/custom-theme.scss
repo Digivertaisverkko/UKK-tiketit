@@ -114,9 +114,6 @@ $custom-theme: mat.define-light-theme(
 // Tällä teemoittaa H1 ja H2.
 // @include mat.all-component-typographies($custom-typography-config);
 
-// Pitäisi toimia, mutta antaa errorin.
-//@include mat.core($custom-typography-config);
-
 // Tämä pitää olla ohjelmassa vain yhden kerran.
 @include mat.core();
 
@@ -133,12 +130,26 @@ $custom-theme: mat.define-light-theme(
 // passed to `define-light-theme` omits typography, `button-theme` will not
 // emit any typography styles.
 
-// @include mat.toolbar-theme($custom-theme);
-// @include mat.core-theme($custom-theme);
-// @include mat.button-theme($custom-theme);
 
-// FIXME: laita tämän sijaan vain niille komponenteille, mitä käytetään.
-@include mat.all-component-themes($custom-theme);
+@include mat.autocomplete-theme($custom-theme);
+@include mat.button-theme($custom-theme);
+@include mat.card-theme($custom-theme);
+@include mat.checkbox-theme($custom-theme);
+@include mat.chips-theme($custom-theme);
+@include mat.core-theme($custom-theme);
+@include mat.dialog-theme($custom-theme);
+@include mat.form-field-theme($custom-theme);
+@include mat.icon-theme($custom-theme);
+@include mat.input-theme($custom-theme);
+@include mat.list-theme($custom-theme);
+@include mat.menu-theme($custom-theme);
+@include mat.progress-bar-theme($custom-theme);
+@include mat.radio-theme($custom-theme);
+@include mat.select-theme($custom-theme);
+@include mat.sort-theme($custom-theme);
+@include mat.table-theme($custom-theme);
+@include mat.toolbar-theme($custom-theme);
+@include mat.tooltip-theme($custom-theme);
 
 button[mat-raised-button] {
   min-width: 10em;
@@ -149,7 +160,7 @@ button[mat-raised-button] {
 
 // Important -ylikirjoitukset
 
-// ? Miksei poimi teeman kontrastiväriä?
+// ? Miksei toimi tämä teeman kontrastiväriä?
 .mat-primary {
   color: white !important;
 }
