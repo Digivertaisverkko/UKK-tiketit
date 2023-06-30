@@ -38,8 +38,8 @@
         >
     <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
-      <div class="title-column">{{ field.otsikko }}</div>
-      <div class="info-text-column">{{ field.ohje }}</div>
+      <div class="column">{{ field.otsikko }}</div>
+      <div class="column">{{ field.ohje }}</div>
       <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id" >
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>

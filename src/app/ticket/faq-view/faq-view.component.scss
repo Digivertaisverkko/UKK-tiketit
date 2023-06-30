@@ -37,6 +37,10 @@ mat-card {
   margin: 0 auto 1em;
 }
 
+.short-field-p {
+  overflow: hidden;
+}
+
 @media (max-width: 900px) {
   .top-buttons-wrapper {
     gap: 0.5rem;

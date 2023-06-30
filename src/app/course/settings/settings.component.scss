@@ -40,10 +40,10 @@ p {
   cursor: move;
 }
 
-// .title-column {
-//   display: inline-block;
-//   width: 20em;
-// }
+
+.column {
+  overflow: hidden;
+}
 
 
 a, mat-icon {
