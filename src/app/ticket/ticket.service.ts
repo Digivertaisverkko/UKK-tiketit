@@ -358,7 +358,11 @@ export class TicketService {
     const me = $localize`:@@Minä:Minä`;
     const thisYear = new Date().getFullYear();
     let sortableData: SortableTicket[] = response.map((ticket: TikettiListassa) => {
-      const viimeisinDate = new Date(ticket.viimeisin);
+      let viimeisinStr = '';
+      if (ticket.viimeisin) {
+        const viimeisinDate = new Date(ticket.viimeisin);
+        viimeisinStr = getDateString(viimeisinDate, thisYear);
+      }
       return {
         tilaID: ticket.tila,
         tila: this.getTicketState(ticket.tila, myRole),
@@ -368,8 +372,8 @@ export class TicketService {
         aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
         kentat: ticket.kentat,
         liite: ticket.liite ?? false,
-        viimeisin: viimeisinDate,
-        viimeisinStr: getDateString(viimeisinDate, thisYear)
+        viimeisin: ticket.viimeisin ? new Date(ticket.viimeisin) : ticket.viimeisin,
+        viimeisinStr: ticket.viimeisin ? viimeisinStr : ''
       }
       // liite: this.getRandomInt(1,5) === 2 ? true : false
     });

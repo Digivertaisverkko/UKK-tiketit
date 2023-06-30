@@ -162,7 +162,11 @@ export class TicketListComponent implements OnInit, AfterViewInit {
       }
       return
     }).catch(error => {
-      this.handleError(error)
+      this.error = {
+        title: $localize`:@@Virhe:Virhe`,
+        message: $localize`:@@Kysymysten hakeminen ei onnistunut:
+          Kysymysten hakeminen ei onnistunut.`
+      }
     }).finally(() => {
       if (this.isPolling === false) {
         this.isPolling = true;
@@ -191,14 +195,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
         break;
       default:
         return $localize`:@@Esitetyt kysymykset:Esitetyt kysymykset`
-    }
-  }
-
-  private handleError(error: any) {
-    this.error = {
-      title: $localize`:@@Virhe:Virhe`,
-      message: $localize`:@@Kysymysten hakeminen ei onnistunut:
-        Kysymysten hakeminen ei onnistunut.`
     }
   }
 
