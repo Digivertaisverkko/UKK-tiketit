@@ -6,7 +6,6 @@
 
 /* ======== Angular material custom theme ======== */
 
-// FIXME: contrast värit eivät jostain syystä toimi esim. buttoneilla, vaan on templaten tyyleissä määritelty.
 $custom-primary-palette: (
   50: #e0f4fa,
   100: #b0e2f3,
@@ -62,6 +61,11 @@ $custom-accent-palette: (
 // accent: DC5323
 $custom-primary: mat.define-palette($custom-primary-palette, 500);
 $custom-accent: mat.define-palette($custom-accent-palette, 700);
+
+// Jostain syystä ylempi määrittely ei toimi buttoneilla, vaan käytetään tätä:
+.mat-primary {
+  color: white !important;
+}
 
 // $custom-primary: mat-palette($custom-primary-palette);
 
@@ -122,14 +126,6 @@ $custom-theme: mat.define-light-theme(
 // }
 
 // Emit theme-dependent styles for common features used across multiple components.
-// @include mat.core-theme($custom-theme);
-
-// @include mat-core($custom-typography-config);
-
-// Emit styles for MatButton based on `$my-theme`. Because the configuration
-// passed to `define-light-theme` omits typography, `button-theme` will not
-// emit any typography styles.
-
 
 @include mat.autocomplete-theme($custom-theme);
 @include mat.button-theme($custom-theme);
@@ -156,13 +152,6 @@ button[mat-raised-button] {
   padding-left: 2em;
   padding-right: 2em;
   text-transform: uppercase;
-}
-
-// Important -ylikirjoitukset
-
-// ? Miksei toimi tämä teeman kontrastiväriä?
-.mat-primary {
-  color: white !important;
 }
 
 .mdc-button {
