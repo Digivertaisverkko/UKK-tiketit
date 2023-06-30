@@ -19,12 +19,13 @@ export class CustomHttpInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler):Observable<HttpEvent<any>> {
+    // Näyttää progress barin.
     this.store.startLoading();
     return next.handle(request).pipe(
       tap({
         next: (event) => {
           if (event instanceof HttpResponse) {
-            this.consoleLogError(request, event);
+            this.logResponse(request, event);
             this.store.stopLoading();
           }
         },
@@ -35,25 +36,34 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     );
   }
 
-  private consoleLogError(request: any, event: any): void {
+  private logResponse(request: any, event: any): void {
     const responseBody = JSON.stringify(event.body);
 
     let huomautus: string;
     if (event.body === null) {
-      huomautus = ' Voi olla myös tyhjä objekti "{}".'
+      huomautus = ' (voi olla myös tyhjä objekti "{}")'
     } else {
       huomautus = '';
     }
 
-    console.log(`Tehtiin ${request.method}-pyyntö URL:iin "${request.url}` +
-      `". Tilakoodi ${event.status}. ` +
-      `Saatiin vastaukseksi "${truncate(responseBody, 1000, true)}".` +
-      huomautus);
-
-    if (request.body != null && request.body.length > 0) {
-      const requestBody = JSON.stringify(request.body);
-      console.log(`Pyynnön body: "$${truncate(requestBody, 500, true)}"`);
+    let bodyMessage = '';
+    if (request.body) {
+      if (Object.keys(request.body).length < 4 ) {
+       bodyMessage = ` Pyynnön body: "${JSON.stringify(request.body)}".`;
+      } else {
+        bodyMessage = ' Pyynnön body alla.';
+      }
     }
+
+    console.log(`Tehtiin ${request.method}-pyyntö URL:iin "${request.url}` +
+      `".${bodyMessage} Tilakoodi ${event.status}. ` +
+      `Saatiin vastaukseksi "${truncate(responseBody, 1500, true)}"` +
+      huomautus + '.');
+
+    if (request.body && Object.keys(request.body).length >= 4 ) {
+      console.dir(request.body);
+    }
+
   }
 
 }
