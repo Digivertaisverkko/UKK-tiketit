@@ -136,7 +136,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.warn('listaus: ngOnDestroy ajettu.');
     window.removeEventListener('scroll', this.onScroll);
     this.loggedIn$.unsubscribe();
   }

@@ -20,7 +20,7 @@ export function getDateString(date: Date, thisYear: number): string {
   } else if (isYesterday(date)) {
     dateString = $localize `:@@Eilen:Eilen`;
   } else if (date.getFullYear() === thisYear) {
-    dateString = datePipe.transform(date, 'd.M') ?? '';
+    dateString = datePipe.transform(date, 'd.M.') ?? '';
   } else {
     dateString = datePipe.transform(date, 'shortDate') ?? '';
   }
