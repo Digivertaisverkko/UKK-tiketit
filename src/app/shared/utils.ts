@@ -27,6 +27,11 @@ export function getDateString(date: Date, thisYear: number): string {
   return dateString
 }
 
+ // Palauta satunnainen kokonaisluku min ja max väliltä.
+ export function getRandomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 
 // Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
 export function getRoleString(asema: Role | null): string {
