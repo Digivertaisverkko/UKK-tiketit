@@ -90,14 +90,15 @@
   Usein kysyttyjen kysymysten siirtäminen
 </h3>
 
-<!-- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
+<!---- Ei näytetä käyttäjällä, koska tiedoston valitsimen aktivointiin käytetään
+  parent componentissa olevaa tämän. Tämän vuoksi ei käytetä label-elementtia.
+-->
 <input  accept=".json"
-        aria-disabled="true"
+        aria-hidden="true"
         (change)="onFileAdded($event)"
         class="file-input"
         #fileInput
         multiple
-        style="display: none"
         type="file"
         >
 
