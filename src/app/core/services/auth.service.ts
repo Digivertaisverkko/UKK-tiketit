@@ -120,7 +120,7 @@ export class AuthService {
   }
 
   // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
-  // käytettäviksi.
+  // käytettäviksi eri puolilla ohjelmaa.
   public async fetchUserInfo(courseID: string): Promise<void> {
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
@@ -133,10 +133,14 @@ export class AuthService {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
       joka paikassa odottaa observablen arvoa? */
       /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
+      console.log(`Haetaan, onko oikeuksia ja käyttäjätietoja kurssille ${courseID}.`);
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
       response = await firstValueFrom<UserRights>(this.http.get<any>(url));
     } catch (error: any) {
       response = null;
+    }
+    if (response === null) {
+      console.warn(`Tällä käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
     }
     let newUserInfo: any;
     if (response != null && response.oikeudet != null)  {
@@ -173,7 +177,7 @@ export class AuthService {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
       joka paikassa odottaa observablen arvoa? */
       const url = `${environment.apiBaseUrl}/minun`;
-      console.log('fetchVisitorInfo: koitetaan hakea tiedot');
+      console.log('authService.fetchVisitorInfo: koitetaan hakea tiedot, onko kirjautuneena eri kurssille.');
       response = await firstValueFrom<any>(this.http.get<any>(url));
     } catch (error: any) {
       return null

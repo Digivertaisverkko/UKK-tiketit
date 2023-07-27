@@ -76,6 +76,7 @@ export class CourseService {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}`;
     try {
+      console.log('Haetaan kurssin nimi.');
       response = await firstValueFrom(
         this.http.get<{ 'kurssi-nimi': string }[]>(url).pipe(
           timeout(3000),
@@ -96,6 +97,7 @@ export class CourseService {
     let response: any;
     let url = environment.apiBaseUrl + '/minun/kurssit';
     try {
+      console.log('Haetaan kurssit, joilla ollaan osallistujana.');
       response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
       this.store.setLoggedIn();
     } catch (error: any) {
