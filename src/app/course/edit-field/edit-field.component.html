@@ -43,8 +43,11 @@
         #submitForm="ngForm"
         >
     <mat-form-field class="field-title" appearance="fill">
-      <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
+      <label class="non-visible-label" for="field-name"i18n="@@Kentän nimi">
+        Kentän nimi
+      </label>
       <input  formControlName="title"
+              id="field-name"
               i18n-placeholder="@@Kentän nimi"
               matInput
               maxlength="50"
@@ -126,7 +129,9 @@
 
     <!------------------------------------------------------------------------->
 
-    <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
+    <label class="theme-label info-text-label" for="info-text" i18n="@@Infoteksti">
+      Info-teksti
+    </label>
 
     <mat-form-field class="text-area-wrapper">
       <textarea autocomplete="off"
@@ -136,6 +141,7 @@
                 cdkTextareaAutosize
                 contenteditable
                 formControlName="infoText"
+                id="info-text"
                 i18n-placeholder="@@Infoteksti"
                 matInput
                 maxlength="255"
