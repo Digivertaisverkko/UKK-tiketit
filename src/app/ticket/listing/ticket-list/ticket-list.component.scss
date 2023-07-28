@@ -1,3 +1,8 @@
+.invisible {
+  position: absolute;
+  left: -9999px;
+  color: transparent;
+}
 
 .mat-column-aloittajanNimi,
 .mat-column-aikaleima {
