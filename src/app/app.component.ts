@@ -83,7 +83,6 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   public goTo(view: 'profile' | 'settings') {
-    // Ei toimi route.paramMap.
     const courseID = getCourseIDfromURL();
     const route = '/course/' + courseID + '/' + view;
     console.log('route: ' + route);
@@ -104,11 +103,9 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   // Seurataan kurssi ID:ä URL:sta.
   private trackCourseID(): void {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+    this.route.paramMap.subscribe(() => {
+      // Ei toimi route.paramMap upotuksessa.
       this.courseID = getCourseIDfromURL();
-      // const courseID = paramMap.get('courseid');
-      // if (courseID != null) this.courseID = courseID;
-      // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
     })
   }
 
