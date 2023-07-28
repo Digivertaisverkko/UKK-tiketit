@@ -10,11 +10,14 @@
   <form [formGroup]="form" (ngSubmit)="login()">
     <mat-form-field>
       <input  formControlName="email"
-              i18n-placeholder="@@Käyttäjätunnus"
               matInput
               name="email"
-              placeholder="Käyttäjätunnus"
               >
+      <!-- i18n-placeholder="@@Käyttäjätunnus" -->
+      <!-- placeholder="Käyttäjätunnus" -->
+      <mat-label i18n="@@Käyttäjätunnus">
+        Käyttäjätunnus
+      </mat-label>
       <mat-error  i18n="@@Käyttäjätunnus tarvitaan."
                   *ngIf="email?.errors?.['required']"
                   >
@@ -26,10 +29,13 @@
       <input  formControlName="password"
               i18n-placeholder="@@Salasana"
               matInput
-              name="password"
-              placeholder="Salasana"
               type="password"
               >
+              <!-- name="password"
+              placeholder="Salasana" -->
+      <mat-label i18n="@@Salasana">
+        Salasana
+      </mat-label>
       <mat-error  i18n="@@Salasana tarvitaan"
                   *ngIf="password?.errors?.['required']"
                   >
