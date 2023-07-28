@@ -81,9 +81,9 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   public goTo(view: 'profile' | 'settings') {
-    // Ei routen seuraaminen toimi ja initiin ei voi laittaa, kun voi silloin
-    // olla null.
-    this.router.navigateByUrl('/course/' + this.courseID + '/' + view);
+    const route = '/course/' + this.courseID + '/' + view;
+    console.log('route: ' + route);
+    this.router.navigateByUrl(route);
   }
 
   public logoClicked() {

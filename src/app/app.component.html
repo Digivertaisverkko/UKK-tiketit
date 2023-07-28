@@ -61,7 +61,7 @@
               i18n="@@Profiili"
               i18n-aria-label="@@Profiili"
               mat-menu-item
-              *ngIf="(isLoggedIn$ | async) === true"
+              *ngIf="(isLoggedIn$ | async) === true && courseID"
               >
           Profiili
         </button>
@@ -70,7 +70,8 @@
                 mat-menu-item
                 *ngIf="((user$ | async)?.asema === 'opettaja' ||
                         (user$ | async)?.asema === 'admin') &&
-                      (isParticipant$ | async) === true"
+                        (isParticipant$ | async) === true &&
+                        courseID"
                       (click)="goTo('settings')"
                 >
           Kurssin asetukset
