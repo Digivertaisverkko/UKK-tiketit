@@ -9,19 +9,21 @@ import { TicketService } from '@ticket/ticket.service';
   template: `
     <div class="attachments-wrapper">
       <button
+          aria-label="Lataa liitetiedosto"
           class="attachment"
           (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
+          i18n-aria-label="@@Lataa liitetiedosto"
           matTooltip="{{file.nimi}}"
           [matTooltipShowDelay]="600"
           *ngFor="let file of files; let i = index"
           >
-          <div class="filename">{{ file.nimi }}</div>
+          <span class="filename">{{ file.nimi }}</span>
           &nbsp;
           <div class="filesize">
             ({{ file.koko | filesize : { locale: 'fi', round: 1,
                 separator: ",", pad: true } }})
           </div>
-          <mat-icon>download</mat-icon>
+          <mat-icon aria-hidden="true">download</mat-icon>
       </button>
     </div>`,
 
