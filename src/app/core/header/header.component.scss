@@ -11,6 +11,7 @@
 
   $icon-size: calc($header-height * 0.8);
 
+
   #account-icon-button {
     align-items: center;
     font-size: $icon-size;
@@ -28,7 +29,16 @@
       height: auto;
       width: auto;
     }
+
   }
+}
+
+// Jostain syystä oletus-focusta ei enää tullut.
+#account-icon-button:focus {
+  color: #f2f3f7;
+  background-color: #008abd;
+  // filter: brightness(85%);
+  // outline: 1px solid gray; /* Example: Add a blue outline when focused */
 }
 
 //----------------- Muut -------------------------------------------------------
