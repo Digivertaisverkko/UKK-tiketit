@@ -47,6 +47,7 @@ export class AppComponent implements OnInit, OnDestroy  {
       console.log('Production build');
     }
     this.authService.initialize();
+    this._language = localStorage.getItem('language') ?? 'fi-FI';
     // Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
     // this.isInIframe = true;
