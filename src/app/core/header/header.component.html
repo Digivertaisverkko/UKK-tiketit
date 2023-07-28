@@ -60,51 +60,48 @@
 
 <!----------------- Valikko --------------------------------------------------->
 <mat-menu #accountMenu="matMenu">
-  <app-usermenu>
-  </app-usermenu>
-</mat-menu>
-<!--
-
-<mat-menu #accountMenu="matMenu">
 
   <button mat-menu-item
-          (click)="toggleLanguage()"
-          [disabled]="disableLangSelect"
-          i18n="@@vaihda kieli"
-          >
+            (click)="toggleLanguage()"
+            [disabled]="disableLangSelect"
+            i18n="@@vaihda kieli"
+            >
     Change to English
   </button>
 
-  <button i18n="@@Profiili"
-          mat-menu-item
-          *ngIf="courseID !== null && isLoggedIn === true"
-          [routerLink]="'/course/' + courseID + '/profile'"
-          >
+  <button (click)="goTo('profile')"
+        i18n="@@Profiili"
+        i18n-aria-label="@@Profiili"
+        mat-menu-item
+        *ngIf="(isLoggedIn$ | async) === true"
+        >
     Profiili
+  </button>
+
+  <button i18n="@@Kurssin asetukset"
+        mat-menu-item
+        *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                (user$ | async)?.asema === 'admin') &&
+              (isParticipant$ | async) === true"
+              (click)="goTo('settings')"
+        >
+    Kurssin asetukset
+  </button>
+
+  <button (click)="login()"
+          i18n="@@Kirjaudu sisään"
+          mat-menu-item
+          *ngIf="(isLoggedIn$ | async) === false"
+          >
+    Kirjaudu sisään
   </button>
 
   <button (click)="logout()"
           i18n="@@Kirjaudu ulos"
           mat-menu-item
-          *ngIf="isLoggedIn === true; else logIn"
+          *ngIf="(isLoggedIn$ | async) === true"
           >
     Kirjaudu ulos
   </button>
 
-  <ng-template #logIn>
-    <button (click)="login()"
-            i18n="@@Kirjaudu sisään"
-            mat-menu-item
-            >
-      Kirjaudu sisään
-    </button>
-  </ng-template>
-
-
-   + Kurssin asetukset
-        + Upotuksessa avaa uuteen välilehteen.
-
 </mat-menu>
-
-
--->

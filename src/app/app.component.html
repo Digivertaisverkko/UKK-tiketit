@@ -41,7 +41,42 @@
       </button>
 
       <mat-menu #menu="matMenu">
-        <app-usermenu></app-usermenu>
+        <button (click)="openInNewTab()"
+                i18n="@@Avaa uuteen välilehteen"
+                mat-menu-item
+                *ngIf="isInIframe"
+                >
+            Avaa uuteen välilehteen
+        </button>
+
+        <button mat-menu-item
+                (click)="toggleLanguage()"
+                [disabled]="disableLangSelect"
+                i18n="@@vaihda kieli"
+                >
+          Change to English
+        </button>
+
+        <button (click)="goTo('profile')"
+              i18n="@@Profiili"
+              i18n-aria-label="@@Profiili"
+              mat-menu-item
+              *ngIf="(isLoggedIn$ | async) === true"
+              >
+          Profiili
+        </button>
+
+        <button i18n="@@Kurssin asetukset"
+                mat-menu-item
+                *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                        (user$ | async)?.asema === 'admin') &&
+                      (isParticipant$ | async) === true"
+                      (click)="goTo('settings')"
+                >
+          Kurssin asetukset
+        </button>
+
+
       </mat-menu>
 
     </mat-toolbar>

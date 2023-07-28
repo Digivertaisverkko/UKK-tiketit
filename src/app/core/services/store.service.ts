@@ -27,6 +27,7 @@ export class StoreService {
   private constants;
   // Voidaan välittää viestejä komponenttien välillä.
   private messageEmitter$ = new Subject<string>();
+  // Vierityksen kohta eri näkymäissä. Tällä hetkellä käytössä listaus -näkymässä.
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null>(null);
 
