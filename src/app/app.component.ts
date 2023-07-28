@@ -3,6 +3,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -15,7 +16,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy  {
   public courseName: string = '';
-  public courseID: string = '';
+  public courseID: string | null = '';
   public disableLangSelect: boolean = false;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
@@ -81,7 +82,9 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   public goTo(view: 'profile' | 'settings') {
-    const route = '/course/' + this.courseID + '/' + view;
+    // Ei toimi route.paramMap.
+    const courseID = getCourseIDfromURL();
+    const route = '/course/' + courseID + '/' + view;
     console.log('route: ' + route);
     this.router.navigateByUrl(route);
   }
@@ -101,8 +104,9 @@ export class AppComponent implements OnInit, OnDestroy  {
   // Seurataan kurssi ID:ä URL:sta.
   private trackCourseID(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      const courseID = paramMap.get('courseid');
-      if (courseID != null) this.courseID = courseID;
+      this.courseID = getCourseIDfromURL();
+      // const courseID = paramMap.get('courseid');
+      // if (courseID != null) this.courseID = courseID;
       // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
     })
   }
