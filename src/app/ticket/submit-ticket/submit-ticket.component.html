@@ -23,21 +23,23 @@
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="theme-subheading">
-        <textarea aria-label="Otsikko"
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMaxRows="3"
-                  cdkAutosizeMinRows="1"
-                  cdkTextareaAutosize
-                  class="theme-subheading"
-                  i18n-placeholder="@@Otsikko"
-                  formControlName="title"
-                  matInput
-                  maxlength="255"
-                  name="title"
-                  placeholder="otsikko"
-                  type="text"
-                  >
-        </textarea>
+        <h2 class="input-heading">
+          <textarea aria-label="Otsikko"
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMaxRows="3"
+                    cdkAutosizeMinRows="1"
+                    cdkTextareaAutosize
+                    class="theme-subheading"
+                    i18n-placeholder="@@Otsikko"
+                    formControlName="title"
+                    matInput
+                    maxlength="255"
+                    name="title"
+                    placeholder="otsikko"
+                    type="text"
+                    >
+          </textarea>
+        </h2>
         <mat-error  i18n="@@Pakollinen kenttä."
                     *ngIf="title?.errors?.['required']"
                     >
@@ -113,7 +115,9 @@
 
     </section>
 
-    <h2 class="theme-subheading"><span i18n="@@Viesti">Viesti</span><span>*</span></h2>
+    <h3 class="theme-subheading">
+      <span i18n="@@Viesti">Viesti</span><span>*</span>
+    </h3>
     <app-editor formControlName="message" ngDefaultControl></app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="message?.errors?.['required'] && message?.touched"
