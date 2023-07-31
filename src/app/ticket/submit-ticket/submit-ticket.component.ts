@@ -138,8 +138,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private fetchTicketInfo(ticketId: string, courseID: string): void {
-    this.ticketService.getTicket(ticketId, courseID)
-    .then(response => {
+    this.ticketService.getTicket(ticketId, courseID).then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);
       this.oldAttachments = response.liitteet ?? [];
