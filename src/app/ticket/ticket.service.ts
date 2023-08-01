@@ -2,7 +2,6 @@
     UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
     niistä vastaavassa servicessä. */
 
-
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -14,7 +13,7 @@ import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
 export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
-import { getDateString, isToday, isYesterday } from '@shared/utils';
+import { getDateString } from '@shared/utils';
 import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
 
@@ -321,7 +320,8 @@ export class TicketService {
 
   /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
       lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
-      palauttaa ainoastaan itse luodut tiketit. */
+      palauttaa ainoastaan itse luodut tiketit, 'archived' palauta arkistoidut
+      eli ratkaistut kysymykset. */
   public async getTicketList(courseID: string, option?: {
       option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
     const currentRoute = window.location.href;

@@ -74,18 +74,15 @@ export class CourseService {
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
     let response: any;
-    let url = `${this.api}/kurssi/${courseID}`;
+    const url = `${this.api}/kurssi/${courseID}`;
     try {
       console.log('Haetaan kurssin nimi.');
       response = await firstValueFrom(
-        this.http.get<{ 'kurssi-nimi': string }[]>(url).pipe(
+        this.http.get<{ 'nimi': string }[]>(url).pipe(
           timeout(3000),
           retry(3)
         )
       )
-      /* response = await firstValueFrom(
-        this.http.get<{ 'kurssi-nimi': string }[]>(url)
-      ); */
     } catch (error: any) {
       this.handleError(error);
     }
