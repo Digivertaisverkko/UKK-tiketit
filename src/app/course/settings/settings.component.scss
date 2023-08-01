@@ -119,17 +119,21 @@ mat-icon {
 
 .invite-wrapper {
   display: flex;
-  align-items: baseline;
-  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.invite-left-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-label {
+  margin-right: 1rem;
 }
 
 .invite-field {
   // margin-top: 1em;
   width: 22em;
-}
-
-.role-label {
-  margin-right: 1rem;
 }
 
 mat-radio-button {
