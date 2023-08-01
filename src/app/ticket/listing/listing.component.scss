@@ -65,6 +65,14 @@ a {
   max-width: 7rem;
 }
 
+.no-left-padding {
+  padding-left: -15px;
+}
+
+.attachment-cell {
+  text-align: center;
+}
+
 /* Jotta menee on samassa tasossa headerien kanssa, joilla sorting-nuoli ottaa
    oikealta puolelta tilaa. */
 .cell-align-right {

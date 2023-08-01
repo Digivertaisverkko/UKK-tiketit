@@ -112,7 +112,7 @@
   </ng-container>
 
   <ng-container matColumnDef="viimeisin">
-    <th class="align-right"
+    <th class="align-right no-left-padding"
         mat-header-cell
         *matHeaderCellDef
         mat-sort-header
@@ -137,10 +137,14 @@
   </ng-container>
 
   <ng-container matColumnDef="liite">
-    <th class="align-right invisible" mat-header-cell *matHeaderCellDef>
-      Liitteet
+    <th class="align-right no-left-padding"
+        mat-header-cell
+        *matHeaderCellDef 
+        mat-sort-header
+        >
+      &nbsp;
     </th>
-    <td class="attachment-cell"mat-cell *matCellDef="let element">
+    <td class="attachment-cell" mat-cell *matCellDef="let element">
       <mat-icon aria-label="Liite"
                 i18n-aria-label="@@Liite"
                 *ngIf="element.liite"
