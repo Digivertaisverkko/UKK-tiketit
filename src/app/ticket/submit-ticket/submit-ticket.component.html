@@ -23,23 +23,24 @@
 
     <div class="ticket-header">
       <mat-form-field appearance="fill" class="theme-subheading">
-        <h2 class="input-heading">
-          <textarea aria-label="Otsikko"
-                    #autosize="cdkTextareaAutosize"
-                    cdkAutosizeMaxRows="3"
-                    cdkAutosizeMinRows="1"
-                    cdkTextareaAutosize
-                    class="theme-subheading"
-                    i18n-placeholder="@@Otsikko"
-                    formControlName="title"
-                    matInput
-                    maxlength="255"
-                    name="title"
-                    placeholder="otsikko"
-                    type="text"
-                    >
-          </textarea>
+        <!-- Screenreaderille -->
+        <h2 class="invisible" i18n="@@Uusi kysymys">
+          Uusi kysymys
         </h2>
+        <textarea #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMaxRows="3"
+                  cdkAutosizeMinRows="1"
+                  cdkTextareaAutosize
+                  class="theme-subheading"
+                  formControlName="title"
+                  i18n-placeholder="@@Otsikko"
+                  matInput
+                  maxlength="255"
+                  name="title"
+                  placeholder="otsikko"
+                  type="text"
+                  >
+        </textarea>
         <mat-error  i18n="@@Pakollinen kenttä."
                     *ngIf="title?.errors?.['required']"
                     >
