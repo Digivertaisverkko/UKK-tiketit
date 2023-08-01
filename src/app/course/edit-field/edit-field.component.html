@@ -43,9 +43,6 @@
         #submitForm="ngForm"
         >
     <mat-form-field class="field-title" appearance="fill">
-      <label class="non-visible-label" for="field-name"i18n="@@Kentän nimi">
-        Kentän nimi
-      </label>
       <input  formControlName="title"
               id="field-name"
               i18n-placeholder="@@Kentän nimi"
@@ -55,6 +52,7 @@
               placeholder="Kentän nimi"
               />
               <!-- [(ngModel)]="field.otsikko" -->
+      <mat-label i18n="@@Kentän nimi">Kentän nimi</mat-label>
       <mat-hint align="end">{{ title.value.length }} / 50</mat-hint>
 
       <mat-error  i18n="@@Pakollinen kenttä."
