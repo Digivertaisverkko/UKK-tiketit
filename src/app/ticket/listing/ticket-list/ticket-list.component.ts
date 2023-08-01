@@ -45,14 +45,15 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
     );
   });
   const datePipe = new DatePipe('fi-FI');
+  const attachmentStr = $localize `:@@liite:liite`;
   const mainDataMatch = (
-    data.id.toString() === filterValue ||
     data.otsikko.toLowerCase().includes(filterValue) ||
     datePipe.transform(data.aikaleima, 'shortDate')?.includes(filterValue) ||
     datePipe.transform(data.viimeisin, 'shortDate')?.includes(filterValue) ||
     data.viimeisinStr.toLowerCase().includes(filterValue) ||
     data.aloittajanNimi.toLowerCase().includes(filterValue) ||
-    data.tila.toLowerCase().includes(filterValue)
+    data.tila.toLowerCase().includes(filterValue) ||
+    data.liite === true && attachmentStr.includes(filterValue)
   );
   return kentatMatch || mainDataMatch;
 };
