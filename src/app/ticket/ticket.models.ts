@@ -76,21 +76,24 @@ export interface SortableTicket {
   liite?: boolean;
   viimeisin: Date;
   viimeisinStr: string;
-  kentat: [{
-    tiketti: string;
-    arvo: string;
-    otsikko: string;
-  }]
+  kentat: TikettiListanKentta[];
 }
 
-// Käytetään pohjana muihin interfaceihin.
+// Käytetään pohjana muihin interfaceihin. 
 interface Tikettipohja {
   id: string;
   otsikko: string;
   aikaleima: Date;
   aloittaja: User;
+  kurssi: number;
   tila: number;
   ukk: boolean;
+}
+
+interface TikettiListanKentta {
+    tiketti: number;
+    arvo: string;
+    otsikko: string;
 }
 
 // Metodi: getTicketList, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
@@ -98,11 +101,7 @@ interface Tikettipohja {
 export interface TikettiListassa extends Tikettipohja {
   viimeisin: string;
   liite?: boolean;
-  kentat: [{
-    tiketti: number;
-    arvo: string;
-    otsikko: string;
-  }]
+  kentat: TikettiListanKentta[];
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
