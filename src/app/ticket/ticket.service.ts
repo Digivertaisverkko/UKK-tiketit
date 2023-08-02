@@ -286,12 +286,7 @@ export class TicketService {
     }
     return response;
   }
-
-  // Testaamista varten.
-  private getRandomInt(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
+  
   // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
@@ -324,8 +319,9 @@ export class TicketService {
       eli ratkaistut kysymykset. */
   public async getTicketList(courseID: string, option?: {
       option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
-    const currentRoute = window.location.href;
-    if (currentRoute.indexOf('/list-tickets') === -1) {
+      const currentRoute = window.location.href;
+      // TODO: testaamista varten. onko muuta tapaa, joka ei oleta porttia?
+      if (!currentRoute.includes('localhost:9876') && currentRoute.indexOf('/list-tickets') === -1) {
       return null
     }
     if (courseID === '') throw new Error('Ei kurssi ID:ä.');
