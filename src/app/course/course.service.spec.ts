@@ -37,5 +37,6 @@ describe('CourseService', () => {
     
     const request = controller.expectOne(url);
     request.flush({ nimi: 'Testikurssi' });
+    controller.verify();
   })
 });
