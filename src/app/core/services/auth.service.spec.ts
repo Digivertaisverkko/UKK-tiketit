@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';
@@ -7,9 +7,11 @@ import { StoreService } from './store.service';
 import { CourseService } from '@course/course.service';
 
 describe('AuthService', () => {
+  let controller: HttpTestingController;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeErrorService: jasmine.SpyObj<ErrorService>;
-  let fakeStoreService: jasmine.SpyObj<StoreService>;
+  let store: StoreService;
+  // let fakeStoreService: jasmine.SpyObj<StoreService>;
   let service: AuthService;
 
   beforeEach(() => {
@@ -21,6 +23,7 @@ describe('AuthService', () => {
       handleServerError: undefined
     });
 
+    /*
     fakeStoreService = jasmine.createSpyObj('StoreService', {
       setCourseName: undefined,
       setLoggedIn: undefined,
@@ -28,17 +31,25 @@ describe('AuthService', () => {
       setParticipant: undefined,
       setUserInfo: undefined,
       unsetPosition: undefined
-    });
+    }); */
 
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
         { provide: ErrorService, useValue: fakeErrorService },
-        { provide: StoreService, useValue: fakeStoreService }
+        { provide: StoreService, useClass: StoreService },
       ]
     });
+    // { provide: StoreService, useValue: fakeStoreService }
     service = TestBed.inject(AuthService);
+    controller = TestBed.inject(HttpTestingController);
+    store = TestBed.inject(StoreService);
+
+  });
+
+  afterEach(() => {
+    controller.verify(); // Verify that there are no outstanding requests
   });
 
   it('should be created', () => {

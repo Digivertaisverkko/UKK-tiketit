@@ -15,7 +15,6 @@ import { getRoleString } from '@shared/utils';
 import { AuthInfo, LoginInfo, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 
-
 interface UserRights {
   oikeudet: User,
   login: AuthInfo,
@@ -202,9 +201,8 @@ export class AuthService {
   }
 
   /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
-  loginType voi olla atm: 'own'. Jos courseID on annettu, niin palautetaan
-  linkki sen kurssin näkymään.¶ */
-   public async getLoginInfo(loginType: string, courseID: string | null):
+     Palautetaan tarvittavat tiedot kirjautumista varten. */
+   public async getLoginInfo(loginType: 'own', courseID: string | null):
      Promise<LoginInfo> {
    if (courseID === null) {
      throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
@@ -269,13 +267,13 @@ export class AuthService {
   /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
   public async login(email: string, password: string, loginID: string):
       Promise<LoginResult> {
-        const httpOptions =  {
-          headers: new HttpHeaders({
-            'ktunnus': email,
-            'salasana': password,
-            'login-id': loginID
-          })
-      }
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'ktunnus': email,
+        'salasana': password,
+        'login-id': loginID
+      })
+    }
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
