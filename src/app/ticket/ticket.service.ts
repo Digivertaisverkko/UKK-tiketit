@@ -111,7 +111,6 @@ export class TicketService {
       tiketti: Number(ticketID)
     }
     try {
-      console.log('lähetetään body: ' + JSON.stringify(body));
       response = await firstValueFrom<{ success: boolean }>(
         this.http.post<{ success: boolean }>(url, body)
       );
@@ -384,9 +383,7 @@ export class TicketService {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
-      console.log('haetaan tiketti');
       response = await firstValueFrom(this.http.get<Tiketti>(url));
-      console.log('tiketti haettu');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -406,8 +403,7 @@ export class TicketService {
     if (originalComment!.muokattu) {
       ticket.muokattu = new Date(originalComment!.muokattu);
     }
-    comments = comments.filter(comment => comment !== originalComment);
-    ticket.kommentit = comments;
+    ticket.kommentit = comments.filter(comment => comment !== originalComment);
     return ticket
   }
 
@@ -427,7 +423,6 @@ export class TicketService {
   private async getComments(ticketID: string, courseID: string): Promise<Kommentti[]>{
     let response: any;
     // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/kaikki
-    console.log('haetaan kommentit');
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/kaikki`;
     try {
       response = await firstValueFrom<Kommentti[]>(this.http.get<any>(url));
@@ -454,15 +449,9 @@ export class TicketService {
   private async getFields(ticketID: string, courseID: string): Promise<Kentta[]> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
-
-    console.log('ticketService.getFields: url: ' + url);
-
     try {
-      console.log('haetaan kentät');
       response = await firstValueFrom<Kentta[]>( this.http.get<any>(url) );
     } catch (error: any) {
-      console.log('kenttien catchissa');
-      console.log(error);
       this.handleError(error);
     }
     return response;

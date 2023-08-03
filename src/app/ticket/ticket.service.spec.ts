@@ -8,7 +8,6 @@ import { SortableTicket, TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ticketDummyData } from './ticket.dummydata';
-import { User } from '@core/core.models';
 import { Tiketti } from './ticket.service';
 
 import { fakeAsync, tick } from '@angular/core/testing';
@@ -17,7 +16,7 @@ environment.testing = true;
 const courseName = 'Testikurssi';
 const api = environment.apiBaseUrl;
 
-fdescribe('TicketService', () => {
+describe('TicketService', () => {
   // let fakeStoreService: Pick<StoreService, keyof StoreService>;
   // let fakeStoreService: jasmine.SpyObj<StoreService>
   let tickets: TicketService;
@@ -80,15 +79,16 @@ fdescribe('TicketService', () => {
     request.flush(ticketDummyData.ticketListServerData);
   });
 
-  fit('retrieves one ticket with full info', fakeAsync(() => {
+  it('retrieves ticket with all properties', fakeAsync(() => {
     store.setUserInfo(storeDummyData.teacherUser);
     const courseID = '1';
     const ticketID = '3';
     let result: Tiketti | undefined;
 
     tickets.getTicket(ticketID, courseID).then(res => {
-      console.log(res);
-      result = res;
+      const ticketProperties = ticketDummyData.ticketProperties;
+      const resProperties = Object.keys(res);
+      expect(resProperties).toEqual(ticketProperties);
       // done();
     }).catch (e => {
       console.log(e);
@@ -113,7 +113,6 @@ fdescribe('TicketService', () => {
     commentsRequest.flush(ticketDummyData.ticket3comments);
     tick();
 
-    expect(result).toBeDefined();
   }));
 
 });

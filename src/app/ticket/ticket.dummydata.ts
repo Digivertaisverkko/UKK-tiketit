@@ -171,6 +171,22 @@ export const ticketDummyData = {
       muokattu: null,
       liitteet: []
     }
+  ],
+
+  ticketProperties: [
+    'id',
+    'otsikko',
+    'aikaleima',
+    'aloittaja',
+    'tila',
+    'kurssi',
+    'ukk',
+    'arkistoitava',
+    'kentat',
+    'kommenttiID',
+    'viesti',
+    'liitteet',
+    'kommentit'
   ]
 
 }
