@@ -5,6 +5,7 @@ import localeEn from '@angular/common/locales/en';
 
 // Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
+
   registerLocaleData(localeFi);  // Aina oletuslocale.
   registerLocaleData(localeEn);
   const language = getLanguage();
@@ -19,7 +20,11 @@ export const initializeLanguage = (): Promise<void> | void => {
   }
 };
 
-// Mikä kieli on käytössä.
+/* Mikä kieli on käytössä. Valitaan tässä järjestyksessä jos on määritelty.
+  1. Käyttäjän valitsema (tallennettu localStorageen)
+  2. URL-parametrina
+  3. Oletus: fi-FI
+*/
 function getLanguage(): 'en-US' | 'fi-FI' {
   const url = new URL(window.location.href);
   var language: 'en-US' | 'fi-FI';
@@ -36,7 +41,7 @@ function getLanguage(): 'en-US' | 'fi-FI' {
       console.log('Käytetään oletuskieltä');
       // Oletus on upotuksessa englanti, koska käyttäjä ei voi vaihtaa kieltä
       // toisin kuin normaalinäkymässä.
-      language = isInIframe() ? 'en-US' : 'fi-FI'; 
+      language = isInIframe() ? 'en-US' : 'fi-FI';
     }
   } else {
     const urlLang = url.searchParams.get('lang');
@@ -44,7 +49,7 @@ function getLanguage(): 'en-US' | 'fi-FI' {
      language = getLangFormat(urlLang);
     } else {
       console.log('Ei kieltä tallennettuna tai URL:ssa, käytetään oletusta: fi-FI');
-      language = isInIframe() ? 'en-US' : 'fi-FI'; 
+      language = isInIframe() ? 'en-US' : 'fi-FI';
     }
   }
 
