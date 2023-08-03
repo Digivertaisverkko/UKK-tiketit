@@ -8,11 +8,14 @@ const baseUrl = '/api';
 
 // clientID on 3rd party -tunnistautumista varten.
 
+// Testing = ajetaan Jasmine -testausympäristössä.ß
+
 export const environment = {
   production: false,
   clientID: 'angularApp',
   productName: 'UKK-Tiketit',
-  apiBaseUrl: baseUrl
+  apiBaseUrl: baseUrl,
+  testing: false
 }
 
 //
