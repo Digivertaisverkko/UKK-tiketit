@@ -1,12 +1,11 @@
-import { APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { environment } from 'src/environments/environment';
-import { LOCALE_ID } from '@angular/core';
 import { ticketDummyData } from './ticket.service.dummydata';
 import { storeDummyData } from '@core/services/store.service.dummydata';
-import { SortableTicket, TicketService, TikettiListassa } from './ticket.service';
+import { SortableTicket, TicketService } from './ticket.service';
 import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
 import { initializeLanguage } from '../app.initializers';
@@ -14,7 +13,6 @@ import { initializeLanguage } from '../app.initializers';
 const courseID = '1';
 const courseName = 'Testikurssi';
 const api = environment.apiBaseUrl;
-const user: User = storeDummyData.teacherUser;
 
 fdescribe('TicketService', () => {
   // let fakeStoreService: jasmine.SpyObj<StoreService>
@@ -60,16 +58,15 @@ fdescribe('TicketService', () => {
     const url = `${api}/kurssi/${courseID}/tiketti/${target}`;
     console.log('pitäisi olla tämä url: ' + url);
     let actualTicketListData: SortableTicket[] | null | undefined;
-    
-      tickets.getTicketList(courseID).then(res => {
-        actualTicketListData = res;
-        expect(actualTicketListData).toEqual(ticketDummyData.ticketListClientData);
-        done();
-      }).catch ( e => {
-        console.log(e);
-        done();
 
-      })
+    tickets.getTicketList(courseID).then(res => {
+      actualTicketListData = res;
+      expect(actualTicketListData).toEqual(ticketDummyData.ticketListClientData);
+      done();
+    }).catch (e => {
+      console.log(e);
+      done();
+    })
     const request = controller.expectOne(url);
     request.flush(ticketDummyData.ticketListServerData);
   });
