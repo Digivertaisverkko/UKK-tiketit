@@ -290,7 +290,8 @@ export class TicketService {
   // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/`+
+      `${commentID}/liite/${fileID}`;
     let response: any;
     try {
       response = firstValueFrom(this.http.delete(url));
@@ -318,10 +319,10 @@ export class TicketService {
       palauttaa ainoastaan itse luodut tiketit, 'archived' palauta arkistoidut
       eli ratkaistut kysymykset. */
   public async getTicketList(courseID: string, option?: {
-      option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
-      const currentRoute = window.location.href;
-      // TODO: testaamista varten. onko muuta tapaa, joka ei oleta porttia?
-      if (!currentRoute.includes('localhost:9876') && currentRoute.indexOf('/list-tickets') === -1) {
+    option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
+    const currentRoute = window.location.href;
+    if (environment.testing === false &&
+        currentRoute.indexOf('/list-tickets') === -1) {
       return null
     }
     if (courseID === '') throw new Error('Ei kurssi ID:ä.');
@@ -381,9 +382,11 @@ export class TicketService {
     kommentit. */
   public async getTicket(ticketID: string, courseID: string): Promise<Tiketti> {
     let response: any;
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
+      console.log('haetaan tiketti');
       response = await firstValueFrom(this.http.get<Tiketti>(url));
+      console.log('tiketti haettu');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -424,6 +427,7 @@ export class TicketService {
   private async getComments(ticketID: string, courseID: string): Promise<Kommentti[]>{
     let response: any;
     // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/kaikki
+    console.log('haetaan kommentit');
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/kaikki`;
     try {
       response = await firstValueFrom<Kommentti[]>(this.http.get<any>(url));
@@ -443,11 +447,6 @@ export class TicketService {
     const commentsAscending = commentsWithDate.sort(
       (commentA, commentB) => commentA.aikaleima.getTime() - commentB.aikaleima.getTime(),
     );
-    // const commentsDescending = commentsWithDate.sort(
-    //   (commentA, commentB) => commentB.aikaleima.getTime() - commentA.aikaleima.getTime(),
-    // );
-    // console.log('Kommentit järjestyksessä:');
-    // console.dir(commentsAscending);
     return commentsAscending;
   }
 
@@ -455,9 +454,15 @@ export class TicketService {
   private async getFields(ticketID: string, courseID: string): Promise<Kentta[]> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
+
+    console.log('ticketService.getFields: url: ' + url);
+
     try {
+      console.log('haetaan kentät');
       response = await firstValueFrom<Kentta[]>( this.http.get<any>(url) );
     } catch (error: any) {
+      console.log('kenttien catchissa');
+      console.log(error);
       this.handleError(error);
     }
     return response;

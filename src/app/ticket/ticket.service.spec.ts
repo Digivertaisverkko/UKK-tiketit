@@ -7,10 +7,13 @@ import { initializeLanguageFI } from '../app.initializers';
 import { SortableTicket, TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
-import { ticketDummyData } from './ticket.service.dummydata';
+import { ticketDummyData } from './ticket.dummydata';
 import { User } from '@core/core.models';
+import { Tiketti } from './ticket.service';
 
-const courseID = '1';
+import { fakeAsync, tick } from '@angular/core/testing';
+
+environment.testing = true;
 const courseName = 'Testikurssi';
 const api = environment.apiBaseUrl;
 
@@ -50,6 +53,7 @@ fdescribe('TicketService', () => {
   });
 
   afterEach(() => {
+
     controller.verify(); // Verify that there are no outstanding requests
   });
 
@@ -58,10 +62,9 @@ fdescribe('TicketService', () => {
   });
 
   it('retrieves the full ticket list', (done) => {
-    const target = 'kaikki'
-    const url = `${api}/kurssi/${courseID}/tiketti/${target}`;
     let actualTicketListData: SortableTicket[] | null | undefined;
     store.setUserInfo(storeDummyData.teacherUser);
+    const courseID = '1';
 
     tickets.getTicketList(courseID).then(res => {
       actualTicketListData = res;
@@ -71,8 +74,46 @@ fdescribe('TicketService', () => {
       console.log(e);
       done();
     })
+    const target = 'kaikki'
+    const url = `${api}/kurssi/${courseID}/tiketti/${target}`;
     const request = controller.expectOne(url);
     request.flush(ticketDummyData.ticketListServerData);
   });
+
+  fit('retrieves one ticket with full info', fakeAsync(() => {
+    store.setUserInfo(storeDummyData.teacherUser);
+    const courseID = '1';
+    const ticketID = '3';
+    let result: Tiketti | undefined;
+
+    tickets.getTicket(ticketID, courseID).then(res => {
+      console.log(res);
+      result = res;
+      // done();
+    }).catch (e => {
+      console.log(e);
+      // done();
+    })
+
+    const ticketUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}`;
+    const ticketRequest = controller.expectOne(ticketUrl);
+    ticketRequest.flush(ticketDummyData.ticket3);
+    // Advance the asynchronous execution of the test to resolve promises.
+    tick();
+
+    const fieldsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
+    console.log(' URLI 2: ' + fieldsUrl);
+    const fieldsRequest = controller.expectOne(fieldsUrl);
+    fieldsRequest.flush(ticketDummyData.ticket3fields);
+    tick();
+
+    const commentsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti`
+      + `/kaikki`;
+    const commentsRequest = controller.expectOne(commentsUrl);
+    commentsRequest.flush(ticketDummyData.ticket3comments);
+    tick();
+
+    expect(result).toBeDefined();
+  }));
 
 });
