@@ -3,12 +3,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 
 import { environment } from 'src/environments/environment';
-import { ticketDummyData } from './ticket.service.dummydata';
-import { storeDummyData } from '@core/services/store.service.dummydata';
-import { SortableTicket, TicketService } from './ticket.service';
-import { StoreService } from '@core/services/store.service';
-import { User } from '@core/core.models';
 import { initializeLanguage } from '../app.initializers';
+import { SortableTicket, TicketService } from './ticket.service';
+import { storeDummyData } from '@core/services/store.service.dummydata';
+import { StoreService } from '@core/services/store.service';
+import { ticketDummyData } from './ticket.service.dummydata';
+import { User } from '@core/core.models';
 
 const courseID = '1';
 const courseName = 'Testikurssi';
@@ -30,6 +30,7 @@ fdescribe('TicketService', () => {
     } as Pick<StoreService, keyof StoreService>;
 
     spyOn(fakeStoreService, 'getUserInfo').and.callThrough();
+    document.documentElement.lang = 'fi-FI';
 
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
