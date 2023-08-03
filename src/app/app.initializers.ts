@@ -20,6 +20,15 @@ export const initializeLanguage = (): Promise<void> | void => {
   }
 };
 
+// Aseta kieleksi fi-FI. Käytetään testeissä.
+export const initializeLanguageFI = (): Promise<void> | void => {
+  registerLocaleData(localeFi);  // Aina oletuslocale.
+  registerLocaleData(localeEn);
+  const language = 'fi-FI'
+  document.documentElement.lang = language;
+};
+
+
 /* Mikä kieli on käytössä. Valitaan tässä järjestyksessä jos on määritelty.
   1. Käyttäjän valitsema (tallennettu localStorageen)
   2. URL-parametrina

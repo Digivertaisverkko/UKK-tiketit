@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 
 import { environment } from 'src/environments/environment';
-import { initializeLanguage } from '../app.initializers';
+import { initializeLanguageFI } from '../app.initializers';
 import { SortableTicket, TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
@@ -15,35 +15,38 @@ const courseName = 'Testikurssi';
 const api = environment.apiBaseUrl;
 
 fdescribe('TicketService', () => {
+  // let fakeStoreService: Pick<StoreService, keyof StoreService>;
   // let fakeStoreService: jasmine.SpyObj<StoreService>
-  let fakeStoreService: Pick<StoreService, keyof StoreService>;
   let tickets: TicketService;
   let controller: HttpTestingController;
+  let store: StoreService;
 
   beforeEach(async () => {
 
+    /*
     // fakeStoreService = jasmine.createSpyObj('StoreService', [ 'getUserInfo' ]);
-    fakeStoreService = {
-      getUserInfo(): User | null {
-        return storeDummyData.teacherUser;
-      }
-    } as Pick<StoreService, keyof StoreService>;
-
-    spyOn(fakeStoreService, 'getUserInfo').and.callThrough();
-    document.documentElement.lang = 'fi-FI';
+      fakeStoreService = {
+        getUserInfo(): User | null {
+          return storeDummyData.teacherUser;
+        }
+      } as Pick<StoreService, keyof StoreService>;
+    */
+    // spyOn(fakeStoreService, 'getUserInfo').and.callThrough();
 
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
-        { provide: StoreService, useValue: fakeStoreService },
-        { provide: APP_INITIALIZER, useFactory: () => initializeLanguage, multi: true },
+        { provide: StoreService, useClass: StoreService },
+        { provide: APP_INITIALIZER, useFactory: () => initializeLanguageFI, multi: true },
         { provide: LOCALE_ID, useValue: 'fi' }
       ]
     });
 
+    // { provide: StoreService, useValue: fakeStoreService },
     tickets = TestBed.inject(TicketService);
     controller = TestBed.inject(HttpTestingController);
-    // fakeStoreService.getUserInfo.and.returnValue(user);
+    store = TestBed.inject(StoreService);
+
   });
 
   afterEach(() => {
@@ -54,11 +57,11 @@ fdescribe('TicketService', () => {
     expect(tickets).toBeTruthy();
   });
 
-  it('gets the full ticket list', (done) => {
+  it('retrieves the full ticket list', (done) => {
     const target = 'kaikki'
     const url = `${api}/kurssi/${courseID}/tiketti/${target}`;
-    console.log('pitäisi olla tämä url: ' + url);
     let actualTicketListData: SortableTicket[] | null | undefined;
+    store.setUserInfo(storeDummyData.teacherUser);
 
     tickets.getTicketList(courseID).then(res => {
       actualTicketListData = res;
