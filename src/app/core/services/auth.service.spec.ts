@@ -1,12 +1,19 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
+import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
+import { authDummyData } from './auth.dummydata';
 import { ErrorService } from './error.service';
 import { StoreService } from './store.service';
 import { CourseService } from '@course/course.service';
 
-describe('AuthService', () => {
+const api = environment.apiBaseUrl;
+environment.testing = true;
+
+fdescribe('AuthService', () => {
+  let auth: AuthService;
   let controller: HttpTestingController;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeErrorService: jasmine.SpyObj<ErrorService>;
@@ -38,11 +45,11 @@ describe('AuthService', () => {
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
         { provide: ErrorService, useValue: fakeErrorService },
-        { provide: StoreService, useClass: StoreService },
+        StoreService
       ]
     });
     // { provide: StoreService, useValue: fakeStoreService }
-    service = TestBed.inject(AuthService);
+    auth = TestBed.inject(AuthService);
     controller = TestBed.inject(HttpTestingController);
     store = TestBed.inject(StoreService);
 
@@ -53,6 +60,29 @@ describe('AuthService', () => {
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(auth).toBeTruthy();
   });
+
+
+  describe('state of auth info is correctly set', () => {
+
+    it('gets logged in status when logged in', fakeAsync(() => {
+
+      const courseID = '1';
+      auth.fetchUserInfo(courseID);
+
+      const url = `${api}/kurssi/${courseID}/oikeudet`;
+      const request = controller.expectOne(url);
+      request.flush(authDummyData.oikeudetOpettaja);
+      tick();
+
+      store.trackLoggedIn().subscribe(isLoggedIn => {
+        expect(isLoggedIn).toBeTrue();
+      })
+
+    }))
+
+  });
+
+
 });

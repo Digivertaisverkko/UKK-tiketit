@@ -1,4 +1,5 @@
 import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -10,7 +11,6 @@ import { StoreService } from '@core/services/store.service';
 import { ticketDummyData } from './ticket.dummydata';
 import { Tiketti } from './ticket.service';
 
-import { fakeAsync, tick } from '@angular/core/testing';
 
 environment.testing = true;
 const courseName = 'Testikurssi';
@@ -18,7 +18,7 @@ const api = environment.apiBaseUrl;
 
 describe('TicketService', () => {
   // let fakeStoreService: Pick<StoreService, keyof StoreService>;
-  // let fakeStoreService: jasmine.SpyObj<StoreService>
+  // let fakeStoreService: jasmine.S3pyObj<StoreService>
   let tickets: TicketService;
   let controller: HttpTestingController;
   let store: StoreService;
