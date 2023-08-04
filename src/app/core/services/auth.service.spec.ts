@@ -8,8 +8,10 @@ import { authDummyData } from './auth.dummydata';
 import { ErrorService } from './error.service';
 import { StoreService } from './store.service';
 import { CourseService } from '@course/course.service';
+import { User } from '@core/core.models';
 
 const api = environment.apiBaseUrl;
+const courseID = '1';
 environment.testing = true;
 
 fdescribe('AuthService', () => {
@@ -18,8 +20,6 @@ fdescribe('AuthService', () => {
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeErrorService: jasmine.SpyObj<ErrorService>;
   let store: StoreService;
-  // let fakeStoreService: jasmine.SpyObj<StoreService>;
-  let service: AuthService;
 
   beforeEach(() => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
@@ -64,11 +64,10 @@ fdescribe('AuthService', () => {
   });
 
 
-  describe('state of auth info is correctly set', () => {
+  describe('state of auth info is correctly set and retrieved', () => {
 
-    it('gets logged in status when logged in', fakeAsync(() => {
+    it('logged in status when logged in', fakeAsync(() => {
 
-      const courseID = '1';
       auth.fetchUserInfo(courseID);
 
       const url = `${api}/kurssi/${courseID}/oikeudet`;
@@ -81,6 +80,98 @@ fdescribe('AuthService', () => {
       })
 
     }))
+
+    it('logged in status when logged out', fakeAsync(() => {
+
+      auth.fetchUserInfo(courseID);
+
+      const url = `${api}/kurssi/${courseID}/oikeudet`;
+      const request = controller.expectOne(url);
+      request.flush(null);
+      tick();
+
+      const url2 = `${api}/minun`;
+      const request2 = controller.expectOne(url2);
+      request2.flush(null);
+      tick();
+
+      store.trackLoggedIn().subscribe(isLoggedIn => {
+        expect(isLoggedIn).toBeFalse();
+      });
+
+    }));
+
+
+    it('user info when logged in', fakeAsync(() => {
+
+      auth.fetchUserInfo(courseID);
+
+      const url = `${api}/kurssi/${courseID}/oikeudet`;
+      const request = controller.expectOne(url);
+      request.flush(authDummyData.oikeudetOpettaja);
+      tick();
+
+      store.trackUserInfo().subscribe((userInfo: User | null) => {
+        expect(userInfo).toEqual(authDummyData.userInfoTeacher);
+      })
+
+    }));
+
+    it('course participation status when participating', fakeAsync(() => {
+
+      const courseID = '1';
+      auth.fetchUserInfo(courseID);
+
+      const url = `${api}/kurssi/${courseID}/oikeudet`;
+      const request = controller.expectOne(url);
+      request.flush(authDummyData.oikeudetOpettaja);
+      tick();
+
+      store.trackIfParticipant().subscribe(isParticipant => {
+        expect(isParticipant).toBeTrue();
+      })
+
+    }));
+
+    it('logged status when logged to another course', fakeAsync(() => {
+
+      auth.fetchUserInfo(courseID);
+
+      const url = `${api}/kurssi/${courseID}/oikeudet`;
+      const request = controller.expectOne(url);
+      request.flush(null);
+      tick();
+
+      const url2 = `${api}/minun`;
+      const request2 = controller.expectOne(url2);
+      request2.flush(authDummyData.minunOpettaja);
+      tick();
+
+      store.trackLoggedIn().subscribe(isLoggedIn => {
+        expect(isLoggedIn).toBeTrue();
+      });
+
+    }));
+
+    it('user info when logged to another course', fakeAsync(() => {
+
+      auth.fetchUserInfo(courseID);
+
+      const url = `${api}/kurssi/${courseID}/oikeudet`;
+      const request = controller.expectOne(url);
+      request.flush(null);
+      tick();
+
+      const url2 = `${api}/minun`;
+      const request2 = controller.expectOne(url2);
+      request2.flush(authDummyData.minunOpettaja);
+      tick();
+
+      store.trackUserInfo().subscribe((userInfo: User | null) => {
+        expect(userInfo).toEqual(authDummyData.minunOpettaja);
+      })
+
+    }));
 
   });
 
