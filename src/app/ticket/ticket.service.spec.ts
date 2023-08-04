@@ -11,17 +11,15 @@ import { StoreService } from '@core/services/store.service';
 import { ticketDummyData } from './ticket.dummydata';
 import { Tiketti } from './ticket.service';
 
-
 environment.testing = true;
-const courseName = 'Testikurssi';
 const api = environment.apiBaseUrl;
 
 describe('TicketService', () => {
   // let fakeStoreService: Pick<StoreService, keyof StoreService>;
   // let fakeStoreService: jasmine.S3pyObj<StoreService>
-  let tickets: TicketService;
   let controller: HttpTestingController;
   let store: StoreService;
+  let tickets: TicketService;
 
   beforeEach(async () => {
 
@@ -38,13 +36,12 @@ describe('TicketService', () => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
-        { provide: StoreService, useClass: StoreService },
         { provide: APP_INITIALIZER, useFactory: () => initializeLanguageFI, multi: true },
-        { provide: LOCALE_ID, useValue: 'fi' }
+        { provide: LOCALE_ID, useValue: 'fi' },
+        StoreService
       ]
     });
 
-    // { provide: StoreService, useValue: fakeStoreService },
     tickets = TestBed.inject(TicketService);
     controller = TestBed.inject(HttpTestingController);
     store = TestBed.inject(StoreService);
@@ -83,7 +80,6 @@ describe('TicketService', () => {
     store.setUserInfo(storeDummyData.teacherUser);
     const courseID = '1';
     const ticketID = '3';
-    let result: Tiketti | undefined;
 
     tickets.getTicket(ticketID, courseID).then(res => {
       const ticketProperties = ticketDummyData.ticketProperties;
