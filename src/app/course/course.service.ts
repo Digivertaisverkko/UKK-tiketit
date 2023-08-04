@@ -45,7 +45,7 @@ export class CourseService {
     return response;
   }
 
-  // Vie kurssin UKK:t JSON--string muodossa.
+  // Vie kurssin UKK:t JSON muodossa.
   public async exportFAQs(courseID: string): Promise<string> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
@@ -89,7 +89,7 @@ export class CourseService {
     return response['nimi'];
   }
 
-  // Palauta listan kaikista kursseista, joilla käyttäjä on.
+  // Palauta listan kaikista kursseista, joilla kirjautunut käyttäjä on.
   public async getMyCourses(): Promise<Kurssini[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/minun/kurssit';
@@ -103,6 +103,7 @@ export class CourseService {
     return response;
   }
 
+  // Palauta käyttäjäkutsun tiedot.
   public async getInvitedInfo(courseID: string, inviteID: string):
         Promise<InvitedInfo> {
     if (inviteID.length === 0) {
@@ -167,7 +168,7 @@ export class CourseService {
     return response;
   }
 
-  // Luo uudet kentät tikettipohjalle.
+  // Luo uudet kentät kurssin tikettipohjalle.
   public async setTicketField(courseID: string, fields: Kenttapohja[]) {
     for (let field of fields) {
       if (field.id != null) delete field.id;

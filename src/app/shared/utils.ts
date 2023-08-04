@@ -32,7 +32,6 @@ export function getDateString(date: Date, thisYear: number): string {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-
 // Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
 export function getRoleString(asema: Role | null): string {
   let role: string;
