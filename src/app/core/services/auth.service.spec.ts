@@ -305,22 +305,12 @@ describe('AuthService', () => {
     it('logs in', fakeAsync(() => {
 
       const loginType = 'own';
-      const codeVerifier = 'cAzHcj8iazEg8cGGHHYoM9XYBZLXqSFNLdIi4dI5qcxI9fcPmV9V659Y7FURICvrqav8DbuiGRBFNGgdKKED9kjSxGa2X1xtQ17qcfd7Gx9HraROhVnRB7uVMbdxAdmg';
-      const codeChallenge = '626de1827408763d25dee6a04ff4aecf4eebb19d38191f816a3abf5a439b06c5';
       const email = 'marianna.laaksonen@example.com';
       const password = 'salasana';
 
-      const expectedHeaders = {
-        'login-type': loginType,
-        'code-challenge': codeChallenge,
-        'kurssi': courseID,
-      };
-
       auth.getLoginInfo(loginType, courseID).then((loginInfo: LoginInfo) => {
-        console.log('vastaus 1. kutsuun: '+ JSON.stringify(loginInfo));
         return auth.login(email, password, loginInfo['login-id']);
       }).then((loginResult: LoginResult) => {
-        console.log('vastaus login() kutsuun: ' + JSON.stringify(loginResult));
         expect(loginResult.success).toBe(true);
       }).catch(e => {
         console.log(e);
@@ -343,53 +333,29 @@ describe('AuthService', () => {
       const loginCode = '9c16b0e1-a101-47a6-93dc-2c6b2961d195';
       const url2 = `${api}/omalogin`;
       const req2 = controller.expectOne(url2);
-      // const loginUrl = 'course/1/login?loginid=2209fe8d-9a04-41fb-bf63-2475ce8efda3';
  
       const result2 = {
         success: true,
         'login-code': loginCode
       }
       req2.flush(result2);
-
       tick();
 
       const url3 = `${api}/authtoken`;
       const req3 = controller.expectOne(url3);
-
       const realCodeVerifier = req3.request.headers.get('code-verifier');
-
-      // console.log('testi: realCodeVerifier: ' + realCodeVerifier);
-
-      /*
       let cryptedRealCodeVerifier;
       if (realCodeVerifier !== null) {
-        const cryptedRealCodeVerifier = shajs('sha256').update(realCodeVerifier).digest('hex');
-
-        
-        console.log('string cryptedRealCodeVerifier: ' + cryptedRealCodeVerifier);
-        console.log('tyyppi: ' + typeof cryptedRealCodeVerifier);
-        console.log('realCodeChallenge: ' + realCodeChallenge);
-        
-
+        cryptedRealCodeVerifier = shajs('sha256').update(realCodeVerifier).digest('hex');
       } else {
         fail("'code-verifier' ei löydetty kutsun headereista. ");
       }
-      */
-
       let result3;
-      
-      /*
-      console.log('codeVerifier: ' + codeVerifier);
-      console.log('realCodeVerifier: ' + realCodeVerifier);
-*/
-
-  //    if (realCodeVerifier === codeVerifier) {
-        result3 = {"success": true }
-    //  } else {
-     //   result3 = {"success": false }
-     // }
-    
-
+      if (cryptedRealCodeVerifier == realCodeChallenge) {
+          result3 = { "success": true }
+      } else {
+        result3 = { "success": false }
+      }
       req3.flush(result3);
       tick();
 
