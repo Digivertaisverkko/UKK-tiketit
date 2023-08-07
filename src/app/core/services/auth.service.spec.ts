@@ -14,7 +14,7 @@ let api = environment.apiBaseUrl;
 const courseID = '1';
 environment.testing = true;
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   let auth: AuthService;
   let controller: HttpTestingController;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
@@ -175,7 +175,7 @@ fdescribe('AuthService', () => {
 
   });
 
-  fdescribe('log manually in', () => {
+  describe('log manually in', () => {
 
     it('/login request has the correct headers.', fakeAsync(() => {
 
@@ -245,7 +245,7 @@ fdescribe('AuthService', () => {
     }));
 
 
-    it('/authtoken request has correct headers',  fakeAsync(()  => {
+    it('/authtoken request after /omalogin with correct headers',  fakeAsync(()  => {
 
       let api = environment.apiBaseUrl;
       const email = 'marianna.laaksonen@example.com';
@@ -261,11 +261,7 @@ fdescribe('AuthService', () => {
         'login-code': loginCode,
       };
 
-      const successResult = {}
-
       auth.login(email, password, loginID).then(res => {
-
-        console.log('saatiin vastaus: ' + res);
 
         expect(req2.request.method).toBe('GET');
         expect(req2.request.headers.get('login-type')).toEqual(expectedHeaders2['login-type']);
