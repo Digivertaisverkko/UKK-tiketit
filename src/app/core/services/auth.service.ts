@@ -62,7 +62,7 @@ export class AuthService {
     this.startUpdatingUserinfo();
   }
 
-  /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
+  /* Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta. */
   private async authenticate(codeVerifier: string, loginCode: string):
     Promise<LoginResult> {
   const httpOptions =  {
@@ -118,8 +118,9 @@ export class AuthService {
     return response;
   }
 
-  // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
-  // käytettäviksi eri puolilla ohjelmaa.
+  /* Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
+     oikeudet, onko osallistujana näkymän kurssilla.
+  */
   public async fetchUserInfo(courseID: string): Promise<void> {
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
@@ -138,33 +139,30 @@ export class AuthService {
     } catch (error: any) {
       response = null;
     }
-    if (response === null) {
-      console.warn(`Tällä käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
-    }
-    let newUserInfo: any;
-    if (response != null && response.oikeudet != null)  {
-      newUserInfo = response.oikeudet;
+    let userInfo: any;
+    if (response != null && response?.oikeudet != null)  {
+      userInfo = response.oikeudet;
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
-      newUserInfo.asemaStr = getRoleString(newUserInfo.asema);
+      userInfo.asemaStr = getRoleString(userInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
     } else {
       this.store.setParticipant(false);
-      console.log('authService: saatiin /oikeudet vastaus null');
+      console.warn(`Käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
       // Haetana käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
       const response = await this.fetchVisitorInfo();
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
-        newUserInfo = response ;
-        newUserInfo.asema = null;
+        userInfo = response ;
+        userInfo.asema = null;
         this.store.setLoggedIn();
       } else {
         this.store.setNotLoggegIn();
         return
       }
     }
-    this.store.setUserInfo(newUserInfo);
+    this.store.setUserInfo(userInfo);
   }
 
   // Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
@@ -293,23 +291,23 @@ export class AuthService {
 
   // Suorita uloskirjautuminen.
   public async logout(): Promise<{ success: boolean }> {
-      let response: any;
-      let url = environment.apiBaseUrl + '/kirjauduulos';
-      try {
-        response = await firstValueFrom(this.http.post(url, {}));
-      } catch (error: any) {
-        return { success: false }
-      }
-      this.store.setNotLoggegIn();
-      this.store.setUserInfo(null);
-      this.store.setParticipant(null);
-      this.store.unsetPosition();
-      this.store.setCourseName('');
-      window.sessionStorage.clear();
-      return { success: true }
-        // if (courseID != null) {
-        //   this.navigateToLogin(courseID);
-        // }
+    let response: any;
+    let url = environment.apiBaseUrl + '/kirjauduulos';
+    try {
+      response = await firstValueFrom(this.http.post(url, {}));
+    } catch (error: any) {
+      return { success: false }
+    }
+    this.store.setNotLoggegIn();
+    this.store.setUserInfo(null);
+    this.store.setParticipant(null);
+    this.store.unsetPosition();
+    this.store.setCourseName('');
+    window.sessionStorage.clear();
+    return { success: true }
+      // if (courseID != null) {
+      //   this.navigateToLogin(courseID);
+      // }
   }
 
   // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
