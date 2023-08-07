@@ -179,7 +179,6 @@ export class EditFieldComponent implements OnInit {
       this.isLoaded = true;
       return
     }).catch(error => {
-      console.dir(error);
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)

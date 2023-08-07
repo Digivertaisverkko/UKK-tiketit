@@ -38,7 +38,6 @@ export class FaqViewComponent implements OnInit {
     this.faqID = this.id;
     this.ticketService.getTicket(this.faqID, this.courseid)
       .then((response) => {
-        console.dir(response);
         this.ticket = response;
         this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       })
