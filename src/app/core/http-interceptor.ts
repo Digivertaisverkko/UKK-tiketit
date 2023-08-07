@@ -41,7 +41,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 
     let huomautus: string;
     if (event.body === null) {
-      huomautus = ' (voi olla myös tyhjä objekti "{}")'
+      huomautus = ' (voi olla myös tyhjä objekti "{}")';
     } else {
       huomautus = '';
     }
@@ -61,7 +61,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
       huomautus + '.');
 
     if (request.body && Object.keys(request.body).length >= 4 ) {
-      console.dir(request.body);
+      console.log(`Body: ${JSON.stringify(request.body)}`);
     }
 
   }
