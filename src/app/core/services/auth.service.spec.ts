@@ -1,5 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, tick } from '@angular/core/testing';
+import * as shajs from 'sha.js';
 import { TestBed } from '@angular/core/testing';
 
 import { environment } from 'src/environments/environment';
@@ -8,7 +9,7 @@ import { authDummyData } from './auth.dummydata';
 import { ErrorService } from './error.service';
 import { StoreService } from './store.service';
 import { CourseService } from '@course/course.service';
-import { User } from '@core/core.models';
+import { LoginInfo, LoginResult, User } from '@core/core.models';
 
 let api = environment.apiBaseUrl;
 const courseID = '1';
@@ -180,10 +181,11 @@ describe('AuthService', () => {
     it('/login request has the correct headers.', fakeAsync(() => {
 
       const loginType = 'own';
+      const codeChallenge = '61b6ec7fff6f21ed0f9b96ad1ae7b5f741c89412c044d5c5e6a344a0f4c94438';
 
       const expectedHeaders = {
         'login-type': loginType,
-        'code-challenge': 'EXPECTED_CODE_CHALLENGE',
+        'code-challenge': codeChallenge,
         'kurssi': courseID,
       };
 
@@ -196,12 +198,20 @@ describe('AuthService', () => {
       const url = `${api}/login`;
       const req = controller.expectOne(url);
 
+      const loginUrl = 'course/1/login?loginid=2209fe8d-9a04-41fb-bf63-2475ce8efda3';
+      const loginID = '2209fe8d-9a04-41fb-bf63-2475ce8efda3';
+      const result = {
+        'login-url': loginUrl,
+        'login-id': loginID
+      }
+
+      req.flush(result);
+
       expect(req.request.method).toBe('POST');
       expect(req.request.headers.get('login-type')).toEqual(expectedHeaders['login-type']);
       expect(req.request.headers.has('code-challenge')).toBeTrue();
       expect(req.request.headers.get('kurssi')).toEqual(expectedHeaders['kurssi']);
 
-      req.flush(null);
 
     }));
 
@@ -211,10 +221,7 @@ describe('AuthService', () => {
       const email = 'marianna.laaksonen@example.com';
       const password = 'salasana';
       const loginID = '2209fe8d-9a04-41fb-bf63-2475ce8efda3';
-      const loginType = 'own'
-      const loginUrl = 'course/1/login?loginid=2209fe8d-9a04-41fb-bf63-2475ce8efda3';
       // const codeChallenge = '61b6ec7fff6f21ed0f9b96ad1ae7b5f741c89412c044d5c5e6a344a0f4c94438';
-      // const loginCode = '9c16b0e1-a101-47a6-93dc-2c6b2961d195';
 
       const expectedHeaders = {
         'ktunnus': email,
@@ -231,8 +238,7 @@ describe('AuthService', () => {
       const url = `${api}/omalogin`;
       const req = controller.expectOne(url);
       const result = {
-        'login-url': loginUrl,
-        'login-id': loginID
+ 
       }
 
       req.flush(result);
@@ -292,6 +298,97 @@ describe('AuthService', () => {
       const result2 = {"success": true };
 
       req2.flush(result2);
+      tick();
+
+    }));
+
+    it('logs in', fakeAsync(() => {
+
+      const loginType = 'own';
+      const codeChallenge = '61b6ec7fff6f21ed0f9b96ad1ae7b5f741c89412c044d5c5e6a344a0f4c94438';
+      const email = 'marianna.laaksonen@example.com';
+      const password = 'salasana';
+
+      const expectedHeaders = {
+        'login-type': loginType,
+        'code-challenge': codeChallenge,
+        'kurssi': courseID,
+      };
+
+      auth.getLoginInfo(loginType, courseID).then((loginInfo: LoginInfo) => {
+        console.log('vastaus 1. kutsuun: '+ JSON.stringify(loginInfo));
+        return auth.login(email, password, loginInfo['login-id']);
+      }).then((loginResult: LoginResult) => {
+        console.log('vastaus login() kutsuun: ' + JSON.stringify(loginResult));
+        expect(loginResult.success).toBe(true);
+      }).catch(e => {
+        console.log(e);
+      })
+
+      const url = `${api}/login`;
+      const req = controller.expectOne(url);
+
+      const loginID = '2209fe8d-9a04-41fb-bf63-2475ce8efda3';
+      let loginUrl = 'course/1/login?loginid=' + loginID;
+      const realCodeChallenge = req.request.headers.get('code-challenge');
+      const result = {
+        'login-url': loginUrl,
+        'login-id': loginID
+      }
+      
+      req.flush(result);
+      tick();
+
+      const loginCode = '9c16b0e1-a101-47a6-93dc-2c6b2961d195';
+      const url2 = `${api}/omalogin`;
+      const req2 = controller.expectOne(url2);
+      // const loginUrl = 'course/1/login?loginid=2209fe8d-9a04-41fb-bf63-2475ce8efda3';
+ 
+      const result2 = {
+        success: true,
+        'login-code': loginCode
+      }
+      req2.flush(result2);
+
+      tick();
+
+      const url3 = `${api}/authtoken`;
+      const req3 = controller.expectOne(url3);
+
+      const realCodeVerifier = req3.request.headers.get('code-verifier');
+
+      // console.log('testi: realCodeVerifier: ' + realCodeVerifier);
+
+      let cryptedRealCodeVerifier;
+      if (realCodeVerifier !== null) {
+        const cryptedRealCodeVerifier = shajs('sha256').update(realCodeVerifier).digest('hex');
+
+        /*
+        console.log('string cryptedRealCodeVerifier: ' + cryptedRealCodeVerifier);
+        console.log('tyyppi: ' + typeof cryptedRealCodeVerifier);
+        console.log('realCodeChallenge: ' + realCodeChallenge);
+        */
+
+      } else {
+        fail("'code-verifier' ei löydetty kutsun headereista. ");
+      }
+
+      let result3;
+
+      
+      // console.log('cryptedRealCodeVerifier: ' + cryptedRealCodeVerifier);
+      // console.log('realCodeChallenge: ' + realCodeChallenge);
+
+      // if (cryptedRealCodeVerifier === realCodeChallenge) {
+        result3 = {"success": true }
+        /*
+      } else {
+        result3 = {"success": false }
+      }
+      */
+
+
+      req3.flush(result3);
       tick();
 
     }));

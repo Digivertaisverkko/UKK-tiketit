@@ -6,6 +6,11 @@ export interface LoginInfo  {
   'login-id': string;
 }
 
+export interface LoginResult {
+  success: boolean,
+  redirectUrl?: string
+};
+
 // Saadaan palvelimelta kirjauduttua.
 export interface AuthInfo {
   lti_login: boolean,

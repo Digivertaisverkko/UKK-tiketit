@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 import { getCourseIDfromURL } from '@shared/utils';
 import { getRoleString } from '@shared/utils';
-import { AuthInfo, LoginInfo, Role, User } from '../core.models';
+import { AuthInfo, LoginInfo, LoginResult, User } from '../core.models';
 import { StoreService } from './store.service';
 
 interface UserRights {
@@ -29,11 +29,6 @@ interface ConsentResponse {
   success: boolean,
   kurssi: number
 }
-
-interface LoginResult {
-  success: boolean,
-  redirectUrl?: string
-};
 
 interface AuthRequestResponse {
   success: boolean;
@@ -65,6 +60,8 @@ export class AuthService {
   /* Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta. */
   private async authenticate(codeVerifier: string, loginCode: string):
     Promise<LoginResult> {
+
+  // console.log('authenticate(): codeVerifier ' +codeVerifier + ' loginCode: '+ loginCode);
   const httpOptions =  {
     headers: new HttpHeaders({
       'login-type': 'own',
@@ -81,6 +78,9 @@ export class AuthService {
   } catch (error: any) {
     this.handleError(error);
   }
+
+  // console.log('authenticate(): saatiin vastaus: ' + JSON.stringify(response));
+
   var loginResult: LoginResult;
   if (response?.success == true) {
     loginResult = { success: true };
@@ -272,6 +272,7 @@ export class AuthService {
         'login-id': loginID
       })
     }
+    // console.log('.login(): ktunnus: ' + email +', salasana: ' + password + ', login-id: ' + loginID);
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
@@ -281,6 +282,17 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
+
+    /*
+    console.log('.login() vastaus 2. kutsuun: ' + JSON.stringify(response));
+    if (response.success == true) {
+      console.log('success on true');
+    } else {
+      console.log('success on false');
+
+    }
+    */
+
     if (response.success == true && response['login-code'] !== undefined) {
       const loginCode = response['login-code'];
       return this.authenticate(this.codeVerifier, loginCode);
