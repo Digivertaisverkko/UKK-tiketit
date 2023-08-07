@@ -21,7 +21,7 @@ export const NOOP_VALUE_ACCESSOR: ControlValueAccessor = {
 const nodeViews = {
   code_mirror: (node: ProseMirrorNode,
                 view: EditorView,
-                getPos: () => number): CodeMirrorView => {
+                getPos: () => number | undefined): CodeMirrorView => {
     return new CodeMirrorView({
       node,
       view,
