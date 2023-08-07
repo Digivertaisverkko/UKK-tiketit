@@ -8,5 +8,6 @@ export const environment = {
   production: true,
   clientID: 'angularApp',
   productName: 'UKK-Tiketit',
-  apiBaseUrl: baseUrl
+  apiBaseUrl: baseUrl,
+  testing: false
 };
