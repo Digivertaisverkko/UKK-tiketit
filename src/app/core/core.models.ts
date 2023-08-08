@@ -19,7 +19,7 @@ export interface AuthInfo {
 
 export interface Error {
   tunnus: number;
-  virheilmoitus: string;
+  virheilmoitus?: string;
   originaali?: string;
 }
 

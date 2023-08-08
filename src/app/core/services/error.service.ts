@@ -3,7 +3,25 @@ import { Router } from "@angular/router";
 
 import { Error } from "../core.models";
 import { StoreService } from "./store.service";
-import { HttpErrorResponse } from "@angular/common/http";
+import { HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+
+interface BackendErrorResponse {
+  success: boolean,
+  error: Error
+}
+
+const CODE = {
+  notSignedIn: 1000,
+  noConnection: 1001,
+  wrongCredentials: 1002,
+  noPermission: 1003,
+  accountAlreadyExists: 1010,
+  noResults: 2000,
+  wrongParameters: 3000,
+  operationNotPossible: 3001,
+  unfinishedAPI: 3002,
+  somethingWentWrong: 3004
+}
 
 @Injectable({ providedIn: 'root' })
 
@@ -21,6 +39,66 @@ export class ErrorService {
       tapauksessa virhe heitetään eteenpäin komponenteille, jotka voivat
       tarpeen mukaan näyttää käyttäjällle virheilmoituksia.
   */
+
+  /* Palauta samanlaisen virheen kuin palvelin. status on HTTP error status koodi,
+      errorid on palvelimen nelinumeroinen virhekoodi. */
+  public createError(status: number, errorid: number): BackendErrorResponse { 
+    var e: BackendErrorResponse = {
+      success: false,
+      error: {
+        tunnus: errorid
+      } 
+    };
+
+    var status = 418;
+
+    switch (errorid) {
+        case CODE.notSignedIn:
+            e.error.virheilmoitus = "Et ole kirjautunut.";
+            status = 403
+            break;
+        case CODE.noConnection:
+            e.error.virheilmoitus = "Kirjautumispalveluun ei saatu yhteyttä.";
+            status = 503
+            break;
+        case CODE.wrongCredentials:
+            e.error.virheilmoitus = "Väärä käyttäjätunnus tai salasana."
+            status = 403
+            break;
+        case CODE.noPermission:
+            e.error.virheilmoitus = "Ei tarvittavia oikeuksia.";
+            status = 403
+            break;
+        case CODE.accountAlreadyExists:
+            e.error.virheilmoitus = "Luotava tili on jo olemassa."
+            status = 500
+            break;
+        case CODE.noResults:
+            e.error.virheilmoitus = "Tuloksia ei löytynyt.";
+            status = 204
+            break;
+        case CODE.wrongParameters:
+            e.error.virheilmoitus = "Virheelliset parametrit.";
+            status = 400
+            break;
+        case CODE.operationNotPossible:
+            e.error.virheilmoitus = "Operaatiota ei voida suorittaa.";
+            status = 400;
+            break;
+        case CODE.unfinishedAPI:
+            e.error.virheilmoitus = "Rajapintaa ei ole vielä toteutettu.";
+            status = 405;
+            break;
+        default:
+            e.error.tunnus = CODE.somethingWentWrong;
+            e.error.virheilmoitus = "Joku meni vikaan."
+            e.error.originaali = String(errorid);
+            status = 500
+            break;
+    }
+
+    return e
+  }
 
   public handleServerError(error: HttpErrorResponse) {
     var backendResponse = error?.error;
@@ -51,7 +129,7 @@ export class ErrorService {
   private getBackendErrorLog(backendError: Error): string {
     let logMessage = "Palvelimen virheen tilakoodi " + backendError.tunnus;
 
-    if (backendError.virheilmoitus?.length > 1) {
+    if (backendError?.virheilmoitus && backendError?.virheilmoitus?.length > 1) {
       logMessage += ' ja viesti: "' + backendError.virheilmoitus + '".';
     } else {
       logMessage += ".";
