@@ -154,8 +154,9 @@ export class TicketService {
     return response
   }
 
-  public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string,
-        fileList?: File[]): Promise<{ success: boolean }> {
+  // Muokkaa tikettiä.
+  public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string):
+      Promise<{ success: boolean }> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     const body = ticket;
@@ -164,19 +165,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response?.success !== true) return { success: false }
-    if (fileList?.length == 0 || !fileList ) return { success: true }
-    if (!courseID) return { success: false }
-    const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.uploadFile(ticketID, firstCommentID, courseID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-    return { success: true }
+    return { success: response?.success === true ? true : false }
   }
 
   // Hae kurssin UKK-kysymykset.
