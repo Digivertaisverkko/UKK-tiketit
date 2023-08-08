@@ -9,29 +9,18 @@ import { SortableTicket, TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ticketDummyData } from './ticket.dummydata';
-import { Tiketti } from './ticket.service';
+import { ErrorService } from '@core/services/error.service';
 
 environment.testing = true;
 const api = environment.apiBaseUrl;
 
 describe('TicketService', () => {
-  // let fakeStoreService: Pick<StoreService, keyof StoreService>;
-  // let fakeStoreService: jasmine.S3pyObj<StoreService>
   let controller: HttpTestingController;
+  let errors: ErrorService;
   let store: StoreService;
   let tickets: TicketService;
 
   beforeEach(async () => {
-
-    /*
-    // fakeStoreService = jasmine.createSpyObj('StoreService', [ 'getUserInfo' ]);
-      fakeStoreService = {
-        getUserInfo(): User | null {
-          return storeDummyData.teacherUser;
-        }
-      } as Pick<StoreService, keyof StoreService>;
-    */
-    // spyOn(fakeStoreService, 'getUserInfo').and.callThrough();
 
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
@@ -42,6 +31,7 @@ describe('TicketService', () => {
       ]
     });
 
+    errors = TestBed.inject(ErrorService)
     tickets = TestBed.inject(TicketService);
     controller = TestBed.inject(HttpTestingController);
     store = TestBed.inject(StoreService);
@@ -109,6 +99,26 @@ describe('TicketService', () => {
     commentsRequest.flush(ticketDummyData.ticket3comments);
     tick();
   }));
+
+  it('handles an error when getting ticket list', (done) => {
+    store.setUserInfo(storeDummyData.teacherUser);
+    const courseID = '1';
+    tickets.getTicketList(courseID).then(res => {
+      fail('ei napattu virhettä.');
+    }).catch (err => {
+      expect(err).toBeDefined();
+      done();
+    })
+  
+  const target = 'kaikki'
+  const url = `${api}/kurssi/${courseID}/tiketti/${target}`;
+  const req = controller.expectOne(url);
+  const status = 400;
+  const errorid = 1000;
+  const error = errors.createError(status, errorid);
+  req.flush(error, { status: status, statusText: 'Forbidden'});
+  });
+  
 
   it('gets a file', fakeAsync (() => {
     const ticketID = '123';
