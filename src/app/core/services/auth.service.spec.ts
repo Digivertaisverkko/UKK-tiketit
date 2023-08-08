@@ -3,13 +3,13 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import * as shajs from 'sha.js';
 import { TestBed } from '@angular/core/testing';
 
-import { environment } from 'src/environments/environment';
-import { AuthService } from './auth.service';
 import { authDummyData } from './auth.dummydata';
-import { ErrorService } from './error.service';
-import { StoreService } from './store.service';
+import { AuthService } from './auth.service';
 import { CourseService } from '@course/course.service';
+import { environment } from 'src/environments/environment';
+import { ErrorService } from './error.service';
 import { LoginInfo, LoginResult, User } from '@core/core.models';
+import { StoreService } from './store.service';
 
 let api = environment.apiBaseUrl;
 const courseID = '1';
@@ -31,16 +31,6 @@ describe('AuthService', () => {
       handleServerError: undefined
     });
 
-    /*
-    fakeStoreService = jasmine.createSpyObj('StoreService', {
-      setCourseName: undefined,
-      setLoggedIn: undefined,
-      setNotLoggedIn: undefined,
-      setParticipant: undefined,
-      setUserInfo: undefined,
-      unsetPosition: undefined
-    }); */
-
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
@@ -53,7 +43,6 @@ describe('AuthService', () => {
     auth = TestBed.inject(AuthService);
     controller = TestBed.inject(HttpTestingController);
     store = TestBed.inject(StoreService);
-
   });
 
   afterEach(() => {
@@ -63,7 +52,6 @@ describe('AuthService', () => {
   it('should be created', () => {
     expect(auth).toBeTruthy();
   });
-
 
   describe('state of auth info is correctly set and retrieved', () => {
 
@@ -197,7 +185,6 @@ describe('AuthService', () => {
 
       const url = `${api}/login`;
       const req = controller.expectOne(url);
-
       const loginUrl = 'course/1/login?loginid=2209fe8d-9a04-41fb-bf63-2475ce8efda3';
       const loginID = '2209fe8d-9a04-41fb-bf63-2475ce8efda3';
       const result = {
@@ -211,7 +198,6 @@ describe('AuthService', () => {
       expect(req.request.headers.get('login-type')).toEqual(expectedHeaders['login-type']);
       expect(req.request.headers.has('code-challenge')).toBeTrue();
       expect(req.request.headers.get('kurssi')).toEqual(expectedHeaders['kurssi']);
-
 
     }));
 
@@ -238,7 +224,7 @@ describe('AuthService', () => {
       const url = `${api}/omalogin`;
       const req = controller.expectOne(url);
       const result = {
- 
+
       }
 
       req.flush(result);
@@ -260,7 +246,6 @@ describe('AuthService', () => {
       const loginCode = '9c16b0e1-a101-47a6-93dc-2c6b2961d195';
 
       const loginType = 'own'
-      const codeChallenge = '61b6ec7fff6f21ed0f9b96ad1ae7b5f741c89412c044d5c5e6a344a0f4c94438';
       const expectedHeaders2 = {
         'login-type': loginType,
         'code-verifier': '12345',
@@ -302,13 +287,14 @@ describe('AuthService', () => {
 
     }));
 
-    it('logs in', fakeAsync(() => {
+    it('logs in using all 3 login requests', fakeAsync(() => {
 
       const loginType = 'own';
       const email = 'marianna.laaksonen@example.com';
       const password = 'salasana';
 
       auth.getLoginInfo(loginType, courseID).then((loginInfo: LoginInfo) => {
+        expect(loginInfo['login-id']).toBeDefined();
         return auth.login(email, password, loginInfo['login-id']);
       }).then((loginResult: LoginResult) => {
         expect(loginResult.success).toBe(true);
@@ -320,20 +306,18 @@ describe('AuthService', () => {
       const req = controller.expectOne(url);
 
       const loginID = '728deabd-a694-4585-99ac-19a361821a5b';
-      let loginUrl = 'course/1/login?loginid=' + loginID;
+      const loginUrl = 'course/1/login?loginid=' + loginID;
       const realCodeChallenge = req.request.headers.get('code-challenge');
       const result = {
         'login-url': loginUrl,
         'login-id': loginID
       }
-      
       req.flush(result);
       tick();
 
       const loginCode = '9c16b0e1-a101-47a6-93dc-2c6b2961d195';
       const url2 = `${api}/omalogin`;
       const req2 = controller.expectOne(url2);
- 
       const result2 = {
         success: true,
         'login-code': loginCode
@@ -344,24 +328,23 @@ describe('AuthService', () => {
       const url3 = `${api}/authtoken`;
       const req3 = controller.expectOne(url3);
       const realCodeVerifier = req3.request.headers.get('code-verifier');
-      let cryptedRealCodeVerifier;
+      let codeChallenge;
+
       if (realCodeVerifier !== null) {
-        cryptedRealCodeVerifier = shajs('sha256').update(realCodeVerifier).digest('hex');
+        codeChallenge = shajs('sha256').update(realCodeVerifier).digest('hex');
       } else {
         fail("'code-verifier' ei löydetty kutsun headereista. ");
       }
+
       let result3;
-      if (cryptedRealCodeVerifier == realCodeChallenge) {
-          result3 = { "success": true }
+      if (realCodeChallenge === codeChallenge) {
+        result3 = { "success": true }
       } else {
         result3 = { "success": false }
       }
       req3.flush(result3);
       tick();
-
     }));
 
-
   });
-
 });
