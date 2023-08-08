@@ -328,10 +328,7 @@ export class TicketService {
     try {
       console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
-        this.http.get<TikettiListassa[]>(url).pipe(
-          timeout(3000),
-          retry(3)
-        )
+        this.http.get<TikettiListassa[]>(url).pipe(timeout(3000))
       )
     } catch (error: any) {
       this.handleError(error);
@@ -360,7 +357,6 @@ export class TicketService {
         viimeisin: ticket.viimeisin ? new Date(ticket.viimeisin) : ticket.viimeisin,
         viimeisinStr: ticket.viimeisin ? viimeisinStr : ''
       }
-      // liite: this.getRandomInt(1,5) === 2 ? true : false
     });
     return sortableData;
   }
@@ -456,8 +452,8 @@ export class TicketService {
   }
 
   // Lähetä tiedosto palauttaen edistymisprosentin.
-  public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
-      Observable<number>{
+  public uploadFile(ticketID: string, commentID: string, courseID: string,
+      file: File): Observable<number>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
