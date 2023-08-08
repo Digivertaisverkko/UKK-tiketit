@@ -154,6 +154,7 @@ export class TicketService {
     return response
   }
 
+  // Muokkaa tikettiä.
   public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string,
         fileList?: File[]): Promise<{ success: boolean }> {
     let response: any;
@@ -165,13 +166,12 @@ export class TicketService {
       this.handleError(error);
     }
     if (response?.success !== true) return { success: false }
-    if (fileList?.length == 0 || !fileList ) return { success: true }
+    if (!fileList || fileList?.length == 0) return { success: true }
     if (!courseID) return { success: false }
     const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
     for (let file of fileList) {
       try {
-        sendFileResponse = await this.uploadFile(ticketID, firstCommentID, courseID, file);
+        await this.uploadFile(ticketID, firstCommentID, courseID, file);
       } catch (error: any) {
         this.handleError(error);
       }
@@ -285,7 +285,7 @@ export class TicketService {
     }
     return response;
   }
-  
+
   // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
@@ -466,7 +466,7 @@ export class TicketService {
     this.errorService.handleServerError(error);
   }
 
-  // Lähetä tiedosto palauttaen edistymisprosentin.
+  // Lähetä yksi tiedosto palvelimelle. Palauttaa edistymisprosentin.
   public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
       Observable<number>{
     let formData = new FormData();
