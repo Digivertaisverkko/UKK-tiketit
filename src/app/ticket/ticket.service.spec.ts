@@ -108,7 +108,27 @@ describe('TicketService', () => {
     const commentsRequest = controller.expectOne(commentsUrl);
     commentsRequest.flush(ticketDummyData.ticket3comments);
     tick();
+  }));
 
+  it('gets a file', fakeAsync (() => {
+    const ticketID = '123';
+    const commentID = '456';
+    const fileID = '789';
+    const courseID = '1';
+    
+    const mockBlob = new Blob(['mock file content'], { type: 'application/octet-stream' });
+
+    tickets.getFile(ticketID, commentID, fileID, courseID).then((response: Blob) => {
+      expect(response).toEqual(mockBlob);
+    });
+
+    const expectedUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/tiedosto`;
+
+    const req = controller.expectOne(expectedUrl);
+    expect(req.request.method).toBe('GET');
+
+    req.flush(mockBlob);
+    tick();
   }));
 
 });
