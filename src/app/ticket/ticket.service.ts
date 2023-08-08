@@ -274,7 +274,7 @@ export class TicketService {
     }
     return response;
   }
-  
+
   // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
@@ -451,9 +451,9 @@ export class TicketService {
     this.errorService.handleServerError(error);
   }
 
-  // Lähetä tiedosto palauttaen edistymisprosentin.
-  public uploadFile(ticketID: string, commentID: string, courseID: string,
-      file: File): Observable<number>{
+  // Lähetä yksi tiedosto palvelimelle. Palauttaa edistymisprosentin.
+  public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
+      Observable<number>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
