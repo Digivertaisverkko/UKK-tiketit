@@ -78,10 +78,7 @@ export class CourseService {
     try {
       console.log('Haetaan kurssin nimi.');
       response = await firstValueFrom(
-        this.http.get<{ 'nimi': string }[]>(url).pipe(
-          timeout(3000),
-          retry(3)
-        )
+        this.http.get<{ 'nimi': string }[]>(url).pipe(timeout(3000))
       )
     } catch (error: any) {
       this.handleError(error);
