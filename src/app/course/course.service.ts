@@ -117,8 +117,7 @@ export class CourseService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string):
-      Promise<Kenttapohja[]> {
+  public async getTicketFieldInfo(courseID: string): Promise<Kenttapohja[]> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
     try {

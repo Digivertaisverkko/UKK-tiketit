@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { CourseService } from './course.service';
 import { environment } from 'src/environments/environment';
-import { Role } from '@core/core.models';
 import { ErrorService } from '@core/services/error.service';
+import { Role } from '@core/core.models';
 
 const courseID = '1';
 const courseName = 'Testikurssi';
@@ -67,7 +67,6 @@ describe('CourseService', () => {
     const courseID = '1';
     const email = 'test@example.com';
     const role: Role = 'opiskelija';
-    const errorMessage = 'Some error message';
 
     courses.sendInvitation(courseID, email, role).then(() => {
       fail('Ei catchattu.');
