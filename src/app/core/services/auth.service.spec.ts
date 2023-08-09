@@ -66,7 +66,7 @@ describe('AuthService', () => {
 
       store.trackLoggedIn().subscribe(isLoggedIn => {
         expect(isLoggedIn).toBeTrue();
-      })
+      });
 
     }))
 
@@ -166,7 +166,7 @@ describe('AuthService', () => {
 
   describe('log manually in', () => {
 
-    it('/login request has the correct headers.', fakeAsync(() => {
+    it('/login request has the correct headers.', (done) => {
 
       const loginType = 'own';
       const codeChallenge = '61b6ec7fff6f21ed0f9b96ad1ae7b5f741c89412c044d5c5e6a344a0f4c94438';
@@ -177,8 +177,8 @@ describe('AuthService', () => {
         'kurssi': courseID,
       };
 
-      auth.getLoginInfo(loginType, courseID).then(res => {
-
+      auth.getLoginInfo(loginType, courseID).then(() => {
+        done();
       }).catch(e => {
         console.log(e);
       })
@@ -193,15 +193,15 @@ describe('AuthService', () => {
       }
 
       req.flush(result);
-
       expect(req.request.method).toBe('POST');
       expect(req.request.headers.get('login-type')).toEqual(expectedHeaders['login-type']);
       expect(req.request.headers.has('code-challenge')).toBeTrue();
       expect(req.request.headers.get('kurssi')).toEqual(expectedHeaders['kurssi']);
 
-    }));
 
-    it('/omalogin request has the correct headers.', fakeAsync(() => {
+    });
+
+    it('/omalogin request has the correct headers.', (done) => {
 
       let api = environment.apiBaseUrl;
       const email = 'marianna.laaksonen@example.com';
@@ -215,8 +215,8 @@ describe('AuthService', () => {
         'login-id': loginID,
       }
 
-      auth.login(email, password, loginID).then(res => {
-
+      auth.login(email, password, loginID).then(() => {
+        done();
       }).catch(e => {
         console.log(e);
       })
@@ -224,9 +224,7 @@ describe('AuthService', () => {
       const url = `${api}/omalogin`;
       const req = controller.expectOne(url);
       const result = {
-
       }
-
       req.flush(result);
 
       expect(req.request.method).toBe('POST');
@@ -234,7 +232,7 @@ describe('AuthService', () => {
       expect(req.request.headers.get('salasana')).toEqual(expectedHeaders['salasana'])
       expect(req.request.headers.has('login-id')).toBeTrue();
 
-    }));
+    });
 
 
     it('/authtoken request after /omalogin with correct headers',  fakeAsync(()  => {
