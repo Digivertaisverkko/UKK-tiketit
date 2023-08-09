@@ -14,7 +14,7 @@
 
 <div class="view-wrapper" *ngIf="isLoaded">
 
-  <h2 class="theme-subheader" i18n="@@Kurssin asetukset">
+  <h2 class="theme-subheading" i18n="@@Kurssin asetukset">
       Kurssin asetukset
   </h2>
 
@@ -85,9 +85,9 @@
 <div class="vertical-spacer"></div>
 
 <h3 class="theme-subheader faq-transfer-h2"
-    i18n="@@Usein kysyttyjen kysymysten siirtäminen"
+    i18n="@@Kurssin siirtäminen"
     >
-  Usein kysyttyjen kysymysten siirtäminen
+  Kurssin siirtäminen
 </h3>
 
 <!---- Ei näytetä käyttäjällä, koska tiedoston valitsimen aktivointiin käytetään
@@ -103,6 +103,11 @@
         >
 
 <div class="transfer-buttons-wrapper">
+  <div  class="file-buttons-text"
+        i18n="@@Usein kysytyt kysymykset"
+        >
+    Usein kysytyt kysymykset
+  </div>
   <button i18n="@@Lataa tiedostona"
           (click)="exportFAQs()"
           mat-raised-button
@@ -118,7 +123,7 @@
   </button>
 </div>
 
-<!---------------- Ulkopuolisten kutsuminen --------------------------------->
+<!---------------- Ulkopuolisten kutsuminen ----------------------------------->
 
 <div class="vertical-spacer"></div>
 
