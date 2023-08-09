@@ -175,10 +175,7 @@ export class TicketService {
     try {
       console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
-        this.http.get<UKK[]>(url).pipe(
-          timeout(3000),
-          retry(3)
-        )
+        this.http.get<UKK[]>(url).pipe(timeout(3000))
       )
     } catch (error: any) {
       this.handleError(error);
