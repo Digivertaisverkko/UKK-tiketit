@@ -1,3 +1,6 @@
+  /* Käsittelee virheisiin liittyviä toimia, kuten niiden logittamista vai
+     tekemistä testausta varten. */
+
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 
@@ -32,13 +35,6 @@ export class ErrorService {
       private store: StoreService
       ) {
   }
-
-  /* Käsitellään virheitä ennen niiden toimittamista komponenteille. Logitetaan
-      kaikki virheet. Jos käyttäjällä ei ole oikeuksia resurssiin tai virheenä
-      on, ettei ole kirjautunut, niin ohjataan "Ei oikeuksia" -näkymään. Muussa
-      tapauksessa virhe heitetään eteenpäin komponenteille, jotka voivat
-      tarpeen mukaan näyttää käyttäjällle virheilmoituksia.
-  */
 
   /* Palauta samanlaisen virheen kuin palvelin. status on HTTP error status koodi,
       errorid on palvelimen nelinumeroinen virhekoodi. */
@@ -100,6 +96,10 @@ export class ErrorService {
     return e
   }
 
+  /* Logitetaan kaikki virheet. Jos käyttäjällä ei ole oikeuksia resurssiin tai
+  virheenä on, ettei ole kirjautunut, niin ohjataan "Ei oikeuksia" -näkymään.
+  Muussa tapauksessa virhe heitetään eteenpäin komponenteille, jotka voivat
+  tarpeen mukaan näyttää käyttäjällle virheilmoituksia. */
   public handleServerError(error: HttpErrorResponse) {
     var backendResponse = error?.error;
     var backendError: Error = backendResponse?.error;
@@ -138,7 +138,6 @@ export class ErrorService {
     if (backendError.originaali && backendError.originaali.length > 1) {
       logMessage += " Alkuperäinen palvelimen virheilmoitus: " + backendError.originaali;
     }
-
     return logMessage;
   }
 
