@@ -109,7 +109,7 @@ describe('TicketService', () => {
       expect(err).toBeDefined();
       done();
     })
-  
+
   const target = 'kaikki'
   const url = `${api}/kurssi/${courseID}/tiketti/${target}`;
   const req = controller.expectOne(url);
@@ -118,14 +118,14 @@ describe('TicketService', () => {
   const error = errors.createError(status, errorid);
   req.flush(error, { status: status, statusText: 'Forbidden'});
   });
-  
+
 
   it('gets a file', fakeAsync (() => {
     const ticketID = '123';
     const commentID = '456';
     const fileID = '789';
     const courseID = '1';
-    
+
     const mockBlob = new Blob(['mock file content'], { type: 'application/octet-stream' });
 
     tickets.getFile(ticketID, commentID, fileID, courseID).then((response: Blob) => {
@@ -140,5 +140,42 @@ describe('TicketService', () => {
     req.flush(mockBlob);
     tick();
   }));
+
+
+  it('upload a file and report progress', (done: DoneFn) => {
+    const courseID = '1';
+    const ticketID = '123';
+    const commentID = '456';
+    const file = new File(['test file content'], 'test.txt', { type: 'text/plain' });
+
+    const uploadProgressSpy = jasmine.createSpy('uploadProgressSpy');
+    const errorSpy = jasmine.createSpy('errorSpy');
+    const completeSpy = jasmine.createSpy('completeSpy');
+
+    const progressObservable = tickets.uploadFile(ticketID, commentID, courseID, file);
+    progressObservable.subscribe({
+      next: (progress: number) => {
+        uploadProgressSpy(progress);
+      },
+      error: (error: any) => {
+        errorSpy(error);
+      },
+      complete: () => {
+        completeSpy();
+        expect(uploadProgressSpy).toHaveBeenCalledWith(50);
+        expect(completeSpy).toHaveBeenCalled();
+        expect(errorSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+
+    const url = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/` +
+      `${commentID}/liite`;
+    const req = controller.expectOne(url);
+    expect(req.request.method).toBe('POST');
+    req.event({ type: 1, loaded: 50, total: 100 }); // Progress event
+
+    req.flush({}, { status: 200, statusText: 'OK' }); // Response
+  });
 
 });
