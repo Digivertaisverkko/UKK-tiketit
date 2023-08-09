@@ -348,7 +348,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('UKK-pollauksen viime kutsusta kulunut aikaa ' +
             `${elapsedTime} sekuntia.`);
         if (elapsedTime !== POLLING_RATE_SEC) {
-          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+          console.log(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
         }
       }
       fetchStartTime = Date.now();
