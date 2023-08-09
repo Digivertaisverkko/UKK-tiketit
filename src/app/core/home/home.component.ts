@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -33,7 +34,8 @@ export class HomeComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.title.setTitle("Tukki-" + $localize `:@@tikettijärjestelmä:tikettijärjestelmä`);
+    this.title.setTitle(environment.productName + "-" +
+        $localize `:@@tikettijärjestelmä:tikettijärjestelmä`);
   }
 
 

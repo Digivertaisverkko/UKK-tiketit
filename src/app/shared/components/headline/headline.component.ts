@@ -3,6 +3,7 @@ import {  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 import { CourseService } from 'src/app/course/course.service';
+import { environment } from 'src/environments/environment';
 import { StoreService } from '@core/services/store.service';
 
 @Component({
@@ -53,7 +54,8 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.hasProjectedContent = !!this.hasProjectedContent;
     if (this.appHeadline) {
-      this.headlineText = "Tukki-" + $localize `:@@tikettijärjestelmä:tikettijärjestelmä`;
+      this.headlineText = environment.productName + "-" +
+          $localize `:@@tikettijärjestelmä:tikettijärjestelmä`;
     } else if (this.noCourseTitle !== true) {
       this.trackCourseID();
     }

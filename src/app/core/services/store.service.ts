@@ -33,7 +33,7 @@ export class StoreService {
 
   constructor() {
     this.constants = {
-      baseTitle: 'UKK Tiketit - ',
+      baseTitle: 'Tukki - ',
       MAX_FILE_SIZE_MB: 100,
       MILLISECONDS_IN_MIN: 60000,
       thisYear: new Date().getFullYear()

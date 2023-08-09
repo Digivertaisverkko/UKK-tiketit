@@ -7,7 +7,7 @@ const baseUrl ='/api';
 export const environment = {
   production: true,
   clientID: 'angularApp',
-  productName: 'UKK-Tiketit',
+  productName: 'Tukki',
   apiBaseUrl: baseUrl,
   testing: false
 };

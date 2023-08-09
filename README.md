@@ -1,10 +1,10 @@
-# UKK-tiketit
+# Tukki
 
-Tämä on Digivertaisverkkohanketta varten toteutetun opetuskäyttöön tarkoitetun tikettijärjestelmän web-käyttöliittymä. Web-käyttöliittymä on toteutettu [Angularilla](https://angular.io/). Web-käyttöliittymä kommunikoi erikseen asennettavan tikettijärjestelmän rajapinnan [UKK-Tiketit-backend](https://github.com/Digivertaisverkko/UKK-tiketit-backend) kanssa.
+Tämä on Digivertaisverkkohanketta varten toteutetun opetuskäyttöön tarkoitetun tikettijärjestelmän web-käyttöliittymä. Web-käyttöliittymä on toteutettu [Angularilla](https://angular.io/). Web-käyttöliittymä kommunikoi erikseen asennettavan tikettijärjestelmän rajapinnan [Tukki-backend](https://github.com/Digivertaisverkko/UKK-tiketit-backend) kanssa.
 
 ## Asennus
 
-Web-käyttöliittymä tarvitsee toimiakseen tikettijärjestelmän rajapinnan [UKK-Tiketit-backend](https://github.com/Digivertaisverkko/UKK-tiketit-backend). Katso ohjeet sen asentamiseksi projektin GitHub sivulta. Sieltä löytyy myös ohjeet tämän web-käyttöliittymän ajamiseen yhdessä rajapinnan kanssa.
+Web-käyttöliittymä tarvitsee toimiakseen tikettijärjestelmän rajapinnan [Tukki-backend](https://github.com/Digivertaisverkko/UKK-tiketit-backend). Katso ohjeet sen asentamiseksi projektin GitHub sivulta. Sieltä löytyy myös ohjeet tämän web-käyttöliittymän ajamiseen yhdessä rajapinnan kanssa.
 
 ## Kehitysympäristö
 
