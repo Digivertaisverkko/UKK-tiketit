@@ -143,9 +143,9 @@ describe('TicketService', () => {
 
 
   it('upload a file and report progress', (done: DoneFn) => {
-    const courseID = '1';
     const ticketID = '123';
     const commentID = '456';
+    const courseID = '1';
     const file = new File(['test file content'], 'test.txt', { type: 'text/plain' });
 
     const uploadProgressSpy = jasmine.createSpy('uploadProgressSpy');
@@ -169,13 +169,51 @@ describe('TicketService', () => {
       }
     });
 
-    const url = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/` +
-      `${commentID}/liite`;
-    const req = controller.expectOne(url);
+    const req = controller.expectOne(
+      `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite`
+    );
+
     expect(req.request.method).toBe('POST');
     req.event({ type: 1, loaded: 50, total: 100 }); // Progress event
 
     req.flush({}, { status: 200, statusText: 'OK' }); // Response
   });
+
+
+  it('handles error during upload', (done: DoneFn) => {
+    const ticketID = '123';
+    const commentID = '456';
+    const courseID = '1';
+    const file = new File(['test file content'], 'test.txt', { type: 'text/plain' });
+
+    const uploadProgressSpy = jasmine.createSpy('uploadProgressSpy');
+    const errorSpy = jasmine.createSpy('errorSpy');
+    const completeSpy = jasmine.createSpy('completeSpy');
+
+    const progress = tickets.uploadFile(ticketID, commentID, courseID, file);
+    progress.subscribe({
+      next: (progress: number) => {
+        uploadProgressSpy(progress);
+      },
+      error: (error: any) => {
+        errorSpy(error);
+        expect(errorSpy).toHaveBeenCalled();
+        expect(uploadProgressSpy).not.toHaveBeenCalled();
+        expect(completeSpy).not.toHaveBeenCalled();
+        done();
+      },
+      complete: () => {
+        completeSpy();
+      }
+    });
+
+    const req = controller.expectOne(
+      `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite`
+    );
+
+    req.error(new ProgressEvent('error', { loaded: 0, total: 0 }));
+
+  });
+
 
 });
