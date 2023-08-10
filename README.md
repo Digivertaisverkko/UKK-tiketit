@@ -34,6 +34,8 @@ Testejä voi ajaa myös testitiedosto kerrallaan käyttäen `--include` argument
 
 Testit ajetaan käyttäen Google Chrome -selainta. Joissain tapauksissa testiympäristö ei havaitse automaattisesti Chromen binaaria ja tällöin joudut asettamaan ympäristömuuttujan `CHROME_BIN`. Esimerkiksi `CHROME_BIN=chromium ng test`.
 
+Projektiin on myös määritelty *production* testien ajaminen `ng test:prod` komennolla, joka ajaa testit flageilla `--browsers=ChromeHeadless --watch=false --code-coverage`. Tämä komento on tarkoitettu lähinnä automaattisten testien ajamiseen.
+
 # Hyödyllisiä linkkejä
 
 * [Web-käyttöliittymän käyttöohjeet](https://github.com/Digivertaisverkko/UKK-tiketit/wiki)
