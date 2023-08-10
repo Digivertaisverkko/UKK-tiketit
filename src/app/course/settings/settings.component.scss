@@ -104,14 +104,14 @@ mat-icon {
   display: none;
 }
 
-.transfer-buttons-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 16em;
+.transfer-buttons-grid {
+  column-gap: 4rem;
+  display: grid;
+  margin-left: 1rem;
+  row-gap: 1rem;
 }
 
-.file-buttons-text {
+.file-buttons-label {
   text-align: center;
 }
 
@@ -144,10 +144,42 @@ mat-radio-button {
   margin: 0 1.3rem 3px 0px
 }
 
+@media (min-width: 450px) {
+  .transfer-buttons-grid {
+    grid-template-columns: repeat(2, minmax(13em,16em));
+    grid-template-rows: 1fr 2fr 2fr;
+    row-gap: 1rem;
+  }
+}
+
 @media (max-width: $XSmall) {
   .text-input { width: 85%; }
   .invite-wrapper {
     flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 450px) and (max-width: $XSmall) {
+  .transfer-buttons-grid {
+    column-gap: 1rem;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 450px) {
+  .transfer-buttons-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    row-gap: 0.5rem;
+  }
+  .file-buttons-label {
+    padding-top: 0.7rem;
+  }
+  .course-settings-text {
+    grid-row: 4;
+  }
+  .add-settings-button {
+    grid-row: 5;
   }
 
 }

@@ -102,24 +102,48 @@
         type="file"
         >
 
-<div class="transfer-buttons-wrapper">
-  <div  class="file-buttons-text"
+<div class="transfer-buttons-grid">
+  <div  class="file-buttons-label"
         i18n="@@Usein kysytyt kysymykset"
         >
     Usein kysytyt kysymykset
   </div>
-  <button i18n="@@Lataa tiedostona"
+  <div  class="file-buttons-label course-settings-text"
+        i18n="@@Kurssin asetukset"
+        >
+      Kurssiasetukset
+  </div>
+
+  <button class="faq-button"
+          i18n="@@Lisää tiedostona"
+          mat-raised-button
+          (click)="fileInput.click()"
+          >
+    Lisää&nbsp;tiedostosta
+  </button>
+
+  <button class="setting-button add-settings-button"
+          i18n="@@Lisää tiedostona"
+          mat-raised-button
+          >
+    Lisää&nbsp;tiedostosta
+  </button>
+
+  <button class="faq-button"
+          i18n="@@Lataa tiedostona"
           (click)="exportFAQs()"
           mat-raised-button
           type="button"
           >
-    Lataa tiedostona
+    Lataa&nbsp;tiedostona
   </button>
-  <button i18n="@@Lisää tiedostona"
+
+  <button class="setting-button"
+          i18n="@@Lataa tiedostona"
           mat-raised-button
-          (click)="fileInput.click()"
+          type="button"
           >
-    Lisää tiedostosta
+    Lataa&nbsp;tiedostona
   </button>
 </div>
 
