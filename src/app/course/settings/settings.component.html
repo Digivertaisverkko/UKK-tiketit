@@ -114,32 +114,40 @@
       Kurssiasetukset
   </div>
 
-  <button class="faq-button"
+  <button aria-label="Lisää usein kysytyt kysymykset"
+          class="faq-button"
           i18n="@@Lisää tiedostona"
+          i18n-aria-label="@@Lisää usein kysytyt kysymykset"
           mat-raised-button
           (click)="fileInput.click()"
           >
     Lisää&nbsp;tiedostosta
   </button>
 
-  <button class="setting-button add-settings-button"
+  <button aria-label="Lisää kurssiasetukset"
+          class="setting-button add-settings-button"
           i18n="@@Lisää tiedostona"
+          i18n-aria-label="@@Lisää kurssiasetukset"
           mat-raised-button
           >
     Lisää&nbsp;tiedostosta
   </button>
 
-  <button class="faq-button"
+  <button aria-label="Lataa usein kysytyt kysymykset"
+          class="faq-button"
           i18n="@@Lataa tiedostona"
+          aria-aria-label="@@Lataa usein kysytyt kysymykset"
           (click)="exportFAQs()"
           mat-raised-button
           type="button"
           >
-    Lataa&nbsp;tiedostona
-  </button>
+          Lataa&nbsp;tiedostona
+        </button>
 
-  <button class="setting-button"
+  <button aria-label="Lataa kurssiasetukset"
+          class="setting-button"
           i18n="@@Lataa tiedostona"
+          i18n-aria-label="@@Lataa kurssiasetukset"
           mat-raised-button
           type="button"
           >
