@@ -157,6 +157,20 @@ export class CourseService {
     return response;
   }
 
+  // Lähetetään JSON-muotoiset asetukset lisättäväksi kurssille.
+  public async importSettings(courseID: string, filecontent: JSON):
+    Promise<GenericResponse | any>{
+  let response;
+  const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
+  const body = filecontent;
+  try {
+    response = await firstValueFrom(this.http.post(url, body));
+  } catch (error: any) {
+    this.handleError(error);
+  }
+  return response;
+}
+
   // Kutsu ulkopuolinen käyttäjä kurssille.
   public async sendInvitation(courseID: string, email: string, role: Role):
       Promise<{ success: boolean, kutsu: string } | any> {
