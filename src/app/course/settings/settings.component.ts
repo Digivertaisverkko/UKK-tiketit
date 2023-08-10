@@ -73,7 +73,7 @@ export class SettingsComponent implements OnInit {
     }, {
       validators: [ isEmail('email') ]
     }
-    
+
     )
   }
 
@@ -83,6 +83,7 @@ export class SettingsComponent implements OnInit {
     this.saveFields();
   }
 
+  // Lataa UKK:t tiedostona.
   public exportFAQs() {
     const faq = $localize `:@@UKK:UKK`;
     const courseName = this.store.getCourseName();
@@ -97,11 +98,33 @@ export class SettingsComponent implements OnInit {
       link.click();
       link.remove();
     })
-    .catch(error => {
+    .catch(() => {
       this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
           Tiedoston lataaminen epäonnistui` + '.';
     });
   }
+
+  // Lataa asetukset tiedostona.
+  public exportSettings() {
+    const settings = $localize `:@@Asetukset:Asetukset`;
+    const courseName = this.store.getCourseName();
+    const filename = `${settings}-${courseName}.json`;
+    this.courses.exportSettings(this.courseid).then(filecontent => {
+      const link = this.renderer.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute(
+          'href',
+          "data:text/json;charset=UTF-8," + encodeURIComponent(filecontent));
+      link.setAttribute('download', filename);
+      link.click();
+      link.remove();
+    })
+    .catch(() => {
+      this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
+          Tiedoston lataaminen epäonnistui` + '.';
+    });
+  }
+
 
   private fetchTicketFieldInfo(courseid: string) {
     this.courses.getTicketFieldInfo(courseid).then(response => {

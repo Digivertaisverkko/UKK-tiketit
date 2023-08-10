@@ -45,12 +45,25 @@ export class CourseService {
     return response;
   }
 
-  // Vie kurssin UKK:t JSON muodossa.
+  // Lataa kurssin UKK:t JSON-stringinä.
   public async exportFAQs(courseID: string): Promise<string> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
     try {
-      response = await firstValueFrom(this.http.get<any>(url));
+      response = await firstValueFrom(this.http.get(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    let filecontent = JSON.stringify(response, null, 2);
+    return filecontent;
+  }
+
+  // Lataa kurssin asetukset JSON-stringinä.
+  public async exportSettings(courseID: string): Promise<string> {
+    let response: any;
+    const url = `${this.api}/kurssi/${courseID}/tikettipohja/vienti`;
+    try {
+      response = await firstValueFrom(this.http.get(url));
     } catch (error: any) {
       this.handleError(error);
     }
