@@ -17,6 +17,10 @@ export class MenuSrcComponent implements OnInit {
   isDisabled = false;
   nodeType!: NodeType;
 
+  public get title(): string {
+    return $localize `:@@Koodilohko:Koodilohko`;
+  }
+
   onClick(e: MouseEvent): void {
     e.preventDefault();
     const { state, dispatch } = this.editor.view;

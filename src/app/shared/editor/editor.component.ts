@@ -50,7 +50,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   editor!: Editor;
   toolbar: Toolbar = [
     ['bold', 'italic', 'underline', 'strike'],
-    ['code', 'blockquote'],
+    ['blockquote'],
     ['ordered_list', 'bullet_list'],
     ['image']
   ];
