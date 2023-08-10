@@ -161,7 +161,7 @@ export class CourseService {
   public async importSettings(courseID: string, filecontent: JSON):
     Promise<GenericResponse | any>{
   let response;
-  const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
+  const url = `${this.api}/kurssi/${courseID}/tikettipohja/vienti`;
   const body = filecontent;
   try {
     response = await firstValueFrom(this.http.post(url, body));

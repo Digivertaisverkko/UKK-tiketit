@@ -190,18 +190,32 @@ export class SettingsComponent implements OnInit {
     return role
   }
 
- private importFAQs(courseID: string, jsonData: JSON) {
-  this.courses.importFAQs(this.courseid, jsonData).then((res: GenericResponse) => {
-    if (res.success === true) {
-      this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
-          Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-    } else {
-      console.log('vastaus: ' + JSON.stringify(res));
-    }
-  }).catch(e => {
-    this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
-      Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
-  })
+  private importFAQs(courseID: string, jsonData: JSON) {
+    this.courses.importFAQs(courseID, jsonData).then((res: GenericResponse) => {
+      if (res?.success === true) {
+        this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
+            Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
+      } else {
+        console.log('vastaus: ' + JSON.stringify(res));
+      }
+    }).catch(e => {
+      this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
+        Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
+    })
+  }
+
+  private importSettings(courseID: string, jsonData: JSON) {
+    this.courses.importSettings(courseID, jsonData).then((res: GenericResponse) => {
+      if (res?.success === true) {
+        this.message = $localize `:@@Lisättiin asetukset tälle kurssille:
+            Lisättiin asetukset tälle kurssille` + '.';
+      } else {
+        console.log('vastaus: ' + JSON.stringify(res));
+      }
+    }).catch(e => {
+      this.errorMessage = $localize `:@@Asetusten lisääminen epäonnistui:
+        Asetusten lisääminen tälle kurssille ei onnistunut.`;
+    })
   }
 
   public submitInvite() {
@@ -228,12 +242,11 @@ export class SettingsComponent implements OnInit {
     this.settingsForm.markAsPristine();
   }
 
-
-  public onFileAdded() {
+  public pickFile(type: 'FAQs' | 'settings') {
     const fileInput = this.fileInput.nativeElement;
     fileInput.click();
+    this.errorMessage = '';
     fileInput.addEventListener('change', (event: any) => {
-      this.message = '';
       const file: File = event.target.files[0];
       if (!file) throw Error('Ei tiedostoa.');
       const fileReader = new FileReader();
@@ -246,7 +259,11 @@ export class SettingsComponent implements OnInit {
           Tiedoston sisältö on virheellisessä muodossa` + '.';
           return
         }
-        this.importFAQs(this.courseid, jsonData);
+        if (type === 'FAQs') {
+          this.importFAQs(this.courseid, jsonData);
+        } else if (type === 'settings') {
+          this.importSettings(this.courseid, jsonData);
+        }
       }
       fileReader.readAsText(file);
     })

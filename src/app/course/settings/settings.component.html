@@ -160,13 +160,14 @@
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää usein kysytyt kysymykset"
           mat-raised-button
-          (click)="onFileAdded()"
+          (click)="pickFile('FAQs')"
           >
     Lisää&nbsp;tiedostosta
   </button>
 
   <button aria-label="Lisää kurssiasetukset"
           class="setting-button add-settings-button"
+          (click)="pickFile('settings')"
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää kurssiasetukset"
           mat-raised-button
