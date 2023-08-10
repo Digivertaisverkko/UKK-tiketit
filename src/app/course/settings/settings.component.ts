@@ -1,7 +1,8 @@
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
 import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Observable, takeWhile, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
@@ -20,6 +21,7 @@ import { isEmail } from '@shared/directives/is-email.directive';
 export class SettingsComponent implements OnInit {
 
   @Input() courseid!: string;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
   public form: FormGroup = this.buildForm();
@@ -165,7 +167,6 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-
   private fetchTicketFieldInfo(courseid: string) {
     this.courses.getTicketFieldInfo(courseid).then(response => {
       if (response[0]?.otsikko != null) {
@@ -187,6 +188,20 @@ export class SettingsComponent implements OnInit {
         throw Error('Ei hyväksyttyä roolinumeroa.');
     }
     return role
+  }
+
+ private importFAQs(courseID: string, jsonData: JSON) {
+  this.courses.importFAQs(this.courseid, jsonData).then((res: GenericResponse) => {
+    if (res.success === true) {
+      this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
+          Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
+    } else {
+      console.log('vastaus: ' + JSON.stringify(res));
+    }
+  }).catch(e => {
+    this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
+      Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
+  })
   }
 
   public submitInvite() {
@@ -213,33 +228,28 @@ export class SettingsComponent implements OnInit {
     this.settingsForm.markAsPristine();
   }
 
-  public onFileAdded(event: any) {
-    this.message = '';
-    const file: File = event.target.files[0];
-    if (!file) throw Error('Ei tiedostoa.');
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      let jsonData: JSON;
-      try {
-        jsonData = JSON.parse(fileReader.result as string);
-      } catch {
-        this.errorMessage = $localize `:@@Tiedoston sisältö on virheellisessä muodossa:
-        Tiedoston sisältö on virheellisessä muodossa` + '.';
-        return
+
+  public onFileAdded() {
+    const fileInput = this.fileInput.nativeElement;
+    fileInput.click();
+    fileInput.addEventListener('change', (event: any) => {
+      this.message = '';
+      const file: File = event.target.files[0];
+      if (!file) throw Error('Ei tiedostoa.');
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        let jsonData: JSON;
+        try {
+          jsonData = JSON.parse(fileReader.result as string);
+        } catch {
+          this.errorMessage = $localize `:@@Tiedoston sisältö on virheellisessä muodossa:
+          Tiedoston sisältö on virheellisessä muodossa` + '.';
+          return
+        }
+        this.importFAQs(this.courseid, jsonData);
       }
-      if (!this.courseid) throw Error('Ei kurssi ID:ä.');
-      this.courses.importFAQs(this.courseid, jsonData)
-        .then((res: GenericResponse) => {
-          if (res.success === true) {
-            this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
-                Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-          }
-      }).catch(e => {
-        this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
-          Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
-      })
-    }
-    fileReader.readAsText(file);
+      fileReader.readAsText(file);
+    })
   }
 
   public saveFields() {

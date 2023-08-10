@@ -137,12 +137,11 @@
 -->
 <input  accept=".json"
         aria-hidden="true"
-        (change)="onFileAdded($event)"
         class="file-input"
         #fileInput
-        multiple
         type="file"
         >
+        <!-- (change)="onFileAdded($event)" -->
 
 <div class="transfer-buttons-grid">
   <div  class="file-buttons-label"
@@ -161,7 +160,7 @@
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää usein kysytyt kysymykset"
           mat-raised-button
-          (click)="fileInput.click()"
+          (click)="onFileAdded()"
           >
     Lisää&nbsp;tiedostosta
   </button>
