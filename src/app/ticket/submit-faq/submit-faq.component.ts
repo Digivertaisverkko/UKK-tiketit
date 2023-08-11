@@ -6,14 +6,14 @@ import { Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject } from 'rxjs';
 
-import { CourseService } from '@course/course.service';
-import schema from '@shared/editor/schema';
-import { EditAttachmentsComponent }
-    from '@ticket/components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, FileInfo, Kentta, Liite, Tiketti, UusiUKK }
     from '@ticket/ticket.models';
-import { TicketService } from '@ticket/ticket.service';
+import { CourseService } from '@course/course.service';
+import { EditAttachmentsComponent }
+    from '@ticket/components/edit-attachments/edit-attachments.component';
+import schema from '@shared/editor/schema';
 import { StoreService } from '@core/services/store.service';
+import { TicketService } from '@ticket/ticket.service';
 
 @Component({
   selector: 'app-submit-faq',
@@ -220,9 +220,7 @@ export class SubmitFaqComponent implements OnInit {
         if (response === null || response?.success !== true) {
           throw new Error('UKK:n muokkaaminen epäonnistui.');
         }
-        console.log('poistettavia tiedostoja: ' + this.attachments.filesToRemove.length);
         if (this.attachments.filesToRemove.length === 0) {
-          console.log('ei poistettavaa');
           return true
         }
         return this.attachments.removeSentFiles();
@@ -273,15 +271,9 @@ export class SubmitFaqComponent implements OnInit {
     .catch((res: any) => {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
           onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log(this.router.url + ': saatiin virhe: ' + res);
       this.state = 'editing';
       this.form.enable();
     })
-    .finally(() => {
-      console.log('Komponentti: Kaikki valmiita!');
-      // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-      // this.attachments.clear();
-    });
   }
 
 }
