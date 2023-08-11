@@ -8,8 +8,22 @@ p {
   margin-bottom: 1.5rem;
 }
 
+.text-area-wrapper {
+  width: 100%;
+}
+
 .help-text {
   max-width: 40rem;
+}
+
+.save-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.fields-h3 {
+  margin-top: 0;
 }
 
 // ----- Lista --------------------------
@@ -39,7 +53,6 @@ p {
   box-sizing: border-box;
   cursor: move;
 }
-
 
 .column {
   overflow: hidden;
@@ -90,10 +103,10 @@ mat-icon {
 
 // --------------------------------
 
-.theme-actions {
+.add-field-wrapper {
+  display: flex;
   justify-content: space-between;
-  margin-right: -0.7rem;
-  margin-bottom: 1rem;
+  margin: 1.4rem -0.7rem 1rem 0;
 }
 
 .vertical-spacer {

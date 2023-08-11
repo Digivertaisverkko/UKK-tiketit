@@ -5,7 +5,7 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, firstValueFrom, of, retry, timeout } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of  , timeout } from 'rxjs';
 
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
   SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }

@@ -18,9 +18,41 @@
       Kurssin asetukset
   </h2>
 
+  <h3 i18n="@@Kysymysten lisäohje opiskelijoille">
+    Kysymysten lisäohje opiskelijoille
+  </h3>
+
+  <mat-form-field class="text-area-wrapper">
+    <textarea autocomplete="off"
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMaxRows="5"
+              cdkAutosizeMinRows="3"
+              cdkTextareaAutosize
+              contenteditable
+              id="help-text"
+              i18n-placeholder="@@Lisäohje opiskelijoille"
+              matInput
+              maxlength="255"
+              name="helpText"
+              placeholder="Lisäohje opiskelijoille"
+              >
+    </textarea>
+    <mat-hint align="end">0 / 255</mat-hint>
+  </mat-form-field>
+
+  <div class="theme-actions save-wrapper">
+    <button class=""
+        i18n="@@Tallenna"
+        mat-raised-button
+        type="submit"
+        >
+      Tallenna
+    </button>
+  </div>
+
   <!----------------- Lisäkentät ---------------------------------------------->
 
-  <h3 class="table-header" i18n="@@Kysymysten lisäkentät">
+  <h3 class="fields-h3" i18n="@@Kysymysten lisäkentät">
     Kysymysten lisäkentät
   </h3>
 
@@ -40,7 +72,7 @@
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
       <div class="column">{{ field.otsikko }}</div>
       <div class="column">{{ field.ohje }}</div>
-      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id" >
+      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id">
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
@@ -69,7 +101,7 @@
 
 <app-success *ngIf="message.length >0">{{ message }}</app-success>
 
-<div class="theme-actions" *ngIf="errorMessage.length === 0">
+<div class="add-field-wrapper" *ngIf="errorMessage.length === 0">
 
   <button class="add-button"
           i18n="@@Lisää kenttä"
