@@ -92,6 +92,37 @@ export class SettingsComponent implements OnInit {
     this.saveFields();
   }
 
+  // Lataa UKK tai asetukset tiedostona.
+  public export(type: 'FAQs' | 'settings') {
+    let exportPromise: Promise<string>;
+    let filenameStart: string = '';
+    if (type === 'FAQs') {
+      filenameStart = $localize `:@@UKK:UKK`;
+      exportPromise = this.courses.exportFAQs(this.courseid);
+    } else if (type === 'settings') {
+      filenameStart = $localize `:@@Asetukset:Asetukset`;
+      exportPromise = this.courses.exportSettings(this.courseid);
+    } else {
+      throw Error('settings.component.export: Väärä parametri.');
+    }
+    const courseName = this.store.getCourseName();
+    const filename = `${filenameStart}-${courseName}.json`;
+    exportPromise.then(filecontent => {
+      const link = this.renderer.createElement('a');
+      link.setAttribute('target', '_blank');
+      link.setAttribute(
+          'href',
+          "data:text/json;charset=UTF-8," + encodeURIComponent(filecontent));
+      link.setAttribute('download', filename);
+      link.click();
+      link.remove();
+    })
+    .catch(() => {
+      this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
+          Tiedoston lataaminen epäonnistui` + '.';
+    });
+  }
+
   // Lataa UKK:t tiedostona.
   public exportFAQs() {
     const faq = $localize `:@@UKK:UKK`;
