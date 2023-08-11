@@ -186,7 +186,7 @@ export class EditFieldComponent implements OnInit {
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
   public onArrowLeft(event: any) {
-    console.log('Vasen nuoli painettu');
+    // console.log('Vasen nuoli painettu');
     // event.target === this.input.nativeElement &&
     if (event.key === 'ArrowLeft' && event.target.selectionStart === 0) {
       // if (this.chipGrid != null) this.chipGrid.last.focus();

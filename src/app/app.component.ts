@@ -85,7 +85,6 @@ export class AppComponent implements OnInit, OnDestroy  {
   public goTo(view: 'profile' | 'settings') {
     const courseID = getCourseIDfromURL();
     const route = '/course/' + courseID + '/' + view;
-    console.log('route: ' + route);
     this.router.navigateByUrl(route);
   }
 

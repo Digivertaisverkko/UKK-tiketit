@@ -173,7 +173,6 @@ export class TicketService {
     const url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
     let response: any;
     try {
-      console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
         this.http.get<UKK[]>(url).pipe(timeout(3000))
       )
@@ -323,7 +322,6 @@ export class TicketService {
     let url = `${this.api}/kurssi/${String(courseID)}/tiketti/${target}`;
     let response: any;
     try {
-      console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
         this.http.get<TikettiListassa[]>(url).pipe(timeout(3000))
       )

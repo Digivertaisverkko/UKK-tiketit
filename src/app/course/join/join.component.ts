@@ -43,8 +43,6 @@ export class JoinComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.invitation === null) {
       console.error('Virhe: Ei UUID:ä.');
-    } else {
-      console.log('UUID: ' + this.invitation);
     }
     this.loginIfNeeded();
     this.trackUserInfo();
@@ -140,7 +138,6 @@ export class JoinComponent implements OnInit, OnDestroy {
   }
 
   private setNotRightUser() {
-    console.log('asetetaan väärä käyttäjä');
     this.state = 'wrongUser';
     this.error = {
       title: $localize `:@@Väärä käyttäjä:Väärä käyttäjä`,
@@ -155,7 +152,6 @@ export class JoinComponent implements OnInit, OnDestroy {
       if (res?.nimi ) this.user = res;
       if (this.user?.sposti && this.invitedInfo?.sposti) {
         if (this.user.sposti !== this.invitedInfo?.sposti) {
-          console.log('trackuserinfo asettaa väärän userin.');
           this.setNotRightUser();
         }
       }

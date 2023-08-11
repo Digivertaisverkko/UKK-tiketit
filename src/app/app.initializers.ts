@@ -37,7 +37,6 @@ export const initializeLanguageFI = (): Promise<void> | void => {
 function getLanguage(): 'en-US' | 'fi-FI' {
   const url = new URL(window.location.href);
   var language: 'en-US' | 'fi-FI';
-  // console.log('urlLang: ' + urlLang);
   // Upotuksessa kieli tulee URL-parametrina.
 
   var savedlanguage: string | null = localStorage.getItem('language');
@@ -61,14 +60,11 @@ function getLanguage(): 'en-US' | 'fi-FI' {
       language = isInIframe() ? 'en-US' : 'fi-FI';
     }
   }
-
     // Jos haluaa käyttää selaimen kieltä.
     // language = navigator.language;
-    // console.log('navigator.language -kieli: ' + language);
 
     // if (language === undefined || language === null ) {
     //   const browserLanguages: string[] | undefined = getBrowserLocales();
-    //   console.log('Saatiin kielet: ' + browserLanguages);
   return language;
 }
 
@@ -77,13 +73,11 @@ function getLangFormat(langInUrl: string): 'en-US' | 'fi-FI' {
   let lang: 'en-US' | 'fi-FI';
   if (langInUrl == 'en') {
     lang = 'en-US';
-    console.log('enkku valittu url:sta');
   } else if (langInUrl == 'fi') {
     lang = 'fi-FI';
-    console.log('suomi valittu url:sta');
   } else {
     lang = 'en-US';
-    console.log('Tuntematon kieli: "' + langInUrl  + '", käytetään englantia.');
+    console.error('Tuntematon kieli: "' + langInUrl  + '", käytetään englantia.');
   }
   return lang
 }

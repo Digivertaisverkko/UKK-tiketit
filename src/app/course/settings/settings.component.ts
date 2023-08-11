@@ -165,14 +165,13 @@ export class SettingsComponent implements OnInit {
     const email = this.form.controls['email'].value;
     const checkboxValue = this.form.controls['role'].value;
     const role: Role = this.getRole(checkboxValue);
-    console.log('lähetetään tiedot: email: ' + email + ', rooli: ' + role);
     this.courses.sendInvitation(this.courseid, email, role).then(res => {
       if (res?.success === true) {
         this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin kutsu onnistuneesti` + '.';
       } else {
-        console.log('kutsun lähettäminen epäonnistui.');
+        throw Error
       }
-    }).catch(err => {
+    }).catch(() => {
       this.inviteErrorMessage = $localize `:@@Käyttäjän kutsuminen epäonnistui:Kutsun lähettäminen ulkopuoliselle käyttäjälle ei onnistunut` + '.';
     })
   }
@@ -203,8 +202,6 @@ export class SettingsComponent implements OnInit {
           if (res.success === true) {
             this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
                 Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-          } else {
-            console.log('vastaus: ' + JSON.stringify(res));
           }
       }).catch(e => {
         this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:

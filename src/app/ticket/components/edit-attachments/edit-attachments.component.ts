@@ -79,12 +79,9 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       return this.tickets.uploadFile(ticketID, commentID, courseID!, fileinfo.file)
         .pipe(
           tap(progress => {
-            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
-                progress);
             this.fileInfoList[index].progress = progress;
           }),
           catchError((error: any) => {
-            console.log('makeRequestChain: catchError: error napattu');
             this.fileInfoList[index].uploadError = $localize `:@@Liitteen
                 lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
             /* Virhettä ei heitetä, koska silloin tiedostojen lähetys loppuu
@@ -124,7 +121,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         this.isInvalid = true;
         this.errors = { size: 'overMax' };
         this.onChange(this.isInvalid);
-        console.log('this.isInvalid: ' + this.isInvalid + ", this.errors: " + this.errors);
       }
       this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileInfoList);
@@ -146,7 +142,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.markAsTouched();
     this.filesToRemove.push(this.oldAttachments[index]);
     this.oldAttachments.splice(index, 1);
-    console.log('tullaan poistamaan:');
     console.dir(this.filesToRemove);
   }
 
@@ -198,7 +193,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   // Kutsutaan parent komponentista.
   public async sendFiles(ticketID: string, commentID: string): Promise<any> {
-    console.log('commentID: ' + commentID);
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
@@ -206,20 +200,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
-
-          /* Tiedostojen poistamisen koodia.
-          let errorsWithRemove: boolean = false;
-
-          console.log('this.filesToRemove.length: ' + this.filesToRemove.length);
-
-          if (this.filesToRemove.length > 0 ) {
-            this.removeSentFiles().then(res => {
-              if (!res) errorsWithRemove = true;
-            }).catch(err => {
-              errorsWithRemove = true;
-            })
-          } */
-
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
           } else {
@@ -227,7 +207,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
           }
         },
         error: (error) => {
-          console.log('edit-attachments.sendFiles: saatiin virhe: ' + error );
           reject('error')
         },
         complete: () => {

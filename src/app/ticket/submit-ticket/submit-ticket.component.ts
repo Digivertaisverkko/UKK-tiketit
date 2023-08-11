@@ -213,8 +213,7 @@ export class SubmitTicketComponent implements OnInit {
         }
       }).then(() => {
         this.goBack();
-      }).catch(error => {
-        console.log('ketjun error: ' + JSON.stringify(error));
+      }).catch(() => {
         this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
             Muokatun kysymyksen lähettäminen epäonnistui` + '.'
         this.state = 'editing';

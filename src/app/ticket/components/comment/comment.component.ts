@@ -144,7 +144,6 @@ export class CommentComponent implements AfterViewInit, OnInit{
         this.sendFiles(this.ticketID, commentID);
         return
       }).catch(err => {
-        console.log('Kommentin muokkaaminen epäonnistui.');
         this.errorMessage = $localize `:@@Kommentin muokkaaminen epäonnistui:
             Kommentin muokkaaminen epäonnistui` + '.';
         this.state="editing";
@@ -157,11 +156,9 @@ export class CommentComponent implements AfterViewInit, OnInit{
     this.messages.emit('sendingFiles')
     this.attachments.sendFiles(ticketID, commentID)
       .then((res:any) => {
-        console.log('kaikki tiedostot valmiita.');
         this.stopEditing();
       })
       .catch((res:any) => {
-        console.log('ticket view: napattiin virhe: ' + res);
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:
             Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
         this.state="editing";

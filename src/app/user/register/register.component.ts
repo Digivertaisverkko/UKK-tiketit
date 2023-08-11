@@ -144,12 +144,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
       if (res?.success === true) {
         const route = 'course/' + this.courseid + '/list-tickets';
         const data = { message: 'account created' };
-        console.log('routataan: ' + route);
         this.router.navigate([route], { state: data });
       }
     })
-    .catch (error => {
-      console.log(error);
+    .catch (() => {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     });
   }

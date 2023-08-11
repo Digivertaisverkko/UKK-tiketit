@@ -60,8 +60,6 @@ export class AuthService {
   /* Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta. */
   private async authenticate(codeVerifier: string, loginCode: string):
     Promise<LoginResult> {
-
-  // console.log('authenticate(): codeVerifier ' +codeVerifier + ' loginCode: '+ loginCode);
   const httpOptions =  {
     headers: new HttpHeaders({
       'login-type': 'own',
@@ -78,14 +76,10 @@ export class AuthService {
   } catch (error: any) {
     this.handleError(error);
   }
-
-  // console.log('authenticate(): saatiin vastaus: ' + JSON.stringify(response));
-
   var loginResult: LoginResult;
   if (response?.success == true) {
     loginResult = { success: true };
     const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
-    console.log('sendAuthRequest: redirect url: ' + redirectUrl);
     if (redirectUrl !== undefined && redirectUrl !== null) {
       loginResult.redirectUrl = redirectUrl;
       window.localStorage.removeItem('REDIRECT_URL')
@@ -250,7 +244,7 @@ export class AuthService {
     }
     this.getLoginInfo('own', courseID).then((response: any) => {
       if (response === undefined) {
-        console.log('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
+        console.error('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
         return
       }
       const loginURL = response['login-url'];
@@ -272,7 +266,6 @@ export class AuthService {
         'login-id': loginID
       })
     }
-    // console.log('.login(): ktunnus: ' + email +', salasana: ' + password + ', login-id: ' + loginID);
     const url = environment.apiBaseUrl + '/omalogin';
     let response: any;
     try {
@@ -282,17 +275,6 @@ export class AuthService {
     } catch (error: any) {
       this.handleError(error);
     }
-
-    /*
-    console.log('.login() vastaus 2. kutsuun: ' + JSON.stringify(response));
-    if (response.success == true) {
-      console.log('success on true');
-    } else {
-      console.log('success on false');
-
-    }
-    */
-
     if (response.success == true && response['login-code'] !== undefined) {
       const loginCode = response['login-code'];
       return this.authenticate(this.codeVerifier, loginCode);
@@ -317,9 +299,6 @@ export class AuthService {
     this.store.setCourseName('');
     window.sessionStorage.clear();
     return { success: true }
-      // if (courseID != null) {
-      //   this.navigateToLogin(courseID);
-      // }
   }
 
   // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
@@ -336,7 +315,6 @@ export class AuthService {
       noDataConsentList.splice(index, 1);
       localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
     }
-    console.log(JSON.stringify(localStorage.getItem('noDataConsent')));
   }
 
   public saveRedirectURL(): void {
@@ -355,7 +333,6 @@ export class AuthService {
   public async sendDataConsent(tokenid: string | null, allow: boolean):
       Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
-    console.log(body);
     let url = '/lti/';
     url += allow ? 'gdpr-lupa-ok' : 'gdpr-lupa-kielto';
     let res: any;

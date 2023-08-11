@@ -88,7 +88,6 @@ describe('TicketService', () => {
     tick();
 
     const fieldsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
-    console.log(' URLI 2: ' + fieldsUrl);
     const fieldsRequest = controller.expectOne(fieldsUrl);
     fieldsRequest.flush(ticketDummyData.ticket3fields);
     tick();
