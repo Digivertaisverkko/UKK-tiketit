@@ -206,11 +206,9 @@ export class SubmitTicketComponent implements OnInit {
         // this.printFileInfoListLog();
         if (this.fileInfoList !== undefined) {
           if (this.fileInfoList.length === 0 ) return
-          console.log('lähetetään tiedostoja.');
           this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
           return this.sendFiles(this.ticketId!, this.commentID!);
         } else {
-          console.log('Ei lähetettäviä tiedostoja.');
           return
         }
       }).then(() => {
@@ -263,8 +261,7 @@ export class SubmitTicketComponent implements OnInit {
 
   private sendFiles(ticketID: string, commentID: string):
       Promise<any> {
-    return this.attachments.sendFiles(ticketID, commentID)
-    .then(() => {
+    return this.attachments.sendFiles(ticketID, commentID).then(() => {
       if (this.errorMessage) {
         this.state = 'editing';
         return
@@ -272,18 +269,11 @@ export class SubmitTicketComponent implements OnInit {
         this.state = 'done';
         this.goBack();
       }
-    })
-    .catch((res: any) => {
+    }).catch((res: any) => {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
           onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log(this.router.url + ': saatiin virhe: ' + res);
       this.state = 'editing';
       this.form.enable();
-    })
-    .finally(() => {
-      console.log('Komponentti: Kaikki valmiita!');
-      // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-      // this.attachments.clear();
     });
   }
 
