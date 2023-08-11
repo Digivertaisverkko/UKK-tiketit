@@ -62,18 +62,19 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.titleServ.setTitle(this.store.getBaseTitle() + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
-
     this.trackUserInfo();
     this.trackIfParticipant();
     this.startPollingFields(this.POLLING_RATE_MIN);
   }
 
+  // Tee Form asetuksia varten.
   private buildSettingsForm(): FormGroup {
     return this.formBuilder.group({
       helpText: [ '' ]
     })
   }
 
+  // Tee Form sähköpostia varten.
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       email: [
@@ -89,6 +90,7 @@ export class SettingsComponent implements OnInit {
     )
   }
 
+  // Lisäkenttien drag & drop:n jälkeen tehtävä.
   public drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
     this.saveFields();
@@ -176,6 +178,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  // Kutsu ulkopuolisia kurssille.
   public submitInvite() {
     this.form.markAllAsTouched();
     this.inviteErrorMessage = '';
@@ -200,6 +203,7 @@ export class SettingsComponent implements OnInit {
     this.settingsForm.markAsPristine();
   }
 
+  // Valitse UKK- tai asetustiedosto (jonka jälkeen se lisätään).
   public pickFile(type: 'FAQs' | 'settings') {
     const fileInput = this.fileInput.nativeElement;
     fileInput.click();
@@ -227,6 +231,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  // Tallenna lisäkentät drag & drobin jälkeen.
   public saveFields() {
     if (!this.courseid) throw Error('Ei kurssi ID:ä.');
     this.courses.setTicketField(this.courseid, this.fieldList)
