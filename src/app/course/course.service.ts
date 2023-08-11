@@ -89,7 +89,6 @@ export class CourseService {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}`;
     try {
-      console.log('Haetaan kurssin nimi.');
       response = await firstValueFrom(
         this.http.get<{ 'nimi': string }[]>(url).pipe(timeout(3000))
       )
