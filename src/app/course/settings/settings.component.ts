@@ -25,9 +25,10 @@ export class SettingsComponent implements OnInit {
   public form: FormGroup = this.buildForm();
   public inviteErrorMessage: string = '';
   public inviteMessage: string = '';
-  public isDirty: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
+  public settingsForm: FormGroup = this.buildSettingsForm();
+  public settingsMessage: string = '';
   public showConfirm: boolean = false;
   private fetchFieldTimer$: Observable<number>;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
@@ -48,6 +49,10 @@ export class SettingsComponent implements OnInit {
     return this.form.get('email') as FormControl;
   }
 
+  get helpText(): AbstractControl {
+    return this.settingsForm.get('helpText') as FormControl;
+  }
+
   get role(): AbstractControl {
     return this.form.get('role') as FormControl;
   }
@@ -59,6 +64,12 @@ export class SettingsComponent implements OnInit {
     this.trackUserInfo();
     this.trackIfParticipant();
     this.startPollingFields(this.POLLING_RATE_MIN);
+  }
+
+  private buildSettingsForm(): FormGroup {
+    return this.formBuilder.group({
+      helpText: [ '' ]
+    })
   }
 
   private buildForm(): FormGroup {
@@ -73,12 +84,10 @@ export class SettingsComponent implements OnInit {
     }, {
       validators: [ isEmail('email') ]
     }
-
     )
   }
 
   public drop(event: CdkDragDrop<string[]>) {
-    this.isDirty = true;
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
     this.saveFields();
   }
@@ -168,6 +177,12 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  public submitSettings() {
+    this.settingsMessage = $localize `:@@Asetusten tallentaminen onnistui.:
+    Asetusten tallentaminen onnistui.`;
+    this.settingsForm.markAsPristine();
+  }
+
   public onFileAdded(event: any) {
     this.message = '';
     const file: File = event.target.files[0];
@@ -205,7 +220,6 @@ export class SettingsComponent implements OnInit {
       .then(response => {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
-          this.isDirty = false;
           if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
         } else {
           throw Error('Ei onnistunut.');

@@ -2,7 +2,7 @@
 
 <app-beginning-button
     (clicked)="showConfirm = true"
-    [confirm]="isDirty === true"
+    [confirm]=settingsForm.dirty
     >
 </app-beginning-button>
 
@@ -22,33 +22,43 @@
     Kysymysten lisäohje opiskelijoille
   </h3>
 
-  <mat-form-field class="text-area-wrapper">
-    <textarea autocomplete="off"
-              #autosize="cdkTextareaAutosize"
-              cdkAutosizeMaxRows="5"
-              cdkAutosizeMinRows="3"
-              cdkTextareaAutosize
-              contenteditable
-              id="help-text"
-              i18n-placeholder="@@Lisäohje opiskelijoille"
-              matInput
-              maxlength="255"
-              name="helpText"
-              placeholder="Lisäohje opiskelijoille"
-              >
-    </textarea>
-    <mat-hint align="end">0 / 255</mat-hint>
-  </mat-form-field>
-
-  <div class="theme-actions save-wrapper">
-    <button class=""
-        i18n="@@Tallenna"
-        mat-raised-button
-        type="submit"
+  <form [formGroup]="settingsForm"
+        (ngSubmit)="submitSettings()"
         >
+    <mat-form-field class="text-area-wrapper">
+      <textarea autocomplete="off"
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMaxRows="5"
+                cdkAutosizeMinRows="3"
+                cdkTextareaAutosize
+                contenteditable
+                (focus)="settingsMessage = ''"
+                formControlName="helpText"
+                id="help-text"
+                i18n-placeholder="@@Lisäohje opiskelijoille"
+                matInput
+                maxlength="255"
+                name="helpText"
+                placeholder="Lisäohje opiskelijoille"
+                >
+      </textarea>
+      <mat-hint align="end">{{ helpText.value.length }} / 255</mat-hint>
+    </mat-form-field>
+    
+    <app-success *ngIf="settingsMessage.length >0">
+      {{ settingsMessage }}
+    </app-success>
+
+    <div class="theme-actions save-wrapper">
+      <button class=""
+      i18n="@@Tallenna"
+      mat-raised-button
+      type="submit"
+      >
       Tallenna
     </button>
   </div>
+</form>
 
   <!----------------- Lisäkentät ---------------------------------------------->
 
