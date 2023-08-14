@@ -179,6 +179,11 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  public onDragStarted() {
+    this.errorMessage = '';
+    this.message='';
+  }
+
   // Kutsu ulkopuolisia kurssille.
   public submitInvite() {
     this.form.markAllAsTouched();
@@ -200,6 +205,8 @@ export class SettingsComponent implements OnInit {
 
   public submitHelpText() {
     if (this.settingsForm.invalid) return;
+    this.settingsError = '';
+    this.settingsMessage = '';
     const helpText = this.helpText.value;
     this.courses.setHelpText(this.courseid, helpText).then(res => {
       if (res?.success === true) {

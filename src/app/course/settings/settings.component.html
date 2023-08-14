@@ -83,7 +83,11 @@
         class="list-wrapper"
         *ngIf="fieldList.length > 0; else noFieldsMessage"
         >
-    <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
+    <div  cdkDrag
+          (cdkDragStarted)="onDragStarted()"
+          class="list-row"
+          *ngFor="let field of fieldList"
+          >
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
       <div class="column">{{ field.otsikko }}</div>
       <div class="column">{{ field.ohje }}</div>
