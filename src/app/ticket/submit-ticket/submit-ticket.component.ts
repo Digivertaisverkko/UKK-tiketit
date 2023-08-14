@@ -32,6 +32,7 @@ export class SubmitTicketComponent implements OnInit {
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
+  public helpText: string = '';
   public oldAttachments: Liite[] = [];
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
@@ -130,6 +131,7 @@ export class SubmitTicketComponent implements OnInit {
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseid).then(response => {
       this.ticketFields = response.kentat as Kentta[];
+      this.helpText = response.kuvaus ?? '';
       this.buildAdditionalFields();
     }).catch(() => {
       this.errorMessage = $localize `:@@Kysymysten tietoja ei saatu haettua:
