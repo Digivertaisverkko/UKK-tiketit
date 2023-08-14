@@ -144,9 +144,6 @@ export class ErrorService {
   private getHttpErrorLog(error: any): string {
     let logMessage = '';
 
-    console.warn('errori alla');
-    console.dir(error);
-
     if (error.status === 0) {
       logMessage = "Saatiin virhe statuskoodilla 0. Yleensä tapahtuu," +
           "kun palvelimeen ei saada yhteyttä.";

@@ -142,7 +142,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.markAsTouched();
     this.filesToRemove.push(this.oldAttachments[index]);
     this.oldAttachments.splice(index, 1);
-    console.dir(this.filesToRemove);
   }
 
   public async removeSentFiles(): Promise<boolean> {
