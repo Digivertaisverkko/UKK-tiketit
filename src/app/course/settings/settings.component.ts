@@ -155,8 +155,6 @@ export class SettingsComponent implements OnInit {
       if (res?.success === true) {
         this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
             Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-      } else {
-        console.log('vastaus: ' + JSON.stringify(res));
       }
     }).catch(e => {
       this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
@@ -167,14 +165,13 @@ export class SettingsComponent implements OnInit {
   private importSettings(courseID: string, jsonData: JSON) {
     this.courses.importSettings(courseID, jsonData).then((res: GenericResponse) => {
       if (res?.success === true) {
-        this.message = $localize `:@@Lisättiin asetukset tälle kurssille:
+        if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
+        this.message = $localize `:@@Lisättiin lisäkentät tälle kurssille:
             Lisättiin asetukset tälle kurssille` + '.';
-      } else {
-        console.log('vastaus: ' + JSON.stringify(res));
       }
     }).catch(e => {
-      this.errorMessage = $localize `:@@Asetusten lisääminen epäonnistui:
-        Asetusten lisääminen tälle kurssille ei onnistunut.`;
+      this.errorMessage = $localize `:@@Lisäkenttien lisääminen epäonnistui:
+          Lisäkenttien lisääminen epäonnistui` + '.';
     })
   }
 
@@ -197,10 +194,23 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  public submitSettings() {
-    this.settingsMessage = $localize `:@@Asetusten tallentaminen onnistui.:
-    Asetusten tallentaminen onnistui.`;
-    this.settingsForm.markAsPristine();
+  public submitHelpText() {
+    if (this.settingsForm.invalid) return;
+    const helpText = this.helpText.value;
+    this.courses.setHelpText(this.courseid, helpText).then(res => {
+      if (res?.success === true) {
+        if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
+        this.settingsMessage = $localize `:@@Kysymysten lisäohjeen tallentaminen onnistui:
+        Kysymysten lisäohjeen tallentaminen onnistui` + '.';
+        this.settingsForm.markAsPristine();
+      } else {
+        throw Error
+      }
+    }).catch(e => {
+      this.errorMessage = $localize `:@@Kysymysten lisäohjeen tallentaminen ei onnistunut:
+      Kysymysten lisäohjeen tallentaminen ei onnistunut` + '.';
+    })
+
   }
 
   // Valitse UKK- tai asetustiedosto (jonka jälkeen se lisätään).
