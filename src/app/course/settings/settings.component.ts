@@ -29,6 +29,7 @@ export class SettingsComponent implements OnInit {
   public inviteMessage: string = '';
   public isLoaded: boolean = false;
   public message: string = '';
+  public settingsError: string = '';
   public settingsForm: FormGroup = this.buildSettingsForm();
   public settingsMessage: string = '';
   public showConfirm: boolean = false;
@@ -203,15 +204,13 @@ export class SettingsComponent implements OnInit {
     this.courses.setHelpText(this.courseid, helpText).then(res => {
       if (res?.success === true) {
         if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
-        this.settingsMessage = $localize `:@@Kysymysten lisäohjeen tallentaminen onnistui:
-        Kysymysten lisäohjeen tallentaminen onnistui` + '.';
+        this.settingsMessage = $localize `:@@Kysymysten lisäohjeen tallentaminen onnistui:Kysymysten lisäohjeen tallentaminen onnistui` + '.';
         this.settingsForm.markAsPristine();
       } else {
         throw Error
       }
     }).catch(e => {
-      this.errorMessage = $localize `:@@Kysymysten lisäohjeen tallentaminen ei onnistunut:
-      Kysymysten lisäohjeen tallentaminen ei onnistunut` + '.';
+      this.settingsError = $localize `:@@Kysymysten lisäohjeen tallentaminen ei onnistunut:Kysymysten lisäohjeen tallentaminen ei onnistunut` + '.';
     })
 
   }

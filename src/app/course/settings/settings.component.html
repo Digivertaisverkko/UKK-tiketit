@@ -51,6 +51,9 @@
       {{ settingsMessage }}
     </app-success>
 
+    <app-error  message="{{settingsError}}" *ngIf="settingsError.length >0">
+    </app-error>
+
     <div class="theme-actions save-wrapper">
       <button class=""
       i18n="@@Tallenna"
