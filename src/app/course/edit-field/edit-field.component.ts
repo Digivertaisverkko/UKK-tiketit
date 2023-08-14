@@ -153,14 +153,14 @@ export class EditFieldComponent implements OnInit {
   // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
-      if (!Array.isArray(response)) {
+      if (!(response?.kentat)) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
-      this.allFields = response;
+      this.allFields = response.kentat;
 
       if (this.allFields.length > 0 && this.fieldid) {
-        let matchingField = response.filter(field => String(field.id) === fieldID);
+        let matchingField = this.allFields.filter(field => String(field.id) === fieldID);
         if (matchingField == null) {
           throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
         }
