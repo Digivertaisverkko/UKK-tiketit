@@ -130,7 +130,8 @@ export class CourseService {
   }
 
   // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string): Promise<Kenttapohja[]> {
+  public async getTicketFieldInfo(courseID: string): Promise< { kuvaus: string,
+      kentat: Kenttapohja[] }> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
     try {
@@ -140,7 +141,7 @@ export class CourseService {
     }
     if (response === null) response = [];
 
-    return response.kentat;
+    return response;
   }
 
   // Lähetetään JSON-muotoiset UKK:t lisättäväksi kurssille.
@@ -191,18 +192,20 @@ export class CourseService {
     return response;
   }
   
-    public async setHelpText(courseID: string, helpText: string):
-        Promise<{ success: boolean }> {
-      const url = `${this.api}/kurssi/${courseID}/tikettipohja/kuvaus`;
-      let response: any;
-      const body = { kuvaus: helpText };
-      try {
-        response = await firstValueFrom( this.http.put(url, body) );
-      } catch (error: any) {
-        this.errorService.handleServerError(error);
-      }
-      return response
+  /*  Aseta kurssille ohjeteksti, joka on näkyvillä, kun käyttäjät
+      lisäävä tikettejä. */
+  public async setHelpText(courseID: string, helpText: string):
+      Promise<{ success: boolean }> {
+    const url = `${this.api}/kurssi/${courseID}/tikettipohja/kuvaus`;
+    let response: any;
+    const body = { kuvaus: helpText };
+    try {
+      response = await firstValueFrom( this.http.put(url, body) );
+    } catch (error: any) {
+      this.errorService.handleServerError(error);
     }
+    return response
+  }
 
   // Luo uudet kentät kurssin tikettipohjalle.
   public async setTicketField(courseID: string, fields: Kenttapohja[]) {

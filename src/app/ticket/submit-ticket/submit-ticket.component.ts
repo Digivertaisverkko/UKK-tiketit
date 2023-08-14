@@ -129,7 +129,7 @@ export class SubmitTicketComponent implements OnInit {
   private fetchAdditionalFields(): void {
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseid).then(response => {
-      this.ticketFields = response as Kentta[];
+      this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
     }).catch(() => {
       this.errorMessage = $localize `:@@Kysymysten tietoja ei saatu haettua:

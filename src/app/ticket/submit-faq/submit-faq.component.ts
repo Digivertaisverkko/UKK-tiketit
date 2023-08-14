@@ -139,7 +139,7 @@ export class SubmitFaqComponent implements OnInit {
   private fetchAdditionalFields(): void {
     this.courses.getTicketFieldInfo(this.courseid)
     .then((response) => {
-      this.ticketFields = response as Kentta[];
+      this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
     });
   }
