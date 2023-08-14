@@ -116,8 +116,8 @@
         mat-header-cell
         *matHeaderCellDef
         mat-sort-header
-        sortActionDescription="Järjestä luodun päivämäärän mukaan"
-        i18n-sortActionDescription="@@Järjestä luodun mukaan"
+        sortActionDescription="Järjestä muokatun päivämäärän mukaan"
+        i18n-sortActionDescription="@@Järjestä muokatun mukaan"
         i18n="@@Muokattu"
         >
       Muokattu
@@ -146,7 +146,7 @@
     </th>
     <td class="attachment-cell" mat-cell *matCellDef="let element">
       <mat-icon aria-label="Liite"
-                i18n-aria-label="@@Liite"
+                i18n-aria-label="@@liite"
                 i18n-matTooltip="@@Sisältää liitetiedostoja"
                 matTooltip="Sisältää liitetiedostoja"
                 [matTooltipShowDelay]="600"
@@ -249,7 +249,7 @@
 
 <ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
 
-<h2 class="theme-subheading" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
+<h2 class="theme-subheading" i18n="@@Ratkaistut kysymykset" *ngIf="isArchivedShown">
   Ratkaistut kysymykset
 </h2>
 
@@ -361,7 +361,7 @@
   </th>
   <td class="attachment-cell"mat-cell *matCellDef="let element">
     <mat-icon aria-label="Liite"
-              i18n-aria-label="@@Liite"
+              i18n-aria-label="@@liite"
               i18n-matTooltip="@@Sisältää liitetiedostoja"
               matTooltip="Sisältää liitetiedostoja"
               [matTooltipShowDelay]="600"
