@@ -369,7 +369,9 @@ export class TicketService {
     }
     response.aikaleima = new Date(response.aikaleima);
     let ticket: Tiketti = response;
-    const fields: Kentta[] = await this.getFields(ticketID, courseID);
+    const res = await this.getFields(ticketID, courseID);
+    // const fields: Kentta[] = await this.getFields(ticketID, courseID);
+    const fields = res.kentat;
     ticket.kentat = fields;
     let comments: Kommentti[] = await this.getComments(ticketID, courseID);
     // Tiketin tiedot sisältyvät 1. kommentissa.
@@ -425,8 +427,9 @@ export class TicketService {
     return commentsAscending;
   }
 
-  // Hae listan tietyn tiketin lisäkentistä.
-  private async getFields(ticketID: string, courseID: string): Promise<Kentta[]> {
+  // Hae yhden tiketin kuvaus ja lisäkentät.
+  private async getFields(ticketID: string, courseID: string): Promise<
+      { kuvaus: string, kentat: Kentta[]}> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
     try {
