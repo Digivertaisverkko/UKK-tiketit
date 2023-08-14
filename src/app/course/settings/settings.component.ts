@@ -129,8 +129,11 @@ export class SettingsComponent implements OnInit {
 
   private fetchTicketFieldInfo(courseid: string) {
     this.courses.getTicketFieldInfo(courseid).then(response => {
-      if (response[0]?.otsikko != null) {
-        this.fieldList = response;
+      if (response.kentat[0]?.otsikko != null) {
+        this.fieldList = response.kentat;
+      }
+      if (response.kuvaus) {
+        this.settingsForm.controls['helpText'].setValue(response.kuvaus);
       }
       return
     }).catch(e => {
