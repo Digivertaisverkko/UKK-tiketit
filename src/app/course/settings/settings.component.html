@@ -39,14 +39,14 @@
                 id="help-text"
                 i18n-placeholder="@@Lisäohje opiskelijoille"
                 matInput
-                maxlength="255"
                 name="helpText"
                 placeholder="Lisäohje opiskelijoille"
                 >
+                <!-- maxlength="255" -->
       </textarea>
-      <mat-hint align="end">{{ helpText.value.length }} / 255</mat-hint>
+      <!-- <mat-hint align="end">{{ helpText.value.length }} / 255</mat-hint> -->
     </mat-form-field>
-    
+
     <app-success *ngIf="settingsMessage.length >0">
       {{ settingsMessage }}
     </app-success>
