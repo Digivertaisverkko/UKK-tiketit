@@ -2,6 +2,7 @@
 
   <ng-container *ngIf="alignLeft === true">
     <div class="circle"
+        [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
         [style.background-color]="avatarColor.background"
         >
       <div class="initials" [style.color]="avatarColor.text">
@@ -57,13 +58,14 @@
 
   <ng-container *ngIf="alignLeft === false">
     <!-- <img mat-card-avatar src="assets/logos/UniOulu.png" alt=""> -->
-    <div  class="circle"
-          [style.background-color]="avatarColor.background"
-          >
-      <div class="initials" [style.color]="avatarColor.text">
-        {{ userNameInitials }}
+      <div  class="circle"
+            [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
+            [style.background-color]="avatarColor.background"
+            >
+        <div class="initials" [style.color]="avatarColor.text">
+          {{ userNameInitials }}
+        </div>
       </div>
-    </div>
   </ng-container>
 
 </div>

@@ -22,6 +22,7 @@ $debug: false;
     }
   }
 
+  /*
   img {
     @if $debug { border: 1px solid lightblue; }
     display: inline-block;
@@ -32,22 +33,25 @@ $debug: false;
     position: relative;
     width: 3rem;
   }
+ */
 
   .circle {
     align-items: center;
-    // background-color: #3770b2;
     border-radius: 50%;
     display: flex;
     height: 3rem;
     justify-content: center;
     width: 3rem;
+    .initials {
+      font-family: $displayFont;
+      font-size: 140%;
+      font-weight: 500;
+    }
   }
 
-  .initials {
-    color: white;
-    font-family: $displayFont;
-    font-weight: 500;
-    font-size: 140%;
+  .circle-teacher {
+    // border: 2px solid white;
+    outline: 4px solid black;
   }
 
 }
