@@ -4,23 +4,23 @@ import { isYesterday, isToday, getHash, getDateString } from '@shared/utils';
 import { User } from '@core/core.models';
 import { StoreService } from '@core/services/store.service';
 
-const avatarColors : { [key: string]: string } = {
-  '0': '#F44336',
-  '1': '#E91E63',
-  '2': '#9C27B0',
-  '3': '#673AB7',
-  '4': '#3F51B5',
-  '5': '#2196F3',
-  '6': '#03A9F4',
-  '7': '#00BCD4',
-  '8': '#009688',
-  '9': '#4CAF50',
-  'a': '#8BC34A',
-  'b': '#CDDC39',
-  'c': '#FFC107',
-  'd': '#FF9800',
-  'e': '#FF5722',
-  'f': '#795548'
+const AvatarColors: { [key: string]: { background: string; text: string } } = {
+  '0': { background: '#F44336', text: '#FFFFFF' },
+  '1': { background: '#E91E63', text: '#FFFFFF' },
+  '2': { background: '#9C27B0', text: '#FFFFFF' },
+  '3': { background: '#673AB7', text: '#FFFFFF' },
+  '4': { background: '#3F51B5', text: '#FFFFFF' },
+  '5': { background: '#2196F3', text: '#000000' },
+  '6': { background: '#03A9F4', text: '#000000' },
+  '7': { background: '#00BCD4', text: '#000000' },
+  '8': { background: '#009688', text: '#000000' },
+  '9': { background: '#4CAF50', text: '#000000' },
+  'A': { background: '#8BC34A', text: '#000000' },
+  'B': { background: '#CDDC39', text: '#000000' },
+  'C': { background: '#FFC107', text: '#000000' },
+  'D': { background: '#FF9800', text: '#000000' },
+  'E': { background: '#FF5722', text: '#FFFFFF' },
+  'F': { background: '#795548', text: '#FFFFFF' }
 };
 
 @Component({
@@ -37,7 +37,7 @@ export class SenderInfoComponent implements OnInit {
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
-  public avatarColor: string = '';
+  public avatarColor: { background: string; text: string };
   public userNameInitials = '';
   public isCreatedToday: boolean | undefined;
   public isCreatedYesterday: boolean | undefined;
@@ -51,11 +51,12 @@ export class SenderInfoComponent implements OnInit {
   constructor(
       private change: ChangeDetectorRef,
       private store: StoreService) {
-    this.currentUserName = this.store.getUserName();
-
+      this.avatarColor = { background: 'white', text: 'black' };
+      this.currentUserName = this.store.getUserName();
   }
 
   ngOnInit() {
+    console.log(this.avatarColor);
     this.userNameInitials = this.getInitials(this.user?.nimi);
     if (this.aikaleima !== 'now') {
       const thisYear = new Date().getFullYear();
@@ -72,10 +73,13 @@ export class SenderInfoComponent implements OnInit {
       this.senderTitle = this.getSenderTitle(this.user.nimi, this.user.asema);
     }
 
-    getHash(this.user?.nimi ?? '').then(res => {
+    getHash(this.user?.nimi ?? '').then(hash => {
       // console.log(res.charAt(0));
-      this.avatarColor = avatarColors[res.charAt(0)];
-      // console.log('väri: ' + this.avatarColor);
+      console.log('res: ' + hash);
+      const firstChar = hash.charAt(0).toUpperCase();
+      console.log(firstChar);
+      this.avatarColor = AvatarColors[firstChar];
+      console.log('väri: ' + this.avatarColor);
       this.change.detectChanges();
     });
 

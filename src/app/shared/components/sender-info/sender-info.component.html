@@ -51,7 +51,10 @@
 
   <ng-container *ngIf="alignLeft === false">
     <!-- <img mat-card-avatar src="assets/logos/UniOulu.png" alt=""> -->
-    <div class="circle" [style.background-color]="avatarColor">
+    <div class="circle"
+        [style.background-color]="avatarColor.background"
+        [style.color]="avatarColor.text"
+        >
       <div class="initials">{{ userNameInitials }}</div>
     </div>
   </ng-container>
