@@ -27,6 +27,18 @@ export function getDateString(date: Date, thisYear: number): string {
   return dateString
 }
 
+export function getHash(input: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+
+  return crypto.subtle.digest('SHA-256', data)
+    .then(hashBuffer => {
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    });
+}
+
  // Palauta satunnainen kokonaisluku min ja max väliltä.
  export function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
