@@ -1,7 +1,13 @@
 <div class="user-info-block"  [ngStyle]="styles">
 
   <ng-container *ngIf="alignLeft === true">
-    <img mat-card-avatar src="assets/logos/UniOulu.png" alt="">
+    <div class="circle"
+        [style.background-color]="avatarColor.background"
+        >
+      <div class="initials" [style.color]="avatarColor.text">
+        {{ userNameInitials }}
+      </div>
+    </div>
   </ng-container>
 
   <div  class="text-info"
@@ -51,9 +57,9 @@
 
   <ng-container *ngIf="alignLeft === false">
     <!-- <img mat-card-avatar src="assets/logos/UniOulu.png" alt=""> -->
-    <div class="circle"
-        [style.background-color]="avatarColor.background"
-        >
+    <div  class="circle"
+          [style.background-color]="avatarColor.background"
+          >
       <div class="initials" [style.color]="avatarColor.text">
         {{ userNameInitials }}
       </div>
