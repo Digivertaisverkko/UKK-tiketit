@@ -1,27 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 
+import AvatarColor from './sender-info.constants';
 import { isYesterday, isToday, getHash, getDateString } from '@shared/utils';
 import { User } from '@core/core.models';
 import { StoreService } from '@core/services/store.service';
-
-const AvatarColors: { [key: string]: { background: string; text: string } } = {
-  '0': { background: '#F44336', text: '#FFFFFF' },
-  '1': { background: '#E91E63', text: '#FFFFFF' },
-  '2': { background: '#9C27B0', text: '#FFFFFF' },
-  '3': { background: '#673AB7', text: '#FFFFFF' },
-  '4': { background: '#3F51B5', text: '#FFFFFF' },
-  '5': { background: '#2196F3', text: '#000000' },
-  '6': { background: '#03A9F4', text: '#000000' },
-  '7': { background: '#00BCD4', text: '#000000' },
-  '8': { background: '#009688', text: '#000000' },
-  '9': { background: '#4CAF50', text: '#000000' },
-  'A': { background: '#8BC34A', text: '#000000' },
-  'B': { background: '#CDDC39', text: '#000000' },
-  'C': { background: '#FFC107', text: '#000000' },
-  'D': { background: '#FF9800', text: '#000000' },
-  'E': { background: '#FF5722', text: '#FFFFFF' },
-  'F': { background: '#795548', text: '#FFFFFF' }
-};
 
 @Component({
   selector: 'app-sender-info',
@@ -56,7 +38,6 @@ export class SenderInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.avatarColor);
     this.userNameInitials = this.getInitials(this.user?.nimi);
     if (this.aikaleima !== 'now') {
       const thisYear = new Date().getFullYear();
@@ -74,12 +55,11 @@ export class SenderInfoComponent implements OnInit {
     }
 
     getHash(this.user?.nimi ?? '').then(hash => {
-      // console.log(res.charAt(0));
-      console.log('res: ' + hash);
       const firstChar = hash.charAt(0).toUpperCase();
-      console.log(firstChar);
-      this.avatarColor = AvatarColors[firstChar];
-      console.log('väri: ' + this.avatarColor);
+      // console.log(firstChar);
+      // this.avatarColor = AvatarColors[this.getRandomHashCharacter()];
+      this.avatarColor = AvatarColor[firstChar];
+      // console.log('väri: ' + JSON.stringify(this.avatarColor));
       this.change.detectChanges();
     });
 
@@ -97,6 +77,13 @@ export class SenderInfoComponent implements OnInit {
       .filter(element => element && element.length > 0)
       .map(element => element[0].toUpperCase())
       .join('');
+  }
+
+  // Testailua varten
+  private getRandomHashCharacter(): string {
+    const characters = '0123456789ABCDEF';
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    return characters[randomIndex];
   }
 
   private getSenderTitle(name: string, role: string | null): string {

@@ -53,9 +53,10 @@
     <!-- <img mat-card-avatar src="assets/logos/UniOulu.png" alt=""> -->
     <div class="circle"
         [style.background-color]="avatarColor.background"
-        [style.color]="avatarColor.text"
         >
-      <div class="initials">{{ userNameInitials }}</div>
+      <div class="initials" [style.color]="avatarColor.text">
+        {{ userNameInitials }}
+      </div>
     </div>
   </ng-container>
 
