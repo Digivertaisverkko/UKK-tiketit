@@ -1,3 +1,4 @@
+// Käyttäjien avatar-ikonien taustojen ja tekstien värit.
 const AvatarColor: { [key: string]: { background: string; text: string } } = {
   '0': { background: '#E53935', text: '#FFFFFF' },
   '1': { background: '#D81B60', text: '#FFFFFF' },

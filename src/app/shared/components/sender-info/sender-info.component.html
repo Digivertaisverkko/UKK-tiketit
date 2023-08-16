@@ -1,10 +1,11 @@
 <div class="user-info-block"  [ngStyle]="styles">
 
   <ng-container *ngIf="alignLeft === true">
-    <div class="circle"
-        [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
-        [style.background-color]="avatarColor.background"
-        >
+    <div  aria-hidden="true"
+          class="circle"
+          [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
+          [style.background-color]="avatarColor.background"
+          >
       <div class="initials" [style.color]="avatarColor.text">
         {{ userNameInitials }}
       </div>
@@ -58,7 +59,8 @@
 
   <ng-container *ngIf="alignLeft === false">
     <!-- <img mat-card-avatar src="assets/logos/UniOulu.png" alt=""> -->
-      <div  class="circle"
+      <div  aria-hidden="true"
+            class="circle"
             [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
             [style.background-color]="avatarColor.background"
             >
