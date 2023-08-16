@@ -40,7 +40,7 @@ describe('CourseService', () => {
       expect(actualCourseName).toEqual(courseName);
       done();
     }).catch(e => {
-      done();
+      fail('got error');
     })
 
     const request = controller.expectOne(url);
