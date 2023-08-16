@@ -28,6 +28,7 @@ export class SubmitFaqComponent implements OnInit {
   @Input() public id!: string;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
+  // Muokataanko jo aiemmin lisättyä UKK:a.
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -146,6 +147,9 @@ export class SubmitFaqComponent implements OnInit {
 
   private fetchTicketInfo(ticketId: string, courseId: string): void {
     this.ticketService.getTicket(ticketId, courseId).then(response => {
+
+      console.dir(response);
+
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
@@ -160,9 +164,14 @@ export class SubmitFaqComponent implements OnInit {
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena
       viimeinen ratkaisuehdotus jää oletusvastaukseksi. */
-      for (let comment of response.kommentit) {
-        if (comment.tila === 5) {
-          this.form.controls['answer'].setValue(comment.viesti);
+
+      if (this.editExisting) {
+        this.form.controls['answer'].setValue(response.kommentit[0].viesti);
+      } else {
+        for (let comment of response.kommentit) {
+          if (comment.tila === 5) {
+            this.form.controls['answer'].setValue(comment.viesti);
+          }
         }
       }
     });
