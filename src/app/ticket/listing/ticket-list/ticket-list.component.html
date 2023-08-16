@@ -139,7 +139,7 @@
   <ng-container matColumnDef="liite">
     <th class="align-right no-left-padding"
         mat-header-cell
-        *matHeaderCellDef 
+        *matHeaderCellDef
         mat-sort-header
         >
       &nbsp;
@@ -247,51 +247,53 @@
 
 <!-------------- Ratkaistut --------------------------------------------------->
 
-<ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
+<!-- Älä korvaa ngIf:llä tai tableen, koska silloin ei sorting ei toimi. -->
+<div [ngStyle]="{ 'display': user?.asema === 'opettaja' ? 'block' : 'none' }">
 
 <h2 class="theme-subheading" i18n="@@Ratkaistut kysymykset" *ngIf="isArchivedShown">
   Ratkaistut kysymykset
 </h2>
 
 <table  class="theme-table mat-elevation-z1"
-        mat-table
         [dataSource]="dataSourceArchived"
         [hidden]="dataSourceArchived.filteredData.length === 0"
         matSort
         matSortActive="viimeisin"
         matSortDirection="desc"
-        *ngIf="archivedCount > 0"
+        mat-table
+        [ngStyle]="{ 'display': archivedCount > 0 ? 'table' : 'none' }"
         #sortArchived="matSort"
         >
+
 <ng-container matColumnDef="tila">
-<th i18n-sortActionDescription="@@Järjestä tilan mukaan"
-    i18n="@@Tila"
-    mat-sort-header
-    *matHeaderCellDef
-    mat-header-cell
-    sortActionDescription="Järjestä tilan mukaan"
-    >
-  Tila
-</th>
-<td mat-cell *matCellDef="let element">
-  <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
-  <a aria-disabled="true"
-    [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
-    tabindex="-1"
-    >
-    <div class="ticket-state-wrapper">
-      <div class="icon-wrapper">
-        <img alt=""
-            class="icon"
-            height="100%"
-            src="assets/icons/{{iconFile[element.tilaID]}}.svg"
-            width="100%"
-            >
+  <th i18n-sortActionDescription="@@Järjestä tilan mukaan"
+      i18n="@@Tila"
+      mat-sort-header
+      *matHeaderCellDef
+      mat-header-cell
+      sortActionDescription="Järjestä tilan mukaan"
+      >
+    Tila
+  </th>
+  <td mat-cell *matCellDef="let element">
+    <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
+    <a aria-disabled="true"
+      [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
+      tabindex="-1"
+      >
+      <div class="ticket-state-wrapper">
+        <div class="icon-wrapper">
+          <img alt=""
+              class="icon"
+              height="100%"
+              src="assets/icons/{{iconFile[element.tilaID]}}.svg"
+              width="100%"
+              >
+        </div>
+        <div>{{ element.tila.substring(2) }}</div>
       </div>
-      <div>{{ element.tila.substring(2) }}</div>
-    </div>
-  </a>
-</td>
+    </a>
+  </td>
 </ng-container>
 
 <ng-container matColumnDef="otsikko">
@@ -357,8 +359,11 @@
 </ng-container>
 
 <ng-container matColumnDef="liite">
-  <th class="align-right" mat-header-cell *matHeaderCellDef>
-  </th>
+  <th class="align-right no-left-padding"
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      >
   <td class="attachment-cell"mat-cell *matCellDef="let element">
     <mat-icon aria-label="Liite"
               i18n-aria-label="@@liite"
@@ -396,7 +401,7 @@
   </p>
 </div>
 
-</ng-container>
+</div>
 
 <!--------------------------------------------------------------------------->
 
