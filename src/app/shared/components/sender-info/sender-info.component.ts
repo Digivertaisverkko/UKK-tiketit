@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
+    from '@angular/core';
 
 import AvatarColor from './sender-info.constants';
 import { isYesterday, isToday, getHash, getDateString } from '@shared/utils';
-import { User } from '@core/core.models';
 import { StoreService } from '@core/services/store.service';
+import { User } from '@core/core.models';
 
 @Component({
   selector: 'app-sender-info',
@@ -43,7 +44,6 @@ export class SenderInfoComponent implements OnInit {
       const thisYear = new Date().getFullYear();
       this.createdString = getDateString(this.aikaleima, thisYear);
     }
-
     if (this.muokattu instanceof Date) {
       this.isEditedToday = isToday(this.muokattu);
       if (!this.isEditedToday) {
@@ -52,8 +52,11 @@ export class SenderInfoComponent implements OnInit {
     }
     if (this.user != null) {
       this.senderTitle = this.getSenderTitle(this.user.nimi, this.user.asema);
+      /*
+      this.senderTitle = this.user.nimi === this.currentUserName ? $localize`:@@Minä:Minä` :
+      this.user.asemaStr ?? '';
+      console.warn(this.user.asemaStr ); */
     }
-
     getHash(this.user?.nimi ?? '').then(hash => {
       const firstChar = hash.charAt(0).toUpperCase();
       // console.log(firstChar);
@@ -79,7 +82,8 @@ export class SenderInfoComponent implements OnInit {
       .join('');
   }
 
-  // Testailua varten
+  /* Palauta satunnainen hash-merkki, jota voi käyttää avatar-taustavärien
+     testaamiseen. */
   private getRandomHashCharacter(): string {
     const characters = '0123456789ABCDEF';
     const randomIndex = Math.floor(Math.random() * characters.length);
@@ -99,6 +103,5 @@ export class SenderInfoComponent implements OnInit {
         return '';
     }
   }
-
 
 }

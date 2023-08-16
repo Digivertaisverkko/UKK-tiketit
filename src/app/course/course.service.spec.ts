@@ -15,6 +15,10 @@ describe('CourseService', () => {
   let controller: HttpTestingController;
   let errors: ErrorService
 
+  afterEach(() => {
+    controller.verify();
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ]
@@ -38,10 +42,23 @@ describe('CourseService', () => {
     }).catch(e => {
       done();
     })
-    
+
     const request = controller.expectOne(url);
     request.flush({ nimi: 'Testikurssi' });
-    controller.verify();
+  });
+
+  it('sends help text for making tickets', (done) => {
+    courses.setHelpText(courseID, 'test help text').then(() => {
+      expect(req.request.method).toBe('PUT');
+      expect(req.request.body).toEqual({ kuvaus: 'test help text' });
+      done();
+    }).catch(e => {
+      fail('got error');
+    })
+
+    const url = `${api}/kurssi/${courseID}/tikettipohja/kuvaus`;
+    const req = controller.expectOne(url);
+    req.flush({ success: true });
   })
 
   it('sends invitation successfully', async () => {
@@ -87,5 +104,5 @@ describe('CourseService', () => {
     const error = errors.createError(status, errorid);
     req.flush(error, { status: status, statusText: 'Error'});
   });
-  
+
 });
