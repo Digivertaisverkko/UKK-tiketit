@@ -60,7 +60,7 @@ export class SenderInfoComponent implements OnInit {
     getHash(this.user?.nimi ?? '').then(hash => {
       const firstChar = hash.charAt(0).toUpperCase();
       // console.log(firstChar);
-      // this.avatarColor = AvatarColors[this.getRandomHashCharacter()];
+      // this.avatarColor = AvatarColor[this.getRandomHashCharacter()];
       this.avatarColor = AvatarColor[firstChar];
       // console.log('väri: ' + JSON.stringify(this.avatarColor));
       this.change.detectChanges();
