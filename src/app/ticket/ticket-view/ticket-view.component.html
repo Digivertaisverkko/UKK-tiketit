@@ -149,6 +149,7 @@
 
     <app-comment  [comment]="comment"
                   [(editingCommentID)]="editingCommentIDParent"
+                  [isInCopyAsFAQ]="ticketIdFromParent ? true : false"
                   (messages)="listenMessagesFromComment($event)"
                   *ngFor="let comment of ticket.kommentit"
                   [ticketID]="ticket.id"

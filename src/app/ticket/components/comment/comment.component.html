@@ -83,7 +83,8 @@
           i18n-aria-label="@@Muokkaa kommenttia"
           mat-icon-button
           *ngIf="(sender?.id === user?.id) &&
-                (editingCommentID !== comment.id)"
+                (editingCommentID !== comment.id) &&
+                !isInCopyAsFAQ"
           >
     <mat-icon>edit</mat-icon>
   </button>

@@ -26,6 +26,9 @@ export class CommentComponent implements AfterViewInit, OnInit{
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
+  /* Kopioi UKK:ksi näkymän yhteydessä näytetään alkuperäinen tiketti.
+     Tällöin editointi pois käytöstä yms. */
+  @Input() public isInCopyAsFAQ: boolean = false;
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
   // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
@@ -65,6 +68,7 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.sender = this.comment.lahettaja;
+    console.warn(this.isInCopyAsFAQ);
   }
 
   private buildForm(): FormGroup {
