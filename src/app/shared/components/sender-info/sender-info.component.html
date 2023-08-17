@@ -5,6 +5,7 @@
           class="circle"
           [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
           [style.background-color]="avatarColor.background"
+          [style.outline-color]="avatarColor.background"
           >
       <div class="initials" [style.color]="avatarColor.text">
         {{ userNameInitials }}
