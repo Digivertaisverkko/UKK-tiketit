@@ -1,7 +1,6 @@
 @import '../styles/financier-logos.scss';
 
 .icon-container {
-
   align-items: flex-end;
   box-sizing: border-box;
   display: flex;
@@ -9,12 +8,12 @@
   justify-content: space-evenly;
   margin: 2rem auto 0 auto;
   max-width: 850px;
-  padding: 12px 8px 30px 4px;
+  padding: 12px 8px 20px 4px;
   width: 100%;
 }
 
 .paragraphs-wrapper {
-  margin: 2em 4em 2.3em 4em;
+  margin: 2em 4em 2em 4em;
 }
 
 p, h2 {
@@ -22,12 +21,13 @@ p, h2 {
 }
 
 .buttons-wrapper {
-  margin-top: 2rem;
-  margin-right: 2rem;
-  // outline: 1px gray solid;
   display: flex;
   justify-content: center;
+  margin-bottom: 3rem;
+  margin-right: 2rem;
+  margin-top: 2rem;
 }
+
 
 @media (max-width: 800px) and (min-width: 450px) {
   .paragraphs-wrapper {
@@ -49,8 +49,8 @@ p, h2 {
 
 @media (max-width: 449px) {
   .buttons-wrapper {
-    margin: 1rem 0 1rem 0;
     flex-direction: column;
+    margin: 1rem 0 1rem 0;
     row-gap: 1rem;
   }
 

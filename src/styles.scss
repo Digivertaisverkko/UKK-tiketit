@@ -13,6 +13,12 @@ body {
   margin: 0;
 }
 
+.theme-anchor {
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer; 
+} 
+
 .theme-footer {
   background-color: mat.get-color-from-palette($custom-primary-palette, 500);
 }

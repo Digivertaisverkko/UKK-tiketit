@@ -26,7 +26,6 @@
 
     <ng-container *ngIf="!(handsetPB$ | async)?.matches">
       <div class="theme-header-text">
-
         {{ user.nimi.length > maxUserLength ?
               (user.nimi | slice:0:maxUserLength) + '...' :
               (user.nimi) | titlecase }}
