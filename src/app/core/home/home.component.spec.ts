@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MockComponent } from 'ng-mocks';
 
 import { HomeComponent } from './home.component';
@@ -13,6 +14,9 @@ describe('HomeComponent', () => {
       declarations: [
         HomeComponent,
         MockComponent(HeadlineComponent)
+      ],
+      imports: [
+        MatDialogModule
       ]
     });
     fixture = TestBed.createComponent(HomeComponent);
