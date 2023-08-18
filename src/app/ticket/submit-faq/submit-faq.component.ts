@@ -148,8 +148,6 @@ export class SubmitFaqComponent implements OnInit {
   private fetchTicketInfo(ticketId: string, courseId: string): void {
     this.ticketService.getTicket(ticketId, courseId).then(response => {
 
-      console.dir(response);
-
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.

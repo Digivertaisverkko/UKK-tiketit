@@ -22,22 +22,10 @@ $debug: false;
     }
   }
 
-  /*
-  img {
-    @if $debug { border: 1px solid lightblue; }
-    display: inline-block;
-    flex-shrink: 0;
-    height: 3rem;
-    margin: auto;
-    object-fit: cover;
-    position: relative;
-    width: 3rem;
-  }
- */
-
   .circle {
     align-items: center;
     border-radius: 50%;
+    box-sizing: border-box;
     display: flex;
     height: 3rem;
     justify-content: center;

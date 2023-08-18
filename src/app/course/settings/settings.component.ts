@@ -9,10 +9,10 @@ import { Title } from '@angular/platform-browser';
 import { CourseService } from '../course.service';
 import { environment } from 'src/environments/environment';
 import { GenericResponse, Role, User } from '@core/core.models';
+import { isEmail } from '@shared/directives/is-email.directive';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { isEmail } from '@shared/directives/is-email.directive';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -128,6 +128,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  // Hae tiketin lisäkentät ja kuvaus ja päivitä ne lomakkeeseen.
   private fetchTicketFieldInfo(courseid: string) {
     this.courses.getTicketFieldInfo(courseid).then(response => {
       if (response.kentat[0]?.otsikko != null) {
