@@ -10,17 +10,41 @@ import { MockComponent } from 'ng-mocks';
 
 import { TicketListComponent } from './ticket-list.component';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
-import { TicketService } from '@ticket/ticket.service';
+import { SortableTicket, TicketService } from '@ticket/ticket.service';
+import { ticketDummyData } from '@ticket/ticket.dummydata';
 
 describe('TicketListComponent', () => {
   let component: TicketListComponent;
-  let fakeTicketService: jasmine.SpyObj<TicketService>;
+  let fakeTicketService: Partial<TicketService>;
+  // let fakeTicketService: jasmi ne.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketListComponent>;
+  let getTicketListSpy: jasmine.Spy;
 
   beforeEach(async () => {
+    /*
     fakeTicketService = jasmine.createSpyObj('TicketService', {
       getTicketList: undefined
-    });
+    }); */
+
+    /*
+    fakeTicketService = {
+      async getTicketList(courseID: string, option?: {
+        option: 'onlyOwn' | 'archived'
+      }): Promise<SortableTicket[] | null> {
+        return ticketDummyData.ticketListClientData;
+      }
+    } as Partial<TicketService>;
+    */
+
+    fakeTicketService = {
+      getTicketList: getTicketListSpy
+    };
+
+    // spyOn(fakeTicketService, 'getTicketList').and.callThrough();
+
+    getTicketListSpy = jasmine.createSpy().and.returnValue(
+      Promise.resolve(ticketDummyData.ticketListClientData)
+    );
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -50,4 +74,12 @@ describe('TicketListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  /*
+  it('shows ticklet list', () => {
+    expect(getTicketListSpy).toHaveBeenCalled();
+    // expect(fakeTicketService.getTicketList).toHaveBeenCalled();
+  })
+  */
+
 });
