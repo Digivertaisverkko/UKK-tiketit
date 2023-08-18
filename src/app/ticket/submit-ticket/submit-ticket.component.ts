@@ -39,6 +39,7 @@ export class SubmitTicketComponent implements OnInit {
   public successMessage: string = '';
   public ticketFields: Kentta[] = [];
   public ticketId: string | null = null;
+  public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
   public user$: Observable<User | null>;
   // Listausnäkymään palattaessa näytä virheviesti.
@@ -68,6 +69,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     this.ticketId = this.id ?? null;
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     if (this.ticketId === null) {
