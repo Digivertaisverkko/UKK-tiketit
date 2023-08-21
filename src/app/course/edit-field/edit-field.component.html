@@ -117,13 +117,7 @@
         </mat-chip-grid>
         <mat-hint align="end">
           {{ selectionName?.value?.length ?? 0 }} / 80
-          <!-- {{ getArraysStringLength(field.valinnat) }} / 255 -->
         </mat-hint>
-        <mat-error  i18n="@@Vaihtoehtojen merkkimäärä ylittyy"
-                    *ngIf="selections?.errors?.['maxLengthExceeded']"
-                    >
-          Vaihtoehtojen yhteenlaskettu merkkimäärä välimerkkeineen ylittää 255 merkin ylärajan.
-        </mat-error>
       </mat-form-field>
     </div>
 

@@ -97,8 +97,8 @@ export class EditFieldComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
-      areSelectionsEnabled: [ true ],
-      selections: [ [], [arrayLengthValidator()] ],
+      areSelectionsEnabled: [ false ],
+      selections: [ [] ],
       selectionName: [ '' ],
       infoText: [ '' ],
       mandatory: [ '' ],
