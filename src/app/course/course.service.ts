@@ -139,7 +139,6 @@ export class CourseService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response === null) response = [];
 
     return response;
   }
