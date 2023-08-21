@@ -111,11 +111,13 @@
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="addOnBlur"
                   (matChipInputTokenEnd)="addSelection($event)"
+                  maxlength="80"
                   placeholder="Paina enter valinnan kirjoittamisen jälkeen."
                   />
         </mat-chip-grid>
         <mat-hint align="end">
-          {{ getArraysStringLength(field.valinnat) }} / 255
+          {{ selectionName?.value?.length ?? 0 }} / 80
+          <!-- {{ getArraysStringLength(field.valinnat) }} / 255 -->
         </mat-hint>
         <mat-error  i18n="@@Vaihtoehtojen merkkimäärä ylittyy"
                     *ngIf="selections?.errors?.['maxLengthExceeded']"

@@ -89,6 +89,7 @@ export class EditFieldComponent implements OnInit {
     if (selection) {
       this.selections?.markAsDirty();
       this.field.valinnat.push(selection);
+      this.selectionName?.setValue('');
     }
     event.chipInput!.clear();
   }
