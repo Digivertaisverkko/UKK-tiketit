@@ -14,6 +14,7 @@ import { TestScheduler } from 'rxjs/testing';
 
 import { MatTableHarness } from '@angular/material/table/testing';
 
+import { initializeLanguageFI } from 'src/app/app.initializers';
 import { TicketListComponent } from './ticket-list.component';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { TicketService } from '@ticket/ticket.service';
@@ -98,15 +99,41 @@ describe('TicketListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('filters rows by sender name', fakeAsync (async() => {
+    initializeLanguageFI(); // datePipeen
+    tick();
+    component.courseid = '1';
+    component.user = authDummyData.userInfoTeacher;
+    component.ngOnInit();
+    tick();
+    component.applyFilter('esko');
+    tick();
+    const table = await loader.getHarness(MatTableHarness);
+    const rows = await table.getRows();
+    expect(rows.length).toBe(1);
+    discardPeriodicTasks();
+  }));
+
+  it('filters rows by additional field content', fakeAsync (async() => {
+    initializeLanguageFI(); // datePipeen
+    tick();
+    component.courseid = '1';
+    component.user = authDummyData.userInfoTeacher;
+    component.ngOnInit();
+    tick();
+    component.applyFilter('Kurssin suoritus');
+    tick();
+    const table = await loader.getHarness(MatTableHarness);
+    const rows = await table.getRows();
+    expect(rows.length).toBe(1);
+    discardPeriodicTasks();
+  }));
+
   it('renders table rows', fakeAsync (async() => {
     component.courseid = '1';
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
     tick();
-    // fixture.detectChanges();
-    //const tableDebugElement: DebugElement = fixture.debugElement.query(By.css('.theme-table'));
-    // Tämä ei jostain syystä oimi.
-    // const tableRows = fixture.debugElement.queryAll(By.css('.mat-row'));
     const table = await loader.getHarness(MatTableHarness);
     const rows = await table.getRows();
     expect(rows.length).toBeGreaterThan(0);
@@ -119,17 +146,9 @@ describe('TicketListComponent', () => {
     it('fetches correct ticket data for dataSource.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
-      const tableDebugElement: DebugElement = fixture.debugElement.query(By.css('.theme-table'));
-      expect(tableDebugElement).toBeTruthy();
-
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
       expect(component.dataSource.filteredData).toEqual(ticketDummyData.ticketListClientData);
       expect(component.dataSource.data).toEqual(ticketDummyData.ticketListClientData);
-
-      /*
-      const rowsDebugElements: DebugElement[] = tableDebugElement.queryAll(By.css('.mat-row'));
-      expect(rowsDebugElements.length).toBeGreaterThan(0); // Check if there are rows
-      */
     }));
 
     it('fetches ticket data for sorting correctly.', fakeAsync (() => {
