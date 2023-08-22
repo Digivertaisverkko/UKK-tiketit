@@ -144,9 +144,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public applyFilter(filterValue: string) {
     filterValue = filterValue.trim().toLowerCase();
       this.dataSource.filter = filterValue;
-      /*if (this.dataSourceFAQ.paginator) {
-        this.dataSourceFAQ.paginator.firstPage();
-      }*/
   }
 
   private static customFilterPredicate(data: UKK, filter: string): boolean {
@@ -187,7 +184,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = ListingComponent.customFilterPredicate;
-          // this.dataSourceFAQ.paginator = this.paginatorFaq;
         }
         return
       })
@@ -207,7 +203,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
             this.restorePosition();
           }
         }
-        // if (refresh !== true) this.stopLoading();
       });
   }
 
