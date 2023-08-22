@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, flush, tick } from '@angular/core/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +19,7 @@ import { SearchBarComponent } from '@shared/components/search-bar/search-bar.com
 import { TicketService } from '@ticket/ticket.service';
 import { ticketDummyData } from '@ticket/ticket.dummydata';
 import { DebugElement } from '@angular/core';
+import { authDummyData } from '@core/services/auth.dummydata';
 
 describe('TicketListComponent', () => {
   let component: TicketListComponent;
@@ -89,7 +90,7 @@ describe('TicketListComponent', () => {
     // component = TestBed.inject(TicketListComponent);
 
     loader = TestbedHarnessEnvironment.loader(fixture);
-     fixture.detectChanges();
+    fixture.detectChanges();
 
   });
 
@@ -97,14 +98,28 @@ describe('TicketListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('renders table rows', fakeAsync (async() => {
+    component.courseid = '1';
+    component.user = authDummyData.userInfoTeacher;
+    component.ngOnInit();
+    tick();
+    // fixture.detectChanges();
+    //const tableDebugElement: DebugElement = fixture.debugElement.query(By.css('.theme-table'));
+    // Tämä ei jostain syystä oimi.
+    // const tableRows = fixture.debugElement.queryAll(By.css('.mat-row'));
+    const table = await loader.getHarness(MatTableHarness);
+    const rows = await table.getRows();
+    expect(rows.length).toBeGreaterThan(0);
+    discardPeriodicTasks();
+  }));
+
   describe('fetches data for Mat table dataSource correctly.', () => {
     const courseID = '1';
 
     it('fetches correct ticket data for dataSource.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
-      const tableDebugElement: DebugElement = fixture.debugElement.query(By.css('.theme-table')); // Update the selector
-      console.dir(component.dataSource);
+      const tableDebugElement: DebugElement = fixture.debugElement.query(By.css('.theme-table'));
       expect(tableDebugElement).toBeTruthy();
 
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
