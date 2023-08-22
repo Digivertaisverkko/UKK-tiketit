@@ -10,10 +10,11 @@ import { getRandomInt } from '@shared/utils';
       <input  class="input"
               id="filter-items-{{inputID}}"
               #input
+              (keyup)="onKeyup(input.value)"
               type="text"
-              (keyup)="searchResult.emit($event)"
               placeholder="&nbsp;"
               >
+              <!-- (keyup)="searchResult.emit($event)" -->
 
       <label class="label" for="filter-items-{{inputID}}">
         <ng-content></ng-content>
@@ -39,7 +40,11 @@ import { getRandomInt } from '@shared/utils';
 export class SearchBarComponent {
 
   @ViewChild('input') searchInput!: ElementRef<HTMLInputElement>;
-  @Output() searchResult = new EventEmitter<Event>();
+  @Output() searchResult = new EventEmitter<string>();
   public inputID: number = getRandomInt(1,10000);
+
+  public onKeyup(inputValue: string) {
+    this.searchResult.emit(inputValue);
+  }
 
 }

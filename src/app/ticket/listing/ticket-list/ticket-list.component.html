@@ -21,7 +21,9 @@
     <mat-icon>refresh</mat-icon>
   </button>
 
-  <app-search-bar (searchResult)="applyFilter($event)" i18n="@@Suodata kysymyksiä">
+  <app-search-bar i18n="@@Suodata kysymyksiä"
+                  (searchResult)="applyFilter($event)"
+                  >
     Suodata kysymyksiä
   </app-search-bar>
 
@@ -75,9 +77,13 @@
   </ng-container>
 
   <ng-container matColumnDef="otsikko">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header
-        i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-        sortActionDescription="Järjestä otsikon mukaan">
+    <th *matHeaderCellDef
+        i18n-sortActionDescription="@@Järjestä otsikon mukaan"
+        i18n="@@Otsikko"
+        mat-sort-header
+        sortActionDescription="Järjestä otsikon mukaan"
+        mat-header-cell
+        >
       Otsikko
     </th>
     <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
@@ -297,9 +303,13 @@
 </ng-container>
 
 <ng-container matColumnDef="otsikko">
-<th mat-header-cell *matHeaderCellDef mat-sort-header
-    i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-    sortActionDescription="Järjestä otsikon mukaan">
+<th *matHeaderCellDef
+    i18n-sortActionDescription="@@Järjestä otsikon mukaan"
+    i18n="@@Otsikko"
+    mat-sort-header
+    sortActionDescription="Järjestä otsikon mukaan"
+    mat-header-cell
+    >
   Otsikko
 </th>
 <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->

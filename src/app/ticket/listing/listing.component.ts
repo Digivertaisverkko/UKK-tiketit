@@ -141,8 +141,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //hakutoiminto, jossa paginointi kommentoitu pois
-  public applyFilter(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
+  public applyFilter(filterValue: string) {
     filterValue = filterValue.trim().toLowerCase();
       this.dataSource.filter = filterValue;
       /*if (this.dataSourceFAQ.paginator) {

@@ -119,8 +119,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.trackMessages();
   }
 
-  public applyFilter(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
+  public applyFilter(filterValue: string) {
     filterValue = filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue;
   }
