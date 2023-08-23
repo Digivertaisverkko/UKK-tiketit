@@ -5,11 +5,12 @@ import { JoinComponent } from './join.component';
 import { AuthService } from '@core/services/auth.service';
 import { CourseService } from '@course/course.service';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
+import { courseDummyData } from '@course/course.dummydata';
 
 describe('JoinComponent', () => {
   let component: JoinComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
-  let fakeCourseService: jasmine.SpyObj<CourseService>;
+  let fakeCourseService: Partial<CourseService>;
   let fixture: ComponentFixture<JoinComponent>;
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('JoinComponent', () => {
 
     fakeCourseService = jasmine.createSpyObj('CourseService', {
       getCourseName: undefined,
-      getInvitationInfo: undefined,
+      getInvitedInfo: Promise.resolve(courseDummyData.invitedInfo),
       joinCourse: undefined
     });
 
@@ -37,6 +38,7 @@ describe('JoinComponent', () => {
     });
     fixture = TestBed.createComponent(JoinComponent);
     component = fixture.componentInstance;
+    component.invitation = '1234567890';
     fixture.detectChanges();
   });
 

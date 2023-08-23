@@ -26,5 +26,12 @@ export const courseDummyData = {
         "Yleinen"
       ]
     }
-  ]
+  ],
+  invitedInfo: {
+    id: 2,
+    kurssi: 1,
+    sposti: 'marianna.laaksonen@example.com',
+    vanhenee: '2023-08-23',
+    rooli: 'opettaja',
+  }
 }
