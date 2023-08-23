@@ -68,7 +68,7 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.sender = this.comment.lahettaja;
-    console.warn(this.isInCopyAsFAQ);
+
   }
 
   private buildForm(): FormGroup {
