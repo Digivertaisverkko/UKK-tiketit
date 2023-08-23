@@ -27,6 +27,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   @Input() public courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
+  /* Saadaan, jos komponentti on upotettuna esim. Kopioi UKK:ksi -toimintoa
+    käytettäessä. */
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
