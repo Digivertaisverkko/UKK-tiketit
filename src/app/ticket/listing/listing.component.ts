@@ -175,8 +175,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // refresh = Jos on saatu refresh-pyyntö muualta.
-  private fetchFAQ(courseID: string, refresh?: boolean) {
+  // refresh = Jos on saatu refresh-pyyntö muualta. Testaamista varten public.
+  public fetchFAQ(courseID: string, refresh?: boolean) {
     this.ticket.getFAQlist(courseID).then(response => {
       if (this.isLoaded === false) this.isLoaded = true;
         if (response.length > 0) {

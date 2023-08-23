@@ -110,7 +110,7 @@ export const ticketDummyData = {
       viimeisinStr: "22.6."
     }
   ],
-  
+
   ticket3: {
     id: 3,
     otsikko: "”Index out of bounds”?",
@@ -187,6 +187,32 @@ export const ticketDummyData = {
     'viesti',
     'liitteet',
     'kommentit'
+  ],
+
+  FAQsInlist: [
+    {
+      id: 7,
+      otsikko: 'UKK kusymys',
+      aikaleima: new Date("2023-06-21T09:37:36.124Z"),
+      aikaleimaStr: '21.6.',
+      tila: 2,
+      kentat: [
+        {
+          arvo: "2",
+          ohje: "",
+          otsikko: "Tehtävä",
+          tiketti: 7,
+          tyyppi: 1
+        },
+        {
+          arvo: "Aikataulu",
+          ohje: "",
+          otsikko: "Ongelman tyyppi",
+          tiketti: 7,
+          tyyppi: 1,
+        }
+      ]
+    }
   ]
 
 }
