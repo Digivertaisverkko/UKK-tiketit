@@ -1,39 +1,36 @@
-import { By } from '@angular/platform-browser';
-import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, flush, tick } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick }
+    from '@angular/core/testing';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTableHarness } from '@angular/material/table/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
-import { MatTableHarness } from '@angular/material/table/testing';
-
-import { initializeLanguageFI } from 'src/app/app.initializers';
-import { TicketListComponent } from './ticket-list.component';
-import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
-import { TicketService } from '@ticket/ticket.service';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
-import { DebugElement } from '@angular/core';
 import { authDummyData } from '@core/services/auth.dummydata';
+import { initializeLanguageFI } from 'src/app/app.initializers';
+import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
+import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketListComponent } from './ticket-list.component';
+import { TicketService } from '@ticket/ticket.service';
 
 describe('TicketListComponent', () => {
   let component: TicketListComponent;
-
+  let fixture: ComponentFixture<TicketListComponent>;
   let loader: HarnessLoader;
   let ticketService: Partial<TicketService>;
-  let fixture: ComponentFixture<TicketListComponent>;
-
-  // Alla oleva ei toiminut, jos siirsi beforeEach.
-  ticketService = jasmine.createSpyObj('TicketService', {
-    getTicketList: Promise.resolve(ticketDummyData.ticketListClientData)
-  });
 
   beforeEach(async () => {
+    // Pitää olla ennen TestBed:n konfigurointia.
+    ticketService = jasmine.createSpyObj('TicketService', {
+      getTicketList: Promise.resolve(ticketDummyData.ticketListClientData)
+    });
+
     await TestBed.configureTestingModule({
       declarations: [
         MockComponent(SearchBarComponent),
@@ -159,44 +156,33 @@ describe('TicketListComponent', () => {
       expect(dataSource.filterPredicate).toBeDefined();
     }));
 
-    // Ei toimi.
-    /*
     it('fetches tickets 3 times in 2 minutes', fakeAsync(() => {
-
       const pollingRateMin = 1;
       const pollingRateSec = pollingRateMin * 60;
-
-      fixture.detectChanges();
-      //component.ngOnInit();
-
-      expect(getTicketListSpy).toHaveBeenCalledTimes(1);
+      component.ngOnInit();
+      tick();
+      expect(ticketService.getTicketList).toHaveBeenCalledTimes(1);
 
       tick(pollingRateSec * 1000);
-
-      expect(getTicketListSpy).toHaveBeenCalledTimes(2);
+      expect(ticketService.getTicketList).toHaveBeenCalledTimes(2);
 
       tick(pollingRateSec * 1000);
-
-      expect(getTicketListSpy).toHaveBeenCalledTimes(3);
+      expect(ticketService.getTicketList).toHaveBeenCalledTimes(3);
+      discardPeriodicTasks();
     }));
-    */
 
-    /* Ei toimi.
-    it('sets 5 sortable columns when there is one with attachment', fakeAsync (() => {
+    /*
+    fit('sets 5 sortable columns when there is one with attachment', fakeAsync (() => {
+      // Ei voi tehdä testBedin konffauksen jälkeen.
       let dummyData = ticketDummyData.ticketListClientData;
       dummyData[1].liite = true;
-      getTicketListSpy = ticketService.getTicketList as jasmine.Spy;
-      getTicketListSpy.and.returnValue(
-        Promise.resolve(dummyData)
-      );
-
       component.fetchTickets(courseID);
       tick();
       const sortFn = component.dataSource.sort;
       expect(sortFn?.sortables.size).toBeGreaterThanOrEqual(5);
 
-      console.warn('spec');
-      console.log(component.dataSource.sort?.sortables);
+      discardPeriodicTasks();
+
     }));
     */
 
