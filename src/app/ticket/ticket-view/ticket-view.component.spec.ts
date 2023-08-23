@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
 
@@ -21,11 +22,12 @@ describe('TicketViewComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [
-        BeginningButtonComponent,
+        MockComponent(BeginningButtonComponent),
         MockComponent(HeadlineComponent),
         TicketViewComponent
       ],
       imports: [
+        ReactiveFormsModule,
         RouterTestingModule
       ],
       providers: [
