@@ -26,16 +26,12 @@ describe('TicketListComponent', () => {
 
   let loader: HarnessLoader;
   let ticketService: Partial<TicketService>;
-  // let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketListComponent>;
-  let getTicketListSpy: jasmine.Spy;
 
   // Alla oleva ei toiminut, jos siirsi beforeEach.
-  ticketService = jasmine.createSpyObj('TicketService', ['getTicketList']);
-  getTicketListSpy = ticketService.getTicketList as jasmine.Spy;
-  getTicketListSpy.and.returnValue(
-    Promise.resolve(ticketDummyData.ticketListClientData)
-  )
+  ticketService = jasmine.createSpyObj('TicketService', {
+    getTicketList: Promise.resolve(ticketDummyData.ticketListClientData)
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -134,7 +130,6 @@ describe('TicketListComponent', () => {
     it('fetches ticket data for sorting correctly.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
-      console.dir(component.sortQuestions);
       expect(component.dataSource.sort).toBeDefined();
 
     }));
