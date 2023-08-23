@@ -1,6 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Role } from "@core/core.models";
 
+export async function getColorIndex(input: string, maxNumber: number):
+    Promise<number> {
+  const hash = await getHash(input);
+  const hashPart = parseInt(hash.substr(0, 4), 16);
+  return hashPart % maxNumber;
+}
+
 export function getCourseIDfromURL(): string | null {
   const pathArray = window.location.pathname.split('/');
   let courseID: string | null;
