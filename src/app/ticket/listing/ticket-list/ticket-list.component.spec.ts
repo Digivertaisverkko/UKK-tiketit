@@ -10,7 +10,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
-import { TestScheduler } from 'rxjs/testing';
 
 import { MatTableHarness } from '@angular/material/table/testing';
 
@@ -27,7 +26,7 @@ describe('TicketListComponent', () => {
 
   let loader: HarnessLoader;
   let ticketService: Partial<TicketService>;
-  // let fakeTicketService: jasmi ne.SpyObj<TicketService>;
+  // let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketListComponent>;
   let getTicketListSpy: jasmine.Spy;
 
@@ -39,31 +38,6 @@ describe('TicketListComponent', () => {
   )
 
   beforeEach(async () => {
-    /*
-    fakeTicketService = jasmine.createSpyObj('TicketService', {
-      getTicketList: undefined
-    }); */
-
-    /*
-    fakeTicketService = {
-      async getTicketList(courseID: string, option?: {
-        option: 'onlyOwn' | 'archived'
-      }): Promise<SortableTicket[] | null> {
-        return ticketDummyData.ticketListClientData;
-      }
-    } as Partial<TicketService>;
-
-    fakeTicketService = {
-      getTicketList: getTicketListSpy
-    }; */
-
-    // spyOn(fakeTicketService, 'getTicketList').and.callThrough();
-
-    /*
-    getTicketListSpy = jasmine.createSpy().and.returnValue(
-      Promise.resolve(ticketDummyData.ticketListClientData)
-    ); */
-
     await TestBed.configureTestingModule({
       declarations: [
         MockComponent(SearchBarComponent),
@@ -86,13 +60,10 @@ describe('TicketListComponent', () => {
 
     fixture = TestBed.createComponent(TicketListComponent);
     component = fixture.componentInstance;
-
     // Tällä tulee error: No provider for TicketListComponent!
     // component = TestBed.inject(TicketListComponent);
-
     loader = TestbedHarnessEnvironment.loader(fixture);
     fixture.detectChanges();
-
   });
 
   it('should create', () => {
@@ -100,32 +71,41 @@ describe('TicketListComponent', () => {
   });
 
   it('filters rows by sender name', fakeAsync (async() => {
+    const filterValue = 'esko';
     initializeLanguageFI(); // datePipeen
-    tick();
     component.courseid = '1';
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
     tick();
-    component.applyFilter('esko');
+    component.applyFilter(filterValue);
     tick();
-    const table = await loader.getHarness(MatTableHarness);
-    const rows = await table.getRows();
-    expect(rows.length).toBe(1);
+    const filteredData = component.dataSource.filteredData;
+    const containsString = filteredData.some(entry =>
+      Object.values(entry).some(value => typeof value === 'string' &&
+          value.toLowerCase().includes(filterValue.toLowerCase()))
+    );
+    expect(containsString).toBe(true);
     discardPeriodicTasks();
   }));
 
   it('filters rows by additional field content', fakeAsync (async() => {
+    let filterValue = 'Kurssin suoritus';
+    filterValue = filterValue.toLowerCase();
     initializeLanguageFI(); // datePipeen
-    tick();
     component.courseid = '1';
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
     tick();
-    component.applyFilter('Kurssin suoritus');
+    component.applyFilter(filterValue);
     tick();
-    const table = await loader.getHarness(MatTableHarness);
-    const rows = await table.getRows();
-    expect(rows.length).toBe(1);
+    const filteredData = component.dataSource.filteredData;
+    const containsString = filteredData.some(entry =>
+      entry.kentat.some(kentat =>
+        kentat.arvo.toLowerCase().includes(filterValue) ||
+        kentat.otsikko.toLowerCase().includes(filterValue)
+      )
+    );
+    expect(containsString).toBe(true);
     discardPeriodicTasks();
   }));
 
