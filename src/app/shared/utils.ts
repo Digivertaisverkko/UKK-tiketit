@@ -1,11 +1,36 @@
+import * as shajs from 'sha.js';
 import { DatePipe } from '@angular/common';
 import { Role } from "@core/core.models";
 
-export async function getColorIndex(input: string, maxNumber: number):
-    Promise<number> {
-  const hash = await getHash(input);
-  const hashPart = parseInt(hash.substr(0, 4), 16);
-  return hashPart % maxNumber;
+/* Palauta 'input' perustuva luku väliltä 0-'maxNumber', jota käytetään
+   värin valintaan. */
+ export async function getColorIndex(input: string, maxNumber: number):
+   Promise<number> {
+ const hash = await getHash(input);
+ console.log(hash);
+ const hashPart = parseInt(hash.substr(0, 10), 16);
+ return hashPart % maxNumber;
+}
+
+async function getHash(input: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    // .then(hashBuffer => {
+  console.log('hashbuffer: ' + hashBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+
+  /*
+  return crypto.subtle.digest('SHA-256', data)
+    .then(hashBuffer => {
+      console.log('hashbuffer: ' + hashBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+      return hashHex;
+    });
+    */
 }
 
 export function getCourseIDfromURL(): string | null {
@@ -34,18 +59,6 @@ export function getDateString(date: Date, thisYear: number): string {
   return dateString
 }
 
-export function getHash(input: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(input);
-
-  return crypto.subtle.digest('SHA-256', data)
-    .then(hashBuffer => {
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-      return hashHex;
-    });
-}
-
  // Palauta satunnainen kokonaisluku min ja max väliltä.
  export function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -65,6 +78,14 @@ export function getRoleString(asema: Role | null): string {
       role = '';
   }
   return role;
+}
+
+export function isInIframe () {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
 }
 
 // Onko annettu aikaleima tänään.

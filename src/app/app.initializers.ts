@@ -3,6 +3,8 @@ import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 import localeEn from '@angular/common/locales/en';
 
+import { isInIframe } from '@shared/utils';
+
 // Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
 
@@ -87,14 +89,6 @@ export const initializeLocale = () => {
   registerLocaleData(localeFi, 'fi-FI');
   return 'fi-FI';
 };
-
-function isInIframe () {
-  try {
-    return window.self !== window.top;
-  } catch (e) {
-    return true;
-  }
-}
 
 export function changeToLang(newLang: 'en' | 'fi') {
   const LANG = (newLang == 'en') ? 'en-US' : 'fi-FI';

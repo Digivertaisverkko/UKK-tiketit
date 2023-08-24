@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
 
-import AvatarColor from './sender-info.constants';
-import { isYesterday, isToday, getHash, getDateString } from '@shared/utils';
+import AvatarColor32 from './sender-info.constants';
+import { isYesterday, isToday, getDateString } from '@shared/utils';
+import { getColorIndex } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
 
@@ -57,15 +58,12 @@ export class SenderInfoComponent implements OnInit {
       this.user.asemaStr ?? '';
       console.warn(this.user.asemaStr ); */
     }
-    getHash(this.user?.nimi ?? '').then(hash => {
-      const firstChar = hash.charAt(0).toUpperCase();
-      // console.log(firstChar);
-      // this.avatarColor = AvatarColor[this.getRandomHashCharacter()];
-      this.avatarColor = AvatarColor[firstChar];
-      // console.log('väri: ' + JSON.stringify(this.avatarColor));
-      this.change.detectChanges();
-    });
-
+    if (this.user?.nimi) {
+      getColorIndex(this.user?.nimi, 32).then(index => {
+        this.avatarColor = AvatarColor32[index];
+        this.change.detectChanges();
+      });
+    }
   }
 
   // Palauta nimen alkukirjaimet isolla (enintään 2 ensimmäistä).
