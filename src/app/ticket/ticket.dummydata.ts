@@ -213,6 +213,38 @@ export const ticketDummyData = {
         }
       ]
     }
-  ]
+  ],
+
+  ticket: {
+    arkistoitava: true,
+    id: 4,
+    kentat: [
+      {
+        arvo: "2",
+        esitaytettava: false,
+        id: 1,
+        ohje: "",
+        otsikko: "Tehtävä",
+        pakollinen: true,
+        tyyppi: 1
+      },
+      {
+        arvo: "Kurssin suoritus",
+        esitaytettava: false,
+        id: 2,
+        ohje: "",
+        otsikko: "Ongelman tyyppi",
+        pakollinen: true,
+        tyyppi: 1
+      }
+    ],
+    kommenttiID: 8,
+    kurssi: 1,
+    liitteet: [],
+    otsikko: "Ohjelma tulostaa numeroita kirjainten sijasta!",
+    tila: 4,
+    ukk: false,
+    viesti: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  }
 
 }
