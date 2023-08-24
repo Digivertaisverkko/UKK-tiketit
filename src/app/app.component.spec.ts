@@ -13,7 +13,7 @@ import { UsermenuComponent } from '@core/usermenu/usermenu.component';
 import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { initializeLanguage } from './app.initializers';
 
-fdescribe('AppComponent', () => {
+describe('AppComponent', () => {
   let component: AppComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fixture: ComponentFixture<AppComponent>;
