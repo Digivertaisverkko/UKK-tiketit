@@ -7,10 +7,10 @@ import { HeadlineComponent } from './headline.component';
 import { CourseService } from '@course/course.service';
 
 describe('HeadlineComponent', () => {
+  let activatedRoute: ActivatedRoute;
   let component: HeadlineComponent;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fixture: ComponentFixture<HeadlineComponent>;
-  let activatedRoute: ActivatedRoute;
 
   beforeEach(async () => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
@@ -20,6 +20,7 @@ describe('HeadlineComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ HeadlineComponent ],
       imports: [
+        RouterTestingModule,
         RouterTestingModule
       ],
       providers: [
