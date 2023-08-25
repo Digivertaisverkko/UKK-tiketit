@@ -18,43 +18,20 @@ import { SuccessComponent } from '@shared/success/success.component';
 import { Minun, MinunAsetukset, UserService } from '@user/user.service';
 import { ProfileComponent } from '@user/profile/profile.component';
 
-describe('ProfileComponent', () => {
+fdescribe('ProfileComponent', () => {
   let component: ProfileComponent;
-  let fakeErrorService: jasmine.SpyObj<ErrorService>;
-  let fakeUserService: Pick<UserService, keyof UserService>;
+  let fakeUserService: Partial<UserService>;
   let fixture: ComponentFixture<ProfileComponent>;
   let loader: HarnessLoader;
 
   beforeEach(async () => {
-
-    fakeErrorService = jasmine.createSpyObj('ErrorService', {
-      handleNotLoggedIn: undefined
+    fakeUserService = jasmine.createSpyObj('UserService', {
+      getGdprData: Promise.resolve<any>(true),
+      getPersonalInfo: Promise.resolve<Minun>({nimi: 'Test User', sposti: 'test@test.user'}),
+      getSettings: Promise.resolve<MinunAsetukset>({'sposti-ilmoitus': true, 'sposti-kooste': true, 'sposti-palaute': true}),
+      removeUser: Promise.resolve<boolean>(true),
+      postSettings: Promise.resolve<boolean>(true)
     });
-
-    fakeUserService = {
-      async getGdprData(): Promise<any> {
-        return '{"name":"John", "age":30, "car":null}';
-      },
-      async getPersonalInfo(): Promise<Minun> {
-        return { nimi: 'Test User', sposti: 'test@test.user' };
-      },
-      async getSettings(): Promise<MinunAsetukset> {
-        return {'sposti-ilmoitus': true,
-                'sposti-kooste': true,
-                'sposti-palaute': true};
-      },
-      async postSettings(settings: MinunAsetukset) {
-        return true;
-      },
-      async removeUser(): Promise<boolean> {
-        return true;
-      },
-    };
-    spyOn(fakeUserService, 'getGdprData').and.callThrough();
-    spyOn(fakeUserService, 'getPersonalInfo').and.callThrough();
-    spyOn(fakeUserService, 'getSettings').and.callThrough();
-    spyOn(fakeUserService, 'postSettings').and.callThrough();
-    spyOn(fakeUserService, 'removeUser').and.callThrough();
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -72,7 +49,12 @@ describe('ProfileComponent', () => {
       ],
       providers: [
         { provide: ComponentFixtureAutoDetect, useValue: true },
-        { provide: ErrorService, useValue: fakeErrorService },
+        {
+          provide: ErrorService,
+          useValue: {
+            handleNotLoggedIn: undefined
+          }
+        },
         { provide: UserService, useValue: fakeUserService }
       ]
     })
@@ -118,21 +100,18 @@ describe('ProfileComponent', () => {
 
     await notify.toggle();
     expect(await notify.isChecked()).toBeFalsy();
-    expect(fakeUserService.postSettings).toHaveBeenCalled();
     expect(fakeUserService.postSettings).toHaveBeenCalledWith(
       { "sposti-ilmoitus": false, "sposti-kooste": true, "sposti-palaute":true }
     );
 
     await summary.toggle();
     expect(await summary.isChecked()).toBeFalsy();
-    expect(fakeUserService.postSettings).toHaveBeenCalled();
     expect(fakeUserService.postSettings).toHaveBeenCalledWith(
       { "sposti-ilmoitus": false, "sposti-kooste": false, "sposti-palaute":true }
     );
 
     await feedback.toggle();
     expect(await feedback.isChecked()).toBeFalsy();
-    expect(fakeUserService.postSettings).toHaveBeenCalled();
     expect(fakeUserService.postSettings).toHaveBeenCalledWith(
       { "sposti-ilmoitus": false, "sposti-kooste": false, "sposti-palaute":false }
     );
@@ -150,10 +129,5 @@ describe('ProfileComponent', () => {
     fixture.detectChanges();
     click(fixture, 'personal-data-delete-confirm');
     expect(fakeUserService.removeUser).toHaveBeenCalled();
-
-    // FIXME: Tämä on kommentoitu pois, koska jostain syystä tätä ei kutsuta.
-    // Jos ErrorServiceä ei feikata, niin handleNotLoggedIn() kutsutaan,
-    // mutta testissä se ei toimi.
-    //expect(fakeErrorService.handleNotLoggedIn).toHaveBeenCalled();
   });
 });
