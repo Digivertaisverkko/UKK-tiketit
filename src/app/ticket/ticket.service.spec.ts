@@ -135,7 +135,7 @@ describe('TicketService', () => {
   });
 
 
-  it('gets a file', fakeAsync (() => {
+  it('gets an attachment', fakeAsync (() => {
     const ticketID = '123';
     const commentID = '456';
     const fileID = '789';
@@ -148,9 +148,10 @@ describe('TicketService', () => {
     });
 
     const expectedUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/tiedosto`;
-
     const req = controller.expectOne(expectedUrl);
     expect(req.request.method).toBe('GET');
+    const contentTypeHeader = req.request.headers.get('Content-Type');
+    expect(contentTypeHeader).toBe('multipart/form-data');
 
     req.flush(mockBlob);
     tick();

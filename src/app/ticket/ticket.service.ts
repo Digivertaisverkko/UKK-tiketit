@@ -189,7 +189,8 @@ export class TicketService {
     return FAQlist;
   }
 
-  // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
+  /* Palauta tiketin sanallinen tila numeerinen arvon perusteella.
+    muotoa: 'numero'-'käännös' */
   public getTicketState(numericalState: number, role: Role | ''): string {
     let string: string;
     switch (numericalState) {
