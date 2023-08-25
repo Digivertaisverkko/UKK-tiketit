@@ -18,7 +18,7 @@ import { SuccessComponent } from '@shared/success/success.component';
 import { Minun, MinunAsetukset, UserService } from '@user/user.service';
 import { ProfileComponent } from '@user/profile/profile.component';
 
-fdescribe('ProfileComponent', () => {
+describe('ProfileComponent', () => {
   let component: ProfileComponent;
   let fakeUserService: Partial<UserService>;
   let fixture: ComponentFixture<ProfileComponent>;
