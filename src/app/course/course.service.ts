@@ -45,12 +45,25 @@ export class CourseService {
     return response;
   }
 
-  // Vie kurssin UKK:t JSON--string muodossa.
+  // Lataa kurssin UKK:t JSON-stringinä.
   public async exportFAQs(courseID: string): Promise<string> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
     try {
-      response = await firstValueFrom(this.http.get<any>(url));
+      response = await firstValueFrom(this.http.get(url));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    let filecontent = JSON.stringify(response, null, 2);
+    return filecontent;
+  }
+
+  // Lataa kurssin asetukset JSON-stringinä.
+  public async exportSettings(courseID: string): Promise<string> {
+    let response: any;
+    const url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
+    try {
+      response = await firstValueFrom(this.http.get(url));
     } catch (error: any) {
       this.handleError(error);
     }
@@ -74,28 +87,23 @@ export class CourseService {
   // Palauta kurssin nimi.
   public async getCourseName(courseID: string): Promise<string> {
     let response: any;
-    let url = `${this.api}/kurssi/${courseID}`;
+    const url = `${this.api}/kurssi/${courseID}`;
     try {
       response = await firstValueFrom(
-        this.http.get<{ 'kurssi-nimi': string }[]>(url).pipe(
-          timeout(3000),
-          retry(3)
-        )
+        this.http.get<{ 'nimi': string }[]>(url).pipe(timeout(3000))
       )
-      /* response = await firstValueFrom(
-        this.http.get<{ 'kurssi-nimi': string }[]>(url)
-      ); */
     } catch (error: any) {
       this.handleError(error);
     }
     return response['nimi'];
   }
 
-  // Palauta listan kaikista kursseista, joilla käyttäjä on.
+  // Palauta listan kaikista kursseista, joilla kirjautunut käyttäjä on.
   public async getMyCourses(): Promise<Kurssini[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/minun/kurssit';
     try {
+      console.log('Haetaan kurssit, joilla ollaan osallistujana.');
       response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
       this.store.setLoggedIn();
     } catch (error: any) {
@@ -104,6 +112,7 @@ export class CourseService {
     return response;
   }
 
+  // Palauta käyttäjäkutsun tiedot.
   public async getInvitedInfo(courseID: string, inviteID: string):
         Promise<InvitedInfo> {
     if (inviteID.length === 0) {
@@ -119,9 +128,10 @@ export class CourseService {
     return response;
   }
 
-  // Hae uutta tikettiä tehdessä tarvittavat lisätiedot.
-  public async getTicketFieldInfo(courseID: string):
-      Promise<Kenttapohja[]> {
+  /* Palauta tikettien lisäkentät sekä käyttäjälle uutta tikettiä tehdessä
+     näytettävä kuvaus.*/
+  public async getTicketFieldInfo(courseID: string): Promise<{ kuvaus: string,
+      kentat: Kenttapohja[] }> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
     try {
@@ -129,7 +139,6 @@ export class CourseService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response === null) response = [];
 
     return response;
   }
@@ -148,6 +157,20 @@ export class CourseService {
     return response;
   }
 
+  // Lähetetään JSON-muotoiset asetukset lisättäväksi kurssille.
+  public async importSettings(courseID: string, filecontent: JSON):
+    Promise<GenericResponse | any> {
+  let response;
+  const url = `${this.api}/kurssi/${courseID}/tikettipohja/vienti`;
+  const body = filecontent;
+  try {
+    response = await firstValueFrom(this.http.post(url, body));
+  } catch (error: any) {
+    this.handleError(error);
+  }
+  return response;
+}
+
   // Kutsu ulkopuolinen käyttäjä kurssille.
   public async sendInvitation(courseID: string, email: string, role: Role):
       Promise<{ success: boolean, kutsu: string } | any> {
@@ -161,14 +184,29 @@ export class CourseService {
       rooli: role
     }
     try {
-      response = await firstValueFrom(this.http.post<any>(url, body));
+      response = await firstValueFrom(this.http.post(url, body));
     } catch (error: any) {
       this.handleError(error);
     }
     return response;
   }
 
-  // Luo uudet kentät tikettipohjalle.
+  /*  Aseta kurssille ohjeteksti, joka on näkyvillä, kun käyttäjät
+      lisäävä tikettejä. */
+  public async setHelpText(courseID: string, helpText: string):
+      Promise<{ success: boolean }> {
+    const url = `${this.api}/kurssi/${courseID}/tikettipohja/kuvaus`;
+    let response: any;
+    const body = { kuvaus: helpText };
+    try {
+      response = await firstValueFrom( this.http.put(url, body) );
+    } catch (error: any) {
+      this.errorService.handleServerError(error);
+    }
+    return response
+  }
+
+  // Luo uudet kentät kurssin tikettipohjalle.
   public async setTicketField(courseID: string, fields: Kenttapohja[]) {
     for (let field of fields) {
       if (field.id != null) delete field.id;
@@ -182,7 +220,7 @@ export class CourseService {
       this.errorService.handleServerError(error);
     }
     return (response?.success === true) ? true : false;
-    }
+  }
 
   private handleError(error: HttpErrorResponse) {
     this.errorService.handleServerError(error);

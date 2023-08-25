@@ -1,11 +1,13 @@
+import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
+  NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
-    NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
+
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
+import { StoreService } from '@core/services/store.service';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;
@@ -34,8 +36,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     OnDestroy, Validator {
 
   @Input() oldAttachments: Liite[] = [];
-  @Input() uploadClicks = new Observable();
   @Input() ticketID: string | null = '';
+  @Input() uploadClicks = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -44,19 +46,18 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
   public isEditingDisabled: boolean = false;
-  public readonly MAX_FILE_SIZE_MB=100;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
   public filesToRemove: Liite[] = [];
 
   constructor(private renderer: Renderer2,
+              private store: StoreService,
               private tickets: TicketService
               ) {
   }
 
   ngOnInit() {
-    // const element: HTMLElement = document.querySelector() as HTMLElement;
     this.uploadClickSub = this.uploadClicks.subscribe(action => {
       if (action === 'add') {
         this.renderer.selectRootElement(this.fileInput.nativeElement).click();
@@ -75,19 +76,12 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
       const courseID = getCourseIDfromURL();
-      if (!courseID) {
-        console.error('makeRequestArray: Ei kurssi ID:ä.');
-        return
-      }
-      return this.tickets.uploadFile(ticketID, commentID, courseID, fileinfo.file)
+      return this.tickets.uploadFile(ticketID, commentID, courseID!, fileinfo.file)
         .pipe(
           tap(progress => {
-            console.log('saatiin event (alla) tiedostolle ('+ fileinfo.filename +'): ' +
-                progress);
             this.fileInfoList[index].progress = progress;
           }),
           catchError((error: any) => {
-            console.log('makeRequestChain: catchError: error napattu');
             this.fileInfoList[index].uploadError = $localize `:@@Liitteen
                 lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
             /* Virhettä ei heitetä, koska silloin tiedostojen lähetys loppuu
@@ -120,14 +114,13 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
         filesize: filesizeNumber,
         progress: 0
       };
-      if (file.size > this.MAX_FILE_SIZE_MB * MEGABYTE) {
+      if (file.size > this.store.getMAX_FILE_SIZE_MB() * MEGABYTE) {
         fileinfo.error = $localize `:@@Liian iso:Liian iso`;
         fileinfo.errorToolTip = $localize `:@@Tiedoston koko ylittää:
-            Tiedoston koko ylittää ${this.MAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
+            Tiedoston koko ylittää ${this.store.getMAX_FILE_SIZE_MB} megatavun rajoituksen` + '.';
         this.isInvalid = true;
         this.errors = { size: 'overMax' };
         this.onChange(this.isInvalid);
-        console.log('this.isInvalid: ' + this.isInvalid + ", this.errors: " + this.errors);
       }
       this.fileInfoList.push(fileinfo);
       this.fileListOutput.emit(this.fileInfoList);
@@ -149,8 +142,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.markAsTouched();
     this.filesToRemove.push(this.oldAttachments[index]);
     this.oldAttachments.splice(index, 1);
-    console.log('tullaan poistamaan:');
-    console.dir(this.filesToRemove);
   }
 
   public async removeSentFiles(): Promise<boolean> {
@@ -201,7 +192,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   // Kutsutaan parent komponentista.
   public async sendFiles(ticketID: string, commentID: string): Promise<any> {
-    console.log('commentID: ' + commentID);
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
@@ -209,20 +199,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
-
-          /* Tiedostojen poistamisen koodia.
-          let errorsWithRemove: boolean = false;
-
-          console.log('this.filesToRemove.length: ' + this.filesToRemove.length);
-
-          if (this.filesToRemove.length > 0 ) {
-            this.removeSentFiles().then(res => {
-              if (!res) errorsWithRemove = true;
-            }).catch(err => {
-              errorsWithRemove = true;
-            })
-          } */
-
           if (res.some((result: unknown) => result === 'error' )) {
             reject(res)
           } else {
@@ -230,7 +206,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
           }
         },
         error: (error) => {
-          console.log('edit-attachments.sendFiles: saatiin virhe: ' + error );
           reject('error')
         },
         complete: () => {

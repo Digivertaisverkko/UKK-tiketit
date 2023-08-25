@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   viewBox="0 0 2048 1028"
+   version="1.1"
+   sodipodi:docname="Tukki_logo_rgb_musta3.svg"
+   inkscape:version="1.2.1 (9c6d41e4, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview19"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.22957198"
+     inkscape:cx="431.23729"
+     inkscape:cy="516.17797"
+     inkscape:window-width="1440"
+     inkscape:window-height="847"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#fff;}.cls-2{fill:#1d1d1b;}</style>
+  </defs>
+  <path
+     class="cls-1"
+     d="m2048,295.593V0H292.951v26.581h-56.802V0H0v317.81c98.699,25.794,171.592,114.776,171.592,220.904S98.699,733.825,0,759.619v262.381h236.149v-61.131h56.802v61.131h1755.049v-282.046c-101.236-24.041-176.592-114.264-176.592-222.181s75.356-198.14,176.592-222.18ZM292.951,898.586h-56.802v-62.287h56.802v62.287Zm0-124.574h-56.802v-62.287h56.802v62.287Zm0-124.57h-56.802v-62.287h56.802v62.287Zm0-124.574h-56.802v-62.287h56.802v62.287Zm0-124.57h-56.802v-62.287h56.802v62.287Zm0-124.574h-56.802v-62.287h56.802v62.287Zm0-124.57h-56.802v-62.287h56.802v62.287Z"
+     id="path6" />
+  <path
+     class="cls-2"
+     d="m573.776,433.27v252.735h-76.819v-252.735h-99.51v-72.395h277.151v72.395h-100.822Z"
+     id="path8"
+     style="fill:#23408f;fill-opacity:1" />
+  <path
+     class="cls-2"
+     d="m978.347,559.419c0,88.436-57.614,134.39-134.869,134.39-76.815,0-136.173-45.084-136.173-134.39v-198.544h77.251v195.943c0,42.919,23.135,63.293,60.669,63.293,34.479,0,56.739-17.339,56.739-58.09v-201.146h76.383v198.544Z"
+     id="path10"
+     style="fill:#23408f;fill-opacity:1" />
+  <path
+     class="cls-2"
+     d="m1325.297,686.005h-100.386l-89.038-130.486-21.82,22.109v108.377h-76.819v-325.13h76.819v117.912l107.803-117.912h103.441l-133.118,136.554,133.118,188.576Z"
+     id="path12"
+     style="fill:#23408f;fill-opacity:1" />
+  <path
+     class="cls-2"
+     d="m1646.064,686.005h-100.386l-89.038-130.486-21.82,22.109v108.377h-76.819v-325.13h76.819v117.912l107.803-117.912h103.441l-133.118,136.554,133.118,188.576Z"
+     id="path14"
+     style="fill:#23408f;fill-opacity:1" />
+  <path
+     class="cls-2"
+     d="m1680.951,686.005v-325.13h76.815v325.13h-76.815Z"
+     id="path16"
+     style="fill:#23408f;fill-opacity:1" />
+</svg>

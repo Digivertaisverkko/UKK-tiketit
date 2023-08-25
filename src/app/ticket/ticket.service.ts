@@ -5,20 +5,17 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, catchError, firstValueFrom, mergeMap, of, retry,
-  retryWhen, throwError, timeout, timer } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of  , timeout } from 'rxjs';
 
+import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
+  SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
+  from './ticket.models';
+export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
+import { getDateString } from '@shared/utils';
 import { Role } from '../core/core.models';
-import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
-  SortableTicket, TiketinPerustiedot, Tiketti, UKK, UusiTiketti, UusiUKK }
-  from './ticket.models';
 import { StoreService } from '../core/services/store.service';
-
-interface GetTicketsOption {
-  option: 'onlyOwn' | 'archived';
-}
 
 @Injectable({ providedIn: 'root' })
 
@@ -114,7 +111,6 @@ export class TicketService {
       tiketti: Number(ticketID)
     }
     try {
-      console.log('lähetetään body: ' + JSON.stringify(body));
       response = await firstValueFrom<{ success: boolean }>(
         this.http.post<{ success: boolean }>(url, body)
       );
@@ -158,8 +154,9 @@ export class TicketService {
     return response
   }
 
-  public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string,
-        fileList?: File[]): Promise<{ success: boolean }> {
+  // Muokkaa tikettiä.
+  public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string):
+      Promise<{ success: boolean }> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     const body = ticket;
@@ -168,19 +165,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
-    if (response?.success !== true) return { success: false }
-    if (fileList?.length == 0 || !fileList ) return { success: true }
-    if (!courseID) return { success: false }
-    const firstCommentID = String(response.uusi.kommentti);
-    let sendFileResponse: any;
-    for (let file of fileList) {
-      try {
-        sendFileResponse = await this.uploadFile(ticketID, firstCommentID, courseID, file);
-      } catch (error: any) {
-        this.handleError(error);
-      }
-    }
-    return { success: true }
+    return { success: response?.success === true ? true : false }
   }
 
   // Hae kurssin UKK-kysymykset.
@@ -188,29 +173,20 @@ export class TicketService {
     const url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
     let response: any;
     try {
-      console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
-        this.http.get<UKK[]>(url).pipe(
-          timeout(3000),
-          retry(3)
-        )
+        this.http.get<UKK[]>(url).pipe(timeout(3000))
       )
-      // response = await firstValueFrom(this.http.get<UKK[]>(url));
-      console.log('haettiin UKK:t');
     } catch (error: any) {
       this.handleError(error);
     }
-    // Jos tarvitsee muokata dataa.
-    // let tableData = response.map((faq: UKK ) => (
-    //   {
-    //     id: faq.id,
-    //     otsikko: faq.otsikko,
-    //     aikaleima: faq.aikaleima,
-    //     tyyppi: faq. tyyppi,
-    //     tila: faq.tila
-    //   }
-    // ));
-    return response;
+    let FAQlist = response;
+    const thisYear = new Date().getFullYear();
+    FAQlist.forEach((faq: any) => {
+      faq.aikaleima = new Date(faq.aikaleima)
+      faq.aikaleimaStr = getDateString(faq.aikaleima, thisYear)
+    })
+
+    return FAQlist;
   }
 
   // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
@@ -296,24 +272,10 @@ export class TicketService {
   }
 
   // Poista liitetiedosto.
-  public removeFileObservable(ticketID: string, commentID: string, fileID: string,
-      courseID: string): Observable<any> {
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
-    let response: any;
-    //return firstValueFrom(this.http.delete(url));
-    return this.http.delete(url);
-
-  }
-
-  // Testaamista varten.
-  private getRandomArbitrary(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
-  // Poista liitetiedosto.
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}`;
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/`+
+      `${commentID}/liite/${fileID}`;
     let response: any;
     try {
       response = firstValueFrom(this.http.delete(url));
@@ -338,11 +300,13 @@ export class TicketService {
 
   /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
       lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
-      palauttaa ainoastaan itse luodut tiketit. */
-  public async getTicketList(courseID: string, option?: GetTicketsOption):
-      Promise<SortableTicket[] | null> {
+      palauttaa ainoastaan itse luodut tiketit, 'archived' palauta arkistoidut
+      eli ratkaistut kysymykset. */
+  public async getTicketList(courseID: string, option?: {
+    option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
     const currentRoute = window.location.href;
-    if (currentRoute.indexOf('/list-tickets') === -1) {
+    if (environment.testing === false &&
+        currentRoute.indexOf('/list-tickets') === -1) {
       return null
     }
     if (courseID === '') throw new Error('Ei kurssi ID:ä.');
@@ -358,14 +322,9 @@ export class TicketService {
     let url = `${this.api}/kurssi/${String(courseID)}/tiketti/${target}`;
     let response: any;
     try {
-      console.log('tehdään kutsu URL:iin ' + url);
       response = await firstValueFrom(
-        this.http.get<TiketinPerustiedot[]>(url).pipe(
-          timeout(3000),
-          retry(3)
-        )
+        this.http.get<TikettiListassa[]>(url).pipe(timeout(3000))
       )
-    console.log('haettiin tiketit.');
     } catch (error: any) {
       this.handleError(error);
     }
@@ -374,43 +333,70 @@ export class TicketService {
     const myName = user?.nimi ?? '';
     const myRole = user?.asema ?? '';
     const me = $localize`:@@Minä:Minä`;
-    let sortableData: SortableTicket[] = response.map((ticket: TiketinPerustiedot) => (
-      {
+    const thisYear = new Date().getFullYear();
+    let sortableData: SortableTicket[] = response.map((ticket: TikettiListassa) => {
+      let viimeisinStr = '';
+      if (ticket.viimeisin) {
+        const viimeisinDate = new Date(ticket.viimeisin);
+        viimeisinStr = getDateString(viimeisinDate, thisYear);
+      }
+      return {
         tilaID: ticket.tila,
         tila: this.getTicketState(ticket.tila, myRole),
         id: ticket.id,
         otsikko: ticket.otsikko,
-        aikaleima: ticket.viimeisin,
-        aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi
+        aikaleima: new Date(ticket.aikaleima),
+        aloittajanNimi: (ticket.aloittaja.nimi === myName) ? me : ticket.aloittaja.nimi,
+        kentat: ticket.kentat,
+        liite: ticket.liite ?? false,
+        viimeisin: ticket.viimeisin ? new Date(ticket.viimeisin) : ticket.viimeisin,
+        viimeisinStr: ticket.viimeisin ? viimeisinStr : ''
       }
-    ));
+    });
     return sortableData;
   }
+
 
   /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
     kommentit. */
   public async getTicket(ticketID: string, courseID: string): Promise<Tiketti> {
     let response: any;
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
+    const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
       response = await firstValueFrom(this.http.get<Tiketti>(url));
     } catch (error: any) {
       this.handleError(error);
     }
+    response.aikaleima = new Date(response.aikaleima);
     let ticket: Tiketti = response;
-    // TODO: alla olevat kutsut voisi tehdä rinnakkain.
-    response = await this.getFields(ticketID, courseID);
-    ticket.kentat = response;
-    response  = await this.getComments(ticketID, courseID);
-    // Tiketin viestin sisältö on sen ensimmäinen kommentti.
-    /// TODO: 1. kommentti ei välttämättä viittaa tikettiin aina, vaan pitäisi
-    // ottaa aikaleiman mukaan vanhin.
-    ticket.viesti = response[0].viesti;
-    ticket.kommenttiID = response[0].id;
-    ticket.liitteet = response[0].liitteet;
-    response.shift();
-    ticket.kommentit = response;
+    const fields = await this.getFields(ticketID, courseID);
+    // const fields: Kentta[] = await this.getFields(ticketID, courseID);
+    ticket.kentat = fields;
+    let comments: Kommentti[] = await this.getComments(ticketID, courseID);
+    // Tiketin tiedot sisältyvät 1. kommentissa.
+    const originalComment: Kommentti | null = this.getOldestComment(comments);
+    ticket.kommenttiID = originalComment!.id;
+    ticket.viesti = originalComment!.viesti;
+    ticket.liitteet = originalComment!.liitteet;
+    if (originalComment?.aikaleima) {
+      ticket.aikaleima = new Date(originalComment?.aikaleima);
+    }
+    if (originalComment!.muokattu) {
+      ticket.muokattu = new Date(originalComment!.muokattu);
+    }
+    ticket.kommentit = comments.filter(comment => comment !== originalComment);
     return ticket
+  }
+
+  // Palauta kommentti, jonka aikaleima on vanhin.
+  private getOldestComment(comments: Kommentti[]): Kommentti | null {
+    return comments.reduce((oldestComment: Kommentti | null,
+          currentComment: Kommentti) => {
+      if (!oldestComment || currentComment.aikaleima < oldestComment.aikaleima) {
+        return currentComment;
+      }
+      return oldestComment;
+    }, null);
   }
 
   // Palauta listan tiketin kommenteista.
@@ -437,15 +423,10 @@ export class TicketService {
     const commentsAscending = commentsWithDate.sort(
       (commentA, commentB) => commentA.aikaleima.getTime() - commentB.aikaleima.getTime(),
     );
-    // const commentsDescending = commentsWithDate.sort(
-    //   (commentA, commentB) => commentB.aikaleima.getTime() - commentA.aikaleima.getTime(),
-    // );
-    // console.log('Kommentit järjestyksessä:');
-    // console.dir(commentsAscending);
     return commentsAscending;
   }
 
-  // Hae listan tietyn tiketin lisäkentistä.
+  // Hae yhden tiketin kuvaus ja lisäkentät.
   private async getFields(ticketID: string, courseID: string): Promise<Kentta[]> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
@@ -466,15 +447,15 @@ export class TicketService {
     this.errorService.handleServerError(error);
   }
 
-  // Lähetä tiedosto palauttaen edistymisprosentin.
+  // Lähetä yksi tiedosto palvelimelle. Palauttaa edistymisprosentin.
   public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
       Observable<number>{
     let formData = new FormData();
     formData.append('tiedosto', file);
     const progress = new Subject<number>();
     // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite
-    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/
-        ${commentID}/liite`;
+    let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/` +
+        `${commentID}/liite`;
     // Virheiden testaukseen vaihda http.post -> fakeHttpPost
     // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
     this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )

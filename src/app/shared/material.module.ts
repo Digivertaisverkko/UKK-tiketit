@@ -15,10 +15,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
@@ -35,10 +32,7 @@ const materialModules = [
   MatSelectModule,
   MatTableModule,
   MatSortModule,
-  MatPaginatorModule,
   MatProgressBarModule,
-  MatDividerModule,
-  MatSnackBarModule,
   MatTooltipModule,
   MatAutocompleteModule
 ];

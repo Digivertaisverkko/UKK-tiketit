@@ -1,5 +1,9 @@
-<!---- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
-<input  aria-disabled="true"
+
+
+<!---- Ei näytetä käyttäjällä, koska tiedoston valitsimen aktivointiin käytetään
+  parent componentissa olevaa tämän. Tämän vuoksi ei käytetä label-elementtia.
+-->
+<input  aria-hidden="true"
         (change)="onFileAdded($event)"
         class="file-input"
         #fileUpload
@@ -7,7 +11,6 @@
         multiple
         type="file"
         >
-
 <!-- <input type="file" class="file-input" id="file-input-{{url}}" multiple
 name="file-input-{{url}}"
 (change)="onFileChanged($event)" #fileUpload> -->

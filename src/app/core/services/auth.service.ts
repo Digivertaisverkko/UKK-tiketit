@@ -1,28 +1,23 @@
 // Tämä service käsittelee käyttäjäautentikointiin liittyviä toimia.
 
+import { ActivationEnd, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
-import cryptoRandomString from 'crypto-random-string';
-import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
 import * as shajs from 'sha.js';
+import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
-import { getCourseIDfromURL } from '@shared/utils';
 import { ErrorService } from './error.service';
-import { LoginInfo, Role, User } from '../core.models';
-import { Kurssini } from '@course/course.models';
-import { CourseService } from '@course/course.service';
+import { getCourseIDfromURL } from '@shared/utils';
+import { getRoleString } from '@shared/utils';
+import { AuthInfo, LoginInfo, LoginResult, User } from '../core.models';
 import { StoreService } from './store.service';
-
 
 interface UserRights {
   oikeudet: User,
-  login: {
-    lti_login: boolean,
-    perus: boolean
-  }
+  login: AuthInfo,
 }
 
 interface LoginResponse {
@@ -35,11 +30,6 @@ interface ConsentResponse {
   kurssi: number
 }
 
-interface LoginResult {
-  success: boolean,
-  redirectUrl?: string
-};
-
 interface AuthRequestResponse {
   success: boolean;
   error: string;
@@ -51,17 +41,9 @@ interface AuthRequestResponse {
 export class AuthService {
 
   private api: string;
-  // Onko käyttäjä osallisena aktiivisella kurssilla.
-  // private user$ = new BehaviorSubject(null) ;
-  // TODO: nämä oAuth tiedot yhteen tietotyyppiin.
   private codeVerifier: string = '';
-  private codeChallenge: string = '';
-  private loginCode: string = '';
 
-  private courseID: string | null = null;
-
-  constructor(private courses: CourseService,
-              private errorService: ErrorService,
+  constructor(private errorService: ErrorService,
               private http: HttpClient,
               private location: Location,
               private router: Router,
@@ -75,9 +57,45 @@ export class AuthService {
     this.startUpdatingUserinfo();
   }
 
+  /* Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta. */
+  private async authenticate(codeVerifier: string, loginCode: string):
+    Promise<LoginResult> {
+  const httpOptions =  {
+    headers: new HttpHeaders({
+      'login-type': 'own',
+      'code-verifier': codeVerifier,
+      'login-code': loginCode,
+    })
+  }
+  const url = environment.apiBaseUrl + '/authtoken';
+  let response: any;
+  try {
+    response = await firstValueFrom(
+      this.http.get<AuthRequestResponse>(url, httpOptions)
+    );
+  } catch (error: any) {
+    this.handleError(error);
+  }
+  var loginResult: LoginResult;
+  if (response?.success == true) {
+    loginResult = { success: true };
+    const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
+    if (redirectUrl !== undefined && redirectUrl !== null) {
+      loginResult.redirectUrl = redirectUrl;
+      window.localStorage.removeItem('REDIRECT_URL')
+    }
+    this.store.setLoggedIn();
+    this.store.setParticipant(null);
+    window.sessionStorage.clear();
+  } else {
+    loginResult = { success: false };
+  }
+  return loginResult;
+}
+
   // Liitä ulkopuolinen käyttäjä kurssille.
-  public async createAccount(name: string, email: string, password: string, inviteID: string):
-      Promise<{ success: boolean }> {
+  public async createAccount(name: string, email: string, password: string,
+      inviteID: string): Promise<{ success: boolean }> {
   let response;
   const url = `${this.api}/luotili`;
   const body = {
@@ -94,96 +112,9 @@ export class AuthService {
     return response;
   }
 
-  /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
-     Käyttäjää on voitu vaihtaa eri tabissa/ikkunassa. */
-  public startUpdatingUserinfo(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof ActivationEnd) {
-        const courseID = getCourseIDfromURL();
-        // Alla oleva antoi joskus null.
-        // const courseID = event.snapshot.paramMap.get('courseid');
-        console.log('authService: huomattiin kurssi id ' + courseID);
-        const currentUrl = this.location.path();
-        const isInLogin: boolean = currentUrl.includes('login');
-        if (!isInLogin && (courseID !== undefined && courseID !== null)) {
-          this.fetchUserInfo(courseID);
-        }
-      }
-    });
-  }
-
-  private checkIfParticipant(courseID: string) {
-    console.log('tsekataan onko osallistuja');
-    this.courses.getMyCourses().then(response => {
-      if (response[0].kurssi === undefined) return
-        const myCourses: Kurssini[] = response;
-        // Onko käyttäjä osallistujana URL parametrilla saadulla kurssilla.
-        if (myCourses.some(course => course.kurssi == Number(courseID))) {
-          this.store.setParticipant(true);
-          console.log('kurssi id: ' + this.courseID);
-          console.log('ollaan kurssilla');
-        } else {
-          this.store.setParticipant(false);
-          console.log('ei olla kurssilla');
-          console.log('kurssi id: ' + this.courseID);
-        }
-    })
-  }
-
-  // Rooli muodossa, joka on tarkoitettu näytettäväksi UI:ssa.
-  private getRoleString(asema: Role | null): string {
-    let role: string;
-      switch (asema) {
-        case 'opiskelija':
-          role = $localize`:@@Opiskelija:Opiskelija`; break;
-        case 'opettaja':
-          role = $localize`:@@Opettaja:Opettaja`; break;
-        case 'admin':
-          role = $localize`:@@Admin:Admin`; break;
-        default:
-          role = '';
-      }
-      return role;
-  }
-
-  public async sendDataConsent(tokenid: string | null, allow: boolean):
-      Promise<ConsentResponse> {
-    const body = { 'lupa-id': tokenid };
-    console.log(body);
-    let url = '/lti/';
-    url += allow ? 'gdpr-lupa-ok' : 'gdpr-lupa-kielto';
-    let res: any;
-    try {
-      res = await firstValueFrom(this.http.post(url, body));
-    } catch (error: any) {
-      this.handleError(error)
-    }
-    return res
-  }
-
-  public getDateFormat(): string {
-    return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
-  }
-
-  private getMethodName() {
-    return this.getMethodName.caller.name
-  }
-
-  public saveRedirectURL(): void {
-    const currentRoute = window.location.pathname + window.location.search;
-    // Kirjautumissivulle ei haluta ohjata.
-    if (currentRoute.indexOf('/login') === -1) {
-      if (window.localStorage.getItem('REDIRECT_URL') == null) {
-      window.localStorage.setItem('REDIRECT_URL', currentRoute);
-      console.log('tallennettiin redirect URL: ' + currentRoute);
-      } else {
-        console.log('Löydettiin redirect URL, ei tallenneta päälle.');
-      }
-    }
-  }
-
-  // Hae ja tallenna palvelimelta käyttöjätiedot auth.User -behavior subjektiin
-  // käytettäviksi.
+  /* Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
+     oikeudet, onko osallistujana näkymän kurssilla.
+  */
   public async fetchUserInfo(courseID: string): Promise<void> {
     if (courseID === undefined || courseID === null || courseID === '') {
       throw new Error('authService.getMyUserInfo: Ei kurssi ID:ä: ' + courseID);
@@ -196,33 +127,36 @@ export class AuthService {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
       joka paikassa odottaa observablen arvoa? */
       /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
+      console.log(`Haetaan, onko oikeuksia ja käyttäjätietoja kurssille ${courseID}.`);
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
       response = await firstValueFrom<UserRights>(this.http.get<any>(url));
     } catch (error: any) {
       response = null;
     }
-    let newUserInfo: any;
-    if (response != null && response.oikeudet != null)  {
-      newUserInfo = response.oikeudet;
-      newUserInfo.asemaStr = this.getRoleString(newUserInfo.asema);
+    let userInfo: any;
+    if (response != null && response?.oikeudet != null)  {
+      userInfo = response.oikeudet;
+      const authInfo = response.login;
+      if (authInfo) this.store.setAuthInfo(authInfo);
+      userInfo.asemaStr = getRoleString(userInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
     } else {
       this.store.setParticipant(false);
-      console.log('authService: saatiin /oikeudet vastaus null');
+      console.warn(`Käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
       // Haetana käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
       const response = await this.fetchVisitorInfo();
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
-        newUserInfo = response ;
-        newUserInfo.asema = null;
+        userInfo = response ;
+        userInfo.asema = null;
         this.store.setLoggedIn();
       } else {
         this.store.setNotLoggegIn();
         return
       }
     }
-    this.store.setUserInfo(newUserInfo);
+    this.store.setUserInfo(userInfo);
   }
 
   // Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
@@ -234,12 +168,16 @@ export class AuthService {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
       joka paikassa odottaa observablen arvoa? */
       const url = `${environment.apiBaseUrl}/minun`;
-      console.log('fetchVisitorInfo: koitetaan hakea tiedot');
+      console.log('authService.fetchVisitorInfo: koitetaan hakea tiedot, onko kirjautuneena eri kurssille.');
       response = await firstValueFrom<any>(this.http.get<any>(url));
     } catch (error: any) {
       return null
     }
     return response
+  }
+
+  public getDateFormat(): string {
+    return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
 
   /* Palauta true, jos on tieto, että viimeisimmällä saadulla tokenid
@@ -254,15 +192,59 @@ export class AuthService {
     return (noDataConsentList.includes(lastTokenid)) ? true : false;
   }
 
+  /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
+     Palautetaan tarvittavat tiedot kirjautumista varten. */
+   public async getLoginInfo(loginType: 'own', courseID: string | null):
+     Promise<LoginInfo> {
+   if (courseID === null) {
+     throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
+   }
+   this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
+   const codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
+   // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
+   // Jos haluaa storageen tallentaa:
+   // this.storage.set('state', state);
+   // this.storage.set('codeVerifier', codeVerifier);
+   let url: string = environment.apiBaseUrl + '/login';
+   const httpOptions =  {
+     headers: new HttpHeaders({
+       'login-type': loginType,
+       'code-challenge': codeChallenge,
+       'kurssi': courseID
+     })
+   };
+   let response: any;
+   try {
+     response = await firstValueFrom(this.http.post(url, null, httpOptions));
+   } catch (error: any) {
+     this.handleError(error);
+   }
+   // if (response['login-url'] == undefined) {
+   //   throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
+   // }
+   return response
+   // const loginUrl = response['login-url'];
+   // return loginUrl;
+ }
+
+  private getMethodName() {
+    return this.getMethodName.caller.name
+  }
+
+  // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
+  // virheen käsittelyä.
+  private handleError(error: HttpErrorResponse): void {
+    this.errorService.handleServerError(error);
+  }
+
   public async navigateToLogin(courseID: string | null,
         notification?: { message: string }) {
-    // console.warn('logout: kurssi id: ' + this.courseID);
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
     this.getLoginInfo('own', courseID).then((response: any) => {
       if (response === undefined) {
-        console.log('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
+        console.error('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
         return
       }
       const loginURL = response['login-url'];
@@ -272,6 +254,51 @@ export class AuthService {
       }
       this.router.navigateByUrl(loginURL);
     })
+  }
+
+  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
+  public async login(email: string, password: string, loginID: string):
+      Promise<LoginResult> {
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'ktunnus': email,
+        'salasana': password,
+        'login-id': loginID
+      })
+    }
+    const url = environment.apiBaseUrl + '/omalogin';
+    let response: any;
+    try {
+      response = await firstValueFrom(
+        this.http.post<LoginResponse>(url, null, httpOptions)
+      );
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    if (response.success == true && response['login-code'] !== undefined) {
+      const loginCode = response['login-code'];
+      return this.authenticate(this.codeVerifier, loginCode);
+    } else {
+      return { success: false };
+    }
+  }
+
+  // Suorita uloskirjautuminen.
+  public async logout(): Promise<{ success: boolean }> {
+    let response: any;
+    let url = environment.apiBaseUrl + '/kirjauduulos';
+    try {
+      response = await firstValueFrom(this.http.post(url, {}));
+    } catch (error: any) {
+      return { success: false }
+    }
+    this.store.setNotLoggegIn();
+    this.store.setUserInfo(null);
+    this.store.setParticipant(null);
+    this.store.unsetPosition();
+    this.store.setCourseName('');
+    window.sessionStorage.clear();
+    return { success: true }
   }
 
   // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
@@ -288,134 +315,49 @@ export class AuthService {
       noDataConsentList.splice(index, 1);
       localStorage.setItem('noDataConsent', JSON.stringify(noDataConsentList));
     }
-    console.log(JSON.stringify(localStorage.getItem('noDataConsent')));
   }
 
-  /* Lähetä 1. authorization code flown:n autentikointiin liittyvä kutsu.
-    loginType voi olla atm: 'own'. Jos courseID on annettu, niin palautetaan
-     linkki sen kurssin näkymään.¶ */
-  public async getLoginInfo(loginType: string, courseID: string | null):
-      Promise<LoginInfo> {
-    if (courseID === null) {
-      throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
-    }
-    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
-    this.codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
-    // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
-    // Jos haluaa storageen tallentaa:
-    // this.storage.set('state', state);
-    // this.storage.set('codeVerifier', codeVerifier);
-    let url: string = environment.apiBaseUrl + '/login';
-    const httpOptions =  {
-      headers: new HttpHeaders({
-        'login-type': loginType,
-        'code-challenge': this.codeChallenge,
-        'kurssi': courseID
-      })
-    };
-    let response: any;
-    try {
-      response = await firstValueFrom(this.http.post(url, null, httpOptions));
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    // if (response['login-url'] == undefined) {
-    //   throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
-    // }
-    return response
-    // const loginUrl = response['login-url'];
-    // return loginUrl;
-  }
-
-  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
-  public async login(email: string, password: string, loginID: string):
-      Promise<LoginResult> {
-        const httpOptions =  {
-          headers: new HttpHeaders({
-            'ktunnus': email,
-            'salasana': password,
-            'login-id': loginID
-          })
+  public saveRedirectURL(): void {
+    const currentRoute = window.location.pathname + window.location.search;
+    // Kirjautumissivulle ei haluta ohjata.
+    if (currentRoute.indexOf('/login') === -1) {
+      if (window.localStorage.getItem('REDIRECT_URL') == null) {
+      window.localStorage.setItem('REDIRECT_URL', currentRoute);
+      console.log('tallennettiin redirect URL: ' + currentRoute);
+      } else {
+        console.log('Löydettiin redirect URL, ei tallenneta päälle.');
       }
-    const url = environment.apiBaseUrl + '/omalogin';
-    let response: any;
+    }
+  }
+
+  public async sendDataConsent(tokenid: string | null, allow: boolean):
+      Promise<ConsentResponse> {
+    const body = { 'lupa-id': tokenid };
+    let url = '/lti/';
+    url += allow ? 'gdpr-lupa-ok' : 'gdpr-lupa-kielto';
+    let res: any;
     try {
-      response = await firstValueFrom(
-        this.http.post<LoginResponse>(url, null, httpOptions)
-      );
+      res = await firstValueFrom(this.http.post(url, body));
     } catch (error: any) {
-      this.handleError(error);
+      this.handleError(error)
     }
-    if (response.success == true && response['login-code'] !== undefined) {
-      this.loginCode = response['login-code'];
-      return this.authenticate(this.codeVerifier, this.loginCode);
-    } else {
-      return { success: false };
-    }
+    return res
   }
 
-  /* Lähetä 3. authorization code flown:n autentikointiin liittyvä kutsu. */
-  private async authenticate(codeVerifier: string, loginCode: string):
-      Promise<LoginResult> {
-    const httpOptions =  {
-      headers: new HttpHeaders({
-        'login-type': 'own',
-        'code-verifier': codeVerifier,
-        'login-code': loginCode,
-      })
-    }
-    const url = environment.apiBaseUrl + '/authtoken';
-    let response: any;
-    try {
-      response = await firstValueFrom(
-        this.http.get<AuthRequestResponse>(url, httpOptions)
-      );
-    } catch (error: any) {
-      this.handleError(error);
-    }
-    var loginResult: LoginResult;
-    if (response?.success == true) {
-      loginResult = { success: true };
-      const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
-      console.log('sendAuthRequest: redirect url: ' + redirectUrl);
-      if (redirectUrl !== undefined && redirectUrl !== null) {
-        loginResult.redirectUrl = redirectUrl;
-        window.localStorage.removeItem('REDIRECT_URL')
+  /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
+     Käyttäjää on voitu vaihtaa eri tabissa/ikkunassa. */
+  public startUpdatingUserinfo(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        const courseID = getCourseIDfromURL();
+        console.log('authService: huomattiin kurssi id ' + courseID);
+        const currentUrl = this.location.path();
+        const isInLogin: boolean = currentUrl.includes('login');
+        if (!isInLogin && (courseID !== undefined && courseID !== null)) {
+          this.fetchUserInfo(courseID);
+        }
       }
-      this.store.setLoggedIn();
-      this.store.setParticipant(null);
-      window.sessionStorage.clear();
-    } else {
-      loginResult = { success: false };
-    }
-    return loginResult;
-  }
-
-  // Suorita uloskirjautuminen.
-  public async logout(): Promise<{ success: boolean }> {
-      let response: any;
-      let url = environment.apiBaseUrl + '/kirjauduulos';
-      try {
-        response = await firstValueFrom(this.http.post(url, {}));
-      } catch (error: any) {
-        return { success: false }
-      }
-      this.store.setNotLoggegIn();
-      this.store.setUserInfo(null);
-      this.store.setParticipant(null);
-      this.store.unsetPosition();
-      this.store.setCourseName('');
-      window.sessionStorage.clear();
-      return { success: true }
-        // if (courseID != null) {
-        //   this.navigateToLogin(courseID);
-        // }
-  }
-
-  // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
-  // virheen käsittelyä.
-  private handleError(error: HttpErrorResponse): void {
-    this.errorService.handleServerError(error);
+    });
   }
 
 }

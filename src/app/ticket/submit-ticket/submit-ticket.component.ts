@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Observable, Subject } from 'rxjs';
 
@@ -25,24 +25,25 @@ import { TicketService } from 'src/app/ticket/ticket.service';
 export class SubmitTicketComponent implements OnInit {
   @Input() public attachmentsMessages: string = '';
   @Input() courseid!: string;
+  @Input() id: string = ''
   @Input() public fileInfoList: FileInfo[] = [];
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
-  private commentID: string | null = null;
-  public readonly currentDate = new Date();
   public editExisting: boolean = window.history.state.editTicket ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
+  public helpText: string = '';
   public oldAttachments: Liite[] = [];
   public showConfirm: boolean = false;
   public state: 'editing' | 'sending' | 'done' = 'editing';
   public successMessage: string = '';
   public ticketFields: Kentta[] = [];
-  public ticketId: string | null = this.route.snapshot.paramMap.get('id');
+  public ticketId: string | null = null;
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
   public user$: Observable<User | null>;
   // Listausnäkymään palattaessa näytä virheviesti.
+  private commentID: string | null = null;
   private errorForListing: string | undefined;
 
   get additionalFields(): FormArray {
@@ -60,7 +61,6 @@ export class SubmitTicketComponent implements OnInit {
   constructor(private courses: CourseService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private route: ActivatedRoute,
               private store: StoreService,
               private ticketService: TicketService,
               private titleServ: Title
@@ -69,9 +69,9 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
-
+    this.ticketId = this.id ?? null;
+    if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     if (this.ticketId === null) {
       this.titleServ.setTitle(
         this.store.getBaseTitle() + $localize `:@@Uusi kysymys: Uusi kysymys`
@@ -131,16 +131,18 @@ export class SubmitTicketComponent implements OnInit {
 
   private fetchAdditionalFields(): void {
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    this.courses.getTicketFieldInfo(this.courseid)
-    .then((response) => {
-      this.ticketFields = response as Kentta[];
+    this.courses.getTicketFieldInfo(this.courseid).then(response => {
+      this.ticketFields = response.kentat as Kentta[];
+      this.helpText = response.kuvaus ?? '';
       this.buildAdditionalFields();
+    }).catch(() => {
+      this.errorMessage = $localize `:@@Kysymysten tietoja ei saatu haettua:
+        Tarvittavia kysymysten tietoja ei saatu haettua` + '.';
     });
   }
 
   private fetchTicketInfo(ticketId: string, courseID: string): void {
-    this.ticketService.getTicket(ticketId, courseID)
-    .then(response => {
+    this.ticketService.getTicket(ticketId, courseID).then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);
       this.oldAttachments = response.liitteet ?? [];
@@ -148,6 +150,9 @@ export class SubmitTicketComponent implements OnInit {
       this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
+    }).catch(() => {
+      this.errorMessage = $localize `:@@Muokattavan kysymyksen tietoja ei saatu haettua:
+        Muokattavan kysymyksen tietoja ei saatu haettua` + '.';
     });
   }
 
@@ -164,13 +169,13 @@ export class SubmitTicketComponent implements OnInit {
   private prepareSendFiles(response: any): void {
     if (!this.courseid) return
     if (response?.uusi == null) {
-      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
     }
     let ticketID, commentID;
     ticketID = response.uusi.tiketti;
     commentID = response.uusi.kommentti;
-    this.sendFiles(ticketID, commentID, this.courseid);
+    this.sendFiles(ticketID, commentID);
   }
 
   public submit(): void {
@@ -191,9 +196,7 @@ export class SubmitTicketComponent implements OnInit {
     if (!this.ticketId || !this.commentID) throw new Error;
     this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
       .then((res: { success: boolean }) => {
-        console.log('saatiin vastaus editointiin: ' + JSON.stringify(res));
         if (res?.success === false) {
-          console.log('editointi ei onnistunut, heitetään virhe.');
           throw Error
         }
         if (this.attachments.filesToRemove.length === 0) {
@@ -207,17 +210,14 @@ export class SubmitTicketComponent implements OnInit {
         // this.printFileInfoListLog();
         if (this.fileInfoList !== undefined) {
           if (this.fileInfoList.length === 0 ) return
-          console.log('lähetetään tiedostoja.');
           this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
-          return this.sendFiles(this.ticketId!, this.commentID!, this.courseid);
+          return this.sendFiles(this.ticketId!, this.commentID!);
         } else {
-          console.log('Ei lähetettäviä tiedostoja.');
           return
         }
       }).then(() => {
         this.goBack();
-      }).catch(error => {
-        console.log('ketjun error: ' + JSON.stringify(error));
+      }).catch(() => {
         this.errorMessage = $localize `:@@Muokatun kysymyksen lähettäminen epäonnistui:
             Muokatun kysymyksen lähettäminen epäonnistui` + '.'
         this.state = 'editing';
@@ -262,10 +262,9 @@ export class SubmitTicketComponent implements OnInit {
     });
   }
 
-  private sendFiles(ticketID: string, commentID: string, courseID: string):
+  private sendFiles(ticketID: string, commentID: string):
       Promise<any> {
-    return this.attachments.sendFiles(ticketID, commentID)
-    .then(() => {
+    return this.attachments.sendFiles(ticketID, commentID).then(() => {
       if (this.errorMessage) {
         this.state = 'editing';
         return
@@ -273,18 +272,11 @@ export class SubmitTicketComponent implements OnInit {
         this.state = 'done';
         this.goBack();
       }
-    })
-    .catch((res: any) => {
+    }).catch((res: any) => {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
           onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log(this.router.url + ': saatiin virhe: ' + res);
       this.state = 'editing';
       this.form.enable();
-    })
-    .finally(() => {
-      console.log('Komponentti: Kaikki valmiita!');
-      // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-      // this.attachments.clear();
     });
   }
 

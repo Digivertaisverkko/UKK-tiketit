@@ -13,18 +13,18 @@
       <app-beginning-button
           (clicked)="showConfirm = true"
           [confirm]="form.dirty || isEditingComment"
-          [disabled]="state==='sending'"
+          [disabled]="state === 'sending'"
           >
       </app-beginning-button>
 
       <div class="spacer"></div>
 
       <button class="edit-button"
+              (click)="editTicket()"
               [disabled]="state==='sending'"
               i18n="@@Muokkaa"
               mat-raised-button
               *ngIf="isEditable"
-              (click)="editTicket()"
               >
         Muokkaa
       </button>
@@ -39,11 +39,11 @@
       </button>
 
       <button (click)="changeButton('archive')"
+              [disabled]="state==='sending'"
               i18n="@@Ratkaistu"
               mat-raised-button
               *ngIf="ticket.arkistoitava === true && ticket.tila !== 6  &&
                   !isArchivePressed"
-              [disabled]="state==='sending'"
               >
         Ratkaistu
       </button>
@@ -51,10 +51,10 @@
       <button class="remove-btn"
               (click)="archiveTicket(ticketID, courseid!)"
               color="accent"
+              [disabled]="state==='sending'"
               i18n="@@Vahvista"
               mat-raised-button
               *ngIf="isArchivePressed"
-              [disabled]="state==='sending'"
               >
         Vahvista
       </button>
@@ -100,6 +100,7 @@
       <div class="spacer"></div>
       <app-sender-info
           [aikaleima]="ticket.aikaleima"
+          [muokattu]="ticket.muokattu"
           [styles]="{'margin-top': '1.5rem' }"
           [user]="ticket.aloittaja"
           >
@@ -108,8 +109,8 @@
     </div>
 
     <div *ngFor="let kentta of ticket.kentat">
-      <p class="theme-label">{{ kentta.otsikko }}</p>
-      <p class="short-field-value">{{ kentta.arvo }}</p>
+      <p class="short-field-p theme-label">{{ kentta.otsikko }}</p>
+      <p class="short-field-p">{{ kentta.arvo }}</p>
     </div>
 
     <p class="theme-label message-label" i18n="@@Viesti">Viesti</p>
@@ -146,13 +147,13 @@
     </button>
   </div>
 
-    <app-comment
-        [comment]="comment"
-        [(editingCommentID)]="editingCommentIDParent"
-        (messages)="listenMessagesFromComment($event)"
-        *ngFor="let comment of ticket.kommentit"
-        [ticketID]="ticket.id"
-        >
+    <app-comment  [comment]="comment"
+                  [(editingCommentID)]="editingCommentIDParent"
+                  [isInCopyAsFAQ]="ticketIdFromParent ? true : false"
+                  (messages)="listenMessagesFromComment($event)"
+                  *ngFor="let comment of ticket.kommentit"
+                  [ticketID]="ticket.id"
+                  >
     </app-comment>
 
     <div class="vertical-spacer"></div>
@@ -164,7 +165,7 @@
   <form [formGroup]="form" (ngSubmit)="sendComment()">
 
     <app-editor formControlName="message"
-                *ngIf="!ticketIdFromParent && state !== 'error'"
+                *ngIf="!ticketIdFromParent && state !== 'error' && isPolling"
                 >
     </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
@@ -189,10 +190,9 @@
     </app-error>
 
     <!-- Näytetään, kun lähetetään liitetiedostoja ja kommentin lisääminen onnistui. -->
-    <app-success
-        i18n="@@Kommentin lisääminen"
-        *ngIf="state==='sending'"
-        >
+    <app-success  i18n="@@Kommentin lisääminen"
+                  *ngIf="state==='sending'"
+                  >
       Uuden kommentin lähettäminen onnistui.
     </app-success>
 

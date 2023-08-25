@@ -1,5 +1,6 @@
 import {  Component, ChangeDetectionStrategy, ElementRef, EventEmitter, Output,
           ViewChild } from '@angular/core';
+import { getRandomInt } from '@shared/utils';
 
 @Component({
   selector: 'app-search-bar',
@@ -7,19 +8,21 @@ import {  Component, ChangeDetectionStrategy, ElementRef, EventEmitter, Output,
     <div class="search-bar">
 
       <input  class="input"
+              id="filter-items-{{inputID}}"
               #input
+              (keyup)="onKeyup(input.value)"
               type="text"
-              (keyup)="searchResult.emit($event)"
               placeholder="&nbsp;"
               >
+              <!-- (keyup)="searchResult.emit($event)" -->
 
-      <span class="label">
+      <label class="label" for="filter-items-{{inputID}}">
         <ng-content></ng-content>
-      </span>
+      </label>
 
       <span class="highlight"></span>
 
-      <button aria-disabled="true"
+      <button aria-hidden="true"
               class="search-btn"
               (click)="searchInput.nativeElement.focus()"
               mat-icon-button
@@ -37,6 +40,11 @@ import {  Component, ChangeDetectionStrategy, ElementRef, EventEmitter, Output,
 export class SearchBarComponent {
 
   @ViewChild('input') searchInput!: ElementRef<HTMLInputElement>;
-  @Output() searchResult = new EventEmitter<Event>();
+  @Output() searchResult = new EventEmitter<string>();
+  public inputID: number = getRandomInt(1,10000);
+
+  public onKeyup(inputValue: string) {
+    this.searchResult.emit(inputValue);
+  }
 
 }

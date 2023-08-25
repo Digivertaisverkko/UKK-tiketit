@@ -23,7 +23,6 @@
   Profiili
 </button>
 
-
 <button i18n="@@Kurssin asetukset"
         mat-menu-item
         *ngIf="((user$ | async)?.asema === 'opettaja' ||
@@ -50,26 +49,6 @@
       Header pois (dev)
     </button>
   </ng-template>
-
-</ng-container>
-
-<ng-container *ngIf="!isInIframe">
-
-  <button (click)="login()"
-          i18n="@@Kirjaudu sisään"
-          mat-menu-item
-          *ngIf="(isLoggedIn$ | async) === false"
-          >
-    Kirjaudu sisään
-  </button>
-
-  <button (click)="logout()"
-          i18n="@@Kirjaudu ulos"
-          mat-menu-item
-          *ngIf="(isLoggedIn$ | async) === true"
-          >
-    Kirjaudu ulos
-  </button>
 
 </ng-container>
 

@@ -6,18 +6,28 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MockComponent } from 'ng-mocks';
 import { of } from 'rxjs';
 
+import { AuthService } from '@core/services/auth.service';
 import { HeaderComponent } from './header.component';
 import { StoreService } from '@core/services/store.service';
 import { UsermenuComponent } from '@core/usermenu/usermenu.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
+  let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fakeStoreService: jasmine.SpyObj<StoreService>;
   let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async () => {
+
+    fakeAuthService = jasmine.createSpyObj('AuthService', {
+      login: undefined,
+      navigateToLogin: undefined
+    });
+
     fakeStoreService = jasmine.createSpyObj('StoreService', {
       sendMessage: undefined,
+      trackIfParticipant: undefined,
+      trackLoggedIn: undefined,
       trackUserInfo: of('')
     });
 
@@ -33,6 +43,7 @@ describe('HeaderComponent', () => {
         RouterTestingModule
       ],
       providers: [
+        { provide: AuthService, useValue: fakeAuthService },
         { provide: StoreService, useValue: fakeStoreService }
       ]
     })

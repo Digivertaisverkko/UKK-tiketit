@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component }
-    from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { User } from '@core/core.models';
@@ -25,7 +24,6 @@ export class UsermenuComponent  {
 
   constructor (
     private authService: AuthService,
-    private change: ChangeDetectorRef,
     private router: Router,
     private store: StoreService
     ) {

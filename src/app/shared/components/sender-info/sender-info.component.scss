@@ -1,4 +1,5 @@
 $debug: false;
+@import '/src/variables.scss';
 
 .user-info-block {    // .text-info + ikoni
   @if $debug { border: 1px dotted green; }
@@ -21,15 +22,25 @@ $debug: false;
     }
   }
 
-  img {
-    @if $debug { border: 1px solid lightblue; }
-    display: inline-block;
-    flex-shrink: 0;
+  .circle {
+    align-items: center;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-sizing: border-box;
+    display: flex;
     height: 3rem;
-    margin: auto;
-    object-fit: cover;
-    position: relative;
+    justify-content: center;
     width: 3rem;
+    .initials {
+      font-family: $displayFont;
+      font-size: 140%;
+      font-weight: 500;
+    }
+  }
+
+  .circle-teacher {
+    border: 2px solid white;
+    outline: 4px solid;
   }
 
 }

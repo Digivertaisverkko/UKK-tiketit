@@ -12,6 +12,10 @@
   margin-bottom: 0;
 }
 
+.non-visible-label {
+  display: none;
+}
+
 .multiple-selection-wrapper {
   margin-bottom: 1rem;
   mat-checkbox {

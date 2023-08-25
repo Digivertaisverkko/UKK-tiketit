@@ -22,6 +22,10 @@ mat-form-field {
   }
 }
 
+.invisible {
+  display: none;
+}
+
 .short-field-wrapper {
   width: 24em;
   mat-form-field {

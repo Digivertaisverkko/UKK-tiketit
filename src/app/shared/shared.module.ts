@@ -27,12 +27,12 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
       // menu
       bold: $localize `:@@Lihavoi:Lihavoi`,
       italic: $localize `:@@Kursivoi:Kursivoi`,
-      code: $localize `:@@Koodi:Koodi`,
       blockquote: $localize `:@@Lohkolainaus:Lohkolainaus`,
       underline: $localize `:@@Alleviivaa:Alleviivaa`,
       strike: $localize `:@@Yliviivaa:Yliviivaa`,
       bullet_list: $localize `:@@Bullettilista:Bullettilista`,
       ordered_list: $localize `:@@Järjestetty lista:Järjestetty lista`,
+      insertImage: $localize `:@@Lisää kuva:Lisää kuva`,
 
       // popups, forms, others...
       url: 'URL',

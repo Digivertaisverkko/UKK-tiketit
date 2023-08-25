@@ -144,12 +144,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
       if (res?.success === true) {
         const route = 'course/' + this.courseid + '/list-tickets';
         const data = { message: 'account created' };
-        console.log('routataan: ' + route);
         this.router.navigate([route], { state: data });
       }
     })
-    .catch (error => {
-      console.log(error);
+    .catch (() => {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     });
   }
@@ -158,7 +156,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     this.isLoggedIn$ = this.store.onIsUserLoggedIn().pipe(
       takeWhile(() => this.isLoggedIn === undefined, true)
     ).subscribe(res => {
-      console.log('logged: ' + res);
       this.isLoggedIn = res;
       // Jos kutsun tietojen haku on onnistunut ja voidaan jatkaa.
       if (this.isLoggedIn === true && this.invitedInfo) {

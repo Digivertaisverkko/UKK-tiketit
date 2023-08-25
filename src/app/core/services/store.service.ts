@@ -4,7 +4,7 @@ ulkopuolella. Tämä tulisi olla ainut service, jossa näin tehdään. */
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Role, User } from '../core.models';
+import { AuthInfo, Role, User } from '../core.models';
 
 interface Headline {
   text?: string;
@@ -18,6 +18,7 @@ interface Headline {
 export class StoreService {
 
   // Kaikki jäsenmuuttujat tulisi olla privaatteja.
+  private authInfo: AuthInfo | null = null;
   private courseName: string | null = null;
   private headline: Headline | null = null;
   private isLoading$: Subject<boolean> = new Subject();
@@ -26,13 +27,16 @@ export class StoreService {
   private constants;
   // Voidaan välittää viestejä komponenttien välillä.
   private messageEmitter$ = new Subject<string>();
+  // Vierityksen kohta eri näkymäissä. Tällä hetkellä käytössä listaus -näkymässä.
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null>(null);
 
   constructor() {
     this.constants = {
-      baseTitle: 'UKK Tiketit - ',
+      baseTitle: 'Tukki - ',
+      MAX_FILE_SIZE_MB: 100,
       MILLISECONDS_IN_MIN: 60000,
+      thisYear: new Date().getFullYear()
     }
   }
 
@@ -56,8 +60,16 @@ export class StoreService {
     return this.isLoggedIn$.value;
   }
 
+  public getMAX_FILE_SIZE_MB(): number {
+    return this.constants.MAX_FILE_SIZE_MB;
+  }
+
   public getMsInMin(): number {
     return this.constants.MILLISECONDS_IN_MIN;
+  }
+
+  public getThisYear(): number {
+    return this.constants.thisYear;
   }
 
   public getUserRole(): Role | null {
@@ -92,6 +104,10 @@ export class StoreService {
     this.user$.unsubscribe();
   }
 
+  public getAuthInfo(): AuthInfo | null {
+    return this.authInfo;
+  }
+
   public getPosition(url: string): number {
     return this.positions[url] || 0;
   }
@@ -111,6 +127,10 @@ export class StoreService {
     this.messageEmitter$.next(message);
   }
 
+  public setAuthInfo(authInfo: AuthInfo): void {
+    this.authInfo = authInfo;
+  }
+
   public setCourseName(courseName: string): void {
     if (this.courseName !== courseName) {
       this.courseName = courseName;
@@ -128,6 +148,7 @@ export class StoreService {
 
   // Aseta tila kirjautumattomaksi.
   public setNotLoggegIn(): void {
+    console.log('Asetetaan: ei kirjautunut.');
     if (this.isLoggedIn$.value !== false) {
       this.isLoggedIn$.next(false);
     }

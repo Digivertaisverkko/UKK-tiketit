@@ -3,9 +3,10 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 // import { TicketService } from './ticket/ticket.service';
 
 @Component({
@@ -15,22 +16,29 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy  {
   public courseName: string = '';
-  public courseID: string = '';
+  public courseID: string | null = '';
+  public disableLangSelect: boolean = false;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
   public isLogged: boolean = false;
+  public isLoggedIn$: Observable<Boolean | null>;
   public isLoading: Observable<boolean> | null = null;
+  public isParticipant$: Observable<Boolean | null>;
   // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
   public user$: Observable<User | null>;
+  private _language!: string;
   private unsubscribe$ = new Subject<void>();
 
   constructor (
     private authService: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private store : StoreService,
   ) {
     this.isLoading = this.store.trackLoading();
+    this.isLoggedIn$ = this.store.trackLoggedIn();
+    this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
   }
 
@@ -39,6 +47,7 @@ export class AppComponent implements OnInit, OnDestroy  {
       console.log('Production build');
     }
     this.authService.initialize();
+    this._language = localStorage.getItem('language') ?? 'fi-FI';
     // Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
     // this.isInIframe = true;
@@ -54,6 +63,17 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.unsubscribe$.complete();
   }
 
+  get language(): string {
+    return this._language;
+  }
+
+  set language(value: string) {
+    if (value !== this._language) {
+      localStorage.setItem('language', value);
+      window.location.reload();
+    }
+  }
+
   private getIsInIframe(): boolean {
     try {
       return window.self !== window.top;
@@ -62,16 +82,29 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
   }
 
+  public goTo(view: 'profile' | 'settings') {
+    const courseID = getCourseIDfromURL();
+    const route = '/course/' + courseID + '/' + view;
+    this.router.navigateByUrl(route);
+  }
+
   public logoClicked() {
     this.store.sendMessage('go begin');
   }
 
+  public openInNewTab(): void {
+    window.open(window.location.href, '_blank');
+  }
+
+  public toggleLanguage() {
+    this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
+  }
+
   // Seurataan kurssi ID:ä URL:sta.
   private trackCourseID(): void {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      const courseID = paramMap.get('courseid');
-      if (courseID != null) this.courseID = courseID;
-      // Älä ota pois. Tällä sivulla toistaiseksi tarvitsee.
+    this.route.paramMap.subscribe(() => {
+      // Ei toimi route.paramMap upotuksessa.
+      this.courseID = getCourseIDfromURL();
     })
   }
 

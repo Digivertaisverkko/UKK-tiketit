@@ -1,7 +1,7 @@
-import {  AfterViewInit, Component, EventEmitter, Input, Output, OnDestroy,
-  OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {  AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
+    ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,6 +12,7 @@ import { StoreService } from '@core/services/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from '@core/core.models';
 import { SortableTicket } from '../../ticket.models';
+import { ticketDummyData } from '@ticket/ticket.dummydata';
 
 interface ColumnDefinition {
   def: string;
@@ -28,6 +29,36 @@ interface ErrorNotification {
   buttonText?: string
 }
 
+/* Tämä tarvitaan mat-tablen oletuksen sijaan, jotta voi etsiä myös lisäkenttien
+tiedoilla. */
+const customFilterPredicate = (data: SortableTicket, filter: string) => {
+  const filterValue = filter.toLowerCase();
+
+  const kentatMatch = data.kentat.some((item) => {
+    const tiketti = item.tiketti ? item.tiketti : '';
+    const arvo = item.arvo ? item.arvo.toLowerCase() : '';
+    const otsikko = item.otsikko ? item.otsikko.toLowerCase() : '';
+
+    return (
+      tiketti === filterValue ||
+      arvo.includes(filterValue) ||
+      otsikko.includes(filterValue)
+    );
+  });
+  const datePipe = new DatePipe('fi-FI');
+  const attachmentStr = $localize `:@@liite:liite`;
+  const mainDataMatch = (
+    data.otsikko.toLowerCase().includes(filterValue) ||
+    datePipe.transform(data.aikaleima, 'shortDate')?.includes(filterValue) ||
+    datePipe.transform(data.viimeisin, 'shortDate')?.includes(filterValue) ||
+    data.viimeisinStr.toLowerCase().includes(filterValue) ||
+    data.aloittajanNimi.toLowerCase().includes(filterValue) ||
+    data.tila.toLowerCase().includes(filterValue) ||
+    data.liite === true && attachmentStr.includes(filterValue)
+  );
+  return kentatMatch || mainDataMatch;
+};
+
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
@@ -37,11 +68,11 @@ interface ErrorNotification {
 export class TicketListComponent implements OnInit, AfterViewInit {
 
   // UKK:sta kopioitaessa @Input:na courseid oli undefined.
-  public readonly courseID: string | null = this.route.snapshot.paramMap.get('courseid');
+  @Input() public courseid: string = '';
   @Input() public user: User | null = null;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
-  public columnDefinitions: ColumnDefinition[];
+  public columnDefinitions!: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
   public dataSourceArchived = new MatTableDataSource<SortableTicket>();
   public error: ErrorNotification | null = null;
@@ -63,21 +94,13 @@ export class TicketListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private responsive: BreakpointObserver,
-    private route: ActivatedRoute,
     private store : StoreService,
     private ticket: TicketService,
   ) {
     const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
     this.fetchTicketsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
     this.trackMessages$ = this.store.trackMessages().pipe(takeUntilDestroyed());
-
-    this.columnDefinitions = [
-      { def: 'tila', showMobile: true },
-      { def: 'otsikko', showMobile: true },
-      { def: 'aloittajanNimi', showMobile: false },
-      { def: 'aikaleima', showMobile: false }
-    ];
-
+    this.setBaseColumnDefinitions();
     this.isArchivedShown = window.sessionStorage.getItem('SHOW_ARCHIVED') === 'true' ?
         true : false;
   }
@@ -96,20 +119,19 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.trackMessages();
   }
 
-  //hakutoiminto, jossa paginointi kommentoitu pois
-  public applyFilter(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
+  public applyFilter(filterValue: string) {
     filterValue = filterValue.trim().toLowerCase();
     this.dataSource.filter = filterValue;
-      /*if (this.dataSourceFAQ.paginator) {
-        this.dataSourceFAQ.paginator.firstPage();
-      }*/
+  }
+
+  private static customFilterPredicate(data: SortableTicket, filter: string): boolean {
+    return customFilterPredicate(data, filter);
   }
 
   // Hae arkistoidut tiketit.
   public fetchArchivedTickets() {
-    if (this.courseID === null) return
-    this.ticket.getTicketList(this.courseID, { option: 'archived' })
+    if (this.courseid === null) return
+    this.ticket.getTicketList(this.courseid, { option: 'archived' })
       .then(response => {
         if (response === null) response = [];
         if (response.length > 0) {
@@ -123,20 +145,34 @@ export class TicketListComponent implements OnInit, AfterViewInit {
 
   // Hae tiketit kerran.
   public fetchTickets(courseID: string) {
-    this.ticket.getTicketList(courseID).then(response => {
+    this.ticket.getTicketList(courseID).then((response: SortableTicket[] | null) => {
+      // response = ticketDummyData.ticketListClientData;
+      // console.log('comp res:');
+      // console.dir(response);
       if (!response) return
       if (response.length > 0) {
         this.error = null;
+        const hasAttachment = response.some(ticket => ticket.liite === true);
+        this.setBaseColumnDefinitions();
+        if (hasAttachment) {
+          this.columnDefinitions.push({ def: 'liite', showMobile: false })
+        }
         this.dataSource = new MatTableDataSource(response);
         this.numberOfQuestions = response.length;
         // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
         // jotta sorting toimii.
         this.dataSource.sort = this.sortQuestions;
+        this.dataSource.filterPredicate = TicketListComponent.customFilterPredicate;
+        // const sortFn = this.dataSource.sort;
+        // console.log('comp: ' + sortFn?.sortables.size);
       }
       return
-      // this.dataSource.paginator = this.paginator;
     }).catch(error => {
-      this.handleError(error)
+      this.error = {
+        title: $localize`:@@Virhe:Virhe`,
+        message: $localize`:@@Kysymysten hakeminen ei onnistunut:
+          Kysymysten hakeminen ei onnistunut.`
+      }
     }).finally(() => {
       if (this.isPolling === false) {
         this.isPolling = true;
@@ -168,15 +204,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // TODO: lisää virheilmoitusten käsittelyjä.
-  private handleError(error: any) {
-    this.error = {
-      title: $localize`:@@Virhe:Virhe`,
-      message: $localize`:@@Kysymysten hakeminen ei onnistunut:
-        Kysymysten hakeminen ei onnistunut.`
-    }
-  }
-
   public hideArchived() {
     this.isArchivedShown = false;
     window.sessionStorage.setItem('SHOW_ARCHIVED', 'false');
@@ -184,11 +211,20 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.archivedCount = 0;
   }
 
-    // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
+  // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
-    const link = '/course/' + this.courseID + '/submit' + (linkEnding ?? '');
+    const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
     window.localStorage.setItem('REDIRECT_URL', link);
+  }
+
+  private setBaseColumnDefinitions() {
+    this.columnDefinitions = [
+      { def: 'tila', showMobile: true },
+      { def: 'otsikko', showMobile: true },
+      { def: 'aloittajanNimi', showMobile: false },
+      { def: 'viimeisin', showMobile: false }
+    ];
   }
 
   public showArchived() {
@@ -213,16 +249,14 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     let fetchStartTime: number | undefined;
     let elapsedTime: number | undefined;
     const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
-    console.log('startPollingTickets 1');
     this.fetchTicketsTimer$.subscribe(() => {
-      console.log('startPollingTickets 2');
-      this.fetchTickets(this.courseID!);
+      this.fetchTickets(this.courseid!);
       if (fetchStartTime) {
         elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
         console.log('Tikettien pollauksen viime kutsusta kulunut aikaa ' +
           `${elapsedTime} sekuntia.`);
         if (elapsedTime !== POLLING_RATE_SEC) {
-          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+          console.log(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
         }
       }
       fetchStartTime = Date.now();
@@ -236,7 +270,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
           console.log('trackMessages: saatiin refresh pyyntö.');
           this.startLoading();
           setTimeout(() => this.stopLoading(), 800);
-          this.fetchTickets(this.courseID!);
+          this.fetchTickets(this.courseid!);
         }
     });
   }

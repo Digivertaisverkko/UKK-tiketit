@@ -21,7 +21,7 @@ export const NOOP_VALUE_ACCESSOR: ControlValueAccessor = {
 const nodeViews = {
   code_mirror: (node: ProseMirrorNode,
                 view: EditorView,
-                getPos: () => number): CodeMirrorView => {
+                getPos: () => number | undefined): CodeMirrorView => {
     return new CodeMirrorView({
       node,
       view,
@@ -50,7 +50,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   editor!: Editor;
   toolbar: Toolbar = [
     ['bold', 'italic', 'underline', 'strike'],
-    ['code', 'blockquote'],
+    ['blockquote'],
     ['ordered_list', 'bullet_list'],
     ['image']
   ];

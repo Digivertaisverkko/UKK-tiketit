@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Renderer2,
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Renderer2,
         ViewChild  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -11,12 +11,21 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class PrivacyModalComponent implements AfterViewInit {
 
   @ViewChild('dialogContent') dialogContent!: ElementRef;
+  @ViewChild('dataRemoval') dataRemovalElement!: ElementRef;
 
-  constructor (public modalRef: MatDialogRef<PrivacyModalComponent>) {
+  constructor (
+    public modalRef: MatDialogRef<PrivacyModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngAfterViewInit(): void {
-    this.dialogContent.nativeElement.scrollTop = 0;
+    if (!this.data) {
+      this.dialogContent.nativeElement.scrollTop = 0;
+    } else if (this.data.scrollToDataRemoval) {
+      this.dataRemovalElement.nativeElement.scrollIntoView(
+        { behavior: 'smooth', block: 'start', inline: 'nearest' }
+      );
+    } 
   }
 
   public closeModal() {

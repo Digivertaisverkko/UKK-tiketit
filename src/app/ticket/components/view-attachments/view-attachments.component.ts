@@ -1,27 +1,29 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
     from '@angular/core';
-import { TicketService } from '@ticket/ticket.service';
-import { Liite } from '@ticket/ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
+import { Liite } from '@ticket/ticket.models';
+import { TicketService } from '@ticket/ticket.service';
 
 @Component({
   selector: 'app-view-attachments',
   template: `
     <div class="attachments-wrapper">
       <button
+          aria-label="Lataa liitetiedosto"
           class="attachment"
           (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
+          i18n-aria-label="@@Lataa liitetiedosto"
           matTooltip="{{file.nimi}}"
           [matTooltipShowDelay]="600"
           *ngFor="let file of files; let i = index"
           >
-          <div class="filename">{{ file.nimi }}</div>
+          <span class="filename">{{ file.nimi }}</span>
           &nbsp;
           <div class="filesize">
             ({{ file.koko | filesize : { locale: 'fi', round: 1,
                 separator: ",", pad: true } }})
           </div>
-          <mat-icon>download</mat-icon>
+          <mat-icon aria-hidden="true">download</mat-icon>
       </button>
     </div>`,
 
@@ -35,7 +37,7 @@ export class ViewAttachmentsComponent {
   @Input() ticketID: string = '';
   @Output() errorMessage = new EventEmitter<string>();
 
-  constructor(private ticketService: TicketService) {}
+  constructor(private tickets: TicketService) {}
 
   public downloadFile(ticketID: string, commentID: string, fileID: string,
       filename: string)
@@ -45,7 +47,7 @@ export class ViewAttachmentsComponent {
       console.error('Ei kurssi ID:ä.')
       return
     }
-    this.ticketService.getFile(ticketID, commentID, fileID, courseID).then(response => {
+    this.tickets.getFile(ticketID, commentID, fileID, courseID).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');

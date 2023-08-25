@@ -2,18 +2,18 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Validators as EditorValidators } from 'ngx-editor';
 import { Subject } from 'rxjs';
 
-import { CourseService } from '@course/course.service';
-import schema from '@shared/editor/schema';
-import { EditAttachmentsComponent }
-    from '@ticket/components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, FileInfo, Kentta, Liite, Tiketti, UusiUKK }
     from '@ticket/ticket.models';
-import { TicketService } from '@ticket/ticket.service';
+import { CourseService } from '@course/course.service';
+import { EditAttachmentsComponent }
+    from '@ticket/components/edit-attachments/edit-attachments.component';
+import schema from '@shared/editor/schema';
 import { StoreService } from '@core/services/store.service';
+import { TicketService } from '@ticket/ticket.service';
 
 @Component({
   selector: 'app-submit-faq',
@@ -23,11 +23,12 @@ import { StoreService } from '@core/services/store.service';
 
 export class SubmitFaqComponent implements OnInit {
   @Input() public attachmentsMessages: string = '';
-  @Input() courseid!: string;
+  @Input() public courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
-  @Input() id!: string;
+  @Input() public id!: string;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
 
+  // Muokataanko jo aiemmin lisättyä UKK:a.
   public editExisting: boolean = window.history.state.editFaq ?? false;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -139,13 +140,14 @@ export class SubmitFaqComponent implements OnInit {
   private fetchAdditionalFields(): void {
     this.courses.getTicketFieldInfo(this.courseid)
     .then((response) => {
-      this.ticketFields = response as Kentta[];
+      this.ticketFields = response.kentat as Kentta[];
       this.buildAdditionalFields();
     });
   }
 
   private fetchTicketInfo(ticketId: string, courseId: string): void {
     this.ticketService.getTicket(ticketId, courseId).then(response => {
+
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
       // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
@@ -160,9 +162,14 @@ export class SubmitFaqComponent implements OnInit {
       /* Käydään läpi kaikki kommentit ja asetetaan tilan 5 eli
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena
       viimeinen ratkaisuehdotus jää oletusvastaukseksi. */
-      for (let comment of response.kommentit) {
-        if (comment.tila === 5) {
-          this.form.controls['answer'].setValue(comment.viesti);
+
+      if (this.editExisting) {
+        this.form.controls['answer'].setValue(response.kommentit[0].viesti);
+      } else {
+        for (let comment of response.kommentit) {
+          if (comment.tila === 5) {
+            this.form.controls['answer'].setValue(comment.viesti);
+          }
         }
       }
     });
@@ -180,7 +187,8 @@ export class SubmitFaqComponent implements OnInit {
 
   private prepareSendFiles(response?: any): void {
     if (!this.editExisting && response?.uusi == null) {
-      this.errorMessage = 'Liitetiedostojen lähettäminen epäonnistui.';
+      this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
+        onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
       throw new Error('Ei tarvittavia tietoja tiedostojen lähettämiseen.');
     }
     let ticketID, commentID;
@@ -219,9 +227,7 @@ export class SubmitFaqComponent implements OnInit {
         if (response === null || response?.success !== true) {
           throw new Error('UKK:n muokkaaminen epäonnistui.');
         }
-        console.log('poistettavia tiedostoja: ' + this.attachments.filesToRemove.length);
         if (this.attachments.filesToRemove.length === 0) {
-          console.log('ei poistettavaa');
           return true
         }
         return this.attachments.removeSentFiles();
@@ -237,7 +243,6 @@ export class SubmitFaqComponent implements OnInit {
         // ? lisää eri virhekoodeja?
         this.state = 'editing';
         this.form.enable();
-        // TODO: Muuta muokkaamiseksi.
         this.errorMessage = $localize`:@@UKK muokkaaminen epäonnistui:
             Usein kysytyn kysymyksen muokkaaminen ei onnistunut` + '.';
       });
@@ -273,15 +278,9 @@ export class SubmitFaqComponent implements OnInit {
     .catch((res: any) => {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
           onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
-      console.log(this.router.url + ': saatiin virhe: ' + res);
       this.state = 'editing';
       this.form.enable();
     })
-    .finally(() => {
-      console.log('Komponentti: Kaikki valmiita!');
-      // Kommentoi alla olevat, jos haluat, että jää näkyviin.
-      // this.attachments.clear();
-    });
   }
 
 }

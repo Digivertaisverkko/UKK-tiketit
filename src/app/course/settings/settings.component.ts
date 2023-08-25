@@ -1,13 +1,15 @@
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
+    from '@angular/forms';
 import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Observable, takeWhile, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { CourseService } from '../course.service';
 import { environment } from 'src/environments/environment';
 import { GenericResponse, Role, User } from '@core/core.models';
+import { isEmail } from '@shared/directives/is-email.directive';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,14 +21,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class SettingsComponent implements OnInit {
 
   @Input() courseid!: string;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   public errorMessage: string = '';
   public fieldList: Kenttapohja[] = [];
   public form: FormGroup = this.buildForm();
   public inviteErrorMessage: string = '';
   public inviteMessage: string = '';
-  public isDirty: boolean = false;
   public isLoaded: boolean = false;
   public message: string = '';
+  public settingsError: string = '';
+  public settingsForm: FormGroup = this.buildSettingsForm();
+  public settingsMessage: string = '';
   public showConfirm: boolean = false;
   private fetchFieldTimer$: Observable<number>;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
@@ -47,6 +52,10 @@ export class SettingsComponent implements OnInit {
     return this.form.get('email') as FormControl;
   }
 
+  get helpText(): AbstractControl {
+    return this.settingsForm.get('helpText') as FormControl;
+  }
+
   get role(): AbstractControl {
     return this.form.get('role') as FormControl;
   }
@@ -54,30 +63,56 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.titleServ.setTitle(this.store.getBaseTitle() + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
-
     this.trackUserInfo();
     this.trackIfParticipant();
     this.startPollingFields(this.POLLING_RATE_MIN);
   }
 
-  private buildForm(): FormGroup {
+  // Tee Form asetuksia varten.
+  private buildSettingsForm(): FormGroup {
     return this.formBuilder.group({
-      email: [ '', Validators.required ],
-      role: [ 1 ]
+      helpText: [ '' ]
     })
   }
 
+  // Tee Form sähköpostia varten.
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      email: [
+        '',
+        Validators.compose([
+          Validators.required
+        ])
+      ],
+      role: [ 1 ]
+    }, {
+      validators: [ isEmail('email') ]
+    }
+    )
+  }
+
+  // Lisäkenttien drag & drop:n jälkeen tehtävä.
   public drop(event: CdkDragDrop<string[]>) {
-    this.isDirty = true;
     moveItemInArray(this.fieldList, event.previousIndex, event.currentIndex);
     this.saveFields();
   }
 
-  public exportFAQs() {
-    const faq = $localize `:@@UKK:UKK`;
+  // Lataa UKK tai asetukset tiedostona.
+  public export(type: 'FAQs' | 'settings') {
+    let exportPromise: Promise<string>;
+    let filenameStart: string = '';
+    if (type === 'FAQs') {
+      filenameStart = $localize `:@@UKK:UKK`;
+      exportPromise = this.courses.exportFAQs(this.courseid);
+    } else if (type === 'settings') {
+      filenameStart = $localize `:@@Asetukset:Asetukset`;
+      exportPromise = this.courses.exportSettings(this.courseid);
+    } else {
+      throw Error('settings.component.export: Väärä parametri.');
+    }
     const courseName = this.store.getCourseName();
-    const filename = `${faq}-${courseName}.json`;
-    this.courses.exportFAQs(this.courseid).then(filecontent => {
+    const filename = `${filenameStart}-${courseName}.json`;
+    exportPromise.then(filecontent => {
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
       link.setAttribute(
@@ -87,16 +122,20 @@ export class SettingsComponent implements OnInit {
       link.click();
       link.remove();
     })
-    .catch(error => {
+    .catch(() => {
       this.errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
           Tiedoston lataaminen epäonnistui` + '.';
     });
   }
 
+  // Hae tiketin lisäkentät ja kuvaus ja päivitä ne lomakkeeseen.
   private fetchTicketFieldInfo(courseid: string) {
     this.courses.getTicketFieldInfo(courseid).then(response => {
-      if (response[0]?.otsikko != null) {
-        this.fieldList = response;
+      if (response.kentat[0]?.otsikko != null) {
+        this.fieldList = response.kentat;
+      }
+      if (response.kuvaus) {
+        this.settingsForm.controls['helpText'].setValue(response.kuvaus);
       }
       return
     }).catch(e => {
@@ -116,61 +155,109 @@ export class SettingsComponent implements OnInit {
     return role
   }
 
-  public sendInvite() {
+  private importFAQs(courseID: string, jsonData: JSON) {
+    this.courses.importFAQs(courseID, jsonData).then((res: GenericResponse) => {
+      if (res?.success === true) {
+        this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
+            Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
+      }
+    }).catch(e => {
+      this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
+        Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
+    })
+  }
+
+  private importSettings(courseID: string, jsonData: JSON) {
+    this.courses.importSettings(courseID, jsonData).then((res: GenericResponse) => {
+      if (res?.success === true) {
+        if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
+        this.message = $localize `:@@Lisättiin lisäkentät tälle kurssille:
+            Lisättiin asetukset tälle kurssille` + '.';
+      }
+    }).catch(e => {
+      this.errorMessage = $localize `:@@Lisäkenttien lisääminen epäonnistui:
+          Lisäkenttien lisääminen epäonnistui` + '.';
+    })
+  }
+
+  public onDragStarted() {
+    this.errorMessage = '';
+    this.message='';
+  }
+
+  // Kutsu ulkopuolisia kurssille.
+  public submitInvite() {
+    this.form.markAllAsTouched();
     this.inviteErrorMessage = '';
+    if (this.form.invalid) return;
     const email = this.form.controls['email'].value;
     const checkboxValue = this.form.controls['role'].value;
     const role: Role = this.getRole(checkboxValue);
-    console.log('lähetetään tiedot: email: ' + email + ', rooli: ' + role);
     this.courses.sendInvitation(this.courseid, email, role).then(res => {
       if (res?.success === true) {
         this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin kutsu onnistuneesti` + '.';
       } else {
-        console.log('kutsun lähettäminen epäonnistui.');
+        throw Error
       }
-    }).catch(err => {
+    }).catch(() => {
       this.inviteErrorMessage = $localize `:@@Käyttäjän kutsuminen epäonnistui:Kutsun lähettäminen ulkopuoliselle käyttäjälle ei onnistunut` + '.';
     })
   }
 
-  public onFileAdded(event: any) {
-    this.message = '';
-    const file: File = event.target.files[0];
-    if (!file) throw Error('Ei tiedostoa.');
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      let jsonData: JSON;
-      try {
-        jsonData = JSON.parse(fileReader.result as string);
-      } catch {
-        this.errorMessage = $localize `:@@Tiedoston sisältö on virheellisessä muodossa:
-        Tiedoston sisältö on virheellisessä muodossa` + '.';
-        return
+  public submitHelpText() {
+    if (this.settingsForm.invalid) return;
+    this.settingsError = '';
+    this.settingsMessage = '';
+    const helpText = this.helpText.value;
+    this.courses.setHelpText(this.courseid, helpText).then(res => {
+      if (res?.success === true) {
+        if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
+        this.settingsMessage = $localize `:@@Kysymysten lisäohjeen tallentaminen onnistui:Kysymysten lisäohjeen tallentaminen onnistui` + '.';
+        this.settingsForm.markAsPristine();
+      } else {
+        throw Error
       }
-      if (!this.courseid) throw Error('Ei kurssi ID:ä.');
-      this.courses.importFAQs(this.courseid, jsonData)
-        .then((res: GenericResponse) => {
-          if (res.success === true) {
-            this.message = $localize `:@@Lisättiin usein kysytyt kysymykset tälle kurssille:
-                Lisättiin usein kysytyt kysymykset tälle kurssille` + '.';
-          } else {
-            console.log('vastaus: ' + JSON.stringify(res));
-          }
-      }).catch(e => {
-        this.errorMessage = $localize `:@@UKKden lisääminen epäonnistui:
-          Usein kysyttyjen kysymysten lisääminen tälle kurssille ei onnistunut.`;
-      })
-    }
-    fileReader.readAsText(file);
+    }).catch(e => {
+      this.settingsError = $localize `:@@Kysymysten lisäohjeen tallentaminen ei onnistunut:Kysymysten lisäohjeen tallentaminen ei onnistunut` + '.';
+    })
+
   }
 
+  // Valitse UKK- tai asetustiedosto (jonka jälkeen se lisätään).
+  public pickFile(type: 'FAQs' | 'settings') {
+    const fileInput = this.fileInput.nativeElement;
+    fileInput.click();
+    this.errorMessage = '';
+    fileInput.addEventListener('change', (event: any) => {
+      const file: File = event.target.files[0];
+      if (!file) throw Error('Ei tiedostoa.');
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        let jsonData: JSON;
+        try {
+          jsonData = JSON.parse(fileReader.result as string);
+        } catch {
+          this.errorMessage = $localize `:@@Tiedoston sisältö on virheellisessä muodossa:
+          Tiedoston sisältö on virheellisessä muodossa` + '.';
+          return
+        }
+        if (type === 'FAQs') {
+          this.importFAQs(this.courseid, jsonData);
+        } else if (type === 'settings') {
+          this.importSettings(this.courseid, jsonData);
+        }
+      }
+      fileReader.readAsText(file);
+    })
+  }
+
+  // Tallenna lisäkentät drag & drobin jälkeen.
   public saveFields() {
     if (!this.courseid) throw Error('Ei kurssi ID:ä.');
     this.courses.setTicketField(this.courseid, this.fieldList)
       .then(response => {
         if (response === true ) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
-          this.isDirty = false;
           if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
         } else {
           throw Error('Ei onnistunut.');
@@ -207,7 +294,7 @@ export class SettingsComponent implements OnInit {
         console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
           `${elapsedTime} sekuntia.`);
         if (elapsedTime !== POLLING_RATE_SEC) {
-          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+          console.log(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
         }
       }
       fetchStartTime = Date.now();

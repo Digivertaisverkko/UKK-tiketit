@@ -43,8 +43,8 @@
         #submitForm="ngForm"
         >
     <mat-form-field class="field-title" appearance="fill">
-      <!-- <mat-label>{{ field.otsikko }}</mat-label> -->
       <input  formControlName="title"
+              id="field-name"
               i18n-placeholder="@@Kentän nimi"
               matInput
               maxlength="50"
@@ -52,6 +52,7 @@
               placeholder="Kentän nimi"
               />
               <!-- [(ngModel)]="field.otsikko" -->
+      <mat-label i18n="@@Kentän nimi">Kentän nimi</mat-label>
       <mat-hint align="end">{{ title.value.length }} / 50</mat-hint>
 
       <mat-error  i18n="@@Pakollinen kenttä."
@@ -110,23 +111,21 @@
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="addOnBlur"
                   (matChipInputTokenEnd)="addSelection($event)"
+                  maxlength="80"
                   placeholder="Paina enter valinnan kirjoittamisen jälkeen."
                   />
         </mat-chip-grid>
         <mat-hint align="end">
-          {{ getArraysStringLength(field.valinnat) }} / 255
+          {{ selectionName?.value?.length ?? 0 }} / 80
         </mat-hint>
-        <mat-error  i18n="@@Vaihtoehtojen merkkimäärä ylittyy"
-                    *ngIf="selections?.errors?.['maxLengthExceeded']"
-                    >
-          Vaihtoehtojen yhteenlaskettu merkkimäärä välimerkkeineen ylittää 255 merkin ylärajan.
-        </mat-error>
       </mat-form-field>
     </div>
 
     <!------------------------------------------------------------------------->
 
-    <p class="theme-label info-text-label" i18n="@@Infoteksti">Info-teksti</p>
+    <label class="theme-label info-text-label" for="info-text" i18n="@@Infoteksti">
+      Info-teksti
+    </label>
 
     <mat-form-field class="text-area-wrapper">
       <textarea autocomplete="off"
@@ -136,6 +135,7 @@
                 cdkTextareaAutosize
                 contenteditable
                 formControlName="infoText"
+                id="info-text"
                 i18n-placeholder="@@Infoteksti"
                 matInput
                 maxlength="255"

@@ -2,7 +2,7 @@
 
 <app-beginning-button
     (clicked)="showConfirm = true"
-    [confirm]="isDirty === true"
+    [confirm]=settingsForm.dirty
     >
 </app-beginning-button>
 
@@ -14,13 +14,65 @@
 
 <div class="view-wrapper" *ngIf="isLoaded">
 
-  <h2 class="theme-subheader" i18n="@@Kurssin asetukset">
+  <!----------------- Asetukset ----------------------------------------------->
+
+  <h2 class="theme-subheading" i18n="@@Kurssin asetukset">
       Kurssin asetukset
   </h2>
 
+  <h3 i18n="@@Kysymysten lisäohje opiskelijoille">
+    Kysymysten lisäohje opiskelijoille
+  </h3>
+
+  <p i18n="@@Ohje lisäohjeen tekemiselle">
+    Tämä vapaavalintainen ohje näytetään opiskelijoille aina uutta kysymystä tehdessä Viesti -kentän alapuolella.
+  </p>
+
+  <form [formGroup]="settingsForm"
+        (ngSubmit)="submitHelpText()"
+        >
+
+    <mat-form-field class="text-area-wrapper">
+      <textarea autocomplete="off"
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMaxRows="5"
+                cdkAutosizeMinRows="3"
+                cdkTextareaAutosize
+                contenteditable
+                (focus)="settingsMessage = ''"
+                formControlName="helpText"
+                id="help-text"
+                i18n-placeholder="@@Lisäohje opiskelijoille"
+                matInput
+                name="helpText"
+                placeholder="Lisäohje opiskelijoille"
+                >
+                <!-- maxlength="255" -->
+      </textarea>
+      <!-- <mat-hint align="end">{{ helpText.value.length }} / 255</mat-hint> -->
+    </mat-form-field>
+
+    <app-success *ngIf="settingsMessage.length >0">
+      {{ settingsMessage }}
+    </app-success>
+
+    <app-error  message="{{settingsError}}" *ngIf="settingsError.length >0">
+    </app-error>
+
+    <div class="theme-actions save-wrapper">
+      <button class=""
+      i18n="@@Tallenna"
+      mat-raised-button
+      type="submit"
+      >
+      Tallenna
+    </button>
+  </div>
+</form>
+
   <!----------------- Lisäkentät ---------------------------------------------->
 
-  <h3 class="table-header" i18n="@@Kysymysten lisäkentät">
+  <h3 class="fields-h3" i18n="@@Kysymysten lisäkentät">
     Kysymysten lisäkentät
   </h3>
 
@@ -36,11 +88,15 @@
         class="list-wrapper"
         *ngIf="fieldList.length > 0; else noFieldsMessage"
         >
-    <div class="list-row" *ngFor="let field of fieldList" cdkDrag>
+    <div  cdkDrag
+          (cdkDragStarted)="onDragStarted()"
+          class="list-row"
+          *ngFor="let field of fieldList"
+          >
       <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
-      <div class="title-column">{{ field.otsikko }}</div>
-      <div class="info-text-column">{{ field.ohje }}</div>
-      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id" >
+      <div class="column">{{ field.otsikko }}</div>
+      <div class="column">{{ field.ohje }}</div>
+      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id">
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
@@ -69,7 +125,7 @@
 
 <app-success *ngIf="message.length >0">{{ message }}</app-success>
 
-<div class="theme-actions" *ngIf="errorMessage.length === 0">
+<div class="add-field-wrapper" *ngIf="errorMessage.length === 0">
 
   <button class="add-button"
           i18n="@@Lisää kenttä"
@@ -80,50 +136,88 @@
   </button>
 </div>
 
-<!----------------- UKK Siirtäminen ------------------------------------------->
+<!----------------- UKK ja asetusten siirtäminen ------------------------------>
 
 <div class="vertical-spacer"></div>
 
 <h3 class="theme-subheader faq-transfer-h2"
-    i18n="@@Usein kysyttyjen kysymysten siirtäminen"
+    i18n="@@Kurssin siirtäminen"
     >
-  Usein kysyttyjen kysymysten siirtäminen
+  Kurssin siirtäminen
 </h3>
 
-<!-- Ei näytetä käyttäjällä, koska näytetään muotoiltu nappi tämän sijaan. -->
+<!---- Ei näytetä käyttäjällä, koska tiedoston valitsimen aktivointiin käytetään
+  parent componentissa olevaa nappia. Tämän vuoksi ei käytetä label-elementtia.
+-->
 <input  accept=".json"
-        aria-disabled="true"
-        (change)="onFileAdded($event)"
+        aria-hidden="true"
         class="file-input"
         #fileInput
-        multiple
-        style="display: none"
         type="file"
         >
 
-<div class="transfer-buttons-wrapper">
-  <button i18n="@@Lataa tiedostona"
-          (click)="exportFAQs()"
+<div class="transfer-buttons-grid">
+  <div  class="file-buttons-label"
+        i18n="@@Usein kysytyt kysymykset"
+        >
+    Usein kysytyt kysymykset
+  </div>
+  <div  class="file-buttons-label course-settings-text"
+        i18n="@@Kurssin asetukset"
+        >
+      Kurssiasetukset
+  </div>
+
+  <button aria-label="Lisää usein kysytyt kysymykset"
+          class="faq-button"
+          (click)="pickFile('FAQs')"
+          i18n="@@Lisää tiedostona"
+          i18n-aria-label="@@Lisää usein kysytyt kysymykset"
+          mat-raised-button
+          >
+    Lisää&nbsp;tiedostosta
+  </button>
+
+  <button aria-label="Lisää kurssiasetukset"
+          class="setting-button add-settings-button"
+          (click)="pickFile('settings')"
+          i18n="@@Lisää tiedostona"
+          i18n-aria-label="@@Lisää kurssiasetukset"
+          mat-raised-button
+          >
+    Lisää&nbsp;tiedostosta
+  </button>
+
+  <button aria-label="Lataa usein kysytyt kysymykset"
+          class="faq-button"
+          (click)="export('FAQs')"
+          i18n="@@Lataa tiedostona"
+          i18n-aria-label="@@Lataa usein kysytyt kysymykset"
           mat-raised-button
           type="button"
           >
-    Lataa tiedostona
+    Lataa&nbsp;tiedostona
   </button>
-  <button i18n="@@Lisää tiedostona"
+
+  <button aria-label="Lataa kurssiasetukset"
+          class="setting-button"
+          (click)="export('settings')"
+          i18n="@@Lataa tiedostona"
+          i18n-aria-label="@@Lataa kurssiasetukset"
           mat-raised-button
-          (click)="fileInput.click()"
+          type="button"
           >
-    Lisää tiedostosta
+    Lataa&nbsp;tiedostona
   </button>
 </div>
 
-<!---------------- Ulkopuolisten kutsuminen --------------------------------->
+<!---------------- Ulkopuolisten kutsuminen ----------------------------------->
 
 <div class="vertical-spacer"></div>
 
 <form class="invite-form"
       [formGroup]="form"
-      (ngSubmit)="sendInvite()"
+      (ngSubmit)="submitInvite()"
       >
 
   <h2 class="theme-subheading" i18n="@@Kutsu ulkopuolisia kurssille">
@@ -135,8 +229,8 @@
   </p>
 
   <app-error  i18n-title="@@Virhe"
-              *ngIf="inviteErrorMessage.length > 0"
               message="{{ inviteErrorMessage }}"
+              *ngIf="inviteErrorMessage.length > 0"
               [styles]="{ margin: '1em 0 1em 0' }"
               title="Virhe"
               >
@@ -144,16 +238,37 @@
 
   <div class="invite-wrapper">
 
-    <mat-form-field class="invite-field">
-      <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-      <input formControlName="email" matInput (value)="email">
-      <mat-error  i18n="@@Pakollinen kenttä."
-                  *ngIf="email.errors?.['required']"
-                  >
-        Pakollinen kenttä.
-      </mat-error>
-    </mat-form-field>
+    <div class="invite-left-wrapper">
+      <mat-form-field class="invite-field">
+        <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
+        <input formControlName="email" matInput (value)="email">
+        <mat-error  i18n="@@Pakollinen kenttä."
+                    *ngIf="email.errors?.['required']"
+                    >
+          Pakollinen kenttä.
+        </mat-error>
+        <mat-error  i18n="@@Ei ole sähköpostiosoite"
+                    *ngIf="email.errors?.['notEmail']"
+                    >
+          Ei ole sähköpostiosoite.
+        </mat-error>
+      </mat-form-field>
 
+      <div>
+        <mat-label class="role-label">
+          <span i18n="@@Rooli">Rooli</span>:
+        </mat-label>
+        <mat-radio-group formControlName="role">
+          <mat-radio-button [value]=1 i18n="@@Opiskelija">
+            Opiskelija
+          </mat-radio-button>
+          <mat-radio-button [value]=2 i18n="@@Opettaja">
+            Opettaja
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+    </div>
 
     <button class="invite-button"
             color="primary"
@@ -163,17 +278,7 @@
       Kutsu
     </button>
 
-    </div>
-
-    <mat-label class="role-label"><span i18n="@@Rooli">Rooli</span>:</mat-label>
-    <mat-radio-group formControlName="role">
-      <mat-radio-button [value]=1 i18n="@@Opiskelija">
-        Opiskelija
-      </mat-radio-button>
-      <mat-radio-button [value]=2 i18n="@@Opettaja">
-        Opettaja
-      </mat-radio-button>
-    </mat-radio-group>
+  </div>
 
   <app-success *ngIf="inviteMessage.length >0">
     {{ inviteMessage }}

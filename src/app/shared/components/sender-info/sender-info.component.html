@@ -1,7 +1,16 @@
 <div class="user-info-block"  [ngStyle]="styles">
 
   <ng-container *ngIf="alignLeft === true">
-    <img mat-card-avatar src="assets/logos/UniOulu.png" alt="">
+    <div  aria-hidden="true"
+          class="circle"
+          [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
+          [style.background-color]="avatarColor.background"
+          [style.outline-color]="avatarColor.background"
+          >
+      <div class="initials" [style.color]="avatarColor.text">
+        {{ userNameInitials }}
+      </div>
+    </div>
   </ng-container>
 
   <div  class="text-info"
@@ -12,21 +21,37 @@
       <span>{{ senderTitle }}</span>
       –
 
-      <span *ngIf="aikaleima === 'now'; else hasDate">
-        {{ nyt }}
-      </span>
+      <!----- Aikaleima ------------------------------------------------------->
 
+      <span i18n="@@Nyt" *ngIf="aikaleima === 'now'; else hasDate">
+        Nyt
+      </span>
       <ng-template #hasDate>
 
-        <span *ngIf="isItToday; else notToday" i18n="@@Tänään">
-          Tänään
-        </span>
+        <span>{{createdString}}&nbsp;</span>
 
-        <ng-template #notToday>
-          <span>{{ aikaleima | date: 'shortDate' }}</span>
-        </ng-template>
+        <span i18n="@@klo">klo</span>
+        <span>&nbsp;{{ aikaleima | date: 'shortTime'}}</span>
 
-        <span>&nbsp;{{ aikaleima | date: 'shortTime' }}</span>
+        <!----- Muokkauksen aikaleima ----------------------------------------->
+
+        <ng-container *ngIf="muokattu && aikaleima !== muokattu">,
+
+          <span i18n="@@muokattu">muokattu</span><span>&nbsp;</span>
+
+          <ng-container *ngIf="isEditedYesterday">
+            <span i18n="@@Eilen">{{ 'eilen' | lowercase }}</span>
+            <span>&nbsp;</span>
+          </ng-container>
+
+          <ng-template *ngIf="!isEditedToday">
+            <span>{{muokattu | date: 'shortDate'}}</span>
+          </ng-template>
+
+          <span i18n="@@klo">klo</span>
+          <span>&nbsp;{{muokattu | date: 'shortTime'}}</span>
+
+        </ng-container>
 
       </ng-template>
 
@@ -34,7 +59,17 @@
   </div>
 
   <ng-container *ngIf="alignLeft === false">
-    <img mat-card-avatar src="assets/logos/UniOulu.png" alt="">
+    <!-- <img mat-card-avatar src="assets/logos/UniOulu.png" alt=""> -->
+      <div  aria-hidden="true"
+            class="circle"
+            [ngClass]="{'circle-teacher': user?.asema === 'opettaja'}"
+            [style.background-color]="avatarColor.background"
+            [style.outline-color]="avatarColor.background"
+            >
+        <div class="initials" [style.color]="avatarColor.text">
+          {{ userNameInitials }}
+        </div>
+      </div>
   </ng-container>
 
 </div>

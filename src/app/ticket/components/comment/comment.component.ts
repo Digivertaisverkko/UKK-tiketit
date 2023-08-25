@@ -7,7 +7,6 @@ import { Subject, Subscription } from 'rxjs';
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
 import { getCourseIDfromURL } from '@shared/utils';
-import { isToday } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
@@ -27,6 +26,9 @@ export class CommentComponent implements AfterViewInit, OnInit{
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
+  /* Kopioi UKK:ksi näkymän yhteydessä näytetään alkuperäinen tiketti.
+     Tällöin editointi pois käytöstä yms. */
+  @Input() public isInCopyAsFAQ: boolean = false;
   // Lähettää ID:n, mitä kommenttia editoidaan.
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
   // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
@@ -66,6 +68,7 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.sender = this.comment.lahettaja;
+
   }
 
   private buildForm(): FormGroup {
@@ -107,10 +110,6 @@ export class CommentComponent implements AfterViewInit, OnInit{
     }
   }
 
-  public isToday(timestamp: string | Date) {
-    return isToday(timestamp);
-  }
-
   public removeComment(commentID: string) {
     const courseID = getCourseIDfromURL();
     if (!courseID) return
@@ -149,7 +148,6 @@ export class CommentComponent implements AfterViewInit, OnInit{
         this.sendFiles(this.ticketID, commentID);
         return
       }).catch(err => {
-        console.log('Kommentin muokkaaminen epäonnistui.');
         this.errorMessage = $localize `:@@Kommentin muokkaaminen epäonnistui:
             Kommentin muokkaaminen epäonnistui` + '.';
         this.state="editing";
@@ -162,11 +160,9 @@ export class CommentComponent implements AfterViewInit, OnInit{
     this.messages.emit('sendingFiles')
     this.attachments.sendFiles(ticketID, commentID)
       .then((res:any) => {
-        console.log('kaikki tiedostot valmiita.');
         this.stopEditing();
       })
       .catch((res:any) => {
-        console.log('ticket view: napattiin virhe: ' + res);
         this.errorMessage = $localize `:@@Kaikkien liitteiden lähettäminen ei onnistunut:
             Kaikkien liitteiden lähettäminen ei onnistunut` + '.';
         this.state="editing";

@@ -1,49 +1,88 @@
 <div class="app-wrapper">
 
-  <app-header *ngIf="!isInIframe">
-    <span class="spacer"></span>
-  </app-header>
+  <header>
+    <app-header *ngIf="!isInIframe">
+      <span class="spacer"></span>
+    </app-header>
 
-  <!-- style="display: none" -->
-  <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
+    <!-- Tämä on upotuksessa oleva kapeampi header. -->
+    <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
 
-    <div class="logo" *ngIf="courseID === null; else clickableLogo">
-      <img alt="" src="assets/logos/dvv-white.svg">
-    </div>
+      <div class="logo" *ngIf="courseID === null; else clickableLogo">
+        <img alt="" src="assets/logos/dvv-white.svg">
+      </div>
 
-    <ng-template #clickableLogo>
-      <div  class="logo logo-clickable"
-            matRipple
-            >
-      <img  alt=""
-            (click)="logoClicked()"
-            src="assets/logos/dvv-white.svg"
-            >
-        </div>
-    </ng-template>
-  
-    <span class="spacer"></span>
+      <ng-template #clickableLogo>
+        <div  class="logo logo-clickable"
+              matRipple
+              >
+        <img  alt=""
+              (click)="logoClicked()"
+              src="assets/logos/Tukki_logo_rgb_tummasini.svg"
+              >
+              <!-- src="assets/logos/dvv-white.svg" -->
+          </div>
+      </ng-template>
 
-    <div class="role theme-header-text-small">{{ (user$ | async)?.asemaStr }}</div>
-    <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
+      <span class="spacer"></span>
 
-    <button aria-label="Valikko"
-            i18n-aria-label="@@Valikko"
-            i18n-matTooltip="@@Valikko"
-            mat-icon-button
-            [matMenuTriggerFor]="menu"
-            [matTooltipShowDelay]="600"
-            matTooltip="Valikko"
-            >
-      <mat-icon>menu</mat-icon>
-      <!-- <mat-icon>account_circle</mat-icon> -->
-    </button>
+      <div class="role theme-header-text-small">{{ (user$ | async)?.asemaStr }}</div>
+      <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
 
-    <mat-menu #menu="matMenu">
-      <app-usermenu></app-usermenu>
-    </mat-menu>
+      <button aria-label="Valikko"
+              i18n-aria-label="@@Valikko"
+              i18n-matTooltip="@@Valikko"
+              mat-icon-button
+              [matMenuTriggerFor]="menu"
+              [matTooltipShowDelay]="600"
+              matTooltip="Valikko"
+              >
+        <mat-icon>menu</mat-icon>
+        <!-- <mat-icon>account_circle</mat-icon> -->
+      </button>
 
-  </mat-toolbar>
+      <mat-menu #menu="matMenu">
+        <button (click)="openInNewTab()"
+                i18n="@@Avaa uuteen välilehteen"
+                mat-menu-item
+                *ngIf="isInIframe"
+                >
+            Avaa uuteen välilehteen
+        </button>
+
+        <button mat-menu-item
+                (click)="toggleLanguage()"
+                [disabled]="disableLangSelect"
+                i18n="@@vaihda kieli"
+                >
+          Change to English
+        </button>
+
+        <button (click)="goTo('profile')"
+              i18n="@@Profiili"
+              i18n-aria-label="@@Profiili"
+              mat-menu-item
+              *ngIf="(isLoggedIn$ | async) === true && courseID"
+              >
+          Profiili
+        </button>
+
+        <button i18n="@@Kurssin asetukset"
+                mat-menu-item
+                *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                        (user$ | async)?.asema === 'admin') &&
+                        (isParticipant$ | async) === true &&
+                        courseID"
+                (click)="goTo('settings')"
+                >
+          Kurssin asetukset
+        </button>
+
+
+      </mat-menu>
+
+    </mat-toolbar>
+  </header>
 
   <main>
 

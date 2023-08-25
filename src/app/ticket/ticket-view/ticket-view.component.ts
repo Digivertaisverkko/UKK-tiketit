@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { Validators as EditorValidators } from 'ngx-editor';
 
@@ -13,6 +13,7 @@ import { TicketService  } from '../ticket.service';
 import { User } from '@core/core.models'
 
 import schema from '@shared/editor/schema';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-ticket-view',
@@ -23,14 +24,15 @@ import schema from '@shared/editor/schema';
 export class TicketViewComponent implements OnInit, OnDestroy {
 
   @Input() public attachmentsMessages: string = '';
-  // @Input() courseid!: string;
+  @Input() public courseid!: string;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public messagesFromComments: string = '';
+  /* Saadaan, jos komponentti on upotettuna esim. Kopioi UKK:ksi -toimintoa
+    käytettäessä. */
   @Input() ticketIdFromParent: string | null = null;
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public cantRemoveTicket: string;
-  public courseid: string | null = this.route.snapshot.paramMap.get('courseid');
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   public form: FormGroup = this.buildForm();
@@ -38,6 +40,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public isEditable: boolean = false;
   public isEditingComment: boolean = false;
   public isLoaded: boolean = false;
+  public isPolling: boolean = false;
   public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
   public newCommentState: 3 | 4 | 5 = 4;
@@ -50,7 +53,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public user: User = {} as User;
   public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
-  private isPolling: boolean = false;
+  private loggedIn$: Observable<boolean|null>
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -68,13 +71,16 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ) {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
-    this.ticketID = this.ticketIdFromParent !== null
+        this.ticketID = this.ticketIdFromParent !== null
         ? this.ticketIdFromParent
         : String(this.route.snapshot.paramMap.get('id'));
+        this.loggedIn$ = this.store.onIsUserLoggedIn().pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
+    this.trackLoggedIn();
     this.store.trackUserInfo().subscribe(response => {
+      this.isLoaded = true;
       if (response?.nimi != null) {
         this.user = response;
         if (this.user.asema === null) {
@@ -91,7 +97,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
       }
     });
-
   }
 
   ngOnDestroy(): void {
@@ -111,7 +116,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       if (error?.tunnus == 1003) {
         this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
       } else {
-        this.errorMessage = "Kysymyksen arkistointi ei onnistunut.";
+        this.errorMessage = $localize `:Kysymyksen asettaminen ratkaistuksi ei onnistunut:
+            Kysymyksen asettaminen ratkaistuksi ei onnistunut` + '.';
       }
     })
   }
@@ -156,6 +162,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
+      console.log('component:');
+      console.dir(response);
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
@@ -183,24 +191,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.router.navigate([url], { state: { editTicket: 'true' } });
   }
 
-  public removeTicket(ticketID: string, courseID: string): void {
-    this.ticketService.removeTicket(ticketID, courseID).then(response => {
-      if (response?.success !== true ) {
-        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
-            Kysymyksen poistaminen ei onnistunut.`;
-      } else {
-        this.router.navigateByUrl('/course/' + this.courseid + '/list-tickets');
-      }
-    }).catch(error => {
-      if (error?.tunnus == 1003) {
-        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
-      } else {
-        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
-            Kysymyksen poistaminen ei onnistunut.`;
-      }
-    })
-  }
-
   public getCommentState(tila: number) {
     return this.ticketService.getTicketState(tila, this.user.asema);
   }
@@ -218,6 +208,24 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     } else if (event === "continue") {
       this.state = 'editing';
     }
+  }
+
+  public removeTicket(ticketID: string, courseID: string): void {
+    this.ticketService.removeTicket(ticketID, courseID).then(response => {
+      if (response?.success !== true ) {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
+            Kysymyksen poistaminen ei onnistunut.`;
+      } else {
+        this.router.navigateByUrl('/course/' + this.courseid + '/list-tickets');
+      }
+    }).catch(error => {
+      if (error?.tunnus == 1003) {
+        this.errorMessage = $localize `:@@Ei oikeuksia:Sinulla ei ole riittäviä käyttäjäoikeuksia` + '.';
+      } else {
+        this.errorMessage = $localize `:@@Kysymyksen poistaminen ei onnistunut:
+            Kysymyksen poistaminen ei onnistunut.`;
+      }
+    })
   }
 
   public sendComment(): void {
@@ -277,5 +285,15 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
     }
+
+
+  private trackLoggedIn() {
+    this.loggedIn$.subscribe(res => {
+      if (res === false) {
+        const route = `course/${this.courseid}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
+    })
+  }
 
 }

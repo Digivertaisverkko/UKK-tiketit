@@ -89,6 +89,7 @@ export class EditFieldComponent implements OnInit {
     if (selection) {
       this.selections?.markAsDirty();
       this.field.valinnat.push(selection);
+      this.selectionName?.setValue('');
     }
     event.chipInput!.clear();
   }
@@ -96,8 +97,8 @@ export class EditFieldComponent implements OnInit {
   private buildForm(): FormGroup {
     return this.formBuilder.group({
       title: [ '', Validators.required ],
-      areSelectionsEnabled: [ true ],
-      selections: [ [], [arrayLengthValidator()] ],
+      areSelectionsEnabled: [ false ],
+      selections: [ [] ],
       selectionName: [ '' ],
       infoText: [ '' ],
       mandatory: [ '' ],
@@ -153,14 +154,14 @@ export class EditFieldComponent implements OnInit {
   // Hae kentän tiedot editoidessa olemassa olevaa.
   private getFieldInfo(courseID: string, fieldID: string | null) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
-      if (!Array.isArray(response)) {
+      if (!(response?.kentat)) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
-      this.allFields = response;
+      this.allFields = response.kentat;
 
       if (this.allFields.length > 0 && this.fieldid) {
-        let matchingField = response.filter(field => String(field.id) === fieldID);
+        let matchingField = this.allFields.filter(field => String(field.id) === fieldID);
         if (matchingField == null) {
           throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
         }
@@ -179,7 +180,6 @@ export class EditFieldComponent implements OnInit {
       this.isLoaded = true;
       return
     }).catch(error => {
-      console.dir(error);
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)
@@ -187,7 +187,7 @@ export class EditFieldComponent implements OnInit {
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
   public onArrowLeft(event: any) {
-    console.log('Vasen nuoli painettu');
+    // console.log('Vasen nuoli painettu');
     // event.target === this.input.nativeElement &&
     if (event.key === 'ArrowLeft' && event.target.selectionStart === 0) {
       // if (this.chipGrid != null) this.chipGrid.last.focus();
@@ -234,7 +234,7 @@ export class EditFieldComponent implements OnInit {
         console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
           `${elapsedTime} sekuntia.`);
         if (elapsedTime !== POLLING_RATE_SEC) {
-          console.error(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
+          console.log(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
         }
       }
       fetchStartTime = Date.now();

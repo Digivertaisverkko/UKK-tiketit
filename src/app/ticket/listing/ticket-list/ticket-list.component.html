@@ -10,7 +10,7 @@
 
   <button aria-label="Virkistä näkymä"
           class="refresh-button"
-          (click)="fetchTickets(courseID!)"
+          (click)="fetchTickets(courseid!)"
           i18n-aria-label="@@Virkistä näkymä"
           i18n-matTooltip="@@Virkistä näkymä"
           mat-icon-button
@@ -21,7 +21,9 @@
     <mat-icon>refresh</mat-icon>
   </button>
 
-  <app-search-bar (searchResult)="applyFilter($event)" i18n="@@Suodata kysymyksiä">
+  <app-search-bar i18n="@@Suodata kysymyksiä"
+                  (searchResult)="applyFilter($event)"
+                  >
     Suodata kysymyksiä
   </app-search-bar>
 
@@ -31,7 +33,7 @@
         [dataSource]="dataSource"
         [hidden]="dataSource.filteredData.length === 0"
         matSort
-        matSortActive="aikaleima"
+        matSortActive="viimeisin"
         matSortDirection="desc"
         mat-table
         #sortQuestions="matSort"
@@ -50,7 +52,7 @@
     <td mat-cell *matCellDef="let element">
       <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
       <a  aria-disabled="true"
-          [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+          [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
           tabindex="-1"
           >
         <div class="ticket-state-wrapper">
@@ -75,15 +77,19 @@
   </ng-container>
 
   <ng-container matColumnDef="otsikko">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header
-        i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-        sortActionDescription="Järjestä otsikon mukaan">
+    <th *matHeaderCellDef
+        i18n-sortActionDescription="@@Järjestä otsikon mukaan"
+        i18n="@@Otsikko"
+        mat-sort-header
+        sortActionDescription="Järjestä otsikon mukaan"
+        mat-header-cell
+        >
       Otsikko
     </th>
     <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
     <td mat-cell *matCellDef="let element" >
       <a class="a-left-padding"
-          [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id">
+          [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id">
           {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko |
           slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
       </a>
@@ -91,7 +97,10 @@
   </ng-container>
 
   <ng-container matColumnDef="aloittajanNimi">
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
+    <th class="align-right"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
         sortActionDescription="Järjestä lähettäjän mukaan"
         i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"
         i18n="@@Lähettäjä">
@@ -100,7 +109,7 @@
     <td class="cell-align-right" mat-cell *matCellDef="let element">
       <a  aria-disabled="true" disabled
           class="cell-align-right"
-          [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+          [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
           tabindex="-1"
           >
         {{ element.aloittajanNimi }}
@@ -108,10 +117,13 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="aikaleima">
-    <th class="align-right" mat-header-cell *matHeaderCellDef mat-sort-header
-        sortActionDescription="Järjestä luodun päivämäärän mukaan"
-        i18n-sortActionDescription="@@Järjestä luodun mukaan"
+  <ng-container matColumnDef="viimeisin">
+    <th class="align-right no-left-padding"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription="Järjestä muokatun päivämäärän mukaan"
+        i18n-sortActionDescription="@@Järjestä muokatun mukaan"
         i18n="@@Muokattu"
         >
       Muokattu
@@ -119,11 +131,35 @@
     <td mat-cell *matCellDef="let element" class="cell-align-right">
       <a  aria-disabled="true"
           class="cell-align-right"
-          [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+          [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
           tabindex="-1"
           >
-        {{element.aikaleima | date: 'shortDate' }}
+          {{ element.viimeisinStr }}
+<!--         {{ element?.viimeisinTanaan === true ? 'Tänään' : (element.viimeisin |
+            date: element.viimeisin.getFullYear() === currentYear ?
+            'd.M' : 'shortDate' )}} -->
       </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="liite">
+    <th class="align-right no-left-padding"
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        >
+      &nbsp;
+    </th>
+    <td class="attachment-cell" mat-cell *matCellDef="let element">
+      <mat-icon aria-label="Liite"
+                i18n-aria-label="@@liite"
+                i18n-matTooltip="@@Sisältää liitetiedostoja"
+                matTooltip="Sisältää liitetiedostoja"
+                [matTooltipShowDelay]="600"
+                *ngIf="element.liite"
+                >
+        attach_file
+      </mat-icon>
     </td>
   </ng-container>
 
@@ -132,7 +168,7 @@
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
 
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()">
-    <!-- <a [routerLink]="'/course/' + courseID + '/ticket-view/' + row.id"></a> -->
+    <!-- <a [routerLink]="'/course/' + courseid + '/ticket-view/' + row.id"></a> -->
   </tr>
 
 </table>
@@ -203,11 +239,11 @@
           (click)="saveRedirectUrl()"
           [color]="user?.asema === 'opiskelija' ? 'primary' : ''"
           mat-raised-button
-          [routerLink]="'/course/' + this.courseID + '/submit'"
+          [routerLink]="'/course/' + this.courseid + '/submit'"
           target="_blank"
           >
     <a  i18n="@@Kysy opettajilta"
-        [routerLink]="'/course/' + this.courseID + '/submit'"
+        [routerLink]="'/course/' + this.courseid + '/submit'"
         >
       Kysy opettajilta
     </a>
@@ -215,65 +251,71 @@
 </div>
 
 
-<!-------------- Ratkaistut ------------------------------------------------>
+<!-------------- Ratkaistut --------------------------------------------------->
 
-<ng-container *ngIf="user?.asema === 'opettaja' || user?.asema === 'admin'">
+<!-- Älä korvaa ngIf:llä tai tableen, koska silloin ei sorting ei toimi. -->
+<div [ngStyle]="{ 'display': user?.asema === 'opettaja' ? 'block' : 'none' }">
 
-<h2 class="theme-subheading" i18n="@@Arkistoidut kysymykset" *ngIf="isArchivedShown">
+<h2 class="theme-subheading" i18n="@@Ratkaistut kysymykset" *ngIf="isArchivedShown">
   Ratkaistut kysymykset
 </h2>
 
 <table  class="theme-table mat-elevation-z1"
-        mat-table
         [dataSource]="dataSourceArchived"
         [hidden]="dataSourceArchived.filteredData.length === 0"
         matSort
-        matSortActive="aikaleima"
+        matSortActive="viimeisin"
         matSortDirection="desc"
-        *ngIf="archivedCount > 0"
+        mat-table
+        [ngStyle]="{ 'display': archivedCount > 0 ? 'table' : 'none' }"
         #sortArchived="matSort"
         >
+
 <ng-container matColumnDef="tila">
-<th i18n-sortActionDescription="@@Järjestä tilan mukaan"
-    i18n="@@Tila"
-    mat-sort-header
-    *matHeaderCellDef
-    mat-header-cell
-    sortActionDescription="Järjestä tilan mukaan"
-    >
-  Tila
-</th>
-<td mat-cell *matCellDef="let element">
-  <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
-  <a aria-disabled="true"
-    [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
-    tabindex="-1"
-    >
-    <div class="ticket-state-wrapper">
-      <div class="icon-wrapper">
-        <img alt=""
-            class="icon"
-            height="100%"
-            src="assets/icons/{{iconFile[element.tilaID]}}.svg"
-            width="100%"
-            >
+  <th i18n-sortActionDescription="@@Järjestä tilan mukaan"
+      i18n="@@Tila"
+      mat-sort-header
+      *matHeaderCellDef
+      mat-header-cell
+      sortActionDescription="Järjestä tilan mukaan"
+      >
+    Tila
+  </th>
+  <td mat-cell *matCellDef="let element">
+    <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->
+    <a aria-disabled="true"
+      [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
+      tabindex="-1"
+      >
+      <div class="ticket-state-wrapper">
+        <div class="icon-wrapper">
+          <img alt=""
+              class="icon"
+              height="100%"
+              src="assets/icons/{{iconFile[element.tilaID]}}.svg"
+              width="100%"
+              >
+        </div>
+        <div>{{ element.tila.substring(2) }}</div>
       </div>
-      <div>{{ element.tila.substring(2) }}</div>
-    </div>
-  </a>
-</td>
+    </a>
+  </td>
 </ng-container>
 
 <ng-container matColumnDef="otsikko">
-<th mat-header-cell *matHeaderCellDef mat-sort-header
-    i18n-sortActionDescription="@@Järjestä otsikon mukaan" i18n="@@Otsikko"
-    sortActionDescription="Järjestä otsikon mukaan">
+<th *matHeaderCellDef
+    i18n-sortActionDescription="@@Järjestä otsikon mukaan"
+    i18n="@@Otsikko"
+    mat-sort-header
+    sortActionDescription="Järjestä otsikon mukaan"
+    mat-header-cell
+    >
   Otsikko
 </th>
 <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
 <td mat-cell *matCellDef="let element" >
   <a class="a-left-padding"
-      [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+      [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
       >
         {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko |
             slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
@@ -296,7 +338,7 @@
   <a  aria-disabled="true"
       class="cell-align-right"
       disabled
-      [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+      [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
       tabindex="-1"
       >
     {{ element.aloittajanNimi }}
@@ -304,7 +346,7 @@
 </td>
 </ng-container>
 
-<ng-container matColumnDef="aikaleima">
+<ng-container matColumnDef="viimeisin">
 <th class="align-right"
     i18n-sortActionDescription="@@Järjestä muokatun mukaan"
     i18n="@@Muokattu"
@@ -318,12 +360,31 @@
 <td mat-cell *matCellDef="let element" class="cell-align-right">
   <a  aria-disabled="true"
       class="cell-align-right"
-      [routerLink]="'/course/' + courseID + '/ticket-view/' + element.id"
+      [routerLink]="'/course/' + courseid + '/ticket-view/' + element.id"
       tabindex="-1"
       >
-    {{ element.aikaleima | date: 'shortDate' }}
+    {{ element.viimeisinStr }}
   </a>
 </td>
+</ng-container>
+
+<ng-container matColumnDef="liite">
+  <th class="align-right no-left-padding"
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      >
+  <td class="attachment-cell"mat-cell *matCellDef="let element">
+    <mat-icon aria-label="Liite"
+              i18n-aria-label="@@liite"
+              i18n-matTooltip="@@Sisältää liitetiedostoja"
+              matTooltip="Sisältää liitetiedostoja"
+              [matTooltipShowDelay]="600"
+              *ngIf="element.liite"
+              >
+      attach_file
+    </mat-icon>
+  </td>
 </ng-container>
 
 <!--  ***** Rivit **** -->
@@ -331,7 +392,7 @@
 <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>
 
 <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()">
-<!-- <a [routerLink]="'/course/' + courseID + '/ticket-view/' + row.id"></a> -->
+<!-- <a [routerLink]="'/course/' + courseid + '/ticket-view/' + row.id"></a> -->
 </tr>
 
 </table>
@@ -350,7 +411,7 @@
   </p>
 </div>
 
-</ng-container>
+</div>
 
 <!--------------------------------------------------------------------------->
 

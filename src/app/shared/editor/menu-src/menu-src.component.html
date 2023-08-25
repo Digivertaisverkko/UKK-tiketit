@@ -1,5 +1,10 @@
-<div class="NgxEditor__MenuItem NgxEditor__MenuItem--Text" (mousedown)="onClick($event)"
-  [ngClass]="{'NgxEditor__MenuItem--Active': isActive, 'NgxEditor--Disabled': isDisabled}"
-  i18n="@@Lähdekoodi">
-  Lähdekoodi
+<div class="NgxEditor__MenuItem">
+  <div class="NgxEditor__MenuItem--IconContainer"
+    [class.NgxEditor__MenuItem--Active]="isActive"
+    [class.NgxEditor--Disabled]="isDisabled"
+    (mousedown)="onClick($event)"
+    [title]="title"
+    >
+    <mat-icon>code</mat-icon>
+  </div>
 </div>

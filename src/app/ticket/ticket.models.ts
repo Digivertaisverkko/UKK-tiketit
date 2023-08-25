@@ -16,7 +16,7 @@ export interface AddTicketResponse {
 }
 
 // 'error' tarkoittaa virhettä tiedoston valitsemisvaiheessa, uploadError
-// lähetysvaiheessa.
+// lähetysvaiheessa. Käytetään liitetiedostoja lisättäessä.
 export interface FileInfo {
   filename: string;
   file: File;
@@ -28,10 +28,8 @@ export interface FileInfo {
 }
 
 /* Tiketin lisäkenttä.
-Metodi: getTicketInfo -> getTickgetFields,
-API: /api/tiketti/:tiketti-id/kentat/
-Uusia propertyjä: tyyppi ja ohje.
-Palautustyypit tarkistettu 27.4.23. */
+Metodi: getFields
+API: /api/tiketti/:tiketti-id/kentat/ */
 export interface Kentta {
   id: string;
   otsikko: string;
@@ -45,11 +43,11 @@ export interface Kentta {
 
 // Tiketin kommentti
 // Metodi: getComments. API: /api/tiketti/:tiketti-id/kommentit/
-// TODO: tiketin ja kommentin aikaleimojen tyypin voisi yhtenäistää.
 export interface Kommentti {
   id: string;
   lahettaja: User;
   aikaleima: Date;
+  muokattu: Date;
   tila: number;
   viesti: string;
   liitteet: Array<Liite>;
@@ -71,21 +69,39 @@ export interface NewCommentResponse {
 export interface SortableTicket {
   id: number;
   otsikko: string;
-  aikaleima: string;
+  aikaleima: Date;
   aloittajanNimi: string
   tilaID: number;
   tila: string;
+  liite?: boolean;
+  viimeisin: Date;
+  viimeisinStr: string;
+  kentat: TikettiListanKentta[];
 }
 
-// Metodi: getQuestions, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
-// Tikettilistan näyttämistä varten.
-export interface TiketinPerustiedot {
+// Käytetään pohjana muihin interfaceihin. 
+interface Tikettipohja {
   id: string;
   otsikko: string;
-  aikaleima: string;
+  aikaleima: Date;
   aloittaja: User;
+  kurssi: number;
   tila: number;
+  ukk: boolean;
+}
+
+interface TikettiListanKentta {
+    tiketti: number;
+    arvo: string;
+    otsikko: string;
+}
+
+// Metodi: getTicketList, API: /api/kurssi/:kurssi-id/[kaikki|omat]/
+// Tikettilistan näyttämistä varten.
+export interface TikettiListassa extends Tikettipohja {
   viimeisin: string;
+  liite?: boolean;
+  kentat: TikettiListanKentta[];
 }
 
 /* Metodi: getTicketInfo. API /api/tiketti/:tiketti-id/[|kentat|kommentit]
@@ -94,23 +110,30 @@ export interface TiketinPerustiedot {
   viestin sisällön, josta tulee jäsenmuuttujan "viesti" -sisältö ja sen id:stä
   kommenttiID. Tätä tarvitaan mm.  Vastaavasti 1. kommentin liitteet
   ovat tiketin liitteitä. */
-export interface Tiketti extends TiketinPerustiedot {
+export interface Tiketti extends Tikettipohja {
   kurssi: number;
   viesti: string;
-  ukk?: boolean;
   arkistoitava: boolean;
   kentat?: Array<Kentta>;
   kommenttiID: string;
   kommentit: Array<Kommentti>;
   liitteet?: Array<Liite>;
+  muokattu?: Date;
 }
 
-// Metodi: getFAQ. API: /api/kurssi/:kurssi-id/ukk/
+// Metodit: getFAQ, getFAQlist API: /api/kurssi/:kurssi-id/ukk/
 export interface UKK {
   id: number;
   otsikko: string;
-  aikaleima: string;
+  aikaleima: Date;
+  aikaleimaStr: string
   tila: number;
+  kentat: [{
+    tiketti: number;
+    arvo: string;
+    otsikko: string;
+    ohje: string;
+  }]
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/

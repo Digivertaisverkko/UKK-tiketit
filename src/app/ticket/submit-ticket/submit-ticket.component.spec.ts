@@ -13,6 +13,8 @@ import { HeadlineComponent } from '@shared/components/headline/headline.componen
 import { EditorComponent } from '@shared/editor/editor.component';
 import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
+import { Kentta } from '@ticket/ticket.service';
+
 
 describe('SubmitTicketComponent', () => {
   let component: SubmitTicketComponent;
@@ -28,7 +30,13 @@ describe('SubmitTicketComponent', () => {
     fakeTicketService = jasmine.createSpyObj('TicketService', {
       addTicket: undefined,
       editTicket: undefined,
-      getTicket: undefined
+      getTicket: Promise.resolve({
+        otsikko: 'Testiotsikko',
+        viesti: 'Testiviesti',
+        liitteet: [],
+        kommenttiID: 1,
+        kentat: [] as Kentta[],
+      }),
     });
 
     // Luodaan komponentti tiketin luomistilassa

@@ -6,7 +6,6 @@
 
 /* ======== Angular material custom theme ======== */
 
-// FIXME: contrast värit eivät jostain syystä toimi esim. buttoneilla, vaan on templaten tyyleissä määritelty.
 $custom-primary-palette: (
   50: #e0f4fa,
   100: #b0e2f3,
@@ -63,6 +62,11 @@ $custom-accent-palette: (
 $custom-primary: mat.define-palette($custom-primary-palette, 500);
 $custom-accent: mat.define-palette($custom-accent-palette, 700);
 
+// Jostain syystä ylempi määrittely ei toimi buttoneilla, vaan käytetään tätä:
+.mat-primary {
+  color: white !important;
+}
+
 // $custom-primary: mat-palette($custom-primary-palette);
 
 // $custom-accent: mat-palette($mat-pink, 100, 500, A100);
@@ -114,9 +118,6 @@ $custom-theme: mat.define-light-theme(
 // Tällä teemoittaa H1 ja H2.
 // @include mat.all-component-typographies($custom-typography-config);
 
-// Pitäisi toimia, mutta antaa errorin.
-//@include mat.core($custom-typography-config);
-
 // Tämä pitää olla ohjelmassa vain yhden kerran.
 @include mat.core();
 
@@ -125,33 +126,32 @@ $custom-theme: mat.define-light-theme(
 // }
 
 // Emit theme-dependent styles for common features used across multiple components.
-// @include mat.core-theme($custom-theme);
 
-// @include mat-core($custom-typography-config);
-
-// Emit styles for MatButton based on `$my-theme`. Because the configuration
-// passed to `define-light-theme` omits typography, `button-theme` will not
-// emit any typography styles.
-
-// @include mat.toolbar-theme($custom-theme);
-// @include mat.core-theme($custom-theme);
-// @include mat.button-theme($custom-theme);
-
-// FIXME: laita tämän sijaan vain niille komponenteille, mitä käytetään.
-@include mat.all-component-themes($custom-theme);
+@include mat.autocomplete-theme($custom-theme);
+@include mat.button-theme($custom-theme);
+@include mat.card-theme($custom-theme);
+@include mat.checkbox-theme($custom-theme);
+@include mat.chips-theme($custom-theme);
+@include mat.core-theme($custom-theme);
+@include mat.dialog-theme($custom-theme);
+@include mat.form-field-theme($custom-theme);
+@include mat.icon-theme($custom-theme);
+@include mat.input-theme($custom-theme);
+@include mat.list-theme($custom-theme);
+@include mat.menu-theme($custom-theme);
+@include mat.progress-bar-theme($custom-theme);
+@include mat.radio-theme($custom-theme);
+@include mat.select-theme($custom-theme);
+@include mat.sort-theme($custom-theme);
+@include mat.table-theme($custom-theme);
+@include mat.toolbar-theme($custom-theme);
+@include mat.tooltip-theme($custom-theme);
 
 button[mat-raised-button] {
   min-width: 10em;
   padding-left: 2em;
   padding-right: 2em;
   text-transform: uppercase;
-}
-
-// Important -ylikirjoitukset
-
-// ? Miksei poimi teeman kontrastiväriä?
-.mat-primary {
-  color: white !important;
 }
 
 .mdc-button {
