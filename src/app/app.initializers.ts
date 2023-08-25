@@ -23,11 +23,10 @@ export const initializeLanguage = (): Promise<void> | void => {
 };
 
 // Aseta kieleksi fi-FI. Käytetään testeissä.
-export const initializeLanguageFI = (): Promise<void> | void => {
+export function initializeLanguageFI()  {
   registerLocaleData(localeFi);  // Aina oletuslocale.
   registerLocaleData(localeEn);
-  const language = 'fi-FI'
-  document.documentElement.lang = language;
+  document.documentElement.lang = 'fi-FI';
 };
 
 
