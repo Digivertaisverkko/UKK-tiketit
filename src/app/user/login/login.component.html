@@ -7,9 +7,10 @@
     Sisäänkirjautuminen
   </h2>
 
-  <form [formGroup]="form" (ngSubmit)="login()">
+  <form data-testid="form" [formGroup]="form" (ngSubmit)="login()">
     <mat-form-field>
-      <input  formControlName="email"
+      <input  data-testid="email"
+              formControlName="email"
               matInput
               name="email"
               >
@@ -26,7 +27,8 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input  formControlName="password"
+      <input  data-testid="password"
+              formControlName="password"
               i18n-placeholder="@@Salasana"
               matInput
               type="password"
@@ -53,6 +55,7 @@
     </app-error>
 
     <button color="primary"
+            data-testid="submit"
             [disabled]="!form.valid"
             i18n="@@Kirjaudu"
             mat-raised-button
