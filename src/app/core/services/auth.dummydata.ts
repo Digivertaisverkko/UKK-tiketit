@@ -22,6 +22,15 @@ export const authDummyData = {
     asemaStr: "Opettaja"
   },
 
+  userInfoEsko: {
+      id: 1,
+      nimi: "Esko Seppä",
+      sposti: "esko.seppa@example.com",
+      asema: "opiskelija" as Role,
+      asemaStr: "Opettaja"
+  },
+  
+
   minunOpettaja: {
     id: 2,
     nimi: "Marianna Laaksonen",

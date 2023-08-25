@@ -21,6 +21,7 @@
 
       <button class="edit-button"
               (click)="editTicket()"
+              data-testid="edit-button"
               [disabled]="state==='sending'"
               i18n="@@Muokkaa"
               mat-raised-button
@@ -65,6 +66,7 @@
             >
         <button class="remove-btn"
                 (click)="changeButton('remove')"
+                data-testid="remove-button"
                 [disabled]="!isRemovable || state === 'sending'"
                 i18n="@@Poista"
                 mat-raised-button
@@ -96,7 +98,9 @@
   <section *ngIf="ticket.tila > 0">
 
     <div class="ticket-header">
-      <h2 class="ticket-headline theme-subheading">{{ ticket.otsikko }}</h2>
+      <h2 class="ticket-headline theme-subheading" data-testid="heading">
+          {{ ticket.otsikko }}
+      </h2>
       <div class="spacer"></div>
       <app-sender-info
           [aikaleima]="ticket.aikaleima"
@@ -108,14 +112,17 @@
 
     </div>
 
-    <div *ngFor="let kentta of ticket.kentat">
-      <p class="short-field-p theme-label">{{ kentta.otsikko }}</p>
-      <p class="short-field-p">{{ kentta.arvo }}</p>
+    <div *ngFor="let kentta of ticket.kentat; let i = index">
+      <p class="short-field-p theme-label" [attr.data-testid]="'field-title-' + i">
+        {{ kentta.otsikko }}</p>
+      <p class="short-field-p" [attr.data-testid]="'field-value-' + i">
+        {{ kentta.arvo }}
+      </p>
     </div>
 
     <p class="theme-label message-label" i18n="@@Viesti">Viesti</p>
 
-    <app-message [messageHtml]=ticket.viesti></app-message>
+    <app-message data-testid="message" [messageHtml]=ticket.viesti></app-message>
 
     <!----- Liitteet ---->
     <app-view-attachments
@@ -131,7 +138,9 @@
   <!-------------- Keskustelu ------------------------------------------------->
 
   <div class="h3-wrapper">
-    <h3 class="discussion-h3 theme-subheading" i18n="@@Keskustelu">Keskustelu</h3>
+    <h3 class="discussion-h3 theme-subheading" i18n="@@Keskustelu">
+      Keskustelu
+    </h3>
 
     <button aria-label="Virkistä näkymä"
             (click)="fetchTicket(courseid!)"

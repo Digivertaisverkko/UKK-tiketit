@@ -62,7 +62,7 @@ describe('TicketListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
+  
   it('filters rows by sender name', fakeAsync (async() => {
     const filterValue = 'esko';
     initializeLanguageFI(); // datePipeen
@@ -80,7 +80,7 @@ describe('TicketListComponent', () => {
     expect(containsString).toBe(true);
     discardPeriodicTasks();
   }));
-
+  
   it('filters rows by additional field content', fakeAsync (async() => {
     let filterValue = 'Kurssin suoritus';
     filterValue = filterValue.toLowerCase();
@@ -123,7 +123,7 @@ describe('TicketListComponent', () => {
       expect(component.dataSource.filteredData).toEqual(ticketDummyData.ticketListClientData);
       expect(component.dataSource.data).toEqual(ticketDummyData.ticketListClientData);
     }));
-
+    
     it('fetches ticket data for sorting correctly.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();

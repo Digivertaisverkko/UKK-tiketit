@@ -133,6 +133,7 @@ export class AuthService {
     } catch (error: any) {
       response = null;
     }
+
     let userInfo: any;
     if (response != null && response?.oikeudet != null)  {
       userInfo = response.oikeudet;
@@ -144,7 +145,7 @@ export class AuthService {
     } else {
       this.store.setParticipant(false);
       console.warn(`Käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
-      // Haetana käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
+      // Haetaan käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
       const response = await this.fetchVisitorInfo();
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
