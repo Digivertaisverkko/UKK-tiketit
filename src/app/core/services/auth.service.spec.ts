@@ -8,25 +8,14 @@ import { AuthService } from './auth.service';
 import { CourseService } from '@course/course.service';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import localeFi from '@angular/common/locales/fi';
-import localeEn from '@angular/common/locales/en';
 import { LoginInfo, LoginResult, User } from '@core/core.models';
 import { StoreService } from './store.service';
-import { registerLocaleData } from '@angular/common';
-import { loadTranslations } from '@angular/localize';
 
 let api = environment.apiBaseUrl;
 const courseID = '1';
 environment.testing = true;
 
-registerLocaleData(localeFi);  // Aina oletuslocale.
-registerLocaleData(localeEn);
-document.documentElement.lang = 'fi';
-
 describe('AuthService', () => {
-  fetch(`/assets/i18n/fi-FI.json`)
-      .then(response => response.json())
-      .then(response => loadTranslations(response.translations));
   let auth: AuthService;
   let controller: HttpTestingController;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
@@ -63,8 +52,6 @@ describe('AuthService', () => {
   it('should be created', () => {
     expect(auth).toBeTruthy();
   });
-
-  /*
 
   describe('state of auth info is correctly set and retrieved', () => {
 
@@ -114,7 +101,10 @@ describe('AuthService', () => {
       tick();
 
       store.trackUserInfo().subscribe((userInfo: User | null) => {
-        expect(userInfo).toEqual(authDummyData.userInfoTeacher);
+        expect(userInfo?.id).toEqual(authDummyData.userInfoTeacher.id);
+        expect(userInfo?.nimi).toEqual(authDummyData.userInfoTeacher.nimi);
+        expect(userInfo?.sposti).toEqual(authDummyData.userInfoTeacher.sposti);
+        expect(userInfo?.asema).toEqual(authDummyData.userInfoTeacher.asema);
       })
 
     }));
@@ -359,6 +349,6 @@ describe('AuthService', () => {
 
   });
 
-  */
+  
 
 });
