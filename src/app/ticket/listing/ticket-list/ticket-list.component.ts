@@ -163,8 +163,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
         // jotta sorting toimii.
         this.dataSource.sort = this.sortQuestions;
         this.dataSource.filterPredicate = TicketListComponent.customFilterPredicate;
-        console.log('component:');
-        console.dir(this.dataSource);
         // const sortFn = this.dataSource.sort;
         // console.log('comp: ' + sortFn?.sortables.size);
       }

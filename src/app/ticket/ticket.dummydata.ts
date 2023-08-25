@@ -1,3 +1,7 @@
+import { Role } from "@core/core.models";
+
+/* id arvot tulevat palvelimelta numeroina, mutta ne tallennetaan
+   ja käsitellään frontissa string:nä. */
 
 export const ticketDummyData = {
 
@@ -217,31 +221,41 @@ export const ticketDummyData = {
 
   ticket: {
     arkistoitava: true,
-    id: 4,
+    id: '4',
+    otsikko: "Ohjelma tulostaa numeroita kirjainten sijasta!",
+    aikaleima: new Date("2023-06-21T09:37:36.124Z"),
+    aloittaja: {
+      asema: "opiskelija" as Role,
+      id: 1,
+      nimi: "Esko Seppä",
+      sposti: "esko.seppa@example.com",
+    },
     kentat: [
       {
         arvo: "2",
         esitaytettava: false,
-        id: 1,
+        id: "1",
         ohje: "",
         otsikko: "Tehtävä",
         pakollinen: true,
-        tyyppi: 1
+        tyyppi: '1',
+        valinnat: []
       },
       {
         arvo: "Kurssin suoritus",
         esitaytettava: false,
-        id: 2,
+        id: "2",
         ohje: "",
         otsikko: "Ongelman tyyppi",
         pakollinen: true,
-        tyyppi: 1
+        tyyppi: '1',
+        valinnat: []
       }
     ],
-    kommenttiID: 8,
+    kommentit: [],
+    kommenttiID: '8',
     kurssi: 1,
     liitteet: [],
-    otsikko: "Ohjelma tulostaa numeroita kirjainten sijasta!",
     tila: 4,
     ukk: false,
     viesti: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."

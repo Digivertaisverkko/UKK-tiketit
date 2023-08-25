@@ -128,7 +128,6 @@ describe('TicketListComponent', () => {
       component.fetchTickets(courseID);
       tick();
       expect(component.dataSource.sort).toBeDefined();
-
     }));
 
     it('sets default sorting to "Edited/Muokattu" column starting from ascending order.', fakeAsync (() => {

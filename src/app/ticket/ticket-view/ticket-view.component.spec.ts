@@ -6,17 +6,14 @@ import { MockComponent } from 'ng-mocks';
 import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
 import { TicketViewComponent } from './ticket-view.component';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { TicketService } from '@ticket/ticket.service';
+import { TicketService, Tiketti } from '@ticket/ticket.service';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { StoreService } from '@core/services/store.service';
 import { authDummyData } from '@core/services/auth.dummydata';
 import { User } from '@core/core.models';
 import { ticketDummyData } from '@ticket/ticket.dummydata';
-import { MessageComponent } from '@ticket/components/message/message.component';
-import { forwardRef } from '@angular/core';
 import { EditorComponent } from '@shared/editor/editor.component';
 
-import { NgxEditorModule } from 'ngx-editor';
 import { SharedModule } from '@shared/shared.module';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
@@ -27,11 +24,14 @@ describe('TicketViewComponent', () => {
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketViewComponent>;
   let loader: HarnessLoader;
-  let store: StoreService 
+  let store: StoreService
+  const ticket: Tiketti = ticketDummyData.ticket;
+  const user: User = authDummyData.userInfoTeacher;
 
   beforeEach(async() => {
+
     fakeTicketService = jasmine.createSpyObj('TicketService', {
-      getTicket: Promise.resolve(ticketDummyData.ticket),
+      getTicket: Promise.resolve(ticket),
     });
     const id = '4';
 
@@ -49,7 +49,7 @@ describe('TicketViewComponent', () => {
       ],
       providers: [
         { provide: TicketService, useValue: fakeTicketService },
-        { 
+        {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
@@ -66,9 +66,8 @@ describe('TicketViewComponent', () => {
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
     store = TestBed.inject(StoreService);
-    
+
     fixture.detectChanges();
-    const user: User = authDummyData.userInfoTeacher;
     store.setUserInfo(user);
     store.setLoggedIn();
   });
@@ -77,16 +76,38 @@ describe('TicketViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // ei ala subscribamaan.
-  /*
-  it('shows ticket heading', fakeAsync(() => {
+  it('fetches proper ticket data from service.', fakeAsync(() => {
     component.courseid = '1';
     component.ngOnInit();
     fixture.detectChanges();
-    tick(10000);
+    tick();
+    // Ei subscribaa timeriin, joten kutsutaan manuaalisesti.
+    component.fetchTicket(component.courseid);
+    tick();
     expect(fakeTicketService.getTicket).toHaveBeenCalledTimes(1);
-    discardPeriodicTasks();
+    expect(component.ticket).toEqual(ticket);
+    discardPeriodicTasks();  // Varalta jos tiketin pollaus käynnistyy.
   }));
-  */
-  
+
+  it('sets correctly if ticket is editable and removable.', fakeAsync(() => {
+    component.courseid = '1';
+    component.ngOnInit();
+    fixture.detectChanges();
+    // Ei subscribaa timeriin, joten kutsutaan manuaalisesti.
+    component.fetchTicket(component.courseid);
+    tick();
+    if (ticket.aloittaja.id === user.id) {
+      expect(component.isEditable).toEqual(true);
+      if (ticket.kommentit.length === 0) {
+        expect(component.isRemovable).toEqual(true);
+      } else {
+        expect(component.isRemovable).toEqual(false);
+      }
+    } else {
+      expect(component.isEditable).toEqual(false);
+      expect(component.isRemovable).toEqual(false);
+    }
+    discardPeriodicTasks();  // Varalta jos tiketin pollaus käynnistyy.
+  }));
+
 });
