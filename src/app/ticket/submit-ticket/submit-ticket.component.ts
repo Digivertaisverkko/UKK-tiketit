@@ -89,7 +89,8 @@ export class SubmitTicketComponent implements OnInit {
       if (field.pakollinen) {
         validators = Validators.required, Validators.maxLength(50);
       }
-      let value = field.arvo ? field.arvo : '';
+      let value = !this.ticketId && field.esitaytettava ? field.esitaytto :
+          field.arvo ?? '';
       this.additionalFields.push(new FormControl(value, validators));
     }
   }

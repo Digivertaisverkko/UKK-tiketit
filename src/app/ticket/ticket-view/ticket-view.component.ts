@@ -162,8 +162,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
+      /*
       console.log('component:');
       console.dir(response);
+      */
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;

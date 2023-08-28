@@ -205,8 +205,6 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    console.log('sendAllFields: ');
-    console.dir(allFields);
     this.courses.setTicketField(courseID, allFields)
       .then(response => {
         if (response === true ) {
@@ -222,9 +220,9 @@ export class EditFieldComponent implements OnInit {
 
   private setControls(): void {
     this.form.controls['infoText'].setValue(this.field.ohje);
+    this.form.controls['isPrefillable'].setValue(this.field.esitaytettava);
     this.form.controls['mandatory'].setValue(this.field.pakollinen);
     this.form.controls['selections'].setValue(this.field.valinnat);
-    this.form.controls['isPrefillable'].setValue(this.field.esitaytettava);
     this.form.controls['title'].setValue(this.field.otsikko);
   }
 
