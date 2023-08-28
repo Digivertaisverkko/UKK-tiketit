@@ -60,10 +60,10 @@ describe('ListingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('fetches data for Mat table dataSource correctly.', () => {
+  describe('fetches data for FAQ-table correctly.', () => {
     const courseID = '1';
 
-    it('fetches correct FAQ data for dataSource.', fakeAsync (() => {
+    it('fetches correct FAQ data.', fakeAsync (() => {
       component.fetchFAQ(courseID);
       tick();
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);

@@ -70,7 +70,7 @@ describe('TicketListComponent', () => {
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
     tick();
-    component.applyFilter(filterValue);
+    component.applyFilter(filterValue);     // Saadaan search komponentista.
     tick();
     const filteredData = component.dataSource.filteredData;
     const containsString = filteredData.some(entry =>
@@ -113,10 +113,10 @@ describe('TicketListComponent', () => {
     discardPeriodicTasks();
   }));
 
-  describe('fetches data for Mat table dataSource correctly.', () => {
+  describe('fetches data for ticket list correctly.', () => {
     const courseID = '1';
 
-    it('fetches correct ticket data for dataSource.', fakeAsync (() => {
+    it('sets correct ticket data.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
@@ -127,7 +127,9 @@ describe('TicketListComponent', () => {
     it('fetches ticket data for sorting correctly.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
-      expect(component.dataSource.sort).toBeDefined();
+      const sortFn = component.dataSource.sort;
+      expect(sortFn).toBeDefined();
+      expect(sortFn?.sortables.size).toBeGreaterThanOrEqual(4);
     }));
 
     it('sets default sorting to "Edited/Muokattu" column starting from ascending order.', fakeAsync (() => {
@@ -139,20 +141,6 @@ describe('TicketListComponent', () => {
       expect(sortFn?.start).toBe('asc');
       const columnCount = 4;
       expect(sortFn?.sortables.size).toBe(columnCount);
-    }));
-
-    it('sets at least four sorting columns.', fakeAsync (() => {
-      component.fetchTickets(courseID);
-      tick();
-      const sortFn = component.dataSource.sort;
-      expect(sortFn?.sortables.size).toBeGreaterThanOrEqual(4);
-    }));
-
-    it('sets filtering function.', fakeAsync (() => {
-      component.fetchTickets(courseID);
-      tick();
-      const dataSource = component.dataSource;
-      expect(dataSource.filterPredicate).toBeDefined();
     }));
 
     it('fetches tickets 3 times in 2 minutes', fakeAsync(() => {
@@ -171,7 +159,7 @@ describe('TicketListComponent', () => {
     }));
 
     /*
-    fit('sets 5 sortable columns when there is one with attachment', fakeAsync (() => {
+    it('sets 5 sortable columns when there is one with attachment', fakeAsync (() => {
       // Ei voi tehdä testBedin konffauksen jälkeen.
       let dummyData = ticketDummyData.ticketListClientData;
       dummyData[1].liite = true;
