@@ -132,7 +132,7 @@ export class SubmitTicketComponent implements OnInit {
 
   private fetchAdditionalFields(): void {
 
-    console.log('fetchAdditionalFields');
+    // console.log('fetchAdditionalFields');
 
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseid).then(response => {
@@ -147,7 +147,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private fetchTicketInfo(ticketId: string, courseID: string): void {
-    console.log('fetchTicketInfo');
+    // console.log('fetchTicketInfo');
     this.ticketService.getTicket(ticketId, courseID).then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);

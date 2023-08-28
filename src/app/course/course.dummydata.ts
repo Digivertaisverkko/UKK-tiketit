@@ -33,5 +33,32 @@ export const courseDummyData = {
     sposti: 'marianna.laaksonen@example.com',
     vanhenee: '2023-08-23',
     rooli: 'opettaja',
-  }
+  },
+
+  ticketFields: [
+    {
+      id: 1,
+      otsikko: "Tehtävä",
+      tyyppi: 1,
+      ohje: "",
+      esitaytettava: false,
+      pakollinen: false,
+      valinnat: [
+        ""
+      ]
+    },
+    {
+      id: 2,
+      otsikko: "Ongelman tyyppi",
+      tyyppi: 1,
+      ohje: "",
+      esitaytettava: false,
+      pakollinen: false,
+      valinnat: [
+        "Kotitehtävä",
+        "Määräajat",
+        "Yleinen"
+      ]
+    }
+  ],
 }

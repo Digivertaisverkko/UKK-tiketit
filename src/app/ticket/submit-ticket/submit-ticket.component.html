@@ -32,6 +32,7 @@
                   cdkAutosizeMinRows="1"
                   cdkTextareaAutosize
                   class="theme-subheading"
+                  data-testid="title"
                   formControlName="title"
                   i18n-placeholder="@@Otsikko"
                   matInput
@@ -119,7 +120,8 @@
     <h3 class="theme-subheading">
       <span i18n="@@Viesti">Viesti</span><span>*</span>
     </h3>
-    <app-editor formControlName="message" ngDefaultControl></app-editor>
+    <app-editor data-testid='message' formControlName="message" ngDefaultControl>
+    </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="message?.errors?.['required'] && message?.touched"
                 >
@@ -179,6 +181,7 @@
       <button class="submit-button"
               *ngIf="state==='editing'"
               color="primary"
+              data-testid='send-button'
               i18n="@@Lähetä opettajille"
               mat-raised-button
               type="submit"
