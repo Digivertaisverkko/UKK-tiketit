@@ -13,7 +13,6 @@ import { StoreService } from '@core/services/store.service';
 import { authDummyData } from '@core/services/auth.dummydata';
 import { User } from '@core/core.models';
 import { ticketDummyData } from '@ticket/ticket.dummydata';
-import { EditorComponent } from '@shared/editor/editor.component';
 
 import { SharedModule } from '@shared/shared.module';
 import { HarnessLoader } from '@angular/cdk/testing';
@@ -48,6 +47,10 @@ describe('TicketViewComponent', () => {
   beforeEach(async() => {
 
     fakeTicketService = jasmine.createSpyObj('TicketService', {
+      addComment: Promise.resolve({
+        success: true,
+        kommentti: 12345
+      }),
       getTicket: Promise.resolve(ticket),
     });
     const id = '4'; // ticketID URL:ssa.
@@ -57,7 +60,6 @@ describe('TicketViewComponent', () => {
         MockComponent(BeginningButtonComponent),
         MockComponent(HeadlineComponent),
         MockComponent(ViewAttachmentsComponent),
-        EditorComponent,
         TicketViewComponent
       ],
       imports: [
@@ -98,7 +100,7 @@ describe('TicketViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('fetches proper ticket data from service.', fakeAsync(() => {
+  it('fetches ticket data from service.', fakeAsync(() => {
     // Ei subscribaa timeriin, joten kutsutaan manuaalisesti.
     component.fetchTicket(component.courseid);
     tick();
@@ -107,11 +109,10 @@ describe('TicketViewComponent', () => {
     discardPeriodicTasks();  // Varalta jos tiketin pollaus käynnistyy.
   }));
 
-  it("sets correctly if ticket isn't editable or removable.", fakeAsync(() => {
+  it("sets if ticket isn't editable or removable.", fakeAsync(() => {
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
-    console.warn(ticket.aloittaja.id, user.id);
     expect(component.isEditable).toEqual(false);
     expect(component.isRemovable).toEqual(false);
     const editButton = findElIfExists(fixture, 'edit-button');
@@ -121,7 +122,7 @@ describe('TicketViewComponent', () => {
     discardPeriodicTasks();  // Varalta jos tiketin pollaus käynnistyy.
   }));
 
-  it("sets correctly if ticket is editable and removable.", fakeAsync(() => {
+  it("sets if ticket is editable and removable.", fakeAsync(() => {
     const student = authDummyData.userInfoEsko;
     store.setUserInfo(student);
     component.fetchTicket(component.courseid);
@@ -137,7 +138,7 @@ describe('TicketViewComponent', () => {
     discardPeriodicTasks();  // Varalta jos tiketin pollaus käynnistyy.
   }));
   
-  it('shows correctly ticket heading and message.', fakeAsync(() => {
+  it('shows ticket heading and message.', fakeAsync(() => {
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
@@ -149,7 +150,7 @@ describe('TicketViewComponent', () => {
     expect(messsageText).toEqual(ticket.viesti);
   }));
 
-  it('shows correctly additional ticket fields.', fakeAsync(() => {
+  it('shows additional ticket fields.', fakeAsync(() => {
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
@@ -173,5 +174,27 @@ describe('TicketViewComponent', () => {
     }
 
   }));
+
+  it('sets right sender for ticket.', fakeAsync(() => {
+    component.fetchTicket(component.courseid);
+    tick();
+    fixture.detectChanges();
+    expect(component.ticket.aloittaja).toEqual(ticket.aloittaja);
+  }));
+
+  it('sends a new comment with right parameters.', async () => {
+    let testMessage = 'New comment';
+    await component.fetchTicket(component.courseid);
+    fixture.detectChanges();
+    component.message.setValue(testMessage);
+    const sendButton = findEl(fixture, 'send-button').nativeElement;
+    sendButton.click();
+    testMessage = `<p>${testMessage}</p>`;
+    const commentedState = 4;
+    expect(fakeTicketService.addComment).toHaveBeenCalledWith(
+      ticket.id, component.courseid, testMessage, commentedState
+    );
+  });
+  
 
 });
