@@ -148,7 +148,9 @@
     </app-error>
 
 
-    <p>{{ helpText }}</p>
+    <!-- Kuvaus / ohjeteksti -->
+    <p data-testid="help-text">{{ helpText }}</p>
+    
     <div class="theme-actions">
 
       <button (click)="uploadClick.next('add')"

@@ -26,10 +26,12 @@ fdescribe('SubmitTicketComponent', () => {
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<SubmitTicketComponent>;
 
+  const helpText = 'Muista valita oikea tehtävä.';
+
   beforeEach(async () => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
       getTicketFieldInfo: Promise.resolve({
-        kuvaus: '',
+        kuvaus: helpText,
         kentat: courseDummyData.ticketFields
       }),
     });
@@ -58,6 +60,7 @@ fdescribe('SubmitTicketComponent', () => {
     const state: State = { editTicket: false };
     window.history.pushState(state, '', '');
 
+    // SharedModule mm. matAutocomplete:a varten.
     await TestBed.configureTestingModule({
       declarations: [
         MockComponent(EditAttachmentsComponent),
@@ -91,7 +94,7 @@ fdescribe('SubmitTicketComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('sends a new ticket', fakeAsync(() => {
+  it('renders the form and sends a new ticket', fakeAsync(() => {
     component.id = '';
     const titleText = 'Uusi kysymys';
     const messageText = 'Kysymyksen teksti';
@@ -110,6 +113,9 @@ fdescribe('SubmitTicketComponent', () => {
     tick();
     fixture.detectChanges();
     tick();
+
+    const helpTextP = findEl(fixture, 'help-text').nativeElement;
+    expect(helpTextP.innerText).toBe(helpText);
     
     const prefilledField = findEl(fixture, 'field-0').nativeElement;
     const prefilledText = fields[0].esitaytto;
