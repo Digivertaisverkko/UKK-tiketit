@@ -12,6 +12,7 @@ import { HeadlineComponent } from '@shared/components/headline/headline.componen
 import { EditorComponent } from '@shared/editor/editor.component';
 import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
+import { SharedModule } from '@shared/shared.module';
 
 describe('SubmitFaqComponent', () => {
   let component: SubmitFaqComponent;
@@ -31,7 +32,9 @@ describe('SubmitFaqComponent', () => {
     });
 
     // Luodaan komponentti tiketin luomistilassa
-    window.history.pushState({ editFaq: 'false'}, '', '');
+    interface State { editTicket: boolean };
+    const state: State = { editTicket: false };
+    window.history.pushState({ editFaq: state }, '', '');
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -45,7 +48,8 @@ describe('SubmitFaqComponent', () => {
         BrowserAnimationsModule,
         MatIconModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        SharedModule
       ],
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
