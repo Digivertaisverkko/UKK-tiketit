@@ -18,7 +18,7 @@ export class NoDataConsentComponent {
     private store: StoreService,
     private title: Title
   ) {
-    this.title.setTitle(this.store.getBaseTitle() + $localize `:@@OKurssialuetta ei ole luotu:
+    this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Kurssialuetta ei ole luotu:
         Kurssialuetta ei ole luotu`);
   }
 
