@@ -64,7 +64,8 @@
 
         <mat-form-field appearance="fill">
           <mat-label>{{ ticketFields[i].otsikko }}</mat-label>
-          <input  formControlName="{{i}}"
+          <input  [attr.data-testid]="'field-' + i"
+                  formControlName="{{i}}"
                   (keydown.enter)="$event.preventDefault()"
                   [matAutocomplete]="auto"
                   matInput
@@ -146,7 +147,7 @@
                 >
     </app-error>
 
- 
+
     <p>{{ helpText }}</p>
     <div class="theme-actions">
 

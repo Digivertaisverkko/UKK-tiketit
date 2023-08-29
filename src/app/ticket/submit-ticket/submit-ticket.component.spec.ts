@@ -14,10 +14,9 @@ import { EditorComponent } from '@shared/editor/editor.component';
 import { TicketService, UusiTiketti } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
 import { Kentta } from '@ticket/ticket.service';
-import { findEl } from '@shared/spec-helpers/element.spec-helper';
+import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { courseDummyData } from '@course/course.dummydata';
 import { StoreService } from '@core/services/store.service';
-import { SharedModule } from '@shared/shared.module';
 
 
 describe('SubmitTicketComponent', () => {
@@ -28,7 +27,10 @@ describe('SubmitTicketComponent', () => {
 
   beforeEach(async () => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
-      getTicketFieldInfo: Promise.resolve({ kuvaus: '', kentat: courseDummyData.ticketFields }),
+      getTicketFieldInfo: Promise.resolve({
+        kuvaus: '',
+        kentat: courseDummyData.ticketFields
+      }),
     });
 
     fakeTicketService = jasmine.createSpyObj('TicketService', {
@@ -50,7 +52,10 @@ describe('SubmitTicketComponent', () => {
     });
 
     // Luodaan komponentti tiketin luomistilassa
-    window.history.pushState({ editTicket: 'false'}, '', '');
+
+    interface State { editTicket: boolean };
+    const state: State = { editTicket: false };
+    window.history.pushState(state, '', '');
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -65,8 +70,7 @@ describe('SubmitTicketComponent', () => {
         MatIconModule,
         MatInputModule,
         ReactiveFormsModule,
-        RouterTestingModule,
-        SharedModule
+        RouterTestingModule
       ],
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
@@ -85,41 +89,41 @@ describe('SubmitTicketComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('sends new ticket', fakeAsync (() => {
+  it('sends a new ticket', fakeAsync(() => {
     component.id = '';
-    component.ngOnInit();
-    tick();
-    fixture.detectChanges();
-    const titleText = 'New question';
-    const messageText = 'Question message';
-    const title = findEl(fixture, 'title').nativeElement;
-    title.value = titleText;
-    const message = findEl(fixture, 'message').nativeElement;
-    message.value = messageText;
-    const sendButton = findEl(fixture, 'send-button').nativeElement;
+    const titleText = 'Uusi kysymys';
+    const messageText = 'Kysymyksen teksti';
+    const fieldTexts = ['Tehtävä 1', 'Kotitehtävä'];
 
+    fixture.detectChanges();
+    setFieldValue(fixture, 'title', titleText);
+    setFieldValue(fixture, 'message', messageText);
+
+    /*
+    fieldTexts.forEach((fieldText, index) => {
+      setFieldValue(fixture, 'field-' + index, fieldText);
+    });
+    */
+
+    tick();
+    findEl(fixture, 'send-button').nativeElement.click();
+    // fixture.detectChanges();
+
+    const fields = courseDummyData.ticketFields;
     const newTicket: UusiTiketti = {
       otsikko: titleText,
       viesti: messageText,
       kentat: [
-        { arvo: '', id: 1 }, { arvo: '', id: 2}
+        { arvo: '', id: fields[0].id },
+        { arvo: '', id: fields[1].id }
       ]
     }
-    fixture.detectChanges();
-    sendButton.click();
-    tick();
-
-    
-    expect(component).toBeTruthy();
-    // expect(fakeTicketService.addTicket).toHaveBeenCalled();
-    
-    /*
+    expect(component.form.invalid).toBe(false);
     expect(fakeTicketService.addTicket).toHaveBeenCalledWith(
       component.courseid, newTicket
     );
-    */
-    
-    
+
+
   }));
-  
+
 });
