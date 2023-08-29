@@ -41,7 +41,8 @@ export const courseDummyData = {
       otsikko: "Tehtävä",
       tyyppi: 1,
       ohje: "",
-      esitaytettava: false,
+      esitaytettava: true,
+      esitaytto: 'Tehtävä 3',
       pakollinen: false,
       valinnat: [
         ""

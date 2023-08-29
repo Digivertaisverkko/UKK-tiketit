@@ -109,6 +109,11 @@ fdescribe('SubmitTicketComponent', () => {
     component.ngOnInit();
     tick();
     fixture.detectChanges();
+    tick();
+    
+    const prefilledField = findEl(fixture, 'field-0').nativeElement;
+    const prefilledText = fields[0].esitaytto;
+    expect(prefilledField.value).toBe(prefilledText);
 
     setFieldValue(fixture, 'title', titleText);
     setFieldValue(fixture, 'message', messageText);
