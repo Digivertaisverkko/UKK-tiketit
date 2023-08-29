@@ -17,9 +17,10 @@ import { Kentta } from '@ticket/ticket.service';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { courseDummyData } from '@course/course.dummydata';
 import { StoreService } from '@core/services/store.service';
+import { SharedModule } from '@shared/shared.module';
 
 
-describe('SubmitTicketComponent', () => {
+fdescribe('SubmitTicketComponent', () => {
   let component: SubmitTicketComponent;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
@@ -70,7 +71,8 @@ describe('SubmitTicketComponent', () => {
         MatIconModule,
         MatInputModule,
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        SharedModule
       ],
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
@@ -93,36 +95,34 @@ describe('SubmitTicketComponent', () => {
     component.id = '';
     const titleText = 'Uusi kysymys';
     const messageText = 'Kysymyksen teksti';
-    const fieldTexts = ['Tehtävä 1', 'Kotitehtävä'];
-
-    fixture.detectChanges();
-    setFieldValue(fixture, 'title', titleText);
-    setFieldValue(fixture, 'message', messageText);
-
-    /*
-    fieldTexts.forEach((fieldText, index) => {
-      setFieldValue(fixture, 'field-' + index, fieldText);
-    });
-    */
-
-    tick();
-    findEl(fixture, 'send-button').nativeElement.click();
-    // fixture.detectChanges();
-
+    const fieldTexts = [ 'Tehtävä 1', 'Kotitehtävä' ];
     const fields = courseDummyData.ticketFields;
-    const newTicket: UusiTiketti = {
+    const expectedTicket: UusiTiketti = {
       otsikko: titleText,
       viesti: messageText,
       kentat: [
-        { arvo: '', id: fields[0].id },
-        { arvo: '', id: fields[1].id }
+        { arvo: fieldTexts[0], id: fields[0].id },
+        { arvo: fieldTexts[1], id: fields[1].id }
       ]
     }
+
+    component.ngOnInit();
+    tick();
+    fixture.detectChanges();
+
+    setFieldValue(fixture, 'title', titleText);
+    setFieldValue(fixture, 'message', messageText);
+
+    fieldTexts.forEach((fieldText, index) => {
+      setFieldValue(fixture, 'field-' + index, fieldText);
+    });
+  
+    findEl(fixture, 'send-button').nativeElement.click();
+
     expect(component.form.invalid).toBe(false);
     expect(fakeTicketService.addTicket).toHaveBeenCalledWith(
-      component.courseid, newTicket
+      component.courseid, expectedTicket
     );
-
 
   }));
 
