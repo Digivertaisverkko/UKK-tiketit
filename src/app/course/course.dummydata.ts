@@ -27,6 +27,7 @@ export const courseDummyData = {
       ]
     }
   ],
+
   invitedInfo: {
     id: 2,
     kurssi: 1,
@@ -40,7 +41,7 @@ export const courseDummyData = {
       id: 1,
       otsikko: "Tehtävä",
       tyyppi: 1,
-      ohje: "",
+      ohje: "Kirjoita tehtävän numero",
       esitaytettava: true,
       esitaytto: 'Tehtävä 3',
       pakollinen: false,

@@ -235,7 +235,7 @@ export const ticketDummyData = {
         arvo: "2",
         esitaytettava: false,
         id: "1",
-        ohje: "",
+        ohje: "Kirjoita tehtävän numero",
         otsikko: "Tehtävä",
         pakollinen: true,
         tyyppi: '1',

@@ -18,9 +18,10 @@ import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper'
 import { courseDummyData } from '@course/course.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { SharedModule } from '@shared/shared.module';
+import { MatTooltip } from '@angular/material/tooltip';
 
 
-fdescribe('SubmitTicketComponent', () => {
+describe('SubmitTicketComponent', () => {
   let component: SubmitTicketComponent;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
@@ -121,6 +122,19 @@ fdescribe('SubmitTicketComponent', () => {
     const prefilledText = fields[0].esitaytto;
     expect(prefilledField.value).toBe(prefilledText);
 
+    /*
+    const tooltipIcon = findEl(fixture, 'field-tooltip-0').nativeElement;
+    const tooltipDirective = tooltipIcon.injector.get(MatTooltip);
+    
+    // Simulate a click to trigger tooltip
+    tooltipIcon.triggerEventHandler('click', null);
+    tick();
+    fixture.detectChanges();
+    tick();
+    const tooltipText = tooltipDirective.message;
+    expect(tooltipText).toBe(fields[0].ohje);
+    */
+
     setFieldValue(fixture, 'title', titleText);
     setFieldValue(fixture, 'message', messageText);
 
@@ -128,7 +142,9 @@ fdescribe('SubmitTicketComponent', () => {
       setFieldValue(fixture, 'field-' + index, fieldText);
     });
   
-    findEl(fixture, 'send-button').nativeElement.click();
+    const sendButton = findEl(fixture, 'send-button').nativeElement;
+    expect(sendButton).toBeDefined();
+    sendButton.click();
 
     expect(component.form.invalid).toBe(false);
     expect(fakeTicketService.addTicket).toHaveBeenCalledWith(
