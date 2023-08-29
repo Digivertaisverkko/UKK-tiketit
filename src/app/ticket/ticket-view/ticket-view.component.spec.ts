@@ -17,11 +17,11 @@ import { ticketDummyData } from '@ticket/ticket.dummydata';
 import { SharedModule } from '@shared/shared.module';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { findEl } from '@shared/spec-helpers/element.spec-helper';
+import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { initializeLanguageFI } from 'src/app/app.initializers';
 import { ViewAttachmentsComponent } from '@ticket/components/view-attachments/view-attachments.component';
 import { TicketModule } from '@ticket/ticket.module';
-
+import { MatRadioButtonHarness } from '@angular/material/radio/testing'; // Import MatRadioButtonHarness
 
 describe('TicketViewComponent', () => {
   let component: TicketViewComponent;
@@ -182,19 +182,31 @@ describe('TicketViewComponent', () => {
     expect(component.ticket.aloittaja).toEqual(ticket.aloittaja);
   }));
 
-  it('sends a new comment with right parameters.', async () => {
-    let testMessage = 'New comment';
-    await component.fetchTicket(component.courseid);
+  it('sends a new comment with right parameters.', fakeAsync(async() => {
+    let comment = 'Uusi kommentti';
+    component.fetchTicket(component.courseid);
+    tick();
     fixture.detectChanges();
-    component.message.setValue(testMessage);
+    component.message.setValue(comment);  
+    // setFieldValue(fixture, 'comment', comment); // Ei toiminut.
+    fixture.detectChanges();
+
+    const radioButton = await loader.getHarness(MatRadioButtonHarness.with(
+      { selector: '[data-testid="info-needed-radio-btn"]' }));
+    radioButton.check();
+
+    fixture.detectChanges();
+    tick();
+
     const sendButton = findEl(fixture, 'send-button').nativeElement;
     sendButton.click();
-    testMessage = `<p>${testMessage}</p>`;
-    const commentedState = 4;
+    comment = `<p>${comment}</p>`;
+    const moreInfoNeededState = 3;
+
     expect(fakeTicketService.addComment).toHaveBeenCalledWith(
-      ticket.id, component.courseid, testMessage, commentedState
+      ticket.id, component.courseid, comment, moreInfoNeededState
     );
-  });
+  }));
   
 
 });

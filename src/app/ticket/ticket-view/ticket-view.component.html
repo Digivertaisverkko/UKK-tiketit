@@ -173,7 +173,8 @@
 
   <form [formGroup]="form" (ngSubmit)="sendComment()">
 
-    <app-editor formControlName="message"
+    <app-editor data-testid='comment'
+                formControlName="message"
                 *ngIf="!ticketIdFromParent && state !== 'error' && isPolling"
                 >
     </app-editor>
@@ -231,13 +232,25 @@
             [(ngModel)]="newCommentState"
             [ngModelOptions]="{standalone: true}"
             >
-          <mat-radio-button [value]=4 i18n="@@Kommentti">
+          <mat-radio-button
+              data-testid='comment-radio-btn'
+              i18n="@@Kommentti"
+              [value]=4
+              >
             Kommentti
           </mat-radio-button>
-          <mat-radio-button [value]=3 i18n="@@Lisätietoa tarvitaan">
+          <mat-radio-button
+              data-testid='info-needed-radio-btn'
+              i18n="@@Lisätietoa tarvitaan"
+              [value]=3
+              >
             Lisätietoa tarvitaan
           </mat-radio-button>
-          <mat-radio-button [value]=5 i18n="@@Ratkaisuehdotus">
+          <mat-radio-button
+              data-testid='solution-radio-btn'
+              i18n="@@Ratkaisuehdotus"
+              [value]=5
+              >
             Ratkaisuehdotus
           </mat-radio-button>
         </mat-radio-group>
