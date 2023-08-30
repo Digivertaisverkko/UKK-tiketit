@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { BeginningButtonComponent } from './beginning-button.component';
 
-describe('ToBeginningButtonComponent', () => {
+describe('BeginningButtonComponent', () => {
   let component: BeginningButtonComponent;
   let fixture: ComponentFixture<BeginningButtonComponent>;
 

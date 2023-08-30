@@ -57,7 +57,7 @@ export class PageNotFoundComponent {
     private title : Title
     ) {
     this.title.setTitle(this.store.getBaseTitle() + $localize
-        `:@@@@404-otsikko:Sivua ei löytynyt`);
+        `:@404-otsikko:Sivua ei löytynyt`);
       this.isLoggedIn = this.store.getIsLoggedIn();
   }
 
