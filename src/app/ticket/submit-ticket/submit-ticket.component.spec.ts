@@ -89,18 +89,39 @@ describe('SubmitTicketComponent', () => {
     fixture = TestBed.createComponent(SubmitTicketComponent);
     component = fixture.componentInstance;
     component.courseid = '1';
+    component.id = '';
+    component.ngOnInit();
+
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
+  it('shows help text', () => {
+    fixture.detectChanges();
+    const helpTextP = findEl(fixture, 'help-text').nativeElement;
+    expect(helpTextP.innerText).toBe(helpText);
+  });
+
+  it('shows prefilled field', fakeAsync(() => {
+    const fields = courseDummyData.ticketFields;
+    fixture.detectChanges();
+    tick();
+    const prefilledField = findEl(fixture, 'field-0').nativeElement;
+    const prefilledText = fields[0].esitaytto;
+    expect(prefilledField.value).toBe(prefilledText);
+  }));
+
   it('renders the form and sends a new ticket', fakeAsync(() => {
-    component.id = '';
+    tick();
+    fixture.detectChanges();
+    tick();
     const titleText = 'Uusi kysymys';
     const messageText = 'Kysymyksen teksti';
     const fieldTexts = [ 'Tehtävä 1', 'Kotitehtävä' ];
     const fields = courseDummyData.ticketFields;
+
     const expectedTicket: UusiTiketti = {
       otsikko: titleText,
       viesti: messageText,
@@ -109,39 +130,13 @@ describe('SubmitTicketComponent', () => {
         { arvo: fieldTexts[1], id: fields[1].id }
       ]
     }
-
-    component.ngOnInit();
-    tick();
-    fixture.detectChanges();
-    tick();
-
-    const helpTextP = findEl(fixture, 'help-text').nativeElement;
-    expect(helpTextP.innerText).toBe(helpText);
-    
-    const prefilledField = findEl(fixture, 'field-0').nativeElement;
-    const prefilledText = fields[0].esitaytto;
-    expect(prefilledField.value).toBe(prefilledText);
-
-    /*
-    const tooltipIcon = findEl(fixture, 'field-tooltip-0').nativeElement;
-    const tooltipDirective = tooltipIcon.injector.get(MatTooltip);
-    
-    // Simulate a click to trigger tooltip
-    tooltipIcon.triggerEventHandler('click', null);
-    tick();
-    fixture.detectChanges();
-    tick();
-    const tooltipText = tooltipDirective.message;
-    expect(tooltipText).toBe(fields[0].ohje);
-    */
-
     setFieldValue(fixture, 'title', titleText);
     setFieldValue(fixture, 'message', messageText);
 
     fieldTexts.forEach((fieldText, index) => {
       setFieldValue(fixture, 'field-' + index, fieldText);
     });
-  
+
     const sendButton = findEl(fixture, 'send-button').nativeElement;
     expect(sendButton).toBeDefined();
     sendButton.click();
@@ -150,7 +145,22 @@ describe('SubmitTicketComponent', () => {
     expect(fakeTicketService.addTicket).toHaveBeenCalledWith(
       component.courseid, expectedTicket
     );
-
   }));
+
+  // Ei toimi vielä.
+  /*
+  it('shows field tooltip', fakeAsync(() => {
+    const tooltipIcon = findEl(fixture, 'field-tooltip-0').nativeElement;
+    const tooltipDirective = tooltipIcon.injector.get(MatTooltip);
+
+    // Simulate a click to trigger tooltip
+    tooltipIcon.triggerEventHandler('click', null);
+    tick();
+    fixture.detectChanges();
+    tick();
+    const tooltipText = tooltipDirective.message;
+    expect(tooltipText).toBe(fields[0].ohje);
+  });
+  */
 
 });
