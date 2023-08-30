@@ -25,6 +25,7 @@
         <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
 
         <input  formControlName="email"
+                data-testid="email"
                 matInput
                 name="email"
                 required
@@ -98,6 +99,7 @@
     <ng-container *ngIf="state !== 'error'">
       <button class="login-button"
               color="primary"
+              data-testid="submit-button"
               i18n="@@Luo tili"
               mat-raised-button
               type="submit"
