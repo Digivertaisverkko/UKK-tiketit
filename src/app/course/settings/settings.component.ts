@@ -195,7 +195,7 @@ export class SettingsComponent implements OnInit {
     const role: Role = this.getRole(checkboxValue);
     this.courses.sendInvitation(this.courseid, email, role).then(res => {
       if (res?.success === true) {
-        this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Lähetettiin kutsu onnistuneesti` + '.';
+        this.inviteMessage = $localize `:@@Käyttäjän kutsuminen onnistui:Kutsu välitettiin lähetettäväksi` + '.';
       } else {
         throw Error
       }
