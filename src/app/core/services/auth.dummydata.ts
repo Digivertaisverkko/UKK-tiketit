@@ -1,6 +1,12 @@
 import { Role } from "@core/core.models"
 
 export const authDummyData = {
+
+  loginInfo: {
+    "login-url": "course/1/login?loginid=d7cda27a-cc58-4825-b2ee-5f1df71072d8",
+    "login-id": "d7cda27a-cc58-4825-b2ee-5f1df71072d8"
+  },
+
   oikeudetOpettaja: {
     oikeudet: {
       id: 2,
@@ -29,7 +35,6 @@ export const authDummyData = {
       asema: "opiskelija" as Role,
       asemaStr: "Opettaja"
   },
-  
 
   minunOpettaja: {
     id: 2,

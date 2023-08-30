@@ -34,9 +34,9 @@ export class RegisterComponent implements OnInit, OnDestroy{
   constructor(private auth : AuthService,
               private courses: CourseService,
               private formBuilder: FormBuilder,
-              private router: Router,
               private store : StoreService,
               private title: Title,
+              public router: Router,
               ) {
     this.form = this.buildForm()
   }

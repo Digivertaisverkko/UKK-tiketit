@@ -12,7 +12,7 @@
       Sinut on kutsuttu osallistumaan kurssille
     </span>
 
-    <strong>{{ courseName }}</strong>.
+    <strong data-testid="course-name">{{ courseName }}</strong>.
     <span i18n="@@Jos et halua liittyä kurssille">
       Jos et halua liittyä kurssille, sinun ei tarvitse tehdä mitään.
     </span>
@@ -36,6 +36,7 @@
       <mat-form-field>
         <mat-label i18n="@@Muille näkyvä nimesi">Muille näkyvä nimesi</mat-label>
         <input  formControlName="name"
+                data-testid="name"
                 matInput
                 maxlength="255"
                 type="name"
@@ -51,7 +52,8 @@
 
       <mat-form-field>
         <mat-label i18n="@@Salasana">Salasana</mat-label>
-        <input  formControlName="password"
+        <input  data-testid="password"
+                formControlName="password"
                 matInput
                 maxlength="255"
                 type="password"
@@ -66,7 +68,8 @@
 
       <mat-form-field>
         <mat-label i18n="@@Salasana uudelleen">Salasana uudelleen</mat-label>
-        <input  formControlName="repassword"
+        <input  data-testid="repassword"
+                formControlName="repassword"
                 matInput
                 type="password"
                 required
