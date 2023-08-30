@@ -11,7 +11,7 @@ import { stringsMatchValidator } from '@shared/directives/strings-match.directiv
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';
 
-// Shares same view with Login screen so they share same styleUrl.
+// ! Käyttää login-komponentin tyylitiedostoa.
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -27,6 +27,9 @@ export class RegisterComponent implements OnInit, OnDestroy{
   public invitedInfo: InvitedInfo | undefined;
   public isLoggedIn$: Subscription | null = null;
   public isLoggedIn: boolean | null | undefined;
+  /* Jos kutsusta ei saada tarvittavia tietoja eli rekisteröiminen ei ole
+  mahdollista, käytetään error-tilaa. Silloin ei näytetä lomaketta. */
+  public state: 'editing' | 'error' = 'editing';
 
   constructor(private auth : AuthService,
               private courses: CourseService,
@@ -57,19 +60,18 @@ export class RegisterComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.trackLoggedStatus();
     this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
-      if (res === null) {
+      if (res === null || res?.id === null) {
         throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
       }
-      if (res.id != null) {
-        window.localStorage.removeItem('redirectUrl');
-        if (this.isLoggedIn) this.auth.logout();
-        this.invitedInfo = res;
-        this.getCourseName(this.invitedInfo.kurssi);
-      }
+      window.localStorage.removeItem('redirectUrl');
+      if (this.isLoggedIn) this.auth.logout();
+      this.invitedInfo = res;
+      this.getCourseName(this.invitedInfo.kurssi);
       if (res.sposti != null) {
         this.email.setValue(res.sposti);
       }
     }).catch(err => {
+      this.state = 'error';
       this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
     })
   }
@@ -128,7 +130,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     const password = this.form.controls['password'].value;
     this.auth.createAccount(name, email, password, this.invitation).then(res => {
       if (res?.success === true) {
-        console.log('luonti onnistui');
         return;
       } else {
         this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;

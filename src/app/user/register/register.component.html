@@ -7,7 +7,7 @@
     Tilin luominen
   </h2>
 
-  <p>
+  <p *ngIf="state !== 'error'">
     <span i18n='@@Sinut on kutsuttu'>
       Sinut on kutsuttu osallistumaan kurssille
     </span>
@@ -20,70 +20,73 @@
 
   <form [formGroup]="form" (ngSubmit)="submit()">
 
-    <mat-form-field>
-      <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
+    <ng-container *ngIf="state !== 'error'">
+      <mat-form-field>
+        <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
 
-      <input  formControlName="email"
-              matInput
-              name="email"
-              required
-              />
-      <!-- <mat-icon matSuffix>email</mat-icon> -->
-    </mat-form-field>
+        <input  formControlName="email"
+                matInput
+                name="email"
+                required
+                />
+        <!-- <mat-icon matSuffix>email</mat-icon> -->
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label i18n="@@Muille näkyvä nimesi">Muille näkyvä nimesi</mat-label>
-      <input  formControlName="name"
-              matInput
-              maxlength="255"
-              type="name"
-              required
-              />
-      <mat-error  i18n="@@Nimi tarvitaan"
-                  *ngIf="name?.errors?.['required']"
-                  >
-        Nimi tarvitaan.
-      </mat-error>
-      <!-- <mat-icon matSuffix>lock</mat-icon> -->
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n="@@Muille näkyvä nimesi">Muille näkyvä nimesi</mat-label>
+        <input  formControlName="name"
+                matInput
+                maxlength="255"
+                type="name"
+                required
+                />
+        <mat-error  i18n="@@Nimi tarvitaan"
+                    *ngIf="name?.errors?.['required']"
+                    >
+          Nimi tarvitaan.
+        </mat-error>
+        <!-- <mat-icon matSuffix>lock</mat-icon> -->
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label i18n="@@Salasana">Salasana</mat-label>
-      <input  formControlName="password"
-              matInput
-              maxlength="255"
-              type="password"
-              required
-              />
-      <mat-error  i18n="@@Salasana tarvitaan"
-                  *ngIf="password?.errors?.['required']"
-                  >
-        Salasana tarvitaan.</mat-error>
-      <!-- <mat-icon matSuffix>lock</mat-icon> -->
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n="@@Salasana">Salasana</mat-label>
+        <input  formControlName="password"
+                matInput
+                maxlength="255"
+                type="password"
+                required
+                />
+        <mat-error  i18n="@@Salasana tarvitaan"
+                    *ngIf="password?.errors?.['required']"
+                    >
+          Salasana tarvitaan.</mat-error>
+        <!-- <mat-icon matSuffix>lock</mat-icon> -->
+      </mat-form-field>
 
-    <mat-form-field>
-      <mat-label i18n="@@Salasana uudelleen">Salasana uudelleen</mat-label>
-      <input  formControlName="repassword"
-              matInput
-              type="password"
-              required
-              />
-      <mat-error  i18n="@@Salasanat eivät täsmää"
-                  *ngIf="repassword.errors?.['notEqual']"
-                  >
-        Salasanat eivät täsmää.
-      </mat-error>
-      <mat-error  i18n="@@Kirjoita salasana uudelleen"
-                  *ngIf="repassword.errors?.['required']"
-                  >
-        Kirjoita salasana uudelleen.
-      </mat-error>
-      <!-- <mat-error i18n="@@Salasanat eivät täsmää.">
-        Salasanat eivät täsmää.
-      </mat-error> -->
-      <!-- <mat-icon matSuffix>lock</mat-icon> -->
-    </mat-form-field>
+      <mat-form-field>
+        <mat-label i18n="@@Salasana uudelleen">Salasana uudelleen</mat-label>
+        <input  formControlName="repassword"
+                matInput
+                type="password"
+                required
+                />
+        <mat-error  i18n="@@Salasanat eivät täsmää"
+                    *ngIf="repassword.errors?.['notEqual']"
+                    >
+          Salasanat eivät täsmää.
+        </mat-error>
+        <mat-error  i18n="@@Kirjoita salasana uudelleen"
+                    *ngIf="repassword.errors?.['required']"
+                    >
+          Kirjoita salasana uudelleen.
+        </mat-error>
+        <!-- <mat-error i18n="@@Salasanat eivät täsmää.">
+          Salasanat eivät täsmää.
+        </mat-error> -->
+        <!-- <mat-icon matSuffix>lock</mat-icon> -->
+      </mat-form-field>
+
+    </ng-container>
 
     <app-error
         *ngIf="errorMessage"
@@ -92,20 +95,23 @@
         >
     </app-error>
 
-    <button class="login-button"
-            color="primary"
-            i18n="@@Luo tili"
-            mat-raised-button
-            type="submit"
-            >
-      Luo tili
-    </button>
-  </form>
+    <ng-container *ngIf="state !== 'error'">
+      <button class="login-button"
+              color="primary"
+              i18n="@@Luo tili"
+              mat-raised-button
+              type="submit"
+              >
+        Luo tili
+      </button>
 
-  <div class="required-wrapper">
-    *&nbsp;
-    <span i18n="@@Pakollinen">Pakollinen</span>
-  </div>
+      <div class="required-wrapper">
+        *&nbsp;
+        <span i18n="@@Pakollinen">Pakollinen</span>
+      </div>
+    </ng-container>
+
+  </form>
 
 </div>
   <!-- <button (click)="changeActiveTab()" mat-raised-button>
