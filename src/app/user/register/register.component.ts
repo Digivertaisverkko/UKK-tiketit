@@ -66,10 +66,14 @@ export class RegisterComponent implements OnInit, OnDestroy{
       window.localStorage.removeItem('redirectUrl');
       if (this.isLoggedIn) this.auth.logout();
       this.invitedInfo = res;
-      this.getCourseName(this.invitedInfo.kurssi);
       if (res.sposti != null) {
         this.email.setValue(res.sposti);
       }
+      return this.courses.getCourseName(this.courseid)
+    }).then(response => {
+      this.courseName = response ?? '';
+      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Luo käyttäjätili kurssille:
+          Luo käyttäjätili kurssille` + this.courseName);
     }).catch(err => {
       this.state = 'error';
       this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
@@ -110,15 +114,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
       validators: [ stringsMatchValidator('password', 'repassword') ]
     }
     );
-  }
-
-  private getCourseName(courseid: string) {
-    this.courses.getCourseName(courseid).then(response => {
-      this.courseName = response ?? '';
-      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Luo käyttäjätili kurssille:
-          Luo käyttäjätili kurssille` + this.courseName);
-    }).catch((response) => {
-    });
   }
 
   public submit() {
