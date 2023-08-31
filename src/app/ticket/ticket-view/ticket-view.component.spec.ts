@@ -23,7 +23,7 @@ import { ViewAttachmentsComponent } from '@ticket/components/view-attachments/vi
 import { TicketModule } from '@ticket/ticket.module';
 import { MatRadioButtonHarness } from '@angular/material/radio/testing'; // Import MatRadioButtonHarness
 
-fdescribe('TicketViewComponent', () => {
+describe('TicketViewComponent', () => {
   let component: TicketViewComponent;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketViewComponent>;
