@@ -78,6 +78,7 @@
 
       <button (click)="removeTicket(ticketID, courseid!)"
               color="accent"
+              data-testid="confirm-button"
               [disabled]="state==='sending'"
               i18n="@@Vahvista poisto"
               mat-raised-button

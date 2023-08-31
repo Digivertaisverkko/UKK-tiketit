@@ -23,15 +23,15 @@ import { ViewAttachmentsComponent } from '@ticket/components/view-attachments/vi
 import { TicketModule } from '@ticket/ticket.module';
 import { MatRadioButtonHarness } from '@angular/material/radio/testing'; // Import MatRadioButtonHarness
 
-describe('TicketViewComponent', () => {
+fdescribe('TicketViewComponent', () => {
   let component: TicketViewComponent;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketViewComponent>;
   let loader: HarnessLoader;
   let store: StoreService
   // Oletusarvoja
-  const ticket: Tiketti = ticketDummyData.ticket;
-  const user: User = authDummyData.userInfoTeacher;
+  let ticket: Tiketti;
+  let user: User;
 
   initializeLanguageFI(); // datePipeen
 
@@ -43,8 +43,10 @@ describe('TicketViewComponent', () => {
       return null;
     }
   }
-  
+
   beforeEach(async() => {
+    ticket = ticketDummyData.ticket;
+    user = authDummyData.userInfoEsko;
 
     fakeTicketService = jasmine.createSpyObj('TicketService', {
       addComment: Promise.resolve({
@@ -52,9 +54,10 @@ describe('TicketViewComponent', () => {
         kommentti: 12345
       }),
       getTicket: Promise.resolve(ticket),
+      removeTicket: Promise.resolve({ success: true})
     });
     const id = '4'; // ticketID URL:ssa.
-  
+
     await TestBed.configureTestingModule({
       declarations: [
         MockComponent(BeginningButtonComponent),
@@ -100,6 +103,33 @@ describe('TicketViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('"Remove ticket" calls correct service method', fakeAsync(() => {
+    component.fetchTicket(component.courseid);
+    tick();
+    fixture.detectChanges();
+    const removeButton = findEl(fixture, 'remove-button').nativeElement;
+    removeButton.click();
+    tick(400);
+    fixture.detectChanges();
+    const confirmButton = findEl(fixture, 'confirm-button').nativeElement;
+    confirmButton.click();
+    expect(fakeTicketService.removeTicket).toHaveBeenCalledWith(
+      ticket.id, component.courseid
+    );
+  }));
+
+  it('"Edit ticket" routes to correct view', fakeAsync(() => {
+    const navigateSpy = spyOn(component.router, 'navigate');
+    const expectedRoute = [`/course/${component.courseid}/submit/${ticket.id}`];
+    const expectedState = { editTicket: true };
+    component.fetchTicket(component.courseid);
+    tick();
+    fixture.detectChanges();
+    const editButton = findEl(fixture, 'edit-button').nativeElement;
+    editButton.click();
+    expect(navigateSpy).toHaveBeenCalledWith(expectedRoute, { state: expectedState });
+  }));
+
   it('fetches ticket data from service.', fakeAsync(() => {
     // Ei subscribaa timeriin, joten kutsutaan manuaalisesti.
     component.fetchTicket(component.courseid);
@@ -110,6 +140,8 @@ describe('TicketViewComponent', () => {
   }));
 
   it("sets if ticket isn't editable or removable.", fakeAsync(() => {
+    const student = authDummyData.userInfoRinne;
+    store.setUserInfo(student);
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
@@ -123,8 +155,6 @@ describe('TicketViewComponent', () => {
   }));
 
   it("sets if ticket is editable and removable.", fakeAsync(() => {
-    const student = authDummyData.userInfoEsko;
-    store.setUserInfo(student);
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
@@ -137,7 +167,7 @@ describe('TicketViewComponent', () => {
 
     discardPeriodicTasks();  // Varalta jos tiketin pollaus käynnistyy.
   }));
-  
+
   it('shows ticket heading and message.', fakeAsync(() => {
     component.fetchTicket(component.courseid);
     tick();
@@ -175,19 +205,21 @@ describe('TicketViewComponent', () => {
 
   }));
 
-  it('sets right sender for ticket.', fakeAsync(() => {
+  it('sets right sender for ticket', fakeAsync(() => {
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
     expect(component.ticket.aloittaja).toEqual(ticket.aloittaja);
   }));
 
-  it('sends a new comment with right parameters.', fakeAsync(async() => {
+  it('sends a new comment with different state', fakeAsync(async() => {
+    const student = authDummyData.userInfoTeacher;
+    store.setUserInfo(student);
     let comment = 'Uusi kommentti';
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
-    component.message.setValue(comment);  
+    component.message.setValue(comment);
     // setFieldValue(fixture, 'comment', comment); // Ei toiminut.
     fixture.detectChanges();
 
@@ -207,6 +239,6 @@ describe('TicketViewComponent', () => {
       ticket.id, component.courseid, comment, moreInfoNeededState
     );
   }));
-  
+
 
 });
