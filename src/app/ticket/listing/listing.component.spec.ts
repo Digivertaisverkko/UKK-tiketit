@@ -25,7 +25,7 @@ describe('ListingComponent', () => {
     });
 
     fakeTicketService = jasmine.createSpyObj('TicketService', {
-      getFAQlist: Promise.resolve(ticketDummyData.FAQsInlist)
+      getFAQlist: Promise.resolve(ticketDummyData.UKKarray)
     });
 
     // Rivi 133: checkSuccessMessage()
@@ -68,7 +68,7 @@ describe('ListingComponent', () => {
       tick();
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
       const dataSourceData = JSON.stringify(component.dataSource.data);
-      const FAQsDummyData = JSON.stringify(ticketDummyData.FAQsInlist);
+      const FAQsDummyData = JSON.stringify(ticketDummyData.UKKarray);
       expect(dataSourceData).toEqual(FAQsDummyData);
     }));
 

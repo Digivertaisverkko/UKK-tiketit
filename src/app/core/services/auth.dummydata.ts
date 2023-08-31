@@ -7,6 +7,13 @@ export const authDummyData = {
     "login-id": "d7cda27a-cc58-4825-b2ee-5f1df71072d8"
   },
 
+  minunOpettaja: {
+    id: 2,
+    nimi: "Marianna Laaksonen",
+    sposti: "marianna.laaksonen@example.com",
+    asema: null
+  },
+
   oikeudetOpettaja: {
     oikeudet: {
       id: 2,
@@ -20,14 +27,6 @@ export const authDummyData = {
     }
   },
 
-  userInfoTeacher: {
-    id: 2,
-    nimi: "Marianna Laaksonen",
-    sposti: "marianna.laaksonen@example.com",
-    asema: "opettaja" as Role,
-    asemaStr: "Opettaja"
-  },
-
   userInfoEsko: {
       id: 1,
       nimi: "Esko Seppä",
@@ -36,10 +35,19 @@ export const authDummyData = {
       asemaStr: "Opettaja"
   },
 
-  minunOpettaja: {
+  userInfoRinne: {
+    id: 3,
+    nimi: "Piia Rinne",
+    sposti: "piia.rinne@example.com",
+    asema: "opiskelija" as Role,
+    asemaStr: "Opiskelija"
+  },
+
+  userInfoTeacher: {
     id: 2,
     nimi: "Marianna Laaksonen",
     sposti: "marianna.laaksonen@example.com",
-    asema: null
-  }
+    asema: "opettaja" as Role,
+    asemaStr: "Opettaja"
+  },
 }

@@ -23,7 +23,7 @@ describe('TicketService', () => {
   let store: StoreService;
   let tickets: TicketService;
 
- 
+
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
@@ -51,7 +51,7 @@ describe('TicketService', () => {
     expect(tickets).toBeTruthy();
   });
 
-  
+
   /*
   it('retrieves the full ticket list', (done) => {
     let actualTicketListData: SortableTicket[] | null | undefined;
@@ -80,7 +80,7 @@ describe('TicketService', () => {
     request.flush(ticketDummyData.ticketListServerData);
   });
   */
-  
+
 
   it('retrieves ticket with all properties', fakeAsync(() => {
     store.setUserInfo(storeDummyData.teacherUser);
@@ -105,7 +105,7 @@ describe('TicketService', () => {
 
     const fieldsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
     const fieldsRequest = controller.expectOne(fieldsUrl);
-    fieldsRequest.flush(ticketDummyData.ticket3fields);
+    fieldsRequest.flush(ticketDummyData.ticket3KenttaArray);
     tick();
 
     const commentsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti`

@@ -131,7 +131,7 @@ export const ticketDummyData = {
     arkistoitava: false
   },
 
-  ticket3fields: [
+  ticket3KenttaArray: [
     {
       id: 1,
       arvo: "2",
@@ -193,7 +193,7 @@ export const ticketDummyData = {
     'kommentit'
   ],
 
-  FAQsInlist: [
+  UKKarray: [
     {
       id: 7,
       otsikko: 'UKK kusymys',
