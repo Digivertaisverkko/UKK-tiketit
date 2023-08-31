@@ -1,9 +1,11 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick } from '@angular/core/testing';
+import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MockComponent } from 'ng-mocks';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthService } from '@core/services/auth.service';
@@ -15,8 +17,9 @@ import { TicketService } from '@ticket/ticket.service';
 describe('ListingComponent', () => {
   let component: ListingComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
-  let fakeTicketService: Partial<TicketService>;
+  let fakeTicketService: Pick<TicketService, 'getFAQlist'>;
   let fixture: ComponentFixture<ListingComponent>;
+  let router: Router;
 
   beforeEach(async () => {
     fakeAuthService = jasmine.createSpyObj('AuthService', {
@@ -30,7 +33,6 @@ describe('ListingComponent', () => {
 
     // Rivi 133: checkSuccessMessage()
     window.history.pushState({ message: ''}, '', '');
-
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -52,9 +54,28 @@ describe('ListingComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(ListingComponent);
+    router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+  it("clicking FAQ's title routes to it's view", fakeAsync(() => {
+    const courseID = '1';
+    component.courseid = courseID;
+    const faqList =  ticketDummyData.UKKarray;
+    const faqID = faqList[0].id;
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const expectedRoute = `/course/${courseID}/faq-view/${faqID}`;
+    component.ngOnInit();
+    tick();
+    fixture.detectChanges();
+    const titleAnchor = findEl(fixture, `faq-title-a-${faqID}`).nativeElement;
+    titleAnchor.click();
+    tick();
+    const [actualRoute, navigationOptions] = navigateSpy.calls.mostRecent().args;
+    expect(String(actualRoute)).toBe(expectedRoute);
+    discardPeriodicTasks();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

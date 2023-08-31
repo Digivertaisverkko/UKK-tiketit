@@ -94,7 +94,8 @@
       Otsikko
     </th>
     <td mat-cell *matCellDef="let element">
-      <a [routerLink]="'/course/' + courseid + '/faq-view/' + element.id">
+      <a  [attr.data-testid]="'faq-title-a-' + element.id"
+          [routerLink]="'/course/' + courseid + '/faq-view/' + element.id">
         {{ (element.otsikko.length > maxItemTitleLength)?
           (element.otsikko | slice:0:maxItemTitleLength) + '...':(element.otsikko) }}
       </a>
