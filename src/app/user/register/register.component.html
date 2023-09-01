@@ -102,7 +102,9 @@
     <ng-container *ngIf="state !== 'error'">
 
       <mat-checkbox class="checkbox"
+                    data-testid="consent-checkbox"
                     formControlName="isAcceptingDataConsent"
+                    id="consent-checkbox"
                     name="checkbox"
                     type="checkbox"
                     >
