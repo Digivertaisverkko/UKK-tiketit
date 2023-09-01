@@ -100,6 +100,21 @@
     </app-error>
 
     <ng-container *ngIf="state !== 'error'">
+
+      <mat-checkbox class="checkbox"
+                    formControlName="isAcceptingDataConsent"
+                    name="checkbox"
+                    type="checkbox"
+                    >
+        <span>Olen lukenut ja hyväksyn käyttöehdot</span>&nbsp;<sup>*</sup>
+      </mat-checkbox>
+      <mat-error class="checkbox-error"
+                  *ngIf="isAcceptingDataConsent.hasError('required') &&
+                    isAcceptingDataConsent.touched"
+                  >
+        Sinun pitää hyväksyä käyttöehdot, jos haluat käyttää järjestelmää.
+      </mat-error>
+
       <button class="login-button"
               color="primary"
               data-testid="submit-button"

@@ -45,6 +45,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
     return this.form.get('email') as FormControl
   }
 
+  get isAcceptingDataConsent(): FormControl {
+    return this.form.get('isAcceptingDataConsent') as FormControl
+  }
+
   get name(): FormControl {
     return this.form.get('name') as FormControl
   }
@@ -109,6 +113,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
         Validators.compose([
           Validators.required
         ])
+      ],
+      isAcceptingDataConsent: [
+        null,
+        Validators.compose([
+          Validators.requiredTrue
+        ])
       ]
     }, {
       validators: [ stringsMatchValidator('password', 'repassword') ]
@@ -118,7 +128,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
   public submit() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      console.error('Form is invalid.');
+      return
+    }
     this.errorMessage = '';
     const email = this.form.controls['email'].value;
     const name = this.form.controls['name'].value;

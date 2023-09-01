@@ -1,5 +1,5 @@
 @import "/src/variables.scss";
-// Tämä on käytössä myös register -komponentissa.
+// Tätä tiedostoa käyttää myös register -komponentti.
 
 .vertical-spacer {
   height: 4.5rem;
@@ -30,6 +30,16 @@
   span {
     display: inline-block;
   }
+}
+
+.checkbox {
+  margin-bottom: 1rem;
+  margin-left: -2rem;
+}
+
+.checkbox-error {
+  margin-top: -1em;
+  margin-bottom: 1em;
 }
 
 @media screen and (max-width: $XSmall) {
