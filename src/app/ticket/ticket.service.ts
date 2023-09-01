@@ -185,7 +185,6 @@ export class TicketService {
       faq.aikaleima = new Date(faq.aikaleima)
       faq.aikaleimaStr = getDateString(faq.aikaleima, thisYear)
     })
-
     return FAQlist;
   }
 

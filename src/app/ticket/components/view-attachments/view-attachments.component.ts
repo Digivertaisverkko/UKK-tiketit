@@ -12,12 +12,15 @@ import { TicketService } from '@ticket/ticket.service';
           aria-label="Lataa liitetiedosto"
           class="attachment"
           (click)="downloadFile(ticketID, file.kommentti, file.tiedosto, file.nimi)"
+          [attr.data-testid]="'download-button-' + i"
           i18n-aria-label="@@Lataa liitetiedosto"
           matTooltip="{{file.nimi}}"
           [matTooltipShowDelay]="600"
           *ngFor="let file of files; let i = index"
           >
-          <span class="filename">{{ file.nimi }}</span>
+          <span class="filename" [attr.data-testid]="'filename-' + i">
+            {{file.nimi}}
+          </span>
           &nbsp;
           <div class="filesize">
             ({{ file.koko | filesize : { locale: 'fi', round: 1,
