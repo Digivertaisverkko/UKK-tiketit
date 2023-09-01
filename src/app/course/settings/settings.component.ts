@@ -189,7 +189,11 @@ export class SettingsComponent implements OnInit {
   public submitInvite() {
     this.form.markAllAsTouched();
     this.inviteErrorMessage = '';
-    if (this.form.invalid) return;
+    this.inviteMessage = '';
+    if (this.form.invalid) {
+      console.error('Form on virheellinen.');
+      return;
+    }
     const email = this.form.controls['email'].value;
     const checkboxValue = this.form.controls['role'].value;
     const role: Role = this.getRole(checkboxValue);
