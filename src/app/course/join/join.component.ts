@@ -141,7 +141,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.state = 'wrongUser';
     this.error = {
       title: $localize `:@@Väärä käyttäjä:Väärä käyttäjä`,
-      message: `:@@Liittyäksesi kurssille:Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, jolle kutsu on lähetetty` + '.'
+      message: $localize `:@@Liittyäksesi kurssille:Liittyäksesi kurssille, kirjaudu sisään käyttäjänä, jolle kutsu on lähetetty` + '.'
     }
   }
 
