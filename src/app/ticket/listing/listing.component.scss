@@ -88,6 +88,10 @@ a {
   background-color: #f2f2f2 !important
 }
 
+.no-items-message {
+  margin-left: 1.2rem;
+}
+
 :host ::ng-deep .mat-sort-header-content {
   color: #595959;
 }
