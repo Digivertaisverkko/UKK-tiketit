@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick }
     from '@angular/core/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
@@ -15,7 +16,6 @@ import { User } from '@core/core.models';
 import { ticketDummyData } from '@ticket/ticket.dummydata';
 
 import { SharedModule } from '@shared/shared.module';
-import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { initializeLanguageFI } from 'src/app/app.initializers';
@@ -29,12 +29,13 @@ describe('TicketViewComponent', () => {
   let fixture: ComponentFixture<TicketViewComponent>;
   let loader: HarnessLoader;
   let store: StoreService
-  // Oletusarvoja
   let ticket: Tiketti;
   let user: User;
 
   initializeLanguageFI(); // datePipeen
 
+  /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
+     Testaamiseen, onko jokin elementti renderoitu. */
   function findElIfExists(fixture: ComponentFixture<any>, selector: string):
       HTMLElement | null {
     try {

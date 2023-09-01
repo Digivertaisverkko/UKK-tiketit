@@ -16,12 +16,14 @@ import { HeadlineComponent } from '@shared/components/headline/headline.componen
 import { MatInputModule } from '@angular/material/input';
 import { RegisterComponent } from '@user/register/register.component';
 import { StoreService } from '@core/services/store.service';
+//import { FakeCourseService } from '@course/fake-course.service';
 
-fdescribe('RegisterComponent', () => {
+describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
-  let fakeCourseService: jasmine.SpyObj<CourseService>;
-  let fakeStoreService: jasmine.SpyObj<StoreService>;
+  let fakeCourseService: Pick<CourseService, 'getCourseName' | 'getInvitedInfo'>;
+  // let fakeCourseService: FakeCourseService;
+  let fakeStoreService: Pick<StoreService, 'getBaseTitle' | 'onIsUserLoggedIn'>;
   let fixture: ComponentFixture<RegisterComponent>;
   let courseName: string;
   let invitationID: string;
@@ -39,12 +41,14 @@ fdescribe('RegisterComponent', () => {
         createAccount: Promise.resolve({ success: true }),
         getLoginInfo: Promise.resolve(authDummyData.loginInfo),
         login: Promise.resolve({ success: true }),
-        logout: undefined
+        logout: Promise.resolve({ success: true })
       });
+
+      // fakeCourseService = jasmine.createSpyObj('AuthService', new FakeCourseService);
 
       fakeCourseService = jasmine.createSpyObj('CourseService', {
         getCourseName: Promise.resolve(courseName),
-        getInvitedInfo: Promise.resolve(courseDummyData.invitedInfo)
+        getInvitedInfo: Promise.resolve(courseDummyData.invitedInfo),
       });
 
       fakeStoreService = jasmine.createSpyObj('StoreService', {
@@ -87,12 +91,15 @@ fdescribe('RegisterComponent', () => {
       expect(fakeCourseService.getInvitedInfo).toHaveBeenCalledWith(
         component.courseid, invitationID
       );
-      /*
-      const courseName = findEl(fixture, 'course-name').nativeElement;
-      console.dir(courseName);
-      expect(courseName.innerHTML).toBe(courseName);
-      expect(courseName).toBeTruthy();
-      */
+      fixture.detectChanges();
+      tick();
+      expect(fakeCourseService.getCourseName).toHaveBeenCalledWith(
+        courseID
+      );
+      // Ei toimi vielä.
+      // const nameEl = findEl(fixture, 'course-name').nativeElement;
+      // expect(component.textContent).toBe(courseName)
+      // expect(component.courseName).toBe(courseName);
       const email = findEl(fixture, 'email').nativeElement;
       expect(email).toBeTruthy();
       expect(email.value).toBe(courseDummyData.invitedInfo.sposti);

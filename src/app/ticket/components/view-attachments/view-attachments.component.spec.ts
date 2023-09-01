@@ -8,7 +8,7 @@ import { FilesizeModule } from '@shared/pipes/filesize.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 
-fdescribe('AttachmentListComponent', () => {
+describe('AttachmentListComponent', () => {
   let component: ViewAttachmentsComponent;
   let fakeTicketService: Pick<TicketService, 'getFile'>;
   let fixture: ComponentFixture<ViewAttachmentsComponent>;
