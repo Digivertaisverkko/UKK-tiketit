@@ -9,7 +9,6 @@ import { of } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { HeaderComponent } from './header.component';
 import { StoreService } from '@core/services/store.service';
-import { UsermenuComponent } from '@core/usermenu/usermenu.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -33,8 +32,7 @@ describe('HeaderComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [
-        HeaderComponent,
-        MockComponent(UsermenuComponent)
+        HeaderComponent
       ],
       imports: [
         MatIconModule,

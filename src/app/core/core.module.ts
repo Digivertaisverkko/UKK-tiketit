@@ -27,7 +27,6 @@ import { NoPrivilegesComponent } from './no-privileges/no-privileges.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.component';
 import { NoDataConsentComponent } from './no-data-consent/no-data-consent.component';
-import { UsermenuComponent } from './usermenu/usermenu.component';
 import { HomeComponent } from './home/home.component';
 
 @NgModule({
@@ -39,7 +38,6 @@ import { HomeComponent } from './home/home.component';
     PageNotFoundComponent,
     PrivacyModalComponent,
     NoDataConsentComponent,
-    UsermenuComponent,
     HomeComponent,
   ],
   imports: [
@@ -62,7 +60,6 @@ import { HomeComponent } from './home/home.component';
   exports: [
     HeaderComponent,
     FooterComponent,
-    UsermenuComponent
   ]
 })
 export class CoreModule { }

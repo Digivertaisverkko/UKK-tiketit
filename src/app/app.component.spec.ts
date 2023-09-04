@@ -9,7 +9,6 @@ import { MockComponent } from 'ng-mocks';
 import { AppComponent } from './app.component';
 import { FooterComponent } from '@core/footer/footer.component';
 import { AuthService } from '@core/services/auth.service';
-import { UsermenuComponent } from '@core/usermenu/usermenu.component';
 import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { initializeLanguage } from './app.initializers';
 
@@ -26,9 +25,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        MockComponent(FooterComponent),
-        MockComponent(UsermenuComponent)
-      ],
+        MockComponent(FooterComponent)      ],
       imports: [
         MatIconModule,
         MatMenuModule,

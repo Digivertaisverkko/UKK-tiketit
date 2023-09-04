@@ -5,7 +5,8 @@
       <span class="spacer"></span>
     </app-header>
 
-    <!-- Tämä on upotuksessa oleva kapeampi header. -->
+    <!--  Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella
+          käytetään header -komponenttia. -->
     <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
 
       <div class="logo" *ngIf="courseID === null; else clickableLogo">
