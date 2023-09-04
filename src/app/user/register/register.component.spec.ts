@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, fakeAsync, tick
     } from '@angular/core/testing';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
 import { of } from 'rxjs';
@@ -62,10 +63,11 @@ describe('RegisterComponent', () => {
       await TestBed.configureTestingModule({
         declarations: [
           MockComponent(HeadlineComponent),
-          RegisterComponent
+          RegisterComponent,
         ],
         imports: [
           BrowserAnimationsModule,
+          MatDialogModule,
           MatFormFieldModule,
           MatInputModule,
           ReactiveFormsModule,
@@ -116,7 +118,9 @@ describe('RegisterComponent', () => {
 
     //  Ei mene vielä läpi.
 
-    /*
+
+     /*
+    
     fit("sends an invitation, logs in and routes to course's list view", fakeAsync(async() => {
       let loader: HarnessLoader = TestbedHarnessEnvironment.loader(fixture);
       const dataConsent = await loader.getHarness(MatCheckboxHarness.with(
@@ -152,7 +156,9 @@ describe('RegisterComponent', () => {
       );
       expect(navigateSpy).toHaveBeenCalledWith(expectedRoute, { state: expectedState });
     }));
-   */
+
+    */
+   
 
   });
 
