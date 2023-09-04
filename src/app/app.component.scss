@@ -1,5 +1,3 @@
-@import '/src/variables.scss';
-
 // Jotta footer ei nouse sivun alaosasta.
 .app-wrapper {
   display: flex;
@@ -66,7 +64,7 @@ main {
   }
 }
 
-@media (max-width: $XSmall) {
+@media (max-width: 600px) {
   main {
     padding: 0 20px 50px 3px;
   }

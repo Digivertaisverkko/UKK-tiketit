@@ -84,9 +84,6 @@ export class SubmitTicketComponent implements OnInit {
 
   private buildAdditionalFields(): void {
     // Luodaan lomakkeelle controllit
-    console.log('build. this.ticketFields:');
-    console.dir(this.ticketFields);
-    console.log('this.ticketId: ' + this.ticketId + ' ' + typeof this.ticketId);
     for (const field of this.ticketFields) {
       let validators = Validators.maxLength(50);
       if (field.pakollinen) {
@@ -133,10 +130,6 @@ export class SubmitTicketComponent implements OnInit {
         arvo: this.additionalFields.controls[i].value
       });
     }
-
-    console.log('ticket:');
-    console.dir(ticket);
-
     return ticket;
   }
 
@@ -203,10 +196,7 @@ export class SubmitTicketComponent implements OnInit {
     this.state = 'sending';
     this.form.disable();
     let newTicket = this.createTicket();
-    console.log('ticket:');
-    console.dir(newTicket);
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    console.log('this.editExisting: ' + this.editExisting + ' ' + typeof this.editExisting);
     if (this.editExisting === true) {
       console.log('submit edited');
       this.submitEdited(newTicket);
