@@ -1,11 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription, takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
 import { InvitedInfo } from '@course/course.models';
+import { PrivacyModalComponent } from '@core/footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 import { CourseService } from '@course/course.service';
@@ -33,6 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
   constructor(private auth : AuthService,
               private courses: CourseService,
+              public dialog: MatDialog,
               private formBuilder: FormBuilder,
               private store : StoreService,
               private title: Title,
@@ -124,6 +127,11 @@ export class RegisterComponent implements OnInit, OnDestroy{
       validators: [ stringsMatchValidator('password', 'repassword') ]
     }
     );
+  }
+
+  public openPrivacyModal(event: Event) {
+    event.stopPropagation();
+    this.dialog.open(PrivacyModalComponent);
   }
 
   public submit() {
