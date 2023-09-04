@@ -108,13 +108,22 @@
                     name="checkbox"
                     type="checkbox"
                     >
-        <span>Olen lukenut ja hyväksyn käyttöehdot</span>&nbsp;<sup>*</sup>
+        <span i18n="@@Hyväksyn, että tietojani käsitellään">
+          Hyväksyn, että tietojani käsitellään</span>
+          <label  class="theme-hyperlink"
+                  (click)="openPrivacyModal($event)"
+                  i18n="@@Väli ja tietosuojaseloste"
+                  >
+            tietosuojaselosteen
+          </label>
+          <span i18n="@@tyhjä">mukaisesti</span>.&nbsp;<sup>*</sup>
       </mat-checkbox>
-      <mat-error class="checkbox-error"
+      <mat-error  class="checkbox-error"
+                  i18n="@@Sinun tulee hyväksyä tämä"
                   *ngIf="isAcceptingDataConsent.hasError('required') &&
                     isAcceptingDataConsent.touched"
                   >
-        Sinun tulee hyväksyä käyttöehdot, jos haluat käyttää järjestelmää.
+        Sinun tulee hyväksyä tämä, jos haluat käyttää järjestelmää.
       </mat-error>
 
       <button class="login-button"

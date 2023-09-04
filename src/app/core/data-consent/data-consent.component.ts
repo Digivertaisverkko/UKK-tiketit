@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../services/auth.service';
-import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
 
