@@ -20,6 +20,13 @@ mat-form-field {
   mat-form-field {
     flex-grow: 3;
   }
+
+}
+
+#title-textarea {
+  font-family: $displayFont;
+  font-size: 1.66rem;
+  font-weight: 700;
 }
 
 .invisible {
