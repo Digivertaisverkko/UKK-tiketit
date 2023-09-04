@@ -1,6 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick }
     from '@angular/core/testing';
+import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +10,7 @@ import { MatTableHarness } from '@angular/material/table/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MockComponent } from 'ng-mocks';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
@@ -23,7 +25,10 @@ describe('TicketListComponent', () => {
   let component: TicketListComponent;
   let fixture: ComponentFixture<TicketListComponent>;
   let loader: HarnessLoader;
-  let ticketService: Partial<TicketService>;
+  let router: Router;
+  let ticketService: Pick<TicketService, 'getTicketList'>;
+
+  initializeLanguageFI(); // datePipeen
 
   beforeEach(async () => {
     // Pitää olla ennen TestBed:n konfigurointia.
@@ -56,21 +61,36 @@ describe('TicketListComponent', () => {
     // Tällä tulee error: No provider for TicketListComponent!
     // component = TestBed.inject(TicketListComponent);
     loader = TestbedHarnessEnvironment.loader(fixture);
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it("clicking ticket's title routes to ticket's view", fakeAsync(() => {
+    const courseID = '1';
+    component.courseid = courseID;
+    component.user = authDummyData.userInfoTeacher;
+    const ticketList =  ticketDummyData.ticketListClientData;
+    const ticketID = ticketList[0].id;
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    const expectedRoute = `/course/${courseID}/ticket-view/${ticketID}`;
+    component.ngOnInit();
+    tick();
+    fixture.detectChanges();
+    const titleAnchor = findEl(fixture, `table-title-a-${ticketID}`).nativeElement;
+    titleAnchor.click();
+    tick();
+    const [actualRoute, navigationOptions] = navigateSpy.calls.mostRecent().args;
+    expect(String(actualRoute)).toBe(expectedRoute);
+    discardPeriodicTasks();
+  }));
 
   it('filters rows by sender name', fakeAsync (async() => {
     const filterValue = 'esko';
-    initializeLanguageFI(); // datePipeen
     component.courseid = '1';
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
     tick();
-    component.applyFilter(filterValue);
+    component.applyFilter(filterValue);     // Saadaan search komponentista.
     tick();
     const filteredData = component.dataSource.filteredData;
     const containsString = filteredData.some(entry =>
@@ -84,7 +104,6 @@ describe('TicketListComponent', () => {
   it('filters rows by additional field content', fakeAsync (async() => {
     let filterValue = 'Kurssin suoritus';
     filterValue = filterValue.toLowerCase();
-    initializeLanguageFI(); // datePipeen
     component.courseid = '1';
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
@@ -102,7 +121,11 @@ describe('TicketListComponent', () => {
     discardPeriodicTasks();
   }));
 
-  it('renders table rows', fakeAsync (async() => {
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('shows table rows', fakeAsync (async() => {
     component.courseid = '1';
     component.user = authDummyData.userInfoTeacher;
     component.ngOnInit();
@@ -113,10 +136,10 @@ describe('TicketListComponent', () => {
     discardPeriodicTasks();
   }));
 
-  describe('fetches data for Mat table dataSource correctly.', () => {
+  describe('fetches data for ticket list correctly.', () => {
     const courseID = '1';
 
-    it('fetches correct ticket data for dataSource.', fakeAsync (() => {
+    it('sets correct ticket data.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
@@ -127,7 +150,9 @@ describe('TicketListComponent', () => {
     it('fetches ticket data for sorting correctly.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
-      expect(component.dataSource.sort).toBeDefined();
+      const sortFn = component.dataSource.sort;
+      expect(sortFn).toBeDefined();
+      expect(sortFn?.sortables.size).toBeGreaterThanOrEqual(4);
     }));
 
     it('sets default sorting to "Edited/Muokattu" column starting from ascending order.', fakeAsync (() => {
@@ -139,20 +164,6 @@ describe('TicketListComponent', () => {
       expect(sortFn?.start).toBe('asc');
       const columnCount = 4;
       expect(sortFn?.sortables.size).toBe(columnCount);
-    }));
-
-    it('sets at least four sorting columns.', fakeAsync (() => {
-      component.fetchTickets(courseID);
-      tick();
-      const sortFn = component.dataSource.sort;
-      expect(sortFn?.sortables.size).toBeGreaterThanOrEqual(4);
-    }));
-
-    it('sets filtering function.', fakeAsync (() => {
-      component.fetchTickets(courseID);
-      tick();
-      const dataSource = component.dataSource;
-      expect(dataSource.filterPredicate).toBeDefined();
     }));
 
     it('fetches tickets 3 times in 2 minutes', fakeAsync(() => {
@@ -171,7 +182,7 @@ describe('TicketListComponent', () => {
     }));
 
     /*
-    fit('sets 5 sortable columns when there is one with attachment', fakeAsync (() => {
+    it('sets 5 sortable columns when there is one with attachment', fakeAsync (() => {
       // Ei voi tehdä testBedin konffauksen jälkeen.
       let dummyData = ticketDummyData.ticketListClientData;
       dummyData[1].liite = true;

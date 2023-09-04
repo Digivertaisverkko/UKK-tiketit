@@ -207,7 +207,8 @@ export class CourseService {
   }
 
   // Luo uudet kentät kurssin tikettipohjalle.
-  public async setTicketField(courseID: string, fields: Kenttapohja[]) {
+  public async setTicketField(courseID: string, fields: Kenttapohja[]):
+    Promise<boolean> {
     for (let field of fields) {
       if (field.id != null) delete field.id;
     }

@@ -11,7 +11,7 @@ import { stringsMatchValidator } from '@shared/directives/strings-match.directiv
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';
 
-// Shares same view with Login screen so they share same styleUrl.
+// ! Käyttää login-komponentin tyylitiedostoa.
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -27,19 +27,26 @@ export class RegisterComponent implements OnInit, OnDestroy{
   public invitedInfo: InvitedInfo | undefined;
   public isLoggedIn$: Subscription | null = null;
   public isLoggedIn: boolean | null | undefined;
+  /* Jos kutsusta ei saada tarvittavia tietoja eli rekisteröiminen ei ole
+  mahdollista, käytetään error-tilaa. Silloin ei näytetä lomaketta. */
+  public state: 'editing' | 'error' = 'editing';
 
   constructor(private auth : AuthService,
               private courses: CourseService,
               private formBuilder: FormBuilder,
-              private router: Router,
               private store : StoreService,
               private title: Title,
+              public router: Router,
               ) {
     this.form = this.buildForm()
   }
 
   get email(): FormControl {
     return this.form.get('email') as FormControl
+  }
+
+  get isAcceptingDataConsent(): FormControl {
+    return this.form.get('isAcceptingDataConsent') as FormControl
   }
 
   get name(): FormControl {
@@ -57,19 +64,22 @@ export class RegisterComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.trackLoggedStatus();
     this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
-      if (res === null) {
+      if (res === null || res?.id === null) {
         throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
       }
-      if (res.id != null) {
-        window.localStorage.removeItem('redirectUrl');
-        if (this.isLoggedIn) this.auth.logout();
-        this.invitedInfo = res;
-        this.getCourseName(this.invitedInfo.kurssi);
-      }
+      window.localStorage.removeItem('redirectUrl');
+      if (this.isLoggedIn) this.auth.logout();
+      this.invitedInfo = res;
       if (res.sposti != null) {
         this.email.setValue(res.sposti);
       }
+      return this.courses.getCourseName(this.courseid)
+    }).then(response => {
+      this.courseName = response ?? '';
+      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Luo käyttäjätili kurssille:
+          Luo käyttäjätili kurssille` + this.courseName);
     }).catch(err => {
+      this.state = 'error';
       this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
     })
   }
@@ -103,6 +113,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
         Validators.compose([
           Validators.required
         ])
+      ],
+      isAcceptingDataConsent: [
+        null,
+        Validators.compose([
+          Validators.requiredTrue
+        ])
       ]
     }, {
       validators: [ stringsMatchValidator('password', 'repassword') ]
@@ -110,25 +126,18 @@ export class RegisterComponent implements OnInit, OnDestroy{
     );
   }
 
-  private getCourseName(courseid: string) {
-    this.courses.getCourseName(courseid).then(response => {
-      this.courseName = response ?? '';
-      this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Luo käyttäjätili kurssille:
-          Luo käyttäjätili kurssille` + this.courseName);
-    }).catch((response) => {
-    });
-  }
-
   public submit() {
     this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      console.error('Form is invalid.');
+      return
+    }
     this.errorMessage = '';
     const email = this.form.controls['email'].value;
     const name = this.form.controls['name'].value;
     const password = this.form.controls['password'].value;
     this.auth.createAccount(name, email, password, this.invitation).then(res => {
       if (res?.success === true) {
-        console.log('luonti onnistui');
         return;
       } else {
         this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;

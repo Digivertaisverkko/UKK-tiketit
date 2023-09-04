@@ -38,6 +38,7 @@ export interface Kentta {
   ohje: string;
   pakollinen: boolean;
   esitaytettava: boolean;
+  esitaytto?: string;
   valinnat: string[];
 }
 

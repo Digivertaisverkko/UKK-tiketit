@@ -5,6 +5,21 @@ import { Role } from "@core/core.models";
 
 export const ticketDummyData = {
 
+  LiiteArray: [
+    {
+      kommentti: '23',
+      tiedosto: 'eec5e8e3-0a11-4447-bd1f-60cf8c33aa3a',
+      nimi: 'Tiedosto yksi',
+      koko: 4818,
+    },
+    {
+      kommentti: '25',
+      tiedosto: '7186f3fd-18f1-4965-b0a9-6cfab33f357d',
+      nimi: 'Tiedosto kaksi',
+      koko: 65818,
+    }
+  ],
+
   ticketListServerData:
   [
     {
@@ -131,7 +146,7 @@ export const ticketDummyData = {
     arkistoitava: false
   },
 
-  ticket3fields: [
+  ticket3KenttaArray: [
     {
       id: 1,
       arvo: "2",
@@ -193,7 +208,7 @@ export const ticketDummyData = {
     'kommentit'
   ],
 
-  FAQsInlist: [
+  UKKarray: [
     {
       id: 7,
       otsikko: 'UKK kusymys',
@@ -235,7 +250,7 @@ export const ticketDummyData = {
         arvo: "2",
         esitaytettava: false,
         id: "1",
-        ohje: "",
+        ohje: "Kirjoita tehtävän numero",
         otsikko: "Tehtävä",
         pakollinen: true,
         tyyppi: '1',

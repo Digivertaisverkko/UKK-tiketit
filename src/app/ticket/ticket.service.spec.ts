@@ -10,13 +10,12 @@ import localeEn from '@angular/common/locales/en';
 import { SortableTicket, TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
-import { ticketDummyData } from './ticket.dummydata';
 import { ErrorService } from '@core/services/error.service';
-import { registerLocaleData } from '@angular/common';
-import { loadTranslations } from '@angular/localize';
+import { ticketDummyData } from './ticket.dummydata';
 
 environment.testing = true;
 const api = environment.apiBaseUrl;
+initializeLanguageFI();
 
 describe('TicketService', () => {
   let controller: HttpTestingController;
@@ -24,12 +23,6 @@ describe('TicketService', () => {
   let store: StoreService;
   let tickets: TicketService;
 
-  registerLocaleData(localeFi);  // Aina oletuslocale.
-  registerLocaleData(localeEn);
-  document.documentElement.lang = 'fi';
-  fetch('/assets/i18n/fi-FI.json')
-        .then(response => response.json())
-        .then(response => loadTranslations(response.translations));
 
   beforeEach(async () => {
 
@@ -58,8 +51,8 @@ describe('TicketService', () => {
     expect(tickets).toBeTruthy();
   });
 
-  /*
 
+  /*
   it('retrieves the full ticket list', (done) => {
     let actualTicketListData: SortableTicket[] | null | undefined;
     store.setUserInfo(storeDummyData.teacherUser);
@@ -67,7 +60,15 @@ describe('TicketService', () => {
 
     tickets.getTicketList(courseID).then(res => {
       actualTicketListData = res;
-      expect(actualTicketListData).toEqual(ticketDummyData.ticketListClientData);
+      const ignoredProperty: keyof SortableTicket = 'tila';
+      let actualWithoutIgnoredProperty
+      if (actualTicketListData) {
+        actualWithoutIgnoredProperty = actualTicketListData.map(ticket => {
+          const { [ignoredProperty]: deletedProperty, ...ticketWithoutIgnoredProperty } = ticket;
+          return ticketWithoutIgnoredProperty;
+        });
+      }
+      expect(actualWithoutIgnoredProperty).toEqual(ticketDummyData.ticketListClientData);
       done();
     }).catch (e => {
       console.log(e);
@@ -78,6 +79,8 @@ describe('TicketService', () => {
     const request = controller.expectOne(url);
     request.flush(ticketDummyData.ticketListServerData);
   });
+  */
+
 
   it('retrieves ticket with all properties', fakeAsync(() => {
     store.setUserInfo(storeDummyData.teacherUser);
@@ -102,7 +105,7 @@ describe('TicketService', () => {
 
     const fieldsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
     const fieldsRequest = controller.expectOne(fieldsUrl);
-    fieldsRequest.flush(ticketDummyData.ticket3fields);
+    fieldsRequest.flush(ticketDummyData.ticket3KenttaArray);
     tick();
 
     const commentsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti`
@@ -132,7 +135,7 @@ describe('TicketService', () => {
   });
 
 
-  it('gets a file', fakeAsync (() => {
+  it('gets an attachment', fakeAsync (() => {
     const ticketID = '123';
     const commentID = '456';
     const fileID = '789';
@@ -145,9 +148,10 @@ describe('TicketService', () => {
     });
 
     const expectedUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/${commentID}/liite/${fileID}/tiedosto`;
-
     const req = controller.expectOne(expectedUrl);
     expect(req.request.method).toBe('GET');
+    const contentTypeHeader = req.request.headers.get('Content-Type');
+    expect(contentTypeHeader).toBe('multipart/form-data');
 
     req.flush(mockBlob);
     tick();
@@ -191,7 +195,6 @@ describe('TicketService', () => {
     req.flush({}, { status: 200, statusText: 'OK' }); // Response
   });
 
-
   it('handles error during upload', (done: DoneFn) => {
     const ticketID = '123';
     const commentID = '456';
@@ -226,8 +229,6 @@ describe('TicketService', () => {
     req.error(new ProgressEvent('error', { loaded: 0, total: 0 }));
 
   });
-
-  */
 
 
 });

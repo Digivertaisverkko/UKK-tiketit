@@ -185,11 +185,11 @@ export class TicketService {
       faq.aikaleima = new Date(faq.aikaleima)
       faq.aikaleimaStr = getDateString(faq.aikaleima, thisYear)
     })
-
     return FAQlist;
   }
 
-  // Palauta tiketin sanallinen tila numeerinen arvon perusteella.
+  /* Palauta tiketin sanallinen tila numeerinen arvon perusteella.
+    muotoa: 'numero'-'käännös' */
   public getTicketState(numericalState: number, role: Role | ''): string {
     let string: string;
     switch (numericalState) {

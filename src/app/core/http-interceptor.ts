@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpEvent, HttpResponse, HttpRequest, HttpHandler }
     from '@angular/common/http';
 import { Observable, PartialObserver, tap } from 'rxjs';
-import { truncate } from '../shared/utils';
+
 import { StoreService } from './services/store.service';
+import { truncate } from '../shared/utils';
 
 @Injectable({ providedIn: 'root' })
 
-// Kaikkien HTTP-pyyntöjen yhteydessä tehtävät toimet.
+/* Kaikkien HTTP-pyyntöjen yhteydessä tehtävät toimet. Logittaa kutsut
+   ja näyttää progress barin. */
 export class CustomHttpInterceptor implements HttpInterceptor {
 
   private readonly observer: PartialObserver<any> = {

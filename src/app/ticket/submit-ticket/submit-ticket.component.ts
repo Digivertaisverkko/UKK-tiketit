@@ -72,7 +72,7 @@ export class SubmitTicketComponent implements OnInit {
     this.titlePlaceholder = $localize `:@@Otsikko:Otsikko` + '*';
     this.ticketId = this.id ?? null;
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    if (this.ticketId === null) {
+    if (!this.ticketId) {
       this.titleServ.setTitle(
         this.store.getBaseTitle() + $localize `:@@Uusi kysymys: Uusi kysymys`
       );
@@ -84,14 +84,20 @@ export class SubmitTicketComponent implements OnInit {
 
   private buildAdditionalFields(): void {
     // Luodaan lomakkeelle controllit
+    console.log('build. this.ticketFields:');
+    console.dir(this.ticketFields);
+    console.log('this.ticketId: ' + this.ticketId + ' ' + typeof this.ticketId);
     for (const field of this.ticketFields) {
       let validators = Validators.maxLength(50);
       if (field.pakollinen) {
         validators = Validators.required, Validators.maxLength(50);
       }
-      let value = field.arvo ? field.arvo : '';
+      let value = !this.ticketId && field.esitaytettava ? field.esitaytto :
+          field.arvo ?? '';
       this.additionalFields.push(new FormControl(value, validators));
     }
+    console.log('this.additionalFields');
+    console.dir(this.additionalFields.value);
   }
 
   private buildForm(): FormGroup {
@@ -116,6 +122,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private createTicket(): UusiTiketti {
+    console.log('create');
     let ticket: UusiTiketti = {} as UusiTiketti;
     ticket.otsikko = this.form.controls['title'].value;
     ticket.viesti = this.form.controls['message'].value;
@@ -126,12 +133,21 @@ export class SubmitTicketComponent implements OnInit {
         arvo: this.additionalFields.controls[i].value
       });
     }
+
+    console.log('ticket:');
+    console.dir(ticket);
+
     return ticket;
   }
 
   private fetchAdditionalFields(): void {
+
+    console.log('fetchAdditionalFields');
+
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseid).then(response => {
+      console.log('fetchAdditionalFields: response getTicketFieldInfo:');
+      console.dir(response);
       this.ticketFields = response.kentat as Kentta[];
       this.helpText = response.kuvaus ?? '';
       this.buildAdditionalFields();
@@ -142,6 +158,7 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private fetchTicketInfo(ticketId: string, courseID: string): void {
+    console.log('fetchTicketInfo');
     this.ticketService.getTicket(ticketId, courseID).then(response => {
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);
@@ -179,15 +196,22 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   public submit(): void {
+    console.log('submit');
     this.form.markAllAsTouched();
+    console.log('this.form.invalid: ' + this.form.invalid);
     if (this.form.invalid) return;
     this.state = 'sending';
     this.form.disable();
     let newTicket = this.createTicket();
+    console.log('ticket:');
+    console.dir(newTicket);
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
-    if (this.editExisting) {
+    console.log('this.editExisting: ' + this.editExisting + ' ' + typeof this.editExisting);
+    if (this.editExisting === true) {
+      console.log('submit edited');
       this.submitEdited(newTicket);
     } else {
+      console.log('submit new');
       this.submitNew(newTicket);
     }
   }
@@ -238,6 +262,8 @@ export class SubmitTicketComponent implements OnInit {
 
   private submitNew(ticket: UusiTiketti): void {
     if (this.courseid === null) return;
+    console.log('submitNew');
+    console.dir(ticket);
     this.ticketService.addTicket(this.courseid, ticket)
     .then((response: AddTicketResponse) => {
       if (this.attachments.fileInfoList.length === 0) this.goBack();

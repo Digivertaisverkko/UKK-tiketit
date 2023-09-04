@@ -44,6 +44,10 @@ export class EditFieldComponent implements OnInit {
     return this.form.get('infoText') as FormControl;
   }
 
+  get isPrefillable(): FormControl {
+    return this.form.get('isPrefillable') as FormControl;
+  }
+
   get selectionName(): AbstractControl<any, any> | null {
     return this.form.get('selectionName');
   }
@@ -102,6 +106,7 @@ export class EditFieldComponent implements OnInit {
       selectionName: [ '' ],
       infoText: [ '' ],
       mandatory: [ '' ],
+      isPrefillable: [ '' ]
     })
   }
 
@@ -115,8 +120,7 @@ export class EditFieldComponent implements OnInit {
     const controls = this.form.controls;
     field.otsikko = controls['title'].value;
     field.pakollinen = controls['mandatory'].value;
-    // TODO: Esitäytettävä ei vielä käytössä.
-    field.esitaytettava = this.field.esitaytettava;
+    field.esitaytettava = controls['isPrefillable'].value;
     field.ohje = controls['infoText'].value;
     if (this.areSelectionsEnabled.value) {
       field.valinnat = controls['selections'].value;
@@ -215,10 +219,11 @@ export class EditFieldComponent implements OnInit {
   }
 
   private setControls(): void {
-    this.form.controls['title'].setValue(this.field.otsikko);
     this.form.controls['infoText'].setValue(this.field.ohje);
+    this.form.controls['isPrefillable'].setValue(this.field.esitaytettava);
     this.form.controls['mandatory'].setValue(this.field.pakollinen);
     this.form.controls['selections'].setValue(this.field.valinnat);
+    this.form.controls['title'].setValue(this.field.otsikko);
   }
 
   // Hae kenttäpohjat tietyn ajan välein.

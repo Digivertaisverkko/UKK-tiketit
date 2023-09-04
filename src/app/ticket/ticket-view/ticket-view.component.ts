@@ -63,8 +63,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route : ActivatedRoute,
-    private router: Router,
+    private route : ActivatedRoute,  // public testejä varten.
+    public router: Router,
     private store : StoreService,
     private ticketService: TicketService,
     private titleServ: Title
@@ -162,8 +162,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
+      /*
       console.log('component:');
       console.dir(response);
+      */
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
@@ -188,7 +190,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public editTicket(): void {
     let url = `/course/${this.courseid}/submit/${this.ticketID}`;
-    this.router.navigate([url], { state: { editTicket: 'true' } });
+    this.router.navigate([url], { state: { editTicket: true } });
   }
 
   public getCommentState(tila: number) {
