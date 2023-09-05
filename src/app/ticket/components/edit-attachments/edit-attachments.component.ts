@@ -6,7 +6,6 @@ import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
 
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
-import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 
 interface FileInfoWithSize extends FileInfo {
@@ -35,11 +34,11 @@ interface FileInfoWithSize extends FileInfo {
 export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     OnDestroy, Validator {
 
+  @Input() courseid: string = '';
   @Input() oldAttachments: Liite[] = [];
   @Input() ticketID: string | null = '';
   @Input() uploadClicks = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
-  @Input() courseid: string = '';
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -76,7 +75,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      // const courseID = getCourseIDfromURL();
       return this.tickets.uploadFile(ticketID, commentID, this.courseid, fileinfo.file)
         .pipe(
           tap(progress => {
