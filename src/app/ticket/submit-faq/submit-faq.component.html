@@ -207,6 +207,7 @@
 
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          [courseid]="courseid"
                           formControlName="attachments"
                           [oldAttachments]="oldAttachments"
                           [ticketID]="ticketid"

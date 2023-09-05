@@ -77,6 +77,7 @@
     <app-message class="message" [messageHtml]=ticket.viesti></app-message>
 
     <app-view-attachments
+        [courseid]="courseid"
         [files]="ticket.liitteet"
         *ngIf="ticket.liitteet"
         [ticketID]="ticket.id"
@@ -92,6 +93,7 @@
     <div *ngFor="let comment of ticket.kommentit">
         <app-message [messageHtml]=comment.viesti></app-message>
         <app-view-attachments
+            [courseid]="courseid"
             [files]="comment.liitteet"
             *ngIf="comment.liitteet"
             [ticketID]="ticket.id"

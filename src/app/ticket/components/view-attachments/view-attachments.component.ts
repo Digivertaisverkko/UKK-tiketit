@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
     from '@angular/core';
-import { getCourseIDfromURL } from '@shared/utils';
 import { Liite } from '@ticket/ticket.models';
 import { TicketService } from '@ticket/ticket.service';
 
@@ -36,6 +35,7 @@ import { TicketService } from '@ticket/ticket.service';
 
 export class ViewAttachmentsComponent {
 
+  @Input() courseid: string = '';
   @Input() files: Liite[] = [];
   @Input() ticketID: string = '';
   @Output() errorMessage = new EventEmitter<string>();
@@ -45,12 +45,11 @@ export class ViewAttachmentsComponent {
   public downloadFile(ticketID: string, commentID: string, fileID: string,
       filename: string)
     {
-    const courseID = getCourseIDfromURL();
-    if (!courseID) {
+    if (!this.courseid) {
       console.error('Ei kurssi ID:ä.')
       return
     }
-    this.tickets.getFile(ticketID, commentID, fileID, courseID).then(response => {
+    this.tickets.getFile(ticketID, commentID, fileID, this.courseid).then(response => {
       const blob = new Blob([response], { type: 'application/octet-stream' });
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement('a');

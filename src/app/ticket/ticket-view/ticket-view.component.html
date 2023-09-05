@@ -127,6 +127,7 @@
 
     <!----- Liitteet ---->
     <app-view-attachments
+        [courseid]="courseid"
         (errorMessage)="errorMessage = $event"
         [files]="ticket.liitteet"
         *ngIf="ticket.liitteet"
@@ -157,7 +158,8 @@
     </button>
   </div>
 
-    <app-comment  [comment]="comment"
+    <app-comment  [courseid]="courseid"
+                  [comment]="comment"
                   [(editingCommentID)]="editingCommentIDParent"
                   [isInCopyAsFAQ]="ticketIdFromParent ? true : false"
                   (messages)="listenMessagesFromComment($event)"
@@ -275,6 +277,7 @@
 
       <app-edit-attachments
           (attachmentsMessages)="attachmentsMessages = $event"
+          [courseid]="courseid"
           (fileListOutput)="fileInfoList = $event"
           formControlName="attachments"
           [uploadClicks]="uploadClick.asObservable()"

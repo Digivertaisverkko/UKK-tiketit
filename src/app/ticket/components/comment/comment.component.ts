@@ -6,7 +6,6 @@ import { Subject, Subscription } from 'rxjs';
 
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
-import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
@@ -23,6 +22,7 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   @Input() public attachmentsMessages: string = '';
   @Input() public comment: Kommentti = {} as Kommentti;
+  @Input() public courseid!: string;
   @Input() public editingCommentID: string | null = null;
   @Input() public fileInfoList: FileInfo[] = [];
   @Input() public ticketID: string = '';
@@ -111,9 +111,8 @@ export class CommentComponent implements AfterViewInit, OnInit{
   }
 
   public removeComment(commentID: string) {
-    const courseID = getCourseIDfromURL();
-    if (!courseID) return
-    this.ticketService.removeComment(this.ticketID, commentID, courseID).then(res => {
+    if (!this.courseid) return
+    this.ticketService.removeComment(this.ticketID, commentID, this.courseid).then(res => {
       this.stopEditing();
     }).catch((err: any) => {
       this.errorMessage = $localize `:@@Kommentin poistaminen ei onnistunut:
@@ -124,14 +123,13 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   public sendComment(commentID: string) {
     this.form.markAllAsTouched();
-    const courseID = getCourseIDfromURL();
-    if (this.form.invalid || !courseID) return;
+    if (this.form.invalid || !this.courseid) return;
     this.state = 'sending';
     this.form.disable();
     const commentText = this.form.controls['message'].value;
     const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
-      commentState, courseID).then(() => {
+      commentState, this.courseid).then(() => {
         if (this.attachments.filesToRemove.length === 0) {
           return true
         }

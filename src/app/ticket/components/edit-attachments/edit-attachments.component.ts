@@ -39,17 +39,18 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   @Input() ticketID: string | null = '';
   @Input() uploadClicks = new Observable();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
+  @Input() courseid: string = '';
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
+  public filesToRemove: Liite[] = [];
   public isEditingDisabled: boolean = false;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
-  public filesToRemove: Liite[] = [];
 
   constructor(private renderer: Renderer2,
               private store: StoreService,
@@ -75,8 +76,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   private makeRequestArray(ticketID: string, commentID: string): any {
     return this.fileInfoList.map((fileinfo, index) => {
-      const courseID = getCourseIDfromURL();
-      return this.tickets.uploadFile(ticketID, commentID, courseID!, fileinfo.file)
+      // const courseID = getCourseIDfromURL();
+      return this.tickets.uploadFile(ticketID, commentID, this.courseid, fileinfo.file)
         .pipe(
           tap(progress => {
             this.fileInfoList[index].progress = progress;
@@ -148,7 +149,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     return new Promise((resolve, reject) => {
 
       if (this.filesToRemove.length === 0) resolve(true);
-      const courseID = getCourseIDfromURL();
+      // const courseID = getCourseIDfromURL();
       if (this.ticketID == null) {
         // throw Error(' ei ticketID:ä');
         reject(new Error('Ei tiketti ID:ä.'));
@@ -157,11 +158,11 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       this.filesToRemove.forEach((file: Liite) => {
         if (!promise) {
           promise = this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-            courseID!)
+            this.courseid)
         } else {
           promise = promise.then(() => {
             return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-              courseID!)
+              this.courseid)
           })
         }
       })
