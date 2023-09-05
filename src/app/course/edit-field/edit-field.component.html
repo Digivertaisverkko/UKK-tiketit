@@ -165,10 +165,14 @@
       <mat-checkbox formControlName="isPrefillable"
                     name="checkbox-prefillable"
                     >
-        <span class="prefillable-span" i18n="@@Esitäytettävä">
-          Esitäytettävä
-        </span>
-        <!-- <mat-icon class="help-icon">help_outline</mat-icon> -->
+        <div  class="checkbox-content"
+              i18n-matTooltip="@@Esitäytä käyttäjille heidän edellinen vastauksensa"
+              matTooltip="Esitäytä käyttäjille heidän edellinen vastauksensa."
+              [matTooltipShowDelay]="600"
+              >
+          <span  i18n="@@Esitäytettävä">Esitäytettävä</span>
+          <mat-icon class="help-icon">help_outline</mat-icon>
+        </div>
       </mat-checkbox>
 
       <div class="spacer bottom-spacer"></div>

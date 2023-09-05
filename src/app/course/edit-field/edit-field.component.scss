@@ -49,8 +49,11 @@
   }
 }
 
-.prefillable-span {
-  align-self: center;
+.checkbox-content {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  justify-content: space-between;
 }
 
 .help-icon {
