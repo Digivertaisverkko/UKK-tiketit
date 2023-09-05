@@ -1,4 +1,3 @@
-import * as shajs from 'sha.js';
 import { DatePipe } from '@angular/common';
 import { Role } from "@core/core.models";
 
