@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { ViewAttachmentsComponent } from './view-attachments.component';
 import { TicketService } from '@ticket/ticket.service';
@@ -10,12 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
 
 describe('AttachmentListComponent', () => {
   let component: ViewAttachmentsComponent;
+  let courseID: string;
   let fakeTicketService: Pick<TicketService, 'getFile'>;
   let fixture: ComponentFixture<ViewAttachmentsComponent>;
 
   beforeEach(async () => {
     fakeTicketService = jasmine.createSpyObj('TicketService', {
-      getFile: Promise.resolve(new Blob)
+      getFile: Promise.resolve(undefined)
     });
 
     await TestBed.configureTestingModule({
@@ -35,19 +36,22 @@ describe('AttachmentListComponent', () => {
 
     fixture = TestBed.createComponent(ViewAttachmentsComponent);
     component = fixture.componentInstance;
+    courseID = '1';
+    component.courseid = courseID;
     component.ticketID = '5';
     component.files = ticketDummyData.LiiteArray;
     fixture.detectChanges();
   });
 
-  /*
-  it('calls download method after clicking file name', () => {
-    spyOn(component, 'downloadFile').and.stub();
-    const downloadBtn = findEl(fixture, 'download-button-1').nativeElement;
-    downloadBtn.click();
-    expect(component.downloadFile).toHaveBeenCalled();
-  });
-  */
+  it('calls correct service method after clicking file name', fakeAsync(() => {
+    const commentID = ticketDummyData.LiiteArray[1].kommentti;
+    const fileID = ticketDummyData.LiiteArray[1].tiedosto;
+    findEl(fixture, 'download-button-1').nativeElement.click();
+    tick();
+
+    expect(fakeTicketService.getFile).toHaveBeenCalledWith(component.ticketID,
+        commentID, fileID, courseID);
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
