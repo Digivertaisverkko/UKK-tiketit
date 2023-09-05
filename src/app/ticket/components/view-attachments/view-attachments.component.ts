@@ -43,26 +43,31 @@ export class ViewAttachmentsComponent {
   constructor(private tickets: TicketService) {}
 
   public downloadFile(ticketID: string, commentID: string, fileID: string,
-      filename: string)
-    {
+      filename: string) {
     if (!this.courseid) {
       console.error('Ei kurssi ID:ä.')
       return
     }
     this.tickets.getFile(ticketID, commentID, fileID, this.courseid).then(response => {
-      const blob = new Blob([response], { type: 'application/octet-stream' });
-      const downloadUrl = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      if (response instanceof Blob) {
+        this.savefile(response, filename);
+      }
     }).catch(error => {
       const errorMessage = $localize `:@@Tiedoston lataaminen epäonnistui:
           Tiedoston lataaminen epäonnistui` + '.';
       this.errorMessage.emit(errorMessage);
     })
+  }
+
+  private savefile(file: Blob, filename: string) {
+    const blob = new Blob([file], { type: 'application/octet-stream' });
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
 }
