@@ -143,6 +143,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.oldAttachments.splice(index, 1);
   }
 
+  /* Kutsutaan parent componentista. Poistetaan tiedostot, jotka on aiemmin
+      lähetetty ja joiden Poista-ikonia käyttäjä on klikannut. */
   public async removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
 
