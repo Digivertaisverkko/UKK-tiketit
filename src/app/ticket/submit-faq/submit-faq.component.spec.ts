@@ -1,18 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent } from 'ng-mocks';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { SubmitFaqComponent } from './submit-faq.component';
-import { CourseService } from '@course/course.service';
 import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
-import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { EditorComponent } from '@shared/editor/editor.component';
-import { TicketService } from '@ticket/ticket.service';
+import { courseDummyData } from '@course/course.dummydata';
+import { CourseService } from '@course/course.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
+import { EditorComponent } from '@shared/editor/editor.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { SharedModule } from '@shared/shared.module';
+import { SubmitFaqComponent } from './submit-faq.component';
+import { TicketService } from '@ticket/ticket.service';
+import { StoreService } from '@core/services/store.service';
 
 describe('SubmitFaqComponent', () => {
   let component: SubmitFaqComponent;
@@ -22,19 +25,24 @@ describe('SubmitFaqComponent', () => {
 
   beforeEach(async () => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
-      getTicketFieldInfo: Promise.resolve(''),
+      getTicketFieldInfo: Promise.resolve({
+        kuvaus: '',
+        kentat: courseDummyData.ticketFields
+      }),
     });
 
     fakeTicketService = jasmine.createSpyObj('TicketService', {
-      addFaq: undefined,
+      addFaq: Promise.resolve({ success: true,
+          uusi: { tiketti: 2, kommentti: 4 }
+      }),
       editFaq: undefined,
       getTicket: undefined
     });
 
     // Luodaan komponentti tiketin luomistilassa
-    interface State { editTicket: boolean };
-    const state: State = { editTicket: false };
-    window.history.pushState({ editFaq: state }, '', '');
+    interface State { editFaq: boolean };
+    const state: State = { editFaq: false };
+    window.history.pushState(state, '', '');
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -53,6 +61,7 @@ describe('SubmitFaqComponent', () => {
       ],
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
+        { provide: StoreService },
         { provide: TicketService, useValue: fakeTicketService }
       ]
     })
@@ -60,10 +69,36 @@ describe('SubmitFaqComponent', () => {
 
     fixture = TestBed.createComponent(SubmitFaqComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('calls correct method to create a new FAQ after Publish click', fakeAsync(() => {
+    component.courseid = '1';
+    component.id = '';
+    const titleText = 'Uusi UKK';
+    const questionText = 'Usein kysytty kysymys';
+    const answerText = 'Vastaus';
+    const fieldTexts = [ 'Tehtävä 1', 'Kotitehtävä' ];
+
+    component.ngOnInit();
+    tick();
+    fixture.detectChanges();
+
+    setFieldValue(fixture, 'title', titleText);
+    setFieldValue(fixture, 'question', questionText);
+    setFieldValue(fixture, 'answer', answerText);
+    fieldTexts.forEach((fieldText, index) => {
+      setFieldValue(fixture, 'field-' + index, fieldText);
+    });
+
+    findEl(fixture, 'send-button').nativeElement.click();
+    tick();
+
+    expect(component.form.invalid).toBe(false);
+    expect(fakeTicketService.addFaq).toHaveBeenCalled();
+
+  }));
 });
