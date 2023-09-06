@@ -63,6 +63,7 @@ name="file-input-{{url}}"
     <div class="list-item">
 
       <span class="filename"
+            [attr.data-testid]="'new-filename-' + index"
             matTooltip="{{ file.filename }}"
             [matTooltipShowDelay]="600"
             >

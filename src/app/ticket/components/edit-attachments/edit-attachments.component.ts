@@ -37,7 +37,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   @Input() courseid: string = '';
   @Input() oldAttachments: Liite[] = [];
   @Input() ticketID: string | null = '';
-  @Input() uploadClicks = new Observable();
+  @Input() uploadClicks: Observable<string> = new Observable<string>();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -51,7 +51,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
 
-  constructor(private renderer: Renderer2,
+  constructor(public renderer: Renderer2,
               private store: StoreService,
               private tickets: TicketService
               ) {
@@ -101,6 +101,9 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public onChange = (isInvalid: boolean) => {};
 
   public onFileAdded(event: any) {
+
+    // console.dir(event.target.files);
+
     this.markAsTouched();
     this.onChange(this.isInvalid);
     const MEGABYTE = 1000000;
