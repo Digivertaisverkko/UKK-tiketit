@@ -87,7 +87,6 @@ describe('SubmitTicketComponent', () => {
       component.courseid = '1';
       component.id = '';
       component.ngOnInit();
-
     });
 
     it('should create', () => {
@@ -109,8 +108,7 @@ describe('SubmitTicketComponent', () => {
       expect(prefilledField.value).toBe(prefilledText);
     }));
 
-    it('calls correct method to create a new ticket after Send click', fakeAsync(() => {
-      tick();
+    it('calls correct method to create a new ticket after send click', fakeAsync(() => {
       fixture.detectChanges();
       tick();
       const titleText = 'Uusi kysymys';
@@ -210,13 +208,12 @@ describe('SubmitTicketComponent', () => {
 
       fixture = TestBed.createComponent(SubmitTicketComponent);
       component = fixture.componentInstance;
-      component.courseid = '1';
+      component.courseid = String(ticketDummyData.Tiketti.kurssi);
       component.id = ticketDummyData.Tiketti.id;
-      component.ngOnInit();
-
+      fixture.detectChanges();
     });
 
-    it('Prefills the form fields', fakeAsync(() => {
+    it('prefills the form fields', fakeAsync(() => {
       const ticket = ticketDummyData.Tiketti;
       const expextedTitle = ticket.otsikko;
       const expextedMessage = ticket.viesti;
@@ -239,6 +236,31 @@ describe('SubmitTicketComponent', () => {
       expect(fieldLabel[0].innerText.trim()).toBe(expectedFieldLabel[0]);
       expect(fieldLabel[1].innerText.trim()).toBe(expectedFieldLabel[1]);
       expect(message.value).toBe(expextedMessage);
+    }));
+
+    it('makes correct method call after changing title and Publish -click', fakeAsync(() => {
+      tick();
+      const expectedTitle = 'Edited title';
+      const ticket = ticketDummyData.Tiketti;
+      const fields = ticket.kentat!;
+      const expectedTicket = {
+          otsikko: expectedTitle,
+          viesti: ticket.viesti,
+          kentat: [
+            { arvo: fields[0].arvo, id: Number(fields[0].id) },
+            { arvo: fields[1].arvo, id: Number(fields[1].id) }
+          ]
+        }
+      // setFieldValue(fixture, 'message', expectedMessage);
+      setFieldValue(fixture, 'title', expectedTitle);
+      findEl(fixture, 'send-button').nativeElement.click();
+      tick();
+
+      // const title = findEl(fixture, 'title').nativeElement;
+      // expect(title.value).toBe(expectedTitle);
+      expect(fakeTicketService.editTicket).toHaveBeenCalledWith(
+        ticketDummyData.Tiketti.id, expectedTicket, component.courseid
+      );
     }));
 
   })
