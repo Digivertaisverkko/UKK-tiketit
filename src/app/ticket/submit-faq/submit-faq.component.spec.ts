@@ -14,10 +14,10 @@ import { EditorComponent } from '@shared/editor/editor.component';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { SharedModule } from '@shared/shared.module';
 import { SubmitFaqComponent } from './submit-faq.component';
-import { TicketService } from '@ticket/ticket.service';
+import { TicketService, UusiUKK } from '@ticket/ticket.service';
 import { StoreService } from '@core/services/store.service';
 
-describe('SubmitFaqComponent', () => {
+fdescribe('SubmitFaqComponent', () => {
   let component: SubmitFaqComponent;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
@@ -82,6 +82,17 @@ describe('SubmitFaqComponent', () => {
     const questionText = 'Usein kysytty kysymys';
     const answerText = 'Vastaus';
     const fieldTexts = [ 'Tehtävä 1', 'Kotitehtävä' ];
+    const fields = courseDummyData.ticketFields;
+
+    const expectedFAQ: UusiUKK = {
+      otsikko: titleText,
+      viesti: questionText,
+      kentat: [
+        { arvo: fieldTexts[0], id: fields[0].id },
+        { arvo: fieldTexts[1], id: fields[1].id }
+      ],
+      vastaus: answerText
+    }
 
     component.ngOnInit();
     tick();
@@ -93,12 +104,11 @@ describe('SubmitFaqComponent', () => {
     fieldTexts.forEach((fieldText, index) => {
       setFieldValue(fixture, 'field-' + index, fieldText);
     });
-
     findEl(fixture, 'send-button').nativeElement.click();
-    tick();
 
     expect(component.form.invalid).toBe(false);
-    expect(fakeTicketService.addFaq).toHaveBeenCalled();
-
+    expect(fakeTicketService.addFaq).toHaveBeenCalledWith(
+      expectedFAQ, component.courseid);
   }));
+
 });
