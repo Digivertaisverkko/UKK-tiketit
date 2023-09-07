@@ -11,7 +11,7 @@ import { SortableTicket, TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ErrorService } from '@core/services/error.service';
-import { ticketDummyData } from './ticket.dummydata';
+import { TicketDummyData } from './ticket.dummydata';
 
 environment.testing = true;
 const api = environment.apiBaseUrl;
@@ -22,6 +22,7 @@ describe('TicketService', () => {
   let errors: ErrorService;
   let store: StoreService;
   let tickets: TicketService;
+  const ticketDummyData = new TicketDummyData;
 
 
   beforeEach(async () => {

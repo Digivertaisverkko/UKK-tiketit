@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 
 import { ViewAttachmentsComponent } from './view-attachments.component';
 import { TicketService } from '@ticket/ticket.service';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { FilesizeModule } from '@shared/pipes/filesize.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -13,6 +13,7 @@ describe('AttachmentListComponent', () => {
   let courseID: string;
   let fakeTicketService: Pick<TicketService, 'getFile'>;
   let fixture: ComponentFixture<ViewAttachmentsComponent>;
+  let dummydata = new TicketDummyData;
 
   beforeEach(async () => {
     fakeTicketService = jasmine.createSpyObj('TicketService', {
@@ -39,13 +40,13 @@ describe('AttachmentListComponent', () => {
     courseID = '1';
     component.courseid = courseID;
     component.ticketID = '5';
-    component.files = ticketDummyData.LiiteArray;
+    component.files = dummydata.liitteet;
     fixture.detectChanges();
   });
 
   it('calls correct service method after clicking file name', fakeAsync(() => {
-    const commentID = ticketDummyData.LiiteArray[1].kommentti;
-    const fileID = ticketDummyData.LiiteArray[1].tiedosto;
+    const commentID = dummydata.liitteet[1].kommentti;
+    const fileID = dummydata.liitteet[1].tiedosto;
     findEl(fixture, 'download-button-1').nativeElement.click();
     tick();
 
@@ -59,11 +60,11 @@ describe('AttachmentListComponent', () => {
 
   it('shows attachment names', () => {
     const filename1 = findEl(fixture, 'filename-0').nativeElement;
-    let expectedFile = ticketDummyData.LiiteArray[0];
+    let expectedFile = dummydata.liitteet[0];
     expect(filename1.textContent.trim()).toBe(expectedFile.nimi);
 
     const filename2 = findEl(fixture, 'filename-1').nativeElement;
-    expectedFile = ticketDummyData.LiiteArray[1];
+    expectedFile = dummydata.liitteet[1];
     expect(filename2.textContent.trim()).toBe(expectedFile.nimi);
   });
 });

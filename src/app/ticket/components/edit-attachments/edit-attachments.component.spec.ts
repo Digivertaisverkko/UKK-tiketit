@@ -9,7 +9,7 @@ import { EditAttachmentsComponent } from './edit-attachments.component';
 import { ErrorService } from '@core/services/error.service';
 import { FilesizeModule } from '@shared/pipes/filesize.module';
 import { StoreService } from '@core/services/store.service';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { TicketService } from '@ticket/ticket.service';
 
 describe('EditAttachmentsComponent', () => {
@@ -19,6 +19,7 @@ describe('EditAttachmentsComponent', () => {
   //let fakeInputElement: HTMLInputElement;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<EditAttachmentsComponent>;
+  let dummydata = new TicketDummyData;
 
   beforeEach(async () => {
     fakeTicketService = jasmine.createSpyObj('TicketService', {
@@ -70,8 +71,8 @@ describe('EditAttachmentsComponent', () => {
     courseID = '1';
     component.courseid = courseID;
     component.oldAttachments = [
-      ticketDummyData.LiiteArray[0],
-      ticketDummyData.LiiteArray[1]
+      dummydata.liitteet[0],
+      dummydata.liitteet[1]
     ];
     component.ticketID = '5';
 
@@ -92,11 +93,11 @@ describe('EditAttachmentsComponent', () => {
   it('shows already uploaded attachments', fakeAsync(() => {
     tick();
     const filename1 = findEl(fixture, 'filename-0').nativeElement;
-    let expectedFile = ticketDummyData.LiiteArray[0];
+    let expectedFile = dummydata.liitteet[0];
     expect(filename1.textContent.trim()).toBe(expectedFile.nimi);
 
     const filename2 = findEl(fixture, 'filename-1').nativeElement;
-    expectedFile = ticketDummyData.LiiteArray[1];
+    expectedFile = dummydata.liitteet[1];
     expect(filename2.textContent.trim()).toBe(expectedFile.nimi);
   }));
 
@@ -107,7 +108,7 @@ describe('EditAttachmentsComponent', () => {
     tick();
     component.removeSentFiles();
     tick();
-    const file = ticketDummyData.LiiteArray[0];
+    const file = dummydata.liitteet[0];
     expect(fakeTicketService.removeFile).toHaveBeenCalledWith(
       component.ticketID!, file.kommentti, file.tiedosto, courseID
     );

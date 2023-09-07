@@ -13,11 +13,11 @@ import { ActivatedRoute } from '@angular/router';
 import { StoreService } from '@core/services/store.service';
 import { authDummyData } from '@core/services/auth.dummydata';
 import { User } from '@core/core.models';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 
 import { SharedModule } from '@shared/shared.module';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { initializeLanguageFI } from 'src/app/app.initializers';
 import { ViewAttachmentsComponent } from '@ticket/components/view-attachments/view-attachments.component';
 import { TicketModule } from '@ticket/ticket.module';
@@ -30,6 +30,7 @@ describe('TicketViewComponent', () => {
   let loader: HarnessLoader;
   let store: StoreService
   let ticket: Tiketti;
+  const ticketDummyData = new TicketDummyData;
   let user: User;
 
   initializeLanguageFI(); // datePipeen

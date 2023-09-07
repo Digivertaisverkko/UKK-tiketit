@@ -12,7 +12,6 @@ import { StoreService } from '@core/services/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from '@core/core.models';
 import { SortableTicket } from '../../ticket.models';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
 
 interface ColumnDefinition {
   def: string;

@@ -19,7 +19,7 @@ import { courseDummyData } from '@course/course.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 
 
 describe('SubmitTicketComponent', () => {
@@ -27,6 +27,7 @@ describe('SubmitTicketComponent', () => {
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<SubmitTicketComponent>;
+  const ticketDummyData = new TicketDummyData;
 
   const helpText = 'Muista valita oikea tehtävä.';
 

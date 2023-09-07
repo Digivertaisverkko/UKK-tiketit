@@ -17,7 +17,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { authDummyData } from '@core/services/auth.dummydata';
 import { initializeLanguageFI } from 'src/app/app.initializers';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { TicketListComponent } from './ticket-list.component';
 import { TicketService } from '@ticket/ticket.service';
 
@@ -27,6 +27,7 @@ describe('TicketListComponent', () => {
   let loader: HarnessLoader;
   let router: Router;
   let ticketService: Pick<TicketService, 'getTicketList'>;
+  const ticketDummyData = new TicketDummyData;
 
   initializeLanguageFI(); // datePipeen
 
