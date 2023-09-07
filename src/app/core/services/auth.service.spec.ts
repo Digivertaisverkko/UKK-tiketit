@@ -3,7 +3,7 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import * as shajs from 'sha.js';
 import { TestBed } from '@angular/core/testing';
 
-import { authDummyData } from './auth.dummydata';
+import { AuthDummyData } from './auth.dummydata';
 import { AuthService } from './auth.service';
 import { CourseService } from '@course/course.service';
 import { environment } from 'src/environments/environment';
@@ -14,6 +14,7 @@ import { StoreService } from './store.service';
 let api = environment.apiBaseUrl;
 const courseID = '1';
 environment.testing = true;
+const authDummyData = new AuthDummyData;
 
 describe('AuthService', () => {
   let auth: AuthService;
@@ -349,6 +350,6 @@ describe('AuthService', () => {
 
   });
 
-  
+
 
 });

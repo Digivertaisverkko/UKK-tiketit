@@ -9,7 +9,7 @@ import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { authDummyData } from '@core/services/auth.dummydata';
+import { AuthDummyData } from '@core/services/auth.dummydata';
 import { AuthService } from '@core/services/auth.service';
 import { courseDummyData } from '@course/course.dummydata';
 import { CourseService } from '@course/course.service';
@@ -24,6 +24,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 //import { FakeCourseService } from '@course/fake-course.service';
 
 describe('RegisterComponent', () => {
+  const authDummyData = new AuthDummyData;
   let component: RegisterComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fakeCourseService: Pick<CourseService, 'getCourseName' | 'getInvitedInfo'>;
@@ -251,7 +252,7 @@ describe('RegisterComponent', () => {
     }));
 
   });
-  
+
 
 });
 

@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
-import { authDummyData } from '@core/services/auth.dummydata';
+import { AuthDummyData } from '@core/services/auth.dummydata';
 import { initializeLanguageFI } from 'src/app/app.initializers';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
@@ -22,6 +22,7 @@ import { TicketListComponent } from './ticket-list.component';
 import { TicketService } from '@ticket/ticket.service';
 
 describe('TicketListComponent', () => {
+  const authDummyData = new AuthDummyData;
   let component: TicketListComponent;
   let fixture: ComponentFixture<TicketListComponent>;
   let loader: HarnessLoader;

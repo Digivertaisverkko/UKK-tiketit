@@ -11,7 +11,7 @@ import { HeadlineComponent } from '@shared/components/headline/headline.componen
 import { TicketService, Tiketti } from '@ticket/ticket.service';
 import { ActivatedRoute } from '@angular/router';
 import { StoreService } from '@core/services/store.service';
-import { authDummyData } from '@core/services/auth.dummydata';
+import { AuthDummyData } from '@core/services/auth.dummydata';
 import { User } from '@core/core.models';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
 
@@ -24,6 +24,7 @@ import { TicketModule } from '@ticket/ticket.module';
 import { MatRadioButtonHarness } from '@angular/material/radio/testing'; // Import MatRadioButtonHarness
 
 describe('TicketViewComponent', () => {
+  const authDummyData = new AuthDummyData;
   let component: TicketViewComponent;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<TicketViewComponent>;
