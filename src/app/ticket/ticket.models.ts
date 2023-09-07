@@ -80,7 +80,7 @@ export interface SortableTicket {
   kentat: TikettiListanKentta[];
 }
 
-// Käytetään pohjana muihin interfaceihin. 
+// Käytetään pohjana muihin interfaceihin.
 interface Tikettipohja {
   id: string;
   otsikko: string;
@@ -122,6 +122,14 @@ export interface Tiketti extends Tikettipohja {
   muokattu?: Date;
 }
 
+interface UKKlistanKentta {
+  tiketti: number;
+  arvo: string;
+  otsikko: string;
+  ohje: string;
+  tyyppi: number;
+}
+
 // Metodit: getFAQ, getFAQlist API: /api/kurssi/:kurssi-id/ukk/
 export interface UKK {
   id: number;
@@ -129,12 +137,7 @@ export interface UKK {
   aikaleima: Date;
   aikaleimaStr: string
   tila: number;
-  kentat: [{
-    tiketti: number;
-    arvo: string;
-    otsikko: string;
-    ohje: string;
-  }]
+  kentat: UKKlistanKentta[]
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/
