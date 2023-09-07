@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick } from '@angular/core/testing';
 import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 
 import { EditAttachmentsComponent } from './edit-attachments.component';
 import { ErrorService } from '@core/services/error.service';
@@ -17,14 +17,34 @@ describe('EditAttachmentsComponent', () => {
   let courseID: string;
 
   //let fakeInputElement: HTMLInputElement;
+  // let fakeTicketService: Pick<TicketService, 'removeFile' | 'uploadFile'>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<EditAttachmentsComponent>;
   let dummydata = new TicketDummyData;
 
   beforeEach(async () => {
+
+    /*
+    const uploadFileSpy = jasmine.createSpy().and.returnValue({
+      subscribe: (next: (value: number) => void) => {
+        for (let i = 0; i <= 100; i += 10) {
+          setTimeout(() => next(i), i * 10);
+        }
+      }
+    });
+
+    fakeTicketService = {
+      removeFile: jasmine.createSpy().and.returnValue(Promise.resolve({ success: true })),
+      uploadFile: uploadFileSpy
+    };
+    */
+
     fakeTicketService = jasmine.createSpyObj('TicketService', {
       removeFile: Promise.resolve({ success: true }),
-      uploadFile: () => {
+
+      uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
+          Observable<number> {
+
         const progress = new Subject<number>();
 
         for (let i = 0; i <= 100; i += 10) {
@@ -39,7 +59,8 @@ describe('EditAttachmentsComponent', () => {
 
         return progress.asObservable();
       }
-  });
+    });
+
 
     await TestBed.configureTestingModule({
       declarations: [ EditAttachmentsComponent ],
@@ -74,6 +95,7 @@ describe('EditAttachmentsComponent', () => {
       dummydata.liitteet[0],
       dummydata.liitteet[1]
     ];
+
     component.ticketID = '5';
 
     /*
@@ -115,11 +137,12 @@ describe('EditAttachmentsComponent', () => {
   }));
 
   it('adds new attachments to list using file input', fakeAsync(() => {
-
+    const commentID = '4';
+    const ticketID = '5';
     const fakeFile1 = new File(['file content'], 'fake-file-1.txt',
         { type: 'text/plain' });
     const fakeFile2 = new File(['file content'], 'fake-file-2.txt',
-        { type: 'text/plain',});
+        { type: 'text/plain' });
     const fileSize1 = 1024;
     const fileSize2 = 2048;
     Object.defineProperty(fakeFile1, 'size', { value: fileSize1 });
@@ -153,6 +176,18 @@ describe('EditAttachmentsComponent', () => {
 
     // Expect your component's method to have been called with the fake FileList
     expect(component.onFileAdded).toHaveBeenCalledWith(changeEvent);
+
+    // Ei toimi.
+
+    /*
+    component.sendFiles(ticketID, commentID).then(res => {
+    });
+    tick(2000);
+    expect(fakeTicketService.uploadFile).toHaveBeenCalled();
+    discardPeriodicTasks();
+    */
+
+
   }));
 
 
