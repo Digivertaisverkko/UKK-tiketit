@@ -33,7 +33,7 @@ describe('TicketListComponent', () => {
   beforeEach(async () => {
     // Pitää olla ennen TestBed:n konfigurointia.
     ticketService = jasmine.createSpyObj('TicketService', {
-      getTicketList: Promise.resolve(ticketDummyData.ticketListClientData)
+      getTicketList: Promise.resolve(ticketDummyData.sortableTicketArray)
     });
 
     await TestBed.configureTestingModule({
@@ -69,7 +69,7 @@ describe('TicketListComponent', () => {
     const courseID = '1';
     component.courseid = courseID;
     component.user = authDummyData.userInfoTeacher;
-    const ticketList =  ticketDummyData.ticketListClientData;
+    const ticketList =  ticketDummyData.sortableTicketArray;
     const ticketID = ticketList[0].id;
     const navigateSpy = spyOn(router, 'navigateByUrl');
     const expectedRoute = `/course/${courseID}/ticket-view/${ticketID}`;
@@ -143,8 +143,8 @@ describe('TicketListComponent', () => {
       component.fetchTickets(courseID);
       tick();
       expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
-      expect(component.dataSource.filteredData).toEqual(ticketDummyData.ticketListClientData);
-      expect(component.dataSource.data).toEqual(ticketDummyData.ticketListClientData);
+      expect(component.dataSource.filteredData).toEqual(ticketDummyData.sortableTicketArray);
+      expect(component.dataSource.data).toEqual(ticketDummyData.sortableTicketArray);
     }));
 
     it('fetches ticket data for sorting correctly.', fakeAsync (() => {

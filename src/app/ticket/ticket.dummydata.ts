@@ -20,67 +20,7 @@ export const ticketDummyData = {
     }
   ],
 
-  ticketListServerData:
-  [
-    {
-      id: 3,
-      kurssi: 1,
-      otsikko: "”Index out of bounds”?",
-      aikaleima: "2023-06-21T09:37:36.124Z",
-      aloittaja: {
-        id: 3,
-        nimi: "Piia Rinne",
-        sposti: "piia.rinne@example.com",
-        asema: "opiskelija"
-      },
-      ukk: false,
-      tila: 3,
-      kentat: [
-        {
-          tiketti: 3,
-          arvo: "2",
-          otsikko: "Tehtävä"
-        },
-        {
-          tiketti: 3,
-          arvo: "Ongelma",
-          otsikko: "Ongelman tyyppi"
-        }
-      ],
-      viimeisin: "2023-06-21T09:37:36.142Z",
-      liite: false
-    },
-    {
-      id: 4,
-      kurssi: 1,
-      otsikko: "Ohjelma tulostaa numeroita kirjainten sijasta!",
-      aikaleima: "2023-06-22T09:37:36.125Z",
-      aloittaja: {
-        id: 1,
-        nimi: "Esko Seppä",
-        sposti: "esko.seppa@example.com",
-        asema: "opiskelija"
-      },
-      ukk: false,
-      tila: 4,
-      kentat: [
-        {
-          tiketti: 4,
-          arvo: "2",
-          otsikko: "Tehtävä"
-        },
-        {
-          tiketti: 4,
-          arvo: "Kurssin suoritus",
-          otsikko: "Ongelman tyyppi"
-        }
-      ],
-      viimeisin: "2023-06-22T09:37:36.142Z",
-      liite: false
-    }
-  ],
-
-  ticketListClientData:
+  sortableTicketArray:
   [
     {
       tilaID: 3,
@@ -130,7 +70,7 @@ export const ticketDummyData = {
     }
   ],
 
-  ticket3: {
+  tiketti3: {
     id: 3,
     otsikko: "”Index out of bounds”?",
     aikaleima: "2023-06-21T09:37:36.124Z",
@@ -146,7 +86,7 @@ export const ticketDummyData = {
     arkistoitava: false
   },
 
-  ticket3KenttaArray: [
+  tiketti3KenttaArray: [
     {
       id: 1,
       arvo: "2",
@@ -175,7 +115,7 @@ export const ticketDummyData = {
     }
   ],
 
-  ticket3comments: [
+  tiketti3kommentit: [
     {
       id: 7,
       viesti: "Lorem ipsum dolor sit amet.",
@@ -234,7 +174,7 @@ export const ticketDummyData = {
     }
   ],
 
-  ticket: {
+  Tiketti: {
     arkistoitava: true,
     id: '4',
     otsikko: "Ohjelma tulostaa numeroita kirjainten sijasta!",

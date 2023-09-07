@@ -99,19 +99,19 @@ describe('TicketService', () => {
 
     const ticketUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}`;
     const ticketRequest = controller.expectOne(ticketUrl);
-    ticketRequest.flush(ticketDummyData.ticket3);
+    ticketRequest.flush(ticketDummyData.tiketti3);
     // Advance the asynchronous execution of the test to resolve promises.
     tick();
 
     const fieldsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
     const fieldsRequest = controller.expectOne(fieldsUrl);
-    fieldsRequest.flush(ticketDummyData.ticket3KenttaArray);
+    fieldsRequest.flush(ticketDummyData.tiketti3KenttaArray);
     tick();
 
     const commentsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti`
       + `/kaikki`;
     const commentsRequest = controller.expectOne(commentsUrl);
-    commentsRequest.flush(ticketDummyData.ticket3comments);
+    commentsRequest.flush(ticketDummyData.tiketti3kommentit);
     tick();
   }));
 

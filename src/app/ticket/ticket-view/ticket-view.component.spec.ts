@@ -46,7 +46,7 @@ describe('TicketViewComponent', () => {
   }
 
   beforeEach(async() => {
-    ticket = ticketDummyData.ticket;
+    ticket = ticketDummyData.Tiketti;
     user = authDummyData.userInfoEsko;
 
     fakeTicketService = jasmine.createSpyObj('TicketService', {

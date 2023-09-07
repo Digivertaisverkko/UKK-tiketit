@@ -17,7 +17,7 @@ import { SubmitFaqComponent } from './submit-faq.component';
 import { TicketService, UusiUKK } from '@ticket/ticket.service';
 import { StoreService } from '@core/services/store.service';
 
-fdescribe('SubmitFaqComponent', () => {
+describe('SubmitFaqComponent', () => {
   let component: SubmitFaqComponent;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
