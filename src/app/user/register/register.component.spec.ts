@@ -11,7 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthDummyData } from '@core/services/auth.dummydata';
 import { AuthService } from '@core/services/auth.service';
-import { courseDummyData } from '@course/course.dummydata';
+import { CourseDummyData } from '@course/course.dummydata';
 import { CourseService } from '@course/course.service';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { MatInputModule } from '@angular/material/input';
@@ -26,6 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 describe('RegisterComponent', () => {
   const authDummyData = new AuthDummyData;
   let component: RegisterComponent;
+  const courseDummyData = new CourseDummyData;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fakeCourseService: Pick<CourseService, 'getCourseName' | 'getInvitedInfo'>;
   // let fakeCourseService: FakeCourseService;

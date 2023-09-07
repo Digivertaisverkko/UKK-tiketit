@@ -7,7 +7,7 @@ import { MockComponent } from 'ng-mocks';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
-import { courseDummyData } from '@course/course.dummydata';
+import { CourseDummyData } from '@course/course.dummydata';
 import { CourseService } from '@course/course.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
 import { EditorComponent } from '@shared/editor/editor.component';
@@ -19,6 +19,7 @@ import { StoreService } from '@core/services/store.service';
 
 describe('SubmitFaqComponent', () => {
   let component: SubmitFaqComponent;
+  const courseDummyData = new CourseDummyData;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<SubmitFaqComponent>;

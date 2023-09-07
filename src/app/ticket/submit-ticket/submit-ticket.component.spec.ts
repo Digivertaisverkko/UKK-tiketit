@@ -15,7 +15,7 @@ import { TicketService, UusiTiketti } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
 import { Kentta } from '@ticket/ticket.service';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
-import { courseDummyData } from '@course/course.dummydata';
+import { CourseDummyData } from '@course/course.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -24,6 +24,7 @@ import { TicketDummyData } from '@ticket/ticket.dummydata';
 
 describe('SubmitTicketComponent', () => {
   let component: SubmitTicketComponent;
+  const courseDummyData = new CourseDummyData;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<SubmitTicketComponent>;
