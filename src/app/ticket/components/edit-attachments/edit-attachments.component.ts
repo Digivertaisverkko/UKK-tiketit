@@ -2,7 +2,7 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
+import { forkJoin, Observable, Subscription, tap, catchError, of, Subject } from 'rxjs';
 
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
@@ -73,21 +73,28 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.fileInfoList = [];
   }
 
-  private makeRequestArray(ticketID: string, commentID: string): any {
+  /* Palauttaa listan liitteen lähetyksiä, jotka päivittävät edistymisen ja
+     virheen tapahtuessa asettavat virheviestin. */
+  private makeRequestArray(ticketID: string, commentID: string):
+      Observable<number>[] {
     return this.fileInfoList.map((fileinfo, index) => {
-      return this.tickets.uploadFile(ticketID, commentID, this.courseid, fileinfo.file)
-        .pipe(
-          tap(progress => {
-            this.fileInfoList[index].progress = progress;
-          }),
-          catchError((error: any) => {
-            this.fileInfoList[index].uploadError = $localize `:@@Liitteen
-                lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            /* Virhettä ei heitetä, koska silloin tiedostojen lähetys loppuu
-              yhteen virheeseen. */
-            return of('error');
-          })
-        )
+      const progress = new Subject<number>();
+      this.tickets.uploadFile(ticketID, commentID, this.courseid, fileinfo.file)
+        .subscribe({
+          next: (value: number) => {
+            this.fileInfoList[index].progress = value;
+            progress.next(value);
+          },
+          error: (error: any) => {
+            this.fileInfoList[index].uploadError = $localize
+                `:@@Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            progress.error(error);
+          },
+          complete: () => {
+            progress.complete();
+          }
+        });
+      return progress.asObservable();
     });
   }
 
@@ -199,7 +206,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
-    let requestArray = this.makeRequestArray(ticketID, commentID);
+    let requestArray: Observable<number>[] = this.makeRequestArray(ticketID, commentID);
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
         next: (res: any) => {
