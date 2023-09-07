@@ -13,7 +13,6 @@ import { HeadlineComponent } from '@shared/components/headline/headline.componen
 import { EditorComponent } from '@shared/editor/editor.component';
 import { TicketService, UusiTiketti } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
-import { Kentta } from '@ticket/ticket.service';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { CourseDummyData } from '@course/course.dummydata';
 import { StoreService } from '@core/services/store.service';
@@ -212,14 +211,35 @@ describe('SubmitTicketComponent', () => {
       fixture = TestBed.createComponent(SubmitTicketComponent);
       component = fixture.componentInstance;
       component.courseid = '1';
-      component.id = '';
+      component.id = ticketDummyData.Tiketti.id;
       component.ngOnInit();
 
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    it('Prefills the form fields', fakeAsync(() => {
+      const ticket = ticketDummyData.Tiketti;
+      const expextedTitle = ticket.otsikko;
+      const expextedMessage = ticket.viesti;
+      const fields = ticket.kentat;
+      const expectedField = fields ? [fields[0].arvo, fields[1].arvo] : '';
+      const expectedFieldLabel = fields ? [fields[0].otsikko, fields[1].otsikko] : '';
+      tick();
+      fixture.detectChanges();
+      tick();
+      const title = findEl(fixture, 'title').nativeElement;
+      const message = findEl(fixture, 'message').nativeElement;
+      const field = [ findEl(fixture, 'field-0').nativeElement,
+                      findEl(fixture, 'field-1').nativeElement];
+      const fieldLabel = [ findEl(fixture, 'field-label-0').nativeElement,
+                           findEl(fixture, 'field-label-1').nativeElement];
+
+      expect(title.value).toBe(expextedTitle);
+      expect(field[0].value).toBe(expectedField[0]);
+      expect(field[1].value).toBe(expectedField[1]);
+      expect(fieldLabel[0].innerText.trim()).toBe(expectedFieldLabel[0]);
+      expect(fieldLabel[1].innerText.trim()).toBe(expectedFieldLabel[1]);
+      expect(message.value).toBe(expextedMessage);
+    }));
 
   })
 
