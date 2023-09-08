@@ -124,7 +124,7 @@ export interface Tiketti extends Tikettipohja {
 }
 
 // Metodit: getFAQlist API: /api/kurssi/:kurssi-id/ukk/
-// UKK-listassa näytettävä UKK.
+// UKK-listassa näytettävä UKK. Yksittäinen UKK on sama kuin Tiketti.
 export interface UKK {
   id: number;
   otsikko: string;
