@@ -17,7 +17,7 @@ export class SenderInfoComponent implements OnInit {
 
   // 'now' näyttää aikaleimaksi "Nyt".
   @Input() aikaleima: Date | 'now' = new Date;
-  @Input() muokattu?: Date;
+  @Input() muokattu?: Date | null;
   @Input() user: User | null = {} as User;
   @Input() alignLeft: boolean = false;
   @Input() styles: any;
@@ -66,13 +66,16 @@ export class SenderInfoComponent implements OnInit {
     }
   }
 
-  // Palauta nimen alkukirjaimet isolla (enintään 2 ensimmäistä).
+  /* Palauta nimen alkukirjaimet isolla. Jos koostuu yli kahdesta sanasta,
+     palauta ensimmäinen ja viimeinen. */
   private getInitials(name: string | undefined): string {
     if (!name) return ''
-    name = name.trim();
-    const words: string[] = name.split(' ');
+    let words: string[] = name.trim().split(' ');
     if (words.length > 2) {
-      (words.slice(0, 2));
+      const newWords: string[] = [];
+      newWords.push(words[0]);
+      newWords.push(words[words.length - 1]);
+      words = newWords;
     }
     return words
       .filter(element => element && element.length > 0)
