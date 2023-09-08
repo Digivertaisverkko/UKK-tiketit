@@ -48,7 +48,7 @@ export interface Kommentti {
   id: string;
   lahettaja: User;
   aikaleima: Date;
-  muokattu: Date;
+  muokattu: Date | null;
   tila: number;
   viesti: string;
   liitteet: Array<Liite>;
@@ -67,6 +67,7 @@ export interface NewCommentResponse {
   kommentti: string;
 }
 
+// Käytetään tikettilistan muodostamiseen, sen sorttaamiseen ja filtteröintiin.
 export interface SortableTicket {
   id: number;
   otsikko: string;
@@ -122,22 +123,20 @@ export interface Tiketti extends Tikettipohja {
   muokattu?: Date;
 }
 
-interface UKKlistanKentta {
-  tiketti: number;
-  arvo: string;
-  otsikko: string;
-  ohje: string;
-  tyyppi: number;
-}
-
-// Metodit: getFAQ, getFAQlist API: /api/kurssi/:kurssi-id/ukk/
+// Metodit: getFAQlist API: /api/kurssi/:kurssi-id/ukk/
+// UKK-listassa näytettävä UKK.
 export interface UKK {
   id: number;
   otsikko: string;
   aikaleima: Date;
-  aikaleimaStr: string
   tila: number;
-  kentat: UKKlistanKentta[]
+  aikaleimaStr: string
+  kentat: UKKlistanKentta[];
+}
+
+interface UKKlistanKentta extends TikettiListanKentta {
+  ohje: string;
+  tyyppi: number;
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/
