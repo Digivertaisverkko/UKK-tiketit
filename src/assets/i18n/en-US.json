@@ -148,6 +148,7 @@
     "Liitä tiedostoja": "Attach files",
     "Liity kurssille": "Join course",
     "Lisäkenttä": "Additional field",
+    "lisäkenttää ei löydy": "The additional field you requested does not exist. Another teacher of the course may have deleted it or you have an incorrect URL",
     "Lisäkenttien lisääminen epäonnistui": "Adding additional fields to this course failed",
     "Lisäkentän tietojen haku epäonnistui": "Failed to retrieve additional field data",
     "Kysymysten lisäohjeen tallentaminen onnistui": "The additional help for the questions was saved successfully",

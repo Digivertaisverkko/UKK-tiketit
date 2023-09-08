@@ -32,6 +32,8 @@ export class EditFieldComponent implements OnInit {
   public isRemovePressed: boolean = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public showConfirm: boolean = false;
+  // Voi olla error, jos editoidaan olemasa olevaa kenttää eikä saada haettua tietoja.
+  public state: 'editing' | 'error' = 'editing';
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
   private fetchFieldTimer$: Observable<number>;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
@@ -163,11 +165,13 @@ export class EditFieldComponent implements OnInit {
       }
       // Tarvitaan tietojen lähettämiseen.
       this.allFields = response.kentat;
-
       if (this.allFields.length > 0 && this.fieldid) {
         let matchingField = this.allFields.filter(field => String(field.id) === fieldID);
-        if (matchingField == null) {
-          throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+        if (matchingField.length === 0) {
+          this.errorMessage = $localize`:@@lisäkenttää ei löydy:
+          Hakemaasi lisäkenttää ei ole olemassa. Toinen kurssin opettaja on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+          this.state = 'error';
+          return
         }
         this.field = matchingField[0];
          // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden

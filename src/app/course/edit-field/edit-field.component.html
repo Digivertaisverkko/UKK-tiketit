@@ -11,7 +11,8 @@
           (click)="changeRemoveButton()"
           i18n="@@Poista"
           mat-raised-button
-          *ngIf="fieldid !== null && isRemovePressed === false"
+          *ngIf="fieldid !== null && isRemovePressed === false &&
+            state !== 'error'"
           >
     Poista
   </button>
@@ -42,6 +43,10 @@
         (ngSubmit)="updateAllFields()"
         #submitForm="ngForm"
         >
+
+    <ng-container *ngIf="state !== 'error'">
+
+
     <mat-form-field class="field-title" appearance="fill">
       <input  formControlName="title"
               id="field-name"
@@ -146,6 +151,8 @@
       <mat-hint align="end">{{ infoText.value.length }} / 255</mat-hint>
     </mat-form-field>
 
+    </ng-container>
+
     <app-error *ngIf="errorMessage.length > 0"
                 i18n-title="@@Virhe"
                 title="Virhe"
@@ -155,6 +162,9 @@
     </app-error>
 
     <div class="bottom-buttons-wrapper">
+
+      <ng-container *ngIf="state !== 'error'">
+
       <mat-checkbox formControlName="mandatory"
                     name="checkbox-mandatory"
                     i18n="@@Pakollinen"
@@ -175,6 +185,8 @@
         </div>
       </mat-checkbox>
 
+    </ng-container>
+
       <div class="spacer bottom-spacer"></div>
 
       <button class="cancel-button"
@@ -190,10 +202,14 @@
               color="primary"
               i18n="@@Tallenna"
               mat-raised-button
+              *ngIf="state !== 'error'"
               type="submit"
               >
         Tallenna
       </button>
     </div>
+
+
+
   </form>
 </div>
