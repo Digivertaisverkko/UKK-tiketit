@@ -171,7 +171,7 @@ describe('SubmitTicketComponent', () => {
 
       fakeTicketService = jasmine.createSpyObj('TicketService', {
         editTicket: Promise.resolve({ success: true }),
-        getTicket: Promise.resolve(ticketDummyData.Tiketti),
+        getTicket: Promise.resolve(ticketDummyData.tiketti),
       });
 
       // Luodaan komponentti tiketin luomistilassa
@@ -208,20 +208,19 @@ describe('SubmitTicketComponent', () => {
 
       fixture = TestBed.createComponent(SubmitTicketComponent);
       component = fixture.componentInstance;
-      component.courseid = String(ticketDummyData.Tiketti.kurssi);
-      component.id = ticketDummyData.Tiketti.id;
+      component.courseid = String(ticketDummyData.tiketti.kurssi);
+      component.id = ticketDummyData.tiketti.id;
       fixture.detectChanges();
     });
 
     it('prefills the form fields', fakeAsync(() => {
-      const ticket = ticketDummyData.Tiketti;
+      const ticket = ticketDummyData.tiketti;
       const expextedTitle = ticket.otsikko;
       const expextedMessage = ticket.viesti;
       const fields = ticket.kentat;
       const expectedField = fields ? [fields[0].arvo, fields[1].arvo] : '';
       const expectedFieldLabel = fields ? [fields[0].otsikko, fields[1].otsikko] : '';
-      tick();
-      fixture.detectChanges();
+      fixture.detectChanges(); // Ei löydä lisäkenttiä ilman tätä toista kutsua.
       tick();
       const title = findEl(fixture, 'title').nativeElement;
       const message = findEl(fixture, 'message').nativeElement;
@@ -238,28 +237,33 @@ describe('SubmitTicketComponent', () => {
       expect(message.value).toBe(expextedMessage);
     }));
 
-    it('makes correct method call after changing title and Publish -click', fakeAsync(() => {
-      tick();
+    it("makes correct method call after changing fields' content", fakeAsync(() => {
+      fixture.detectChanges(); // Ei löydä lisäkenttiä ilman tätä toista kutsua.
       const expectedTitle = 'Edited title';
-      const ticket = ticketDummyData.Tiketti;
+      const expectedMessage = 'Edited message';
+      const expectedField0 = '10';
+      const ticket = ticketDummyData.tiketti;
       const fields = ticket.kentat!;
       const expectedTicket = {
           otsikko: expectedTitle,
-          viesti: ticket.viesti,
+          viesti: expectedMessage,
           kentat: [
-            { arvo: fields[0].arvo, id: Number(fields[0].id) },
+            { arvo: expectedField0, id: Number(fields[0].id) },
             { arvo: fields[1].arvo, id: Number(fields[1].id) }
           ]
         }
       // setFieldValue(fixture, 'message', expectedMessage);
       setFieldValue(fixture, 'title', expectedTitle);
+      setFieldValue(fixture, 'message', expectedMessage);
+      setFieldValue(fixture, 'field-0', expectedField0);
+      const field0 = findEl(fixture, 'field-0');
+      tick();
       findEl(fixture, 'send-button').nativeElement.click();
       tick();
-
       // const title = findEl(fixture, 'title').nativeElement;
       // expect(title.value).toBe(expectedTitle);
       expect(fakeTicketService.editTicket).toHaveBeenCalledWith(
-        ticketDummyData.Tiketti.id, expectedTicket, component.courseid
+        ticketDummyData.tiketti.id, expectedTicket, component.courseid
       );
     }));
 

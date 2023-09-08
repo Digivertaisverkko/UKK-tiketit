@@ -74,7 +74,7 @@ export class TicketDummyData {
     ]
   }
 
-  public get Tiketti(): Tiketti {
+  public get tiketti(): Tiketti {
     return {
       arkistoitava: true,
       id: '4',
