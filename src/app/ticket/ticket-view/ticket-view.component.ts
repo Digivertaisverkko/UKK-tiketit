@@ -166,6 +166,12 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       console.log('component:');
       console.dir(response);
       */
+      if (response === null) {
+        this.errorMessage = $localize`:@@Kysymystä ei löydy:
+        Hakemaasi kysymystä ei ole olemassa. Kysymyksen aloittajan on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+        this.state = 'error';
+        return
+      }
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;

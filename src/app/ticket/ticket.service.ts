@@ -359,7 +359,7 @@ export class TicketService {
 
   /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
     kommentit. */
-  public async getTicket(ticketID: string, courseID: string): Promise<Tiketti> {
+  public async getTicket(ticketID: string, courseID: string): Promise<Tiketti | null> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
@@ -367,6 +367,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
+    if (response === null) return null;
     response.aikaleima = new Date(response.aikaleima);
     let ticket: Tiketti = response;
     const fields = await this.getFields(ticketID, courseID);

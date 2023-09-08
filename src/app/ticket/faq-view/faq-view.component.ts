@@ -38,6 +38,13 @@ export class FaqViewComponent implements OnInit {
     this.faqID = this.id;
     this.ticketService.getTicket(this.faqID, this.courseid)
       .then((response) => {
+
+        if (response === null) {
+          this.errorMessage = $localize`:@@UKK ei löydy:
+          Hakemaasi usein kysyttä kysymystä ei ole olemassa. Sen tekijä on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+          return
+        }
+
         this.ticket = response;
         this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       })

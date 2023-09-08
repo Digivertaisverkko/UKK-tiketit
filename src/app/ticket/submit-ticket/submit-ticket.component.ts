@@ -93,8 +93,6 @@ export class SubmitTicketComponent implements OnInit {
           field.arvo ?? '';
       this.additionalFields.push(new FormControl(value, validators));
     }
-    console.log('this.additionalFields');
-    console.dir(this.additionalFields.value);
   }
 
   private buildForm(): FormGroup {
@@ -153,6 +151,9 @@ export class SubmitTicketComponent implements OnInit {
   private fetchTicketInfo(ticketId: string, courseID: string): void {
     console.log('fetchTicketInfo');
     this.ticketService.getTicket(ticketId, courseID).then(response => {
+      if (response === null) {
+        return
+      }
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);
       this.oldAttachments = response.liitteet ?? [];
