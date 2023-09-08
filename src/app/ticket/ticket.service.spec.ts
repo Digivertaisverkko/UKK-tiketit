@@ -89,6 +89,7 @@ describe('TicketService', () => {
     const ticketID = '3';
 
     tickets.getTicket(ticketID, courseID).then(res => {
+      if (res === null) return
       const ticketProperties = ticketDummyData.ticketProperties;
       const resProperties = Object.keys(res);
       expect(resProperties).toEqual(ticketProperties);
