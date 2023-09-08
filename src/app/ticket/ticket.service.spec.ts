@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 import { initializeLanguageFI } from '../app.initializers';
 import localeFi from '@angular/common/locales/fi';
 import localeEn from '@angular/common/locales/en';
-import { SortableTicket, TicketService } from './ticket.service';
+import { SortableTicket, TicketService, Tiketti } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ErrorService } from '@core/services/error.service';
@@ -88,7 +88,7 @@ describe('TicketService', () => {
     const courseID = '1';
     const ticketID = '3';
 
-    tickets.getTicket(ticketID, courseID).then(res => {
+    tickets.getTicket(ticketID, courseID).then((res: Tiketti | null) => {
       if (res === null) return
       const ticketProperties = ticketDummyData.ticketProperties;
       const resProperties = Object.keys(res);

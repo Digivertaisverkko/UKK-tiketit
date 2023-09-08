@@ -58,7 +58,9 @@
                     >
 
         <mat-form-field appearance="fill">
-          <mat-label>{{ ticketFields[i].otsikko }}</mat-label>
+          <mat-label [attr.data-testid]="'field-label-' + i">
+            {{ ticketFields[i].otsikko }}
+          </mat-label>
           <input  [attr.data-testid]="'field-' + i"
                   formControlName="{{i}}"
                   (keydown.enter)="$event.preventDefault()"
@@ -114,7 +116,7 @@
     </section>
 
     <h3><span i18n="@@Kysymys">Kysymys</span><span>*</span></h3>
-    <app-editor data-testid='question' formControlName="question" ngDefaultControl>
+    <app-editor data-testid='message' formControlName="question" ngDefaultControl>
     </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="question?.errors?.['required'] && question?.touched"

@@ -1,10 +1,15 @@
 import { Role } from "@core/core.models";
 import { Kentta, Liite, SortableTicket, Tiketti, UKK } from "./ticket.models";
+import { AuthDummyData } from "@core/services/auth.dummydata";
+
+/* Dummy dataa testausta varten. */
 
 /* id arvot tulevat palvelimelta numeroina, mutta ne tallennetaan
    ja käsitellään frontissa string:nä. */
 
 export class TicketDummyData {
+
+  readonly authDummyData = new AuthDummyData;
 
   public get liitteet(): Liite[] {
     return [
@@ -230,6 +235,22 @@ export class TicketDummyData {
         ]
       }
     ]
+  }
+
+  public get ukk(): Tiketti {
+    const faq: Tiketti = this.tiketti;
+    faq.ukk = true;
+    faq.tila = 2;
+    faq.kommentit = [{
+      id: '14',
+      tila: 1,
+      lahettaja: this.authDummyData.userInfoTeacher,
+      aikaleima: new Date("2023-06-21T09:37:36.124Z"),
+      muokattu: null,
+      viesti: "Vastaus kysymykseen",
+      liitteet: []
+    }]
+    return faq
   }
 
 }
