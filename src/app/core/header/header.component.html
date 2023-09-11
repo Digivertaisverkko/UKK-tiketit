@@ -48,6 +48,7 @@
 
   <button aria-label="Valikko"
           class="material-symbols-outlined"
+          data-testid="account-button"
           id="account-icon-button"
           i18n-aria-label="@@Valikko"
           mat-icon-button
@@ -89,6 +90,7 @@
   </button>
 
   <button (click)="login()"
+          data-testid="login-button"
           i18n="@@Kirjaudu sisään"
           mat-menu-item
           *ngIf="(isLoggedIn$ | async) === false"
@@ -97,6 +99,7 @@
   </button>
 
   <button (click)="logout()"
+          data-testid="logout-button"
           i18n="@@Kirjaudu ulos"
           mat-menu-item
           *ngIf="(isLoggedIn$ | async) === true"

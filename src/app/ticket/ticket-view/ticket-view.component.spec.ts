@@ -106,7 +106,7 @@ describe('TicketViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('"Remove ticket" calls correct service method', fakeAsync(() => {
+  it('calls correct service method when clicking "Remove ticket"', fakeAsync(() => {
     component.fetchTicket(component.courseid);
     tick();
     fixture.detectChanges();
