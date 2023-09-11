@@ -91,7 +91,6 @@ describe('SubmitFaqComponent', () => {
       const answerText = 'Vastaus';
       const fieldTexts = [ 'Tehtävä 1', 'Kotitehtävä' ];
       const fields = courseDummyData.ticketFields;
-
       const expectedFAQ: UusiUKK = {
         otsikko: titleText,
         viesti: questionText,
@@ -101,7 +100,6 @@ describe('SubmitFaqComponent', () => {
         ],
         vastaus: answerText
       }
-
       component.ngOnInit();
       tick();
       fixture.detectChanges();
@@ -132,7 +130,7 @@ describe('SubmitFaqComponent', () => {
       });
 
       fakeTicketService = jasmine.createSpyObj('TicketService', {
-        editFaq: undefined,
+        editFaq: Promise.resolve({ success: true}),
         getTicket: Promise.resolve(ticketDummyData.ukk)
       });
 
@@ -186,9 +184,9 @@ describe('SubmitFaqComponent', () => {
       const fields = ticket.kentat;
       const expectedField = fields ? [fields[0].arvo, fields[1].arvo] : '';
       const expectedFieldLabel = fields ? [fields[0].otsikko, fields[1].otsikko] : '';
-      tick(1000);
+      tick(100);
       fixture.detectChanges(); // Ei löydä lisäkenttiä ilman tätä toista kutsua.
-      tick(1000);
+      tick(100);
       const title = findEl(fixture, 'title').nativeElement;
       const message = findEl(fixture, 'message').nativeElement;
       const field = [ findEl(fixture, 'field-0').nativeElement,
@@ -204,6 +202,33 @@ describe('SubmitFaqComponent', () => {
       expect(message.value).toBe(expextedMessage);
     }));
 
+    it('calls correct method after editing fields and Publish-click', fakeAsync(() => {
+      const expectedMessage = 'Edited message';
+      const expectedField = '10';
+      const expectedAnswer = 'Edited answer';
+      const ticket = ticketDummyData.ukk;
+      const fields = ticket.kentat!;
+      const expectedTicket = {
+        otsikko: ticket.otsikko,
+        viesti: expectedMessage,
+        kentat: [
+          { arvo: expectedField, id: Number(fields[0].id) },
+          { arvo: fields[1].arvo, id: Number(fields[1].id) }
+        ],
+        vastaus: expectedAnswer
+      }
+      tick(100);
+      fixture.detectChanges(); // Ei löydä lisäkenttiä ilman tätä toista kutsua.
+      tick(100);
+      setFieldValue(fixture, 'message', expectedMessage);
+      setFieldValue(fixture, 'field-0', expectedField);
+      setFieldValue(fixture, 'answer', expectedAnswer);
+      tick();
+      findEl(fixture, 'send-button').nativeElement.click();
+      tick();
+      expect(fakeTicketService.editFaq).toHaveBeenCalledWith(ticket.id, expectedTicket,
+        component.courseid);
+    }));
 
   });
 
