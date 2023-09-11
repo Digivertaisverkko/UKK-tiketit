@@ -7,7 +7,7 @@
 
     <!--  Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella
           käytetään header -komponenttia. -->
-    <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
+    <mat-toolbar color="primary" class="embedded-header" *ngIf="isInIframe">
 
       <div class="logo" *ngIf="courseID === null; else clickableLogo">
         <img alt="" src="assets/logos/Tukki_logo_rgb_tummasini.svg">
@@ -78,8 +78,6 @@
                 >
           Kurssin asetukset
         </button>
-
-
       </mat-menu>
 
     </mat-toolbar>

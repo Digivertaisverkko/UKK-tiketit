@@ -7,7 +7,6 @@ import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-// import { TicketService } from './ticket/ticket.service';
 
 @Component({
   selector: 'app-root',
