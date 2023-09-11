@@ -11,48 +11,60 @@ import { FooterComponent } from '@core/footer/footer.component';
 import { AuthService } from '@core/services/auth.service';
 import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { initializeLanguage } from './app.initializers';
+import { StoreService } from '@core/services/store.service';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fixture: ComponentFixture<AppComponent>;
 
-  beforeEach(async () => {
-    fakeAuthService = jasmine.createSpyObj('CourseService', {
-      initialize: undefined
+  describe('Logged as teacher', () => {
+
+    beforeEach(async () => {
+      fakeAuthService = jasmine.createSpyObj('CourseService', {
+        initialize: undefined
+      });
+
+      await TestBed.configureTestingModule({
+        declarations: [
+          AppComponent,
+          MockComponent(FooterComponent)      ],
+        imports: [
+          MatIconModule,
+          MatMenuModule,
+          MatToolbarModule,
+          MatTooltipModule,
+          RouterTestingModule
+        ],
+        providers: [
+          { provide: AuthService, useValue: fakeAuthService },
+          {
+            provide: APP_INITIALIZER,
+            useFactory: () => initializeLanguage,
+            multi: true
+          },
+          { provide: LOCALE_ID, useValue: 'fi' },
+          StoreService
+        ]
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      localStorage.clear();
     });
 
-    await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        MockComponent(FooterComponent)      ],
-      imports: [
-        MatIconModule,
-        MatMenuModule,
-        MatToolbarModule,
-        MatTooltipModule,
-        RouterTestingModule
-      ],
-      providers: [
-        { provide: AuthService, useValue: fakeAuthService },
-        {
-          provide: APP_INITIALIZER,
-          useFactory: () => initializeLanguage,
-          multi: true
-        },
-        { provide: LOCALE_ID, useValue: 'fi' }
-      ]
-    }).compileComponents();
+    it('should create the app', () => {
+      expect(component).toBeTruthy();
+    });
 
-    fixture = TestBed.createComponent(AppComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    /*
+    it('logout is shown and calls right method', () => {
+      expect(component).toBeTruthy();
+    });
+    */
 
-    localStorage.clear();
-  });
-
-  it('should create the app', () => {
-    expect(component).toBeTruthy();
   });
 
   // Ei toimi vielä. Huomaa upotuksen ja asettaa silloin kielen enkuksi.
