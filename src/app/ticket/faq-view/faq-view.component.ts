@@ -26,7 +26,7 @@ export class FaqViewComponent implements OnInit {
   private faqID!: string;
 
   constructor(
-    private router: Router,
+    public router: Router,  // Jotta voidaan testata.
     private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
