@@ -10,6 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthService } from '@core/services/auth.service';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
+import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { ListingComponent } from './listing.component';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { TicketService } from '@ticket/ticket.service';
@@ -38,7 +39,8 @@ describe('ListingComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         ListingComponent,
-        MockComponent(HeadlineComponent)
+        MockComponent(HeadlineComponent),
+        MockComponent(SearchBarComponent)
       ],
       imports: [
         BrowserAnimationsModule,
