@@ -1,25 +1,25 @@
 import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
-import { getCourseIDfromURL } from '@shared/utils';
 import { Observable } from 'rxjs';
 import { StoreService } from '../services/store.service';
 import { User } from '@core/core.models';
 import { AuthService } from '@core/services/auth.service';
+import { isInIframe } from '@shared/utils';
+import { UtilsService } from '@core/services/utils.service';
 
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./header.component.scss']
 })
 
 export class HeaderComponent implements OnInit {
   // Async pipeä varten.
   // public isUserLoggedIn$: Observable<boolean>;
-  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
+  public courseID: string | null = this.utils.getCourseIDfromURL();
   public disableLangSelect: boolean = false;
   public isLoggedIn$: Observable<Boolean | null>;
   public isParticipant$: Observable<Boolean | null>;
@@ -36,8 +36,10 @@ export class HeaderComponent implements OnInit {
     private change: ChangeDetectorRef,
     private responsive: BreakpointObserver,
     private router: Router,
-    private store : StoreService
+    private store : StoreService,
+    private utils : UtilsService
     ) {
+    // this.courseID = this.utils.getCourseIDfromURL();
     this.handsetPB$ = this.responsive.observe(Breakpoints.HandsetPortrait);
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isParticipant$ = this.store.trackIfParticipant();
@@ -46,7 +48,6 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.trackCourseID();
     this.trackUserInfo();
   }
 
@@ -64,17 +65,17 @@ export class HeaderComponent implements OnInit {
   public goTo(view: 'profile' | 'settings') {
     // Ei routen seuraaminen toimi ja initiin ei voi laittaa, kun voi silloin
     // olla null.
-    const courseID = getCourseIDfromURL();
-    if (!courseID) {
-      console.error('Kurssi id on null, ei voida jatkaa. ' + typeof courseID);
+    const courseid = this.utils.getCourseIDfromURL();
+    if (!courseid) {
+      console.error('Kurssi id on null, ei voida jatkaa. ');
       return
     }
-    this.router.navigateByUrl('/course/' + courseID + '/' + view);
+    this.router.navigateByUrl('/course/' + courseid + '/' + view);
   }
 
   public login(): void {
-    const courseID = getCourseIDfromURL();
-    if (courseID === null) {
+    const courseid = this.utils.getCourseIDfromURL();
+    if (!courseid) {
       throw new Error('header.component.ts.login: ei kurssi ID:ä.');
     }
     const currentRoute = window.location.pathname + window.location.search;
@@ -82,13 +83,13 @@ export class HeaderComponent implements OnInit {
         currentRoute.indexOf('/login') !== -1) {
       this.auth.saveRedirectURL();
     }
-      this.auth.navigateToLogin(courseID);
+    if (courseid) this.auth.navigateToLogin(courseid);
   }
 
   public logout() {
-    const courseID = getCourseIDfromURL();
+    const courseid = this.utils.getCourseIDfromURL();
     this.auth.logout().then(res => {
-      this.auth.navigateToLogin(courseID);
+      if (courseid) this.auth.navigateToLogin(courseid);
     })
   }
 
@@ -100,8 +101,10 @@ export class HeaderComponent implements OnInit {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }
 
+  /*
   private trackCourseID() {
     this.router.events.subscribe(event => {
+      console.dir(event);
       if (event instanceof ActivationEnd) {
         let courseID = event.snapshot.paramMap.get('courseid');
         if (courseID !== this.courseID) {
@@ -109,7 +112,7 @@ export class HeaderComponent implements OnInit {
         }
       }
     });
-  }
+  } */
 
   trackUserInfo() {
     this.store.trackUserInfo().subscribe(response => {
