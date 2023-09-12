@@ -38,12 +38,12 @@ export class ErrorService {
 
   /* Palauta samanlaisen virheen kuin palvelin. status on HTTP error status koodi,
       errorid on palvelimen nelinumeroinen virhekoodi. */
-  public createError(status: number, errorid: number): BackendErrorResponse { 
+  public createError(status: number, errorid: number): BackendErrorResponse {
     var e: BackendErrorResponse = {
       success: false,
       error: {
         tunnus: errorid
-      } 
+      }
     };
 
     var status = 418;
@@ -169,7 +169,6 @@ export class ErrorService {
           'ohjataan virhesivulle.');
     this.store.setNotLoggegIn();
     // window.localStorage.clear();
-    // const courseID = getCourseIDfromURL();
     // this.saveRedirectURL();
     this.routeToNoPrivileges();
     // const baseUrl = (courseID == null) ? '' : 'course/' + courseID  + '/';

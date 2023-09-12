@@ -30,17 +30,6 @@ async function getHash(input: string): Promise<string> {
     */
 }
 
-export function getCourseIDfromURL(): string | null {
-  const pathArray = window.location.pathname.split('/');
-  let courseID: string | null;
-  if (pathArray[1] === 'course' && pathArray[2] != null)  {
-    courseID = pathArray[2];
-  } else {
-    courseID = null;
-  }
-  return courseID
-}
-
 export function getDateString(date: Date, thisYear: number): string {
   let dateString: string = '';
   const datePipe = new DatePipe('fi-FI');

@@ -180,7 +180,6 @@ describe('SubmitTicketComponent', () => {
       const state: State = { editTicket: true };
       window.history.pushState(state, '', '');
 
-      // SharedModule mm. matAutocomplete:a varten.
       await TestBed.configureTestingModule({
         declarations: [
           MockComponent(EditAttachmentsComponent),

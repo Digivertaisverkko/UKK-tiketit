@@ -2,7 +2,7 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { forkJoin, Observable, Subscription, tap, catchError, of, Subject } from 'rxjs';
+import { forkJoin, Observable, Subscription, Subject } from 'rxjs';
 
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
@@ -159,7 +159,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     return new Promise((resolve, reject) => {
 
       if (this.filesToRemove.length === 0) resolve(true);
-      // const courseID = getCourseIDfromURL();
       if (this.ticketID == null) {
         // throw Error(' ei ticketID:ä');
         reject(new Error('Ei tiketti ID:ä.'));

@@ -10,10 +10,10 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import { getCourseIDfromURL } from '@shared/utils';
 import { getRoleString } from '@shared/utils';
 import { AuthInfo, LoginInfo, LoginResult, User } from '../core.models';
 import { StoreService } from './store.service';
+import { UtilsService } from './utils.service';
 
 interface UserRights {
   oikeudet: User,
@@ -48,6 +48,7 @@ export class AuthService {
               private location: Location,
               private router: Router,
               private store: StoreService,
+              private utils: UtilsService,
               @Inject(LOCALE_ID) private localeDateFormat: string
               ) {
     this.api = environment.apiBaseUrl;
@@ -350,7 +351,7 @@ export class AuthService {
   public startUpdatingUserinfo(): void {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
-        const courseID = getCourseIDfromURL();
+        const courseID = this.utils.getCourseIDfromURL();
         console.log('authService: huomattiin kurssi id ' + courseID);
         const currentUrl = this.location.path();
         const isInLogin: boolean = currentUrl.includes('login');

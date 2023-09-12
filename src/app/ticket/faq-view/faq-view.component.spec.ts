@@ -121,6 +121,5 @@ describe('FaqViewComponent', () => {
     fixture.detectChanges();
     expect(component.isCopyToClipboardPressed).toBe(true);
   }));
-  
+
 });
-  
