@@ -7,8 +7,6 @@ import { StoreService } from '../services/store.service';
 import { User } from '@core/core.models';
 import { AuthService } from '@core/services/auth.service';
 import { isInIframe } from '@shared/utils';
-import { UtilsService } from '@core/services/utils.service';
-
 
 @Component({
   selector: 'app-header',
@@ -18,8 +16,8 @@ import { UtilsService } from '@core/services/utils.service';
 
 export class HeaderComponent implements OnInit {
   // Async pipeä varten.
-  // public isUserLoggedIn$: Observable<boolean>;
-  public courseID: string | null = this.utils.getCourseIDfromURL();
+  // public courseID: string | null = this.utils.getCourseIDfromURL();
+  @Input() courseid: string | null = null;
   public disableLangSelect: boolean = false;
   public isLoggedIn$: Observable<Boolean | null>;
   public isParticipant$: Observable<Boolean | null>;
@@ -36,8 +34,7 @@ export class HeaderComponent implements OnInit {
     private change: ChangeDetectorRef,
     private responsive: BreakpointObserver,
     private router: Router,
-    private store : StoreService,
-    private utils : UtilsService
+    private store : StoreService
     ) {
     // this.courseID = this.utils.getCourseIDfromURL();
     this.handsetPB$ = this.responsive.observe(Breakpoints.HandsetPortrait);
@@ -65,17 +62,16 @@ export class HeaderComponent implements OnInit {
   public goTo(view: 'profile' | 'settings') {
     // Ei routen seuraaminen toimi ja initiin ei voi laittaa, kun voi silloin
     // olla null.
-    const courseid = this.utils.getCourseIDfromURL();
-    if (!courseid) {
+    // const courseid = this.utils.getCourseIDfromURL();
+    if (this.courseid === null) {
       console.error('Kurssi id on null, ei voida jatkaa. ');
       return
     }
-    this.router.navigateByUrl('/course/' + courseid + '/' + view);
+    this.router.navigateByUrl('/course/' + this.courseid + '/' + view);
   }
 
   public login(): void {
-    const courseid = this.utils.getCourseIDfromURL();
-    if (!courseid) {
+    if (this.courseid === null) {
       throw new Error('header.component.ts.login: ei kurssi ID:ä.');
     }
     const currentRoute = window.location.pathname + window.location.search;
@@ -83,17 +79,17 @@ export class HeaderComponent implements OnInit {
         currentRoute.indexOf('/login') !== -1) {
       this.auth.saveRedirectURL();
     }
-    if (courseid) this.auth.navigateToLogin(courseid);
+    this.auth.navigateToLogin(this.courseid);
   }
 
   public logout() {
-    const courseid = this.utils.getCourseIDfromURL();
     this.auth.logout().then(res => {
-      if (courseid) this.auth.navigateToLogin(courseid);
+      if (this.courseid) this.auth.navigateToLogin(this.courseid);
     })
   }
 
   public logoClicked() {
+    // beginningButton komponentti kuuntelee tätä ja vaihtaa routea.
     this.store.sendMessage('go begin');
   }
 

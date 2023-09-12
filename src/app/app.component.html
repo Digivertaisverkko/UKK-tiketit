@@ -1,7 +1,7 @@
 <div class="app-wrapper">
 
   <header>
-    <app-header *ngIf="!isInIframe">
+    <app-header [courseid]="courseid"*ngIf="!isInIframe">
       <span class="spacer"></span>
     </app-header>
 
@@ -9,7 +9,7 @@
           käytetään header -komponenttia. -->
     <mat-toolbar color="primary" class="embedded-header" *ngIf="isInIframe">
 
-      <div class="logo" *ngIf="courseID === null; else clickableLogo">
+      <div class="logo" *ngIf="courseid === null; else clickableLogo">
         <img alt="" src="assets/logos/Tukki_logo_rgb_tummasini.svg">
       </div>
 
@@ -63,7 +63,7 @@
               i18n="@@Profiili"
               i18n-aria-label="@@Profiili"
               mat-menu-item
-              *ngIf="(isLoggedIn$ | async) === true && courseID"
+              *ngIf="(isLoggedIn$ | async) === true && courseid"
               >
           Profiili
         </button>
@@ -73,7 +73,7 @@
                 *ngIf="((user$ | async)?.asema === 'opettaja' ||
                         (user$ | async)?.asema === 'admin') &&
                         (isParticipant$ | async) === true &&
-                        courseID"
+                        courseid"
                 (click)="goTo('settings')"
                 >
           Kurssin asetukset

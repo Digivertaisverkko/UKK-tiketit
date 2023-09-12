@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +14,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy  {
+  public courseid: string | null = '';
   public courseName: string = '';
-  public courseID: string | null = '';
   public disableLangSelect: boolean = false;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
@@ -31,10 +31,11 @@ export class AppComponent implements OnInit, OnDestroy  {
 
   constructor (
     private authService: AuthService,
-    private route: ActivatedRoute,
+    private route : ActivatedRoute,
     private router: Router,
     private store : StoreService,
-  ) {
+    private utils : UtilsService
+    ) {
     this.isLoading = this.store.trackLoading();
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isParticipant$ = this.store.trackIfParticipant();
@@ -82,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy  {
   }
 
   public goTo(view: 'profile' | 'settings') {
-    const courseID = getCourseIDfromURL();
+    const courseID = this.utils.getCourseIDfromURL();
     const route = '/course/' + courseID + '/' + view;
     this.router.navigateByUrl(route);
   }
@@ -103,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy  {
   private trackCourseID(): void {
     this.route.paramMap.subscribe(() => {
       // Ei toimi route.paramMap upotuksessa.
-      this.courseID = getCourseIDfromURL();
+      this.courseid = this.utils.getCourseIDfromURL();
     })
   }
 
