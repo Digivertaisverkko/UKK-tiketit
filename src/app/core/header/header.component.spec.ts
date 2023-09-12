@@ -1,4 +1,6 @@
-import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, flush, tick } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
+import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,9 +10,6 @@ import { AuthDummyData } from '@core/services/auth.dummydata';
 import { AuthService } from '@core/services/auth.service';
 import { HeaderComponent } from './header.component';
 import { StoreService } from '@core/services/store.service';
-import { findEl } from '@shared/spec-helpers/element.spec-helper';
-import { ActivationEnd } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('HeaderComponent', () => {
   const authDummyData = new AuthDummyData;
@@ -18,6 +17,17 @@ describe('HeaderComponent', () => {
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fixture: ComponentFixture<HeaderComponent>;
   let store: StoreService;
+
+    /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
+     Testaamiseen, onko jokin elementti renderoitu. */
+     function findElIfExists(fixture: ComponentFixture<any>, selector: string):
+     HTMLElement | null {
+   try {
+     return findEl(fixture, selector).nativeElement;
+   } catch {
+     return null;
+   }
+ }
 
   beforeEach(async () => {
     fakeAuthService = jasmine.createSpyObj('AuthService', {
@@ -46,13 +56,6 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     store = TestBed.inject(StoreService);
     component = fixture.componentInstance;
-    const courseID = '1';
-    const activationEndEvent = new ActivationEnd(null!);
-    activationEndEvent.snapshot = {
-      paramMap: {
-        get: () => courseID
-      }
-    } as any;
     fixture.detectChanges();
   });
 
@@ -61,36 +64,36 @@ describe('HeaderComponent', () => {
   });
 
   /* For logged in user 'Logout' is shown and clicking it calls right method. */
-  /*
-  it('shows logout option when logged in and it makes correct method call', fakeAsync(() => {
+
+  it('shows logout option when logged in and makes correct method call', fakeAsync(() => {
     store.setNotLoggegIn();
+    component.courseid = '1';
     fixture.detectChanges();
     tick();
-    // const accountBtn = findEl(fixture, 'account-button');
-    // const logoutBtn = findEl(fixture, 'logout-button');
     findEl(fixture, 'account-button').nativeElement.click();
     tick(500);
     const loginBtn = findEl(fixture, 'login-button').nativeElement;
+    const logoutBtn = findElIfExists(fixture, 'logout-button');
     expect(loginBtn).toBeDefined();
+    expect(logoutBtn).toBe(null);
     loginBtn.click();
     tick();
     expect(fakeAuthService.navigateToLogin).toHaveBeenCalled();
     flush();
   }));
-  */
 
-  it('shows login option when logged out and it makes correct method call', fakeAsync(() => {
-
+  it('shows login option when logged out and makes correct method call', fakeAsync(() => {
+    component.courseid = '1';
     store.setUserInfo(authDummyData.userInfoEsko);
     store.setLoggedIn();
     fixture.detectChanges();
     tick();
-    // const accountBtn = findEl(fixture, 'account-button');
-    // const logoutBtn = findEl(fixture, 'logout-button');
     findEl(fixture, 'account-button').nativeElement.click();
     tick(500);
     const logoutBtn = findEl(fixture, 'logout-button').nativeElement;
+    const loginBtn = findElIfExists(fixture, 'login-button');
     expect(logoutBtn).toBeDefined();
+    expect(loginBtn).toBe(null);
     logoutBtn.click();
     tick();
     expect(fakeAuthService.logout).toHaveBeenCalled();

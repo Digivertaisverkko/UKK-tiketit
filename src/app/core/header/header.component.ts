@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit {
 
   constructor (
     private auth: AuthService,
-    private route : ActivatedRoute,
     private change: ChangeDetectorRef,
     private responsive: BreakpointObserver,
     private router: Router,
