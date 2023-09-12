@@ -1,12 +1,13 @@
-import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
 import { Observable } from 'rxjs';
-import { StoreService } from '../services/store.service';
-import { User } from '@core/core.models';
+import { Router  } from '@angular/router';
+
 import { AuthService } from '@core/services/auth.service';
 import { isInIframe } from '@shared/utils';
+import { StoreService } from '../services/store.service';
+import { User } from '@core/core.models';
 
 @Component({
   selector: 'app-header',
@@ -35,7 +36,6 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private store : StoreService
     ) {
-    // this.courseID = this.utils.getCourseIDfromURL();
     this.handsetPB$ = this.responsive.observe(Breakpoints.HandsetPortrait);
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isParticipant$ = this.store.trackIfParticipant();
@@ -61,7 +61,6 @@ export class HeaderComponent implements OnInit {
   public goTo(view: 'profile' | 'settings') {
     // Ei routen seuraaminen toimi ja initiin ei voi laittaa, kun voi silloin
     // olla null.
-    // const courseid = this.utils.getCourseIDfromURL();
     if (this.courseid === null) {
       console.error('Kurssi id on null, ei voida jatkaa. ');
       return

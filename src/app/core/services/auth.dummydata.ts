@@ -39,7 +39,7 @@ export class AuthDummyData {
       nimi: "Esko Seppä",
       sposti: "esko.seppa@example.com",
       asema: "opiskelija" as Role,
-      asemaStr: "Opettaja"
+      asemaStr: "Opiskelija"
     }
   }
 

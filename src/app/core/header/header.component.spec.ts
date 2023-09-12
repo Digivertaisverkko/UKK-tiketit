@@ -1,33 +1,42 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { findEl } from '@shared/spec-helpers/element.spec-helper';
+import { Location } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRippleModule } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from "@angular/router/testing";
+import { Routes } from '@angular/router';
 
 import { AuthDummyData } from '@core/services/auth.dummydata';
 import { AuthService } from '@core/services/auth.service';
 import { HeaderComponent } from './header.component';
 import { StoreService } from '@core/services/store.service';
+import { MockComponent } from 'ng-mocks';
+import { ProfileComponent } from '@user/profile/profile.component';
 
 describe('HeaderComponent', () => {
   const authDummyData = new AuthDummyData;
   let component: HeaderComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fixture: ComponentFixture<HeaderComponent>;
+  let location: Location;
   let store: StoreService;
 
-    /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
-     Testaamiseen, onko jokin elementti renderoitu. */
-     function findElIfExists(fixture: ComponentFixture<any>, selector: string):
-     HTMLElement | null {
-   try {
-     return findEl(fixture, selector).nativeElement;
-   } catch {
-     return null;
-   }
- }
+  const routes: Routes = [
+    { path: 'course/:courseid/profile', component: MockComponent(ProfileComponent)}
+  ];
+  /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
+  Testaamiseen, onko jokin elementti renderoitu. */
+  function findElIfExists(fixture: ComponentFixture<any>, selector: string):
+      HTMLElement | null {
+    try {
+      return findEl(fixture, selector).nativeElement;
+    } catch {
+      return null;
+    }
+  }
 
   beforeEach(async () => {
     fakeAuthService = jasmine.createSpyObj('AuthService', {
@@ -37,23 +46,27 @@ describe('HeaderComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [
-        HeaderComponent
+        HeaderComponent,
+        MockComponent(ProfileComponent)
       ],
       imports: [
         BrowserAnimationsModule,
         MatIconModule,
         MatMenuModule,
+        MatRippleModule,
         MatToolbarModule,
-        RouterTestingModule
+        RouterTestingModule.withRoutes(routes)
       ],
       providers: [
         { provide: AuthService, useValue: fakeAuthService },
+        Location,
         StoreService
       ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(HeaderComponent);
+    location = TestBed.inject(Location);
     store = TestBed.inject(StoreService);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -99,4 +112,55 @@ describe('HeaderComponent', () => {
     expect(fakeAuthService.logout).toHaveBeenCalled();
     flush();
   }));
+
+  /* Shows right user.nimi */
+  it('shows right user name', fakeAsync(() => {
+    component.courseid = '1';
+    store.setUserInfo(authDummyData.userInfoEsko);
+    store.setLoggedIn();
+    fixture.detectChanges();
+    tick();
+    const username = findEl(fixture, 'header-username').nativeElement;
+    expect(username.textContent).toContain(authDummyData.userInfoEsko.nimi);
+  }));
+
+  /* Shows right user role */
+  it('shows right user role for student', fakeAsync(() => {
+    component.courseid = '1';
+    store.setUserInfo(authDummyData.userInfoEsko);
+    store.setLoggedIn();
+    tick();
+    fixture.detectChanges();
+    tick();
+    const userrole = findEl(fixture, 'header-user-role').nativeElement;
+    expect(userrole.textContent).toContain(authDummyData.userInfoEsko.asemaStr);
+  }));
+
+  it('shows right user role for teacher', fakeAsync(() => {
+    component.courseid = '1';
+    store.setUserInfo(authDummyData.userInfoTeacher);
+    store.setLoggedIn();
+    tick();
+    fixture.detectChanges();
+    tick();
+    const userrole = findEl(fixture, 'header-user-role').nativeElement;
+    expect(userrole.textContent).toContain(authDummyData.userInfoTeacher.asemaStr);
+  }));
+
+  /* Shows profile option for logged in user and clicking it routes to correct
+      view. */
+  it('shows profile option when logged in and clicking it routes to correct view', fakeAsync(() => {
+    component.courseid = '1';
+    store.setUserInfo(authDummyData.userInfoEsko);
+    store.setLoggedIn();
+    fixture.detectChanges();
+    findEl(fixture, 'account-button').nativeElement.click();
+    tick(100);
+    const profileBtn = findEl(fixture, 'profile-button').nativeElement;
+    profileBtn.click();
+    tick();
+    expect(location.path()).toContain('profile');
+    flush();
+  }));
+
 });
