@@ -3,8 +3,6 @@ import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 import localeEn from '@angular/common/locales/en';
 
-import { isInIframe } from '@shared/utils';
-
 // Alusta valittu kieli.
 export const initializeLanguage = (): Promise<void> | void => {
 
@@ -118,4 +116,12 @@ function getBrowserLocales(options = {}): string[] | undefined {
     const trimmedLocale = locale.trim();
     return opt.languageCodeOnly ? trimmedLocale.split(/-|_/)[0] : trimmedLocale;
   });
+}
+
+function isInIframe () {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
 }

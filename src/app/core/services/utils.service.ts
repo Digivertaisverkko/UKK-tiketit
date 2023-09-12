@@ -53,7 +53,6 @@ export class UtilsService {
     return hashHex;
   }
 
-
   // Palauta satunnainen kokonaisluku min ja max väliltä.
   public getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -88,5 +87,17 @@ export class UtilsService {
       date.getDate() === yesterday.getDate();
     return isYesterday
   }
+
+  // Lyhennä pitkiä merkkijonoja vaihtoehtoisesti sanaraja huomioiden.
+  public truncate(str: string, length: number, useWordBoundary: boolean) {
+    if (typeof str !== 'string') {
+      return str;
+    }
+    if (str.length <= length) { return str; }
+    const subString = str.slice(0, length-1);
+    return (useWordBoundary
+      ? subString.slice(0, subString.lastIndexOf(" "))
+      : subString) + "...";
+  };
 
 }
