@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { Router  } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
-import { isInIframe } from '@shared/utils';
 import { StoreService } from '../services/store.service';
 import { User } from '@core/core.models';
 
@@ -94,19 +93,6 @@ export class HeaderComponent implements OnInit {
   public toggleLanguage() {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }
-
-  /*
-  private trackCourseID() {
-    this.router.events.subscribe(event => {
-      console.dir(event);
-      if (event instanceof ActivationEnd) {
-        let courseID = event.snapshot.paramMap.get('courseid');
-        if (courseID !== this.courseID) {
-          this.courseID = courseID;
-        }
-      }
-    });
-  } */
 
   trackUserInfo() {
     this.store.trackUserInfo().subscribe(response => {

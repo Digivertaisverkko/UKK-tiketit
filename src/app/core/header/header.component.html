@@ -13,9 +13,7 @@
     <img  alt=""
           (click)="logoClicked()"
           src="assets/logos/Tukki_logo_rgb_tummasini.svg"
-
           >
-          <!-- src="assets/logos/dvv-white.svg" -->
       </div>
   </ng-template>
 
@@ -85,12 +83,13 @@
   </button>
 
   <button i18n="@@Kurssin asetukset"
-        mat-menu-item
-        *ngIf="((user$ | async)?.asema === 'opettaja' ||
-                (user$ | async)?.asema === 'admin') &&
-                (isParticipant$ | async) === true"
-                (click)="goTo('settings')"
-        >
+          data-testid="settings-button"
+          mat-menu-item
+          *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                  (user$ | async)?.asema === 'admin') &&
+                  (isParticipant$ | async) === true"
+                  (click)="goTo('settings')"
+          >
     Kurssin asetukset
   </button>
 

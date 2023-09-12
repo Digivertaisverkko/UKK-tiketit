@@ -15,8 +15,9 @@ import { HeaderComponent } from './header.component';
 import { StoreService } from '@core/services/store.service';
 import { MockComponent } from 'ng-mocks';
 import { ProfileComponent } from '@user/profile/profile.component';
+import { SettingsComponent } from '@course/settings/settings.component';
 
-describe('HeaderComponent', () => {
+fdescribe('HeaderComponent', () => {
   const authDummyData = new AuthDummyData;
   let component: HeaderComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
@@ -25,7 +26,8 @@ describe('HeaderComponent', () => {
   let store: StoreService;
 
   const routes: Routes = [
-    { path: 'course/:courseid/profile', component: MockComponent(ProfileComponent)}
+    { path: 'course/:courseid/profile', component: MockComponent(ProfileComponent)},
+    { path: 'course/:courseid/settings', component: MockComponent(SettingsComponent)}
   ];
   /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
   Testaamiseen, onko jokin elementti renderoitu. */
@@ -76,7 +78,7 @@ describe('HeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  /* For logged in user 'Logout' is shown and clicking it calls right method. */
+  /* For logged in user 'Logout' is shown and clicking it calls correct method. */
 
   it('shows logout option when logged in and makes correct method call', fakeAsync(() => {
     store.setNotLoggegIn();
@@ -113,8 +115,8 @@ describe('HeaderComponent', () => {
     flush();
   }));
 
-  /* Shows right user.nimi */
-  it('shows right user name', fakeAsync(() => {
+  /* Shows correct user.nimi */
+  it('shows correct user name', fakeAsync(() => {
     component.courseid = '1';
     store.setUserInfo(authDummyData.userInfoEsko);
     store.setLoggedIn();
@@ -124,8 +126,8 @@ describe('HeaderComponent', () => {
     expect(username.textContent).toContain(authDummyData.userInfoEsko.nimi);
   }));
 
-  /* Shows right user role */
-  it('shows right user role for student', fakeAsync(() => {
+  /* Shows correct user role */
+  it('shows correct user role for student', fakeAsync(() => {
     component.courseid = '1';
     store.setUserInfo(authDummyData.userInfoEsko);
     store.setLoggedIn();
@@ -136,7 +138,7 @@ describe('HeaderComponent', () => {
     expect(userrole.textContent).toContain(authDummyData.userInfoEsko.asemaStr);
   }));
 
-  it('shows right user role for teacher', fakeAsync(() => {
+  it('shows correct user role for teacher', fakeAsync(() => {
     component.courseid = '1';
     store.setUserInfo(authDummyData.userInfoTeacher);
     store.setLoggedIn();
@@ -160,6 +162,52 @@ describe('HeaderComponent', () => {
     profileBtn.click();
     tick();
     expect(location.path()).toContain('profile');
+    flush();
+  }));
+
+  /* Settings button in shown when user role is teacher and is participant in course */
+  it('shows working settings button when user role is teacher and is participant in course', fakeAsync(() => {
+    component.courseid = '1';
+    store.setLoggedIn();
+    store.setUserInfo(authDummyData.userInfoTeacher);
+    store.setParticipant(true);
+    fixture.detectChanges();
+    tick();
+    findEl(fixture, 'account-button').nativeElement.click();
+    tick();
+    const settingsBtn = findEl(fixture, 'settings-button').nativeElement;
+    expect(settingsBtn).toBeDefined();
+    settingsBtn.click();
+    tick(100);
+    expect(location.path()).toContain('settings');
+    flush();
+  }));
+
+  it("doesn't show settings button when user role is teacher and not participant in course", fakeAsync(() => {
+    component.courseid = '1';
+    store.setLoggedIn();
+    store.setUserInfo(authDummyData.userInfoTeacher);
+    store.setParticipant(false);
+    fixture.detectChanges();
+    tick();
+    findEl(fixture, 'account-button').nativeElement.click();
+    tick();
+    const settingsBtn = findElIfExists(fixture, 'settings-button');
+    expect(settingsBtn).toBe(null);
+    flush();
+  }));
+
+  it("doesn't show settings button when user role is student", fakeAsync(() => {
+    component.courseid = '1';
+    store.setLoggedIn();
+    store.setUserInfo(authDummyData.userInfoEsko);
+    store.setParticipant(true);
+    fixture.detectChanges();
+    tick();
+    findEl(fixture, 'account-button').nativeElement.click();
+    tick();
+    const settingsBtn = findElIfExists(fixture, 'settings-button');
+    expect(settingsBtn).toBe(null);
     flush();
   }));
 
