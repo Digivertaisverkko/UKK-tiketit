@@ -194,7 +194,8 @@
 
     <div class="vertical-spacer" *ngIf="errorMessage.length > 0"></div>
 
-    <app-error  *ngIf="errorMessage.length > 0"
+    <app-error  data-testid="error-message"
+                *ngIf="errorMessage.length > 0"
                 i18n-title="@@Virhe"
                 message="{{ errorMessage }}"
                 [styles]="{ margin: '1rem 0 0 0' }"

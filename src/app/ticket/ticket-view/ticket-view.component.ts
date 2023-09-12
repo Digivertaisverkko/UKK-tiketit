@@ -71,10 +71,10 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   ) {
     this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
         Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
-        this.ticketID = this.ticketIdFromParent !== null
+    this.ticketID = this.ticketIdFromParent !== null
         ? this.ticketIdFromParent
         : String(this.route.snapshot.paramMap.get('id'));
-        this.loggedIn$ = this.store.onIsUserLoggedIn().pipe(takeUntilDestroyed());
+    this.loggedIn$ = this.store.onIsUserLoggedIn().pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {

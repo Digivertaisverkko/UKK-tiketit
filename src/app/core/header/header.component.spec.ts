@@ -17,7 +17,7 @@ import { MockComponent } from 'ng-mocks';
 import { ProfileComponent } from '@user/profile/profile.component';
 import { SettingsComponent } from '@course/settings/settings.component';
 
-fdescribe('HeaderComponent', () => {
+describe('HeaderComponent', () => {
   const authDummyData = new AuthDummyData;
   let component: HeaderComponent;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
