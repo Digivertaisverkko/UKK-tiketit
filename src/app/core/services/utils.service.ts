@@ -8,6 +8,15 @@ export class UtilsService {
 
   constructor() { }
 
+  /* Palauta 'input' perustuva luku väliltä 0-'maxNumber', jota käytetään
+   värin valintaan. */
+  public async getColorIndex(input: string, maxNumber: number):
+  Promise<number> {
+  const hash = await this.getHash(input);
+  const hashPart = parseInt(hash.substr(0, 10), 16);
+  return hashPart % maxNumber;
+  }
+
   // Angularin ActivatedRoute voi palauttaa undefined, niin tämä on varmempi.
   public getCourseIDfromURL(): string | null {
     const pathArray = window.location.pathname.split('/');
@@ -33,6 +42,21 @@ export class UtilsService {
       dateString = datePipe.transform(date, 'shortDate') ?? '';
     }
     return dateString
+  }
+
+  public async getHash(input: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
+
+
+  // Palauta satunnainen kokonaisluku min ja max väliltä.
+  public getRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
   }
 
   // Onko annettu aikaleima tänään.

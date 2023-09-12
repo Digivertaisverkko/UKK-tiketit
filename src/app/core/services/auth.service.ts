@@ -10,8 +10,7 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import { getRoleString } from '@shared/utils';
-import { AuthInfo, LoginInfo, LoginResult, User } from '../core.models';
+import { AuthInfo, LoginInfo, LoginResult, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 import { UtilsService } from './utils.service';
 
@@ -140,7 +139,7 @@ export class AuthService {
       userInfo = response.oikeudet;
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
-      userInfo.asemaStr = getRoleString(userInfo.asema);
+      userInfo.asemaStr = this.getRoleString(userInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
     } else {
@@ -231,6 +230,21 @@ export class AuthService {
 
   private getMethodName() {
     return this.getMethodName.caller.name
+  }
+
+  private getRoleString(asema: Role | null): string {
+    let role: string;
+    switch (asema) {
+      case 'opiskelija':
+        role = $localize`:@@Opiskelija:Opiskelija`; break;
+      case 'opettaja':
+        role = $localize`:@@Opettaja:Opettaja`; break;
+      case 'admin':
+        role = $localize`:@@Admin:Admin`; break;
+      default:
+        role = '';
+    }
+    return role;
   }
 
   // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan

@@ -1,6 +1,6 @@
 import {  Component, ChangeDetectionStrategy, ElementRef, EventEmitter, Output,
           ViewChild } from '@angular/core';
-import { getRandomInt } from '@shared/utils';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -41,7 +41,10 @@ export class SearchBarComponent {
 
   @ViewChild('input') searchInput!: ElementRef<HTMLInputElement>;
   @Output() searchResult = new EventEmitter<string>();
-  public inputID: number = getRandomInt(1,10000);
+
+  constructor(private utils: UtilsService) { }
+
+  public inputID: number = this.utils.getRandomInt(1,10000);
 
   public onKeyup(inputValue: string) {
     this.searchResult.emit(inputValue);

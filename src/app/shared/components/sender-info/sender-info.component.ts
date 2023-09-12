@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
 
 import AvatarColor32 from './sender-info.constants';
-import { getColorIndex } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
 import { UtilsService } from '@core/services/utils.service';
@@ -61,7 +60,7 @@ export class SenderInfoComponent implements OnInit {
       console.warn(this.user.asemaStr ); */
     }
     if (this.user?.nimi) {
-      getColorIndex(this.user?.nimi, 32).then(index => {
+      this.utils.getColorIndex(this.user?.nimi, 32).then(index => {
         this.avatarColor = AvatarColor32[index];
         this.change.detectChanges();
       });
