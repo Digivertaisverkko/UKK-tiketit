@@ -30,21 +30,6 @@ async function getHash(input: string): Promise<string> {
     */
 }
 
-export function getDateString(date: Date, thisYear: number): string {
-  let dateString: string = '';
-  const datePipe = new DatePipe('fi-FI');
-  if (isToday(date)) {
-    dateString = $localize `:@@Tänään:Tänään`;
-  } else if (isYesterday(date)) {
-    dateString = $localize `:@@Eilen:Eilen`;
-  } else if (date.getFullYear() === thisYear) {
-    dateString = datePipe.transform(date, 'd.M.') ?? '';
-  } else {
-    dateString = datePipe.transform(date, 'shortDate') ?? '';
-  }
-  return dateString
-}
-
  // Palauta satunnainen kokonaisluku min ja max väliltä.
  export function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -74,35 +59,7 @@ export function isInIframe () {
   }
 }
 
-// Onko annettu aikaleima tänään.
-export function isToday(date: Date) : boolean {
-  const isDate = date instanceof Date;
-  if (!isDate) {
-    throw Error('Virhe: "' + JSON.stringify(date) + '" on tyyppiä: ' + typeof date);
-  }
-  const CURRENT_DATE = new Date();
-  const isToday: boolean =
-    date.getFullYear() === CURRENT_DATE.getFullYear() &&
-    date.getMonth() === CURRENT_DATE.getMonth() &&
-    date.getDate() === CURRENT_DATE.getDate();
-  return isToday
-}
 
-export function isYesterday(date: Date): boolean {
-  const isDate = date instanceof Date;
-  if (!isDate) {
-    throw Error('Virhe: "' + JSON.stringify(date) + '" on tyyppiä: ' + typeof date);
-  }
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-  const yesterday: Date = new Date(currentDate);
-  yesterday.setDate(currentDate.getDate() - 1);
-  const isYesterday: boolean =
-    date.getFullYear() === yesterday.getFullYear() &&
-    date.getMonth() === yesterday.getMonth() &&
-    date.getDate() === yesterday.getDate();
-  return isYesterday
-}
 
 // Onko string muodoltaan HTTP URL.
 export function isValidHttpUrl(testString: string): boolean {

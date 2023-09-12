@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
 
 import AvatarColor32 from './sender-info.constants';
-import { isYesterday, isToday, getDateString } from '@shared/utils';
 import { getColorIndex } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-sender-info',
@@ -34,7 +34,9 @@ export class SenderInfoComponent implements OnInit {
 
   constructor(
       private change: ChangeDetectorRef,
-      private store: StoreService) {
+      private store: StoreService,
+      private utils: UtilsService
+      ) {
       this.avatarColor = { background: 'white', text: 'black' };
       this.currentUserName = this.store.getUserName();
   }
@@ -43,12 +45,12 @@ export class SenderInfoComponent implements OnInit {
     this.userNameInitials = this.getInitials(this.user?.nimi);
     if (this.aikaleima !== 'now') {
       const thisYear = new Date().getFullYear();
-      this.createdString = getDateString(this.aikaleima, thisYear);
+      this.createdString = this.utils.getDateString(this.aikaleima, thisYear);
     }
     if (this.muokattu instanceof Date) {
-      this.isEditedToday = isToday(this.muokattu);
+      this.isEditedToday = this.utils.isToday(this.muokattu);
       if (!this.isEditedToday) {
-        this.isEditedYesterday = isYesterday(this.muokattu);
+        this.isEditedYesterday = this.utils.isYesterday(this.muokattu);
       }
     }
     if (this.user != null) {

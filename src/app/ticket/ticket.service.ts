@@ -13,9 +13,9 @@ import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
 export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
-import { getDateString } from '@shared/utils';
 import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -26,7 +26,8 @@ export class TicketService {
   constructor (
     private errorService: ErrorService,
     private http: HttpClient,
-    private store: StoreService
+    private store: StoreService,
+    private utils: UtilsService
     ) {}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
@@ -183,7 +184,7 @@ export class TicketService {
     const thisYear = new Date().getFullYear();
     FAQlist.forEach((faq: any) => {
       faq.aikaleima = new Date(faq.aikaleima)
-      faq.aikaleimaStr = getDateString(faq.aikaleima, thisYear)
+      faq.aikaleimaStr = this.utils.getDateString(faq.aikaleima, thisYear)
     })
     return FAQlist;
   }
@@ -338,7 +339,7 @@ export class TicketService {
       let viimeisinStr = '';
       if (ticket.viimeisin) {
         const viimeisinDate = new Date(ticket.viimeisin);
-        viimeisinStr = getDateString(viimeisinDate, thisYear);
+        viimeisinStr = this.utils.getDateString(viimeisinDate, thisYear);
       }
       return {
         tilaID: ticket.tila,
