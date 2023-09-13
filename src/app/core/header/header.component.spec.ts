@@ -29,6 +29,7 @@ describe('HeaderComponent', () => {
     { path: 'course/:courseid/profile', component: MockComponent(ProfileComponent)},
     { path: 'course/:courseid/settings', component: MockComponent(SettingsComponent)}
   ];
+
   /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
   Testaamiseen, onko jokin elementti renderoitu. */
   function findElIfExists(fixture: ComponentFixture<any>, selector: string):
@@ -115,38 +116,31 @@ describe('HeaderComponent', () => {
     flush();
   }));
 
-  /* Shows correct user.nimi */
-  it('shows correct user name', fakeAsync(() => {
+  it('shows correct user name and role for student', fakeAsync(() => {
     component.courseid = '1';
-    store.setUserInfo(authDummyData.userInfoEsko);
+    const user = authDummyData.userInfoEsko;
+    store.setUserInfo(user);
     store.setLoggedIn();
     fixture.detectChanges();
     tick();
     const username = findEl(fixture, 'header-username').nativeElement;
-    expect(username.textContent).toContain(authDummyData.userInfoEsko.nimi);
+    expect(username.textContent).toContain(user.nimi);
+    const userrole = findEl(fixture, 'header-user-role').nativeElement;
+    expect(userrole.textContent).toContain(user.asemaStr);
   }));
 
-  /* Shows correct user role */
-  it('shows correct user role for student', fakeAsync(() => {
+  it('shows correct user name and role for teacher', fakeAsync(() => {
     component.courseid = '1';
-    store.setUserInfo(authDummyData.userInfoEsko);
+    const user = authDummyData.userInfoTeacher
+    store.setUserInfo(user);
     store.setLoggedIn();
     tick();
     fixture.detectChanges();
     tick();
+    const username = findEl(fixture, 'header-username').nativeElement;
+    expect(username.textContent).toContain(user.nimi);
     const userrole = findEl(fixture, 'header-user-role').nativeElement;
-    expect(userrole.textContent).toContain(authDummyData.userInfoEsko.asemaStr);
-  }));
-
-  it('shows correct user role for teacher', fakeAsync(() => {
-    component.courseid = '1';
-    store.setUserInfo(authDummyData.userInfoTeacher);
-    store.setLoggedIn();
-    tick();
-    fixture.detectChanges();
-    tick();
-    const userrole = findEl(fixture, 'header-user-role').nativeElement;
-    expect(userrole.textContent).toContain(authDummyData.userInfoTeacher.asemaStr);
+    expect(userrole.textContent).toContain(user.asemaStr);
   }));
 
   /* Shows profile option for logged in user and clicking it routes to correct
