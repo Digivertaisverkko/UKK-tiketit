@@ -1,21 +1,19 @@
-import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { LOCALE_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import localeFi from '@angular/common/locales/fi';
 
 import { environment } from 'src/environments/environment';
-import { initializeLanguageFI } from '../app.initializers';
-import localeFi from '@angular/common/locales/fi';
-import localeEn from '@angular/common/locales/en';
 import { SortableTicket, TicketService, Tiketti } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ErrorService } from '@core/services/error.service';
 import { TicketDummyData } from './ticket.dummydata';
+import { registerLocaleData } from '@angular/common';
 
 environment.testing = true;
 const api = environment.apiBaseUrl;
-initializeLanguageFI();
 
 describe('TicketService', () => {
   let controller: HttpTestingController;
@@ -24,13 +22,13 @@ describe('TicketService', () => {
   let tickets: TicketService;
   const ticketDummyData = new TicketDummyData;
 
+  registerLocaleData(localeFi);
 
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
-        { provide: APP_INITIALIZER, useFactory: () => initializeLanguageFI, multi: true },
         { provide: LOCALE_ID, useValue: 'fi' },
         StoreService
       ]
@@ -52,7 +50,6 @@ describe('TicketService', () => {
     expect(tickets).toBeTruthy();
   });
 
-
   /*
   it('retrieves the full ticket list', (done) => {
     let actualTicketListData: SortableTicket[] | null | undefined;
@@ -69,7 +66,7 @@ describe('TicketService', () => {
           return ticketWithoutIgnoredProperty;
         });
       }
-      expect(actualWithoutIgnoredProperty).toEqual(ticketDummyData.ticketListClientData);
+      expect(actualWithoutIgnoredProperty).toEqual(ticketDummyData.ticketListData);
       done();
     }).catch (e => {
       console.log(e);
@@ -81,7 +78,6 @@ describe('TicketService', () => {
     request.flush(ticketDummyData.ticketListServerData);
   });
   */
-
 
   it('retrieves ticket with all properties', fakeAsync(() => {
     store.setUserInfo(storeDummyData.teacherUser);

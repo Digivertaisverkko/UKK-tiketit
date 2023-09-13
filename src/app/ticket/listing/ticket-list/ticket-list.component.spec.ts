@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick }
     from '@angular/core/testing';
 import { findEl } from '@shared/spec-helpers/element.spec-helper';
 import { HarnessLoader } from '@angular/cdk/testing';
+import localeFi from '@angular/common/locales/fi';
+import { LOCALE_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
@@ -10,12 +12,12 @@ import { MatTableHarness } from '@angular/material/table/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MockComponent } from 'ng-mocks';
+import { registerLocaleData } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
 import { AuthDummyData } from '@core/services/auth.dummydata';
-import { initializeLanguageFI } from 'src/app/app.initializers';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { TicketListComponent } from './ticket-list.component';
@@ -30,7 +32,7 @@ describe('TicketListComponent', () => {
   let ticketService: Pick<TicketService, 'getTicketList'>;
   const ticketDummyData = new TicketDummyData;
 
-  initializeLanguageFI(); // datePipeen
+  registerLocaleData(localeFi);
 
   beforeEach(async () => {
     // Pitää olla ennen TestBed:n konfigurointia.
@@ -53,6 +55,7 @@ describe('TicketListComponent', () => {
         RouterTestingModule
       ],
       providers: [
+        { provide: LOCALE_ID, useValue: 'fi-FI' },
         { provide: TicketService, useValue: ticketService }
       ]
     })
