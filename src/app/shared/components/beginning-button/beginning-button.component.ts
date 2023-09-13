@@ -8,11 +8,11 @@ import { StoreService } from '@core/services/store.service';
 @Component({
   selector: 'app-beginning-button',
   template: `
-
-    <button  color="accent"
+    <button color="accent"
             (click)="buttonPressed()"
-            mat-raised-button
+            data-testid='beginning-button'
             [disabled]="disabled"
+            mat-raised-button
             >
       <mat-icon>arrow_back_ios</mat-icon>
       <span i18n="@@Alkuun">Alkuun</span>
@@ -31,8 +31,8 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
 
   constructor (
     private router: Router,
-    private route: ActivatedRoute,
-    private store: StoreService
+    private route : ActivatedRoute,
+    private store : StoreService
     ) {
   }
 
@@ -42,12 +42,6 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.messages$?.unsubscribe();
-  }
-
-  private listenMessages(): void {
-    this.messages$ = this.store.trackMessages().subscribe(response => {
-      if (response === 'go begin') this.buttonPressed();
-    })
   }
 
   public buttonPressed() {
@@ -62,6 +56,12 @@ export class BeginningButtonComponent implements OnInit, OnDestroy {
   private goBack(): void {
     const courseID = this.route.snapshot.paramMap.get('courseid');
     this.router.navigateByUrl('course/' + courseID +  '/list-tickets');
+  }
+
+  private listenMessages(): void {
+    this.messages$ = this.store.trackMessages().subscribe(response => {
+      if (response === 'go begin') this.buttonPressed();
+    })
   }
 
 }
