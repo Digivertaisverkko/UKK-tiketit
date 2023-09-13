@@ -8,7 +8,7 @@ import { MockComponent } from 'ng-mocks';
 import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
 import { TicketViewComponent } from './ticket-view.component';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { Location } from '@angular/common';
+import { Location, registerLocaleData } from '@angular/common';
 import { TicketService, Tiketti } from '@ticket/ticket.service';
 import { ActivatedRoute, Routes } from '@angular/router';
 import { StoreService } from '@core/services/store.service';
@@ -16,13 +16,15 @@ import { AuthDummyData } from '@core/services/auth.dummydata';
 import { User } from '@core/core.models';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
 
-import { SharedModule } from '@shared/shared.module';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { findEl } from '@shared/spec-helpers/element.spec-helper';
-import { initializeLanguageFI } from 'src/app/app.initializers';
+import localeFi from '@angular/common/locales/fi';
 import { ViewAttachmentsComponent } from '@ticket/components/view-attachments/view-attachments.component';
 import { TicketModule } from '@ticket/ticket.module';
 import { MatRadioButtonHarness } from '@angular/material/radio/testing'; // Import MatRadioButtonHarness
+import { LOCALE_ID } from '@angular/core';
+import { MessageComponent } from '@ticket/components/message/message.component';
+import { EditorComponent } from '@shared/editor/editor.component';
 
 describe('TicketViewComponent', () => {
   const authDummyData = new AuthDummyData;
@@ -36,11 +38,10 @@ describe('TicketViewComponent', () => {
   const ticketDummyData = new TicketDummyData;
   let user: User | null;
 
-  initializeLanguageFI();
-
   const routes: Routes = [
-
   ];
+
+  registerLocaleData(localeFi);
 
   /* Kuin findEl, mutta jos elementtiä ei ole, niin palauttaa null errorin sijaan.
      Testaamiseen, onko jokin elementti renderoitu. */
@@ -74,16 +75,16 @@ describe('TicketViewComponent', () => {
           MockComponent(BeginningButtonComponent),
           MockComponent(HeadlineComponent),
           MockComponent(ViewAttachmentsComponent),
+          EditorComponent,
+          MessageComponent,
           TicketViewComponent
         ],
         imports: [
           ReactiveFormsModule,
           RouterTestingModule.withRoutes(routes),
-          SharedModule,
-          TicketModule
+          TicketModule,
         ],
         providers: [
-          { provide: TicketService, useValue: fakeTicketService },
           {
             provide: ActivatedRoute,
             useValue: {
@@ -92,6 +93,8 @@ describe('TicketViewComponent', () => {
               }
             }
           },
+          { provide: TicketService, useValue: fakeTicketService },
+          { provide: LOCALE_ID, useValue: 'fi-FI' },
           Location,
           StoreService,
         ]
@@ -258,6 +261,10 @@ describe('TicketViewComponent', () => {
       });
       const id = '4'; // ticketID URL:ssa.
 
+      registerLocaleData(localeFi);
+
+      setTimeout(() => {}, 5000 );
+
       await TestBed.configureTestingModule({
         declarations: [
           MockComponent(BeginningButtonComponent),
@@ -267,11 +274,12 @@ describe('TicketViewComponent', () => {
         ],
         imports: [
           ReactiveFormsModule,
-          SharedModule,
+
           TicketModule
         ],
         providers: [
           { provide: TicketService, useValue: fakeTicketService },
+          { provide: LOCALE_ID, useValue: 'fi-FI' },
           {
             provide: ActivatedRoute,
             useValue: {
@@ -298,9 +306,10 @@ describe('TicketViewComponent', () => {
       fixture.detectChanges();
       tick(0);
       fixture.detectChanges();
-      tick(100);
+      tick(5000);
       const error = findEl(fixture, 'error-message').nativeElement;
       expect(error).toBeTruthy();
+      expect(component.errorCode).toEqual('noTicket');
       discardPeriodicTasks();
     }));
 

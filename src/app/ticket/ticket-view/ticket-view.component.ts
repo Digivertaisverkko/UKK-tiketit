@@ -35,6 +35,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public cantRemoveTicket: string;
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
+  // Testejä varten, kun ei aina ota käyttöön asetettua localea.
+  public errorCode: string = '';
   public form: FormGroup = this.buildForm();
   public isArchivePressed: boolean = false;
   public isEditable: boolean = false;
@@ -159,6 +161,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   // Hae tiketti ja päivitä näkymän tila.
   public fetchTicket(courseID: string) {
+    this.errorMessage = '';
+    this.state = 'editing';
+    this.errorCode = '';
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
@@ -170,6 +175,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         this.errorMessage = $localize`:@@Kysymystä ei löydy:
         Hakemaasi kysymystä ei ole olemassa. Kysymyksen aloittajan on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
         this.state = 'error';
+        this.errorCode = 'noTicket';
         return
       }
       this.ticket = response;
