@@ -22,6 +22,43 @@ export class CourseDummyData {
     }
   }
 
+  // settings.component.spec
+  public get ticketFieldInfo(): { kuvaus: string, kentat: Kenttapohja[] } {
+    return {
+      kuvaus: "Testikuvaus",
+      kentat: this.ticketFieldFromsService
+    }
+  }
+
+  // Servicelta tulevassa muodossa.
+  public get ticketFieldFromsService(): Kenttapohja[] {
+    return [
+      {
+        id: "1",
+        otsikko: "Tehtävä",
+        ohje: "Kirjoita tehtävän numero",
+        esitaytettava: true,
+        pakollinen: false,
+        valinnat: [
+          ""
+        ]
+      },
+      {
+        id: "2",
+        otsikko: "Ongelman tyyppi",
+        ohje: "",
+        esitaytettava: false,
+        pakollinen: false,
+        valinnat: [
+          "Kotitehtävä",
+          "Määräajat",
+          "Yleinen"
+        ]
+      }
+    ]
+  }
+
+  // Palvelimelta tulevassa muodossa.
   public get ticketFields() {
     return [
       {

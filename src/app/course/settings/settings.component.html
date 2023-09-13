@@ -39,6 +39,7 @@
                 cdkAutosizeMinRows="3"
                 cdkTextareaAutosize
                 contenteditable
+                data-testid="help-text"
                 (focus)="settingsMessage = ''"
                 formControlName="helpText"
                 id="help-text"
@@ -47,7 +48,6 @@
                 name="helpText"
                 placeholder="Lisäohje opiskelijoille"
                 >
-                <!-- maxlength="255" -->
       </textarea>
       <!-- <mat-hint align="end">{{ helpText.value.length }} / 255</mat-hint> -->
     </mat-form-field>
@@ -60,11 +60,11 @@
     </app-error>
 
     <div class="theme-actions save-wrapper">
-      <button class=""
-      i18n="@@Tallenna"
-      mat-raised-button
-      type="submit"
-      >
+      <button data-testid="save-button"
+              i18n="@@Tallenna"
+              mat-raised-button
+              type="submit"
+              >
       Tallenna
     </button>
   </div>
@@ -91,11 +91,13 @@
     <div  cdkDrag
           (cdkDragStarted)="onDragStarted()"
           class="list-row"
-          *ngFor="let field of fieldList"
+          *ngFor="let field of fieldList; let i = index"
           >
-      <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
-      <div class="column">{{ field.otsikko }}</div>
-      <div class="column">{{ field.ohje }}</div>
+      <div class="column" [attr.data-testid]="'field-title-' + i">
+        {{ field.otsikko }}</div>
+      <div class="column" [attr.data-testid]="'field-help-' + i">
+        {{ field.ohje }}
+      </div>
       <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id">
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
