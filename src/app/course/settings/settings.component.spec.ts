@@ -7,11 +7,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MockComponent } from 'ng-mocks';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Routes } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { AuthDummyData } from '@core/services/auth.dummydata';
 import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
 import { CourseDummyData } from '@course/course.dummydata';
 import { CourseService } from '@course/course.service';
+import { EditFieldComponent } from '@course/edit-field/edit-field.component';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { SettingsComponent } from './settings.component';
 import { StoreService } from '@core/services/store.service';
@@ -23,8 +26,14 @@ describe('SettingsComponent', () => {
   const courseDummyData = new CourseDummyData;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fixture: ComponentFixture<SettingsComponent>;
+  let location: Location;
   let store: StoreService;
   const ticketDummyData = new TicketDummyData;
+
+  const routes: Routes = [
+    { path: 'course/:courseid/settings/field', component: MockComponent(EditFieldComponent)},
+    { path: 'course/:courseid/settings/field/:fieldid', component: MockComponent(EditFieldComponent)},
+  ];
 
   beforeEach(async () => {
     // Exportit ei palauta tiedostoa, jotta sitä ei tallenneta.
@@ -34,7 +43,9 @@ describe('SettingsComponent', () => {
       getCourseName: undefined,
       getTicketFieldInfo: Promise.resolve(courseDummyData.ticketFieldInfo),
       getInvitedInfo: undefined,
-      setHelpText: Promise.resolve({ success: true})
+      importFAQs: Promise.resolve({ success: true }),
+      importSettings: Promise.resolve({ success: true }),
+      setHelpText: Promise.resolve({ success: true })
     });
 
     await TestBed.configureTestingModule({
@@ -49,16 +60,18 @@ describe('SettingsComponent', () => {
         MatInputModule,
         MatRadioModule,
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule.withRoutes(routes)
       ],
       providers: [
         { provide: CourseService, useValue: fakeCourseService },
+        Location,
         StoreService
       ]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(SettingsComponent);
+    location = TestBed.inject(Location);
     store = TestBed.inject(StoreService);
     component = fixture.componentInstance;
     component.courseid = '1';
@@ -71,6 +84,27 @@ describe('SettingsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('routes to correct view when first Edit field -icon is clicked', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    findEl(fixture, 'edit-field-button-0').nativeElement.click();
+    tick();
+    const expectedTicketID = courseDummyData.ticketFieldInfo.kentat[0].id;
+    expect(location.path()).toBe('/course/1/settings/field/' + expectedTicketID);
+    discardPeriodicTasks();
+  }));
+
+  it('routes to correct view when Add field -button is clicked', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    findEl(fixture, 'add-field-button').nativeElement.click();
+    tick();
+    expect(location.path()).toBe('/course/1/settings/field');
+    discardPeriodicTasks();
+  }));
 
   it('calls correct method when "Export FAQ" -button is clicked', fakeAsync(() => {
     fixture.detectChanges();
@@ -105,6 +139,18 @@ describe('SettingsComponent', () => {
     );
     discardPeriodicTasks();
   }));
+
+  /*
+  it('calls correct method when add FAQ from file-button is clicked', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    findEl(fixture, 'import-faq-button').nativeElement.click();
+    tick();
+    expect(fakeCourseService.importFAQs).toHaveBeenCalledWith(component.courseid);
+    discardPeriodicTasks();
+  }));
+  */
 
   it('shows correct additional field titles', fakeAsync(() => {
     const expectedFields = courseDummyData.ticketFieldInfo.kentat;

@@ -98,7 +98,9 @@
       <div class="column" [attr.data-testid]="'field-help-' + i">
         {{ field.ohje }}
       </div>
-      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id">
+      <a  [attr.data-testid]="'edit-field-button-' + i"
+          [routerLink]="'/course/' + courseid + '/settings/field/' + field.id"
+          >
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
@@ -131,6 +133,7 @@
 
   <button class="add-button"
           i18n="@@Lisää kenttä"
+          data-testid="add-field-button"
           mat-raised-button
           [routerLink]="'/course/' + this.courseid + '/settings/field'"
           >
@@ -173,6 +176,7 @@
   <button aria-label="Lisää usein kysytyt kysymykset"
           class="faq-button"
           (click)="pickFile('FAQs')"
+          data-testid="import-faq-button"
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää usein kysytyt kysymykset"
           mat-raised-button
@@ -183,6 +187,7 @@
   <button aria-label="Lisää kurssiasetukset"
           class="setting-button add-settings-button"
           (click)="pickFile('settings')"
+          data-testid="import-settings-button"
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää kurssiasetukset"
           mat-raised-button
