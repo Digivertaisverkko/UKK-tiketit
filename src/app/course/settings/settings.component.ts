@@ -113,6 +113,7 @@ export class SettingsComponent implements OnInit {
     const courseName = this.store.getCourseName();
     const filename = `${filenameStart}-${courseName}.json`;
     exportPromise.then(filecontent => {
+      if (filecontent.length === 0) return  // Testaamisessa hyödynnetään.
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
       link.setAttribute(
@@ -224,7 +225,6 @@ export class SettingsComponent implements OnInit {
     }).catch(e => {
       this.settingsError = $localize `:@@Kysymysten lisäohjeen tallentaminen ei onnistunut:Kysymysten lisäohjeen tallentaminen ei onnistunut` + '.';
     })
-
   }
 
   // Valitse UKK- tai asetustiedosto (jonka jälkeen se lisätään).

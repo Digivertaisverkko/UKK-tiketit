@@ -193,6 +193,7 @@
   <button aria-label="Lataa usein kysytyt kysymykset"
           class="faq-button"
           (click)="export('FAQs')"
+          data-testid="export-faq-button"
           i18n="@@Lataa tiedostona"
           i18n-aria-label="@@Lataa usein kysytyt kysymykset"
           mat-raised-button
@@ -204,6 +205,7 @@
   <button aria-label="Lataa kurssiasetukset"
           class="setting-button"
           (click)="export('settings')"
+          data-testid="export-settings-button"
           i18n="@@Lataa tiedostona"
           i18n-aria-label="@@Lataa kurssiasetukset"
           mat-raised-button

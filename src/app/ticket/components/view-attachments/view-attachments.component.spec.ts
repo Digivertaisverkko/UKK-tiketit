@@ -49,7 +49,6 @@ describe('AttachmentListComponent', () => {
     const fileID = dummydata.liitteet[1].tiedosto;
     findEl(fixture, 'download-button-1').nativeElement.click();
     tick();
-
     expect(fakeTicketService.getFile).toHaveBeenCalledWith(component.ticketID,
         commentID, fileID, courseID);
   }));

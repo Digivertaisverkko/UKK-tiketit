@@ -213,7 +213,7 @@ export class TicketDummyData {
     return [
       {
         id: 7,
-        otsikko: 'UKK kusymys',
+        otsikko: 'UKK kysymys',
         aikaleima: new Date("2023-06-21T09:37:36.124Z"),
         aikaleimaStr: '21.6.',
         tila: 2,

@@ -1,31 +1,36 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, flush, tick } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
-import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { SettingsComponent } from './settings.component';
-import { CourseService } from '@course/course.service';
-import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
-import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { StoreService } from '@core/services/store.service';
 import { AuthDummyData } from '@core/services/auth.dummydata';
+import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
 import { CourseDummyData } from '@course/course.dummydata';
-import { MatIconModule } from '@angular/material/icon';
+import { CourseService } from '@course/course.service';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
+import { SettingsComponent } from './settings.component';
+import { StoreService } from '@core/services/store.service';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 
-fdescribe('SettingsComponent', () => {
+describe('SettingsComponent', () => {
   const authDummyData = new AuthDummyData;
   let component: SettingsComponent;
   const courseDummyData = new CourseDummyData;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fixture: ComponentFixture<SettingsComponent>;
   let store: StoreService;
+  const ticketDummyData = new TicketDummyData;
 
   beforeEach(async () => {
+    // Exportit ei palauta tiedostoa, jotta sitä ei tallenneta.
     fakeCourseService = jasmine.createSpyObj('CourseService', {
+      exportFAQs: Promise.resolve(undefined),
+      exportSettings: Promise.resolve(undefined),
       getCourseName: undefined,
       getTicketFieldInfo: Promise.resolve(courseDummyData.ticketFieldInfo),
       getInvitedInfo: undefined,
@@ -60,11 +65,32 @@ fdescribe('SettingsComponent', () => {
     store.setLoggedIn();
     store.setUserInfo(authDummyData.userInfoTeacher);
     store.setParticipant(true);
+    store.setCourseName('Matematiikan perusteet');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('calls correct method when "Export FAQ" -button is clicked', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    findEl(fixture, 'export-faq-button').nativeElement.click();
+    tick();
+    expect(fakeCourseService.exportFAQs).toHaveBeenCalledWith(component.courseid);
+    discardPeriodicTasks();
+  }));
+
+  it('calls correct method when "Export settings" -button is clicked', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    findEl(fixture, 'export-settings-button').nativeElement.click();
+    tick();
+    expect(fakeCourseService.exportSettings).toHaveBeenCalledWith(component.courseid);
+    discardPeriodicTasks();
+  }));
 
   it('calls correct method when help text is changed', fakeAsync(() => {
     const expectedHelpText = courseDummyData.ticketFieldInfo.kuvaus;
