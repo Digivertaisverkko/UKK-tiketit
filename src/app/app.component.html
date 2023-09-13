@@ -27,10 +27,13 @@
 
       <span class="spacer"></span>
 
-      <div class="role theme-header-text-small">{{ (user$ | async)?.asemaStr }}</div>
+      <div class="role theme-header-text-small" data-testid="header-user-role">
+        {{ (user$ | async)?.asemaStr }}
+      </div>
       <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
 
       <button aria-label="Valikko"
+              data-testid="account-button"
               i18n-aria-label="@@Valikko"
               i18n-matTooltip="@@Valikko"
               mat-icon-button
@@ -60,15 +63,17 @@
         </button>
 
         <button (click)="goTo('profile')"
-              i18n="@@Profiili"
-              i18n-aria-label="@@Profiili"
-              mat-menu-item
-              *ngIf="(isLoggedIn$ | async) === true && courseid"
-              >
+                data-testid="profile-button"
+                i18n="@@Profiili"
+                i18n-aria-label="@@Profiili"
+                mat-menu-item
+                *ngIf="(isLoggedIn$ | async) === true && courseid"
+                >
           Profiili
         </button>
 
-        <button i18n="@@Kurssin asetukset"
+        <button data-testid="settings-button"
+                i18n="@@Kurssin asetukset"
                 mat-menu-item
                 *ngIf="((user$ | async)?.asema === 'opettaja' ||
                         (user$ | async)?.asema === 'admin') &&

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
@@ -50,8 +50,8 @@ export class AppComponent implements OnInit, OnDestroy  {
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     // Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
-    // this.isInIframe = true;
-    this.isInIframe = this.getIsInIframe();
+    this.isInIframe = true;
+    // this.isInIframe = this.getIsInIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackCourseID();
