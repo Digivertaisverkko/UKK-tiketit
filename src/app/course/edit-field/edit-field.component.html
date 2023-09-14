@@ -11,13 +11,14 @@
           (click)="changeRemoveButton()"
           i18n="@@Poista"
           mat-raised-button
-          *ngIf="fieldid !== null && isRemovePressed === false &&
+          *ngIf="fieldid !== undefined &&
+            isRemovePressed === false &&
             state !== 'error'"
           >
     Poista
   </button>
 
-  <button (click)="updateAllFields(true)"
+  <button (click)="removeField(field.id)"
           color="accent"
           i18n="@@Vahvista poisto"
           *ngIf="isRemovePressed === true"
@@ -40,7 +41,7 @@
 
   <form action=""
         [formGroup]="form"
-        (ngSubmit)="updateAllFields()"
+        (ngSubmit)="submitField()"
         #submitForm="ngForm"
         >
 
@@ -48,7 +49,8 @@
 
 
     <mat-form-field class="field-title" appearance="fill">
-      <input  formControlName="title"
+      <input  data-testid="title-input"
+              formControlName="title"
               id="field-name"
               i18n-placeholder="@@Kentän nimi"
               matInput
@@ -56,7 +58,6 @@
               name="kentta.otsikko"
               placeholder="Kentän nimi"
               />
-              <!-- [(ngModel)]="field.otsikko" -->
       <mat-label i18n="@@Kentän nimi">Kentän nimi</mat-label>
       <mat-hint align="end">{{ title.value.length }} / 50</mat-hint>
 
@@ -200,6 +201,8 @@
 
       <button class="send-button"
               color="primary"
+              data-testid="save-button"
+              id="save-button"
               i18n="@@Tallenna"
               mat-raised-button
               *ngIf="state !== 'error'"

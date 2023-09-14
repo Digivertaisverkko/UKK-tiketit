@@ -29,6 +29,49 @@ export class CourseService {
   ) {
   }
 
+  public async editField(courseID: string, editableField: Kenttapohja,
+      status: 'new' | 'old'): Promise<{ success: boolean }> {
+    let info;
+    try {
+      info = await this.getTicketFieldInfo(courseID);
+    } catch {
+      throw Error('Ei saatu haettua kenttien tietoja.');
+    }
+    let allFields: Kenttapohja[] = info.kentat;
+    if (status === 'new') {
+      allFields.push(editableField);
+    } else if (status === 'old') {
+      const index = allFields.findIndex(field => field.id == editableField.id);
+      allFields.splice(index, 1, editableField);
+    }
+    try {
+      const res = await this.setTicketField(courseID, allFields);
+      return { success: true }
+    } catch {
+      throw Error('Ei saatu asetettua kenttien tietoja.');
+    }
+  }
+
+  public async removeField(courseID: string, removeFieldID: string):
+      Promise<{ success: boolean}> {
+    let info;
+    try {
+      info = await this.getTicketFieldInfo(courseID);
+    } catch {
+      throw Error('Ei saatu haettua kenttien tietoja.');
+    }
+    let allFields: Kenttapohja[] = info.kentat;
+    const index = allFields.findIndex(field => field.id == removeFieldID);
+    allFields.splice(index, 1);
+    try {
+      const res = await this.setTicketField(courseID, allFields);
+      return { success: true}
+    } catch {
+      throw Error('Ei saatu asetettua kenttien tietoja.');
+    }
+
+  }
+
   // Liitä ulkopuolinen käyttäjä kurssille.
   public async joinCourse(courseID: string, UUID: string):
       Promise<{ success: boolean }> {

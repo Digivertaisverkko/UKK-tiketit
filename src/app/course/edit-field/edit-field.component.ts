@@ -115,6 +115,7 @@ export class EditFieldComponent implements OnInit {
   private createField(): Kenttapohja {
     let field: Kenttapohja = {} as Kenttapohja;
     const controls = this.form.controls;
+    field.id = this.field.id;
     field.otsikko = controls['title'].value;
     field.pakollinen = controls['mandatory'].value;
     field.esitaytettava = controls['isPrefillable'].value;
@@ -152,15 +153,15 @@ export class EditFieldComponent implements OnInit {
     return getArraysStringLength(array);
   }
 
-  // Hae kentän tiedot editoidessa olemassa olevaa.
-  private getFieldInfo(courseID: string, fieldID: string | null) {
+  // Hae kentän tiedot editoidessa kun edioitaan olemassa olevaa kenttää.
+  private getFieldInfo(courseID: string, fieldID: string) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
       if (!(response?.kentat)) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
       let allFields: Kenttapohja[] = response.kentat;
-      if (allFields.length > 0 && this.fieldid) {
+      if (allFields.length > 0) { // Vain varmistus.
         let matchingField = allFields.filter(field => String(field.id) === fieldID);
         if (matchingField.length === 0) {
           this.errorMessage = $localize`:@@lisäkenttää ei löydy:
@@ -182,7 +183,7 @@ export class EditFieldComponent implements OnInit {
     }).then((otsikko: string | undefined) => {
       if (otsikko !== undefined) {
         this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
-        $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + otsikko);
+          $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + otsikko);
       }
     }).catch(error => {
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
@@ -209,7 +210,7 @@ export class EditFieldComponent implements OnInit {
   private submitAllFields(allFields: Kenttapohja[]) {
     this.courses.setTicketField(this.courseid, allFields)
       .then(response => {
-        if (response === true ) {
+        if (response === true) {
           this.router.navigateByUrl('/course/' + this.courseid + '/settings')
         } else {
           throw Error;
@@ -229,26 +230,44 @@ export class EditFieldComponent implements OnInit {
   }
 
   // Päivitä kaikkien kenttien tiedot ennen niiden lähettämistä.
-  public async submitField(remove?: boolean): Promise<void> {
-    if (this.form.invalid || !this.courseid) return
-    /* Haetaan kaikkien kenttien tiedot, koska palvelimelle lähetetään aina
-    kaikki kentät. */
-    const response = await this.courses.getTicketFieldInfo(this.courseid);
-    if (!(response?.kentat)) {
-      throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+  public submitField(): void {
+    if (this.form.invalid) {
+      console.error('Form on invalid.');
+      return
     }
-    let allFields: Kenttapohja[] = response.kentat;
     const newField = this.createField();
-    if (this.fieldid === undefined) {   // Jos on uusi kenttä.
-      allFields.push(newField);
-    } else {
-      const index = allFields.findIndex(field => field.id == this.fieldid);
-      if (remove === true) {
-        allFields.splice(index, 1);
+    const ticketStatus = this.fieldid === undefined ? 'new' : 'old';
+    this.courses.editField(this.courseid, newField, ticketStatus).then(response => {
+      if (response?.success === true) {
+        this.router.navigateByUrl('/course/' + this.courseid + '/settings')
       } else {
-        allFields.splice(index, 1, newField);
+        throw Error;
       }
-    }
-    this.submitAllFields(allFields);
+    }).catch (() => {
+      if (ticketStatus === 'new') {
+        this.errorMessage = $localize `:@@Lisäkentän lisääminen epäonnistui:Lisäkentän lisääminen epäonnistui` + '.';
+      } else {
+      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:Kenttäpohjan muuttaminen ei onnistunut.`;
+      }
+      return
+    })
   }
+
+  public async removeField(fieldID: string | undefined): Promise<void> {
+    if (fieldID === undefined) {
+      return
+    }
+    this.courses.removeField(this.courseid, fieldID!).then(response => {
+      if (response?.success === true) {
+        this.router.navigateByUrl('/course/' + this.courseid + '/settings')
+      } else {
+        throw Error;
+      }
+    }).catch (() => {
+      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
+      Kenttäpohjan muuttaminen ei onnistunut.`;
+      return
+    })
+  }
+
 }
