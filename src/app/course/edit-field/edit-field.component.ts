@@ -5,15 +5,12 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
-import { Observable, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { arrayLengthValidator, getArraysStringLength } from '@shared/directives/array-length.directive';
+import { getArraysStringLength } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
-import { environment } from 'src/environments/environment';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   templateUrl: './edit-field.component.html',
@@ -35,8 +32,6 @@ export class EditFieldComponent implements OnInit {
   // Voi olla error, jos editoidaan olemasa olevaa kenttää eikä saada haettua tietoja.
   public state: 'editing' | 'error' = 'editing';
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
-  private fetchFieldTimer$: Observable<number>;
-  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
 
   get areSelectionsEnabled(): FormControl {
     return this.form.get('areSelectionsEnabled') as FormControl;
@@ -76,8 +71,6 @@ export class EditFieldComponent implements OnInit {
       ohje: '',
       valinnat: []
     }
-    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
-    this.fetchFieldTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
@@ -85,8 +78,10 @@ export class EditFieldComponent implements OnInit {
     if (this.fieldid === null) {
       this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
+      this.isLoaded = true;
     } else {
-      this.startPollingFields(this.POLLING_RATE_MIN);
+      // this.startPollingFields(this.POLLING_RATE_MIN);
+      this.getFieldInfo(this.courseid, this.fieldid);
     }
   }
 
@@ -209,6 +204,9 @@ export class EditFieldComponent implements OnInit {
 
   // Lähetä kaikkien kenttien tiedot.§
   private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
+
+    console.dir(allFields);
+
     this.courses.setTicketField(courseID, allFields)
       .then(response => {
         if (response === true ) {
@@ -230,27 +228,7 @@ export class EditFieldComponent implements OnInit {
     this.form.controls['title'].setValue(this.field.otsikko);
   }
 
-  // Hae kenttäpohjat tietyn ajan välein.
-  private startPollingFields(POLLING_RATE_MIN: number) {
-    console.log(`Aloitetaan kenttäpohjien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
-    let fetchStartTime: number | undefined;
-    let elapsedTime: number | undefined;
-    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
-    this.fetchFieldTimer$.subscribe(() => {
-      this.getFieldInfo(this.courseid, this.fieldid);
-      if (fetchStartTime) {
-        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
-        console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
-          `${elapsedTime} sekuntia.`);
-        if (elapsedTime !== POLLING_RATE_SEC) {
-          console.log(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
-        }
-      }
-      fetchStartTime = Date.now();
-    });
-  }
-
-  // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
+  // Päivitä kaikkien kenttien tiedot ennen niiden lähettämistä.
   public updateAllFields(remove?: boolean): void {
     if (this.form.invalid || !this.courseid) return
     const newField = this.createField();
