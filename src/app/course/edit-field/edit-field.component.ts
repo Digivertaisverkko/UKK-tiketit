@@ -19,9 +19,8 @@ import { StoreService } from '@core/services/store.service';
 
 export class EditFieldComponent implements OnInit {
   @Input() courseid!: string;
-  @Input() fieldid: string | null = null;
+  @Input() fieldid: string | undefined;
   public addOnBlur = true;
-  public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.
   public errorMessage: string = '';
   public field: Kenttapohja;
   public form: FormGroup = this.buildForm();
@@ -75,9 +74,11 @@ export class EditFieldComponent implements OnInit {
 
   ngOnInit(): void {
     // Kentän id on uutta kenttää tehdessä null.
-    if (this.fieldid === null) {
+    if (this.fieldid === undefined) {
       this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
+      this.form.controls['isPrefillable'].setValue(false);
+      this.form.controls['mandatory'].setValue(false);
       this.isLoaded = true;
     } else {
       // this.startPollingFields(this.POLLING_RATE_MIN);
@@ -113,7 +114,6 @@ export class EditFieldComponent implements OnInit {
 
   private createField(): Kenttapohja {
     let field: Kenttapohja = {} as Kenttapohja;
-    field.id = this.field.id;
     const controls = this.form.controls;
     field.otsikko = controls['title'].value;
     field.pakollinen = controls['mandatory'].value;
@@ -159,9 +159,9 @@ export class EditFieldComponent implements OnInit {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
-      this.allFields = response.kentat;
-      if (this.allFields.length > 0 && this.fieldid) {
-        let matchingField = this.allFields.filter(field => String(field.id) === fieldID);
+      let allFields: Kenttapohja[] = response.kentat;
+      if (allFields.length > 0 && this.fieldid) {
+        let matchingField = allFields.filter(field => String(field.id) === fieldID);
         if (matchingField.length === 0) {
           this.errorMessage = $localize`:@@lisäkenttää ei löydy:
           Hakemaasi lisäkenttää ei ole olemassa. Toinen kurssin opettaja on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
@@ -176,16 +176,19 @@ export class EditFieldComponent implements OnInit {
         this.areSelectionsEnabled?.setValue(areSelections);
         this.enableSelections(areSelections);
       }
-
       this.setControls();
-      this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
-          $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       this.isLoaded = true;
-      return
+      return this.field.otsikko;
+    }).then((otsikko: string | undefined) => {
+      if (otsikko !== undefined) {
+        this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
+        $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + otsikko);
+      }
     }).catch(error => {
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
     }).finally( () => this.isLoaded = true)
+
   }
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
@@ -203,14 +206,11 @@ export class EditFieldComponent implements OnInit {
   }
 
   // Lähetä kaikkien kenttien tiedot.§
-  private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-
-    console.dir(allFields);
-
-    this.courses.setTicketField(courseID, allFields)
+  private submitAllFields(allFields: Kenttapohja[]) {
+    this.courses.setTicketField(this.courseid, allFields)
       .then(response => {
         if (response === true ) {
-          this.router.navigateByUrl('/course/' + courseID + '/settings')
+          this.router.navigateByUrl('/course/' + this.courseid + '/settings')
         } else {
           throw Error;
         }
@@ -229,20 +229,26 @@ export class EditFieldComponent implements OnInit {
   }
 
   // Päivitä kaikkien kenttien tiedot ennen niiden lähettämistä.
-  public updateAllFields(remove?: boolean): void {
+  public async submitField(remove?: boolean): Promise<void> {
     if (this.form.invalid || !this.courseid) return
+    /* Haetaan kaikkien kenttien tiedot, koska palvelimelle lähetetään aina
+    kaikki kentät. */
+    const response = await this.courses.getTicketFieldInfo(this.courseid);
+    if (!(response?.kentat)) {
+      throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+    }
+    let allFields: Kenttapohja[] = response.kentat;
     const newField = this.createField();
-    if (this.fieldid == null) {   // Ellei ole uusi kenttä.
-      this.allFields.push(newField);
+    if (this.fieldid === undefined) {   // Jos on uusi kenttä.
+      allFields.push(newField);
     } else {
-      const index = this.allFields.findIndex(field => field.id == this.fieldid);
-      if (remove) {
-        this.allFields.splice(index, 1);
+      const index = allFields.findIndex(field => field.id == this.fieldid);
+      if (remove === true) {
+        allFields.splice(index, 1);
       } else {
-        this.allFields.splice(index, 1, newField)
+        allFields.splice(index, 1, newField);
       }
     }
-    this.sendAllFields(this.courseid, this.allFields);
+    this.submitAllFields(allFields);
   }
-
 }

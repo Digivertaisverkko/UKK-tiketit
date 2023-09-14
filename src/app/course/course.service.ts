@@ -207,9 +207,10 @@ export class CourseService {
 
   // Luo uudet kentät kurssin tikettipohjalle.
   public async setTicketField(courseID: string, fields: Kenttapohja[]):
-    Promise<boolean> {
+      Promise<boolean> {
+    // Haetuissa kentissä on id, mutta lähetettävissä ei ole.
     for (let field of fields) {
-      if (field.id != null) delete field.id;
+      if (field.id) delete field.id;
     }
     const url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
     let response: any;
