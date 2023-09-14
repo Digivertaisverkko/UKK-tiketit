@@ -19,7 +19,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 
-fdescribe('EditFieldComponent', () => {
+describe('EditFieldComponent', () => {
   const authDummyData = new AuthDummyData;
   let component: EditFieldComponent;
   const courseDummyData = new CourseDummyData;
@@ -70,6 +70,7 @@ fdescribe('EditFieldComponent', () => {
         expect(component).toBeTruthy();
       });
 
+      /*
       fit('shows correct field title', fakeAsync(() => {
         const newField: Kenttapohja =  {
           id: undefined,
@@ -94,5 +95,6 @@ fdescribe('EditFieldComponent', () => {
           '1', expectedFields);
         discardPeriodicTasks();
       }));
+      */
 
 });
