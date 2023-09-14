@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, flush, tick
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioButtonHarness } from '@angular/material/radio/testing';
 import { MatRadioModule } from '@angular/material/radio';
 import { MockComponent } from 'ng-mocks';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +20,8 @@ import { HeadlineComponent } from '@shared/components/headline/headline.componen
 import { SettingsComponent } from './settings.component';
 import { StoreService } from '@core/services/store.service';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { HarnessLoader } from '@angular/cdk/testing';
 
 describe('SettingsComponent', () => {
   const authDummyData = new AuthDummyData;
@@ -26,6 +29,7 @@ describe('SettingsComponent', () => {
   const courseDummyData = new CourseDummyData;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fixture: ComponentFixture<SettingsComponent>;
+  let loader: HarnessLoader;
   let location: Location;
   let store: StoreService;
   const ticketDummyData = new TicketDummyData;
@@ -45,6 +49,7 @@ describe('SettingsComponent', () => {
       getInvitedInfo: undefined,
       importFAQs: Promise.resolve({ success: true }),
       importSettings: Promise.resolve({ success: true }),
+      sendInvitation: Promise.resolve({ success: true }),
       setHelpText: Promise.resolve({ success: true })
     });
 
@@ -73,6 +78,7 @@ describe('SettingsComponent', () => {
     fixture = TestBed.createComponent(SettingsComponent);
     location = TestBed.inject(Location);
     store = TestBed.inject(StoreService);
+  loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
     component.courseid = '1';
     store.setLoggedIn();
@@ -137,6 +143,39 @@ describe('SettingsComponent', () => {
     expect(fakeCourseService.setHelpText).toHaveBeenCalledWith(
       component.courseid, expectedHelpText
     );
+    discardPeriodicTasks();
+  }));
+
+  it('calls correct method after typing email and clicking "Send invitation" -button',
+      fakeAsync(() => {
+    const expectedEmail = "test@example.com";
+    const expectedRole = "opiskelija";
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    setFieldValue(fixture, 'email', expectedEmail);
+    tick();
+    findEl(fixture, 'invite-button').nativeElement.click();
+    expect(fakeCourseService.sendInvitation).toHaveBeenCalledWith(
+      component.courseid, expectedEmail, expectedRole);
+    discardPeriodicTasks();
+  }));
+
+  it('calls correct method after typing email, selecting Teacher -role and clicking "Send invitation" -button',
+        fakeAsync(async() => {
+    const expectedEmail = "anotherTest@example.com";
+    const expectedRole = "opettaja";
+    fixture.detectChanges();
+    tick(0);
+    fixture.detectChanges();
+    setFieldValue(fixture, 'email', expectedEmail);
+    const teacherRadio = await loader.getHarness(MatRadioButtonHarness.with(
+      { selector: '[data-testid="teacher-radio"]' }));
+    await teacherRadio.check();
+    tick();
+    findEl(fixture, 'invite-button').nativeElement.click();
+    expect(fakeCourseService.sendInvitation).toHaveBeenCalledWith(
+      component.courseid, expectedEmail, expectedRole);
     discardPeriodicTasks();
   }));
 

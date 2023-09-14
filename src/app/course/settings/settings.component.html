@@ -250,7 +250,7 @@
     <div class="invite-left-wrapper">
       <mat-form-field class="invite-field">
         <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-        <input formControlName="email" matInput (value)="email">
+        <input formControlName="email" data-testid="email" matInput (value)="email">
         <mat-error  i18n="@@Pakollinen kenttä."
                     *ngIf="email.errors?.['required']"
                     >
@@ -268,10 +268,14 @@
           <span i18n="@@Rooli">Rooli</span>:
         </mat-label>
         <mat-radio-group formControlName="role">
-          <mat-radio-button [value]=1 i18n="@@Opiskelija">
+          <mat-radio-button data-testid="student-radio"
+                            i18n="@@Opiskelija"
+                            [value]=1>
             Opiskelija
           </mat-radio-button>
-          <mat-radio-button [value]=2 i18n="@@Opettaja">
+          <mat-radio-button data-testid="teacher-radio"
+                            i18n="@@Opettaja"
+                            [value]=2>
             Opettaja
           </mat-radio-button>
         </mat-radio-group>
@@ -281,6 +285,7 @@
 
     <button class="invite-button"
             color="primary"
+            data-testid="invite-button"
             i18n="@@Kutsu"
             mat-raised-button
             >
