@@ -59,7 +59,6 @@ describe('AuthService', () => {
     it('logged in status when logged in', fakeAsync(() => {
 
       auth.fetchUserInfo(courseID);
-
       const url = `${api}/kurssi/${courseID}/oikeudet`;
       const request = controller.expectOne(url);
       request.flush(authDummyData.oikeudetOpettaja);
@@ -74,7 +73,6 @@ describe('AuthService', () => {
     it('logged in status when logged out', fakeAsync(() => {
 
       auth.fetchUserInfo(courseID);
-
       const url = `${api}/kurssi/${courseID}/oikeudet`;
       const request = controller.expectOne(url);
       request.flush(null);
@@ -91,11 +89,9 @@ describe('AuthService', () => {
 
     }));
 
-
     it('user info when logged in', fakeAsync(() => {
 
       auth.fetchUserInfo(courseID);
-
       const url = `${api}/kurssi/${courseID}/oikeudet`;
       const request = controller.expectOne(url);
       request.flush(authDummyData.oikeudetOpettaja);
@@ -129,7 +125,6 @@ describe('AuthService', () => {
     it('logged status when logged to another course', fakeAsync(() => {
 
       auth.fetchUserInfo(courseID);
-
       const url = `${api}/kurssi/${courseID}/oikeudet`;
       const request = controller.expectOne(url);
       request.flush(null);
@@ -149,7 +144,6 @@ describe('AuthService', () => {
     it('user info when logged to another course', fakeAsync(() => {
 
       auth.fetchUserInfo(courseID);
-
       const url = `${api}/kurssi/${courseID}/oikeudet`;
       const request = controller.expectOne(url);
       request.flush(null);
@@ -201,8 +195,6 @@ describe('AuthService', () => {
       expect(req.request.headers.get('login-type')).toEqual(expectedHeaders['login-type']);
       expect(req.request.headers.has('code-challenge')).toBeTrue();
       expect(req.request.headers.get('kurssi')).toEqual(expectedHeaders['kurssi']);
-
-
     });
 
     it('/omalogin request has the correct headers.', (done) => {
@@ -212,7 +204,6 @@ describe('AuthService', () => {
       const password = 'salasana';
       const loginID = '2209fe8d-9a04-41fb-bf63-2475ce8efda3';
       // const codeChallenge = '61b6ec7fff6f21ed0f9b96ad1ae7b5f741c89412c044d5c5e6a344a0f4c94438';
-
       const expectedHeaders = {
         'ktunnus': email,
         'salasana': password,
@@ -235,9 +226,7 @@ describe('AuthService', () => {
       expect(req.request.headers.get('ktunnus')).toEqual(expectedHeaders['ktunnus']);
       expect(req.request.headers.get('salasana')).toEqual(expectedHeaders['salasana'])
       expect(req.request.headers.has('login-id')).toBeTrue();
-
     });
-
 
     it('/authtoken request after /omalogin with correct headers',  fakeAsync(()  => {
 
@@ -246,7 +235,6 @@ describe('AuthService', () => {
       const password = 'salasana';
       const loginID = '2209fe8d-9a04-41fb-bf63-2475ce8efda3';
       const loginCode = '9c16b0e1-a101-47a6-93dc-2c6b2961d195';
-
       const loginType = 'own'
       const expectedHeaders2 = {
         'login-type': loginType,
@@ -255,38 +243,29 @@ describe('AuthService', () => {
       };
 
       auth.login(email, password, loginID).then(res => {
-
         expect(req2.request.method).toBe('GET');
         expect(req2.request.headers.get('login-type')).toEqual(expectedHeaders2['login-type']);
         expect(req2.request.headers.has('code-verifier')).toEqual(true);
         expect(req2.request.headers.get('login-code')).toEqual(expectedHeaders2['login-code']);
-
         expect(res).toEqual({"success": true });
-
-        // done();
-
       }).catch(e => {
         console.log(e);
       })
 
       const url = `${api}/omalogin`;
       const req = controller.expectOne(url);
-      // const loginUrl = 'course/1/login?loginid=2209fe8d-9a04-41fb-bf63-2475ce8efda3';
       const result = {
         success: true,
         'login-code': loginCode
       }
       req.flush(result);
-
       tick();
 
       const url2 = `${api}/authtoken`;
       const req2 = controller.expectOne(url2);
-      const result2 = {"success": true };
-
+      const result2 = { "success": true };
       req2.flush(result2);
       tick();
-
     }));
 
     it('logs in using all 3 login requests', fakeAsync(() => {
@@ -349,7 +328,5 @@ describe('AuthService', () => {
     }));
 
   });
-
-
 
 });
