@@ -22,7 +22,7 @@ export class CourseDummyData {
     }
   }
 
-  // settings.component.spec
+  // settings.component.spec, course.service.spec
   public get ticketFieldInfo(): { kuvaus: string, kentat: Kenttapohja[] } {
     return {
       kuvaus: "Testikuvaus",

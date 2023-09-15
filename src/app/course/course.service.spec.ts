@@ -1,11 +1,15 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 
+import { CourseDummyData } from './course.dummydata';
 import { CourseService } from './course.service';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '@core/services/error.service';
+import { Kenttapohja } from './course.models';
 import { Role } from '@core/core.models';
 
+environment.testing = true;
+const courseDummyData = new CourseDummyData();
 const courseID = '1';
 const courseName = 'Testikurssi';
 const api = environment.apiBaseUrl;
@@ -19,8 +23,8 @@ describe('CourseService', () => {
     controller.verify();
   });
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ]
     });
     courses = TestBed.inject(CourseService);
@@ -42,10 +46,43 @@ describe('CourseService', () => {
     }).catch(e => {
       fail('got error');
     })
-
     const request = controller.expectOne(url);
     request.flush({ nimi: 'Testikurssi' });
   });
+
+  it('makes correct requests when adding a new additional field', fakeAsync(() => {
+    const newField: Kenttapohja = {
+      otsikko: "Uusi kenttä",
+      ohje: "Kentän ohje",
+      esitaytettava: false,
+      pakollinen: true,
+      valinnat: [
+        ""
+      ]
+    }
+    let fields = courseDummyData.ticketFieldInfo.kentat;
+    for (let field of fields) {
+      if (field.id) delete field.id;  // Lähetettävissä kentissä ei ole id:ä.
+    }
+    fields.push(newField);
+    let exptectedBody = { kentat: fields };
+    const expectedUrl = `${api}/kurssi/${courseID}/tikettipohja/kentat`;
+
+    courses.addField(courseID, newField, true).then((res) => {
+      expect(req).toBeDefined();
+      expect(req2).toBeDefined();
+      expect(req2.request.body).toEqual(exptectedBody);
+    }).catch(e => {
+      fail('got error');
+    });
+
+    const req = controller.expectOne({ method: 'GET', url: expectedUrl });
+    req.flush(courseDummyData.ticketFieldInfo);
+    tick();
+
+    const req2 = controller.expectOne({ method: 'PUT', url: expectedUrl });
+    req2.flush({ success: true });
+  }));
 
   it('sends help text for making tickets', (done) => {
     courses.setHelpText(courseID, 'test help text').then(() => {
@@ -55,7 +92,6 @@ describe('CourseService', () => {
     }).catch(e => {
       fail('got error');
     })
-
     const url = `${api}/kurssi/${courseID}/tikettipohja/kuvaus`;
     const req = controller.expectOne(url);
     req.flush({ success: true });

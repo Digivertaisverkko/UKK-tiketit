@@ -200,6 +200,7 @@ export class AuthService {
    if (courseID === null) {
      throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
    }
+
    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
    const codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
    // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });

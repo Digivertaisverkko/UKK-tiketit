@@ -38,7 +38,6 @@ describe('TicketService', () => {
     tickets = TestBed.inject(TicketService);
     controller = TestBed.inject(HttpTestingController);
     store = TestBed.inject(StoreService);
-
   });
 
   afterEach(() => {
