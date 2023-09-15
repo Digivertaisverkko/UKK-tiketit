@@ -1,3 +1,6 @@
+/*  Yleishyödyllisiä funktioita, jotka eivät rajoitu vain tietyn komponentin tai
+    servicen vastuualueeseen, vaan voidaan käyttää missä tahansa. */
+
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 

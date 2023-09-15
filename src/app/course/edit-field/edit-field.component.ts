@@ -188,8 +188,7 @@ export class EditFieldComponent implements OnInit {
     }).catch(error => {
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
-    }).finally( () => this.isLoaded = true)
-
+    }).finally( () => this.isLoaded = true);
   }
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
@@ -201,24 +200,25 @@ export class EditFieldComponent implements OnInit {
     }
   }
 
+  public async removeField(fieldID: string | undefined): Promise<void> {
+    if (fieldID === undefined) {
+      return
+    }
+    this.courses.removeField(this.courseid, fieldID!).then(response => {
+      if (response?.success === true) {
+        this.router.navigateByUrl(`/course/${this.courseid}/settings`);
+      } else {
+        throw Error;
+      }
+    }).catch (() => {
+      this.errorMessage = $localize `:@@Lisäkentän poistaminen epäonnistui:Lisäkentän poistaminen epäonnistui.` + '.';
+      return
+    })
+  }
+
   public removeSelection(valinta: string): void {
     let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat.splice(index, 1);
-  }
-
-  // Lähetä kaikkien kenttien tiedot.§
-  private submitAllFields(allFields: Kenttapohja[]) {
-    this.courses.setTicketField(this.courseid, allFields)
-      .then(response => {
-        if (response === true) {
-          this.router.navigateByUrl('/course/' + this.courseid + '/settings')
-        } else {
-          throw Error;
-        }
-      }).catch (() => {
-        this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-        Kenttäpohjan muuttaminen ei onnistunut.`;
-      })
   }
 
   private setControls(): void {
@@ -236,36 +236,19 @@ export class EditFieldComponent implements OnInit {
       return
     }
     const newField = this.createField();
-    const ticketStatus = this.fieldid === undefined ? 'new' : 'old';
-    this.courses.editField(this.courseid, newField, ticketStatus).then(response => {
+    const isNewField = this.fieldid === undefined ? true : false;
+    this.courses.addField(this.courseid, newField, isNewField).then(response => {
       if (response?.success === true) {
-        this.router.navigateByUrl('/course/' + this.courseid + '/settings')
+        this.router.navigateByUrl(`/course/${this.courseid}/settings`);
       } else {
         throw Error;
       }
     }).catch (() => {
-      if (ticketStatus === 'new') {
+      if (isNewField === true) {
         this.errorMessage = $localize `:@@Lisäkentän lisääminen epäonnistui:Lisäkentän lisääminen epäonnistui` + '.';
       } else {
-      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:Kenttäpohjan muuttaminen ei onnistunut.`;
+        this.errorMessage = $localize `:@@Lisäkentän muokkaaminen epäonnistui:Lisäkentän muokkaaminen epäonnistui` + '.';
       }
-      return
-    })
-  }
-
-  public async removeField(fieldID: string | undefined): Promise<void> {
-    if (fieldID === undefined) {
-      return
-    }
-    this.courses.removeField(this.courseid, fieldID!).then(response => {
-      if (response?.success === true) {
-        this.router.navigateByUrl('/course/' + this.courseid + '/settings')
-      } else {
-        throw Error;
-      }
-    }).catch (() => {
-      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-      Kenttäpohjan muuttaminen ei onnistunut.`;
       return
     })
   }

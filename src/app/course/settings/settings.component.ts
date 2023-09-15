@@ -258,17 +258,15 @@ export class SettingsComponent implements OnInit {
   // Tallenna lisäkentät drag & drobin jälkeen.
   public saveFields() {
     if (!this.courseid) throw Error('Ei kurssi ID:ä.');
-    this.courses.setTicketField(this.courseid, this.fieldList)
-      .then(response => {
-        if (response === true ) {
+    this.courses.setTicketField(this.courseid, this.fieldList).then(response => {
+        if (response === true) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
           if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
         } else {
           throw Error('Ei onnistunut.');
         }
     }).catch (error => {
-      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-      Kenttäpohjan muuttaminen ei onnistunut.`;
+      this.errorMessage = $localize `:@@Lisäkenttien järjestyksen muuttaminen ei onnistunut:Lisäkenttien järjestyksen muuttaminen ei onnistunut` + '.';
     })
   }
 
