@@ -1,0 +1,779 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>tikettisysteemi documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">tikettisysteemi documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  EditorComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/shared/editor/editor.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>OnDestroy</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+            <tr>
+                <td class="col-md-3">encapsulation</td>
+                <td class="col-md-9"><code>ViewEncapsulation.None</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-editor</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./editor.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./editor.component.html</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">viewProviders</td>
+                <td class="col-md-9">
+                    <code>
+                            <code>{
+    provide: ControlContainer, useExisting: FormGroupDirective
+}</code>
+                    </code>
+                </td>
+            </tr>
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#editor" >editor</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                    <span class="modifier"></span>
+                                    <span class="modifier">Public</span>
+                                <a href="#ngControl" >ngControl</a>
+                            </li>
+                            <li>
+                                <a href="#toolbar" >toolbar</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#formControlName" >formControlName</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(ngControl: NgControl)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/editor/editor.component.ts:58</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>ngControl</td>
+                                                  
+                                                        <td>
+                                                                    <code>NgControl</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="formControlName"></a>
+                        <b>formControlName</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/editor/editor.component.ts:58</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/shared/editor/editor.component.ts:83</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/shared/editor/editor.component.ts:64</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editor"></a>
+                    <span class="name">
+                        <span ><b>editor</b></span>
+                        <a href="#editor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Editor</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/shared/editor/editor.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngControl"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                            <span class="modifier"></span>
+                            <span class="modifier">Public</span>
+                        <span ><b>ngControl</b></span>
+                        <a href="#ngControl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>NgControl</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @Self()<br />@Optional()<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/shared/editor/editor.component.ts:60</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toolbar"></a>
+                    <span class="name">
+                        <span ><b>toolbar</b></span>
+                        <a href="#toolbar"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Toolbar</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+    [&#x27;bold&#x27;, &#x27;italic&#x27;, &#x27;underline&#x27;, &#x27;strike&#x27;],
+    [&#x27;blockquote&#x27;],
+    [&#x27;ordered_list&#x27;, &#x27;bullet_list&#x27;],
+    [&#x27;image&#x27;]
+  ]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/editor/editor.component.ts:51</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnDestroy, OnInit, Optional, Self, ViewEncapsulation
+    } from &#x27;@angular/core&#x27;;
+import { ControlContainer, ControlValueAccessor, FormGroupDirective, NgControl
+    } from &#x27;@angular/forms&#x27;;
+import { minimalSetup } from &#x27;codemirror&#x27;;
+import { javascript } from &quot;@codemirror/lang-javascript&quot;
+import { Editor, Toolbar } from &#x27;ngx-editor&#x27;;
+import { CodeMirrorView } from &#x27;prosemirror-codemirror-6&#x27;;
+import { gapCursor } from &#x27;prosemirror-gapcursor&#x27;;
+import { Node as ProseMirrorNode } from &#x27;prosemirror-model&#x27;;
+import { EditorView } from &#x27;prosemirror-view&#x27;;
+
+import schema from &#x27;./schema&#x27;;
+
+export const NOOP_VALUE_ACCESSOR: ControlValueAccessor &#x3D; {
+  writeValue(): void {},
+  registerOnChange(): void {},
+  registerOnTouched(): void {}
+};
+
+const nodeViews &#x3D; {
+  code_mirror: (node: ProseMirrorNode,
+                view: EditorView,
+                getPos: () &#x3D;&gt; number | undefined): CodeMirrorView &#x3D;&gt; {
+    return new CodeMirrorView({
+      node,
+      view,
+      getPos,
+      cmOptions: {
+        extensions: [
+          minimalSetup,
+          javascript(),
+        ],
+      },
+    });
+  },
+};
+
+@Component({
+  selector: &#x27;app-editor&#x27;,
+  templateUrl: &#x27;./editor.component.html&#x27;,
+  styleUrls: [&#x27;./editor.component.scss&#x27;],
+  encapsulation: ViewEncapsulation.None,
+  viewProviders: [{
+    provide: ControlContainer,
+    useExisting: FormGroupDirective
+  }]
+})
+export class EditorComponent implements OnInit, OnDestroy {
+  editor!: Editor;
+  toolbar: Toolbar &#x3D; [
+    [&#x27;bold&#x27;, &#x27;italic&#x27;, &#x27;underline&#x27;, &#x27;strike&#x27;],
+    [&#x27;blockquote&#x27;],
+    [&#x27;ordered_list&#x27;, &#x27;bullet_list&#x27;],
+    [&#x27;image&#x27;]
+  ];
+
+  @Input() formControlName: string &#x3D; &#x27;&#x27;;
+
+  constructor(@Self() @Optional() public ngControl: NgControl) {
+    if (this.ngControl) this.ngControl.valueAccessor &#x3D; NOOP_VALUE_ACCESSOR;
+  }
+
+  ngOnInit(): void {
+    this.editor &#x3D; new Editor({
+      schema,
+      nodeViews,
+      history: true,
+      keyboardShortcuts: true,
+      inputRules: true,
+      attributes: { enterkeyhint: &#x27;enter&#x27; },
+      features: {
+        linkOnPaste: true,
+        resizeImage: true,
+      },
+      plugins: [
+        gapCursor(),
+      ],
+    });
+  }
+
+  // make sure to destory the editor
+  ngOnDestroy(): void {
+    this.editor.destroy();
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;editor NgxEditor__Wrapper&quot;&gt;
+  &lt;ngx-editor-menu  [customMenuRef]&#x3D;&quot;customMenu&quot;
+                    [editor]&#x3D;&quot;editor&quot;
+                    [toolbar]&#x3D;&quot;toolbar&quot;
+                    &gt;
+  &lt;/ngx-editor-menu&gt;
+  &lt;ngx-editor *ngIf&#x3D;&quot;formControlName&quot;
+              [editor]&#x3D;&quot;editor&quot;
+              [formControlName]&#x3D;&quot;formControlName&quot;
+              [placeholder]&#x3D;&quot;&#x27;&#x27;&quot;
+              &gt;
+  &lt;/ngx-editor&gt;
+&lt;/div&gt;
+
+&lt;ng-template #customMenu&gt;
+  &lt;div class&#x3D;&quot;NgxEditor__Seperator&quot;&gt;&lt;/div&gt;
+  &lt;app-menu-link [editor]&#x3D;&quot;editor&quot;&gt;&lt;/app-menu-link&gt;
+  &lt;div class&#x3D;&quot;NgxEditor__Seperator&quot;&gt;&lt;/div&gt;
+  &lt;app-menu-src [editor]&#x3D;&quot;editor&quot;&gt;&lt;/app-menu-src&gt;
+&lt;/ng-template&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./editor.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.NgxEditor__Wrapper {
+  --mdc-outlined-card-outline-color: #e0e0e0;
+  border-width: var(--mdc-outlined-card-outline-width, 1px) !important;
+  border-style: solid !important;
+  border-color: var(--mdc-outlined-card-outline-color, transparent) !important;
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px)) !important;
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12) !important;
+
+  .NgxEditor__Content {
+    min-height: 10em;
+    overflow: auto;
+
+    .cm-editor {
+      margin-bottom: 1em;
+      outline: 1px dotted #212121;
+    }
+  }
+
+  .NgxEditor__Content--Disabled {
+    background-color: #fafafa;
+  }
+
+  .NgxEditor__MenuBar {
+    border-bottom-width: var(--mdc-outlined-card-outline-width, 1px) !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: var(--mdc-outlined-card-outline-color, transparent) !important;
+  }
+
+  .NgxEditor__Seperator {
+    border-left-width: var(--mdc-outlined-card-outline-width, 1px) !important;
+    border-left-style: solid !important;
+    border-left-color: var(--mdc-outlined-card-outline-color, transparent) !important;
+  }
+}
+
+
+
+/* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; ProseMirror-gapcursor pluginin tyylit &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+
+.ProseMirror-gapcursor {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+}
+
+.ProseMirror-gapcursor:after {
+  content: &quot;&quot;;
+  display: block;
+  position: absolute;
+  top: -2px;
+  width: 20px;
+  border-top: 1px solid black;
+  animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes ProseMirror-cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.ProseMirror-focused .ProseMirror-gapcursor {
+  display: block;
+}
+
+/* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; */
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="editor NgxEditor__Wrapper">  <ngx-editor-menu  [customMenuRef]="customMenu"                    [editor]="editor"                    [toolbar]="toolbar"                    >  </ngx-editor-menu>  <ngx-editor *ngIf="formControlName"              [editor]="editor"              [formControlName]="formControlName"              [placeholder]="\'\'"              >  </ngx-editor></div><ng-template #customMenu>  <div class="NgxEditor__Seperator"></div>  <app-menu-link [editor]="editor"></app-menu-link>  <div class="NgxEditor__Seperator"></div>  <app-menu-src [editor]="editor"></app-menu-src></ng-template></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BeginningButtonComponent', 'selector': 'app-beginning-button'},{'name': 'CommentComponent', 'selector': 'app-comment'},{'name': 'DataConsentComponent', 'selector': ''},{'name': 'EditAttachmentsComponent', 'selector': 'app-edit-attachments'},{'name': 'EditFieldComponent', 'selector': ''},{'name': 'EditorComponent', 'selector': 'app-editor'},{'name': 'ErrorComponent', 'selector': 'app-error'},{'name': 'FaqViewComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeadlineComponent', 'selector': 'app-headline'},{'name': 'HomeComponent', 'selector': ''},{'name': 'JoinComponent', 'selector': ''},{'name': 'ListingComponent', 'selector': 'app-listing'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MenuLinkComponent', 'selector': 'app-menu-link'},{'name': 'MenuSrcComponent', 'selector': 'app-menu-src'},{'name': 'MessageComponent', 'selector': 'app-message'},{'name': 'NoDataConsentComponent', 'selector': ''},{'name': 'NoPrivilegesComponent', 'selector': ''},{'name': 'PageNotFoundComponent', 'selector': ''},{'name': 'PrivacyModalComponent', 'selector': 'app-privacy-modal'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RefreshDialogComponent', 'selector': 'app-refresh-dialog'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'SearchBarComponent', 'selector': 'app-search-bar'},{'name': 'SenderInfoComponent', 'selector': 'app-sender-info'},{'name': 'SettingsComponent', 'selector': ''},{'name': 'SubmitFaqComponent', 'selector': 'app-submit-faq'},{'name': 'SubmitTicketComponent', 'selector': 'app-submit-ticket'},{'name': 'SuccessComponent', 'selector': 'app-success'},{'name': 'TicketListComponent', 'selector': 'app-ticket-list'},{'name': 'TicketViewComponent', 'selector': 'app-ticket-view'},{'name': 'ViewAttachmentsComponent', 'selector': 'app-view-attachments'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'EditorComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'EditorComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

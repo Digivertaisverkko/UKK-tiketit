@@ -2,6 +2,7 @@
   "name": "tikettisysteemi",
   "version": "0.0.0",
   "scripts": {
+    "compodoc": "npx compodoc -p tsconfig.doc.json",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -24,6 +25,7 @@
     "@angular/platform-browser": "^16.2.3",
     "@angular/platform-browser-dynamic": "^16.2.3",
     "@angular/router": "^16.2.3",
+    "@babel/plugin-proposal-private-methods": "^7.18.6",
     "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/language": "^6.9.0",
     "@lezer/highlight": "^1.1.6",
@@ -53,6 +55,7 @@
     "@angular/cli": "^16.2.1",
     "@angular/compiler-cli": "^16.2.3",
     "@angular/localize": "^16.2.3",
+    "@compodoc/compodoc": "^1.1.21",
     "@types/jasmine": "^4.3.5",
     "@types/sha.js": "^2.4.1",
     "@typescript-eslint/eslint-plugin": "^6.5.0",

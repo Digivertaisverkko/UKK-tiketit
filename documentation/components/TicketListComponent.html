@@ -1,0 +1,2951 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>tikettisysteemi documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">tikettisysteemi documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  TicketListComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/ticket/listing/ticket-list/ticket-list.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Näyttää opettajalle listan kurssin tiketeistä sekä listan ratkaistuiksi
+asetetuista tiketeistä ja opiskelijalle tämän omat tiketit.</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>AfterViewInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-ticket-list</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>../listing.component.scss,<br>./ticket-list.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./ticket-list.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#archivedCount" >archivedCount</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#columnDefinitions" >columnDefinitions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#dataSource" >dataSource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#dataSourceArchived" >dataSourceArchived</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#error" >error</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#fetchTicketsTimer$" >fetchTicketsTimer$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#headline" >headline</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#iconFile" >iconFile</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isArchivedShown" >isArchivedShown</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isLoaded" >isLoaded</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isPhonePortrait" >isPhonePortrait</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isPolling" >isPolling</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#maxItemTitleLength" >maxItemTitleLength</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#numberOfQuestions" >numberOfQuestions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#POLLING_RATE_MIN" >POLLING_RATE_MIN</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#sortArchived" >sortArchived</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#sortQuestions" >sortQuestions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackMessages$" >trackMessages$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#applyFilter" >applyFilter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#customFilterPredicate" >customFilterPredicate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#fetchArchivedTickets" >fetchArchivedTickets</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#fetchTickets" >fetchTickets</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#getDisplayedColumn" >getDisplayedColumn</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#getHeadline" >getHeadline</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#hideArchived" >hideArchived</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#saveRedirectUrl" >saveRedirectUrl</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#setBaseColumnDefinitions" >setBaseColumnDefinitions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#showArchived" >showArchived</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#startLoading" >startLoading</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#startPollingTickets" >startPollingTickets</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#stopLoading" >stopLoading</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackMessages" >trackMessages</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackScreenSize" >trackScreenSize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#courseid" >courseid</a>
+                            </li>
+                            <li>
+                                <a href="#user" >user</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Outputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ticketMessage" >ticketMessage</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(responsive: BreakpointObserver, store: <a href="../injectables/StoreService.html" target="_self">StoreService</a>, ticket: <a href="../injectables/TicketService.html" target="_self">TicketService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:101</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>responsive</td>
+                                                  
+                                                        <td>
+                                                                    <code>BreakpointObserver</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>store</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StoreService.html" target="_self" >StoreService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>ticket</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TicketService.html" target="_self" >TicketService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="courseid"></a>
+                        <b>courseid</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:79</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="user"></a>
+                        <b>user</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/User.html" target="_self" >User | null</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:80</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+    <section data-compodoc="block-outputs">
+    <h3 id="outputs">Outputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="ticketMessage"></a>
+                        <b>ticketMessage</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>EventEmitter</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="81" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:81</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyFilter"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>applyFilter</b></span>
+                        <a href="#applyFilter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyFilter(filterValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:130</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>filterValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="customFilterPredicate"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span class="modifier">Static</span>
+                        <span ><b>customFilterPredicate</b></span>
+                        <a href="#customFilterPredicate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>customFilterPredicate(data: <a href="../interfaces/SortableTicket.html" target="_self">SortableTicket</a>, filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:135</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>data</td>
+                                    <td>
+                                                <code><a href="../interfaces/SortableTicket.html" target="_self" >SortableTicket</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>filter</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchArchivedTickets"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>fetchArchivedTickets</b></span>
+                        <a href="#fetchArchivedTickets"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fetchArchivedTickets()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:140</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchTickets"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>fetchTickets</b></span>
+                        <a href="#fetchTickets"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fetchTickets(courseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="155"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:155</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>courseID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDisplayedColumn"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>getDisplayedColumn</b></span>
+                        <a href="#getDisplayedColumn"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDisplayedColumn()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>string[]</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getHeadline"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>getHeadline</b></span>
+                        <a href="#getHeadline"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getHeadline()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="199"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:199</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hideArchived"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>hideArchived</b></span>
+                        <a href="#hideArchived"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>hideArchived()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="215"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:215</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:126</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="116"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:116</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveRedirectUrl"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>saveRedirectUrl</b></span>
+                        <a href="#saveRedirectUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>saveRedirectUrl(linkEnding?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="223"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:223</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>linkEnding</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setBaseColumnDefinitions"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>setBaseColumnDefinitions</b></span>
+                        <a href="#setBaseColumnDefinitions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>setBaseColumnDefinitions()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="229"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:229</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showArchived"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>showArchived</b></span>
+                        <a href="#showArchived"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>showArchived()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="238"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:238</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startLoading"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>startLoading</b></span>
+                        <a href="#startLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>startLoading()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="244"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:244</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startPollingTickets"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>startPollingTickets</b></span>
+                        <a href="#startPollingTickets"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>startPollingTickets(POLLING_RATE_MIN: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="255"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:255</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>POLLING_RATE_MIN</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="stopLoading"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>stopLoading</b></span>
+                        <a href="#stopLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>stopLoading()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="249"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:249</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackMessages"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>trackMessages</b></span>
+                        <a href="#trackMessages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackMessages()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="275"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:275</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackScreenSize"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>trackScreenSize</b></span>
+                        <a href="#trackScreenSize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackScreenSize()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="286"
+                            class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:286</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="archivedCount"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>archivedCount</b></span>
+                        <a href="#archivedCount"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:82</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="columnDefinitions"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>columnDefinitions</b></span>
+                        <a href="#columnDefinitions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ColumnDefinition[]</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:83</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dataSource"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>dataSource</b></span>
+                        <a href="#dataSource"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new MatTableDataSource&lt;SortableTicket&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:84</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dataSourceArchived"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>dataSourceArchived</b></span>
+                        <a href="#dataSourceArchived"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new MatTableDataSource&lt;SortableTicket&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="85" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="error"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>error</b></span>
+                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ErrorNotification | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchTicketsTimer$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>fetchTicketsTimer$</b></span>
+                        <a href="#fetchTicketsTimer$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Observable&lt;number&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="96" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:96</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="headline"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>headline</b></span>
+                        <a href="#headline"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:87</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="iconFile"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>iconFile</b></span>
+                        <a href="#iconFile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>IconFile</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:88</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isArchivedShown"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isArchivedShown</b></span>
+                        <a href="#isArchivedShown"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoaded"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isLoaded</b></span>
+                        <a href="#isLoaded"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="89" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:89</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isPhonePortrait"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isPhonePortrait</b></span>
+                        <a href="#isPhonePortrait"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="91" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:91</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isPolling"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isPolling</b></span>
+                        <a href="#isPolling"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="maxItemTitleLength"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>maxItemTitleLength</b></span>
+                        <a href="#maxItemTitleLength"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>100</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="92" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="numberOfQuestions"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>numberOfQuestions</b></span>
+                        <a href="#numberOfQuestions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:93</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POLLING_RATE_MIN"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>POLLING_RATE_MIN</b></span>
+                        <a href="#POLLING_RATE_MIN"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>( environment.production &#x3D;&#x3D; true ) ? 1 : 1</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:97</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sortArchived"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>sortArchived</b></span>
+                        <a href="#sortArchived"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new MatSort()</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;sortArchived&#x27;, {static: false})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="101" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:101</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sortQuestions"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>sortQuestions</b></span>
+                        <a href="#sortQuestions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new MatSort()</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;sortQuestions&#x27;, {static: false})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="100" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackMessages$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>trackMessages$</b></span>
+                        <a href="#trackMessages$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Observable&lt;string&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/ticket/listing/ticket-list/ticket-list.component.ts:98</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
+    ViewChild } from &#x27;@angular/core&#x27;;
+import { BreakpointObserver, Breakpoints } from &#x27;@angular/cdk/layout&#x27;;
+import { DatePipe } from &#x27;@angular/common&#x27;;
+import { environment } from &#x27;src/environments/environment&#x27;;
+import { MatSort } from &#x27;@angular/material/sort&#x27;;
+import { MatTableDataSource } from &#x27;@angular/material/table&#x27;;
+import { Observable, timer } from &#x27;rxjs&#x27;;
+import { takeUntilDestroyed } from &#x27;@angular/core/rxjs-interop&#x27;;
+
+import { StoreService } from &#x27;@core/services/store.service&#x27;;
+import { TicketService } from &#x27;../../ticket.service&#x27;;
+import { User } from &#x27;@core/core.models&#x27;;
+import { SortableTicket } from &#x27;../../ticket.models&#x27;;
+
+interface ColumnDefinition {
+  def: string;
+  showMobile: boolean;
+}
+
+enum IconFile {
+  &#x27;Lahetetty&#x27; &#x3D; 1, &#x27;Kasittelyssa&#x27;, &#x27;Kysymys&#x27;, &quot;Kommentti&quot;, &quot;Ehdotus&quot;, &quot;Ratkaisu&quot;
+}
+
+interface ErrorNotification {
+  title: string,
+  message: string,
+  buttonText?: string
+}
+
+/* Tämä tarvitaan mat-tablen oletuksen sijaan, jotta voi etsiä myös lisäkenttien
+tiedoilla. */
+const customFilterPredicate &#x3D; (data: SortableTicket, filter: string) &#x3D;&gt; {
+  const filterValue &#x3D; filter.toLowerCase();
+
+  const kentatMatch &#x3D; data.kentat.some((item) &#x3D;&gt; {
+    const tiketti &#x3D; item.tiketti ? item.tiketti : &#x27;&#x27;;
+    const arvo &#x3D; item.arvo ? item.arvo.toLowerCase() : &#x27;&#x27;;
+    const otsikko &#x3D; item.otsikko ? item.otsikko.toLowerCase() : &#x27;&#x27;;
+
+    return (
+      tiketti &#x3D;&#x3D;&#x3D; filterValue ||
+      arvo.includes(filterValue) ||
+      otsikko.includes(filterValue)
+    );
+  });
+  const datePipe &#x3D; new DatePipe(&#x27;fi-FI&#x27;);
+  const attachmentStr &#x3D; $localize &#x60;:@@liite:liite&#x60;;
+  const mainDataMatch &#x3D; (
+    data.otsikko.toLowerCase().includes(filterValue) ||
+    datePipe.transform(data.aikaleima, &#x27;shortDate&#x27;)?.includes(filterValue) ||
+    datePipe.transform(data.viimeisin, &#x27;shortDate&#x27;)?.includes(filterValue) ||
+    data.viimeisinStr.toLowerCase().includes(filterValue) ||
+    data.aloittajanNimi.toLowerCase().includes(filterValue) ||
+    data.tila.toLowerCase().includes(filterValue) ||
+    data.liite &#x3D;&#x3D;&#x3D; true &amp;&amp; attachmentStr.includes(filterValue)
+  );
+  return kentatMatch || mainDataMatch;
+};
+
+/**
+ * Näyttää opettajalle listan kurssin tiketeistä sekä listan ratkaistuiksi
+ * asetetuista tiketeistä ja opiskelijalle tämän omat tiketit.
+ * 
+ * @export
+ * @class TicketListComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
+@Component({
+  selector: &#x27;app-ticket-list&#x27;,
+  templateUrl: &#x27;./ticket-list.component.html&#x27;,
+  styleUrls: [ &#x27;../listing.component.scss&#x27; , &#x27;./ticket-list.component.scss&#x27;]
+})
+
+export class TicketListComponent implements OnInit, AfterViewInit {
+
+  // UKK:sta kopioitaessa @Input:na courseid oli undefined.
+  @Input() public courseid: string &#x3D; &#x27;&#x27;;
+  @Input() public user: User | null &#x3D; null;
+  @Output() ticketMessage &#x3D; new EventEmitter&lt;string&gt;();
+  public archivedCount: number &#x3D; 0;
+  public columnDefinitions!: ColumnDefinition[];
+  public dataSource &#x3D; new MatTableDataSource&lt;SortableTicket&gt;();
+  public dataSourceArchived &#x3D; new MatTableDataSource&lt;SortableTicket&gt;();
+  public error: ErrorNotification | null &#x3D; null;
+  public headline: string &#x3D; &#x27;&#x27;;
+  public iconFile: typeof IconFile &#x3D; IconFile;
+  public isLoaded: boolean &#x3D; false;
+  public isPolling: boolean &#x3D; false;
+  public isPhonePortrait: boolean &#x3D; false;
+  public maxItemTitleLength &#x3D; 100;  // Älä aseta tätä vakioksi.
+  public numberOfQuestions: number &#x3D; 0;
+  public isArchivedShown: boolean;
+
+  private fetchTicketsTimer$: Observable&lt;number&gt;;
+  private readonly POLLING_RATE_MIN &#x3D; ( environment.production &#x3D;&#x3D; true ) ? 1 : 1;
+  private trackMessages$: Observable&lt;string&gt;;
+
+  @ViewChild(&#x27;sortQuestions&#x27;, { static: false }) sortQuestions &#x3D; new MatSort();
+  @ViewChild(&#x27;sortArchived&#x27;,  { static: false }) sortArchived  &#x3D; new MatSort();
+
+  constructor(
+    private responsive: BreakpointObserver,
+    private store : StoreService,
+    private ticket: TicketService,
+  ) {
+    const POLLING_RATE_MS &#x3D; this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchTicketsTimer$ &#x3D; timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
+    this.trackMessages$ &#x3D; this.store.trackMessages().pipe(takeUntilDestroyed());
+    this.setBaseColumnDefinitions();
+    this.isArchivedShown &#x3D; window.sessionStorage.getItem(&#x27;SHOW_ARCHIVED&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27; ?
+        true : false;
+  }
+
+  ngOnInit() {
+    this.headline &#x3D; this.getHeadline();
+    this.trackScreenSize();
+    this.startPollingTickets(this.POLLING_RATE_MIN);
+    if (this.isArchivedShown &amp;&amp; (this.user?.asema &#x3D;&#x3D;&#x3D; &#x27;opettaja&#x27;
+      || this.user?.asema &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;)) {
+      this.fetchArchivedTickets();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.trackMessages();
+  }
+
+  public applyFilter(filterValue: string) {
+    filterValue &#x3D; filterValue.trim().toLowerCase();
+    this.dataSource.filter &#x3D; filterValue;
+  }
+
+  private static customFilterPredicate(data: SortableTicket, filter: string): boolean {
+    return customFilterPredicate(data, filter);
+  }
+
+  // Hae arkistoidut tiketit.
+  public fetchArchivedTickets() {
+    if (this.courseid &#x3D;&#x3D;&#x3D; null) return
+    this.ticket.getTicketList(this.courseid, { option: &#x27;archived&#x27; })
+      .then(response &#x3D;&gt; {
+        if (response &#x3D;&#x3D;&#x3D; null) response &#x3D; [];
+        if (response.length &gt; 0) {
+          this.dataSourceArchived &#x3D; new MatTableDataSource(response);
+          this.archivedCount &#x3D; response.length;
+          this.dataSourceArchived.sort &#x3D; this.sortArchived;
+        }
+    }).catch(error &#x3D;&gt; {
+    });
+  }
+
+  // Hae tiketit kerran.
+  public fetchTickets(courseID: string) {
+    this.ticket.getTicketList(courseID).then((response: SortableTicket[] | null) &#x3D;&gt; {
+      // response &#x3D; ticketDummyData.ticketListClientData;
+      // console.log(&#x27;comp res:&#x27;);
+      // console.dir(response);
+      if (!response) return
+      if (response.length &gt; 0) {
+        this.error &#x3D; null;
+        const hasAttachment &#x3D; response.some(ticket &#x3D;&gt; ticket.liite &#x3D;&#x3D;&#x3D; true);
+        this.setBaseColumnDefinitions();
+        if (hasAttachment) {
+          this.columnDefinitions.push({ def: &#x27;liite&#x27;, showMobile: false })
+        }
+        this.dataSource &#x3D; new MatTableDataSource(response);
+        this.numberOfQuestions &#x3D; response.length;
+        // Taulukko pitää olla tässä vaiheessa templatessa näkyvillä,
+        // jotta sorting toimii.
+        this.dataSource.sort &#x3D; this.sortQuestions;
+        this.dataSource.filterPredicate &#x3D; TicketListComponent.customFilterPredicate;
+        // const sortFn &#x3D; this.dataSource.sort;
+        // console.log(&#x27;comp: &#x27; + sortFn?.sortables.size);
+      }
+      return
+    }).catch(error &#x3D;&gt; {
+      this.error &#x3D; {
+        title: $localize&#x60;:@@Virhe:Virhe&#x60;,
+        message: $localize&#x60;:@@Kysymysten hakeminen ei onnistunut:
+          Kysymysten hakeminen ei onnistunut.&#x60;
+      }
+    }).finally(() &#x3D;&gt; {
+      if (this.isPolling &#x3D;&#x3D;&#x3D; false) {
+        this.isPolling &#x3D; true;
+        this.ticketMessage.emit(&#x27;loaded&#x27;);
+        this.stopLoading();
+      }
+    })
+  }
+
+  public getDisplayedColumn(): string[] {
+    return this.columnDefinitions
+      .filter(cd &#x3D;&gt; !this.isPhonePortrait || cd.showMobile)
+      .map(cd &#x3D;&gt; cd.def);
+  }
+
+  public getHeadline(): string {
+    switch (this.user?.asema) {
+      case &#x27;opettaja&#x27;:
+        return $localize&#x60;:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset&#x60;;
+        break;
+      case &#x27;admin&#x27;:
+        return $localize&#x60;:@@Kurssilla esitetyt kysymykset:Kurssilla esitetyt kysymykset&#x60;;
+        break;
+      case &#x27;opiskelija&#x27;:
+        return $localize&#x60;:@@Omat kysymykset:Omat kysymykset&#x60;;
+        break;
+      default:
+        return $localize&#x60;:@@Esitetyt kysymykset:Esitetyt kysymykset&#x60;
+    }
+  }
+
+  public hideArchived() {
+    this.isArchivedShown &#x3D; false;
+    window.sessionStorage.setItem(&#x27;SHOW_ARCHIVED&#x27;, &#x27;false&#x27;);
+    this.dataSourceArchived &#x3D; new MatTableDataSource();
+    this.archivedCount &#x3D; 0;
+  }
+
+  // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
+  public saveRedirectUrl(linkEnding?: string): void {
+    const link &#x3D; &#x27;/course/&#x27; + this.courseid + &#x27;/submit&#x27; + (linkEnding ?? &#x27;&#x27;);
+    console.log(&#x27;tallennettu URL: &#x27; + link);
+    window.localStorage.setItem(&#x27;REDIRECT_URL&#x27;, link);
+  }
+
+  private setBaseColumnDefinitions() {
+    this.columnDefinitions &#x3D; [
+      { def: &#x27;tila&#x27;, showMobile: true },
+      { def: &#x27;otsikko&#x27;, showMobile: true },
+      { def: &#x27;aloittajanNimi&#x27;, showMobile: false },
+      { def: &#x27;viimeisin&#x27;, showMobile: false }
+    ];
+  }
+
+  public showArchived() {
+    window.sessionStorage.setItem(&#x27;SHOW_ARCHIVED&#x27;, &#x27;true&#x27;);
+    this.isArchivedShown &#x3D; true;
+    this.fetchArchivedTickets()
+  }
+
+  private startLoading() {
+    this.isLoaded &#x3D; false;
+    this.store.startLoading();
+  }
+
+  private stopLoading() {
+    this.isLoaded &#x3D; true;
+    this.store.stopLoading();
+  }
+
+  // Hae tiketit tietyn ajan välein.
+  private startPollingTickets(POLLING_RATE_MIN: number) {
+    console.log(&#x60;Aloitetaan tikettien pollaus joka ${POLLING_RATE_MIN} minuutti.&#x60;);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC &#x3D; POLLING_RATE_MIN * 60;
+    this.fetchTicketsTimer$.subscribe(() &#x3D;&gt; {
+      this.fetchTickets(this.courseid!);
+      if (fetchStartTime) {
+        elapsedTime &#x3D; Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log(&#x27;Tikettien pollauksen viime kutsusta kulunut aikaa &#x27; +
+          &#x60;${elapsedTime} sekuntia.&#x60;);
+        if (elapsedTime !&#x3D;&#x3D; POLLING_RATE_SEC) {
+          console.log(&#x60;Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.&#x60;);
+        }
+      }
+      fetchStartTime &#x3D; Date.now();
+    });
+  }
+
+  // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
+  private trackMessages(): void {
+    this.trackMessages$.subscribe(response &#x3D;&gt; {
+        if (response &#x3D;&#x3D;&#x3D; &#x27;refresh&#x27;) {
+          console.log(&#x27;trackMessages: saatiin refresh pyyntö.&#x27;);
+          this.startLoading();
+          setTimeout(() &#x3D;&gt; this.stopLoading(), 800);
+          this.fetchTickets(this.courseid!);
+        }
+    });
+  }
+
+  private trackScreenSize(): void {
+    this.responsive.observe(Breakpoints.HandsetPortrait).subscribe(result &#x3D;&gt; {
+      if (result.matches) {
+        this.maxItemTitleLength &#x3D; 75;
+        this.isPhonePortrait &#x3D; true;
+      } else {
+        this.isPhonePortrait &#x3D; false;
+        this.maxItemTitleLength &#x3D; 100;
+      }
+    });
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;!-- Älä korvaa ngIf:llä tai sorting ei toimi. --&gt;
+&lt;div [ngStyle]&#x3D;&quot;{ &#x27;display&#x27;: &#x27;isLoaded&#x27; ? &#x27;block&#x27; : &#x27;none&#x27; }&quot;&gt;
+
+&lt;div class&#x3D;&quot;input-field-wrapper&quot;&gt;
+  &lt;h2 class&#x3D;&quot;theme-subheading table-header&quot; *ngIf&#x3D;&quot;headline.length &gt; 0&quot;&gt;
+    {{ headline }}
+  &lt;/h2&gt;
+
+  &lt;div class&#x3D;&quot;spacer&quot;&gt;&lt;/div&gt;
+
+  &lt;button aria-label&#x3D;&quot;Virkistä näkymä&quot;
+          class&#x3D;&quot;refresh-button&quot;
+          (click)&#x3D;&quot;fetchTickets(courseid!)&quot;
+          i18n-aria-label&#x3D;&quot;@@Virkistä näkymä&quot;
+          i18n-matTooltip&#x3D;&quot;@@Virkistä näkymä&quot;
+          mat-icon-button
+          matTooltip&#x3D;&quot;Virkistä näkymä&quot;
+          matTooltipPosition&#x3D;&quot;after&quot;
+          #tooltip&#x3D;&quot;matTooltip&quot;
+          &gt;
+    &lt;mat-icon&gt;refresh&lt;/mat-icon&gt;
+  &lt;/button&gt;
+
+  &lt;app-search-bar i18n&#x3D;&quot;@@Suodata kysymyksiä&quot;
+                  (searchResult)&#x3D;&quot;applyFilter($event)&quot;
+                  &gt;
+    Suodata kysymyksiä
+  &lt;/app-search-bar&gt;
+
+&lt;/div&gt;
+
+&lt;table  class&#x3D;&quot;theme-table mat-elevation-z1&quot;
+        [dataSource]&#x3D;&quot;dataSource&quot;
+        [hidden]&#x3D;&quot;dataSource.filteredData.length &#x3D;&#x3D;&#x3D; 0&quot;
+        matSort
+        matSortActive&#x3D;&quot;viimeisin&quot;
+        matSortDirection&#x3D;&quot;desc&quot;
+        mat-table
+        #sortQuestions&#x3D;&quot;matSort&quot;
+        &gt;
+
+  &lt;ng-container matColumnDef&#x3D;&quot;tila&quot;&gt;
+    &lt;th i18n-sortActionDescription&#x3D;&quot;@@Järjestä tilan mukaan&quot;
+        i18n&#x3D;&quot;@@Tila&quot;
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription&#x3D;&quot;Järjestä tilan mukaan&quot;
+        &gt;
+      Tila
+    &lt;/th&gt;
+    &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+      &lt;!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. --&gt;
+      &lt;a  aria-disabled&#x3D;&quot;true&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+          tabindex&#x3D;&quot;-1&quot;
+          &gt;
+        &lt;div class&#x3D;&quot;ticket-state-wrapper&quot;&gt;
+          &lt;div class&#x3D;&quot;icon-wrapper&quot;&gt;
+            &lt;img  alt&#x3D;&quot;&quot;
+                  class&#x3D;&quot;icon&quot;
+                  height&#x3D;&quot;100%&quot;
+                  src&#x3D;&quot;assets/icons/{{iconFile[element.tilaID]}}.svg&quot;
+                  width&#x3D;&quot;100%&quot;
+                  &gt;
+          &lt;/div&gt;
+          &lt;!--  Opiskelijalle tilan string on eri, mutta sama id,
+                joten älä käytä id:ä. --&gt;
+          &lt;div [style.font-weight]&#x3D;&quot;element.tila &#x3D;&#x3D;&#x3D; &#x27;1-Lukematon&#x27; ||
+              element.tila &#x3D;&#x3D;&#x3D; &#x27;1-Unread&#x27; ? 600 : 400&quot;&gt;
+              &lt;!-- Ensimmäiset 2 merkkiä ovat tilan numeroarvo ja viiva. --&gt;
+            {{ element.tila.substring(2) }}
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;ng-container matColumnDef&#x3D;&quot;otsikko&quot;&gt;
+    &lt;th *matHeaderCellDef
+        i18n-sortActionDescription&#x3D;&quot;@@Järjestä otsikon mukaan&quot;
+        i18n&#x3D;&quot;@@Otsikko&quot;
+        mat-sort-header
+        sortActionDescription&#x3D;&quot;Järjestä otsikon mukaan&quot;
+        mat-header-cell
+        &gt;
+      Otsikko
+    &lt;/th&gt;
+    &lt;!-- &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot; (clik)&#x3D;&quot;goTicketView(element.id)&quot;&gt; --&gt;
+    &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot; &gt;
+      &lt;a  class&#x3D;&quot;a-left-padding&quot;
+          [attr.data-testid]&#x3D;&quot;&#x27;table-title-a-&#x27; + element.id&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;&gt;
+          {{ (element.otsikko.length &gt; maxItemTitleLength)? (element.otsikko |
+          slice:0:maxItemTitleLength) + &#x27;...&#x27;:(element.otsikko) }}
+      &lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;ng-container matColumnDef&#x3D;&quot;aloittajanNimi&quot;&gt;
+    &lt;th class&#x3D;&quot;align-right&quot;
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription&#x3D;&quot;Järjestä lähettäjän mukaan&quot;
+        i18n-sortActionDescription&#x3D;&quot;@@Järjestä lähettäjän mukaan&quot;
+        i18n&#x3D;&quot;@@Lähettäjä&quot;&gt;
+      Lähettäjä
+    &lt;/th&gt;
+    &lt;td class&#x3D;&quot;cell-align-right&quot; mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+      &lt;a  aria-disabled&#x3D;&quot;true&quot; disabled
+          class&#x3D;&quot;cell-align-right&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+          tabindex&#x3D;&quot;-1&quot;
+          &gt;
+        {{ element.aloittajanNimi }}
+      &lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;ng-container matColumnDef&#x3D;&quot;viimeisin&quot;&gt;
+    &lt;th class&#x3D;&quot;align-right no-left-padding&quot;
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        sortActionDescription&#x3D;&quot;Järjestä muokatun päivämäärän mukaan&quot;
+        i18n-sortActionDescription&#x3D;&quot;@@Järjestä muokatun mukaan&quot;
+        i18n&#x3D;&quot;@@Muokattu&quot;
+        &gt;
+      Muokattu
+    &lt;/th&gt;
+    &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot; class&#x3D;&quot;cell-align-right&quot;&gt;
+      &lt;a  aria-disabled&#x3D;&quot;true&quot;
+          class&#x3D;&quot;cell-align-right&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+          tabindex&#x3D;&quot;-1&quot;
+          &gt;
+          {{ element.viimeisinStr }}
+&lt;!--         {{ element?.viimeisinTanaan &#x3D;&#x3D;&#x3D; true ? &#x27;Tänään&#x27; : (element.viimeisin |
+            date: element.viimeisin.getFullYear() &#x3D;&#x3D;&#x3D; currentYear ?
+            &#x27;d.M&#x27; : &#x27;shortDate&#x27; )}} --&gt;
+      &lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;ng-container matColumnDef&#x3D;&quot;liite&quot;&gt;
+    &lt;th class&#x3D;&quot;align-right no-left-padding&quot;
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        &gt;
+      &amp;nbsp;
+    &lt;/th&gt;
+    &lt;td class&#x3D;&quot;attachment-cell&quot; mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+      &lt;mat-icon aria-label&#x3D;&quot;Liite&quot;
+                i18n-aria-label&#x3D;&quot;@@liite&quot;
+                i18n-matTooltip&#x3D;&quot;@@Sisältää liitetiedostoja&quot;
+                matTooltip&#x3D;&quot;Sisältää liitetiedostoja&quot;
+                [matTooltipShowDelay]&#x3D;&quot;600&quot;
+                *ngIf&#x3D;&quot;element.liite&quot;
+                &gt;
+        attach_file
+      &lt;/mat-icon&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;!--  ***** Rivit **** --&gt;
+
+  &lt;tr mat-header-row *matHeaderRowDef&#x3D;&quot;getDisplayedColumn()&quot;&gt;&lt;/tr&gt;
+
+  &lt;tr mat-row *matRowDef&#x3D;&quot;let row; columns: getDisplayedColumn()&quot;&gt;
+    &lt;!-- &lt;a [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + row.id&quot;&gt;&lt;/a&gt; --&gt;
+  &lt;/tr&gt;
+
+&lt;/table&gt;
+
+&lt;p  class&#x3D;&quot;no-items-message&quot; i18n&#x3D;&quot;@@Ei tuloksia&quot;
+    *ngIf&#x3D;&quot;dataSource.filteredData.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; numberOfQuestions &gt; 0&quot;&gt;
+  Suodattimella ei löytynyt tuloksia.
+&lt;/p&gt;
+
+  &lt;div  class&#x3D;&quot;no-items-box&quot;
+        mat-elevation-z1
+        *ngIf&#x3D;&quot;numberOfQuestions &#x3D;&#x3D;&#x3D; 0 &amp;&amp; error &#x3D;&#x3D;&#x3D; null&quot;
+        &gt;
+    &lt;p i18n&#x3D;&quot;@@Ei yhtään kysymystä esitetty&quot;
+      *ngIf&#x3D;&quot;user?.asema &#x3D;&#x3D;&#x3D; &#x27;opettaja&#x27; || user?.asema &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;;
+          else noTicketsStudent&quot; &gt;
+      Yhtään kysymystä ei ole esitetty.
+    &lt;/p&gt;
+    &lt;ng-template #noTicketsStudent&gt;
+      &lt;p i18n&#x3D;&quot;@@Et ole lähettänyt yhtään kysymystä.&quot;&gt;
+        Et ole lähettänyt yhtään kysymystä.
+      &lt;/p&gt;
+    &lt;/ng-template&gt;
+  &lt;/div&gt;
+
+&lt;!----------------- Virheilm. ja napit ----------------------------------------&gt;
+
+  &lt;app-error  buttonText&#x3D;&quot;{{ error.buttonText }}&quot;
+              i18n-title&#x3D;&quot;{{ error.title }}&quot;
+              message&#x3D;&quot;{{ error.message }}&quot;
+              *ngIf&#x3D;&quot;isLoaded &amp;&amp; error&quot;
+              #ticketError
+              title&#x3D;&quot;{{ error.title }}&quot;
+              &gt;
+  &lt;/app-error&gt;
+
+  &lt;div  class&#x3D;&quot;buttons-wrapper theme-actions&quot;
+      [ngStyle]&#x3D;&quot;numberOfQuestions &#x3D;&#x3D;&#x3D; 0 ?
+          {&#x27;justify-content&#x27;: &#x27;flex-start&#x27;} : {&#x27;justify-content&#x27;: &#x27;flex-end&#x27;}&quot;
+      &gt;
+
+  &lt;ng-container *ngIf&#x3D;&quot;user?.asema &#x3D;&#x3D;&#x3D; &#x27;opettaja&#x27; || user?.asema &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;&quot;&gt;
+
+    &lt;button class&#x3D;&quot;button&quot;
+            (click)&#x3D;&quot;showArchived()&quot;
+            i18n&#x3D;&quot;@@Näytä arkistoidut&quot;
+            mat-raised-button
+            *ngIf&#x3D;&quot;!isArchivedShown else hideArchivedBtn&quot;
+            &gt;
+        Näytä ratkaistut
+    &lt;/button&gt;
+
+    &lt;ng-template #hideArchivedBtn&gt;
+      &lt;button class&#x3D;&quot;button&quot;
+              (click)&#x3D;&quot;hideArchived()&quot;
+              i18n&#x3D;&quot;@@Piilota arkistoidut&quot;
+              mat-raised-button
+              &gt;
+          Piilota ratkaistut
+      &lt;/button&gt;
+    &lt;/ng-template&gt;
+
+  &lt;/ng-container&gt;
+
+  &lt;div class&#x3D;&quot;spacer&quot;&gt;&lt;/div&gt;
+
+  &lt;button class&#x3D;&quot;button&quot;
+          (click)&#x3D;&quot;saveRedirectUrl()&quot;
+          [color]&#x3D;&quot;user?.asema &#x3D;&#x3D;&#x3D; &#x27;opiskelija&#x27; ? &#x27;primary&#x27; : &#x27;&#x27;&quot;
+          mat-raised-button
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + this.courseid + &#x27;/submit&#x27;&quot;
+          target&#x3D;&quot;_blank&quot;
+          &gt;
+    &lt;a  i18n&#x3D;&quot;@@Kysy opettajilta&quot;
+        [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + this.courseid + &#x27;/submit&#x27;&quot;
+        &gt;
+      Kysy opettajilta
+    &lt;/a&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+
+&lt;!-------------- Ratkaistut ---------------------------------------------------&gt;
+
+&lt;!-- Älä korvaa ngIf:llä tai tableen, koska silloin ei sorting ei toimi. --&gt;
+&lt;div [ngStyle]&#x3D;&quot;{ &#x27;display&#x27;: user?.asema &#x3D;&#x3D;&#x3D; &#x27;opettaja&#x27; ? &#x27;block&#x27; : &#x27;none&#x27; }&quot;&gt;
+
+&lt;h2 class&#x3D;&quot;theme-subheading&quot; i18n&#x3D;&quot;@@Ratkaistut kysymykset&quot; *ngIf&#x3D;&quot;isArchivedShown&quot;&gt;
+  Ratkaistut kysymykset
+&lt;/h2&gt;
+
+&lt;table  class&#x3D;&quot;theme-table mat-elevation-z1&quot;
+        [dataSource]&#x3D;&quot;dataSourceArchived&quot;
+        [hidden]&#x3D;&quot;dataSourceArchived.filteredData.length &#x3D;&#x3D;&#x3D; 0&quot;
+        matSort
+        matSortActive&#x3D;&quot;viimeisin&quot;
+        matSortDirection&#x3D;&quot;desc&quot;
+        mat-table
+        [ngStyle]&#x3D;&quot;{ &#x27;display&#x27;: archivedCount &gt; 0 ? &#x27;table&#x27; : &#x27;none&#x27; }&quot;
+        #sortArchived&#x3D;&quot;matSort&quot;
+        &gt;
+
+&lt;ng-container matColumnDef&#x3D;&quot;tila&quot;&gt;
+  &lt;th i18n-sortActionDescription&#x3D;&quot;@@Järjestä tilan mukaan&quot;
+      i18n&#x3D;&quot;@@Tila&quot;
+      mat-sort-header
+      *matHeaderCellDef
+      mat-header-cell
+      sortActionDescription&#x3D;&quot;Järjestä tilan mukaan&quot;
+      &gt;
+    Tila
+  &lt;/th&gt;
+  &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+    &lt;!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. --&gt;
+    &lt;a aria-disabled&#x3D;&quot;true&quot;
+      [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+      tabindex&#x3D;&quot;-1&quot;
+      &gt;
+      &lt;div class&#x3D;&quot;ticket-state-wrapper&quot;&gt;
+        &lt;div class&#x3D;&quot;icon-wrapper&quot;&gt;
+          &lt;img alt&#x3D;&quot;&quot;
+              class&#x3D;&quot;icon&quot;
+              height&#x3D;&quot;100%&quot;
+              src&#x3D;&quot;assets/icons/{{iconFile[element.tilaID]}}.svg&quot;
+              width&#x3D;&quot;100%&quot;
+              &gt;
+        &lt;/div&gt;
+        &lt;div&gt;{{ element.tila.substring(2) }}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/a&gt;
+  &lt;/td&gt;
+&lt;/ng-container&gt;
+
+&lt;ng-container matColumnDef&#x3D;&quot;otsikko&quot;&gt;
+  &lt;th *matHeaderCellDef
+      i18n-sortActionDescription&#x3D;&quot;@@Järjestä otsikon mukaan&quot;
+      i18n&#x3D;&quot;@@Otsikko&quot;
+      mat-header-cell
+      mat-sort-header
+      sortActionDescription&#x3D;&quot;Järjestä otsikon mukaan&quot;
+      &gt;
+    Otsikko
+  &lt;/th&gt;
+  &lt;!-- &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot; (clik)&#x3D;&quot;goTicketView(element.id)&quot;&gt; --&gt;
+  &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot; &gt;
+    &lt;a  class&#x3D;&quot;a-left-padding&quot;
+        [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+        &gt;
+          {{ (element.otsikko.length &gt; maxItemTitleLength)? (element.otsikko |
+              slice:0:maxItemTitleLength) + &#x27;...&#x27;:(element.otsikko) }}
+    &lt;/a&gt;
+  &lt;/td&gt;
+&lt;/ng-container&gt;
+
+&lt;ng-container matColumnDef&#x3D;&quot;aloittajanNimi&quot;&gt;
+  &lt;th class&#x3D;&quot;align-right&quot;
+      i18n&#x3D;&quot;@@Lähettäjä&quot;
+      i18n-sortActionDescription&#x3D;&quot;@@Järjestä lähettäjän mukaan&quot;
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription&#x3D;&quot;Järjestä lähettäjän mukaan&quot;
+      &gt;
+    Lähettäjä
+  &lt;/th&gt;
+  &lt;td class&#x3D;&quot;cell-align-right&quot; mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+    &lt;a  aria-disabled&#x3D;&quot;true&quot;
+        class&#x3D;&quot;cell-align-right&quot;
+        disabled
+        [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+        tabindex&#x3D;&quot;-1&quot;
+        &gt;
+      {{ element.aloittajanNimi }}
+    &lt;/a&gt;
+  &lt;/td&gt;
+&lt;/ng-container&gt;
+
+&lt;ng-container matColumnDef&#x3D;&quot;viimeisin&quot;&gt;
+&lt;th class&#x3D;&quot;align-right&quot;
+    i18n-sortActionDescription&#x3D;&quot;@@Järjestä muokatun mukaan&quot;
+    i18n&#x3D;&quot;@@Muokattu&quot;
+    mat-header-cell
+    *matHeaderCellDef
+    mat-sort-header
+    sortActionDescription&#x3D;&quot;Järjestä muokkauksen päivämäärän mukaan&quot;
+    &gt;
+  Muokattu
+&lt;/th&gt;
+&lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot; class&#x3D;&quot;cell-align-right&quot;&gt;
+  &lt;a  aria-disabled&#x3D;&quot;true&quot;
+      class&#x3D;&quot;cell-align-right&quot;
+      [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + element.id&quot;
+      tabindex&#x3D;&quot;-1&quot;
+      &gt;
+    {{ element.viimeisinStr }}
+  &lt;/a&gt;
+&lt;/td&gt;
+&lt;/ng-container&gt;
+
+&lt;ng-container matColumnDef&#x3D;&quot;liite&quot;&gt;
+  &lt;th class&#x3D;&quot;align-right no-left-padding&quot;
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      &gt;
+  &lt;td class&#x3D;&quot;attachment-cell&quot;mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+    &lt;mat-icon aria-label&#x3D;&quot;Liite&quot;
+              i18n-aria-label&#x3D;&quot;@@liite&quot;
+              i18n-matTooltip&#x3D;&quot;@@Sisältää liitetiedostoja&quot;
+              matTooltip&#x3D;&quot;Sisältää liitetiedostoja&quot;
+              [matTooltipShowDelay]&#x3D;&quot;600&quot;
+              *ngIf&#x3D;&quot;element.liite&quot;
+              &gt;
+      attach_file
+    &lt;/mat-icon&gt;
+  &lt;/td&gt;
+&lt;/ng-container&gt;
+
+&lt;!--  ***** Rivit **** --&gt;
+
+&lt;tr mat-header-row *matHeaderRowDef&#x3D;&quot;getDisplayedColumn()&quot;&gt;&lt;/tr&gt;
+
+&lt;tr mat-row *matRowDef&#x3D;&quot;let row; columns: getDisplayedColumn()&quot;&gt;
+&lt;!-- &lt;a [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + row.id&quot;&gt;&lt;/a&gt; --&gt;
+&lt;/tr&gt;
+
+&lt;/table&gt;
+
+&lt;p  class&#x3D;&quot;no-items-message&quot; i18n&#x3D;&quot;@@Ei tuloksia&quot;
+    *ngIf&#x3D;&quot;dataSourceArchived.filteredData.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; archivedCount&quot;&gt;
+  Suodattimella ei löytynyt tuloksia.
+&lt;/p&gt;
+
+&lt;div  class&#x3D;&quot;no-items-box&quot;
+      mat-elevation-z1
+      *ngIf&#x3D;&quot;isArchivedShown &amp;&amp; archivedCount &#x3D;&#x3D;&#x3D; 0&quot;
+      &gt;
+  &lt;p  i18n&#x3D;&quot;@@Ei arkistoituja kysymyksiä&quot;&gt;
+    Ei ratkaistuja kysymyksiä.
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;!---------------------------------------------------------------------------&gt;
+
+
+&lt;!-- Jos halutaan paginator --&gt;
+&lt;!-- &lt;mat-paginator [pageSizeOptions]&#x3D;&quot;[10, 15, 20]&quot; [hidden]&#x3D;&quot;numberOfQuestions &lt; 10&quot;
+        #paginatorQuestions showFirstLastButtons
+    aria-label&#x3D;&quot;Valitse kysymysten sivu&quot;&gt;&lt;/mat-paginator&gt; --&gt;
+
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>../listing.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &#x27;/src/variables.scss&#x27;;
+
+.success-message {
+  margin-top: 1.5rem;
+  margin-bottom: -0.5rem;
+}
+
+/* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
+   kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
+section,
+app-error {
+  width: 103%;
+}
+
+section,
+app-error,
+.theme-actions {
+  margin-left: -15px;
+}
+
+.theme-actions {
+  row-gap: 1rem;
+}
+
+.feedback {
+  margin-top: 2rem;
+  margin-left: 0;
+
+  h2 {
+    margin-left: -1rem
+  }
+}
+
+// Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
+h2 {
+  padding-left: 20px;
+  margin-right: 0.5em;
+}
+
+.mdc-card__actions {
+  min-height: 30px;
+}
+
+app-search-bar {
+  margin-left: auto;
+}
+
+// ----------------- Table -----------------------------------------------------
+
+a {
+  color: unset;
+  display: block;
+  text-decoration: none;
+  width: 98%;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+}
+
+.a-left-padding {
+  padding-left: 16px;
+}
+
+.mat-column-viimeisin, .mat-column-aikaleima {
+  text-align: right;
+  max-width: 7rem;
+}
+
+.no-left-padding {
+  padding-left: -15px;
+}
+
+.attachment-cell {
+  text-align: center;
+}
+
+/* Jotta menee on samassa tasossa headerien kanssa, joilla sorting-nuoli ottaa
+   oikealta puolelta tilaa. */
+.cell-align-right {
+  padding-right: 2.1rem;
+}
+
+// :host ei toimi, jos on styles.scss.
+:host ::ng-deep .align-right&gt;.mat-sort-header-container {
+  justify-content: flex-end;
+}
+
+.mat-mdc-row:hover {
+  background-color: #f2f2f2 !important
+}
+
+.no-items-message {
+  margin-left: 1.2rem;
+}
+
+:host ::ng-deep .mat-sort-header-content {
+  color: #595959;
+}
+
+:host ::ng-deep .mat-sort-header-sorted&gt;.mat-sort-header-content {
+  color: #3F55A6;
+  // color: #5379FC;
+}
+
+// -----------------------------------------------------------------------------
+
+.no-items-box {
+  border: solid 2px #D3D3D3;
+  border-radius: 2px;
+  display: block;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.buttons-wrapper {
+  justify-content: flex-end;
+}
+
+button {
+  margin-left: 1rem;
+  margin-right: 0;
+  white-space: nowrap;
+}
+
+.input-field-wrapper {
+  align-items: flex-end;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.mat-mdc-form-field {
+  width: 97%;
+}
+
+.submit-faq-btn {
+  a {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-right: 1em;
+    padding-left: 1em;
+  }
+}
+
+@media (min-width: $XSmall) {
+
+  mat-card {
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
+  }
+
+  // Oikeimman sarakkeen sorting-nuoli ottaa tilaa,
+  // niin komsenoidaan sitä.
+  tr&gt; :first-child {
+    padding-left: 1.5em;
+  }
+
+  mat-row&gt; :last-child {
+    padding-right: 50px;
+  }
+
+}
+
+@media (max-width: $XSmall) {
+  section,
+  app-error,
+  h2 {
+    margin-left: 0;
+  }
+
+  .table-header {
+    padding-left: 0;
+  }
+}
+</code></pre>
+                <p class="comment">
+                    <code>./ticket-list.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.invisible {
+  position: absolute;
+  left: -9999px;
+  color: transparent;
+}
+
+.mat-column-aloittajanNimi,
+.mat-column-aikaleima {
+  text-align: right;
+}
+
+.mat-column-aloittajanNimi {
+  min-width: 11em;
+}
+
+.refresh-button {
+  margin: 0 0.7rem 0.9rem auto;
+}
+
+.ticket-state-wrapper {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  width: 1.8rem;
+}
+
+.attachment-cell {
+  padding-right: 0.7rem;
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- Älä korvaa ngIf:llä tai sorting ei toimi. --><div [ngStyle]="{ \'display\': \'isLoaded\' ? \'block\' : \'none\' }"><div class="input-field-wrapper">  <h2 class="theme-subheading table-header" *ngIf="headline.length > 0">    {{ headline }}  </h2>  <div class="spacer"></div>  <button aria-label="Virkistä näkymä"          class="refresh-button"          (click)="fetchTickets(courseid!)"          i18n-aria-label="@@Virkistä näkymä"          i18n-matTooltip="@@Virkistä näkymä"          mat-icon-button          matTooltip="Virkistä näkymä"          matTooltipPosition="after"          #tooltip="matTooltip"          >    <mat-icon>refresh</mat-icon>  </button>  <app-search-bar i18n="@@Suodata kysymyksiä"                  (searchResult)="applyFilter($event)"                  >    Suodata kysymyksiä  </app-search-bar></div><table  class="theme-table mat-elevation-z1"        [dataSource]="dataSource"        [hidden]="dataSource.filteredData.length === 0"        matSort        matSortActive="viimeisin"        matSortDirection="desc"        mat-table        #sortQuestions="matSort"        >  <ng-container matColumnDef="tila">    <th i18n-sortActionDescription="@@Järjestä tilan mukaan"        i18n="@@Tila"        mat-header-cell        *matHeaderCellDef        mat-sort-header        sortActionDescription="Järjestä tilan mukaan"        >      Tila    </th>    <td mat-cell *matCellDef="let element">      <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->      <a  aria-disabled="true"          [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"          tabindex="-1"          >        <div class="ticket-state-wrapper">          <div class="icon-wrapper">            <img  alt=""                  class="icon"                  height="100%"                  src="assets/icons/{{iconFile[element.tilaID]}}.svg"                  width="100%"                  >          </div>          <!--  Opiskelijalle tilan string on eri, mutta sama id,                joten älä käytä id:ä. -->          <div [style.font-weight]="element.tila === \'1-Lukematon\' ||              element.tila === \'1-Unread\' ? 600 : 400">              <!-- Ensimmäiset 2 merkkiä ovat tilan numeroarvo ja viiva. -->            {{ element.tila.substring(2) }}          </div>        </div>      </a>    </td>  </ng-container>  <ng-container matColumnDef="otsikko">    <th *matHeaderCellDef        i18n-sortActionDescription="@@Järjestä otsikon mukaan"        i18n="@@Otsikko"        mat-sort-header        sortActionDescription="Järjestä otsikon mukaan"        mat-header-cell        >      Otsikko    </th>    <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->    <td mat-cell *matCellDef="let element" >      <a  class="a-left-padding"          [attr.data-testid]="\'table-title-a-\' + element.id"          [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id">          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko |          slice:0:maxItemTitleLength) + \'...\':(element.otsikko) }}      </a>    </td>  </ng-container>  <ng-container matColumnDef="aloittajanNimi">    <th class="align-right"        mat-header-cell        *matHeaderCellDef        mat-sort-header        sortActionDescription="Järjestä lähettäjän mukaan"        i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"        i18n="@@Lähettäjä">      Lähettäjä    </th>    <td class="cell-align-right" mat-cell *matCellDef="let element">      <a  aria-disabled="true" disabled          class="cell-align-right"          [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"          tabindex="-1"          >        {{ element.aloittajanNimi }}      </a>    </td>  </ng-container>  <ng-container matColumnDef="viimeisin">    <th class="align-right no-left-padding"        mat-header-cell        *matHeaderCellDef        mat-sort-header        sortActionDescription="Järjestä muokatun päivämäärän mukaan"        i18n-sortActionDescription="@@Järjestä muokatun mukaan"        i18n="@@Muokattu"        >      Muokattu    </th>    <td mat-cell *matCellDef="let element" class="cell-align-right">      <a  aria-disabled="true"          class="cell-align-right"          [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"          tabindex="-1"          >          {{ element.viimeisinStr }}<!--         {{ element?.viimeisinTanaan === true ? \'Tänään\' : (element.viimeisin |            date: element.viimeisin.getFullYear() === currentYear ?            \'d.M\' : \'shortDate\' )}} -->      </a>    </td>  </ng-container>  <ng-container matColumnDef="liite">    <th class="align-right no-left-padding"        mat-header-cell        *matHeaderCellDef        mat-sort-header        >      &nbsp;    </th>    <td class="attachment-cell" mat-cell *matCellDef="let element">      <mat-icon aria-label="Liite"                i18n-aria-label="@@liite"                i18n-matTooltip="@@Sisältää liitetiedostoja"                matTooltip="Sisältää liitetiedostoja"                [matTooltipShowDelay]="600"                *ngIf="element.liite"                >        attach_file      </mat-icon>    </td>  </ng-container>  <!--  ***** Rivit **** -->  <tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr>  <tr mat-row *matRowDef="let row; columns: getDisplayedColumn()">    <!-- <a [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + row.id"></a> -->  </tr></table><p  class="no-items-message" i18n="@@Ei tuloksia"    *ngIf="dataSource.filteredData.length === 0 && numberOfQuestions > 0">  Suodattimella ei löytynyt tuloksia.</p>  <div  class="no-items-box"        mat-elevation-z1        *ngIf="numberOfQuestions === 0 && error === null"        >    <p i18n="@@Ei yhtään kysymystä esitetty"      *ngIf="user?.asema === \'opettaja\' || user?.asema === \'admin\';          else noTicketsStudent" >      Yhtään kysymystä ei ole esitetty.    </p>    <ng-template #noTicketsStudent>      <p i18n="@@Et ole lähettänyt yhtään kysymystä.">        Et ole lähettänyt yhtään kysymystä.      </p>    </ng-template>  </div><!----------------- Virheilm. ja napit ---------------------------------------->  <app-error  buttonText="{{ error.buttonText }}"              i18n-title="{{ error.title }}"              message="{{ error.message }}"              *ngIf="isLoaded && error"              #ticketError              title="{{ error.title }}"              >  </app-error>  <div  class="buttons-wrapper theme-actions"      [ngStyle]="numberOfQuestions === 0 ?          {\'justify-content\': \'flex-start\'} : {\'justify-content\': \'flex-end\'}"      >  <ng-container *ngIf="user?.asema === \'opettaja\' || user?.asema === \'admin\'">    <button class="button"            (click)="showArchived()"            i18n="@@Näytä arkistoidut"            mat-raised-button            *ngIf="!isArchivedShown else hideArchivedBtn"            >        Näytä ratkaistut    </button>    <ng-template #hideArchivedBtn>      <button class="button"              (click)="hideArchived()"              i18n="@@Piilota arkistoidut"              mat-raised-button              >          Piilota ratkaistut      </button>    </ng-template>  </ng-container>  <div class="spacer"></div>  <button class="button"          (click)="saveRedirectUrl()"          [color]="user?.asema === \'opiskelija\' ? \'primary\' : \'\'"          mat-raised-button          [routerLink]="\'/course/\' + this.courseid + \'/submit\'"          target="_blank"          >    <a  i18n="@@Kysy opettajilta"        [routerLink]="\'/course/\' + this.courseid + \'/submit\'"        >      Kysy opettajilta    </a>  </button></div><!-------------- Ratkaistut ---------------------------------------------------><!-- Älä korvaa ngIf:llä tai tableen, koska silloin ei sorting ei toimi. --><div [ngStyle]="{ \'display\': user?.asema === \'opettaja\' ? \'block\' : \'none\' }"><h2 class="theme-subheading" i18n="@@Ratkaistut kysymykset" *ngIf="isArchivedShown">  Ratkaistut kysymykset</h2><table  class="theme-table mat-elevation-z1"        [dataSource]="dataSourceArchived"        [hidden]="dataSourceArchived.filteredData.length === 0"        matSort        matSortActive="viimeisin"        matSortDirection="desc"        mat-table        [ngStyle]="{ \'display\': archivedCount > 0 ? \'table\' : \'none\' }"        #sortArchived="matSort"        ><ng-container matColumnDef="tila">  <th i18n-sortActionDescription="@@Järjestä tilan mukaan"      i18n="@@Tila"      mat-sort-header      *matHeaderCellDef      mat-header-cell      sortActionDescription="Järjestä tilan mukaan"      >    Tila  </th>  <td mat-cell *matCellDef="let element">    <!-- Muut kuin otsikko-kentässä olevat linkit eivät ole ARIA-käytössä. -->    <a aria-disabled="true"      [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"      tabindex="-1"      >      <div class="ticket-state-wrapper">        <div class="icon-wrapper">          <img alt=""              class="icon"              height="100%"              src="assets/icons/{{iconFile[element.tilaID]}}.svg"              width="100%"              >        </div>        <div>{{ element.tila.substring(2) }}</div>      </div>    </a>  </td></ng-container><ng-container matColumnDef="otsikko">  <th *matHeaderCellDef      i18n-sortActionDescription="@@Järjestä otsikon mukaan"      i18n="@@Otsikko"      mat-header-cell      mat-sort-header      sortActionDescription="Järjestä otsikon mukaan"      >    Otsikko  </th>  <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->  <td mat-cell *matCellDef="let element" >    <a  class="a-left-padding"        [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"        >          {{ (element.otsikko.length > maxItemTitleLength)? (element.otsikko |              slice:0:maxItemTitleLength) + \'...\':(element.otsikko) }}    </a>  </td></ng-container><ng-container matColumnDef="aloittajanNimi">  <th class="align-right"      i18n="@@Lähettäjä"      i18n-sortActionDescription="@@Järjestä lähettäjän mukaan"      mat-header-cell      *matHeaderCellDef      mat-sort-header      sortActionDescription="Järjestä lähettäjän mukaan"      >    Lähettäjä  </th>  <td class="cell-align-right" mat-cell *matCellDef="let element">    <a  aria-disabled="true"        class="cell-align-right"        disabled        [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"        tabindex="-1"        >      {{ element.aloittajanNimi }}    </a>  </td></ng-container><ng-container matColumnDef="viimeisin"><th class="align-right"    i18n-sortActionDescription="@@Järjestä muokatun mukaan"    i18n="@@Muokattu"    mat-header-cell    *matHeaderCellDef    mat-sort-header    sortActionDescription="Järjestä muokkauksen päivämäärän mukaan"    >  Muokattu</th><td mat-cell *matCellDef="let element" class="cell-align-right">  <a  aria-disabled="true"      class="cell-align-right"      [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + element.id"      tabindex="-1"      >    {{ element.viimeisinStr }}  </a></td></ng-container><ng-container matColumnDef="liite">  <th class="align-right no-left-padding"      mat-header-cell      *matHeaderCellDef      mat-sort-header      >  <td class="attachment-cell"mat-cell *matCellDef="let element">    <mat-icon aria-label="Liite"              i18n-aria-label="@@liite"              i18n-matTooltip="@@Sisältää liitetiedostoja"              matTooltip="Sisältää liitetiedostoja"              [matTooltipShowDelay]="600"              *ngIf="element.liite"              >      attach_file    </mat-icon>  </td></ng-container><!--  ***** Rivit **** --><tr mat-header-row *matHeaderRowDef="getDisplayedColumn()"></tr><tr mat-row *matRowDef="let row; columns: getDisplayedColumn()"><!-- <a [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + row.id"></a> --></tr></table><p  class="no-items-message" i18n="@@Ei tuloksia"    *ngIf="dataSourceArchived.filteredData.length === 0 && archivedCount">  Suodattimella ei löytynyt tuloksia.</p><div  class="no-items-box"      mat-elevation-z1      *ngIf="isArchivedShown && archivedCount === 0"      >  <p  i18n="@@Ei arkistoituja kysymyksiä">    Ei ratkaistuja kysymyksiä.  </p></div></div><!---------------------------------------------------------------------------><!-- Jos halutaan paginator --><!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" [hidden]="numberOfQuestions < 10"        #paginatorQuestions showFirstLastButtons    aria-label="Valitse kysymysten sivu"></mat-paginator> --></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BeginningButtonComponent', 'selector': 'app-beginning-button'},{'name': 'CommentComponent', 'selector': 'app-comment'},{'name': 'DataConsentComponent', 'selector': ''},{'name': 'EditAttachmentsComponent', 'selector': 'app-edit-attachments'},{'name': 'EditFieldComponent', 'selector': ''},{'name': 'EditorComponent', 'selector': 'app-editor'},{'name': 'ErrorComponent', 'selector': 'app-error'},{'name': 'FaqViewComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeadlineComponent', 'selector': 'app-headline'},{'name': 'HomeComponent', 'selector': ''},{'name': 'JoinComponent', 'selector': ''},{'name': 'ListingComponent', 'selector': 'app-listing'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MenuLinkComponent', 'selector': 'app-menu-link'},{'name': 'MenuSrcComponent', 'selector': 'app-menu-src'},{'name': 'MessageComponent', 'selector': 'app-message'},{'name': 'NoDataConsentComponent', 'selector': ''},{'name': 'NoPrivilegesComponent', 'selector': ''},{'name': 'PageNotFoundComponent', 'selector': ''},{'name': 'PrivacyModalComponent', 'selector': 'app-privacy-modal'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RefreshDialogComponent', 'selector': 'app-refresh-dialog'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'SearchBarComponent', 'selector': 'app-search-bar'},{'name': 'SenderInfoComponent', 'selector': 'app-sender-info'},{'name': 'SettingsComponent', 'selector': ''},{'name': 'SubmitFaqComponent', 'selector': 'app-submit-faq'},{'name': 'SubmitTicketComponent', 'selector': 'app-submit-ticket'},{'name': 'SuccessComponent', 'selector': 'app-success'},{'name': 'TicketListComponent', 'selector': 'app-ticket-list'},{'name': 'TicketViewComponent', 'selector': 'app-ticket-view'},{'name': 'ViewAttachmentsComponent', 'selector': 'app-view-attachments'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'TicketListComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'TicketListComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,3198 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>tikettisysteemi documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">tikettisysteemi documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ListingComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/ticket/listing/listing.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
+Ratkaistut, ovat tämän näkymän child componentissa TicketListComponent.</p>
+
+    </p>
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>AfterViewInit</code>
+                <code>OnDestroy</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-listing</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./listing.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./listing.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#columnDefinitions" >columnDefinitions</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#dataSource" >dataSource</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#error" >error</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#errorFromComponent" >errorFromComponent</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#fetchFAQsTimer$" >fetchFAQsTimer$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isInIframe" >isInIframe</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isLoaded" >isLoaded</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isLoggedIn$" >isLoggedIn$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isParticipant$" >isParticipant$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isPhonePortrait" >isPhonePortrait</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#isPolling" >isPolling</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#isTicketsLoaded" >isTicketsLoaded</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#loggedIn$" >loggedIn$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#maxItemTitleLength" >maxItemTitleLength</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#noDataConsent" >noDataConsent</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#numberOfFAQ" >numberOfFAQ</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#onScroll" >onScroll</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Readonly</span>
+                                <a href="#POLLING_RATE_MIN" >POLLING_RATE_MIN</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#screenSize" >screenSize</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#scrollPosition" >scrollPosition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#sort" >sort</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#strings" >strings</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#successMessage" >successMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#ticketList" >ticketList</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#unsubscribe$" >unsubscribe$</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#url" >url</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#user$" >user$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#applyFilter" >applyFilter</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkRouterData" >checkRouterData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                    <span class="modifier">Static</span>
+                                <a href="#customFilterPredicate" >customFilterPredicate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#errorClickEvent" >errorClickEvent</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#fetchFAQ" >fetchFAQ</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#getDisplayedColumnFAQ" >getDisplayedColumnFAQ</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#GoToLogin" >GoToLogin</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#newTicketMessage" >newTicketMessage</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy" >ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#restorePosition" >restorePosition</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#saveRedirectUrl" >saveRedirectUrl</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#setError" >setError</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#showConsentPopup" >showConsentPopup</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#startPollingFAQ" >startPollingFAQ</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackLoggedStatus" >trackLoggedStatus</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackMessages" >trackMessages</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackScreenSize" >trackScreenSize</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#courseid" >courseid</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>, dialog: MatDialog, responsive: BreakpointObserver, store: <a href="../injectables/StoreService.html" target="_self">StoreService</a>, ticket: <a href="../injectables/TicketService.html" target="_self">TicketService</a>, title: Title)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="102" class="link-to-prism">src/app/ticket/listing/listing.component.ts:102</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>dialog</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatDialog</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>responsive</td>
+                                                  
+                                                        <td>
+                                                                    <code>BreakpointObserver</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>store</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StoreService.html" target="_self" >StoreService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>ticket</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TicketService.html" target="_self" >TicketService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>title</td>
+                                                  
+                                                        <td>
+                                                                    <code>Title</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="courseid"></a>
+                        <b>courseid</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/ticket/listing/listing.component.ts:74</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyFilter"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>applyFilter</b></span>
+                        <a href="#applyFilter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyFilter(filterValue: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="153"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:153</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>filterValue</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkRouterData"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>checkRouterData</b></span>
+                        <a href="#checkRouterData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkRouterData()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="168"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:168</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="customFilterPredicate"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span class="modifier">Static</span>
+                        <span ><b>customFilterPredicate</b></span>
+                        <a href="#customFilterPredicate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>customFilterPredicate(data: <a href="../interfaces/UKK.html" target="_self">UKK</a>, filter: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="158"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:158</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>data</td>
+                                    <td>
+                                                <code><a href="../interfaces/UKK.html" target="_self" >UKK</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>filter</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorClickEvent"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>errorClickEvent</b></span>
+                        <a href="#errorClickEvent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>errorClickEvent(button: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="179"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:179</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>button</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchFAQ"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>fetchFAQ</b></span>
+                        <a href="#fetchFAQ"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fetchFAQ(courseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, refresh?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="188"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:188</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>courseID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>refresh</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDisplayedColumnFAQ"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>getDisplayedColumnFAQ</b></span>
+                        <a href="#getDisplayedColumnFAQ"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>getDisplayedColumnFAQ()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="218"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:218</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>string[]</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GoToLogin"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>GoToLogin</b></span>
+                        <a href="#GoToLogin"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GoToLogin()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="162"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:162</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="newTicketMessage"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>newTicketMessage</b></span>
+                        <a href="#newTicketMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>newTicketMessage(event: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="230"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:230</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="143"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:143</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <span ><b>ngOnDestroy</b></span>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="147"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:147</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:135</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="restorePosition"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>restorePosition</b></span>
+                        <a href="#restorePosition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>restorePosition()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="245"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:245</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveRedirectUrl"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>saveRedirectUrl</b></span>
+                        <a href="#saveRedirectUrl"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>saveRedirectUrl(linkEnding?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="290"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:290</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>linkEnding</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setError"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>setError</b></span>
+                        <a href="#setError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>setError(type: "notParticipant" | "notLoggedIn")</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="311"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:311</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                            <code>&quot;notParticipant&quot; | &quot;notLoggedIn&quot;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showConsentPopup"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>showConsentPopup</b></span>
+                        <a href="#showConsentPopup"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>showConsentPopup()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="224"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:224</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startPollingFAQ"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>startPollingFAQ</b></span>
+                        <a href="#startPollingFAQ"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>startPollingFAQ(POLLING_RATE_MIN: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="342"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:342</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>POLLING_RATE_MIN</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackLoggedStatus"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>trackLoggedStatus</b></span>
+                        <a href="#trackLoggedStatus"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackLoggedStatus()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="298"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:298</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackMessages"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>trackMessages</b></span>
+                        <a href="#trackMessages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackMessages()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="255"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:255</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackScreenSize"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>trackScreenSize</b></span>
+                        <a href="#trackScreenSize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackScreenSize()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="270"
+                            class="link-to-prism">src/app/ticket/listing/listing.component.ts:270</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="columnDefinitions"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>columnDefinitions</b></span>
+                        <a href="#columnDefinitions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ColumnDefinition[]</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="92" class="link-to-prism">src/app/ticket/listing/listing.component.ts:92</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dataSource"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>dataSource</b></span>
+                        <a href="#dataSource"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new MatTableDataSource&lt;UKK&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/ticket/listing/listing.component.ts:76</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="error"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>error</b></span>
+                        <a href="#error"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>ErrorNotification | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/ticket/listing/listing.component.ts:77</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorFromComponent"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>errorFromComponent</b></span>
+                        <a href="#errorFromComponent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/app/ticket/listing/listing.component.ts:78</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchFAQsTimer$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>fetchFAQsTimer$</b></span>
+                        <a href="#fetchFAQsTimer$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Observable&lt;number&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="93" class="link-to-prism">src/app/ticket/listing/listing.component.ts:93</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isInIframe"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isInIframe</b></span>
+                        <a href="#isInIframe"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/app/ticket/listing/listing.component.ts:79</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoaded"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isLoaded</b></span>
+                        <a href="#isLoaded"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/ticket/listing/listing.component.ts:80</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isLoggedIn$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isLoggedIn$</b></span>
+                        <a href="#isLoggedIn$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Observable&lt;boolean | null&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/ticket/listing/listing.component.ts:87</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isParticipant$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isParticipant$</b></span>
+                        <a href="#isParticipant$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Observable&lt;boolean | null&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/ticket/listing/listing.component.ts:82</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isPhonePortrait"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isPhonePortrait</b></span>
+                        <a href="#isPhonePortrait"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/app/ticket/listing/listing.component.ts:83</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isPolling"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>isPolling</b></span>
+                        <a href="#isPolling"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/ticket/listing/listing.component.ts:94</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isTicketsLoaded"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>isTicketsLoaded</b></span>
+                        <a href="#isTicketsLoaded"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="95" class="link-to-prism">src/app/ticket/listing/listing.component.ts:95</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loggedIn$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>loggedIn$</b></span>
+                        <a href="#loggedIn$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Subscription</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="96" class="link-to-prism">src/app/ticket/listing/listing.component.ts:96</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="maxItemTitleLength"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>maxItemTitleLength</b></span>
+                        <a href="#maxItemTitleLength"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>100</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/ticket/listing/listing.component.ts:84</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="noDataConsent"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>noDataConsent</b></span>
+                        <a href="#noDataConsent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>boolean | null</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/app/ticket/listing/listing.component.ts:86</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="numberOfFAQ"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>numberOfFAQ</b></span>
+                        <a href="#numberOfFAQ"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="85" class="link-to-prism">src/app/ticket/listing/listing.component.ts:85</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onScroll"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>onScroll</b></span>
+                        <a href="#onScroll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>() &#x3D;&gt; {...}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="240" class="link-to-prism">src/app/ticket/listing/listing.component.ts:240</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POLLING_RATE_MIN"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                            <span class="modifier">Readonly</span>
+                        <span ><b>POLLING_RATE_MIN</b></span>
+                        <a href="#POLLING_RATE_MIN"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>( environment.production &#x3D;&#x3D; true ) ? 5 : 5</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/ticket/listing/listing.component.ts:97</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="screenSize"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>screenSize</b></span>
+                        <a href="#screenSize"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>&quot;handset&quot; | &quot;small&quot; | &quot;other&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;other&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="81" class="link-to-prism">src/app/ticket/listing/listing.component.ts:81</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="scrollPosition"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>scrollPosition</b></span>
+                        <a href="#scrollPosition"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/ticket/listing/listing.component.ts:98</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sort"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>sort</b></span>
+                        <a href="#sort"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new MatSort()</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(&#x27;sortFaq&#x27;, {static: false})<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="102" class="link-to-prism">src/app/ticket/listing/listing.component.ts:102</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="strings"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>strings</b></span>
+                        <a href="#strings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>Map&lt;string | string&gt;</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/app/ticket/listing/listing.component.ts:88</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="successMessage"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>successMessage</b></span>
+                        <a href="#successMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="89" class="link-to-prism">src/app/ticket/listing/listing.component.ts:89</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ticketList"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>ticketList</b></span>
+                        <a href="#ticketList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/TicketListComponent.html" target="_self" >TicketListComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(TicketListComponent)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="75" class="link-to-prism">src/app/ticket/listing/listing.component.ts:75</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unsubscribe$"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>unsubscribe$</b></span>
+                        <a href="#unsubscribe$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Subject&lt;void&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="99" class="link-to-prism">src/app/ticket/listing/listing.component.ts:99</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="url"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>url</b></span>
+                        <a href="#url"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="100" class="link-to-prism">src/app/ticket/listing/listing.component.ts:100</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="user$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>user$</b></span>
+                        <a href="#user$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/User.html" target="_self" >Observable&lt;User | null&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/app/ticket/listing/listing.component.ts:90</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild }
+    from &#x27;@angular/core&#x27;;
+import { BreakpointObserver, BreakpointState, Breakpoints } from &#x27;@angular/cdk/layout&#x27;;
+import { DatePipe } from &#x27;@angular/common&#x27;;
+import { MatDialog, MatDialogConfig } from &#x27;@angular/material/dialog&#x27;;
+import { MatTableDataSource } from &#x27;@angular/material/table&#x27;;
+import { MatSort } from &#x27;@angular/material/sort&#x27;;
+import { Observable, Subject, Subscription, takeUntil, timer } from &#x27;rxjs&#x27;;
+import { takeUntilDestroyed } from &#x27;@angular/core/rxjs-interop&#x27;;
+import { Title } from &#x27;@angular/platform-browser&#x27;;
+
+import { AuthService } from &#x27;@core/services/auth.service&#x27;;
+import { environment } from &#x27;src/environments/environment&#x27;;
+import { RefreshDialogComponent } from &#x27;@core/refresh-dialog/refresh-dialog.component&#x27;;
+import { StoreService } from &#x27;@core/services/store.service&#x27;;
+import { TicketListComponent } from &#x27;./ticket-list/ticket-list.component&#x27;;
+import { User } from &#x27;@core/core.models&#x27;;
+import { UKK } from &#x27;../ticket.models&#x27;;
+import { TicketService } from &#x27;../ticket.service&#x27;;
+
+interface ColumnDefinition {
+  def: string;
+  showMobile: boolean;
+}
+interface ErrorNotification {
+  title: string,
+  message: string,
+  buttonText?: string
+}
+
+const customFilterPredicate &#x3D; (data: UKK, filter: string) &#x3D;&gt; {
+  const filterValue &#x3D; filter.toLowerCase();
+
+  const kentatMatch &#x3D; data.kentat?.some((item) &#x3D;&gt; {
+    const arvo &#x3D; item.arvo ? item.arvo.toLowerCase() : &#x27;&#x27;;
+    const otsikko &#x3D; item.otsikko ? item.otsikko.toLowerCase() : &#x27;&#x27;;
+    const ohje &#x3D; item.ohje ? item.ohje.toLowerCase() : &#x27;&#x27;;
+
+    return (
+      arvo.includes(filterValue) ||
+      otsikko.includes(filterValue) ||
+      ohje.includes(filterValue)
+    );
+  });
+
+  const datePipe &#x3D; new DatePipe(&#x27;fi-FI&#x27;);
+
+  let mainDataMatch: boolean | undefined &#x3D; (
+    data.id.toString() &#x3D;&#x3D;&#x3D; filterValue ||
+    data.otsikko.toLowerCase().includes(filterValue) ||
+    datePipe.transform(data.aikaleima, &#x27;shortDate&#x27;)?.includes(filterValue)
+  );
+  if (mainDataMatch &#x3D;&#x3D;&#x3D; undefined) mainDataMatch &#x3D; false;
+  return kentatMatch || mainDataMatch
+
+}
+/**
+ * Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
+ * Ratkaistut, ovat tämän näkymän child componentissa TicketListComponent.
+ *
+ * @export
+ * @class ListingComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ * @implements {OnDestroy}
+ */
+@Component({
+  selector: &#x27;app-listing&#x27;,
+  templateUrl: &#x27;./listing.component.html&#x27;,
+  styleUrls: [&#x27;./listing.component.scss&#x27;],
+})
+
+export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() public courseid: string &#x3D; &#x27;&#x27;;
+  @ViewChild(TicketListComponent) ticketList!: TicketListComponent;
+  public dataSource &#x3D; new MatTableDataSource&lt;UKK&gt;();
+  public error: ErrorNotification | null &#x3D; null;
+  public errorFromComponent: string | null &#x3D; null;
+  public isInIframe: boolean;
+  public isLoaded: boolean &#x3D; false;
+  public screenSize: &#x27;handset&#x27; | &#x27;small&#x27; | &#x27;other&#x27; &#x3D; &#x27;other&#x27;;
+  public isParticipant$: Observable&lt;boolean | null&gt;
+  public isPhonePortrait: boolean &#x3D; false;
+  public maxItemTitleLength &#x3D; 100;  // Älä aseta tätä vakioksi.
+  public numberOfFAQ: number &#x3D; 0;
+  public noDataConsent: boolean | null;
+  public isLoggedIn$: Observable&lt;boolean | null&gt;;
+  public strings: Map&lt;string, string&gt;;
+  public successMessage: string | null &#x3D; null;
+  public user$: Observable&lt;User | null&gt;;
+
+  private columnDefinitions: ColumnDefinition[];
+  private fetchFAQsTimer$: Observable&lt;number&gt;;
+  private isPolling: boolean &#x3D; false;
+  private isTicketsLoaded: boolean &#x3D; false;
+  private loggedIn$ &#x3D; new Subscription;
+  private readonly POLLING_RATE_MIN &#x3D; ( environment.production &#x3D;&#x3D; true ) ? 5 : 5;
+  private scrollPosition: number &#x3D; 0;
+  private unsubscribe$ &#x3D; new Subject&lt;void&gt;();
+  private url: string &#x3D; &#x27;&#x27;;
+
+  @ViewChild(&#x27;sortFaq&#x27;, { static: false }) sort &#x3D; new MatSort();
+
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private responsive: BreakpointObserver,
+    private store : StoreService,
+    private ticket: TicketService,
+    private title : Title
+  ) {
+    this.noDataConsent &#x3D; this.authService.getDenyDataConsent();
+    this.title.setTitle(this.store.getBaseTitle() + $localize &#x60;:@@Otsikko-Kysymykset:
+        Kysymykset&#x60;);
+    this.isLoggedIn$ &#x3D; this.store.trackLoggedIn();
+    this.isInIframe &#x3D; window.sessionStorage.getItem(&#x27;IN-IFRAME&#x27;) &#x3D;&#x3D;&#x3D; &#x27;true&#x27; ?
+        true : false;
+    this.isParticipant$ &#x3D; this.store.trackIfParticipant();
+    this.user$ &#x3D; this.store.trackUserInfo();
+    this.columnDefinitions &#x3D; [
+      { def: &#x27;otsikko&#x27;, showMobile: true },
+      { def: &#x27;aikaleima&#x27;, showMobile: true }
+    ];
+    this.strings &#x3D; new Map([
+      [&#x27;Ei osallistujana-msg&#x27;, $localize&#x60;:@@Ei osallistujana-viesti: Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.&#x60;],
+      [&#x27;Et ole kirjautunut-title&#x27;, $localize&#x60;:@@Et ole kirjautunut:Et ole kirjautunut&#x60;],
+      [&#x27;Et osallistujana-title&#x27;, $localize&#x60;:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.&#x60;],
+      [&#x27;Kirjaudu&#x27;, $localize&#x60;:@@Kirjaudu:Kirjaudu&#x60;],
+      [&#x27;Luo tili&#x27;, $localize&#x60;:@@Luo tili:Luo tili&#x60;]
+    ]);
+    const POLLING_RATE_MS &#x3D; this.POLLING_RATE_MIN * this.store.getMsInMin();
+    this.fetchFAQsTimer$ &#x3D; timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
+  }
+
+  ngOnInit() {
+    this.url &#x3D; window.location.pathname;
+    this.checkRouterData();
+    this.startPollingFAQ(this.POLLING_RATE_MIN);
+    // this.trackLoggedStatus();
+    this.trackScreenSize();
+  }
+
+  ngAfterViewInit(): void {
+    this.trackMessages();
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener(&#x27;scroll&#x27;, this.onScroll);
+    this.loggedIn$.unsubscribe();
+  }
+
+  //hakutoiminto, jossa paginointi kommentoitu pois
+  public applyFilter(filterValue: string) {
+    filterValue &#x3D; filterValue.trim().toLowerCase();
+      this.dataSource.filter &#x3D; filterValue;
+  }
+
+  private static customFilterPredicate(data: UKK, filter: string): boolean {
+    return customFilterPredicate(data, filter);
+  }
+
+  public GoToLogin(): void {
+    if (!this.courseid) return
+    this.authService.navigateToLogin(this.courseid)
+  }
+
+  // Näytä mahdollisesti routen mukana tullut viesti tai virheilmoitus.
+  private checkRouterData() {
+    const message: string | null &#x3D; window.history.state.message;
+    if (message) {
+      if (message &#x3D;&#x3D;&#x3D; &#x27;account created&#x27;) {
+        this.successMessage &#x3D; $localize &#x60;:@@Tilin luonti onnistui:Uusi käyttäjätili luotiin tälle kurssille onnistuneesti&#x60; + &#x27;.&#x27;;
+      }
+    }
+    const errorMsg: string | null &#x3D; window.history.state.error;
+    this.errorFromComponent &#x3D; errorMsg ?? null;
+  }
+
+  public errorClickEvent(button: string) {
+    if (this.noDataConsent &#x3D;&#x3D;&#x3D; true &amp;&amp; this.isInIframe &#x3D;&#x3D;&#x3D; true) {
+      this.showConsentPopup();
+    } else if (this.noDataConsent !&#x3D;&#x3D; true &amp;&amp; this.isInIframe &#x3D;&#x3D;&#x3D; false) {
+      this.authService.navigateToLogin(this.courseid);
+    }
+  }
+
+  // refresh &#x3D; Jos on saatu refresh-pyyntö muualta. Testaamista varten public.
+  public fetchFAQ(courseID: string, refresh?: boolean) {
+    this.ticket.getFAQlist(courseID).then(response &#x3D;&gt; {
+      if (this.isLoaded &#x3D;&#x3D;&#x3D; false) this.isLoaded &#x3D; true;
+        if (response.length &gt; 0) {
+          this.numberOfFAQ &#x3D; response.length;
+          this.dataSource &#x3D; new MatTableDataSource(response);
+          this.dataSource.sort &#x3D; this.sort;
+          this.dataSource.filterPredicate &#x3D; ListingComponent.customFilterPredicate;
+        }
+        return
+      })
+      .catch(error &#x3D;&gt; {
+        this.error &#x3D; {
+          title: $localize&#x60;:@@Virhe:Virhe&#x60;,
+          message: $localize &#x60;:@@UKK-lista ei saatu haettua:
+            Ei saatu haettua tälle kurssille lisättyjä usein kysyttyjä kysymyksiä&#x60; + &#x27;.&#x27;,
+          buttonText: &#x27;&#x27;
+        }
+        this.isLoaded &#x3D; true;
+      })
+      .finally(() &#x3D;&gt; {
+        if (this.isPolling &#x3D;&#x3D;&#x3D; false) {
+          this.isPolling &#x3D; true;
+          if (this.isTicketsLoaded &#x3D;&#x3D;&#x3D; true || this.numberOfFAQ &gt; 0) {
+            this.restorePosition();
+          }
+        }
+      });
+  }
+
+  public getDisplayedColumnFAQ(): string[] {
+    return this.columnDefinitions
+      .filter(cd &#x3D;&gt; !this.isPhonePortrait || cd.showMobile)
+      .map(cd &#x3D;&gt; cd.def);
+  }
+
+  public showConsentPopup() {
+    const dialogConfig &#x3D; new MatDialogConfig();
+    dialogConfig.maxWidth &#x3D; &#x27;30rem&#x27;;
+    this.dialog.open(RefreshDialogComponent, dialogConfig);
+  }
+
+  public newTicketMessage(event: any) {
+    if (event &#x3D;&#x3D;&#x3D; &#x27;loaded&#x27;) {
+      this.isTicketsLoaded &#x3D; true;
+      if (this.isPolling &#x3D;&#x3D;&#x3D; true) {
+        // this.isLoaded &#x3D; true;
+        this.restorePosition();
+      }
+    }
+  }
+
+  private onScroll &#x3D; () &#x3D;&gt; {
+    this.scrollPosition &#x3D; window.scrollY;
+    this.store.setPosition(this.url, this.scrollPosition);
+  }
+
+  private restorePosition(): void {
+    this.scrollPosition &#x3D; this.store.getPosition(this.url);
+    if (this.scrollPosition &amp;&amp; this.scrollPosition !&#x3D;&#x3D; 0) {
+      console.log(&#x27;siirrytään aiempaan scroll-positioon&#x27;);
+      setTimeout(() &#x3D;&gt; window.scrollTo(0, this.scrollPosition), 100);
+    }
+    window.addEventListener(&#x27;scroll&#x27;, this.onScroll);
+  }
+
+  // Kun esim. headerin logoa klikataan ja saadaan refresh-pyyntö.
+  private trackMessages(): void {
+    this.store.trackMessages()
+    .pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe(response &#x3D;&gt; {
+      if (response &#x3D;&#x3D;&#x3D; &#x27;go begin&#x27;) {
+        console.log(&#x27;listing.trackMessages: saatiin refresh pyyntö.&#x27;);
+        this.isLoaded &#x3D; false;
+        setTimeout(() &#x3D;&gt; this.isLoaded &#x3D; true, 800);
+        this.fetchFAQ(this.courseid, true);
+      }
+    });
+  }
+
+  // Aseta tarvittavat asettelun muutokset riippuen näkymän leveydestä.
+  private trackScreenSize(): void {
+    this.responsive.observe([Breakpoints.HandsetPortrait, Breakpoints.Small])
+    .subscribe((state: BreakpointState) &#x3D;&gt; {
+      if (state.breakpoints[Breakpoints.HandsetPortrait]) {
+        this.maxItemTitleLength &#x3D; 85;
+        this.isPhonePortrait &#x3D; true;
+        this.screenSize &#x3D; &quot;handset&quot;;
+      } else if (state.breakpoints[Breakpoints.Small]) {
+        this.isPhonePortrait &#x3D; false;
+        this.maxItemTitleLength &#x3D; 90;
+        this.screenSize &#x3D; &quot;small&quot;;
+      } else {
+        this.isPhonePortrait &#x3D; false;
+        this.maxItemTitleLength &#x3D; 100;
+        this.screenSize &#x3D; &quot;other&quot;;
+      }
+    });
+  }
+
+  // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
+  public saveRedirectUrl(linkEnding?: string): void {
+    const link &#x3D; &#x27;/course/&#x27; + this.courseid + &#x27;/submit&#x27; + (linkEnding ?? &#x27;&#x27;);
+    if (this.store.getIsLoggedIn() &#x3D;&#x3D;&#x3D; false) {
+      console.log(&#x27;tallennettu URL: &#x27; + link);
+      window.localStorage.setItem(&#x27;REDIRECT_URL&#x27;, link);
+    }
+  }
+
+  private trackLoggedStatus(): void {
+    this.loggedIn$ &#x3D; this.store.onIsUserLoggedIn().subscribe(response &#x3D;&gt; {
+      if (response &#x3D;&#x3D;&#x3D; false) {
+        console.log(&#x27;Listing: saatiin tieto, ettei olla kirjautuneina.&#x27;);
+        this.isLoaded &#x3D; true;
+        this.setError(&#x27;notLoggedIn&#x27;);
+      } else if (response &#x3D;&#x3D;&#x3D; true) {
+        this.error &#x3D;&#x3D;&#x3D; null;
+      }
+    });
+  }
+
+  // Aseta virheviestejä.
+  private setError(type: &#x27;notParticipant&#x27; | &#x27;notLoggedIn&#x27;): void {
+    if (type &#x3D;&#x3D;&#x3D; &#x27;notParticipant&#x27;) {
+      this.error &#x3D; {
+        title: $localize&#x60;:@@Ei osallistujana-otsikko:Et osallistu tälle kurssille.&#x60;,
+        message: $localize&#x60;:@@Ei osallistujana-viesti:Et voi kysyä kysymyksiä tällä kurssilla, etkä tarkastella muiden kysymiä kysymyksiä.&#x60;,
+        buttonText: &#x27;&#x27;
+      }
+    } else if (type &#x3D;&#x3D;&#x3D; &#x27;notLoggedIn&#x27;) {
+      this.error &#x3D; {
+        title: $localize&#x60;:@@Et ole kirjautunut:Et ole kirjautunut&#x60; + &#x27;.&#x27;,
+        message: &#x27;&#x27;,
+        buttonText: &#x27;&#x27;
+      }
+
+      if (this.isInIframe &amp;&amp; this.authService.getDenyDataConsent() !&#x3D;&#x3D; true) {
+        this.error.message &#x3D; $localize &#x60;:@@Ei kirjautunut upotuksessa:Tämä voi johtua siitä, että käytät selainta, joka kieltää kolmannnen osapuolen evästeet. Voit kokeilla muuttaa selaimen asetuksia tai käyttää eri selainta, esim. Chrome.&#x60;;
+      } else {
+        this.error.message &#x3D; $localize &#x60;:@@Ei osallistujana-viesti:Et voi lisätä tai nähdä kurssilla esitettyjä henkilökohtaisia kysymyksiä.&#x60;
+      }
+
+      if (this.authService.getDenyDataConsent() &#x3D;&#x3D;&#x3D; true) {
+        this.error.buttonText &#x3D; $localize &#x60;:@@Luo tili:Luo tili&#x60;;
+      } else if (this.isInIframe &#x3D;&#x3D;&#x3D; false) {
+        this.error.buttonText &#x3D; $localize &#x60;:@@Kirjaudu:Kirjaudu&#x60;;
+      }
+    } else {
+      console.error(&#x27;Ei virheviestiä tyypille: &#x27; + type);
+    }
+  }
+
+  // Hae UKK:t tietyn ajan välein.
+  private startPollingFAQ(POLLING_RATE_MIN: number): void {
+    console.log(&#x60;Aloitetaan UKK pollaus joka ${POLLING_RATE_MIN} minuutti.&#x60;);
+    let fetchStartTime: number | undefined;
+    let elapsedTime: number | undefined;
+    const POLLING_RATE_SEC &#x3D; POLLING_RATE_MIN * 60;
+    this.fetchFAQsTimer$.subscribe(() &#x3D;&gt; {
+      this.fetchFAQ(this.courseid!);
+      if (fetchStartTime) {
+        elapsedTime &#x3D; Math.round((Date.now() - fetchStartTime) / 1000);
+        console.log(&#x27;UKK-pollauksen viime kutsusta kulunut aikaa &#x27; +
+            &#x60;${elapsedTime} sekuntia.&#x60;);
+        if (elapsedTime !&#x3D;&#x3D; POLLING_RATE_SEC) {
+          console.log(&#x60;Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.&#x60;);
+        }
+      }
+      fetchStartTime &#x3D; Date.now();
+    });
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;app-headline&gt;&lt;/app-headline&gt;
+
+&lt;ng-container *ngIf&#x3D;&quot;isLoaded&quot;&gt;
+
+  &lt;app-error
+      [buttonText]&#x3D;&quot;noDataConsent ? strings.get(&#x27;Luo tili&#x27;) ?? &#x27;&#x27; :
+                    strings.get(&#x27;Kirjaudu&#x27;) ?? &#x27;&#x27;&quot;
+      (clickEvent)&#x3D;&quot;errorClickEvent($event)&quot;
+      [message]&#x3D;&quot;strings.get(&#x27;Ei osallistujana-msg&#x27;) ?? &#x27;&#x27;&quot;
+      *ngIf&#x3D;&quot;(isLoggedIn$ | async) &#x3D;&#x3D;&#x3D; false; else notParticipant&quot;
+      [title]&#x3D;&quot;strings.get(&#x27;Et ole kirjautunut-title&#x27;) ?? &#x27;&#x27;&quot;
+      &gt;
+  &lt;/app-error&gt;
+
+  &lt;ng-template #notParticipant&gt;
+    &lt;app-error
+        [message]&#x3D;&quot;strings.get(&#x27;Ei osallistujana-msg&#x27;) ?? &#x27;&#x27;&quot;
+        *ngIf&#x3D;&quot;(isParticipant$ | async) &#x3D;&#x3D;&#x3D; false&quot;
+        [title]&#x3D;&quot;strings.get(&#x27;Et osallistujana-title&#x27;) ?? &#x27;&#x27;&quot;
+        &gt;
+    &lt;/app-error&gt;
+
+  &lt;/ng-template&gt;
+
+  &lt;app-error  *ngIf&#x3D;&quot;errorFromComponent&quot;
+              [message]&#x3D;&quot;errorFromComponent&quot;
+              &gt;
+  &lt;/app-error&gt;
+
+&lt;/ng-container&gt;
+
+&lt;app-success  *ngIf&#x3D;&quot;successMessage&quot;
+              styles&#x3D;&quot;margin-top: 1.5rem; margin-bottom: -0.5rem&quot;
+              &gt;
+  {{ successMessage }}
+&lt;/app-success&gt;
+
+&lt;section [ngStyle]&#x3D;&quot;{ &#x27;margin-top&#x27;: isInIframe ? &#x27;-1.7rem&#x27; : &#x27;&#x27;}&quot;&gt;
+  &lt;app-ticket-list
+      [courseid]&#x3D;&quot;courseid&quot;
+      *ngIf&#x3D;&quot;(isParticipant$ | async) &amp;&amp; (user$ | async)&quot;
+      (ticketMessage)&#x3D;&quot;newTicketMessage($event)&quot;
+      [user]&#x3D;&quot;(user$ | async)&quot;
+      &gt;
+  &lt;/app-ticket-list&gt;
+&lt;/section&gt;
+
+&lt;!------------ UKK:t ----------------------------------------------------------&gt;
+
+&lt;!-- Älä korvaa ngIf:llä tai sorting ei toimi. --&gt;
+&lt;section [ngStyle]&#x3D;&quot;{ &#x27;display&#x27;: &#x27;isLoaded&#x27; ? &#x27;block&#x27; : &#x27;none&#x27; }&quot;&gt;
+
+&lt;div class&#x3D;&quot;input-field-wrapper&quot;&gt;
+  &lt;h2 class&#x3D;&quot;theme-subheading table-header&quot; i18n&#x3D;&quot;@@Usein kysytyt kysymykset&quot;&gt;
+    Usein kysytyt kysymykset
+  &lt;/h2&gt;
+
+  &lt;ng-container *ngIf&#x3D;&quot;numberOfFAQ !&#x3D;&#x3D; 0&quot;&gt;
+    &lt;app-search-bar
+        i18n&#x3D;&quot;@@Suodata kysymyksiä&quot;
+        (searchResult)&#x3D;&quot;applyFilter($event)&quot;
+        &gt;
+      Suodata kysymyksiä
+    &lt;/app-search-bar&gt;
+  &lt;/ng-container&gt;
+
+&lt;/div&gt;
+
+  &lt;div class&#x3D;&quot;no-items-box&quot; *ngIf&#x3D;&quot;numberOfFAQ &#x3D;&#x3D;&#x3D; 0 &amp;&amp; !error&quot;&gt;
+    &lt;p i18n&#x3D;&quot;@@Ei yhtään UKK&quot;&gt;
+      Yhtään usein kysyttyä kysymystä ei ole lisätty.
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+&lt;table  class&#x3D;&quot;theme-table mat-elevation-z1&quot;
+        [dataSource]&#x3D;&quot;dataSource&quot;
+        [hidden]&#x3D;&quot;dataSource.filteredData.length &#x3D;&#x3D;&#x3D; 0&quot;
+        id&#x3D;&quot;faqTable&quot;
+        mat-table
+        matSort
+        matSortActive&#x3D;&quot;aikaleima&quot;
+        matSortDirection&#x3D;&quot;desc&quot;
+        #sortFaq&#x3D;&quot;matSort&quot;
+        &gt;
+
+  &lt;ng-container matColumnDef&#x3D;&quot;otsikko&quot;&gt;
+    &lt;th mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        i18n-sortActionDescription&#x3D;&quot;@@Järjestä otsikon mukaan&quot;
+        i18n&#x3D;&quot;@@Otsikko&quot;
+        sortActionDescription&#x3D;&quot;Järjestä otsikon mukaan&quot;
+        &gt;
+      Otsikko
+    &lt;/th&gt;
+    &lt;td mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+      &lt;a  [attr.data-testid]&#x3D;&quot;&#x27;faq-title-a-&#x27; + element.id&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/faq-view/&#x27; + element.id&quot;&gt;
+        {{ (element.otsikko.length &gt; maxItemTitleLength)?
+          (element.otsikko | slice:0:maxItemTitleLength) + &#x27;...&#x27;:(element.otsikko) }}
+      &lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;ng-container i18n-sortActionDescription&#x3D;&quot;@@Järjestä päivämäärän mukaan&quot;
+                matColumnDef&#x3D;&quot;aikaleima&quot;
+                &gt;
+    &lt;th class&#x3D;&quot;align-right&quot;
+        *matHeaderCellDef
+        i18n&#x3D;&quot;@@Päivämäärä&quot;
+        mat-header-cell
+        mat-sort-header
+        sortActionDescription&#x3D;&quot;Järjestä päivämäärän mukaan&quot;
+        &gt;
+      Päivämäärä
+    &lt;/th&gt;
+    &lt;td class&#x3D;&quot;cell-align-right&quot; mat-cell *matCellDef&#x3D;&quot;let element&quot;&gt;
+      &lt;a  class&#x3D;&quot;cell-align-right&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/faq-view/&#x27; + element.id&quot;
+          tabindex&#x3D;&quot;-1&quot;
+          &gt;
+        {{ element.aikaleimaStr }}
+      &lt;/a&gt;
+    &lt;/td&gt;
+  &lt;/ng-container&gt;
+
+  &lt;tr mat-header-row *matHeaderRowDef&#x3D;&quot;getDisplayedColumnFAQ()&quot;&gt;&lt;/tr&gt;
+
+  &lt;tr mat-row *matRowDef&#x3D;&quot;let row; columns: getDisplayedColumnFAQ()&quot;&gt;&lt;/tr&gt;
+
+&lt;/table&gt;
+
+  &lt;p class&#x3D;&quot;no-items-message&quot; i18n&#x3D;&quot;@@Ei tuloksia&quot;
+      *ngIf&#x3D;&quot;dataSource.filteredData.length &#x3D;&#x3D;&#x3D; 0 &amp;&amp; numberOfFAQ &gt; 0&quot;&gt;
+    Suodattimella ei löytynyt tuloksia.
+  &lt;/p&gt;
+&lt;!-- &lt;mat-paginator [pageSizeOptions]&#x3D;&quot;[10, 15, 20]&quot; #paginatorFaq [hidden]&#x3D;&quot;numberOfFAQ &lt; 10&quot;
+        showFirstLastButtons aria-label&#x3D;&quot;Valitse kysymysten sivu&quot;&gt;&lt;/mat-paginator&gt; --&gt;
+
+  &lt;app-error buttonText&#x3D;&quot;{{ error.buttonText }}&quot;
+            (clickEvent)&#x3D;&quot;errorClickEvent($event)&quot;
+            i18n-title&#x3D;&quot;{{ error.title }}&quot;
+            message&#x3D;&quot;{{ error.message }}&quot;
+            *ngIf&#x3D;&quot;isLoaded &amp;&amp; error !&#x3D;&#x3D; null&quot;
+            #ticketError
+            title&#x3D;&quot;{{ error.title }}&quot;
+            &gt;
+  &lt;/app-error&gt;
+
+  &lt;div  class&#x3D;&quot;buttons-wrapper theme-actions&quot;
+        *ngIf&#x3D;&quot;((user$ | async)?.asema &#x3D;&#x3D;&#x3D; &#x27;opettaja&#x27; ||
+                (user$ | async)?.asema &#x3D;&#x3D;&#x3D; &#x27;admin&#x27;) &amp;&amp;
+                (isParticipant$ | async)&quot;
+        &gt;
+
+    &lt;button class&#x3D;&quot;submit-faq-btn&quot;
+            (click)&#x3D;&quot;saveRedirectUrl(&#x27;-faq&#x27;)&quot;
+            color&#x3D;&quot;primary&quot;
+            justify-content&#x3D;&quot;flex-end&quot;
+            mat-raised-button
+            tabindex&#x3D;&quot;-1&quot;
+            &gt;
+      &lt;a  i18n&#x3D;&quot;@@Uusi UKK&quot;
+          [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + this.courseid + &#x27;/submit-faq&#x27;&quot;&gt;
+        Uusi UKK
+      &lt;/a&gt;
+    &lt;/button&gt;
+
+  &lt;/div&gt;
+
+&lt;/section&gt;
+
+&lt;!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. --&gt;
+&lt;section class&#x3D;&quot;feedback&quot;&gt;
+  &lt;h2 class&#x3D;&quot;theme-subheading&quot; i18n&#x3D;&quot;@@Onko sinulla ongelmia tämän järjestelmän kanssa?&quot;&gt;Onko sinulla ongelmia tämän järjestelmän kanssa?&lt;/h2&gt;
+  &lt;p i18n&#x3D;&quot;@@Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?&quot;&gt;
+    Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?
+  &lt;/p&gt;
+  &lt;p i18n&#x3D;&quot;@@Palautteen antaminen on täysin vapaaehtoista. Kiitos!&quot;&gt;
+    Palautteen antaminen on täysin vapaaehtoista. Kiitos!
+  &lt;/p&gt;
+  &lt;div class&#x3D;&quot;theme-actions&quot; [ngStyle]&#x3D;&quot;{ &#x27;justify-content&#x27;: &#x27;flex-start&#x27; }&quot;&gt;
+    &lt;button mat-raised-button color&#x3D;&quot;primary&quot; onClick&#x3D;&quot;window.open(&#x27;https://link.webropolsurveys.com/S/6D1CD4B0D938E765&#x27;)&quot;
+      i18n&#x3D;&quot;@@Anna meille palautetta&quot;&gt;Anna meille palautetta&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./listing.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &#x27;/src/variables.scss&#x27;;
+
+.success-message {
+  margin-top: 1.5rem;
+  margin-bottom: -0.5rem;
+}
+
+/* Näkymän leveys on leveämpi kuin muissa näkymissä taulukoiden vuoksi.
+   kaikki tekstisisältö tarvitsee vasemman lisämarginaalin.  */
+section,
+app-error {
+  width: 103%;
+}
+
+section,
+app-error,
+.theme-actions {
+  margin-left: -15px;
+}
+
+.theme-actions {
+  row-gap: 1rem;
+}
+
+.feedback {
+  margin-top: 2rem;
+  margin-left: 0;
+
+  h2 {
+    margin-left: -1rem
+  }
+}
+
+// Jälkimmäinen keskitetään vasemmalle, jos ei ole tuloksia.
+h2 {
+  padding-left: 20px;
+  margin-right: 0.5em;
+}
+
+.mdc-card__actions {
+  min-height: 30px;
+}
+
+app-search-bar {
+  margin-left: auto;
+}
+
+// ----------------- Table -----------------------------------------------------
+
+a {
+  color: unset;
+  display: block;
+  text-decoration: none;
+  width: 98%;
+  padding-top: 0.6em;
+  padding-bottom: 0.6em;
+}
+
+.a-left-padding {
+  padding-left: 16px;
+}
+
+.mat-column-viimeisin, .mat-column-aikaleima {
+  text-align: right;
+  max-width: 7rem;
+}
+
+.no-left-padding {
+  padding-left: -15px;
+}
+
+.attachment-cell {
+  text-align: center;
+}
+
+/* Jotta menee on samassa tasossa headerien kanssa, joilla sorting-nuoli ottaa
+   oikealta puolelta tilaa. */
+.cell-align-right {
+  padding-right: 2.1rem;
+}
+
+// :host ei toimi, jos on styles.scss.
+:host ::ng-deep .align-right&gt;.mat-sort-header-container {
+  justify-content: flex-end;
+}
+
+.mat-mdc-row:hover {
+  background-color: #f2f2f2 !important
+}
+
+.no-items-message {
+  margin-left: 1.2rem;
+}
+
+:host ::ng-deep .mat-sort-header-content {
+  color: #595959;
+}
+
+:host ::ng-deep .mat-sort-header-sorted&gt;.mat-sort-header-content {
+  color: #3F55A6;
+  // color: #5379FC;
+}
+
+// -----------------------------------------------------------------------------
+
+.no-items-box {
+  border: solid 2px #D3D3D3;
+  border-radius: 2px;
+  display: block;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.buttons-wrapper {
+  justify-content: flex-end;
+}
+
+button {
+  margin-left: 1rem;
+  margin-right: 0;
+  white-space: nowrap;
+}
+
+.input-field-wrapper {
+  align-items: flex-end;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.mat-mdc-form-field {
+  width: 97%;
+}
+
+.submit-faq-btn {
+  a {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-right: 1em;
+    padding-left: 1em;
+  }
+}
+
+@media (min-width: $XSmall) {
+
+  mat-card {
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 2em;
+  }
+
+  // Oikeimman sarakkeen sorting-nuoli ottaa tilaa,
+  // niin komsenoidaan sitä.
+  tr&gt; :first-child {
+    padding-left: 1.5em;
+  }
+
+  mat-row&gt; :last-child {
+    padding-right: 50px;
+  }
+
+}
+
+@media (max-width: $XSmall) {
+  section,
+  app-error,
+  h2 {
+    margin-left: 0;
+  }
+
+  .table-header {
+    padding-left: 0;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><app-headline></app-headline><ng-container *ngIf="isLoaded">  <app-error      [buttonText]="noDataConsent ? strings.get(\'Luo tili\') ?? \'\' :                    strings.get(\'Kirjaudu\') ?? \'\'"      (clickEvent)="errorClickEvent($event)"      [message]="strings.get(\'Ei osallistujana-msg\') ?? \'\'"      *ngIf="(isLoggedIn$ | async) === false; else notParticipant"      [title]="strings.get(\'Et ole kirjautunut-title\') ?? \'\'"      >  </app-error>  <ng-template #notParticipant>    <app-error        [message]="strings.get(\'Ei osallistujana-msg\') ?? \'\'"        *ngIf="(isParticipant$ | async) === false"        [title]="strings.get(\'Et osallistujana-title\') ?? \'\'"        >    </app-error>  </ng-template>  <app-error  *ngIf="errorFromComponent"              [message]="errorFromComponent"              >  </app-error></ng-container><app-success  *ngIf="successMessage"              styles="margin-top: 1.5rem; margin-bottom: -0.5rem"              >  {{ successMessage }}</app-success><section [ngStyle]="{ \'margin-top\': isInIframe ? \'-1.7rem\' : \'\'}">  <app-ticket-list      [courseid]="courseid"      *ngIf="(isParticipant$ | async) && (user$ | async)"      (ticketMessage)="newTicketMessage($event)"      [user]="(user$ | async)"      >  </app-ticket-list></section><!------------ UKK:t ----------------------------------------------------------><!-- Älä korvaa ngIf:llä tai sorting ei toimi. --><section [ngStyle]="{ \'display\': \'isLoaded\' ? \'block\' : \'none\' }"><div class="input-field-wrapper">  <h2 class="theme-subheading table-header" i18n="@@Usein kysytyt kysymykset">    Usein kysytyt kysymykset  </h2>  <ng-container *ngIf="numberOfFAQ !== 0">    <app-search-bar        i18n="@@Suodata kysymyksiä"        (searchResult)="applyFilter($event)"        >      Suodata kysymyksiä    </app-search-bar>  </ng-container></div>  <div class="no-items-box" *ngIf="numberOfFAQ === 0 && !error">    <p i18n="@@Ei yhtään UKK">      Yhtään usein kysyttyä kysymystä ei ole lisätty.    </p>  </div><table  class="theme-table mat-elevation-z1"        [dataSource]="dataSource"        [hidden]="dataSource.filteredData.length === 0"        id="faqTable"        mat-table        matSort        matSortActive="aikaleima"        matSortDirection="desc"        #sortFaq="matSort"        >  <ng-container matColumnDef="otsikko">    <th mat-header-cell        *matHeaderCellDef        mat-sort-header        i18n-sortActionDescription="@@Järjestä otsikon mukaan"        i18n="@@Otsikko"        sortActionDescription="Järjestä otsikon mukaan"        >      Otsikko    </th>    <td mat-cell *matCellDef="let element">      <a  [attr.data-testid]="\'faq-title-a-\' + element.id"          [routerLink]="\'/course/\' + courseid + \'/faq-view/\' + element.id">        {{ (element.otsikko.length > maxItemTitleLength)?          (element.otsikko | slice:0:maxItemTitleLength) + \'...\':(element.otsikko) }}      </a>    </td>  </ng-container>  <ng-container i18n-sortActionDescription="@@Järjestä päivämäärän mukaan"                matColumnDef="aikaleima"                >    <th class="align-right"        *matHeaderCellDef        i18n="@@Päivämäärä"        mat-header-cell        mat-sort-header        sortActionDescription="Järjestä päivämäärän mukaan"        >      Päivämäärä    </th>    <td class="cell-align-right" mat-cell *matCellDef="let element">      <a  class="cell-align-right"          [routerLink]="\'/course/\' + courseid + \'/faq-view/\' + element.id"          tabindex="-1"          >        {{ element.aikaleimaStr }}      </a>    </td>  </ng-container>  <tr mat-header-row *matHeaderRowDef="getDisplayedColumnFAQ()"></tr>  <tr mat-row *matRowDef="let row; columns: getDisplayedColumnFAQ()"></tr></table>  <p class="no-items-message" i18n="@@Ei tuloksia"      *ngIf="dataSource.filteredData.length === 0 && numberOfFAQ > 0">    Suodattimella ei löytynyt tuloksia.  </p><!-- <mat-paginator [pageSizeOptions]="[10, 15, 20]" #paginatorFaq [hidden]="numberOfFAQ < 10"        showFirstLastButtons aria-label="Valitse kysymysten sivu"></mat-paginator> -->  <app-error buttonText="{{ error.buttonText }}"            (clickEvent)="errorClickEvent($event)"            i18n-title="{{ error.title }}"            message="{{ error.message }}"            *ngIf="isLoaded && error !== null"            #ticketError            title="{{ error.title }}"            >  </app-error>  <div  class="buttons-wrapper theme-actions"        *ngIf="((user$ | async)?.asema === \'opettaja\' ||                (user$ | async)?.asema === \'admin\') &&                (isParticipant$ | async)"        >    <button class="submit-faq-btn"            (click)="saveRedirectUrl(\'-faq\')"            color="primary"            justify-content="flex-end"            mat-raised-button            tabindex="-1"            >      <a  i18n="@@Uusi UKK"          [routerLink]="\'/course/\' + this.courseid + \'/submit-faq\'">        Uusi UKK      </a>    </button>  </div></section><!-- Anna palautetta osio. Ohjaa käyttäjän ulkoiselle sivulle, jossa on palautelomake. --><section class="feedback">  <h2 class="theme-subheading" i18n="@@Onko sinulla ongelmia tämän järjestelmän kanssa?">Onko sinulla ongelmia tämän järjestelmän kanssa?</h2>  <p i18n="@@Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?">    Entä uusia ideoita, miten voisimme jatkokehittää tätä järjestelmää? Tai herännyt muita ajatuksia liittyen tähän järjestelmään?  </p>  <p i18n="@@Palautteen antaminen on täysin vapaaehtoista. Kiitos!">    Palautteen antaminen on täysin vapaaehtoista. Kiitos!  </p>  <div class="theme-actions" [ngStyle]="{ \'justify-content\': \'flex-start\' }">    <button mat-raised-button color="primary" onClick="window.open(\'https://link.webropolsurveys.com/S/6D1CD4B0D938E765\')"      i18n="@@Anna meille palautetta">Anna meille palautetta</button>  </div></section></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BeginningButtonComponent', 'selector': 'app-beginning-button'},{'name': 'CommentComponent', 'selector': 'app-comment'},{'name': 'DataConsentComponent', 'selector': ''},{'name': 'EditAttachmentsComponent', 'selector': 'app-edit-attachments'},{'name': 'EditFieldComponent', 'selector': ''},{'name': 'EditorComponent', 'selector': 'app-editor'},{'name': 'ErrorComponent', 'selector': 'app-error'},{'name': 'FaqViewComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeadlineComponent', 'selector': 'app-headline'},{'name': 'HomeComponent', 'selector': ''},{'name': 'JoinComponent', 'selector': ''},{'name': 'ListingComponent', 'selector': 'app-listing'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MenuLinkComponent', 'selector': 'app-menu-link'},{'name': 'MenuSrcComponent', 'selector': 'app-menu-src'},{'name': 'MessageComponent', 'selector': 'app-message'},{'name': 'NoDataConsentComponent', 'selector': ''},{'name': 'NoPrivilegesComponent', 'selector': ''},{'name': 'PageNotFoundComponent', 'selector': ''},{'name': 'PrivacyModalComponent', 'selector': 'app-privacy-modal'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RefreshDialogComponent', 'selector': 'app-refresh-dialog'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'SearchBarComponent', 'selector': 'app-search-bar'},{'name': 'SenderInfoComponent', 'selector': 'app-sender-info'},{'name': 'SettingsComponent', 'selector': ''},{'name': 'SubmitFaqComponent', 'selector': 'app-submit-faq'},{'name': 'SubmitTicketComponent', 'selector': 'app-submit-ticket'},{'name': 'SuccessComponent', 'selector': 'app-success'},{'name': 'TicketListComponent', 'selector': 'app-ticket-list'},{'name': 'TicketViewComponent', 'selector': 'app-ticket-view'},{'name': 'ViewAttachmentsComponent', 'selector': 'app-view-attachments'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ListingComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ListingComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

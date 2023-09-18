@@ -1,0 +1,2484 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>tikettisysteemi documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">tikettisysteemi documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  SubmitTicketComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/ticket/submit-ticket/submit-ticket.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-submit-ticket</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./submit-ticket.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./submit-ticket.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#attachments" >attachments</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#commentID" >commentID</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#editExisting" >editExisting</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#errorForListing" >errorForListing</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#errorMessage" >errorMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#form" >form</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#helpText" >helpText</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#oldAttachments" >oldAttachments</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#showConfirm" >showConfirm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#state" >state</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#successMessage" >successMessage</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#ticketFields" >ticketFields</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#ticketId" >ticketId</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#titlePlaceholder" >titlePlaceholder</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#uploadClick" >uploadClick</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#user$" >user$</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#buildAdditionalFields" >buildAdditionalFields</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#buildForm" >buildForm</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#createTicket" >createTicket</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#fetchAdditionalFields" >fetchAdditionalFields</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#fetchTicketInfo" >fetchTicketInfo</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#goBack" >goBack</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#prepareSendFiles" >prepareSendFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#printFileInfoListLog" >printFileInfoListLog</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#sendFiles" >sendFiles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#submit" >submit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#submitEdited" >submitEdited</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#submitNew" >submitNew</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#attachmentsMessages" >attachmentsMessages</a>
+                            </li>
+                            <li>
+                                <a href="#courseid" >courseid</a>
+                            </li>
+                            <li>
+                                <a href="#fileInfoList" >fileInfoList</a>
+                            </li>
+                            <li>
+                                <a href="#id" >id</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#additionalFields" >additionalFields</a>
+                                </li>
+                                <li>
+                                    <a href="#message" >message</a>
+                                </li>
+                                <li>
+                                    <a href="#title" >title</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(courses: <a href="../injectables/CourseService.html" target="_self">CourseService</a>, formBuilder: FormBuilder, router: Router, store: <a href="../injectables/StoreService.html" target="_self">StoreService</a>, ticketService: <a href="../injectables/TicketService.html" target="_self">TicketService</a>, titleServ: Title)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:59</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>courses</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CourseService.html" target="_self" >CourseService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>store</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StoreService.html" target="_self" >StoreService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>ticketService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TicketService.html" target="_self" >TicketService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>titleServ</td>
+                                                  
+                                                        <td>
+                                                                    <code>Title</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="attachmentsMessages"></a>
+                        <b>attachmentsMessages</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:26</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="courseid"></a>
+                        <b>courseid</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:27</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="fileInfoList"></a>
+                        <b>fileInfoList</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/FileInfo.html" target="_self" >FileInfo[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:29</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="id"></a>
+                        <b>id</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:28</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildAdditionalFields"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>buildAdditionalFields</b></span>
+                        <a href="#buildAdditionalFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>buildAdditionalFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="85"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:85</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="buildForm"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>buildForm</b></span>
+                        <a href="#buildForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>buildForm()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="98"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:98</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>FormGroup</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="createTicket"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>createTicket</b></span>
+                        <a href="#createTicket"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>createTicket()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:119</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/UusiTiketti.html" target="_self" >UusiTiketti</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchAdditionalFields"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>fetchAdditionalFields</b></span>
+                        <a href="#fetchAdditionalFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fetchAdditionalFields()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="134"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:134</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fetchTicketInfo"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>fetchTicketInfo</b></span>
+                        <a href="#fetchTicketInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fetchTicketInfo(ticketId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, courseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:151</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ticketId</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>courseID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="goBack"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>goBack</b></span>
+                        <a href="#goBack"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>goBack()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="170"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:170</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="71"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:71</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="prepareSendFiles"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>prepareSendFiles</b></span>
+                        <a href="#prepareSendFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>prepareSendFiles(response: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="180"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:180</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>response</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printFileInfoListLog"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>printFileInfoListLog</b></span>
+                        <a href="#printFileInfoListLog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>printFileInfoListLog()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="243"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:243</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sendFiles"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>sendFiles</b></span>
+                        <a href="#sendFiles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sendFiles(ticketID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, commentID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="282"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:282</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ticketID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>commentID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submit"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>submit</b></span>
+                        <a href="#submit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>submit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="192"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:192</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submitEdited"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>submitEdited</b></span>
+                        <a href="#submitEdited"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>submitEdited(newTicket: <a href="../interfaces/UusiTiketti.html" target="_self">UusiTiketti</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="210"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:210</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>newTicket</td>
+                                    <td>
+                                                <code><a href="../interfaces/UusiTiketti.html" target="_self" >UusiTiketti</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="submitNew"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>submitNew</b></span>
+                        <a href="#submitNew"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>submitNew(ticket: <a href="../interfaces/UusiTiketti.html" target="_self">UusiTiketti</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="254"
+                            class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:254</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ticket</td>
+                                    <td>
+                                                <code><a href="../interfaces/UusiTiketti.html" target="_self" >UusiTiketti</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="attachments"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>attachments</b></span>
+                        <a href="#attachments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../components/EditAttachmentsComponent.html" target="_self" >EditAttachmentsComponent</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ViewChild(EditAttachmentsComponent)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="commentID"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>commentID</b></span>
+                        <a href="#commentID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editExisting"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>editExisting</b></span>
+                        <a href="#editExisting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>window.history.state.editTicket ?? false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorForListing"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>errorForListing</b></span>
+                        <a href="#errorForListing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | undefined</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:47</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="errorMessage"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>errorMessage</b></span>
+                        <a href="#errorMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="form"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>form</b></span>
+                        <a href="#form"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>FormGroup</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>this.buildForm()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="helpText"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>helpText</b></span>
+                        <a href="#helpText"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="oldAttachments"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>oldAttachments</b></span>
+                        <a href="#oldAttachments"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Liite.html" target="_self" >Liite[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showConfirm"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>showConfirm</b></span>
+                        <a href="#showConfirm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="state"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>state</b></span>
+                        <a href="#state"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>&quot;editing&quot; | &quot;sending&quot; | &quot;done&quot;</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;editing&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="successMessage"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>successMessage</b></span>
+                        <a href="#successMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ticketFields"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>ticketFields</b></span>
+                        <a href="#ticketFields"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/Kentta.html" target="_self" >Kentta[]</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ticketId"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>ticketId</b></span>
+                        <a href="#ticketId"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:41</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="titlePlaceholder"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>titlePlaceholder</b></span>
+                        <a href="#titlePlaceholder"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;&#x27;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:42</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="uploadClick"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>uploadClick</b></span>
+                        <a href="#uploadClick"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new Subject&lt;string&gt;()</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:43</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="user$"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>user$</b></span>
+                        <a href="#user$"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/User.html" target="_self" >Observable&lt;User | null&gt;</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:44</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-accessors">
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="additionalFields"></a>
+                        <span class="name"><b>additionalFields</b><a href="#additionalFields"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>additionalFields()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:49</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="message"></a>
+                        <span class="name"><b>message</b><a href="#message"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>message()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:53</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="title"></a>
+                        <span class="name"><b>title</b><a href="#title"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>title()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="57" class="link-to-prism">src/app/ticket/submit-ticket/submit-ticket.component.ts:57</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnInit, ViewChild } from &#x27;@angular/core&#x27;;
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
+    from &#x27;@angular/forms&#x27;;
+import { Title } from &#x27;@angular/platform-browser&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
+import { Validators as EditorValidators } from &#x27;ngx-editor&#x27;;
+import { Observable, Subject } from &#x27;rxjs&#x27;;
+
+import { User } from &#x27;@core/core.models&#x27;
+import { StoreService } from &#x27;@core/services/store.service&#x27;;
+import { CourseService } from &#x27;@course/course.service&#x27;;
+import schema from &#x27;@shared/editor/schema&#x27;;
+import { EditAttachmentsComponent }
+    from &#x27;@ticket/components/edit-attachments/edit-attachments.component&#x27;;
+import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
+    from &#x27;@ticket/ticket.models&#x27;;
+import { TicketService } from &#x27;src/app/ticket/ticket.service&#x27;;
+
+@Component({
+  selector: &#x27;app-submit-ticket&#x27;,
+  templateUrl: &#x27;./submit-ticket.component.html&#x27;,
+  styleUrls: [&#x27;./submit-ticket.component.scss&#x27;]
+})
+
+export class SubmitTicketComponent implements OnInit {
+  @Input() public attachmentsMessages: string &#x3D; &#x27;&#x27;;
+  @Input() courseid!: string;
+  @Input() id: string &#x3D; &#x27;&#x27;
+  @Input() public fileInfoList: FileInfo[] &#x3D; [];
+  @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
+
+  public editExisting: boolean &#x3D; window.history.state.editTicket ?? false;
+  public errorMessage: string &#x3D; &#x27;&#x27;;
+  public form: FormGroup &#x3D; this.buildForm();
+  public helpText: string &#x3D; &#x27;&#x27;;
+  public oldAttachments: Liite[] &#x3D; [];
+  public showConfirm: boolean &#x3D; false;
+  public state: &#x27;editing&#x27; | &#x27;sending&#x27; | &#x27;done&#x27; &#x3D; &#x27;editing&#x27;;
+  public successMessage: string &#x3D; &#x27;&#x27;;
+  public ticketFields: Kentta[] &#x3D; [];
+  public ticketId: string | null &#x3D; null;
+  public titlePlaceholder: string &#x3D; &#x27;&#x27;;
+  public uploadClick &#x3D; new Subject&lt;string&gt;();
+  public user$: Observable&lt;User | null&gt;;
+  // Listausnäkymään palattaessa näytä virheviesti.
+  private commentID: string | null &#x3D; null;
+  private errorForListing: string | undefined;
+
+  get additionalFields(): FormArray {
+    return this.form.controls[&quot;additionalFields&quot;] as FormArray;
+  }
+
+  get message(): FormControl {
+    return this.form.get(&#x27;message&#x27;) as FormControl;
+  }
+
+  get title(): FormControl {
+    return this.form.get(&#x27;title&#x27;) as FormControl;
+  }
+
+  constructor(private courses: CourseService,
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private store: StoreService,
+              private ticketService: TicketService,
+              private titleServ: Title
+              ) {
+    this.user$ &#x3D; this.store.trackUserInfo();
+  }
+
+  ngOnInit(): void {
+    this.titlePlaceholder &#x3D; $localize &#x60;:@@Otsikko:Otsikko&#x60; + &#x27;*&#x27;;
+    this.ticketId &#x3D; this.id ?? null;
+    if (this.courseid &#x3D;&#x3D;&#x3D; null) throw new Error(&#x27;Kurssi ID puuttuu URL:sta.&#x27;);
+    if (!this.ticketId) {
+      this.titleServ.setTitle(
+        this.store.getBaseTitle() + $localize &#x60;:@@Uusi kysymys: Uusi kysymys&#x60;
+      );
+      this.fetchAdditionalFields();
+    } else {
+      this.fetchTicketInfo(this.ticketId, this.courseid);
+    }
+  }
+
+  private buildAdditionalFields(): void {
+    // Luodaan lomakkeelle controllit
+    for (const field of this.ticketFields) {
+      let validators &#x3D; Validators.maxLength(50);
+      if (field.pakollinen) {
+        validators &#x3D; Validators.required, Validators.maxLength(50);
+      }
+      let value &#x3D; !this.ticketId &amp;&amp; field.esitaytettava ? field.esitaytto :
+          field.arvo ?? &#x27;&#x27;;
+      this.additionalFields.push(new FormControl(value, validators));
+    }
+  }
+
+  private buildForm(): FormGroup {
+    return this.formBuilder.group({
+      title: [
+        &#x27;&#x27;,
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(255)
+        ])
+      ],
+      additionalFields: this.formBuilder.array([]),
+      message: [
+        &#x27;&#x27;,
+        Validators.compose([
+          EditorValidators.required(schema),
+          Validators.maxLength(100000)
+        ])
+      ],
+      attachments: [&#x27;&#x27;],
+    });
+  }
+
+  private createTicket(): UusiTiketti {
+    console.log(&#x27;create&#x27;);
+    let ticket: UusiTiketti &#x3D; {} as UusiTiketti;
+    ticket.otsikko &#x3D; this.form.controls[&#x27;title&#x27;].value;
+    ticket.viesti &#x3D; this.form.controls[&#x27;message&#x27;].value;
+    ticket.kentat &#x3D; [];
+    for (let i &#x3D; 0; i &lt; this.ticketFields.length; i++) {
+      ticket.kentat.push({
+        id: Number(this.ticketFields[i].id),
+        arvo: this.additionalFields.controls[i].value
+      });
+    }
+    return ticket;
+  }
+
+  private fetchAdditionalFields(): void {
+
+    console.log(&#x27;fetchAdditionalFields&#x27;);
+
+    if (this.courseid &#x3D;&#x3D;&#x3D; null) throw new Error(&#x27;Kurssi ID puuttuu URL:sta.&#x27;);
+    this.courses.getTicketFieldInfo(this.courseid).then(response &#x3D;&gt; {
+      console.log(&#x27;fetchAdditionalFields: response getTicketFieldInfo:&#x27;);
+      console.dir(response);
+      this.ticketFields &#x3D; response.kentat as Kentta[];
+      this.helpText &#x3D; response.kuvaus ?? &#x27;&#x27;;
+      this.buildAdditionalFields();
+    }).catch(() &#x3D;&gt; {
+      this.errorMessage &#x3D; $localize &#x60;:@@Kysymysten tietoja ei saatu haettua:
+        Tarvittavia kysymysten tietoja ei saatu haettua&#x60; + &#x27;.&#x27;;
+    });
+  }
+
+  private fetchTicketInfo(ticketId: string, courseID: string): void {
+    console.log(&#x27;fetchTicketInfo&#x27;);
+    this.ticketService.getTicket(ticketId, courseID).then(response &#x3D;&gt; {
+      if (response &#x3D;&#x3D;&#x3D; null) {
+        return
+      }
+      this.form.controls[&#x27;title&#x27;].setValue(response.otsikko);
+      this.form.controls[&#x27;message&#x27;].setValue(response.viesti);
+      this.oldAttachments &#x3D; response.liitteet ?? [];
+      this.commentID &#x3D; response.kommenttiID;
+      this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
+      this.ticketFields &#x3D; response.kentat as Kentta[];
+      this.buildAdditionalFields();
+    }).catch(() &#x3D;&gt; {
+      this.errorMessage &#x3D; $localize &#x60;:@@Muokattavan kysymyksen tietoja ei saatu haettua:
+        Muokattavan kysymyksen tietoja ei saatu haettua&#x60; + &#x27;.&#x27;;
+    });
+  }
+
+  public goBack(): void {
+    if (this.errorForListing) {
+      const route &#x3D; &#x27;course/&#x27; + this.courseid + &#x27;/list-tickets&#x27;;
+      const data &#x3D; { error: this.errorForListing };
+      this.router.navigate([route], { state: data });
+    } else {
+      this.router.navigateByUrl(&#x27;course/&#x27; + this.courseid + &#x27;/list-tickets&#x27;);
+    }
+  }
+
+  private prepareSendFiles(response: any): void {
+    if (!this.courseid) return
+    if (response?.uusi &#x3D;&#x3D; null) {
+      this.errorForListing &#x3D; $localize &#x60;:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut&#x60; + &#x27;.&#x27;;
+      throw new Error(&#x27;Ei tarvittavia tietoja tiedostojen lähettämiseen.&#x27;);
+    }
+    let ticketID, commentID;
+    ticketID &#x3D; response.uusi.tiketti;
+    commentID &#x3D; response.uusi.kommentti;
+    this.sendFiles(ticketID, commentID);
+  }
+
+  public submit(): void {
+    console.log(&#x27;submit&#x27;);
+    this.form.markAllAsTouched();
+    console.log(&#x27;this.form.invalid: &#x27; + this.form.invalid);
+    if (this.form.invalid) return;
+    this.state &#x3D; &#x27;sending&#x27;;
+    this.form.disable();
+    let newTicket &#x3D; this.createTicket();
+    if (this.courseid &#x3D;&#x3D;&#x3D; null) throw new Error(&#x27;Kurssi ID puuttuu URL:sta.&#x27;);
+    if (this.editExisting &#x3D;&#x3D;&#x3D; true) {
+      console.log(&#x27;submit edited&#x27;);
+      this.submitEdited(newTicket);
+    } else {
+      console.log(&#x27;submit new&#x27;);
+      this.submitNew(newTicket);
+    }
+  }
+
+  private submitEdited(newTicket: UusiTiketti): void {
+    if (!this.ticketId || !this.commentID) throw new Error;
+    this.ticketService.editTicket(this.ticketId, newTicket, this.courseid)
+      .then((res: { success: boolean }) &#x3D;&gt; {
+        if (res?.success &#x3D;&#x3D;&#x3D; false) {
+          throw Error
+        }
+        if (this.attachments.filesToRemove.length &#x3D;&#x3D;&#x3D; 0) {
+          return true
+        }
+        return this.attachments.removeSentFiles();
+      }).then((res: boolean) &#x3D;&gt; {
+        if (res &#x3D;&#x3D;&#x3D; false) {
+          this.errorForListing &#x3D; $localize &#x60;:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut&#x60; + &#x27;.&#x27;;
+        }
+        // this.printFileInfoListLog();
+        if (this.fileInfoList !&#x3D;&#x3D; undefined) {
+          if (this.fileInfoList.length &#x3D;&#x3D;&#x3D; 0 ) return
+          this.successMessage &#x3D; $localize &#x60;:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui&#x60; + &#x27;.&#x27;;
+          return this.sendFiles(this.ticketId!, this.commentID!);
+        } else {
+          return
+        }
+      }).then(() &#x3D;&gt; {
+        this.goBack();
+      }).catch(() &#x3D;&gt; {
+        this.errorMessage &#x3D; $localize &#x60;:@@Muokatun kysymyksen lähettäminen epäonnistui:
+            Muokatun kysymyksen lähettäminen epäonnistui&#x60; + &#x27;.&#x27;
+        this.state &#x3D; &#x27;editing&#x27;;
+        this.form.enable();
+      });
+  }
+
+  private printFileInfoListLog() {
+    if (this.fileInfoList) {
+      console.log(&#x27; this.fileInfoList on true&#x27;);
+    } else {
+      console.log(&#x27;this.fileInfoList on false&#x27;);
+    }
+    console.log(&#x27;fileinfolist sisältö alla:&#x27;);
+    console.log(JSON.stringify(this.fileInfoList));
+    console.log(typeof this.fileInfoList);
+  }
+
+  private submitNew(ticket: UusiTiketti): void {
+    if (this.courseid &#x3D;&#x3D;&#x3D; null) return;
+    console.log(&#x27;submitNew&#x27;);
+    console.dir(ticket);
+    this.ticketService.addTicket(this.courseid, ticket)
+    .then((response: AddTicketResponse) &#x3D;&gt; {
+      if (this.attachments.fileInfoList.length &#x3D;&#x3D;&#x3D; 0) this.goBack();
+      if (response &#x3D;&#x3D;&#x3D; null || response?.success !&#x3D;&#x3D; true) {
+        this.state &#x3D; &#x27;editing&#x27;;
+        this.form.enable();
+        this.errorMessage &#x3D; $localize&#x60;:@@Kysymyksen lähettäminen epäonnistui:
+            Kysymyksen lähettäminen epäonnistui&#x60; + &#x27;.&#x27;;
+        throw new Error(&#x27;Kysymyksen lähettäminen epäonnistui.&#x27;);
+      } else if (response?.success &#x3D;&#x3D;&#x3D; true) {
+        this.successMessage &#x3D; $localize &#x60;:@@Uuden kysymyksen lähettäminen onnistui:
+            Uuden kysymyksen lähettäminen onnistui&#x60; + &#x27;.&#x27;;
+      }
+      this.prepareSendFiles(response);
+    })
+    .catch( error &#x3D;&gt; {
+      // ? lisää eri virhekoodeja?
+      this.state &#x3D; &#x27;editing&#x27;;
+      this.form.enable();
+      this.errorMessage &#x3D; $localize&#x60;:@@Kysymyksen lähettäminen epäonnistui:
+          Kysymyksen lähettäminen epäonnistui&#x60; + &#x27;.&#x27;;
+    });
+  }
+
+  private sendFiles(ticketID: string, commentID: string):
+      Promise&lt;any&gt; {
+    return this.attachments.sendFiles(ticketID, commentID).then(() &#x3D;&gt; {
+      if (this.errorMessage) {
+        this.state &#x3D; &#x27;editing&#x27;;
+        return
+      } else {
+        this.state &#x3D; &#x27;done&#x27;;
+        this.goBack();
+      }
+    }).catch((res: any) &#x3D;&gt; {
+      this.errorMessage &#x3D; $localize&#x60;:@@Kaikkien liitteiden lähettäminen ei
+          onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut&#x60;;
+      this.state &#x3D; &#x27;editing&#x27;;
+      this.form.enable();
+    });
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;app-headline&gt;&lt;/app-headline&gt;
+
+&lt;div class&#x3D;&quot;view-wrapper&quot;&gt;
+
+  &lt;app-beginning-button
+      (clicked)&#x3D;&quot;showConfirm &#x3D; true&quot;
+      [confirm]&#x3D;form.dirty
+      [disabled]&#x3D;&quot;state &#x3D;&#x3D;&#x3D; &#x27;sending&#x27;&quot;
+      &gt;
+  &lt;/app-beginning-button&gt;
+
+  &lt;app-error  [confirmLeave]&#x3D;&quot;true&quot;
+              *ngIf&#x3D;&quot;showConfirm&quot;
+              [styles]&#x3D;&quot;{ margin: &#x27;2rem 0 0 0&#x27; }&quot;
+              &gt;
+  &lt;/app-error&gt;
+
+  &lt;form accept-charset&#x3D;&quot;UTF-8&quot;
+        enctype&#x3D;&quot;multipart/form-data&quot;
+        [formGroup]&#x3D;&quot;form&quot;
+        (ngSubmit)&#x3D;&quot;submit()&quot;
+        &gt;
+
+    &lt;div class&#x3D;&quot;ticket-header&quot;&gt;
+      &lt;mat-form-field appearance&#x3D;&quot;fill&quot; class&#x3D;&quot;theme-subheading&quot;&gt;
+        &lt;!-- Screenreaderille --&gt;
+        &lt;h2 class&#x3D;&quot;invisible&quot; i18n&#x3D;&quot;@@Uusi kysymys&quot;&gt;
+          Uusi kysymys
+        &lt;/h2&gt;
+        &lt;textarea #autosize&#x3D;&quot;cdkTextareaAutosize&quot;
+                  cdkAutosizeMaxRows&#x3D;&quot;3&quot;
+                  cdkAutosizeMinRows&#x3D;&quot;1&quot;
+                  cdkTextareaAutosize
+                  data-testid&#x3D;&quot;title&quot;
+                  formControlName&#x3D;&quot;title&quot;
+                  id&#x3D;&quot;title-textarea&quot;
+                  i18n-placeholder&#x3D;&quot;@@Otsikko&quot;
+                  matInput
+                  maxlength&#x3D;&quot;255&quot;
+                  name&#x3D;&quot;title&quot;
+                  [placeholder]&#x3D;&quot;titlePlaceholder&quot;
+                  type&#x3D;&quot;text&quot;
+                  &gt;
+        &lt;/textarea&gt;
+        &lt;mat-error  i18n&#x3D;&quot;@@Pakollinen kenttä.&quot;
+                    *ngIf&#x3D;&quot;title?.errors?.[&#x27;required&#x27;]&quot;
+                    &gt;
+          Pakollinen kenttä.
+        &lt;/mat-error&gt;
+      &lt;/mat-form-field&gt;
+
+      &lt;app-sender-info  aikaleima&#x3D;&quot;now&quot;
+                        *ngIf&#x3D;&quot;(user$ | async)&quot;
+                        [user]&#x3D;&quot;(user$ | async)&quot;&gt;
+      &lt;/app-sender-info&gt;
+
+    &lt;/div&gt;
+
+    &lt;section class&#x3D;&quot;short-field-wrapper&quot;&gt;
+
+      &lt;ng-container formArrayName&#x3D;&quot;additionalFields&quot;
+                    *ngFor&#x3D;&quot;let af of additionalFields.controls; let i &#x3D; index&quot;
+                    &gt;
+
+        &lt;mat-form-field appearance&#x3D;&quot;fill&quot;&gt;
+          &lt;mat-label [attr.data-testid]&#x3D;&quot;&#x27;field-label-&#x27; + i&quot;&gt;
+            {{ ticketFields[i].otsikko }}
+          &lt;/mat-label&gt;
+          &lt;input  [attr.data-testid]&#x3D;&quot;&#x27;field-&#x27; + i&quot;
+                  formControlName&#x3D;&quot;{{i}}&quot;
+                  (keydown.enter)&#x3D;&quot;$event.preventDefault()&quot;
+                  [matAutocomplete]&#x3D;&quot;auto&quot;
+                  matInput
+                  maxlength&#x3D;&quot;255&quot;
+                  name&#x3D;&quot;{{ ticketFields[i].otsikko }}&quot;
+                  type&#x3D;&quot;text&quot;
+                  &gt;
+
+          &lt;mat-icon matSuffix
+                    *ngIf&#x3D;&quot;ticketFields[i].valinnat[0] !&#x3D;&#x3D; &#x27;&#x27;&quot;
+                    [ngStyle]&#x3D;&quot;{ &#x27;color&#x27;: &#x27;#000000&#x27; }&quot;
+                    &gt;
+            keyboard_arrow_down
+          &lt;/mat-icon&gt;
+
+          &lt;mat-autocomplete #auto&#x3D;&quot;matAutocomplete&quot;&gt;
+            &lt;!-- Jos lisäkenttä ei sisällä valintoja, niin
+              ticketFields[i].valinnat[0] sisältää tyhjän merkkijonon, eikä
+              suinkaan ole tyhjä. --&gt;
+            &lt;ng-container *ngIf&#x3D;&quot;ticketFields[i].valinnat[0] !&#x3D;&#x3D; &#x27;&#x27;&quot;&gt;
+              &lt;mat-option *ngFor&#x3D;&quot;let valinta of ticketFields[i].valinnat&quot;
+                          [value]&#x3D;&quot;valinta&quot;
+                          &gt;
+                {{ valinta }}
+              &lt;/mat-option&gt;
+            &lt;/ng-container&gt;
+          &lt;/mat-autocomplete&gt;
+
+          &lt;mat-error  i18n&#x3D;&quot;@@Pakollinen kenttä.&quot;
+                      *ngIf&#x3D;&quot;af?.errors?.[&#x27;required&#x27;]&quot;
+                      &gt;
+            Pakollinen kenttä.
+          &lt;/mat-error&gt;
+
+          &lt;mat-hint align&#x3D;&quot;end&quot;&gt;{{ af.value.length }} / 255&lt;/mat-hint&gt;
+
+        &lt;/mat-form-field&gt;
+
+        &lt;mat-icon (click)&#x3D;&quot;tooltip.toggle()&quot;
+                  [attr.data-testid]&#x3D;&quot;&#x27;field-tooltip-&#x27; + i&quot;
+                  matTooltip&#x3D;&quot;{{ ticketFields[i].ohje }}&quot;
+                  matTooltipPosition&#x3D;&quot;after&quot;
+                  *ngIf&#x3D;&quot;ticketFields[i].ohje.length &gt; 0&quot;
+                  [ngStyle]&#x3D;&quot;{ &#x27;padding-left&#x27;: &#x27;15px&#x27; }&quot;
+                  #tooltip&#x3D;&quot;matTooltip&quot;
+                  &gt;
+          help_outline
+        &lt;/mat-icon&gt;
+
+      &lt;/ng-container&gt;
+
+    &lt;/section&gt;
+
+    &lt;h3 class&#x3D;&quot;theme-subheading&quot;&gt;
+      &lt;span i18n&#x3D;&quot;@@Viesti&quot;&gt;Viesti&lt;/span&gt;&lt;span&gt;*&lt;/span&gt;
+    &lt;/h3&gt;
+    &lt;app-editor data-testid&#x3D;&#x27;message&#x27; formControlName&#x3D;&quot;message&quot; ngDefaultControl&gt;
+    &lt;/app-editor&gt;
+    &lt;mat-error  i18n&#x3D;&quot;@@Pakollinen kenttä.&quot;
+                *ngIf&#x3D;&quot;message?.errors?.[&#x27;required&#x27;] &amp;&amp; message?.touched&quot;
+                &gt;
+      Pakollinen kenttä.
+    &lt;/mat-error&gt;
+    &lt;mat-error  i18n&#x3D;&quot;@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.&quot;
+                *ngIf&#x3D;&quot;message?.errors?.[&#x27;maxlength&#x27;]&quot;
+                &gt;
+      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.
+    &lt;/mat-error&gt;
+
+    &lt;!-- Kun lähetetään liitetiedostoja --&gt;
+    &lt;app-success *ngIf&#x3D;&quot;successMessage&quot;&gt;
+      {{ successMessage }}
+    &lt;/app-success&gt;
+
+    &lt;app-error  i18n-title&#x3D;&quot;@@Virhe&quot;
+                message&#x3D;&quot;{{ errorMessage }}&quot;
+                *ngIf&#x3D;&quot;errorMessage.length &gt; 0&quot;
+                [styles]&#x3D;&quot;{ margin: &#x27;1em 0&#x27; }&quot;
+                title&#x3D;&quot;Virhe&quot;
+                &gt;
+    &lt;/app-error&gt;
+
+
+    &lt;!-- Kuvaus / ohjeteksti --&gt;
+    &lt;p data-testid&#x3D;&quot;help-text&quot;&gt;{{ helpText }}&lt;/p&gt;
+
+    &lt;div class&#x3D;&quot;theme-actions&quot;&gt;
+
+      &lt;button (click)&#x3D;&quot;uploadClick.next(&#x27;add&#x27;)&quot;
+              [disabled]&#x3D;&quot;state!&#x3D;&#x3D;&#x27;editing&#x27;&quot;
+              i18n&#x3D;&quot;@@Liitä tiedostoja&quot;
+              mat-raised-button
+              type&#x3D;&quot;button&quot;
+              &gt;
+        &lt;mat-icon&gt;attach_file&lt;/mat-icon&gt;
+        Liitä tiedostoja
+      &lt;/button&gt;
+
+      &lt;div class&#x3D;&quot;spacer&quot;&gt;&lt;/div&gt;
+
+      &lt;div class&#x3D;&quot;required-span&quot;&gt;
+        *&amp;nbsp;
+        &lt;span i18n&#x3D;&quot;@@Pakollinen&quot;&gt;Pakollinen&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;button class&#x3D;&quot;cancel-button&quot;
+              [disabled]&#x3D;&quot;state!&#x3D;&#x3D;&#x27;editing&#x27;&quot;
+              i18n&#x3D;&quot;@@Peru&quot;
+              mat-raised-button
+              *ngIf&#x3D;&quot;editExisting&quot;
+              [routerLink]&#x3D;&quot;&#x27;/course/&#x27; + courseid + &#x27;/ticket-view/&#x27; + ticketId&quot;
+              type&#x3D;&quot;button&quot;
+              &gt;
+        Peru
+      &lt;/button&gt;
+
+      &lt;button class&#x3D;&quot;submit-button&quot;
+              *ngIf&#x3D;&quot;state&#x3D;&#x3D;&#x3D;&#x27;editing&#x27;&quot;
+              color&#x3D;&quot;primary&quot;
+              data-testid&#x3D;&#x27;send-button&#x27;
+              i18n&#x3D;&quot;@@Lähetä opettajille&quot;
+              mat-raised-button
+              type&#x3D;&quot;submit&quot;
+              &gt;
+        Lähetä opettajille
+      &lt;/button&gt;
+
+      &lt;button class&#x3D;&quot;submit-button&quot;
+              (click)&#x3D;&quot;goBack()&quot;
+              color&#x3D;&quot;primary&quot;
+              mat-raised-button
+              *ngIf&#x3D;&quot;state&#x3D;&#x3D;&#x3D;&#x27;done&#x27;&quot;
+              type&#x3D;&quot;button&quot;
+              &gt;
+        OK
+      &lt;/button&gt;
+
+    &lt;/div&gt;
+
+    &lt;!-- (fileListOutput)&#x3D;&quot;fileList &#x3D; $event&quot; --&gt;
+    &lt;app-edit-attachments (attachmentsMessages)&#x3D;&quot;attachmentsMessages &#x3D; $event&quot;
+                          [courseid]&#x3D;&quot;courseid&quot;
+                          (fileListOutput)&#x3D;&quot;fileInfoList &#x3D; $event&quot;
+                          formControlName&#x3D;&quot;attachments&quot;
+                          [oldAttachments]&#x3D;&quot;oldAttachments&quot;
+                          [ticketID]&#x3D;&quot;ticketId&quot;
+                          [uploadClicks]&#x3D;&quot;uploadClick.asObservable()&quot;
+                          &gt;
+    &lt;/app-edit-attachments&gt;
+
+  &lt;/form&gt;
+
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./submit-ticket.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &quot;../submits&quot;;
+@import &#x27;/src/variables.scss&#x27;;
+
+.ticket-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  row-gap: 0;
+  mat-form-field {
+    flex-grow: 3;
+  }
+  app-sender-info {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: $XSmall) {
+  .theme-subheading {
+    order: 2;
+  }
+  app-sender-info {
+    margin-top: 1rem;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><app-headline></app-headline><div class="view-wrapper">  <app-beginning-button      (clicked)="showConfirm = true"      [confirm]=form.dirty      [disabled]="state === \'sending\'"      >  </app-beginning-button>  <app-error  [confirmLeave]="true"              *ngIf="showConfirm"              [styles]="{ margin: \'2rem 0 0 0\' }"              >  </app-error>  <form accept-charset="UTF-8"        enctype="multipart/form-data"        [formGroup]="form"        (ngSubmit)="submit()"        >    <div class="ticket-header">      <mat-form-field appearance="fill" class="theme-subheading">        <!-- Screenreaderille -->        <h2 class="invisible" i18n="@@Uusi kysymys">          Uusi kysymys        </h2>        <textarea #autosize="cdkTextareaAutosize"                  cdkAutosizeMaxRows="3"                  cdkAutosizeMinRows="1"                  cdkTextareaAutosize                  data-testid="title"                  formControlName="title"                  id="title-textarea"                  i18n-placeholder="@@Otsikko"                  matInput                  maxlength="255"                  name="title"                  [placeholder]="titlePlaceholder"                  type="text"                  >        </textarea>        <mat-error  i18n="@@Pakollinen kenttä."                    *ngIf="title?.errors?.[\'required\']"                    >          Pakollinen kenttä.        </mat-error>      </mat-form-field>      <app-sender-info  aikaleima="now"                        *ngIf="(user$ | async)"                        [user]="(user$ | async)">      </app-sender-info>    </div>    <section class="short-field-wrapper">      <ng-container formArrayName="additionalFields"                    *ngFor="let af of additionalFields.controls; let i = index"                    >        <mat-form-field appearance="fill">          <mat-label [attr.data-testid]="\'field-label-\' + i">            {{ ticketFields[i].otsikko }}          </mat-label>          <input  [attr.data-testid]="\'field-\' + i"                  formControlName="{{i}}"                  (keydown.enter)="$event.preventDefault()"                  [matAutocomplete]="auto"                  matInput                  maxlength="255"                  name="{{ ticketFields[i].otsikko }}"                  type="text"                  >          <mat-icon matSuffix                    *ngIf="ticketFields[i].valinnat[0] !== \'\'"                    [ngStyle]="{ \'color\': \'#000000\' }"                    >            keyboard_arrow_down          </mat-icon>          <mat-autocomplete #auto="matAutocomplete">            <!-- Jos lisäkenttä ei sisällä valintoja, niin              ticketFields[i].valinnat[0] sisältää tyhjän merkkijonon, eikä              suinkaan ole tyhjä. -->            <ng-container *ngIf="ticketFields[i].valinnat[0] !== \'\'">              <mat-option *ngFor="let valinta of ticketFields[i].valinnat"                          [value]="valinta"                          >                {{ valinta }}              </mat-option>            </ng-container>          </mat-autocomplete>          <mat-error  i18n="@@Pakollinen kenttä."                      *ngIf="af?.errors?.[\'required\']"                      >            Pakollinen kenttä.          </mat-error>          <mat-hint align="end">{{ af.value.length }} / 255</mat-hint>        </mat-form-field>        <mat-icon (click)="tooltip.toggle()"                  [attr.data-testid]="\'field-tooltip-\' + i"                  matTooltip="{{ ticketFields[i].ohje }}"                  matTooltipPosition="after"                  *ngIf="ticketFields[i].ohje.length > 0"                  [ngStyle]="{ \'padding-left\': \'15px\' }"                  #tooltip="matTooltip"                  >          help_outline        </mat-icon>      </ng-container>    </section>    <h3 class="theme-subheading">      <span i18n="@@Viesti">Viesti</span><span>*</span>    </h3>    <app-editor data-testid=\'message\' formControlName="message" ngDefaultControl>    </app-editor>    <mat-error  i18n="@@Pakollinen kenttä."                *ngIf="message?.errors?.[\'required\'] && message?.touched"                >      Pakollinen kenttä.    </mat-error>    <mat-error  i18n="@@Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin."                *ngIf="message?.errors?.[\'maxlength\']"                >      Tekstikenttään lisäämäsi kuva on liian iso. Liitä kenttään pienempi kuva tai lisää kuva liitetiedostona viestiin.    </mat-error>    <!-- Kun lähetetään liitetiedostoja -->    <app-success *ngIf="successMessage">      {{ successMessage }}    </app-success>    <app-error  i18n-title="@@Virhe"                message="{{ errorMessage }}"                *ngIf="errorMessage.length > 0"                [styles]="{ margin: \'1em 0\' }"                title="Virhe"                >    </app-error>    <!-- Kuvaus / ohjeteksti -->    <p data-testid="help-text">{{ helpText }}</p>    <div class="theme-actions">      <button (click)="uploadClick.next(\'add\')"              [disabled]="state!==\'editing\'"              i18n="@@Liitä tiedostoja"              mat-raised-button              type="button"              >        <mat-icon>attach_file</mat-icon>        Liitä tiedostoja      </button>      <div class="spacer"></div>      <div class="required-span">        *&nbsp;        <span i18n="@@Pakollinen">Pakollinen</span>      </div>      <button class="cancel-button"              [disabled]="state!==\'editing\'"              i18n="@@Peru"              mat-raised-button              *ngIf="editExisting"              [routerLink]="\'/course/\' + courseid + \'/ticket-view/\' + ticketId"              type="button"              >        Peru      </button>      <button class="submit-button"              *ngIf="state===\'editing\'"              color="primary"              data-testid=\'send-button\'              i18n="@@Lähetä opettajille"              mat-raised-button              type="submit"              >        Lähetä opettajille      </button>      <button class="submit-button"              (click)="goBack()"              color="primary"              mat-raised-button              *ngIf="state===\'done\'"              type="button"              >        OK      </button>    </div>    <!-- (fileListOutput)="fileList = $event" -->    <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"                          [courseid]="courseid"                          (fileListOutput)="fileInfoList = $event"                          formControlName="attachments"                          [oldAttachments]="oldAttachments"                          [ticketID]="ticketId"                          [uploadClicks]="uploadClick.asObservable()"                          >    </app-edit-attachments>  </form></div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BeginningButtonComponent', 'selector': 'app-beginning-button'},{'name': 'CommentComponent', 'selector': 'app-comment'},{'name': 'DataConsentComponent', 'selector': ''},{'name': 'EditAttachmentsComponent', 'selector': 'app-edit-attachments'},{'name': 'EditFieldComponent', 'selector': ''},{'name': 'EditorComponent', 'selector': 'app-editor'},{'name': 'ErrorComponent', 'selector': 'app-error'},{'name': 'FaqViewComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeadlineComponent', 'selector': 'app-headline'},{'name': 'HomeComponent', 'selector': ''},{'name': 'JoinComponent', 'selector': ''},{'name': 'ListingComponent', 'selector': 'app-listing'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MenuLinkComponent', 'selector': 'app-menu-link'},{'name': 'MenuSrcComponent', 'selector': 'app-menu-src'},{'name': 'MessageComponent', 'selector': 'app-message'},{'name': 'NoDataConsentComponent', 'selector': ''},{'name': 'NoPrivilegesComponent', 'selector': ''},{'name': 'PageNotFoundComponent', 'selector': ''},{'name': 'PrivacyModalComponent', 'selector': 'app-privacy-modal'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RefreshDialogComponent', 'selector': 'app-refresh-dialog'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'SearchBarComponent', 'selector': 'app-search-bar'},{'name': 'SenderInfoComponent', 'selector': 'app-sender-info'},{'name': 'SettingsComponent', 'selector': ''},{'name': 'SubmitFaqComponent', 'selector': 'app-submit-faq'},{'name': 'SubmitTicketComponent', 'selector': 'app-submit-ticket'},{'name': 'SuccessComponent', 'selector': 'app-success'},{'name': 'TicketListComponent', 'selector': 'app-ticket-list'},{'name': 'TicketViewComponent', 'selector': 'app-ticket-view'},{'name': 'ViewAttachmentsComponent', 'selector': 'app-view-attachments'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'SubmitTicketComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'SubmitTicketComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

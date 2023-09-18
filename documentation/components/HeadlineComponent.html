@@ -1,0 +1,1015 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>tikettisysteemi documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">tikettisysteemi documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  HeadlineComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/shared/components/headline/headline.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code>OnInit</code>
+                <code>AfterViewInit</code>
+    </p>
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-headline</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./headline.component.scss</code></td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">template</td>
+                <td class="col-md-9"><pre class="line-numbers"><code class="language-html">
+&lt;!-- *ngIf&#x3D;&quot;!isInIframe || showInIframe &amp;&amp; (headlineText || hasProjectedContent)&quot; --&gt;
+&lt;h1 class&#x3D;&quot;mat-h1&quot;
+    [ngClass]&#x3D;&quot;appHeadline ? &#x27;login-h1&#x27; : &#x27;&#x27;&quot;
+    *ngIf&#x3D;&quot;isInIframe !&#x3D;&#x3D; &#x27;true&#x27; || showInIframe&quot;
+    &gt;
+  &lt;!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. --&gt;
+  &lt;span&gt;
+    {{ headlineText }}
+    &lt;ng-content&gt;&lt;/ng-content&gt;
+  &lt;/span&gt;
+&lt;/h1&gt;
+
+&lt;!-- &lt;div class&#x3D;&quot;vertical-spacer&quot; *ngIf&#x3D;&quot;isInIframe || !headlineText&quot;&gt;&lt;/div&gt; --&gt;
+</code></pre></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#hasProjectedContent" >hasProjectedContent</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#headlineText" >headlineText</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#isInIframe" >isInIframe</a>
+                            </li>
+                            <li>
+                                    <span class="modifier"></span>
+                                <a href="#projectedContent" >projectedContent</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#showCourseName" >showCourseName</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#trackCourseID" >trackCourseID</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#appHeadline" >appHeadline</a>
+                            </li>
+                            <li>
+                                <a href="#noCourseTitle" >noCourseTitle</a>
+                            </li>
+                            <li>
+                                <a href="#showInIframe" >showInIframe</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(change: ChangeDetectorRef, route: ActivatedRoute, router: Router, courses: <a href="../injectables/CourseService.html" target="_self">CourseService</a>, store: <a href="../injectables/StoreService.html" target="_self">StoreService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>change</td>
+                                                  
+                                                        <td>
+                                                                    <code>ChangeDetectorRef</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>courses</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/CourseService.html" target="_self" >CourseService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>store</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/StoreService.html" target="_self" >StoreService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section data-compodoc="block-inputs">
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="appHeadline"></a>
+                        <b>appHeadline</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:33</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="noCourseTitle"></a>
+                        <b>noCourseTitle</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:35</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="showInIframe"></a>
+                        <b>showInIframe</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:37</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/shared/components/headline/headline.component.ts:64</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="54"
+                            class="link-to-prism">src/app/shared/components/headline/headline.component.ts:54</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="showCourseName"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>showCourseName</b></span>
+                        <a href="#showCourseName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>showCourseName(courseID: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="68"
+                            class="link-to-prism">src/app/shared/components/headline/headline.component.ts:68</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>courseID</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="trackCourseID"></a>
+                    <span class="name">
+                        <span class="modifier">Private</span>
+                        <span ><b>trackCourseID</b></span>
+                        <a href="#trackCourseID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>trackCourseID()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/shared/components/headline/headline.component.ts:83</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hasProjectedContent"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>hasProjectedContent</b></span>
+                        <a href="#hasProjectedContent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="headlineText"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>headlineText</b></span>
+                        <a href="#headlineText"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:39</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isInIframe"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>isInIframe</b></span>
+                        <a href="#isInIframe"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>string | null</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:40</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="projectedContent"></a>
+                    <span class="name">
+                            <span class="modifier"></span>
+                        <span ><b>projectedContent</b></span>
+                        <a href="#projectedContent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <b>Decorators : </b>
+                        <br />
+                        <code>
+                            @ContentChild(&#x27;projectedContent&#x27;)<br />
+                        </code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/components/headline/headline.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
+          ContentChild, Input, OnInit } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute, ParamMap, Router } from &#x27;@angular/router&#x27;;
+
+import { CourseService } from &#x27;src/app/course/course.service&#x27;;
+import { environment } from &#x27;src/environments/environment&#x27;;
+import { StoreService } from &#x27;@core/services/store.service&#x27;;
+
+@Component({
+  selector: &#x27;app-headline&#x27;,
+  template: &#x60;
+
+    &lt;!-- *ngIf&#x3D;&quot;!isInIframe || showInIframe &amp;&amp; (headlineText || hasProjectedContent)&quot; --&gt;
+    &lt;h1 class&#x3D;&quot;mat-h1&quot;
+        [ngClass]&#x3D;&quot;appHeadline ? &#x27;login-h1&#x27; : &#x27;&#x27;&quot;
+        *ngIf&#x3D;&quot;isInIframe !&#x3D;&#x3D; &#x27;true&#x27; || showInIframe&quot;
+        &gt;
+      &lt;!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. --&gt;
+      &lt;span&gt;
+        {{ headlineText }}
+        &lt;ng-content&gt;&lt;/ng-content&gt;
+      &lt;/span&gt;
+    &lt;/h1&gt;
+
+    &lt;!-- &lt;div class&#x3D;&quot;vertical-spacer&quot; *ngIf&#x3D;&quot;isInIframe || !headlineText&quot;&gt;&lt;/div&gt; --&gt;
+  &#x60;,
+  styleUrls: [&#x27;./headline.component.scss&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class HeadlineComponent implements OnInit, AfterViewInit {
+
+  // Kirjautumissivulla otsikko on erilainen.
+  @Input() appHeadline: boolean &#x3D; false
+  // Oletuksena näytetään kurssin nimi, tällä voi ohittaa sen.
+  @Input() noCourseTitle: boolean &#x3D; false;
+  // Oletuksena otsikkoa ei näytetä upotuksessa. Tällä voi näyttää sen aina.
+  @Input() showInIframe: boolean &#x3D; false;
+  public hasProjectedContent &#x3D; false;
+  public headlineText: string | null &#x3D; null;
+  public isInIframe: string | null;
+
+  constructor(
+      private change: ChangeDetectorRef,
+      private route : ActivatedRoute,
+      private router: Router,
+      private courses: CourseService,
+      private store: StoreService,
+  ) {
+    this.isInIframe &#x3D; window.sessionStorage.getItem(&#x27;IN-IFRAME&#x27;);
+  }
+
+  @ContentChild(&#x27;projectedContent&#x27;) projectedContent: any
+
+  ngOnInit() {
+    this.hasProjectedContent &#x3D; !!this.hasProjectedContent;
+    if (this.appHeadline) {
+      this.headlineText &#x3D; environment.productName + &quot;-&quot; +
+          $localize &#x60;:@@tikettijärjestelmä:tikettijärjestelmä&#x60;;
+    } else if (this.noCourseTitle !&#x3D;&#x3D; true) {
+      this.trackCourseID();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.hasProjectedContent &#x3D; !!this.hasProjectedContent;
+  }
+
+  private showCourseName(courseID: string) {
+    this.courses.getCourseName(courseID).then(response &#x3D;&gt; {
+      this.headlineText &#x3D; response ?? &#x27;&#x27;;
+      this.change.detectChanges();
+      this.store.setCourseName(this.headlineText);
+    }).catch((response) &#x3D;&gt; {
+      /* Jälkimmäinen testaa tyhjää objektia. Tulos tarkoittaa, että
+          kurssia ei ole olemassa. */
+      if (response &#x3D;&#x3D;&#x3D; null || Object.keys(response).length &#x3D;&#x3D;&#x3D; 0)  {
+        this.router.navigateByUrl(&#x27;404&#x27;);
+      }
+      this.headlineText &#x3D; &#x27;&#x27;;
+    });
+  }
+
+  private trackCourseID(): void {
+    this.route.paramMap.subscribe((paramMap: ParamMap) &#x3D;&gt; {
+      var courseID: string | null &#x3D; paramMap.get(&#x27;courseid&#x27;);
+      if (courseID &#x3D;&#x3D;&#x3D; null) {
+        console.error(&#x27;Virhe: ei kurssi ID:ä.&#x27;);
+      } else {
+        this.showCourseName(courseID);
+      }
+    })
+  }
+
+}
+</code></pre>
+    </div>
+
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./headline.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &#x27;/src/variables.scss&#x27;;
+$debug: false;
+
+.vertical-spacer {
+  height: 1.5rem;
+}
+
+/* Yläotsikko, jossa punainen viiva. Käytetään esim:
+  &lt;h1 class&#x3D;&quot;main-header&quot;&gt;&lt;span&gt;Otsikko&lt;/span&lt;/h1&gt;
+*/
+h1 {
+  // Ei ota jostain syystä custom teemasta fonttia.
+  font-family: var(--display-font);
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  // Älä laita enempää ala-marginaalia. Alkuun -nappi sijoittuu muuten väärin.
+  margin-top: 2.2rem;
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
+
+  // Tarvitaan pituuden mukaan muuttuvan inline-elementti alla olevan otsikon
+  // alla olevan viivan pituuden määrittelyyn.
+  span {
+    @if $debug { outline: 2px dotted blue }
+    position: relative;
+    // Firefoxilla korkeutta ei määritellä span-elementillä, vaan tarvitaan tämä.
+    // Viiva on tällöin useammalla rivillä koko näkymän leveyksinen.
+    @-moz-document url-prefix() {
+      display: inline-block;
+    }
+    // padding-right: 2em;
+    // Otsikon viimeisen rivin alla oleva viiva.lock;
+    &amp;:after {
+      @if $debug { outline: 2px solid green }
+      border-bottom: 3px solid var(--accent-color);
+      bottom: 4px;
+      content: &quot;&quot;;
+      left: 0;
+      padding-right: 3em;
+      position: absolute;
+      width: 100%;
+      z-index: -1;
+    }
+  }
+}
+
+.login-h1 {
+  margin: 0 auto 0 auto;
+  // margin: 1.8em auto 0 auto;
+  text-align: center;
+  span:after {
+    bottom: 4px;
+    left: -6%;
+    padding-right: 0;
+    width: 112%;
+  }
+}
+
+@media (max-width: $XSmall) {
+
+  h1 {
+    font-size: 2.5rem * 0.8;
+    line-height: 1.1;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><!-- *ngIf="!isInIframe || showInIframe && (headlineText || hasProjectedContent)" --><h1 class="mat-h1"    [ngClass]="appHeadline ? \'login-h1\' : \'\'"    *ngIf="isInIframe !== \'true\' || showInIframe"    >  <!-- Span-tagit tarvitsee otsikon ympärille, että teemassa muotoillaan oikein. -->  <span>    {{ headlineText }}    <ng-content></ng-content>  </span></h1><!-- <div class="vertical-spacer" *ngIf="isInIframe || !headlineText"></div> --></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'BeginningButtonComponent', 'selector': 'app-beginning-button'},{'name': 'CommentComponent', 'selector': 'app-comment'},{'name': 'DataConsentComponent', 'selector': ''},{'name': 'EditAttachmentsComponent', 'selector': 'app-edit-attachments'},{'name': 'EditFieldComponent', 'selector': ''},{'name': 'EditorComponent', 'selector': 'app-editor'},{'name': 'ErrorComponent', 'selector': 'app-error'},{'name': 'FaqViewComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HeadlineComponent', 'selector': 'app-headline'},{'name': 'HomeComponent', 'selector': ''},{'name': 'JoinComponent', 'selector': ''},{'name': 'ListingComponent', 'selector': 'app-listing'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MenuLinkComponent', 'selector': 'app-menu-link'},{'name': 'MenuSrcComponent', 'selector': 'app-menu-src'},{'name': 'MessageComponent', 'selector': 'app-message'},{'name': 'NoDataConsentComponent', 'selector': ''},{'name': 'NoPrivilegesComponent', 'selector': ''},{'name': 'PageNotFoundComponent', 'selector': ''},{'name': 'PrivacyModalComponent', 'selector': 'app-privacy-modal'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RefreshDialogComponent', 'selector': 'app-refresh-dialog'},{'name': 'RegisterComponent', 'selector': 'app-register'},{'name': 'SearchBarComponent', 'selector': 'app-search-bar'},{'name': 'SenderInfoComponent', 'selector': 'app-sender-info'},{'name': 'SettingsComponent', 'selector': ''},{'name': 'SubmitFaqComponent', 'selector': 'app-submit-faq'},{'name': 'SubmitTicketComponent', 'selector': 'app-submit-ticket'},{'name': 'SuccessComponent', 'selector': 'app-success'},{'name': 'TicketListComponent', 'selector': 'app-ticket-list'},{'name': 'TicketViewComponent', 'selector': 'app-ticket-view'},{'name': 'ViewAttachmentsComponent', 'selector': 'app-view-attachments'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'HeadlineComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'HeadlineComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
