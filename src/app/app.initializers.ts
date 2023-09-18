@@ -3,7 +3,7 @@ import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 import localeEn from '@angular/common/locales/en';
 
-// Alusta valittu kieli.
+// Alusta valittu kieli. Asetetaan app.module:ssa.
 export const initializeLanguage = (): Promise<void> | void => {
 
   registerLocaleData(localeFi);  // Aina oletuslocale.

@@ -8,7 +8,8 @@ const baseUrl = '/api';
 
 // clientID on 3rd party -tunnistautumista varten.
 
-// Testing = ajetaan Jasmine -testausympäristössä.ß
+/* Testing tarkoittaa, ajetaanko sovellus Jasmine -testausympäristössä. Ohjelma-
+koodissa voidaan joissain tapauksissa lukea tämä arvo. */
 
 export const environment = {
   production: false,

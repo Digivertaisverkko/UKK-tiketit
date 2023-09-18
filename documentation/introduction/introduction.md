@@ -1,27 +1,48 @@
 # Järjestelmän kuvaus
 
+Tämä ohje pyrkii antamaan yleisen kuvauksen Tukki-järjestelmän frontendistä ohjelman ylläpitäjälle. 
 Tämän kuvauksen ymmärtämiseksi olisi hyvä tuntea perustiedot Angularin
-yleisistä käsitteistä, kuten moduuli (*module tai ngModule*), komponentti
-(*component*), *template* ja *service*.  Näistä voi lukea esimerkiksi [Angularin virallisesta dokumentaatiosta](https://angular.io/guide/understanding-angular-overview). Tiedostojen nimissä käytetään [Angularin suosituksia](https://angular.io/guide/styleguide#naming).
+yleisistä käsitteistä, kuten *moduuli* (*module* tai *ngModule*), 
+*komponentti* (*component*), *template* ja *service*.  Näistä voi lukea esimerkiksi [Angularin virallisesta dokumentaatiosta](https://angular.io/guide/architecture). Tiedostojen nimissä käytetään [Angularin suosituksia](https://angular.io/guide/styleguide#naming).
+
+## Tekniikat
+
+Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee Angularin mukana.
+
+- Angular Framework. Tätä kirjoittaessa versio 16.
+- HTML - Templatien määrittely.
+- SASS/SCSS - CSS:n esikäsittelykieli, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
+- TypeScript - JavaScriptin superset tyyppimäärityksillä.
+- RxJS - Kirjasto reaktiivisen ohjelmoinnin toteuttamiseen käyttäen observableja.
+- Angular Material - Komponenttikirjasto käyttöliittymäelementteille.
+- Angular Router - Reititys ja navigointi.
+- Angular HTTP Client - Kirjasto HTTP-pyyntöjen käsittelyyn.
+- Angular CLI - Komentorivityökalu.
+- Angular Reactive Forms - Reaktiivisten lomakkeiden tekemiseen.
+- Ngx-editor - Rich-text editori -komponentti.
+- Npm - Riippuvuuksien hallintaan.
+- Jasmine - Testaus framework yksikkötesteillle.
+- Karma - Testien suoritusympäristö, joka toimii Jasminen kanssa.
+- Git - versionhallinta.
+- ESLint - Staattinen koodinanalyysi.
 
 ## Moduulit
 
-Sovellus koostuu erilaisista moduuleista. Moduulit puolestaan sisältävät mm. eri komponentteja.
+Sovellus koostuu eri moduuleista. Moduulit puolestaan sisältävät mm. eri komponentteja.
+Moduulien hakemistot sijaitsevat hakemistossa **src/app**. Moduulit sisältävät tyypillisesti seuraavat tiedostot:
 
-Sisältävät tyypillisesti seuraavat tiedostot:
-*.module.ts. - Moduulin asetukset lukuunottamatta routing-asetuksia.
-*.module.routing.ts - Routing -asetukset.
-*.models.ts - Moduulissä käytettyjä modeleja, tyypillisesti rajapintoja.
-*.service.ts - Moduulissa käytetty service.
-.spec.ts - Jasmine -automaattitestit.
-dummydata.ts - Testien käyttämää dummydataa.
+- *.module.ts. - Moduulin asetukset lukuunottamatta reitityksen määrittelyjä.
+- *.module.routing.ts - Moduulin tarjoamia reitityksen määrittelyjä.
+- *.models.ts - Moduulissä käytettyjä malleja, tyypillisesti rajapintoja.
+- *.service.ts - Moduulissa käytetty service.
+- *.spec.ts - Automaattitestejä.
+- *.dummydata.ts - Testien käyttämää dataa.
 
-Tämä sovellus koostuu app ja core moduuleista sekä eri feature-moduuleista:
+Komponentit ovat moduulien alihakemistoissa. Sovellus koostuu seuraavista moduuleista:
 
 - **app.module**
   - Sovelluksen päämoduuli. Sisältää juurikomponentin AppComponent, joka toimii sovelluksen näkymän perustana. 
   - Määritellään kaikki muut moduulit.
-  - Otetaan käynnistyksessä käyttöön haluttu kieli funktiolla *initializeLanguage*.
 
 - **core.module**
   - Sovelluksen ydintoiminnallisuus.
@@ -31,34 +52,43 @@ Tämä sovellus koostuu app ja core moduuleista sekä eri feature-moduuleista:
 
 - **Feature -moduulit**
   
-  Nämä ovat tapa ryhmitellä toisiinsa liittyvää toiminnallisuutta. Jokainen moduuli shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä routing määrittelyt tiedostoissa *.routing.module.ts.
+  Ryhmittelevät toisiinsa liittyvää toiminnallisuutta. Jokainen moduuli shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä
+  reitityksen määrittelyt.
 
-  - **ticket.module**
-    - Sisältää tiketteihin eli kysymyksiin liittyviä ominaisuuksia.
+  - **ticket.module** - Tiketteihin eli kysymyksiin liittyviä ominaisuuksia.
 
-  - **user.module**
-    - Sisältää käyttäjiin liittyviä ominaisuuksia.
+  - **user.module** - Käyttäjiin liittyviä ominaisuuksia.
 
-  - **course.module**
-    - Sisältää kursseihin liittyviä ominaisuuksia.
+  - **course.module** - Kursseihin liittyviä ominaisuuksia.
 
-  - **shared.module**
-    - Omainaisuuksia, joita on käytössä useissa eri feature-moduuleissa.
+  - **shared.module** - Omainaisuuksia, joita on käytössä useissa eri feature-moduuleissa.
 
-  ## Komponentit
-  
-  Tähän komponenteista.
+## Komponentit
 
-  ## Servicet
+Tähän komponenteista.
 
-  Tähän serviceistä.
+## Servicet
 
-  ## Teema ja tyylit
+Tähän serviceistä.
 
-  Sovellus käyttää tyylien määrittelyyn SASS-kirjastoa ja sen Sassy CSS eli SCSS -määrittelytapaa. Tyylit ovat .scss -tiedostoissa. Sovellus käyttää *Angular Material* -kirjastoa ja kustomoitua teemaa, jonka tyyliasetukset ovat tiedostossa *src/styles/custom-theme.scss*. Globaalit tyylimäärittelyt ovat tiedostossa *src/styles.scss*. Täällä määrittelyt css -classien nimet ovat tyypillisesti ".theme-" -alkuisia. Suurin osa tyyleistä on määritelty komponenteissa .scss -tiedostoissa.
-  
-  ## Muut tiedostot
+## Teema ja tyylit
 
-  *src/assets* sisältää hakemistot ikoneille ja logoille sekä käännöstiedoston en-US.json. Käännökset ovat muodossa:
+Sovellus käyttää *Angular Material* -kirjaston kustomoitua teemaa, jonka määrittelyt ovat tiedostossa **src/styles/custom-theme.scss**. Globaalit tyylimäärittelyt ovat tiedostossa **src/styles.scss**. Siellä on määrittelty kaikkialla sovelluksessa käytettyjä CSS -luokkia, joiden nimet ovat **.theme-** -alkuisia. Komponenttikohtaiset tyylit ovat määritelty komponenttien
+*.component.scss -tiedostoissa. Jos tyyli koskee vain tiettyä tai tiettyjä komponenttia,
+pitäisi niiden määrittely tehdä näissä tiedostoissa. 
+
+## Kieli ja käännökset
+
+Angularissa käännökset voidaan tehdä build-aikana tai ajonaikaisesti. Tässä sovelluksessa
+noudatetaan jälkimmäistä tapaa. Käännöksen vaihtaminen ajon aikana aiheuttaa aina
+sovelluksen uudelleenkäynnistyksen. Kieli haetaan ja alustetaan ohjelman käynnistyessä tiedostossa **src/app/app.initializers.ts**. Englanninkieliset käännökset sijaitsevat
+tiedostossa **src/assets/en-US.json**. Käännökset ovat muodossa:
+
   ```"Suomenkielinen käännösavain": "Englanninkielinen käännös"```
-  Suomenkielinen teksti on komponenttien templateissa. Käännös haetaan käännösavaimeen viittaamalla. Käännös tehdäään ajonaikaisesti. Käännöksen vaihtaminen ajon aikana aiheuttaa sovelluksen uudelleenkäynnistyksen.
+
+Suomenkielinen, alkuperäinen teksti on komponenttien templateissa. Käännös haetaan käännösavaimeen viittaamalla. 
+
+## Muita tiedostoja
+
+- **/src/assets** - Kuvat, logot ja käännökset.
+- **index.html** - Fonttien ja faviconin osoitteet.
