@@ -1,0 +1,178 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Tukki-front documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top d-block d-sm-none">
+            <a href="../" class="navbar-brand">Tukki-front documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content additional-page">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1>Järjestelmän kuvaus</h1>
+<p>Tämän kuvauksen ymmärtämiseksi olisi hyvä tuntea perustiedot Angularin
+yleisistä käsitteistä, kuten moduuli (<em>module tai ngModule</em>), komponentti
+(<em>component</em>), <em>template</em> ja <em>service</em>.  Näistä voi lukea esimerkiksi <a href="https://angular.io/guide/understanding-angular-overview">Angularin virallisesta dokumentaatiosta</a>. Tiedostojen nimissä käytetään <a href="https://angular.io/guide/styleguide#naming">Angularin suosituksia</a>.</p>
+<h2>Moduulit</h2>
+<p>Sovellus koostuu erilaisista moduuleista. Sisältävät tyypillisesti seuraavat tiedostot:
+*.module.ts. - Moduulin asetukset lukuunottamatta routing-asetuksia.
+*.module.routing.ts - Routing -asetukset.
+*.models.ts - Moduulissä käytettyjä modeleja, tyypillisesti rajapintoja.
+*.service.ts - Moduulissa käytetty service.
+.spec.ts - Jasmine -automaattitestit.
+dummydata.ts - Testien käyttämää dummydataa.</p>
+<p>Tämä sovellus koostuu app ja core moduuleista sekä eri feature-moduuleista:</p>
+<ul>
+<li><p><strong>app.module</strong></p>
+<ul>
+<li>Sovelluksen päämoduuli. Sisältää juurikomponentin AppComponent, joka toimii sovelluksen näkymän perustana. </li>
+<li>Määritellään kaikki muut moduulit.</li>
+<li>Otetaan käynnistyksessä käyttöön haluttu kieli funktiolla <em>initializeLanguage</em>.</li>
+</ul>
+</li>
+<li><p><strong>core.module</strong></p>
+<ul>
+<li>Sovelluksen ydintoiminnallisuus.</li>
+<li>Yleisiä komponentteja, kuten header ja footer.</li>
+<li>Yleisiä näkymiä ja virhenäkymiä.</li>
+<li>Monia yleiskäyttöisiä servicejä, kuten auth.service.</li>
+</ul>
+</li>
+<li><p><strong>Feature -moduulit</strong></p>
+<p>Nämä ovat tapa ryhmitellä toisiinsa liittyvää toiminnallisuutta. Jokainen moduuli shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä routing määrittelyt tiedostoissa *.routing.module.ts.</p>
+<ul>
+<li><p><strong>ticket.module</strong></p>
+<ul>
+<li>Sisältää tiketteihin eli kysymyksiin liittyviä ominaisuuksia.</li>
+</ul>
+</li>
+<li><p><strong>user.module</strong></p>
+<ul>
+<li>Sisältää käyttäjiin liittyviä ominaisuuksia.</li>
+</ul>
+</li>
+<li><p><strong>course.module</strong></p>
+<ul>
+<li>Sisältää kursseihin liittyviä ominaisuuksia.</li>
+</ul>
+</li>
+<li><p><strong>shared.module</strong></p>
+<ul>
+<li>Omainaisuuksia, joita on käytössä useissa eri feature-moduuleissa.</li>
+</ul>
+</li>
+</ul>
+<h2>Komponentit</h2>
+<p>Tähän komponenteista.</p>
+<h2>Servicet</h2>
+<p>Tähän serviceistä.</p>
+<h2>Teema ja tyylit</h2>
+<p>Sovellus käyttää tyylien määrittelyyn SASS-kirjastoa ja sen Sassy CSS eli SCSS -määrittelytapaa. Tyylit ovat .scss -tiedostoissa. Sovellus käyttää <em>Angular Material</em> -kirjastoa ja kustomoitua teemaa, jonka tyyliasetukset ovat tiedostossa <em>src/styles/custom-theme.scss</em>. Globaalit tyylimäärittelyt ovat tiedostossa <em>src/styles.scss</em>. Täällä määrittelyt css -classien nimet ovat tyypillisesti &quot;.theme-&quot; -alkuisia. Suurin osa tyyleistä on määritelty komponenteissa .scss -tiedostoissa.</p>
+<h2>Muut tiedostot</h2>
+<p><em>src/assets</em> sisältää hakemistot ikoneille ja logoille sekä käännöstiedoston en-US.json. Käännökset ovat muodossa:
+<code>&quot;Suomenkielinen käännösavain&quot;: &quot;Englanninkielinen käännös&quot;</code>
+Suomenkielinen teksti on komponenttien templateissa. Käännös haetaan käännösavaimeen viittaamalla. Käännös tehdäään ajonaikaisesti. Käännöksen vaihtaminen ajon aikana aiheuttaa sovelluksen uudelleenkäynnistyksen.</p>
+</li>
+</ul>
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'additional-page';
+            var COMPODOC_CURRENT_PAGE_URL = 'johdanto-ylläpitäjälle.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
