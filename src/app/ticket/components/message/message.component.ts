@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { highlightTree } from '@lezer/highlight';
-import { defaultHighlightStyle, Language } from '@codemirror/language';
-import { javascript } from "@codemirror/lang-javascript";
+import { defaultHighlightStyle, Language, StreamLanguage } from '@codemirror/language';
 import { StyleModule } from 'style-mod';
+
+import langGeneric from '@shared/editor/lang-generic/lang-generic';
 
 @Component({
   selector: 'app-message',
@@ -44,7 +45,7 @@ export class MessageComponent implements OnInit {
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].tagName === 'CODE') {
         let newElement = doc.createElement('CODE');
-        newElement.innerHTML = this.highlightCode(elements[i].innerHTML, javascript().language);
+        newElement.innerHTML = this.highlightCode(elements[i].innerHTML, StreamLanguage.define(langGeneric));
         elements[i].replaceWith(newElement);
       }
     }

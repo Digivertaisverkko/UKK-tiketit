@@ -28,6 +28,7 @@
     "@babel/plugin-proposal-private-methods": "^7.18.6",
     "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/language": "^6.9.0",
+    "@codemirror/legacy-modes": "^6.3.3",
     "@lezer/highlight": "^1.1.6",
     "codemirror": "^6.0.1",
     "crypto-random-string": "^5.0.0",
