@@ -54,7 +54,16 @@ const customFilterPredicate = (data: UKK, filter: string) => {
   return kentatMatch || mainDataMatch
 
 }
-
+/**
+ * Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
+ * Ratkaistut, ovat tämän näkymän child componentissa TicketListComponent.
+ *
+ * @export
+ * @class ListingComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',

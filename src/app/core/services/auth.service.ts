@@ -1,5 +1,3 @@
-// Tämä service käsittelee käyttäjäautentikointiin liittyviä toimia.
-
 import { ActivationEnd, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
@@ -34,7 +32,12 @@ interface AuthRequestResponse {
   error: string;
   'session-id': string;
 }
-
+/**
+ * Käsittelee käyttäjäautentikointiin liittyvää tietoa.
+ *
+ * @export
+ * @class AuthService
+ */
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {

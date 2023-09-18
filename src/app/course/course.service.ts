@@ -1,5 +1,3 @@
-/* Tämä service käsittelee kursseihin liittyvää tietoa. */
-
 import { firstValueFrom, timeout } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -15,6 +13,13 @@ interface Kurssi {
   id: string;
   nimi: string;
 }
+
+/**
+ * Käsittelee kursseihin liittyvää tietoa.
+ * 
+ * @export
+ * @class CourseService
+ */
 
 @Injectable({ providedIn: 'root' })
 

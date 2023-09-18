@@ -1,5 +1,10 @@
 import { InvitedInfo, Kenttapohja } from "./course.models"
-
+/**
+ * Testaamiseen käytettävää dummy dataa.
+ *
+ * @export
+ * @class CourseDummyData
+ */
 export class CourseDummyData {
 
   public get invitedInfo() {

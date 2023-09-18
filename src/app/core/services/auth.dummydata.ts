@@ -1,5 +1,10 @@
 import { LoginInfo, Role, User } from "@core/core.models"
-
+/**
+ * Testaamiseen käytettävää dummy dataa.
+ *
+ * @export
+ * @class AuthDummyData
+ */
 export class AuthDummyData {
 
   public get loginInfo(): LoginInfo {

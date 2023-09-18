@@ -1,12 +1,15 @@
 import { Role } from "@core/core.models";
 import { Kentta, Liite, SortableTicket, Tiketti, UKK } from "./ticket.models";
 import { AuthDummyData } from "@core/services/auth.dummydata";
-
-/* Dummy dataa testausta varten. */
-
-/* id arvot tulevat palvelimelta numeroina, mutta ne tallennetaan
-   ja käsitellään frontissa string:nä. */
-
+ 
+/**
+ * Dummy dataa testausta varten.
+ * id arvot tulevat palvelimelta numeroina, mutta ne tallennetaan ja
+ * käsitellään frontissa string:nä.
+ *
+ * @export
+ * @class TicketDummyData
+ */
 export class TicketDummyData {
 
   readonly authDummyData = new AuthDummyData;

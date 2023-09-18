@@ -1,11 +1,7 @@
-/* Tämä service on käsittelee tiketteihin eli kysymyksiin liittyvää tietoa.
-    UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
-    niistä vastaavassa servicessä. */
-
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, firstValueFrom, of  , timeout } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of, timeout } from 'rxjs';
 
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
   SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
@@ -17,10 +13,16 @@ import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
 import { UtilsService } from '@core/services/utils.service';
 
+/**
+ * Käsittelee tiketteihin eli kysymyksiin liittyvää tietoa mukaan lukien UKK:t.
+ * Tikettipohjat ovat kurssin asetuksia ja niitä käsitelään course servicessä.
+ * @export
+ * @class TicketService
+ */
+
 @Injectable({ providedIn: 'root' })
 
 export class TicketService {
-
   private api: string = environment.apiBaseUrl
 
   constructor (
@@ -213,19 +215,6 @@ export class TicketService {
     // Numero edessä, koska järjestetään taulukossa sen mukaan.
     string = numericalState + '-' + string;
     return string;
-  }
-
-  // Tiedoston lähetyksen testaamisessa voi http.post korvata tällä, niin saa virheitä.
-  public fakeHttpPost(url?: any, formData?: any, options?: any): Observable<any> {
-    const errorResponse = new HttpErrorResponse({
-      error: 'File upload failed',
-      status: 400,
-      statusText: 'Bad Request',
-    });
-    const fakePost = new Observable(observer => {
-      observer.error(errorResponse);
-    })
-    return fakePost
   }
 
   // Testaamista varten.

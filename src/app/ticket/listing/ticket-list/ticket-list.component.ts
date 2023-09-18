@@ -1,4 +1,4 @@
-import {  AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
+import { AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
     ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
@@ -58,6 +58,15 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
   return kentatMatch || mainDataMatch;
 };
 
+/**
+ * Näyttää opettajalle listan kurssin tiketeistä sekä listan ratkaistuiksi
+ * asetetuista tiketeistä ja opiskelijalle tämän omat tiketit.
+ * 
+ * @export
+ * @class TicketListComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',

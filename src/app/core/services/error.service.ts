@@ -1,6 +1,3 @@
-  /* Käsittelee virheisiin liittyviä toimia, kuten niiden logittamista vai
-     tekemistä testausta varten. */
-
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 
@@ -25,7 +22,14 @@ const CODE = {
   unfinishedAPI: 3002,
   somethingWentWrong: 3004
 }
-
+/**
+ * Käsittelee virheisiin liittyviä toimia, kuten niiden logittamista vai
+ * tekemistä testausta varten. 403 virheissä routataan no-privileges /
+ * /forbidden -näkymään.
+ *
+ * @export
+ * @class ErrorService
+ */
 @Injectable({ providedIn: 'root' })
 
 export class ErrorService {
