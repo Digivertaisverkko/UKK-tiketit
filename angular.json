@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "tikettisysteemi": {
+    "tukki-front": {
 
       "projectType": "application",
       "schematics": {
@@ -21,7 +21,7 @@
             "allowedCommonJsDependencies": [
                 "filesize", "sha.js"
             ],
-            "outputPath": "dist/tikettisysteemi",
+            "outputPath": "dist/tukki-front",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -76,15 +76,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "tikettisysteemi:build",
+            "browserTarget": "tukki-front:build",
             "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "tikettisysteemi:build:production"
+              "browserTarget": "tukki-front:build:production"
             },
             "development": {
-              "browserTarget": "tikettisysteemi:build:development"
+              "browserTarget": "tukki-front:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "tikettisysteemi:build"
+            "browserTarget": "tukki-front:build"
           }
         },
         "test": {

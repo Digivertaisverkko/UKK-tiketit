@@ -14,7 +14,7 @@ Alla on ohjeet miten käytät tätä projektia kehitystyössä. Ohjeet olettavat
 
 - Asenna nodejs ja npm tietokoneellesi.
 - Asenna [Angular-CLI](https://angular.io/cli) globaalisti npm:llä komennolla `npm install -g @angular/cli`
-- Lataa tai kloonaa tämä repo. Aseta tikettijärjestelmän rajapinnassa ympäristömuuttuja `FRONTEND_DIRECTORY` osoittamaan kyseisessä kansiossa olevaan /dist/tikettisysteemi -hakemistoon. Esimerkiksi `FRONTEND_DIRECTORY=/home/user/UKK-tiketit/dist/tikettisysteemi/`
+- Lataa tai kloonaa tämä repo. Aseta tikettijärjestelmän rajapinnassa ympäristömuuttuja `FRONTEND_DIRECTORY` osoittamaan kyseisessä kansiossa olevaan /dist/tukki-front -hakemistoon. Esimerkiksi `FRONTEND_DIRECTORY=/home/user/UKK-tiketit/dist/tukki-front/`
 - Aja komento `npm ci` asentaaksesi projektin riippuvuudet
 - Aja komento `npm run build` kääntääksesi projektin.
 
@@ -24,7 +24,7 @@ Aja komento `npm run build` kääntääksesi projektin `production` versiona.
 
 Aja komento `npm run watch`, jos haluat tehdä kehitystyötä. Tällöin projekti käännetään `development` versiona ja kääntäminen tapahtuu tiedostojen muuttumisen yhteydessä.
 
-Projektin käännetty versio sijaitsee `dist/tikettisysteemi/` hakemistossa.
+Projektin käännetty versio sijaitsee `dist/tukki-front/` hakemistossa.
 
 ### Testien ajaminen
 

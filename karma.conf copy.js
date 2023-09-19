@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/tikettisysteemi'),
+      dir: require('path').join(__dirname, './coverage/tukki-front'),
       subdir: '.',
       reporters: [
         { type: 'html' },
