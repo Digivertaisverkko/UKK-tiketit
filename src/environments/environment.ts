@@ -6,21 +6,15 @@
 
 const baseUrl = '/api';
 
-// clientID on 3rd party -tunnistautumista varten.
-
-/* Testing tarkoittaa, ajetaanko sovellus Jasmine -testausympäristössä. Ohjelma-
-koodissa voidaan joissain tapauksissa lukea tämä arvo. */
+/* "testing" muuttuja voidaan tarvittaessa asettaa testissä arvoksi true,
+    jos halutaan ohjelmakoodissa tietää, ajetaanko testiympäristöä. */
 
 export const environment = {
   production: false,
-  clientID: 'angularApp',
   productName: 'Tukki',
   apiBaseUrl: baseUrl,
   testing: false
 }
-
-//
-//   ownLoginUrl: apiBaseUrl + '/echoheaders/',
 
 /*
  * For easier debugging in development mode, you can import the following file

@@ -2,11 +2,13 @@
    esim. ng build --configuration production.
 */
 
+/* "testing" muuttuja voidaan tarvittaessa asettaa testissä arvoksi true,
+    jos halutaan ohjelmakoodissa tietää, ajetaanko testiympäristöä. */
+
 const baseUrl ='/api';
 
 export const environment = {
   production: true,
-  clientID: 'angularApp',
   productName: 'Tukki',
   apiBaseUrl: baseUrl,
   testing: false
