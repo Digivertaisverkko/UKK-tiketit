@@ -289,10 +289,10 @@
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
 import { MatDialog, MatDialogConfig } from &#x27;@angular/material/dialog&#x27;;
-
-import { RefreshDialogComponent } from &#x27;../refresh-dialog/refresh-dialog.component&#x27;;
 import { Title } from &#x27;@angular/platform-browser&#x27;;
+
 import { AuthService } from &#x27;@core/services/auth.service&#x27;;
+import { RefreshDialogComponent } from &#x27;@shared/components/refresh-dialog/refresh-dialog.component&#x27;;
 import { StoreService } from &#x27;@core/services/store.service&#x27;;
 
 @Component({
@@ -358,7 +358,7 @@ export class NoDataConsentComponent {
                 <p class="comment">
                     <code>./no-data-consent.component.scss</code>
                 </p>
-                <pre class="line-numbers"><code class="language-scss">@import &#x27;/src/variables.scss&#x27;;
+                <pre class="line-numbers"><code class="language-scss">@import &#x27;/src/styles/variables.scss&#x27;;
 
 // app-headline {
 //   margin-top: 1.5em;
@@ -393,7 +393,8 @@ p {
     margin-bottom: 1rem;
   }
 
-}</code></pre>
+}
+</code></pre>
     </div>
 
     <div class="tab-pane fade " id="tree">

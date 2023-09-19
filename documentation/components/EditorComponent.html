@@ -206,7 +206,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/editor/editor.component.ts:58</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/shared/editor/editor.component.ts:59</a></div>
                             </td>
                         </tr>
 
@@ -267,7 +267,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/app/shared/editor/editor.component.ts:58</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">src/app/shared/editor/editor.component.ts:59</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -301,7 +301,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/shared/editor/editor.component.ts:50</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/editor/editor.component.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -339,7 +339,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/shared/editor/editor.component.ts:60</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="61" class="link-to-prism">src/app/shared/editor/editor.component.ts:61</a></div>
                         </td>
                     </tr>
 
@@ -375,7 +375,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/shared/editor/editor.component.ts:51</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/shared/editor/editor.component.ts:52</a></div>
                         </td>
                     </tr>
 
@@ -393,7 +393,7 @@
 import { ControlContainer, ControlValueAccessor, FormGroupDirective, NgControl
     } from &#x27;@angular/forms&#x27;;
 import { minimalSetup } from &#x27;codemirror&#x27;;
-import { javascript } from &quot;@codemirror/lang-javascript&quot;
+import { StreamLanguage } from &quot;@codemirror/language&quot;;
 import { Editor, Toolbar } from &#x27;ngx-editor&#x27;;
 import { CodeMirrorView } from &#x27;prosemirror-codemirror-6&#x27;;
 import { gapCursor } from &#x27;prosemirror-gapcursor&#x27;;
@@ -401,6 +401,7 @@ import { Node as ProseMirrorNode } from &#x27;prosemirror-model&#x27;;
 import { EditorView } from &#x27;prosemirror-view&#x27;;
 
 import schema from &#x27;./schema&#x27;;
+import langGeneric from &#x27;./lang-generic/lang-generic&#x27;;
 
 export const NOOP_VALUE_ACCESSOR: ControlValueAccessor &#x3D; {
   writeValue(): void {},
@@ -419,7 +420,7 @@ const nodeViews &#x3D; {
       cmOptions: {
         extensions: [
           minimalSetup,
-          javascript(),
+          StreamLanguage.define(langGeneric),
         ],
       },
     });

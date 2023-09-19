@@ -215,7 +215,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/ticket/components/message/message.component.ts:13</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/ticket/components/message/message.component.ts:14</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -251,8 +251,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="20"
-                            class="link-to-prism">src/app/ticket/components/message/message.component.ts:20</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="21"
+                            class="link-to-prism">src/app/ticket/components/message/message.component.ts:21</a></div>
                 </td>
             </tr>
 
@@ -334,8 +334,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="40"
-                            class="link-to-prism">src/app/ticket/components/message/message.component.ts:40</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="41"
+                            class="link-to-prism">src/app/ticket/components/message/message.component.ts:41</a></div>
                 </td>
             </tr>
 
@@ -414,7 +414,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/ticket/components/message/message.component.ts:14</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/ticket/components/message/message.component.ts:15</a></div>
                         </td>
                     </tr>
 
@@ -429,9 +429,10 @@
     <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnInit } from &#x27;@angular/core&#x27;;
 import { highlightTree } from &#x27;@lezer/highlight&#x27;;
-import { defaultHighlightStyle, Language } from &#x27;@codemirror/language&#x27;;
-import { javascript } from &quot;@codemirror/lang-javascript&quot;;
+import { defaultHighlightStyle, Language, StreamLanguage } from &#x27;@codemirror/language&#x27;;
 import { StyleModule } from &#x27;style-mod&#x27;;
+
+import langGeneric from &#x27;@shared/editor/lang-generic/lang-generic&#x27;;
 
 @Component({
   selector: &#x27;app-message&#x27;,
@@ -473,7 +474,7 @@ export class MessageComponent implements OnInit {
     for (let i &#x3D; 0; i &lt; elements.length; i++) {
       if (elements[i].tagName &#x3D;&#x3D;&#x3D; &#x27;CODE&#x27;) {
         let newElement &#x3D; doc.createElement(&#x27;CODE&#x27;);
-        newElement.innerHTML &#x3D; this.highlightCode(elements[i].innerHTML, javascript().language);
+        newElement.innerHTML &#x3D; this.highlightCode(elements[i].innerHTML, StreamLanguage.define(langGeneric));
         elements[i].replaceWith(newElement);
       }
     }
