@@ -33,7 +33,7 @@ Sovellus koostuu eri moduuleista. App.module on hakemistossa **/src/app**, jossa
 on alihakemistot muille moduuleille.
 Moduulit sisältävät tyypillisesti seuraavat tiedostot:
 
-- *.module.ts. - Moduulin asetukset lukuunottamatta reitityksen määrittelyjä.
+- *.module.ts. - Moduulin määritykset lukuunottamatta reitityksen määrittelyjä.
 - *.module.routing.ts - Moduulin tarjoamia reitityksen määrittelyjä.
 - *.models.ts - Moduulissä käytettyjä malleja, tyypillisesti rajapintoja.
 - *.service.ts - Moduulissa käytetty service.
@@ -41,13 +41,13 @@ Moduulit sisältävät tyypillisesti seuraavat tiedostot:
 - *.dummydata.ts - Testien käyttämää dataa.
 - Komponentteja, jotka ovat omissa alihakemistoissaan.
 
-Sovellus koostuu seuraavista moduuleista:
+### Sovellus koostuu seuraavista moduuleista
 
- **app.module**
+ #### app.module
   - Sovelluksen päämoduuli, jossa määritellään kaikki muut moduulit.
   - Sisältää juurikomponentin AppComponent, joka toimii sovelluksen näkymän perustana. 
-
- **core.module**
+  
+ #### core.module
   - Sovelluksen ydintoiminnallisuus.
   - Sisältää yleisiä...
     - komponentteja, kuten header ja footer.
@@ -57,24 +57,26 @@ Sovellus koostuu seuraavista moduuleista:
   - Lisäksi
     - http-interceptor.ts, joka logittaa HTTP-kutsuja.
 
- **Feature -moduulit**
+ #### Feature -moduulit
   
-  Muu sovelluksen toiminnallisuus on ryhmitelty näihin moduuleihin. Jokainen moduuli shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä
-  reitityksen määrittelyt.
+  Muu sovelluksen toiminnallisuus on ryhmitelty näihin moduuleihin. Jokainen moduuli shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä reitityksen määrittelyt.
 
   - **ticket.module** - Tiketteihin eli kysymyksiin liittyviä ominaisuuksia.
 
   - **user.module** - Käyttäjiin liittyviä ominaisuuksia.
 
   - **course.module** - Kursseihin liittyviä ominaisuuksia.
-
-  - **shared.module** - Omainaisuuksia, joita on käytössä useissa eri feature-moduuleissa.
+  #### shared.module
+  
+  Sisältää ominaisuuksia, joita on käytössä useissa eri feature-moduuleissa. Yleisten *Material* -teemaan kuuluvien moduulien tuonti on jaettu omaksi **material.module** -tiedostoksi. Sisältää monia eri näkymien käyttämiä komponentteja, kuten ngx-editori ja sender-info, sekä pipeja ja Reactive Forms -direktiivejä.
 
 ## Komponentit
 
-Kukin komponentti vastaa tietystä käyttöliittymän osasta. Se voi olla tiettyyn
+Kukin omponentti vastaa tietystä käyttöliittymän osasta, joka voi olla tiettyyn
 reittiin sidottu näkymä tai rajatumpi käyttöliittymän osa, kuten header tai
-tiketin kommentti. Komponentit voivat sisältää muita komponentteja. Komponentit kuuluvat johonkin moduuliin, sijaitsevat moduulissa omassa hakemistossaan ja sisältävät yleensä seuraavat tiedostot:
+tiketin kommentti. Komponentit voivat sisältää lapsikomponentteja. Komponentit kuuluvat johonkin moduuliin, sijaitsevat moduulin hakemistossa omassa alihakemistossaan.
+
+Komponentit sisältävät yleensä seuraavat tiedostot:
 
 - *.component.html - Komponentin template, jonka mukaan komponentin näkymä renderöidään. 
 - *.component.ts - Komponentin määrittelyt sekä sen TypeScript -luokka, joka käsittelee näkymässä tarvittavaa logiikkaa. Muu logiikka injektoidaan serviceinä.
@@ -89,34 +91,34 @@ Sisältävät toiminnallisuuksia, jotka eivät suoraan liity näytettään käyt
 
 ### Eri servicet ja ja niiden vastuualueet
 
-**auth.service**
+#### auth.service
 
 Käyttäjäautentikaatioon liittyvät toiminnot, kuten
 käyttäjien kirjautuminen ja kirjautumiseen liittyvien tietojen käsittely.
 
-**store.service**
+#### store.service
 
 Komponentit ja servicet tallentavat ja palauttavat muistissa olevia  muuttujia tänne. Sisältää myös vakioita. Tämä tila haetaan uudestaan näkymiä vaihdettassa eikä tallenneta sessioiden välilä. Sessioiden yli säilyvää tila tallennetaan local storageen. Komponenttien ja niiden lapsien tai vanhempien välinen tiedonvaihto käydään suoraan niiden välillä. Tällä servicellä voidaan välittää tieto minkä tahansa komponenttien ja serviceiden välillä.
 
- **error.service**
+#### error.service
 
 Serviceissä tapahtuvat virheet ohjataan ensin tänne, jossa ne logitetaan console.log:lla. *403* eli *ei oikeuksia* -virhetilanteissa reititetäänä täältä sitä vastaavaan virhenäkymään. Virheet heitetään uudelleen, jolloin komponentit voivat napata ne ja esittää ne tarvittaessa käyttäjälle tai tehdä muita toimia. Servicellä on mahdollista myös testausta varten generoida virheitä. HTTP-kutsuja logittaa *http-interceptor*.
 
-**utils.service**
+#### utils.service
 
 Yleishyödyllisiä funktioita, jotka eivät suoraan liity toisten serviceiden vastuualueeseen.
 
 Feature-moduulien servicet:
 
-**ticket.service**
+#### ticket.service
 
 Käsittelee tiketteihin eli kysymyksiin liittyviä toiminnallisuuksia, kuten tikettien ja niiden kommenttien ja liitetiedostojen käsittely.
 
-**course.service**
+#### course.service
 
 Käsittelee kursseihin liittyviä toiminnallisuuksia, kuten kurssienhakeminen, tikettipohjien käsittely ja kurssien tietojen tuonti ja vienti tiedostoiksi.
 
-**user.service**
+#### user.service
 
 
 ## Teema ja tyylit
