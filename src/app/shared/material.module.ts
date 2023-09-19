@@ -19,12 +19,15 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
+import { MatDialogModule } from '@angular/material/dialog';
+
 const materialModules = [
   MatInputModule,
   MatCardModule,
   MatFormFieldModule,
   MatButtonModule,
   MatCheckboxModule,
+  MatDialogModule,
   MatIconModule,
   MatToolbarModule,
   MatRadioModule,

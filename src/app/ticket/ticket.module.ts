@@ -20,7 +20,6 @@ import { MessageComponent } from './components/message/message.component';
 import { SubmitFaqComponent } from './submit-faq/submit-faq.component';
 import { ViewAttachmentsComponent } from './components/view-attachments/view-attachments.component';
 import { EditAttachmentsComponent } from './components/edit-attachments/edit-attachments.component';
-import { RefreshDialogComponent } from '../core/refresh-dialog/refresh-dialog.component';
 import { CommentComponent } from './components/comment/comment.component';
 import { TicketListComponent } from './listing/ticket-list/ticket-list.component';
 
@@ -30,7 +29,6 @@ import { TicketListComponent } from './listing/ticket-list/ticket-list.component
     EditAttachmentsComponent,
     FaqViewComponent,
     MessageComponent,
-    RefreshDialogComponent,
     SubmitFaqComponent,
     SubmitTicketComponent,
     TicketViewComponent,

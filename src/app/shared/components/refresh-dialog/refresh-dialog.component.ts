@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
-import { AuthService } from '@core/services/auth.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-refresh-dialog',

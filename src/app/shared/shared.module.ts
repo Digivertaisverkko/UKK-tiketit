@@ -20,6 +20,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { HeadlineComponent } from './components/headline/headline.component';
 import { SenderInfoComponent } from './components/sender-info/sender-info.component';
 import { SuccessComponent } from './success/success.component';
+import { RefreshDialogComponent } from './components/refresh-dialog/refresh-dialog.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -53,6 +54,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MenuLinkComponent,
     MenuSrcComponent,
     BeginningButtonComponent,
+    RefreshDialogComponent,
     SafeHtmlPipe,
     SearchBarComponent,
     SenderInfoComponent,
@@ -80,6 +82,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     BeginningButtonComponent,
     SafeHtmlPipe,
     ReactiveFormsModule,
+    RefreshDialogComponent,
     SearchBarComponent,
     SenderInfoComponent,
     SuccessComponent

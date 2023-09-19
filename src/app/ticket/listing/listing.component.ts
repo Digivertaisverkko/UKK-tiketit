@@ -11,7 +11,7 @@ import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
+import { RefreshDialogComponent } from '@shared/components/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from '@core/core.models';
