@@ -1,6 +1,6 @@
 {
-  "name": "Tukki-front",
-  "version": "0.0.0",
+  "name": "tukki-front",
+  "version": "1.0.0",
   "scripts": {
     "compodoc": "npx compodoc -p tsconfig.doc.json --includes documentation/introduction --disableLifeCycleHooks --includesName 'Järjestelmän kuvaus'",
     "ng": "ng",
