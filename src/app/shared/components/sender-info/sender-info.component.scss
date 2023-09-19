@@ -1,5 +1,5 @@
 $debug: false;
-@import '/src/variables.scss';
+@import '/src/styles/variables.scss';
 
 .user-info-block {    // .text-info + ikoni
   @if $debug { border: 1px dotted green; }
