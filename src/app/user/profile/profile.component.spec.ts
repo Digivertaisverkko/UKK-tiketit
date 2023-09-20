@@ -14,7 +14,7 @@ import { BeginningButtonComponent } from '@shared/components/beginning-button/be
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { ErrorService } from '@core/services/error.service';
 import { click, findEl } from '@shared/spec-helpers/element.spec-helper';
-import { SuccessComponent } from '@shared/success/success.component';
+import { SuccessComponent } from '@shared/components/success/success.component';
 import { Minun, MinunAsetukset, UserService } from '@user/user.service';
 import { ProfileComponent } from '@user/profile/profile.component';
 
