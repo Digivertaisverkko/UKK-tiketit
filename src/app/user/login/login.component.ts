@@ -6,6 +6,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '@core/services/store.service';
 
+/**
+ * Sisäänkirjautumisnäkymä. Tämä ei ole käytössä upotuksessa.
+ *
+ * @export
+ * @class LoginComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

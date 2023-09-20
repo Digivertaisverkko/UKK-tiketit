@@ -60,7 +60,15 @@ export class AuthService {
     this.startUpdatingUserinfo();
   }
 
-  /* Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta. */
+  /**
+   * Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta.
+   *
+   * @private
+   * @param {string} codeVerifier
+   * @param {string} loginCode
+   * @returns  {Promise<LoginResult>}
+   * @memberof AuthService
+   */
   private async authenticate(codeVerifier: string, loginCode: string):
     Promise<LoginResult> {
   const httpOptions =  {
@@ -96,7 +104,16 @@ export class AuthService {
   return loginResult;
 }
 
-  // Liitä ulkopuolinen käyttäjä kurssille.
+  /**
+   * Liitä ulkopuolinen käyttäjä kurssille.
+   *
+   * @param {string} name
+   * @param {string} email
+   * @param {string} password
+   * @param {string} inviteID
+   * @returns  {Promise<{ success: boolean }>}
+   * @memberof AuthService
+   */
   public async createAccount(name: string, email: string, password: string,
       inviteID: string): Promise<{ success: boolean }> {
   let response;
@@ -115,8 +132,13 @@ export class AuthService {
     return response;
   }
 
-  /* Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
-     oikeudet, onko osallistujana näkymän kurssilla.
+  /**
+  * Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
+  * oikeudet, onko osallistujana näkymän kurssilla.
+  *
+  * @param {string} courseID
+  * @returns  {Promise<void>}
+  * @memberof AuthService
   */
   public async fetchUserInfo(courseID: string): Promise<void> {
     if (courseID === undefined || courseID === null || courseID === '') {
@@ -163,8 +185,14 @@ export class AuthService {
     this.store.setUserInfo(userInfo);
   }
 
-  // Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
-  // kirjautunut, mutta ei näkymän kurssille.
+  /**
+   * Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
+   * kirjautunut, mutta ei näkymän kurssille.
+   * @private
+   * @returns  {(Promise<{nimi: string, sposti: string | null}
+   *         | null>)}
+   * @memberof AuthService
+   */
   private async fetchVisitorInfo(): Promise<{nimi: string, sposti: string | null}
         | null> {
     let response: any;
@@ -184,8 +212,12 @@ export class AuthService {
     return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
 
-  /* Palauta true, jos on tieto, että viimeisimmällä saadulla tokenid
-     on datan luovutuksesta kieltäytyneiden joukossa */
+  /**
+   * Palauta true, jos on tieto, että viimeisimmällä saadulla tokenid
+   * on datan luovutuksesta kieltäytyneiden joukossa.
+   * @returns  {boolean}
+   * @memberof AuthService
+   */
   public getDenyDataConsent(): boolean {
     const lastTokenid: string | null = localStorage.getItem('lastTokenid');
     const noDataConsent = localStorage.getItem('noDataConsent')
@@ -276,7 +308,15 @@ export class AuthService {
     })
   }
 
-  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
+  /**
+   * Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.
+   *
+   * @param {string} email
+   * @param {string} password
+   * @param {string} loginID
+   * @returns  {Promise<LoginResult>}
+   * @memberof AuthService
+   */
   public async login(email: string, password: string, loginID: string):
       Promise<LoginResult> {
     const httpOptions =  {
@@ -302,8 +342,12 @@ export class AuthService {
       return { success: false };
     }
   }
-
-  // Suorita uloskirjautuminen.
+  /**
+   * Suorita uloskirjautuminen.
+   *
+   * @returns  {Promise<{ success: boolean }>}
+   * @memberof AuthService
+   */
   public async logout(): Promise<{ success: boolean }> {
     let response: any;
     let url = environment.apiBaseUrl + '/kirjauduulos';
@@ -321,7 +365,11 @@ export class AuthService {
     return { success: true }
   }
 
-  // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+  /**
+   * Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+   *
+   * @memberof AuthService
+   */
   public removeDenyConsent(): void {
     const noDataConsent: string | null = localStorage.getItem('noDataConsent')
     let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
@@ -337,6 +385,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * Tallenna URL, johon kirjautumisen jälkeen uudelleenohjataan, ellei jo olla
+   * login näkymässä.
+   *
+   * @memberof AuthService
+   */
   public saveRedirectURL(): void {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
@@ -350,6 +404,14 @@ export class AuthService {
     }
   }
 
+  /**
+   * Lähetä, onko käyttäjän tietojen luovutukseen annettu lupa.
+   *
+   * @param {(string | null)} tokenid
+   * @param {boolean} allow
+   * @returns  {Promise<ConsentResponse>}
+   * @memberof AuthService
+   */
   public async sendDataConsent(tokenid: string | null, allow: boolean):
       Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
@@ -364,8 +426,11 @@ export class AuthService {
     return res
   }
 
-  /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
-     Käyttäjää on voitu vaihtaa eri tabissa/ikkunassa. */
+  /**
+   * Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
+   *
+   * @memberof AuthService
+   */
   public startUpdatingUserinfo(): void {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {

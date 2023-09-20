@@ -15,6 +15,16 @@ import { User } from '@core/core.models'
 import schema from '@shared/editor/schema';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+/**
+ * Yksittäisen tiketin / kysymyksen näkymä. Sisältää kommentin lähettämisen
+ * tikettiin. Tikettien lähettämiseen ja muokkaamiseen käytetään submit-ticket -
+ * komponenttia.
+ *
+ * @export
+ * @class TicketViewComponent
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'app-ticket-view',
   templateUrl: './ticket-view.component.html',

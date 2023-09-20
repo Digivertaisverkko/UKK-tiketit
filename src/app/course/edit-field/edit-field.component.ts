@@ -12,6 +12,13 @@ import { CourseService } from '../course.service';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
 
+/**
+ * Näkymä kysymysten yhden lisäkentän muokkaamiseen ja poistamiseen.
+ *
+ * @export
+ * @class EditFieldComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './edit-field.component.html',
   styleUrls: ['./edit-field.component.scss']

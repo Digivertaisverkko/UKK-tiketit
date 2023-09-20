@@ -6,6 +6,15 @@ import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
 import { UtilsService } from '@core/services/utils.service';
 
+/**
+ * Näyttää tiketin lähettäjän tiedot. Näihin kuuluu lähettäjän nimi, asema,
+ * milloin tiketti on tehty ja muokattu sekä nimen ja roolin mukaan generoitu
+ * avatar-ikoni.
+ *
+ * @export
+ * @class SenderInfoComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-sender-info',
   templateUrl: './sender-info.component.html',
@@ -13,13 +22,41 @@ import { UtilsService } from '@core/services/utils.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SenderInfoComponent implements OnInit {
-
-  // 'now' näyttää aikaleimaksi "Nyt".
+  /**
+   * Milloin tiketti on tehnty. 'now' näytää aikaleimaksi "Nyt" tai "Now".
+   * @type {(Date | 'now')}
+   * @memberof SenderInfoComponent
+   */
   @Input() aikaleima: Date | 'now' = new Date;
+
+  /**
+   * Milloin tikettiä on muookattu
+   * @type {(Date | null)}
+   * @memberof SenderInfoComponent
+   */
   @Input() muokattu?: Date | null;
+
+  /**
+   * Tiketin tehnyt käyttäjä.
+   * @type {(User | null)}
+   * @memberof SenderInfoComponent
+   */
   @Input() user: User | null = {} as User;
+
+  /**
+   * Asemoidaanko käyttäjätiedot vasemmalle puolelle.
+   * @type {boolean}
+   * @memberof SenderInfoComponent
+   */
   @Input() alignLeft: boolean = false;
-  @Input() styles: any;
+
+  /**
+   * Vapaavalintaisia SCSS-tyylejä.
+   * @type {*}
+   * @memberof SenderInfoComponent
+   */
+  @Input() styles?: any;
+
   public avatarColor: { background: string; text: string };
   public userNameInitials = '';
   public isCreatedToday: boolean | undefined;

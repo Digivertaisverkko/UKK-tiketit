@@ -1,5 +1,7 @@
 import { ValidatorFn, AbstractControl } from '@angular/forms';
 
+/* Reactive Form:ssa käytettävä validator. */
+
 /* Arrayn merkkijonojen yhteenlaskettu pituus huomioiden 1 välimerkki niide
    välissä. */
 export function arrayLengthValidator(): ValidatorFn {

@@ -12,6 +12,14 @@ import { User } from '@core/core.models';
 
 import schema from '@shared/editor/schema';
 
+/**
+ * Näyttää yhden kommentin. Kommenttia voi muokata tai sen voi poistaa.
+ *
+ * @export
+ * @class CommentComponent
+ * @implements {AfterViewInit}
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -21,18 +29,70 @@ import schema from '@shared/editor/schema';
 export class CommentComponent implements AfterViewInit, OnInit{
 
   @Input() public attachmentsMessages: string = '';
+
+  /**
+   * Näytettävä kommentti.
+   *
+   * @type {Kommentti}
+   * @memberof CommentComponent
+   */
   @Input() public comment: Kommentti = {} as Kommentti;
+
+  /**
+   * Kurssi ID.
+   *
+   * @type {string}
+   * @memberof CommentComponent
+   */
   @Input() public courseid!: string;
+
+  /**
+   * Jos käyttäjä editoi kommenttia, editoitavan kommentin ID.
+   *
+   * @type {(string | null)}
+   * @memberof CommentComponent
+   */
   @Input() public editingCommentID: string | null = null;
+
+  /**
+   * Lista liitetiedostoissa, jos sellaisia kommenttiin on liitetty.
+   *
+   * @type {FileInfo[]}
+   * @memberof CommentComponent
+   */
   @Input() public fileInfoList: FileInfo[] = [];
+
+  /**
+   * Tiketin ID, johon kommentti on liitetty.
+   *
+   * @type {string}
+   * @memberof CommentComponent
+   */
   @Input() public ticketID: string = '';
-  /* Kopioi UKK:ksi näkymän yhteydessä näytetään alkuperäinen tiketti.
-     Tällöin editointi pois käytöstä yms. */
+
+  /**
+   * Onko kyseessä "Kopioi UKK:ksi" näkymä. Tällöin näytetään alkuperäinen tiketti,
+   * johon UKK perustuu ja muokkauksen poistaminen on pois käytöstä.
+   *
+   * @type {boolean}
+   * @memberof CommentComponent
+   */
   @Input() public isInCopyAsFAQ: boolean = false;
-  // Lähettää ID:n, mitä kommenttia editoidaan.
+
+  /**
+   * Kun kommenttia muokataan, lähetetään sen ID parent komponentille.
+   *
+   * @memberof CommentComponent
+   */
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
-  // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
+
+  /**
+   * Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
+   *
+   * @memberof CommentComponent
+   */
   @Output() public messages = new EventEmitter<string>();
+
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public editingComment: string | null = null;

@@ -2,6 +2,13 @@ import {  Component, ChangeDetectionStrategy, ElementRef, EventEmitter, Output,
           ViewChild } from '@angular/core';
 import { UtilsService } from '@core/services/utils.service';
 
+/**
+ * Listaus-näkymissä käytetty tekstinsyöttö-elementti. Labelin sisältö voidaan
+ * syöttää komponentin tagien väliin.
+ *
+ * @export
+ * @class SearchBarComponent
+ */
 @Component({
   selector: 'app-search-bar',
   template: `
@@ -40,6 +47,12 @@ import { UtilsService } from '@core/services/utils.service';
 export class SearchBarComponent {
 
   @ViewChild('input') searchInput!: ElementRef<HTMLInputElement>;
+
+  /**
+   * Palauttaa käyttäjän syöttämän tekstin eventtinä.
+   *
+   * @memberof SearchBarComponent
+   */
   @Output() searchResult = new EventEmitter<string>();
 
   constructor(private utils: UtilsService) { }

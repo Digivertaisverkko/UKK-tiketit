@@ -1,7 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, Renderer2,
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject,
         ViewChild  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+/**
+ * Sisältää sovelluksen tietosuojaselosteen. Tähän on linkki mm. footerista ja
+ * register -komponentissa. Tämä on footer-komponentin lapsikomponentti.
+ *
+ * @export
+ * @class PrivacyModalComponent
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-privacy-modal',
   templateUrl: './privacy-modal.component.html',
@@ -25,7 +33,7 @@ export class PrivacyModalComponent implements AfterViewInit {
       this.dataRemovalElement.nativeElement.scrollIntoView(
         { behavior: 'smooth', block: 'start', inline: 'nearest' }
       );
-    } 
+    }
   }
 
   public closeModal() {

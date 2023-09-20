@@ -59,8 +59,9 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
 };
 
 /**
- * Näyttää opettajalle listan kurssin tiketeistä sekä listan ratkaistuiksi
- * asetetuista tiketeistä ja opiskelijalle tämän omat tiketit.
+ * Lista tiketeistä / kysymyksistä. Näyttää opettajalle listan kurssin tiketeistä
+ * sekä listan ratkaistuiksi asetetuista tiketeistä ja opiskelijalle tämän omat
+ * tiketit. Tämän komponentin parent komponentti on "listing".
  *
  * @export
  * @class TicketListComponent

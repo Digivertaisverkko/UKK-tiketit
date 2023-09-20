@@ -6,6 +6,16 @@ import { CourseService } from 'src/app/course/course.service';
 import { environment } from 'src/environments/environment';
 import { StoreService } from '@core/services/store.service';
 
+/**
+ * Näyttää H1-tason otsikon, joka on tavallisesti kurssin nimi. Voidaan asettaa
+ * näkymään sovelluksen nimi tai kirjoittaa tagien sisään muu otsikko. Kurssin
+ * nimeä ei oletuksen näytetä upotuksessa.
+ *
+ * @export
+ * @class HeadlineComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-headline',
   template: `
@@ -29,11 +39,29 @@ import { StoreService } from '@core/services/store.service';
 })
 export class HeadlineComponent implements OnInit, AfterViewInit {
 
-  // Kirjautumissivulla otsikko on erilainen.
+  /**
+   * Arvolla true näytetään kurssin nimen sijaan sovelluksen nimi.
+   *
+   * @type {boolean}
+   * @memberof HeadlineComponent
+   */
   @Input() appHeadline: boolean = false
-  // Oletuksena näytetään kurssin nimi, tällä voi ohittaa sen.
+
+  /**
+   * Arvolla false ei näytetä kurssin nimeä.
+   *
+   * @type {boolean}
+   * @memberof HeadlineComponent
+   */
   @Input() noCourseTitle: boolean = false;
-  // Oletuksena otsikkoa ei näytetä upotuksessa. Tällä voi näyttää sen aina.
+
+  /**
+   * Oletuksena otsikkoa ei näytetä upotuksessa, mutta arvolla true näytetään
+   * myös silloin.
+   *
+   * @type {boolean}
+   * @memberof HeadlineComponent
+   */
   @Input() showInIframe: boolean = false;
   public hasProjectedContent = false;
   public headlineText: string | null = null;

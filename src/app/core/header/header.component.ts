@@ -8,6 +8,19 @@ import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '../services/store.service';
 import { User } from '@core/core.models';
 
+/**
+ * Upotuksen ulkopuolella näytettävä "header" -elementti. Sisältää logon,
+ * mahdollisesti kirjautuneen käyttäjän nimen, roolin sekä valikon.
+ * Valikosta voi vaihtaa kielen, kirjautua sisään/ulos, kirjautuessa avata
+ * profiili-näkymän ja jos käyttäjä on kirjautuneena opettajana kurssilla voi
+ * hän avata asetukset -näkymän.  Logon klikkaamalla reititetään kurssin
+ * tikettilista -näkymään. Upotuksessa app -komponentti näyttää vastaavan
+ * upotukseen soveltuvan elementin tämän sijaan.
+ *
+ * @export
+ * @class HeaderComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

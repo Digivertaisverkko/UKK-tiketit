@@ -2,6 +2,14 @@ import { Component, Input } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { StoreService } from '../services/store.service';
 
+/**
+ * "Ei oikeuksia" -näkymä. Näytetään, kun palvelimelta on saatu tieto, että
+ * käyttäjällä ei ole oikeuksia näytettävään sisältöön.
+ * Näytetään Alkuun -nappi, jos URL:ssa on kurssin id.
+ *
+ * @export
+ * @class NoPrivilegesComponent
+ */
 @Component({
   template: `
 

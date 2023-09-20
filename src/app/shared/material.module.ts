@@ -39,7 +39,14 @@ const materialModules = [
   MatTooltipModule,
   MatAutocompleteModule
 ];
-
+/**
+ * Muiden moduulien käyttämät Angular Material -moduulit. Erillään shared.modulesta
+ * ryhmittelyn vuoksi. Jos jokin moduuli on käytössä ainoastaan tietyssä
+ * yhdessä moduulissa, voidaan se määritellä siellä tämän sijaan.
+ *
+ * @export
+ * @class MaterialModule
+ */
 @NgModule({
   declarations: [],
   imports: [

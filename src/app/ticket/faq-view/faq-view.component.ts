@@ -8,6 +8,13 @@ import { TicketService } from '../ticket.service';
 import { Tiketti } from '../ticket.models';
 import { User, Error } from '@core/core.models';
 
+/**
+ * Yksittäisen UKK:n näkymä. UKK-lähettämiseen on submit-faq -komponentti.
+ *
+ * @export
+ * @class FaqViewComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './faq-view.component.html',
   styleUrls: ['./faq-view.component.scss'],

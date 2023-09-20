@@ -15,6 +15,13 @@ import schema from '@shared/editor/schema';
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '@ticket/ticket.service';
 
+/**
+ * Näkymä uuden UKK:n lähettämiseen tai vanhan muokkaamiseen.
+ *
+ * @export
+ * @class SubmitFaqComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-submit-faq',
   templateUrl: './submit-faq.component.html',

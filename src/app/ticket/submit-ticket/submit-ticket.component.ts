@@ -16,6 +16,13 @@ import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
     from '@ticket/ticket.models';
 import { TicketService } from 'src/app/ticket/ticket.service';
 
+/**
+ * Näkymä uuden tiketin lähettämiseen tai vanhan muokkaamiseen.
+ *
+ * @export
+ * @class SubmitTicketComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-submit-ticket',
   templateUrl: './submit-ticket.component.html',

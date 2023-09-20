@@ -9,20 +9,13 @@ import { TicketViewComponent } from './ticket-view/ticket-view.component';
 
 const routes: Routes = [
   { path: 'course/:courseid/ticket-view/:id', component: TicketViewComponent },
-
   { path: 'course/:courseid/submit', component: SubmitTicketComponent },
-
   { path: 'course/:courseid/submit/:id', component: SubmitTicketComponent },
-
   { path: 'course/:courseid/submit-faq', component: SubmitFaqComponent },
-
   { path: 'course/:courseid/submit-faq/:id', component: SubmitFaqComponent },
-
   { path: 'course/:courseid/faq-view/:id', component: FaqViewComponent },
-
   { path: 'course/:courseid/list-tickets', component: ListingComponent },
 ];
-//   { path: 'list-tickets', component: ListingComponent }
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

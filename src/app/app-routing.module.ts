@@ -7,8 +7,8 @@ import { NoDataConsentComponent } from './core/no-data-consent/no-data-consent.c
 import { NoPrivilegesComponent } from './core/no-privileges/no-privileges.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 
-// ? viimeisimmän kurssin muistaminen, jos on tallennettuna local storageen?
-// courseid:n nappaaminen routesta ei onnistunut, jos käytti loppuosasta vain wildcardia.
+/** Objektien järjestyksellä on väliä, sillä ensimmäinen match näytetään.
+ * @type {*} */
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'course/:courseid/home', component: HomeComponent },
@@ -25,11 +25,12 @@ const routes: Routes = [
   { path: '**', component: PageNotFoundComponent },
 ];
 
-// redirect esimerkkki:  { path: '', redirectTo: 'login', pathMatch: 'full' }
-// lazy-loading esimerkki:
-// { path: 'front', loadChildren: () => import('./front/front.module').then(m => m.FrontModule) }
-// { path: 'users', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
-
+/**
+ * Pääreititysmoduuli. Feature-moduuleilla on omat reititysmoduulinsa.
+ *
+ * @export
+ * @class AppRoutingModule
+ */
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {

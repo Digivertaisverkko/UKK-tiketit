@@ -12,6 +12,16 @@ interface FileInfoWithSize extends FileInfo {
   filesize: number;
 }
 
+/**
+ * Tällä komponentilla voi lisätä ja poistaa liitetiedostoja.
+ *
+ * @export
+ * @class EditAttachmentsComponent
+ * @implements {ControlValueAccessor}
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ * @implements {Validator}
+ */
 @Component({
   selector: 'app-edit-attachments',
   templateUrl: './edit-attachments.component.html',

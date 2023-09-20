@@ -29,6 +29,13 @@ import { PrivacyModalComponent } from './footer/privacy-modal/privacy-modal.comp
 import { NoDataConsentComponent } from './no-data-consent/no-data-consent.component';
 import { HomeComponent } from './home/home.component';
 
+/** Sovelluksen ydintoiminnallisuus. Importoidaan ainoastaan app.modulessa,
+ * jolloin se voidaan pitää yksinkertaisempana. App -componentin käyttämät
+ * "header" ja "footer" on määritelty täällä.
+ *
+ * @export
+ * @class CoreModule
+ */
 @NgModule({
   declarations: [
     DataConsentComponent,

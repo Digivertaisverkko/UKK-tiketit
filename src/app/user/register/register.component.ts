@@ -13,12 +13,25 @@ import { stringsMatchValidator } from '@shared/directives/strings-match.directiv
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';
 
+
+/**
+ * Näkymä, jossa uusi käyttäjä pystyy luomaan käyttäjätilin. Käyttäjä on saanut
+ * osoitteen tähän näkymään sähköpostilla. Jo olemassa olevan käyttäjätilin
+ * liittäminen kurssilel tapahtuu join -komponentilla.
+ *
+ * @export
+ * @class RegisterComponent
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ */
+
 // ! Käyttää login-komponentin tyylitiedostoa.
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['../login/login.component.scss']
 })
+
 export class RegisterComponent implements OnInit, OnDestroy{
 
   @Input() courseid!: string;

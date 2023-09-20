@@ -56,7 +56,7 @@ const customFilterPredicate = (data: UKK, filter: string) => {
 }
 /**
  * Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
- * Ratkaistut, ovat tämän näkymän child componentissa TicketListComponent.
+ * Ratkaistut, ovat tämän näkymän lapsikomponentissa TicketList.
  *
  * @export
  * @class ListingComponent

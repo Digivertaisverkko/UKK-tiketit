@@ -14,6 +14,14 @@ import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+/**
+ * Näkymä kurssin asetusten katseluun ja muokkaamiseen. Lisäkenttien muokkaamiseen
+ * on edit-field -näkymä.
+ *
+ * @export
+ * @class SettingsComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']

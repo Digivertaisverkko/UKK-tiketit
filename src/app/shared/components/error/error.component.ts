@@ -30,13 +30,48 @@ import { StoreService } from '@core/services/store.service';
 
 export class ErrorComponent implements OnInit {
 
-  // styles: voi laittaa CSS:ää. Komponenttiin esim:
-  // [styles]="{ margin: '1em 0 1em' }"
+  /**
+   * Jos virheilmoituksessa haluaa näyttää näppäimen, sen teksti.
+   * @type {string}
+   * @memberof ErrorComponent
+   */
   @Input() buttonText: string = '';
+
+  /**
+   * Virheilmoituksen tekstil.
+   * @type {string}
+   * @memberof ErrorComponent
+   */
   @Input() message: string = $localize `:@@Toiminto epäonnistui:Toiminto epäonnistui` + '.';
-  @Input() styles: any;
+
+  /**
+   * Vapaita SCSS-tyylimäärittelyjä. Esim.
+   * [styles]="{ margin: '1em 0 1em' }
+   * @type {*}
+   * @memberof ErrorComponent
+   */
+  @Input() styles?: any;
+
+  /**
+   * Virheilmoituksen otsikko
+   * @type {string}
+   * @memberof ErrorComponent
+   */
   @Input() title: string = $localize `:@@Virhe:Virhe`;
+
+  /**
+   * Näytetäänkö virheilmoituksena Ilmoitus, jossa kerrotaan, että käyttäjä poistuu
+   * näkymästä kesken muokkauksen, hän menettää tekemänsä muutokset. Tämän lisäksi
+   * näytetään ilmoituksesta Kyllä-nappi, jolla käyttäjä voi tämän vahvistaa.
+   * @type {boolean}
+   * @memberof ErrorComponent
+   */
   @Input() confirmLeave: boolean = false;
+
+  /**
+   * Jos ilmoituksessa näytetään näppäin, niin sen painalluksen event.
+   * @memberof ErrorComponent
+   */
   @Output() clickEvent = new EventEmitter<string>();
 
   constructor(

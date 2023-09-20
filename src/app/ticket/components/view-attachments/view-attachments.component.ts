@@ -3,6 +3,13 @@ import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter }
 import { Liite } from '@ticket/ticket.models';
 import { TicketService } from '@ticket/ticket.service';
 
+/**
+ * Näyttää listan liitetiedostoista. Tiedostoja pystyy lataamaan klikkaamalla.
+ * Liitteiden lisääminen tapahtuu edit-attachments -komponentilla.
+ *
+ * @export
+ * @class ViewAttachmentsComponent
+ */
 @Component({
   selector: 'app-view-attachments',
   template: `

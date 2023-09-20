@@ -7,6 +7,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
 
+/**
+ * Näkymä, jossa kysytään käyttäjältä lupaa tietojen siirtämiseen järjestelmän
+ * käyttöön. Käyttäjä voi olla uusi tai tili on jo olemassa. Tämän näkymän jälkeen
+ * käyttäjä ohjataan kurssin listaus-näkymään eli näytetään listing-komponetti.
+ * Jos käyttäjä kieltäytyy eikä kurssialuetta ole vielä luotu, reititetään
+ * no-data-consent -näkymään.
+ *
+ * @export
+ * @class DataConsentComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './data-consent.component.html',
   styleUrls: ['./data-consent.component.scss']

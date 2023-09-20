@@ -6,6 +6,12 @@ import { ProfileComponent } from './profile/profile.component';
 import { RegisterComponent } from './register/register.component';
 import { UserRoutingModule } from './user-routing.module';
 
+/**
+ * Käyttäjiin liittyvä toiminnallisuus.
+ *
+ * @export
+ * @class UserModule
+ */
 @NgModule({
   declarations: [
     LoginComponent,

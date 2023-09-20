@@ -8,6 +8,18 @@ import { StoreService } from './core/services/store.service';
 import { User } from './core/core.models';
 import { UtilsService } from '@core/services/utils.service';
 
+/**
+ * Juurikomponentti. Näyttää reititystä vastaavan näkymä. Sisältää upotuksessa
+ * käytetyn header-elementin, joka sisältää login,
+ *
+ * Muut näkymässä käytetyt komponentit, kuten upotuksen
+ * ulkopuolinen "header" sekä "footer" ovat tämän käyttämää core-moduulia.
+ *
+ * @export
+ * @class AppComponent
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
