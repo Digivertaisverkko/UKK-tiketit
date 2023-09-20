@@ -291,7 +291,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     if (this.store.getIsLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
-      window.localStorage.setItem('REDIRECT_URL', link);
+      window.localStorage.setItem('redirectUrl', link);
     }
   }
 

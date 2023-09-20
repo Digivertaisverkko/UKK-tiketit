@@ -82,10 +82,10 @@ export class AuthService {
   var loginResult: LoginResult;
   if (response?.success == true) {
     loginResult = { success: true };
-    const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
+    const redirectUrl = window.localStorage.getItem('redirectUrl');
     if (redirectUrl !== undefined && redirectUrl !== null) {
       loginResult.redirectUrl = redirectUrl;
-      window.localStorage.removeItem('REDIRECT_URL')
+      window.localStorage.removeItem('redirectUrl')
     }
     this.store.setLoggedIn();
     this.store.setParticipant(null);
@@ -341,8 +341,8 @@ export class AuthService {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
     if (currentRoute.indexOf('/login') === -1) {
-      if (window.localStorage.getItem('REDIRECT_URL') == null) {
-      window.localStorage.setItem('REDIRECT_URL', currentRoute);
+      if (window.localStorage.getItem('redirectUrl') == null) {
+      window.localStorage.setItem('redirectUrl', currentRoute);
       console.log('tallennettiin redirect URL: ' + currentRoute);
       } else {
         console.log('Löydettiin redirect URL, ei tallenneta päälle.');

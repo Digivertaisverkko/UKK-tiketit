@@ -3,9 +3,9 @@ import { registerLocaleData } from '@angular/common';
 import localeFi from '@angular/common/locales/fi';
 import localeEn from '@angular/common/locales/en';
 
-// Alusta valittu kieli. Asetetaan app.module:ssa.
+/** Alusta valittu kieli. Asetetaan app.module:ssa.
+ * */
 export const initializeLanguage = (): Promise<void> | void => {
-
   registerLocaleData(localeFi);  // Aina oletuslocale.
   registerLocaleData(localeEn);
   const language = getLanguage();
@@ -27,12 +27,11 @@ export function initializeLanguageFI()  {
   document.documentElement.lang = 'fi-FI';
 };
 
-
-/* Mikä kieli on käytössä. Valitaan tässä järjestyksessä jos on määritelty.
-  1. Käyttäjän valitsema (tallennettu localStorageen)
-  2. URL-parametrina
-  3. Oletus: fi-FI
-*/
+/** Mikä kieli on käytössä. Valitaan tässä järjestyksessä jos on määritelty.
+ * 1. Käyttäjän valitsema (tallennettu localStorageen)
+ * 2. URL-parametrina
+ * 3. Oletus: fi-FI
+ * */
 function getLanguage(): 'en-US' | 'fi-FI' {
   const url = new URL(window.location.href);
   var language: 'en-US' | 'fi-FI';

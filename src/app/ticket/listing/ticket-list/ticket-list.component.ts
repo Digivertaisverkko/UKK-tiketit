@@ -61,7 +61,7 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
 /**
  * Näyttää opettajalle listan kurssin tiketeistä sekä listan ratkaistuiksi
  * asetetuista tiketeistä ja opiskelijalle tämän omat tiketit.
- * 
+ *
  * @export
  * @class TicketListComponent
  * @implements {OnInit}
@@ -223,7 +223,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   public saveRedirectUrl(linkEnding?: string): void {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
-    window.localStorage.setItem('REDIRECT_URL', link);
+    window.localStorage.setItem('redirectUrl', link);
   }
 
   private setBaseColumnDefinitions() {
