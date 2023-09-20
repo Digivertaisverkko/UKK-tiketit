@@ -1,11 +1,16 @@
 @import '@angular/material/theming';
 
-// Täällä on variablet, jotka on tarkoitettu importoitavaksi ja käytettäväksi näkymien tyyleissä.
+/**
+  * Täällä on variablet, jotka on tarkoitettu importoitavaksi ja käytettäväksi
+  * muissa tyylitiedostoissa.
+  *
+  * Käyttö:
+  * @import '/src/styles/variables.scss';
+  *
+*/
 
 $right-padding: 40px;
 $button-gap: 1rem;
-
-// Breakpoints. Material Designista.
 
 $displayFont: Montserrat;
 $textFont: Roboto;
