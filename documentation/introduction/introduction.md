@@ -43,7 +43,7 @@ Päämoduulit sisältävät tyypillisesti seuraavat tiedostot:
 ### Sovellus koostuu seuraavista päämoduuleista
 
  #### app.module
-Sovelluksen päämoduuli, jossa määritellään muut moduulit. Sijaitsee hakemistossa **/src/app**. Sisältää alihakemistot muille moduuleille. Vain app.modulen käyttämät komponentit
+Sovelluksen juurimoduuli, joka ladataan ensin ja jossa määritellään muut moduulit. Sijaitsee hakemistossa **/src/app**. Sisältää alihakemistot muille moduuleille. Vain app.modulen käyttämät komponentit
 tulisi sijoittaa core.moduleen, samoin kaikki yleiset servicet.
  #### core.module
   Sovelluksen ydintoiminnallisuus. Importoidaan ainoastaan app.modulessa, jolloin se voidaan pitää yksinkertaisempana. 
