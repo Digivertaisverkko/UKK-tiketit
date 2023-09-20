@@ -5,7 +5,7 @@ import { FilesizeModule } from './pipes/filesize.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 
-import { ErrorComponent } from './error/error.component';
+import { ErrorComponent } from './components/error/error.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
