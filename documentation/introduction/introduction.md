@@ -1,17 +1,16 @@
 # Järjestelmän kuvaus
 
-Tämä ohje pyrkii antamaan yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän eli frontendin arkkitehtuurista ohjelman ylläpitäjälle. 
-Tämän kuvauksen ymmärtämiseksi olisi hyvä tuntea perustiedot Angularin
-yleisistä käsitteistä, kuten *moduuli* (*module* tai *ngModule*), 
-*komponentti* (*component*), *template* ja *service*.  Näistä voi lukea esimerkiksi [Angularin virallisesta dokumentaatiosta](https://angular.io/guide/architecture). Tiedostojen nimissä käytetään [Angularin suosituksia](https://angular.io/guide/styleguide#naming).
-
+Tämä ohje pyrkii antamaan yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän eli frontendin arkkitehtuurista ohjelman ylläpitäjälle.   Tämä tiedosto kannattaa pitää ajan tasalla.
+Dokumentin ymmärtämiseksi olisi hyvä tuntea perustiedot Angularin
+yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngModule*), 
+*komponentti* (*component*), *template* ja *service*.  Näistä voi lukea esimerkiksi [Angularin virallisesta dokumentaatiosta](https://angular.io/guide/architecture). Tiedostojen nimissä käytetään [Angularin suosituksia](https://angular.io/guide/styleguide#naming), samoin [sovelluksen yleisessä rakenteessa](https://angular.io/guide/styleguide#overall-structural-guidelines).
 ## Tekniikat
 
 Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee Angularin mukana.
 
-- [Angular Framework](https://angular.io/). Tätä kirjoittaessa major-versio on uusin 16.
+- [Angular Framework](https://angular.io/) - Käytetty ohjelmistokehys.
 - HTML - Templatien määrittely.
-- [SASS/SCSS](https://sass-lang.com/) - CSS:n esikäsittelykieli, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
+- [SASS / SCSS](https://sass-lang.com/) - CSS:n esikäsittelykieli, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
 - [TypeScript](https://www.typescriptlang.org/) - JavaScriptin superset tyyppimäärityksillä.
 - [RxJS](https://rxjs.dev/) - Kirjasto reaktiivisen ohjelmoinnin toteuttamiseen käyttäen observableja.
 - [Angular Material](https://material.angular.io/) - Komponenttikirjasto käyttöliittymäelementteille.
@@ -22,14 +21,16 @@ Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tu
 - [Npm](https://www.npmjs.com/) - Riippuvuuksien hallintaan.
 - [Jasmine](https://jasmine.github.io/) - Testaus framework yksikkötesteillle.
 - [Karma](https://karma-runner.github.io/latest/index.html) - Testien suoritusympäristö, joka toimii Jasminen kanssa.
-- [Git](https://git-scm.com/) - versionhallinta.
+- [Git](https://git-scm.com/) - Versionhallinta.
 - [ESLint](https://eslint.org/) - Staattinen koodinanalyysi.
-
 
 ## Moduulit
 
-Sovellus koostuu eri moduuleista. App.module on juurimoduuli, joka sijaitsee hakemistossa **/src/app**. Siellä on alihakemistot muille moduuleille.
-Moduulit sisältävät tyypillisesti seuraavat tiedostot:
+Sovellus koostuu eri päämoduuleista, jotka ovat kukin omassa hakemistoissaan. Esim.
+core.module hakemistossa **src/app/core**. Näiden moduulien lisäksi eri paketit
+sisältävät monia omia moduuleitaan.
+
+Päämoduulit sisältävät tyypillisesti seuraavat tiedostot:
 
 - *.module.ts. - Moduulin määritykset lukuunottamatta reitityksen määrittelyjä.
 - *.module.routing.ts - Moduulin tarjoamia reitityksen määrittelyjä.
@@ -39,23 +40,23 @@ Moduulit sisältävät tyypillisesti seuraavat tiedostot:
 - *.dummydata.ts - Testien käyttämää dataa.
 - Komponentteja, jotka ovat omissa alihakemistoissaan.
 
-### Sovellus koostuu seuraavista moduuleista
+### Sovellus koostuu seuraavista päämoduuleista
 
  #### app.module
-  - Sovelluksen päämoduuli, jossa myös määritellään muut moduulit.
+Sovelluksen päämoduuli, jossa määritellään muut moduulit. Sijaitsee hakemistossa **/src/app**. Sisältää alihakemistot muille moduuleille. Vain app.modulen käyttämät komponentit
+tulisi sijoittaa core.moduleen, samoin kaikki yleiset servicet.
  #### core.module
-  - Sovelluksen ydintoiminnallisuus. Importoidaan vain app.modulessa, jolloin se voidaan pitää yksinkertaisempana. 
-  Sisältää:
-  - App.modulen käyttämiä komponentteja, kuten *header* ja *footer* ja näkymäkomponentteja, kuten *home*, *Ei oikeuksia* ja *Sivua ei löytynyt*.
-  - Yleisiä servicejä, kuten auth.service ja error.service.
-  - http-interceptor.ts, joka logittaa HTTP-kutsuja.
+  Sovelluksen ydintoiminnallisuus. Importoidaan ainoastaan app.modulessa, jolloin se voidaan pitää yksinkertaisempana. 
+  Sisältää App.modulen käyttämiä komponentteja, kuten *header* ja *footer* ja yleisiä näkymäkomponentteja, kuten *home* ja *Sivua ei löytynyt*, yleisiä servicejä, kuten auth.service ja error.service. Sisältää myös http-interceptor.ts, joka logittaa HTTP-kutsuja.
 
  #### Feature -moduulit
   
-  Muu sovelluksen toiminnallisuus on ryhmitelty näihin moduuleihin. Jokainen shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä reitityksen määrittelyt.
+  Muu sovelluksen toiminnallisuus on ryhmitelty vastuualueittain näihin moduuleihin. Jokainen shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta vastaavan servicen sekä reitityksen määrittelyt.
 
   - **ticket.module** - Tiketteihin eli kysymyksiin liittyviä toiminnallisuus,
-  kuten tikettien listaus, tikettien ja UKK:n näyttäminen ja käsittely.
+  kuten tikettien listaus, tikettien ja UKK:n näyttäminen ja käsittely. Alihakemistossa
+  *components* on moduulissa käytettyjä, muita kuin reitteihin sidottuja komponentteja,
+  kuten tiketin kommentista vastaava *comment*.
 
   - **user.module** - Käyttäjiin liittyviä toiminnallisuus, kuten kirjautumisnäkymä,
   käyttäprofiilien näyttäminen ja käsittely.
@@ -63,7 +64,7 @@ Moduulit sisältävät tyypillisesti seuraavat tiedostot:
   - **course.module** - Kursseihin liittyviä toiminnallisuus, kuten kursseille liittyminen, sekä kurssiasetusten- ja tikettipohjien käsittely.
   #### shared.module
   
-  Sisältää uudelleenkäytettäviä ominaisuuksia, joita käytetään muissa moduuleissa. Yleisten *Material* -teemaan kuuluvien moduulien tuonti on jaettu omaksi **material.module** -tiedostoksi. Sisältää monia eri näkymien käyttämiä komponentteja, kuten *editor* ja *sender-info*, sekä pipeja ja Reactive Forms -direktiivejä.
+  Sisältää ominaisuuksia, joita käytetään useissa muissa moduuleissa. Yleisten *Material* -teemaan kuuluvien moduulien tuonti on jaettu omaksi **material.module** -tiedostoksi. **components** -alihakemisto sisältää monia eri näkymien käyttämiä komponentteja. Moduuli sisältää myös pipeja ja direktiivejä.
 
 ## Komponentit
 
@@ -89,13 +90,16 @@ Sisältävät toiminnallisuuksia, jotka eivät suoraan liity näytettävään k�
 
 #### auth.service
 
-Käyttäjäautentikaatioon liittyvät toiminnot, kuten kirjautuminen ja sen jälkeen
-tapahtuva käyttäjätietojen hakeminen palvelimelta sekä käyttäjätilin luominen.
+Käyttäjäautentikaatioon liittyvät toiminnot, kuten kirjautuminen sekä siihen
+liittyvien tietojen käsittely. Näitä ovat esimerkiksi kirjautumisen tila ja kirjautuneen
+käyttäjän tiedot. Nämä tiedot haetaan palvelimelta ja päivitetään store.serviceen
+aina reitityksen muuttuessa.
 
 #### store.service
 
-Tänne tallennetaan ja palautetaan muistissa olevia globaaleja muuttujia, kuten
-tieto kirjautumisesta ja käyttäjätiedoista. Sisältää myös vakioita. Tämä tila haetaan uudestaan reitityksen muuttuessa eikä tallenneta sessioiden välilä. Sessioiden yli säilyvää tila tallennetaan local storageen. Komponenttien ja niiden lapsien tai vanhempien välinen tiedonvaihto käydään suoraan niiden välillä. Tällä servicellä voidaan välittää tieto minkä tahansa komponenttien ja serviceiden välillä.
+Tänne tallennetaan globaali tieto, jonka halutaan olevan käytettävissä kaikkialla
+sovelluksessa. Näitä ovat esimerkiksi tieto kirjautumisen tilasta ja kirjautuneen
+käyttäjän tiedoista. Tiedot eivät säily sessioiden yli (kts. *Sessioiden yli tallentuva tieto*).
 
 #### error.service
 
@@ -113,21 +117,28 @@ Käsittelee tiketteihin eli kysymyksiin liittyviä toiminnallisuuksia, kuten tik
 
 #### course.service
 
-Käsittelee kursseihin liittyviä toiminnallisuuksia, kuten kurssienhakeminen, tikettipohjien käsittely ja kurssien tietojen tuonti ja vienti tiedostoiksi.
+Käsittelee kursseihin liittyviä toiminnallisuuksia, kuten kurssien hakeminen, tikettipohjien käsittely ja kurssin tietojen tuonti ja vienti tiedostoiksi.
 
 #### user.service
 
 
 ## Teema ja tyylit
 
-Sovellus käyttää *Angular Material* -kirjaston kustomoitua teemaa, jonka määrittelyt ovat tiedostossa **src/styles/custom-theme.scss**. Globaalit tyylimäärittelyt ovat tiedostossa **src/styles.scss**. Se sisältää kaikkialla sovelluksessa käytettyjä CSS -luokkia, joiden nimet ovat *.theme-* -alkuisia. Komponenttikohtaiset tyylit ovat määritelty komponenttien
-**.component.scss** -tiedostoissa.
+Yleiset tyylimäärittelyt ovat hakemistossa **src/styles/**. Sovellus käyttää *Angular Material* -kirjaston kustomoitua teemaa, jonka määrittelyt ovat tiedostossa **custom-theme.scss**.
+[Tietoa teeman muokkaamisesta](https://material.angular.io/guide/theming).
+
+Kaikkiin templateihin vaikuttavat määrittelyt ovat tiedostossa **styles.scss**. Se sisältää kaikkialla sovelluksessa käytettyjä CSS -luokkia, joiden nimet ovat *.theme-* -alkuisia. **variables.scss** sisältää joitain globaaleja variableja, jotka voi importoida tarvittaessa komponenttien tyylitiedostoissa. Niissä sijaitsevat komponenttikohtaiset tyylit.
 
 ## Kieli ja käännökset
 
 Angularissa käännökset voidaan natiivisti tehdä kahdella eri tavalla: yleisemmin build-aikana tai ajonaikaisesti. Tässä sovelluksessa
 noudatetaan jälkimmäistä tapaa. Kieli haetaan ja alustetaan ohjelman käynnistyessä tiedostossa **src/app/app.initializers.ts**. Käännöksen vaihtaminen ajon aikana aiheuttaa aina sovelluksen uudelleenkäynnistyksen.
-Tämä on normaalia. Englanninkieliset käännökset sijaitsevat
+Tämä on normaalia. Kielen valinnan logiikka, joka tarkistetaan tässä järjestyksessä sovelluksen alustuksessa:
+1. Käyttäjän valitsema.
+2. URL-parametrina asetettu. Yleensä LTI-kautta upotuksessa.
+3. Oletus, joka upotuksessa on englanti ja muulloin suomi.
+
+Englanninkieliset käännökset sijaitsevat
 tiedostossa **src/assets/en-US.json**. Käännökset ovat muodossa:
 
   ```"Suomenkielinen käännösavain": "Englanninkielinen käännös"```
@@ -140,9 +151,9 @@ Suomenkielinen, alkuperäinen teksti on komponenttien templateissa tai komponent
 - **angular.json** - Angularin asetuksia. Mm. eri tiedostojen sijaintien määrittely.
 - **package.json** - Node.js -asetukset, kuten npm skriptien määrittelyt ja pakettiriippuvuudet.
 - **/src/** - Sovelluksen lähdekoodi.
-  - **/app/** - App.modulen hakemisto. Sisältää muiden moduulien alihakemistot.
-  - **/styles/** - Custom teeman tyylimäärittelyt.
+  - **/app/** - App.modulen hakemisto. Sisältää myös muiden moduulien alihakemistot.
   - **assets/** - Logot, ikonit ja käännökset.
+  - **/styles/** - Teeman ja yleiset tyylimäärittelyt.
   - **main.ts** - Täällä asetettu, että production buildissa ei näytetä logeja.
   - **index.html** - Sovelluksen title, fonttien, faviconin osoitteet, sekä mitä
   näytetään, jos ei selaimessa JavaScript -käytössä.
@@ -150,6 +161,41 @@ Suomenkielinen, alkuperäinen teksti on komponenttien templateissa tai komponent
     - **environments.ts** - Development build:lle.
     - **environments.prod.ts** - Production build:lle.
 
+## Sessioiden yli tallentuva tieto
+
+Session yli tallentuva tieto tallennetaan local storageen. Nämä muuttujat ovat:
+
+#### language
+Voi olla 'fi-FI' tai 'en-US'. Täytyy tallentaa local storageen,
+koska kielen vaihtaminen vaatii aina sovelluksen uudelleenkäynnistyksen.
+
+#### noDataConsent
+Array käyttäjät tunnistavia token id:tä, jotka eivät ole antaneet suostumuksia
+tietojen luovutukseen. Heille ei tehdä tiliä, mutta voivat katsella UKK:a.
+Tallennetaan, jotta heiltä ei aina ohjelman alussa kysyttäisi sitä uudelleen,
+vaan uudelleen kieltäytyminen voidaan tehdä automaattisesti.
+
+#### lastTokenId
+Edelliseen liittyen viimeisin tunnettukäyttäjän token id.
+
+#### redirectUrl
+Tallentaa URL:n, johon ohjataan kirjautumisen jälkeen. Käytetään, kun käyttäjä
+käyttäjä kirjautuu sisälle, jolloin hänet voidaan sen jälkeen ohjata samaan
+näkymään.
+
 ## Vianmääritys
 
-Tarkkaile virheilmoituksia selainkonsolissa / browser console. Developer buildissa myös tavalliset console.log -logitukset ovat käytössä, joista voi olla hyötyä.
+### Virhetilanteissa
+- Aja automaattitestit, frontendillä komennolla *ng test*.
+- Tarkkaile virheilmoituksia selainkonsolissa / browser console:ssa. Developer buildissa myös tavalliset console.log -logitukset ovat käytössä toisin kuin production buildissa. Tällöin mm. kaikki HTTP-kutsut logitetaan.
+
+### Jokin elementti näyttää päivityksen jälkeen väärältä
+
+Jos kyseessä on Angular Materialin -elementti, voi tämä johtua muutoksesta Angularin generoimassa CSS-luokkien nimissä. Tyylitiedostot sisältävät joitain muokkauksia, joissa käytetään näitä luokkia. Esimerkkinä alla *listing* -komponentin tyylitiedosto muuttaa taulukon sarakkeen otsikon väriä, jonka mukaan lajittelu tehdään.
+
+```
+:host ::ng-deep .mat-sort-header-content {
+  color: #595959;
+}
+```
+*.mat-sort-header-content* on Angularin generoima luokka, jota ei ole templatessa. Pelkästään templatessa oleviin elementteihin viittaamalla ei näissä tapauksissa saataisi haluttua vaikutusta. Niihin viittaaminen voi vaatia toimiakseen **::ng-deep** -yhdistäjän. Jos tämä määritys lakkaisi toimimasta, kannattaa ensimmäisenä tarkastaa selaimen kehittäjätyökalulla, onko nimeämisessä tai elementin rakenteessa tapahtunut muutoksia. 
