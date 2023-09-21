@@ -148,14 +148,13 @@ describe('TicketViewComponent', () => {
       discardPeriodicTasks();
     }));
 
-    it("sets if ticket isn't editable or removable.", fakeAsync(() => {
+    it("sets if ticket isn't editable.", fakeAsync(() => {
       const student = authDummyData.userInfoRinne;
       store.setUserInfo(student);
       fixture.detectChanges();
       tick(0);
       fixture.detectChanges();
       expect(component.isEditable).toEqual(false);
-      expect(component.isRemovable).toEqual(false);
       const editButton = findElIfExists(fixture, 'edit-button');
       expect(editButton).toBeNull();
       const removeButton = findElIfExists(fixture, 'remove-button');
@@ -163,14 +162,13 @@ describe('TicketViewComponent', () => {
       discardPeriodicTasks();
     }));
 
-    it("sets if ticket is editable and removable.", fakeAsync(() => {
+    it("shows Edit and Remove -buttons if it's user's ticket.", fakeAsync(() => {
       fixture.detectChanges();
       tick(0);
       fixture.detectChanges();
       expect(component.isEditable).toEqual(true);
       const editButton = findEl(fixture, 'edit-button').nativeElement;
       expect(editButton).toBeTruthy();
-      expect(component.isRemovable).toEqual(true);
       const removeButton = findEl(fixture, 'remove-button').nativeElement;
       expect(removeButton).toBeTruthy();
       discardPeriodicTasks();

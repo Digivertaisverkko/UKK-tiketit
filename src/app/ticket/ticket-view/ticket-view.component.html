@@ -60,14 +60,11 @@
         Vahvista
       </button>
 
-      <div  class="remove-btn"
-            matTooltip="{{ cantRemoveTicket }}"
-            [matTooltipDisabled]="isRemovable"
-            >
+      <div  class="remove-btn">
         <button class="remove-btn"
                 (click)="changeButton('remove')"
                 data-testid="remove-button"
-                [disabled]="!isRemovable || state === 'sending'"
+                [disabled]="state === 'sending'"
                 i18n="@@Poista"
                 mat-raised-button
                 *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
@@ -94,7 +91,7 @@
                 >
     </app-error>
 
-  <!-------------- Kysymys ---------------------------------------------------->
+  <!--------------------------------------------------------------------------->
 
   <section *ngIf="ticket.tila > 0">
 

@@ -33,16 +33,51 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export class TicketViewComponent implements OnInit, OnDestroy {
 
+  /**
+   * view-attachments -komponentilta tulevat viestit.
+   *
+   * @type {string}
+   * @memberof TicketViewComponent
+   */
   @Input() public attachmentsMessages: string = '';
+
+  /**
+   * Tiketin ID.
+   *
+   * @type {string}
+   * @memberof TicketViewComponent
+   */
   @Input() public courseid!: string;
+
+  /**
+   * Lista liitetiedostojen tiedoista, view-attachments -komponentilta, jotta
+   * ne voidaan kommenttia lisätessä lähettää.
+   *
+   * @type {FileInfo[]}
+   * @memberof TicketViewComponent
+   */
   @Input() public fileInfoList: FileInfo[] = [];
+
+  /**
+   * Kommentti-komponenteilta tulevia viestejä liitteiden lähettämisen tilasta.
+   *
+   * @type {string}
+   * @memberof TicketViewComponent
+   */
   @Input() public messagesFromComments: string = '';
-  /* Saadaan, jos komponentti on upotettuna esim. Kopioi UKK:ksi -toimintoa
-    käytettäessä. */
+  /* */
+
+  /**
+   * Parent komponentilta mahdollisesti tuleva tiketti ID. Saadaan, jos
+   * komponentti on upotettuna "Kopioi UKK":ksi -toimintoa käytettäessä. 
+   *
+   * @type {(string | null)}
+   * @memberof TicketViewComponent
+   */
   @Input() ticketIdFromParent: string | null = null;
+  
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
-  public cantRemoveTicket: string;
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
   // Testejä varten, kun ei aina ota käyttöön asetettua localea.
@@ -53,7 +88,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public isEditingComment: boolean = false;
   public isLoaded: boolean = false;
   public isPolling: boolean = false;
-  public isRemovable: boolean = false;
   public isRemovePressed: boolean = false;
   public newCommentState: 3 | 4 | 5 = 4;
   /* Error state = On jokin virhe, joka estää tiketin näyttämisen ja
@@ -81,8 +115,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     private ticketService: TicketService,
     private titleServ: Title
   ) {
-    this.cantRemoveTicket = $localize `:@@Ei voi poistaa kysymystä:
-        Kysymystä ei voi poistaa, jos siihen on tullut kommentteja` + '.'
     this.ticketID = this.ticketIdFromParent !== null
         ? this.ticketIdFromParent
         : String(this.route.snapshot.paramMap.get('id'));
@@ -177,10 +209,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     // fetchaus sulkee editointiboxin.
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
-      /*
-      console.log('component:');
-      console.dir(response);
-      */
       if (response === null) {
         this.errorMessage = $localize`:@@Kysymystä ei löydy:
         Hakemaasi kysymystä ei ole olemassa. Kysymyksen aloittajan on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
@@ -191,7 +219,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       this.ticket = response;
       if (this.ticket.aloittaja.id === this.user.id) {
         this.isEditable = true;
-        this.isRemovable = this.ticket.kommentit.length === 0 ? true : false;
       }
       this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       this.isLoaded = true;
