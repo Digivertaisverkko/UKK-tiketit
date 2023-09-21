@@ -13,7 +13,6 @@ import { stringsMatchValidator } from '@shared/directives/strings-match.directiv
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';
 
-
 /**
  * Näkymä, jossa uusi käyttäjä pystyy luomaan käyttäjätilin. Käyttäjä on saanut
  * osoitteen tähän näkymään sähköpostilla. Jo olemassa olevan käyttäjätilin

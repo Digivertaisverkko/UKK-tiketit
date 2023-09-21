@@ -139,13 +139,8 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private fetchAdditionalFields(): void {
-
-    console.log('fetchAdditionalFields');
-
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseid).then(response => {
-      console.log('fetchAdditionalFields: response getTicketFieldInfo:');
-      console.dir(response);
       this.ticketFields = response.kentat as Kentta[];
       this.helpText = response.kuvaus ?? '';
       this.buildAdditionalFields();
@@ -229,7 +224,6 @@ export class SubmitTicketComponent implements OnInit {
         if (res === false) {
           this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
         }
-        // this.printFileInfoListLog();
         if (this.fileInfoList !== undefined) {
           if (this.fileInfoList.length === 0 ) return
           this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
@@ -245,17 +239,6 @@ export class SubmitTicketComponent implements OnInit {
         this.state = 'editing';
         this.form.enable();
       });
-  }
-
-  private printFileInfoListLog() {
-    if (this.fileInfoList) {
-      console.log(' this.fileInfoList on true');
-    } else {
-      console.log('this.fileInfoList on false');
-    }
-    console.log('fileinfolist sisältö alla:');
-    console.log(JSON.stringify(this.fileInfoList));
-    console.log(typeof this.fileInfoList);
   }
 
   private submitNew(ticket: UusiTiketti): void {

@@ -20,6 +20,7 @@ import schema from '@shared/editor/schema';
  * @implements {AfterViewInit}
  * @implements {OnInit}
  */
+
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -87,7 +88,11 @@ export class CommentComponent implements AfterViewInit, OnInit{
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
 
   /**
-   * Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
+   * Välittää liitetiedostojen lähettämisen tilan parent componentille.
+   * 
+   * 'sendingFiles' - Lähettäminen on kesken.
+   * 'continue' - Lähettäminen pysäytettiin, jatka editointitilassa.
+   * 'done' - Lähettäminen on valmis.
    *
    * @memberof CommentComponent
    */
@@ -128,7 +133,6 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.sender = this.comment.lahettaja;
-
   }
 
   private buildForm(): FormGroup {

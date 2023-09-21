@@ -8,7 +8,8 @@ import { NoPrivilegesComponent } from './core/no-privileges/no-privileges.compon
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 
 /** Objektien järjestyksellä on väliä, sillä ensimmäinen match näytetään.
- * @type {*} */
+ * @type {*}
+ */
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'course/:courseid/home', component: HomeComponent },

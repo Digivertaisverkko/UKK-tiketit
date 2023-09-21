@@ -1,4 +1,8 @@
 {
+  "comments": {
+    "comment1": "Käännökset ovat muodossa 'Käännösavain': 'Englanninkielinen käännös'",
+    "comment2": "Suomenkieliset tekstit ovat templateissa ja osa lisäksi komponenteissa"
+  },
   "locale": "fi",
   "translations": {
     "404-otsikko": "Page not found",

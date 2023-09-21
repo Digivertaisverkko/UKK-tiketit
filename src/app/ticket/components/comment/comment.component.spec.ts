@@ -8,8 +8,10 @@ import { SenderInfoComponent } from '@shared/components/sender-info/sender-info.
 import { TicketService } from '@ticket/ticket.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
 import { MessageComponent } from '@ticket/components/message/message.component';
+import { AuthDummyData } from '@core/services/auth.dummydata';
 
 describe('CommentComponent', () => {
+  const authDymmyData = new AuthDummyData;
   let component: CommentComponent;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<CommentComponent>;
@@ -39,6 +41,8 @@ describe('CommentComponent', () => {
 
     fixture = TestBed.createComponent(CommentComponent);
     component = fixture.componentInstance;
+    component.courseid = '1';
+    
     fixture.detectChanges();
   });
 
