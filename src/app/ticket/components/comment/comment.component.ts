@@ -89,7 +89,7 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   /**
    * Välittää liitetiedostojen lähettämisen tilan parent componentille.
-   * 
+   *
    * 'sendingFiles' - Lähettäminen on kesken.
    * 'continue' - Lähettäminen pysäytettiin, jatka editointitilassa.
    * 'done' - Lähettäminen on valmis.

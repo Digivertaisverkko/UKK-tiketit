@@ -105,7 +105,8 @@
 
   <mat-card-content>
     <ng-container *ngIf="editingCommentID !== comment.id; else editingComment">
-      <app-message [messageHtml]=comment.viesti></app-message>
+      <app-message data-testid="message" [messageHtml]=comment.viesti>
+      </app-message>
       <app-view-attachments
           [courseid]="courseid"
           (errorMessage)="errorMessage = $event"

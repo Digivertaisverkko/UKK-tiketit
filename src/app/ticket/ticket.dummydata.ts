@@ -1,7 +1,7 @@
 import { Role } from "@core/core.models";
-import { Kentta, Liite, SortableTicket, Tiketti, UKK } from "./ticket.models";
+import { Kentta, Kommentti, Liite, SortableTicket, Tiketti, UKK } from "./ticket.models";
 import { AuthDummyData } from "@core/services/auth.dummydata";
- 
+
 /**
  * Dummy dataa testausta varten.
  * id arvot tulevat palvelimelta numeroina, mutta ne tallennetaan ja
@@ -13,6 +13,31 @@ import { AuthDummyData } from "@core/services/auth.dummydata";
 export class TicketDummyData {
 
   readonly authDummyData = new AuthDummyData;
+
+
+  public get kommentti(): Kommentti {
+    return {
+      id: '25',
+      viesti: "<p>Testikommentti</p>",
+      lahettaja: {
+        id: 2,
+        nimi: "Marianna Laaksonen",
+        sposti: "marianna.laaksonen@example.com",
+        asema: "opettaja"
+      },
+      aikaleima: new Date("2023-09-22T10:54:02.119Z"),
+      tila: 4,
+      muokattu: null,
+      liitteet: [
+        {
+          kommentti: '25',
+          tiedosto: "06734754-9af4-4597-869b-19da98f1a645",
+          nimi: "testiliite.js",
+          koko: 0
+        }
+      ]
+    }
+  }
 
   public get liitteet(): Liite[] {
     return [
