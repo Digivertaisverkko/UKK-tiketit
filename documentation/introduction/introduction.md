@@ -38,8 +38,18 @@ Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tu
 - [Node.js 20.5](https://nodejs.org/en) - Mm. Kehityspalvelimen ajamiseen.
 - [Jasmine 4.3](https://jasmine.github.io/) - Testaus framework yksikkötesteillle.
 - [Karma 6.4](https://karma-runner.github.io/latest/index.html) - Testien suoritusympäristö, joka toimii Jasminen kanssa.
+- [Compodoc](https://compodoc.app/) - Dokumentaation generointi.
 - [Git](https://git-scm.com/) - Versionhallinta.
 - [ESLint](https://eslint.org/) - Staattinen koodinanalyysi.
+
+## Sovelluksen arkkitehtuuri
+
+![Sovelluksen arkkitehtuurin kaavakuva](Tukki-web-UI-arkkitehtuuri.svg)
+
+Kuvassa on esitetty sovelluksen arkkitehtuuria. Kuva on nähtävillä tiedostossa documentation/introduction/Tukki-web-UI-arkkitehtuuri.svg. Seuraavissa kappaleissa on kuvattu
+kuvassa näkyviä sovelluksen yksikköjä. Yksikköjen kuvaukset on dokumenetoitu myös
+niiden lähdekooditiedostoihin. Niitä voi lukea automaattisesti generoidusta Compodoc
+-dokumentaatiosta avaamalla verkkoselaimella tiedoston documentation/index.html. 
 
 ## Moduulit
 
