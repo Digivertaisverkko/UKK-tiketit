@@ -1,7 +1,7 @@
 # Tukki web-käyttöliittymän kuvaus
 
 Tämä ohje pyrkii antamaan yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän
-eli frontendin arkkitehtuurista ohjelman ylläpitäjälle.  Tämä tiedosto kannattaa
+eli frontendin arkkitehtuurista ja tekniikoista ohjelman ylläpitäjälle. Tiedosto kannattaa
 pitää ajan tasalla. Dokumentin ymmärtämiseksi olisi hyvä tuntea perustiedot
 Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngModule*), 
 *komponentti* (*component*), *template* ja *service*. Näistä voi lukea esimerkiksi
@@ -10,17 +10,17 @@ Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngM
 
 ## Sisällysluettelo
 
-- [Tekniikat](#tekniikat)
-- [Moduulit](#moduulit)
+- [Tekniikat](#käytetyt-tekniikat)
+- [Moduulit](#angular--päämoduulit)
 - [Komponentit](#komponentit)
 - [Servicet](#servicet)
+- [Osien välinen kommunikaatio](#osien-välinen-kommunikaatio)
 - [Teema ja tyylit](#teema-ja-tyylit)
 - [Kieli ja käännökset](#kieli-ja-käännökset)
 - [Projektin hakemistorakenne](#projektin-hakemistorakenne)
-- [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto)
 - [Vianmääritys](#vianmääritys)
 
-## Tekniikat
+## Käytetyt tekniikat
 
 Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee Angularin mukana.
 
@@ -33,12 +33,12 @@ Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tu
 - [Angular Router](https://angular.io/guide/router) - Reititys ja navigointi.
 - [Angular CLI](https://angular.io/cli) - Komentorivityökalu.
 - [Angular Reactive Forms](https://angular.io/guide/reactive-forms) - Käytetty sovelluksen lomakkeissa.
+- [Compodoc](https://compodoc.app/) - Dokumentaation generointi.
 - [NgxEditor](https://www.npmjs.com/package/ngx-editor) - Rich-text editori -komponentti.
 - [Npm 9.8](https://www.npmjs.com/) - Pakettien hallintaan.
 - [Node.js 20.5](https://nodejs.org/en) - Mm. Kehityspalvelimen ajamiseen.
 - [Jasmine 4.3](https://jasmine.github.io/) - Testaus framework yksikkötesteillle.
 - [Karma 6.4](https://karma-runner.github.io/latest/index.html) - Testien suoritusympäristö, joka toimii Jasminen kanssa.
-- [Compodoc](https://compodoc.app/) - Dokumentaation generointi.
 - [Git](https://git-scm.com/) - Versionhallinta.
 - [ESLint](https://eslint.org/) - Staattinen koodinanalyysi.
 
@@ -46,16 +46,15 @@ Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tu
 
 ![Sovelluksen arkkitehtuurin kaavakuva](Tukki-web-UI-arkkitehtuuri.svg)
 
-Kuvassa on esitetty sovelluksen arkkitehtuuria. Kuva on nähtävillä tiedostossa documentation/introduction/Tukki-web-UI-arkkitehtuuri.svg. Seuraavissa kappaleissa on kuvattu
-kuvassa näkyviä sovelluksen yksikköjä. Yksikköjen kuvaukset on dokumenetoitu myös
+Kuvassa on esitetty sovelluksen arkkitehtuuria. Kuva on nähtävillä tiedostossa documentation/kuvaus/Tukki-web-UI-arkkitehtuuri.svg. Seuraavissa kappaleissa on kuvattu
+kuvassa näkyviä sovelluksen yksikköjä. Niiden kuvaukset on dokumentoitu myös
 niiden lähdekooditiedostoihin. Niitä voi lukea automaattisesti generoidusta Compodoc
 -dokumentaatiosta avaamalla verkkoselaimella tiedoston documentation/index.html. 
 
-## Moduulit
+## Angular -päämoduulit
 
-Sovellus koostuu eri päämoduuleista, jotka ovat kukin omassa hakemistoissaan. Esim.
-core.module hakemistossa **src/app/core**. Näiden moduulien lisäksi eri paketit
-sisältävät monia omia moduuleitaan.
+Sovellus koostuu eri Angular -päämoduuleista, jotka ovat kukin omassa hakemistossaan.
+Näiden päämoduulien lisäksi eri paketit sisältävät monia omia moduuleitaan.
 
 Päämoduulit sisältävät tyypillisesti seuraavat tiedostot:
 
@@ -69,21 +68,22 @@ Päämoduulit sisältävät tyypillisesti seuraavat tiedostot:
 
 ### Sovellus koostuu seuraavista päämoduuleista
 
- #### app.module
+#### app.module
+
 Sovelluksen juurimoduuli, joka ladataan ensin ja jossa määritellään muut moduulit.
 Sijaitsee hakemistossa **/src/app**. Sisältää alihakemistot muille moduuleille.
-Vain app.modulen käyttämät komponentit tulisi sijoittaa core.moduleen, samoin
-kaikki yleiset servicet.
+App -komponentin käyttämät komponentit ovat core-moduulissa.
 
- #### core.module
+#### core.module
+
 Sovelluksen ydintoiminnallisuus. Importoidaan ainoastaan app.modulessa, jolloin
 se voidaan pitää yksinkertaisempana. Sisältää App.modulen käyttämiä komponentteja,
 kuten *header* ja *footer* ja yleisiä näkymäkomponentteja, kuten *home* ja
 *Sivua ei löytynyt*, yleisiä servicejä, kuten auth.service ja error.service.
 Sisältää myös http-interceptor.ts, joka logittaa HTTP-kutsuja.
 
- #### Feature -moduulit
-  
+#### Feature -moduulit
+
 Muu sovelluksen toiminnallisuus on ryhmitelty vastuualueittain näihin moduuleihin. 
 okainen shared.modulea lukuunottamatta sisältää niiden toiminnallisuudesta
 vastaavan servicen sekä reitityksen määrittelyt.
@@ -139,15 +139,12 @@ hakemistossa on myös vastaava *.service.spec.ts - tiedosto, jossa on servicen t
 
 Käyttäjäautentikaatioon liittyvät toiminnot, kuten kirjautuminen sekä siihen
 liittyvien tietojen käsittely. Näitä ovat esimerkiksi kirjautumisen tila ja kirjautuneen
-käyttäjän tiedot. Nämä tiedot haetaan palvelimelta ja päivitetään store.serviceen
-aina reitityksen muuttuessa.
+käyttäjän tiedot. Tiedot haetaan palvelimelta ja asetetaan store.serviceen aina reitityksen muuttuessa. Käyttäjät tunnistetaan evästeiden avulla, joka tapahtuu
+web-käyttöliittymän näkökulmasta automaattisesti.
 
 #### store.service
 
-Tänne tallennetaan globaali tieto, jonka halutaan olevan käytettävissä kaikkialla
-sovelluksessa. Näitä ovat esimerkiksi tieto kirjautumisen tilasta ja kirjautuneen
-käyttäjän tiedoista. Tiedot eivät säily sessioiden yli (kts. [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto)).
-Tiedot välitetään pääosin RxJS:n behavior subjecteilla.
+Tänne tallennetaan globaali tieto RxJS behavior subjekteihin, jonka halutaan olevan käytettävissä kaikille komponenteille ja serviceille. Näitä ovat esimerkiksi tieto kirjautumisen tilasta ja kirjautuneen käyttäjän tiedoista. Tiedot eivät säily sessioiden yli (kts. [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto)).
 
 #### error.service
 
@@ -177,17 +174,21 @@ tikettipohjien käsittely ja kurssin tietojen tuonti ja vienti tiedostoiksi.
 
 ## Osien välinen kommunikaatio
 
-Parent- ja child komponenttien välillä tiedonvaihto tapahtuu pääosin
-suoraan Angularin @Input ja @Output -dekoraattoreiden avulla. Komponentit voivat
-kutsua niihin injektoitujen serviceiden metodeja ja saada paluuarvoja. Kun
-jonkin osan tarvitsee välittää muuttujien tieto globaalisti sovelluksen muihin
-osiin, ne lähettävän sen metodikutsuilla [Store servicen](#storeservice) RxJS (behavior)
-subjekteihin. Komponentit voivat kuunnella niiden arvoja observableilla. [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto) tallennetaan local storageen, mutta tätä ei käytetä paljon.
+Parent- ja child komponenttien välillä tiedonvaihto tapahtuu pääosin suoraan
+Angularin @Input ja @Output -dekoraattoreiden avulla. Globaali, session aikainen
+tila tallennetaan [store servicen](#storeservice) behavior subjekteihin metodikutsuilla. Servicen injektoivat yksiköt saavat nämä tiedot metodikutsuilla, jotka palauttavat
+tyypillisesti observableja. Tallennettava globaali tila on esimerkiksi kirjautumisen
+tila sekä komponenttien toisilleen välittämät viestit.
+
+Komponentit välittävät
+muun tiedon serviceihin metodikutsuilla ja saavat palautusarvoja, jotka tyypillisesti
+ovat promiseja. Sessioiden yli tallentuva tieto tallennetaan local storageen,
+josta voi lukea tiedostosta documentation/kuvaus/local-storage.md. Tätä ei käytetä sovelluksella paljon.
 
 ## Teema ja tyylit
 
 Yleiset tyylimäärittelyt ovat hakemistossa **src/styles/**. Sovellus käyttää
-*Angular Material* -kirjaston kustomoitua teemaa, jonka määrittelyt ovat tiedostossa
+[Angular Material](https://material.angular.io/) -kirjaston kustomoitua teemaa, jonka määrittelyt ovat tiedostossa
 **custom-theme.scss**. [Tietoa teeman muokkaamisesta](https://material.angular.io/guide/theming).
 
 Kaikkiin templateihin vaikuttavat määrittelyt ovat tiedostossa **styles.scss**.
@@ -204,7 +205,7 @@ Kieli haetaan ja alustetaan ohjelman käynnistyessä tiedostossa **src/app/app.i
 Käännöksen vaihtaminen ajon aikana aiheuttaa aina sovelluksen uudelleenkäynnistyksen.
 Tämä on normaalia. Kielen valinnan logiikka, joka tarkistetaan tässä järjestyksessä
 sovelluksen alustuksessa:
-1. Käyttäjän valitsema.
+1. Käyttäjän valikon kautta valitsema.
 2. URL-parametrina asetettu. Yleensä LTI-kautta upotuksessa.
 3. Oletus, joka upotuksessa on englanti ja muulloin suomi.
 
@@ -214,48 +215,32 @@ tiedostossa **src/assets/en-US.json**. Käännökset ovat muodossa:
   ```"Suomenkielinen käännösavain": "Englanninkielinen käännös"```
 
 Suomenkielinen, alkuperäinen teksti on komponenttien templateissa tai komponentin
-koodissa. Käännös haetaan käännösavaimeen viittaamalla. Komponentin koodissa tämä
-tapahtuu [$localize](https://angular.io/api/localize) -funktiolla.
+koodissa. Käännös haetaan käännösavaimeen viittaamalla. Templatessa tämä tapahtuu
+yleensä *i18n* - tai sen alkuisella alkuisella tunnisteella tai Angularin interpolaatiolla komponentin muuttujaan, jossa käännös tapahtuu yleensä [$localize](https://angular.io/api/localize) -funktiolla.
 
 
 ## Projektin hakemistorakenne
 
+Tärkeitä tai huomionarvoisia  tiedostoja ja hakemistoja.
+
 - **angular.json** - Angularin asetuksia. Mm. eri tiedostojen sijaintien määrittely.
 - **package.json** - Node.js -asetukset, kuten npm -skriptien määrittelyt ja pakettiriippuvuudet.
+- **documentation/** - Compodocilla generoitu dokumentaatio.
+  - **index.html** - Avaamalla tämän tiedoston selaimella voit lukea generoitua
+   dokumentaatiota.
+  - **kuvaus/** - Hakemisto, jossa kuvailevaa dokumentaatiota:
+    - **kuvaus.md** - Tämä tiedosto.
+    - **local-storage.md** - Local storageen tallennettavat muuttujat.
 - **src/** - Sovelluksen lähdekoodi.
   - **app/** - App.modulen hakemisto. Sisältää myös muiden moduulien alihakemistot.
   - **assets/** - Logot, ikonit ja käännökset.
-  - **styles/** - Teeman ja yleiset tyylimäärittelyt.
+  - **styles/** - Teeman määrittely ja globaalit tyylimäärittelyt.
   - **main.ts** - Täällä asetettu, että production buildissa ei näytetä logeja.
   - **index.html** - Sovelluksen title, fonttien, faviconin osoitteet, sekä mitä
   näytetään, jos selaimessa ei ole JavaScript -käytössä.
   - **environments/** - Environment -variablet. Sisältää sovelluksen nimen ja base URL:n. Tiedostot:
     - **environments.ts** - Development build:lle.
     - **environments.prod.ts** - Production build:lle.
-
-## Sessioiden yli tallentuva tieto
-
-Session yli tallentuva tieto tallennetaan local storageen. Tämän käyttö on sovelluksessa
-vähäistä. Session globaali tila on tallennettu [store serviceen](#storeservice).
-Local storageen on tallennetut muuttujat:
-
-- **language**
-Voi olla 'fi-FI' tai 'en-US'. Täytyy tallentaa local storageen,
-koska kielen vaihtaminen vaatii aina sovelluksen uudelleenkäynnistyksen.
-
-- **noDataConsent**
-Array käyttäjät tunnistavia token id:tä, jotka eivät ole antaneet suostumuksia
-tietojen luovutukseen. Heille ei tehdä tiliä, mutta voivat katsella UKK:a.
-Tallennetaan, jotta heiltä ei aina ohjelman alussa kysyttäisi sitä uudelleen,
-vaan uudelleen kieltäytyminen voidaan tehdä automaattisesti.
-
-- **lastTokenId**
-Edelliseen liittyen viimeisin tunnettukäyttäjän token id.
-
-- **redirectUrl**
-Tallentaa URL:n, johon ohjataan kirjautumisen jälkeen. Käytetään, kun käyttäjä
-käyttäjä kirjautuu sisälle, jolloin hänet voidaan sen jälkeen ohjata samaan
-näkymään.
 
 ## Vianmääritys
 
@@ -264,6 +249,7 @@ näkymään.
 - Tarkkaile virheilmoituksia selainkonsolissa / browser console:ssa. Developer
 buildissa myös tavalliset console.log -logitukset ovat käytössä toisin kuin
 production buildissa. Tällöin mm. kaikki HTTP-kutsut logitetaan.
+  - Lisää tarvittaessa omia console.log -logituksia.
 
 ### Jokin elementti näyttää päivityksen jälkeen väärältä
 
@@ -284,5 +270,4 @@ saataisi haluttua vaikutusta. Niihin viittaaminen voi vaatia toimiakseen
 ensimmäisenä tarkastaa selaimen kehittäjätyökalulla, onko nimeämisessä tai
 elementin rakenteessa tapahtunut muutoksia. 
 
-
-[Takaisin alkuun](#web-käyttöliittymän-kuvaus)
+[Takaisin alkuun](#tukki-web-käyttöliittymän-kuvaus)
