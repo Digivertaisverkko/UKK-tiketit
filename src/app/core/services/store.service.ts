@@ -2,12 +2,18 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AuthInfo, Role, User } from '../core.models';
 
+/**
+ * Näkymän otsikko.
+ *
+ * @interface Headline
+ */
 interface Headline {
   text?: string;
   appHeadline?: boolean;
   noCourseTitle?: boolean;
   showInIframe?: boolean;
 }
+
 /**
  * 
  * Tallennetaan ja palautetaan muistissa olevia globaaleja muuttujia ja vakioita, 
@@ -25,75 +31,138 @@ interface Headline {
 @Injectable({ providedIn: 'root' })
 
 export class StoreService {
-
   // Kaikki jäsenmuuttujat tulisi olla privaatteja.
   private authInfo: AuthInfo | null = null;
+  private constants = {
+    baseTitle: 'Tukki - ',
+    MAX_FILE_SIZE_MB: 100,
+    MILLISECONDS_IN_MIN: 60000,
+    thisYear: new Date().getFullYear()
+  }
   private courseName: string | null = null;
   private headline: Headline | null = null;
   private isLoading$: Subject<boolean> = new Subject();
   private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
-  private constants;
-  // Voidaan välittää viestejä komponenttien välillä.
   private messageEmitter$ = new Subject<string>();
-  // Vierityksen kohta eri näkymäissä. Tällä hetkellä käytössä listaus -näkymässä.
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null>(null);
 
   constructor() {
-    this.constants = {
-      baseTitle: 'Tukki - ',
-      MAX_FILE_SIZE_MB: 100,
-      MILLISECONDS_IN_MIN: 60000,
-      thisYear: new Date().getFullYear()
-    }
+
   }
 
   /* get -alkuiset palauttavat sen hetkisen arvon. Huomioi, että
     esimerkiksi käyttäjätietoja ei sivun latautumisen alussa ole
-    välttämättä ehditty vielä hakea, vaan arvo on null. */
+    välttämättä ehditty vielä hakea, vaan arvo on tällöin null. */
 
+  /**
+   * Sovelluksen selainotsikoiden perusosa.
+   *
+   * @return {*}  {string}
+   * @memberof StoreService
+   */
   public getBaseTitle(): string {
     return this.constants.baseTitle;
   }
 
+  /**
+   * Aktiivisen kurssin nimi.
+   *
+   * @return {*}  {(string | null)}
+   * @memberof StoreService
+   */
   public getCourseName(): string | null {
     return this.courseName ?? '';
   }
 
+  /**
+   * Näkymän otsikko.
+   *
+   * @return {*}  {(Headline | null)}
+   * @memberof StoreService
+   */
   public getHeadline(): Headline | null {
     return this.headline;
   }
 
+  /**
+   * Onko käyttäjä kirjautunut.
+   *
+   * @return {*}  {(Boolean | null)}
+   * @memberof StoreService
+   */
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
   }
 
+  /**
+   * Maksimi liitetiedostojen koko megatavuina.
+   *
+   * @return {*}  {number}
+   * @memberof StoreService
+   */
   public getMAX_FILE_SIZE_MB(): number {
     return this.constants.MAX_FILE_SIZE_MB;
   }
 
+  /**
+   * Millisekuntien määrä minuutissa.
+   *
+   * @return {*}  {number}
+   * @memberof StoreService
+   */
   public getMsInMin(): number {
     return this.constants.MILLISECONDS_IN_MIN;
   }
 
+  /**
+   * Nykyinen vuosi.
+   *
+   * @return {*}  {number}
+   * @memberof StoreService
+   */
   public getThisYear(): number {
     return this.constants.thisYear;
   }
 
+  /**
+   * Käyttäjän rooli kurssilla, johon ollaan kirjautuneena.
+   *
+   * @return {*}  {(Role | null)}
+   * @memberof StoreService
+   */
   public getUserRole(): Role | null {
     return this.user$.value?.asema ?? null;
   }
 
+  /**
+   * Käyttäjän tiedot kurssilla, johon ollaan kirjautuneena.
+   *
+   * @return {*}  {(User | null)}
+   * @memberof StoreService
+   */
   public getUserInfo(): User | null {
     const user: User | null = this.user$.value;
     return user;
   }
 
+  /**
+   * Palauta käyttäjän nimi.
+   *
+   * @return {*}  {(string | null)}
+   * @memberof StoreService
+   */
   public getUserName(): string | null {
     return this.user$.value?.nimi ?? null;
   }
 
+  /**
+   * Aseta näkymän otsikko.
+   *
+   * @param {Headline} headline
+   * @memberof StoreService
+   */
   public setHeadline(headline: Headline): void {
     this.headline = headline;
   }
@@ -104,6 +173,12 @@ export class StoreService {
     }
   }
 
+  /**
+   * Seuraa käyttäjätietoja observablena.
+   *
+   * @return {*}  {(Observable<User | null>)}
+   * @memberof StoreService
+   */
   public trackUserInfo(): Observable<User | null> {
     return this.user$.asObservable();
   }
@@ -113,25 +188,54 @@ export class StoreService {
     this.user$.unsubscribe();
   }
 
+  /**
+   * Hae käyttäjän kirjautumistiedot.
+   *
+   * @return {*}  {(AuthInfo | null)}
+   * @memberof StoreService
+   */
   public getAuthInfo(): AuthInfo | null {
     return this.authInfo;
   }
 
+  /**
+   * Hae vierityksen kohta.
+   *
+   * @param {string} url
+   * @return {*}  {number}
+   * @memberof StoreService
+   */
   public getPosition(url: string): number {
     return this.positions[url] || 0;
   }
 
+  /**
+   *  Aseta tieto näkymän lataamisesta progress barin varten seuraavaan change
+   * detectionin macrotaskiin.
+   *
+   * @memberof StoreService
+   */
+  // Näin vältytään virheeltä ExpressionChangedAfterItHasBeenCheckedError.
   public startLoading(): void {
-    /* Laittaa muutoksen seuraavaan change detectionin macrotaskiin,
-      jotta vältytään dev buildissa virheeltä:
-      Error:ExpressionChangedAfterItHasBeenCheckedError */
     setTimeout( () => this.isLoading$.next(true) );
   }
 
+  /**
+   * Aseta tieto näkymän lataamisen lopettamisesta progress barin varten.
+   *
+   * @memberof StoreService
+   */
   public stopLoading(): void {
     setTimeout( () => this.isLoading$.next(false) );
   }
 
+  /**
+   * Lähetä viesti komponenttien välillä, joilla ei ole parent-child -
+   * suhdetta.
+   *
+   * @param {string} message
+   * @memberof StoreService
+   */
   public sendMessage(message: string): void {
     this.messageEmitter$.next(message);
   }
@@ -146,7 +250,11 @@ export class StoreService {
     }
   }
 
-  // Aseta tila kirjautuneeksi.
+  /**
+   * Aseta, että käyttäjä on kirjautunut.
+   *
+   * @memberof StoreService
+   */
   public setLoggedIn(): void {
     if (this.isLoggedIn$.value !== true) {
       // this.setSessionID('loggedin');
@@ -164,12 +272,25 @@ export class StoreService {
     if (this.user$ !== null) this.user$.next(null);
   }
 
+  /**
+   * Aseta onko käyttäjä on kurssin osallistuja.
+   *
+   * @param {(boolean | null)} newIsParticipant
+   * @memberof StoreService
+   */
   public setParticipant(newIsParticipant: boolean | null): void {
     if (newIsParticipant !== this.isParticipant$.value) {
       this.isParticipant$.next(newIsParticipant);
     }
   }
-
+  
+  /**
+   * Aseta näkymän vierityksen kohta.
+   *
+   * @param {string} url
+   * @param {number} position
+   * @memberof StoreService
+   */
   public setPosition(url: string, position: number) {
     this.positions[url] = position;
   }
@@ -182,22 +303,51 @@ export class StoreService {
     return this.isParticipant$.asObservable();
   }
 
+  /**
+   * Seuraa näkymän lataamisen tilaa. Tämä on käytössä progress barin
+   * näyttämiseen.
+   *
+   * @return {*}  {Observable<boolean>}
+   * @memberof StoreService
+   */
   public trackLoading(): Observable<boolean> {
     return this.isLoading$.asObservable();
   }
 
+  /**
+   * Seuraa kirjautumisen tilaa.
+   *
+   * @return {*}  {(Observable<boolean | null>)}
+   * @memberof StoreService
+   */
   public trackLoggedIn(): Observable<boolean | null> {
     return this.isLoggedIn$.asObservable();
   }
 
+  /**
+   * Seuraa viestejä komponenttien välillä.
+   *
+   * @return {*}  {Observable<string>}
+   * @memberof StoreService
+   */
   public trackMessages(): Observable<string> {
     return this.messageEmitter$.asObservable();
   }
 
+  /**
+   *  Poista vierityksen kohta.
+   *
+   * @memberof StoreService
+   */
   public unsetPosition(): void {
     this.positions = {};
   }
 
+  /**
+   * Lopeta komponenttien välisten viestien seuraaminen.
+   *
+   * @memberof StoreService
+   */
   public untrackMessages(): void {
     this.messageEmitter$.unsubscribe;
   }
