@@ -1,8 +1,19 @@
 @use "@angular/material" as mat;
-@import '/src/variables.scss';
+@import 'variables.scss';
+
+/**
+* Globaalit tyylimäärittelyt. Nämä ovat voimassa kaikkialla. Teeman muokkaaminen
+* on tiedostossa custom-theme.scss ja muuttujien määrittely variables.scss.
+* Tiettyyn tai tiettyihin templatehin liittyvät määrittelyt ovat niihin liitetyissä
+* tyylitiedostoissa.
+*
+* Uusia tyylejä määrittäessä on hyvä nimetä ne ".theme-" -alkuisiksi, jotta
+* templateissa ne tunnistetaan täällä määritellyiksi eikä käytetä samoja
+* nimiä kuin templateissa on määritelty.
+*/
 
 // Material teeman määrittely:
-@import '/src/styles/custom-theme.scss';
+@import 'custom-theme.scss';
 
 html {
   font-family: $textFont
@@ -16,8 +27,8 @@ body {
 .theme-anchor {
   color: var(--primary-color);
   text-decoration: underline;
-  cursor: pointer; 
-} 
+  cursor: pointer;
+}
 
 .theme-footer {
   background-color: mat.get-color-from-palette($custom-primary-palette, 500);
@@ -48,9 +59,7 @@ $debug: false;
   font-weight: 700;
   line-height: 1.2;
   margin-block-start: 2.5rem;
-  // margin-block-start: 2.6rem;
   margin-block-end: 0.8em; // Älä muuta
-  // margin-left: 12px;
 }
 
 // Käyttäjän nimi.
@@ -99,7 +108,6 @@ mat-hint {
 // Testaamiseen jos haluaa osan block-elementeistä näkyviin.
 $debug: false;
 
-
 .theme-table {
   width: 100%; line-height: 1.4rem;
   .mat-mdc-header-row {
@@ -133,7 +141,6 @@ $debug: false;
 // ---------------- Media queryt -----------------------------------------------
 
 @media (max-width: $XSmall) {
-
 
   .theme-subheading {
     font-family: $displayFont;

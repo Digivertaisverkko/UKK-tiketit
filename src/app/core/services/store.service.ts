@@ -1,7 +1,3 @@
-/* Voidaan tallentaa ja palauttaa muistissa olevia muuttujia ja vakioita, joita
-tarvitaan globaalisti useamman kuin yhden komponentin ja sen lapsien tai vanhempien
-ulkopuolella. Tämä tulisi olla ainut service, jossa näin tehdään. */
-
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { AuthInfo, Role, User } from '../core.models';
@@ -12,7 +8,20 @@ interface Headline {
   noCourseTitle?: boolean;
   showInIframe?: boolean;
 }
-
+/**
+ * 
+ * Tallennetaan ja palautetaan muistissa olevia globaaleja muuttujia ja vakioita, 
+ * eli ohjelman state. Tämä rakennetaan uudestaan näkymiä vaihdettassa eikä
+ * tallenneta sessioiden välilä. Komponenttien ja niiden lapsien tai vanhempien
+ * välinen tiedonvaihto käydään suoraan niiden välillä @Input ja @Output -
+ * dekoraattoreilla. Tällä servicellä taas välitetään tieto minkä tahansa
+ * komponenttien tai serviceiden välillä. Tämä on myös ainut service, jossa tätä
+ * statea pidetään. Tämän lisäksi sessioiden yli säilyvää statea säilytetään
+ * local storagessa.
+ *
+ * @export
+ * @class StoreService
+ */
 @Injectable({ providedIn: 'root' })
 
 export class StoreService {
@@ -165,8 +174,7 @@ export class StoreService {
     this.positions[url] = position;
   }
 
-
- public onIsUserLoggedIn(): Observable<any> {
+  public onIsUserLoggedIn(): Observable<any> {
     return this.isLoggedIn$.asObservable();
   }
 

@@ -1,9 +1,10 @@
-/* Tänne exportoitavat modelit, joita käytetään useammassa komponentissa
-ja joita on tarkoitus käyttää tämän feature-moduulin sisällä.
-
-  Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
-  API:a se vastaa. Rajapintojen jäsenmuuttujien arvojen järjestys noudattaa
-  API-dokumentin järjestystä. */
+/**
+ * Mallit, joista tämä moduuli vastaa ja joita voidaan käyttää muuallakin.
+ *
+ * Rajapinnoissa on mainittu, missä metodissa sitä käytetään ja mitä palvelimen
+ * API:a se vastaa. Rajapintojen jäsenmuuttujien arvojen järjestys noudattaa
+ * API-dokumentin järjestystä.
+ */
 
 import { User } from "@core/core.models";
 
@@ -48,7 +49,7 @@ export interface Kommentti {
   id: string;
   lahettaja: User;
   aikaleima: Date;
-  muokattu: Date;
+  muokattu: Date | null;
   tila: number;
   viesti: string;
   liitteet: Array<Liite>;
@@ -67,6 +68,7 @@ export interface NewCommentResponse {
   kommentti: string;
 }
 
+// Käytetään tikettilistan muodostamiseen, sen sorttaamiseen ja filtteröintiin.
 export interface SortableTicket {
   id: number;
   otsikko: string;
@@ -80,7 +82,7 @@ export interface SortableTicket {
   kentat: TikettiListanKentta[];
 }
 
-// Käytetään pohjana muihin interfaceihin. 
+// Käytetään pohjana muihin interfaceihin.
 interface Tikettipohja {
   id: string;
   otsikko: string;
@@ -122,19 +124,20 @@ export interface Tiketti extends Tikettipohja {
   muokattu?: Date;
 }
 
-// Metodit: getFAQ, getFAQlist API: /api/kurssi/:kurssi-id/ukk/
+// Metodit: getFAQlist API: /api/kurssi/:kurssi-id/ukk/
+// UKK-listassa näytettävä UKK. Yksittäinen UKK on sama kuin Tiketti.
 export interface UKK {
   id: number;
   otsikko: string;
   aikaleima: Date;
-  aikaleimaStr: string
   tila: number;
-  kentat: [{
-    tiketti: number;
-    arvo: string;
-    otsikko: string;
-    ohje: string;
-  }]
+  aikaleimaStr: string
+  kentat: UKKlistanKentta[];
+}
+
+interface UKKlistanKentta extends TikettiListanKentta {
+  ohje: string;
+  tyyppi: number;
 }
 
 // Metodi: addTicket, API: /api/kurssi/:kurssi-id/uusitiketti/

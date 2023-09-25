@@ -6,12 +6,20 @@ import { Subject, Subscription } from 'rxjs';
 
 import { EditAttachmentsComponent } from '../edit-attachments/edit-attachments.component';
 import { FileInfo, Kommentti } from '@ticket//ticket.models';
-import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
 
 import schema from '@shared/editor/schema';
+
+/**
+ * Näyttää yhden kommentin. Kommenttia voi muokata tai sen voi poistaa.
+ *
+ * @export
+ * @class CommentComponent
+ * @implements {AfterViewInit}
+ * @implements {OnInit}
+ */
 
 @Component({
   selector: 'app-comment',
@@ -22,17 +30,74 @@ import schema from '@shared/editor/schema';
 export class CommentComponent implements AfterViewInit, OnInit{
 
   @Input() public attachmentsMessages: string = '';
+
+  /**
+   * Näytettävä kommentti.
+   *
+   * @type {Kommentti}
+   * @memberof CommentComponent
+   */
   @Input() public comment: Kommentti = {} as Kommentti;
+
+  /**
+   * Kurssi ID.
+   *
+   * @type {string}
+   * @memberof CommentComponent
+   */
+  @Input() public courseid!: string;
+
+  /**
+   * Jos käyttäjä editoi kommenttia, editoitavan kommentin ID.
+   *
+   * @type {(string | null)}
+   * @memberof CommentComponent
+   */
   @Input() public editingCommentID: string | null = null;
+
+  /**
+   * Lista liitetiedostoissa, jos sellaisia kommenttiin on liitetty.
+   *
+   * @type {FileInfo[]}
+   * @memberof CommentComponent
+   */
   @Input() public fileInfoList: FileInfo[] = [];
+
+  /**
+   * Tiketin ID, johon kommentti on liitetty.
+   *
+   * @type {string}
+   * @memberof CommentComponent
+   */
   @Input() public ticketID: string = '';
-  /* Kopioi UKK:ksi näkymän yhteydessä näytetään alkuperäinen tiketti.
-     Tällöin editointi pois käytöstä yms. */
+
+  /**
+   * Onko kyseessä "Kopioi UKK:ksi" näkymä. Tällöin näytetään alkuperäinen tiketti,
+   * johon UKK perustuu ja muokkauksen poistaminen on pois käytöstä.
+   *
+   * @type {boolean}
+   * @memberof CommentComponent
+   */
   @Input() public isInCopyAsFAQ: boolean = false;
-  // Lähettää ID:n, mitä kommenttia editoidaan.
+
+  /**
+   * Kun kommenttia muokataan, lähetetään sen ID parent komponentille.
+   *
+   * @memberof CommentComponent
+   */
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
-  // Välittää ennen kaikkea tiedon, onko tiedostojen lataus käynnissä.
+
+  /**
+   * Välittää liitetiedostojen lähettämisen tilan parent componentille.
+   *
+   * 'sendingFiles' - Lähettäminen on kesken.
+   * 'continue' - Lähettäminen pysäytettiin, jatka editointitilassa.
+   * 'done' - Lähettäminen on valmis.
+   *
+   * @memberof CommentComponent
+   */
   @Output() public messages = new EventEmitter<string>();
+
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public editingComment: string | null = null;
@@ -68,7 +133,6 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.sender = this.comment.lahettaja;
-
   }
 
   private buildForm(): FormGroup {
@@ -111,9 +175,8 @@ export class CommentComponent implements AfterViewInit, OnInit{
   }
 
   public removeComment(commentID: string) {
-    const courseID = getCourseIDfromURL();
-    if (!courseID) return
-    this.ticketService.removeComment(this.ticketID, commentID, courseID).then(res => {
+    if (!this.courseid) return
+    this.ticketService.removeComment(this.ticketID, commentID, this.courseid).then(res => {
       this.stopEditing();
     }).catch((err: any) => {
       this.errorMessage = $localize `:@@Kommentin poistaminen ei onnistunut:
@@ -124,14 +187,13 @@ export class CommentComponent implements AfterViewInit, OnInit{
 
   public sendComment(commentID: string) {
     this.form.markAllAsTouched();
-    const courseID = getCourseIDfromURL();
-    if (this.form.invalid || !courseID) return;
+    if (this.form.invalid || !this.courseid) return;
     this.state = 'sending';
     this.form.disable();
     const commentText = this.form.controls['message'].value;
     const commentState = this.form.controls['checkboxes'].value;
     this.ticketService.editComment(this.ticketID, commentID, commentText,
-      commentState, courseID).then(() => {
+      commentState, this.courseid).then(() => {
         if (this.attachments.filesToRemove.length === 0) {
           return true
         }

@@ -1,8 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
+
 import { AuthService } from '@core/services/auth.service';
 
-
+/**
+ * Näytetään pop up-dialogi, jossa pyydetään virkistämään selaimen näkymä.
+ * Käytetään, kun käyttäjä ensin kieltäytynyt tietojen luovutuksesta ja sen
+ * jälkeen antaa luvan. Näkymä pitää silloin virkistää uudelleen, jotta
+ * palvelin voi ohjata oikeaan näkymään.
+ *
+ * @export
+ * @class RefreshDialogComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-refresh-dialog',
   template: `

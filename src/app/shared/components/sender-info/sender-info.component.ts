@@ -2,11 +2,19 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
 
 import AvatarColor32 from './sender-info.constants';
-import { isYesterday, isToday, getDateString } from '@shared/utils';
-import { getColorIndex } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 import { User } from '@core/core.models';
+import { UtilsService } from '@core/services/utils.service';
 
+/**
+ * Näyttää tiketin lähettäjän tiedot. Näihin kuuluu lähettäjän nimi, asema,
+ * milloin tiketti on tehty ja muokattu sekä nimen ja roolin mukaan generoitu
+ * avatar-ikoni.
+ *
+ * @export
+ * @class SenderInfoComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-sender-info',
   templateUrl: './sender-info.component.html',
@@ -14,13 +22,41 @@ import { User } from '@core/core.models';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SenderInfoComponent implements OnInit {
-
-  // 'now' näyttää aikaleimaksi "Nyt".
+  /**
+   * Milloin tiketti on tehnty. 'now' näytää aikaleimaksi "Nyt" tai "Now".
+   * @type {(Date | 'now')}
+   * @memberof SenderInfoComponent
+   */
   @Input() aikaleima: Date | 'now' = new Date;
-  @Input() muokattu?: Date;
+
+  /**
+   * Milloin tikettiä on muookattu
+   * @type {(Date | null)}
+   * @memberof SenderInfoComponent
+   */
+  @Input() muokattu?: Date | null;
+
+  /**
+   * Tiketin tehnyt käyttäjä.
+   * @type {(User | null)}
+   * @memberof SenderInfoComponent
+   */
   @Input() user: User | null = {} as User;
+
+  /**
+   * Asemoidaanko käyttäjätiedot vasemmalle puolelle.
+   * @type {boolean}
+   * @memberof SenderInfoComponent
+   */
   @Input() alignLeft: boolean = false;
-  @Input() styles: any;
+
+  /**
+   * Vapaavalintaisia SCSS-tyylejä.
+   * @type {*}
+   * @memberof SenderInfoComponent
+   */
+  @Input() styles?: any;
+
   public avatarColor: { background: string; text: string };
   public userNameInitials = '';
   public isCreatedToday: boolean | undefined;
@@ -34,7 +70,9 @@ export class SenderInfoComponent implements OnInit {
 
   constructor(
       private change: ChangeDetectorRef,
-      private store: StoreService) {
+      private store: StoreService,
+      private utils: UtilsService
+      ) {
       this.avatarColor = { background: 'white', text: 'black' };
       this.currentUserName = this.store.getUserName();
   }
@@ -43,12 +81,12 @@ export class SenderInfoComponent implements OnInit {
     this.userNameInitials = this.getInitials(this.user?.nimi);
     if (this.aikaleima !== 'now') {
       const thisYear = new Date().getFullYear();
-      this.createdString = getDateString(this.aikaleima, thisYear);
+      this.createdString = this.utils.getDateString(this.aikaleima, thisYear);
     }
     if (this.muokattu instanceof Date) {
-      this.isEditedToday = isToday(this.muokattu);
+      this.isEditedToday = this.utils.isToday(this.muokattu);
       if (!this.isEditedToday) {
-        this.isEditedYesterday = isYesterday(this.muokattu);
+        this.isEditedYesterday = this.utils.isYesterday(this.muokattu);
       }
     }
     if (this.user != null) {
@@ -59,20 +97,23 @@ export class SenderInfoComponent implements OnInit {
       console.warn(this.user.asemaStr ); */
     }
     if (this.user?.nimi) {
-      getColorIndex(this.user?.nimi, 32).then(index => {
+      this.utils.getColorIndex(this.user?.nimi, 32).then(index => {
         this.avatarColor = AvatarColor32[index];
         this.change.detectChanges();
       });
     }
   }
 
-  // Palauta nimen alkukirjaimet isolla (enintään 2 ensimmäistä).
+  /* Palauta nimen alkukirjaimet isolla. Jos koostuu yli kahdesta sanasta,
+     palauta ensimmäinen ja viimeinen. */
   private getInitials(name: string | undefined): string {
     if (!name) return ''
-    name = name.trim();
-    const words: string[] = name.split(' ');
+    let words: string[] = name.trim().split(' ');
     if (words.length > 2) {
-      (words.slice(0, 2));
+      const newWords: string[] = [];
+      newWords.push(words[0]);
+      newWords.push(words[words.length - 1]);
+      words = newWords;
     }
     return words
       .filter(element => element && element.length > 0)

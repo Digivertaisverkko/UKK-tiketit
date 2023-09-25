@@ -105,8 +105,10 @@
 
   <mat-card-content>
     <ng-container *ngIf="editingCommentID !== comment.id; else editingComment">
-      <app-message [messageHtml]=comment.viesti></app-message>
+      <app-message data-testid="message" [messageHtml]=comment.viesti>
+      </app-message>
       <app-view-attachments
+          [courseid]="courseid"
           (errorMessage)="errorMessage = $event"
           [files]="comment.liitteet"
           *ngIf="comment.liitteet"
@@ -196,6 +198,7 @@
 
     <app-edit-attachments
         (attachmentsMessages)="attachmentsMessages = $event"
+        [courseid]="courseid"
         (fileListOutput)="fileInfoList = $event"
         formControlName="attachments"
         id="attachments-{{comment.id}}"

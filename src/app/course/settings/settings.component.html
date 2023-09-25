@@ -39,6 +39,7 @@
                 cdkAutosizeMinRows="3"
                 cdkTextareaAutosize
                 contenteditable
+                data-testid="help-text"
                 (focus)="settingsMessage = ''"
                 formControlName="helpText"
                 id="help-text"
@@ -47,7 +48,6 @@
                 name="helpText"
                 placeholder="Lisäohje opiskelijoille"
                 >
-                <!-- maxlength="255" -->
       </textarea>
       <!-- <mat-hint align="end">{{ helpText.value.length }} / 255</mat-hint> -->
     </mat-form-field>
@@ -60,11 +60,11 @@
     </app-error>
 
     <div class="theme-actions save-wrapper">
-      <button class=""
-      i18n="@@Tallenna"
-      mat-raised-button
-      type="submit"
-      >
+      <button data-testid="save-button"
+              i18n="@@Tallenna"
+              mat-raised-button
+              type="submit"
+              >
       Tallenna
     </button>
   </div>
@@ -91,12 +91,16 @@
     <div  cdkDrag
           (cdkDragStarted)="onDragStarted()"
           class="list-row"
-          *ngFor="let field of fieldList"
+          *ngFor="let field of fieldList; let i = index"
           >
-      <!-- <div class="list-row" *ngFor="let field of fieldList" cdkDrag> -->
-      <div class="column">{{ field.otsikko }}</div>
-      <div class="column">{{ field.ohje }}</div>
-      <a [routerLink]="'/course/' + courseid + '/settings/field/' + field.id">
+      <div class="column" [attr.data-testid]="'field-title-' + i">
+        {{ field.otsikko }}</div>
+      <div class="column" [attr.data-testid]="'field-help-' + i">
+        {{ field.ohje }}
+      </div>
+      <a  [attr.data-testid]="'edit-field-button-' + i"
+          [routerLink]="'/course/' + courseid + '/settings/field/' + field.id"
+          >
         <mat-icon class="edit-icon">edit_indicator</mat-icon>
       </a>
       <mat-icon class="resize-icon">drag_indicator</mat-icon>
@@ -129,6 +133,7 @@
 
   <button class="add-button"
           i18n="@@Lisää kenttä"
+          data-testid="add-field-button"
           mat-raised-button
           [routerLink]="'/course/' + this.courseid + '/settings/field'"
           >
@@ -171,6 +176,7 @@
   <button aria-label="Lisää usein kysytyt kysymykset"
           class="faq-button"
           (click)="pickFile('FAQs')"
+          data-testid="import-faq-button"
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää usein kysytyt kysymykset"
           mat-raised-button
@@ -181,6 +187,7 @@
   <button aria-label="Lisää kurssiasetukset"
           class="setting-button add-settings-button"
           (click)="pickFile('settings')"
+          data-testid="import-settings-button"
           i18n="@@Lisää tiedostona"
           i18n-aria-label="@@Lisää kurssiasetukset"
           mat-raised-button
@@ -191,6 +198,7 @@
   <button aria-label="Lataa usein kysytyt kysymykset"
           class="faq-button"
           (click)="export('FAQs')"
+          data-testid="export-faq-button"
           i18n="@@Lataa tiedostona"
           i18n-aria-label="@@Lataa usein kysytyt kysymykset"
           mat-raised-button
@@ -202,6 +210,7 @@
   <button aria-label="Lataa kurssiasetukset"
           class="setting-button"
           (click)="export('settings')"
+          data-testid="export-settings-button"
           i18n="@@Lataa tiedostona"
           i18n-aria-label="@@Lataa kurssiasetukset"
           mat-raised-button
@@ -241,7 +250,7 @@
     <div class="invite-left-wrapper">
       <mat-form-field class="invite-field">
         <mat-label i18n="@@Sähköposti">Sähköposti</mat-label>
-        <input formControlName="email" matInput (value)="email">
+        <input formControlName="email" data-testid="email" matInput (value)="email">
         <mat-error  i18n="@@Pakollinen kenttä."
                     *ngIf="email.errors?.['required']"
                     >
@@ -259,10 +268,14 @@
           <span i18n="@@Rooli">Rooli</span>:
         </mat-label>
         <mat-radio-group formControlName="role">
-          <mat-radio-button [value]=1 i18n="@@Opiskelija">
+          <mat-radio-button data-testid="student-radio"
+                            i18n="@@Opiskelija"
+                            [value]=1>
             Opiskelija
           </mat-radio-button>
-          <mat-radio-button [value]=2 i18n="@@Opettaja">
+          <mat-radio-button data-testid="teacher-radio"
+                            i18n="@@Opettaja"
+                            [value]=2>
             Opettaja
           </mat-radio-button>
         </mat-radio-group>
@@ -272,6 +285,7 @@
 
     <button class="invite-button"
             color="primary"
+            data-testid="invite-button"
             i18n="@@Kutsu"
             mat-raised-button
             >

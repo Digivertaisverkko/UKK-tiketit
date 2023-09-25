@@ -16,6 +16,13 @@ import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
     from '@ticket/ticket.models';
 import { TicketService } from 'src/app/ticket/ticket.service';
 
+/**
+ * Näkymä uuden tiketin lähettämiseen tai vanhan muokkaamiseen.
+ *
+ * @export
+ * @class SubmitTicketComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-submit-ticket',
   templateUrl: './submit-ticket.component.html',
@@ -93,8 +100,6 @@ export class SubmitTicketComponent implements OnInit {
           field.arvo ?? '';
       this.additionalFields.push(new FormControl(value, validators));
     }
-    console.log('this.additionalFields');
-    console.dir(this.additionalFields.value);
   }
 
   private buildForm(): FormGroup {
@@ -134,13 +139,8 @@ export class SubmitTicketComponent implements OnInit {
   }
 
   private fetchAdditionalFields(): void {
-
-    console.log('fetchAdditionalFields');
-
     if (this.courseid === null) throw new Error('Kurssi ID puuttuu URL:sta.');
     this.courses.getTicketFieldInfo(this.courseid).then(response => {
-      console.log('fetchAdditionalFields: response getTicketFieldInfo:');
-      console.dir(response);
       this.ticketFields = response.kentat as Kentta[];
       this.helpText = response.kuvaus ?? '';
       this.buildAdditionalFields();
@@ -153,6 +153,9 @@ export class SubmitTicketComponent implements OnInit {
   private fetchTicketInfo(ticketId: string, courseID: string): void {
     console.log('fetchTicketInfo');
     this.ticketService.getTicket(ticketId, courseID).then(response => {
+      if (response === null) {
+        return
+      }
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['message'].setValue(response.viesti);
       this.oldAttachments = response.liitteet ?? [];
@@ -221,7 +224,6 @@ export class SubmitTicketComponent implements OnInit {
         if (res === false) {
           this.errorForListing = $localize `:@@Kaikkien liitetiedostojen poistaminen ei onnistunut:Kaikkien valittujen liitetiedostojen poistaminen ei onnistunut` + '.';
         }
-        // this.printFileInfoListLog();
         if (this.fileInfoList !== undefined) {
           if (this.fileInfoList.length === 0 ) return
           this.successMessage = $localize `:@@Muokatun kysymyksen lähettäminen onnistui:Muokatun kysymyksen lähettäminen onnistui` + '.';
@@ -237,17 +239,6 @@ export class SubmitTicketComponent implements OnInit {
         this.state = 'editing';
         this.form.enable();
       });
-  }
-
-  private printFileInfoListLog() {
-    if (this.fileInfoList) {
-      console.log(' this.fileInfoList on true');
-    } else {
-      console.log('this.fileInfoList on false');
-    }
-    console.log('fileinfolist sisältö alla:');
-    console.log(JSON.stringify(this.fileInfoList));
-    console.log(typeof this.fileInfoList);
   }
 
   private submitNew(ticket: UusiTiketti): void {

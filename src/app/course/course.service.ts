@@ -1,6 +1,4 @@
-/* Tämä service käsittelee kursseihin liittyvää tietoa. */
-
-import { firstValueFrom, retry, timeout } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -16,6 +14,13 @@ interface Kurssi {
   nimi: string;
 }
 
+/**
+ * Käsittelee kursseihin liittyvää tietoa.
+ * 
+ * @export
+ * @class CourseService
+ */
+
 @Injectable({ providedIn: 'root' })
 
 export class CourseService {
@@ -27,6 +32,31 @@ export class CourseService {
     private http : HttpClient,
     private store: StoreService
   ) {
+  }
+
+  // Lisää lisäkenttä.
+  public async addField(courseID: string, editableField: Kenttapohja,
+      isNewField: boolean): Promise<{ success: boolean }> {
+    let info;
+    try {
+      info = await this.getTicketFieldInfo(courseID);
+    } catch {
+      throw Error('Ei saatu haettua kenttien tietoja.');
+    }
+    let allFields: Kenttapohja[] = info.kentat;
+    if (isNewField === true) {
+      allFields.push(editableField);
+    } else {
+      const index = allFields.findIndex(field => field.id == editableField.id);
+      allFields.splice(index, 1, editableField);
+    }
+    let res;
+    try {
+      res = await this.setTicketField(courseID, allFields);
+      return { success: true }
+    } catch {
+      throw Error('Ei saatu asetettua kenttien tietoja.');
+    }
   }
 
   // Liitä ulkopuolinen käyttäjä kurssille.
@@ -139,7 +169,6 @@ export class CourseService {
     } catch (error: any) {
       this.handleError(error);
     }
-
     return response;
   }
 
@@ -159,17 +188,37 @@ export class CourseService {
 
   // Lähetetään JSON-muotoiset asetukset lisättäväksi kurssille.
   public async importSettings(courseID: string, filecontent: JSON):
-    Promise<GenericResponse | any> {
-  let response;
-  const url = `${this.api}/kurssi/${courseID}/tikettipohja/vienti`;
-  const body = filecontent;
-  try {
-    response = await firstValueFrom(this.http.post(url, body));
-  } catch (error: any) {
-    this.handleError(error);
+      Promise<GenericResponse | any> {
+    let response;
+    const url = `${this.api}/kurssi/${courseID}/tikettipohja/vienti`;
+    const body = filecontent;
+    try {
+      response = await firstValueFrom(this.http.post(url, body));
+    } catch (error: any) {
+      this.handleError(error);
+    }
+    return response;
   }
-  return response;
-}
+
+  // Poista lisäkenttä.
+  public async removeField(courseID: string, removeFieldID: string):
+      Promise<{ success: boolean}> {
+    let info;
+    try {
+      info = await this.getTicketFieldInfo(courseID);
+    } catch {
+      throw Error('Ei saatu haettua kenttien tietoja.');
+    }
+    let allFields: Kenttapohja[] = info.kentat;
+    const index = allFields.findIndex(field => field.id == removeFieldID);
+    allFields.splice(index, 1);
+    try {
+      await this.setTicketField(courseID, allFields);
+      return { success: true}
+    } catch {
+      throw Error('Ei saatu asetettua kenttien tietoja.');
+    }
+  }
 
   // Kutsu ulkopuolinen käyttäjä kurssille.
   public async sendInvitation(courseID: string, email: string, role: Role):
@@ -208,9 +257,10 @@ export class CourseService {
 
   // Luo uudet kentät kurssin tikettipohjalle.
   public async setTicketField(courseID: string, fields: Kenttapohja[]):
-    Promise<boolean> {
+      Promise<boolean> {
+    // Haetuissa kentissä on id, mutta lähetettävissä ei ole.
     for (let field of fields) {
-      if (field.id != null) delete field.id;
+      if (field.id) delete field.id;
     }
     const url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
     let response: any;

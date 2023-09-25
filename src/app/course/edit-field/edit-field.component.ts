@@ -5,16 +5,20 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
-import { Observable, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
-import { arrayLengthValidator, getArraysStringLength } from '@shared/directives/array-length.directive';
+import { getArraysStringLength } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
-import { environment } from 'src/environments/environment';
 import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+/**
+ * Näkymä kysymysten yhden lisäkentän muokkaamiseen ja poistamiseen.
+ *
+ * @export
+ * @class EditFieldComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './edit-field.component.html',
   styleUrls: ['./edit-field.component.scss']
@@ -22,9 +26,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export class EditFieldComponent implements OnInit {
   @Input() courseid!: string;
-  @Input() fieldid: string | null = null;
+  @Input() fieldid: string | undefined;
   public addOnBlur = true;
-  public allFields: Kenttapohja[] = [];  // Kaikki kurssilla olevat lisäkentät.
   public errorMessage: string = '';
   public field: Kenttapohja;
   public form: FormGroup = this.buildForm();
@@ -32,9 +35,9 @@ export class EditFieldComponent implements OnInit {
   public isRemovePressed: boolean = false;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   public showConfirm: boolean = false;
+  // Voi olla error, jos editoidaan olemasa olevaa kenttää eikä saada haettua tietoja.
+  public state: 'editing' | 'error' = 'editing';
   @ViewChild('chipGrid') chipGrid: MatChipGrid | null = null;
-  private fetchFieldTimer$: Observable<number>;
-  private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 5 : 5;
 
   get areSelectionsEnabled(): FormControl {
     return this.form.get('areSelectionsEnabled') as FormControl;
@@ -74,17 +77,19 @@ export class EditFieldComponent implements OnInit {
       ohje: '',
       valinnat: []
     }
-    const POLLING_RATE_MS = this.POLLING_RATE_MIN * this.store.getMsInMin();
-    this.fetchFieldTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
     // Kentän id on uutta kenttää tehdessä null.
-    if (this.fieldid === null) {
+    if (this.fieldid === undefined) {
       this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
+      this.form.controls['isPrefillable'].setValue(false);
+      this.form.controls['mandatory'].setValue(false);
+      this.isLoaded = true;
     } else {
-      this.startPollingFields(this.POLLING_RATE_MIN);
+      // this.startPollingFields(this.POLLING_RATE_MIN);
+      this.getFieldInfo(this.courseid, this.fieldid);
     }
   }
 
@@ -116,8 +121,8 @@ export class EditFieldComponent implements OnInit {
 
   private createField(): Kenttapohja {
     let field: Kenttapohja = {} as Kenttapohja;
-    field.id = this.field.id;
     const controls = this.form.controls;
+    field.id = this.field.id;
     field.otsikko = controls['title'].value;
     field.pakollinen = controls['mandatory'].value;
     field.esitaytettava = controls['isPrefillable'].value;
@@ -155,19 +160,21 @@ export class EditFieldComponent implements OnInit {
     return getArraysStringLength(array);
   }
 
-  // Hae kentän tiedot editoidessa olemassa olevaa.
-  private getFieldInfo(courseID: string, fieldID: string | null) {
+  // Hae kentän tiedot editoidessa kun edioitaan olemassa olevaa kenttää.
+  private getFieldInfo(courseID: string, fieldID: string) {
     this.courses.getTicketFieldInfo(courseID).then(response => {
       if (!(response?.kentat)) {
         throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
       }
       // Tarvitaan tietojen lähettämiseen.
-      this.allFields = response.kentat;
-
-      if (this.allFields.length > 0 && this.fieldid) {
-        let matchingField = this.allFields.filter(field => String(field.id) === fieldID);
-        if (matchingField == null) {
-          throw new Error('Ei saatu haettua kenttäpohjan tietoja.');
+      let allFields: Kenttapohja[] = response.kentat;
+      if (allFields.length > 0) { // Vain varmistus.
+        let matchingField = allFields.filter(field => String(field.id) === fieldID);
+        if (matchingField.length === 0) {
+          this.errorMessage = $localize`:@@lisäkenttää ei löydy:
+          Hakemaasi lisäkenttää ei ole olemassa. Toinen kurssin opettaja on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+          this.state = 'error';
+          return
         }
         this.field = matchingField[0];
          // Jos ei valintoja, niin oletuksena valinnat-array sisältää yhden
@@ -177,16 +184,18 @@ export class EditFieldComponent implements OnInit {
         this.areSelectionsEnabled?.setValue(areSelections);
         this.enableSelections(areSelections);
       }
-
       this.setControls();
-      this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
-          $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + this.field.otsikko);
       this.isLoaded = true;
-      return
+      return this.field.otsikko;
+    }).then((otsikko: string | undefined) => {
+      if (otsikko !== undefined) {
+        this.titleServ.setTitle(this.store.getBaseTitle() + ' ' +
+          $localize `:@@Lisäkenttä:Lisäkenttä` + ' - ' + otsikko);
+      }
     }).catch(error => {
       this.errorMessage = $localize `:@@Lisäkentän tietojen haku epäonnistui:
           Lisäkentän tietojen haku epäonnistui` + '.';
-    }).finally( () => this.isLoaded = true)
+    }).finally( () => this.isLoaded = true);
   }
 
   // TODO: nuolella siirtyminen edelliseen chippiin.
@@ -198,24 +207,25 @@ export class EditFieldComponent implements OnInit {
     }
   }
 
+  public async removeField(fieldID: string | undefined): Promise<void> {
+    if (fieldID === undefined) {
+      return
+    }
+    this.courses.removeField(this.courseid, fieldID!).then(response => {
+      if (response?.success === true) {
+        this.router.navigateByUrl(`/course/${this.courseid}/settings`);
+      } else {
+        throw Error;
+      }
+    }).catch (() => {
+      this.errorMessage = $localize `:@@Lisäkentän poistaminen epäonnistui:Lisäkentän poistaminen epäonnistui.` + '.';
+      return
+    })
+  }
+
   public removeSelection(valinta: string): void {
     let index = this.field.valinnat.indexOf(valinta);
     if (index >= 0) this.field.valinnat.splice(index, 1);
-  }
-
-  // Lähetä kaikkien kenttien tiedot.§
-  private sendAllFields(courseID: string, allFields: Kenttapohja[]) {
-    this.courses.setTicketField(courseID, allFields)
-      .then(response => {
-        if (response === true ) {
-          this.router.navigateByUrl('/course/' + courseID + '/settings')
-        } else {
-          throw Error;
-        }
-      }).catch (() => {
-        this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-        Kenttäpohjan muuttaminen ei onnistunut.`;
-      })
   }
 
   private setControls(): void {
@@ -226,41 +236,28 @@ export class EditFieldComponent implements OnInit {
     this.form.controls['title'].setValue(this.field.otsikko);
   }
 
-  // Hae kenttäpohjat tietyn ajan välein.
-  private startPollingFields(POLLING_RATE_MIN: number) {
-    console.log(`Aloitetaan kenttäpohjien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
-    let fetchStartTime: number | undefined;
-    let elapsedTime: number | undefined;
-    const POLLING_RATE_SEC = POLLING_RATE_MIN * 60;
-    this.fetchFieldTimer$.subscribe(() => {
-      this.getFieldInfo(this.courseid, this.fieldid);
-      if (fetchStartTime) {
-        elapsedTime = Math.round((Date.now() - fetchStartTime) / 1000);
-        console.log('Kenttäpohjien pollauksen viime kutsusta kulunut aikaa ' +
-          `${elapsedTime} sekuntia.`);
-        if (elapsedTime !== POLLING_RATE_SEC) {
-          console.log(`Olisi pitänyt kulua ${POLLING_RATE_SEC} sekuntia.`);
-        }
-      }
-      fetchStartTime = Date.now();
-    });
-  }
-
-  // Päivitä kaikkien kenttien tiedot ennen lähettämistä.
-  public updateAllFields(remove?: boolean): void {
-    if (this.form.invalid || !this.courseid) return
-    const newField = this.createField();
-    if (this.fieldid == null) {   // Ellei ole uusi kenttä.
-      this.allFields.push(newField);
-    } else {
-      const index = this.allFields.findIndex(field => field.id == this.fieldid);
-      if (remove) {
-        this.allFields.splice(index, 1);
-      } else {
-        this.allFields.splice(index, 1, newField)
-      }
+  // Päivitä kaikkien kenttien tiedot ennen niiden lähettämistä.
+  public submitField(): void {
+    if (this.form.invalid) {
+      console.error('Form on invalid.');
+      return
     }
-    this.sendAllFields(this.courseid, this.allFields);
+    const newField = this.createField();
+    const isNewField = this.fieldid === undefined ? true : false;
+    this.courses.addField(this.courseid, newField, isNewField).then(response => {
+      if (response?.success === true) {
+        this.router.navigateByUrl(`/course/${this.courseid}/settings`);
+      } else {
+        throw Error;
+      }
+    }).catch (() => {
+      if (isNewField === true) {
+        this.errorMessage = $localize `:@@Lisäkentän lisääminen epäonnistui:Lisäkentän lisääminen epäonnistui` + '.';
+      } else {
+        this.errorMessage = $localize `:@@Lisäkentän muokkaaminen epäonnistui:Lisäkentän muokkaaminen epäonnistui` + '.';
+      }
+      return
+    })
   }
 
 }

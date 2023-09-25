@@ -31,6 +31,7 @@
                   cdkAutosizeMaxRows="3"
                   cdkAutosizeMinRows="1"
                   cdkTextareaAutosize
+                  data-testid="title"
                   formControlName="title"
                   i18n-placeholder="@@Otsikko"
                   id="title-textarea"
@@ -57,8 +58,11 @@
                     >
 
         <mat-form-field appearance="fill">
-          <mat-label>{{ ticketFields[i].otsikko }}</mat-label>
-          <input  formControlName="{{i}}"
+          <mat-label [attr.data-testid]="'field-label-' + i">
+            {{ ticketFields[i].otsikko }}
+          </mat-label>
+          <input  [attr.data-testid]="'field-' + i"
+                  formControlName="{{i}}"
                   (keydown.enter)="$event.preventDefault()"
                   [matAutocomplete]="auto"
                   matInput
@@ -112,7 +116,8 @@
     </section>
 
     <h3><span i18n="@@Kysymys">Kysymys</span><span>*</span></h3>
-    <app-editor formControlName="question" ngDefaultControl></app-editor>
+    <app-editor data-testid='message' formControlName="question" ngDefaultControl>
+    </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="question?.errors?.['required'] && question?.touched"
                 >
@@ -125,7 +130,8 @@
     </mat-error>
 
     <h3><span i18n="@@Vastaus">Vastaus</span><span>*</span></h3>
-    <app-editor formControlName="answer" ngDefaultControl></app-editor>
+    <app-editor data-testid='answer' formControlName="answer" ngDefaultControl>
+    </app-editor>
     <mat-error  i18n="@@Pakollinen kenttä."
                 *ngIf="answer?.errors?.['required'] && answer?.touched"
                 >
@@ -185,6 +191,7 @@
 
       <button class="submit-button"
               color="primary"
+              data-testid="send-button"
               *ngIf="state==='editing'"
               i18n="@@Julkaise"
               mat-raised-button
@@ -207,6 +214,7 @@
 
     <!-- (fileListOutput)="fileList = $event" -->
     <app-edit-attachments (attachmentsMessages)="attachmentsMessages = $event"
+                          [courseid]="courseid"
                           formControlName="attachments"
                           [oldAttachments]="oldAttachments"
                           [ticketID]="ticketid"

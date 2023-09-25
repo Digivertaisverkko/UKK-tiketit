@@ -21,24 +21,19 @@ main {
   padding: 0 40px 70px 40px;
 }
 
-.embedded-wrapper {
-  width: 100%;
-  // align-items: space-between;
-  height: 2.3rem;
+.embedded-header {
   display: flex;
   gap: 0.5rem;
+  height: 2.3rem;
   justify-content: flex-end;
-  // margin-right: -1rem;
 }
 
 .logo {
   margin: auto;
   height: 100%;
-
   img {
     height: 100%;
   }
-
   &-clickable {
     &:hover {
       filter: brightness(97%);

@@ -1,4 +1,4 @@
-import {  AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
+import { AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
     ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
@@ -12,7 +12,6 @@ import { StoreService } from '@core/services/store.service';
 import { TicketService } from '../../ticket.service';
 import { User } from '@core/core.models';
 import { SortableTicket } from '../../ticket.models';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
 
 interface ColumnDefinition {
   def: string;
@@ -59,6 +58,16 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
   return kentatMatch || mainDataMatch;
 };
 
+/**
+ * Lista tiketeistä / kysymyksistä. Näyttää opettajalle listan kurssin tiketeistä
+ * sekä listan ratkaistuiksi asetetuista tiketeistä ja opiskelijalle tämän omat
+ * tiketit. Tämän komponentin parent komponentti on "listing".
+ *
+ * @export
+ * @class TicketListComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-ticket-list',
   templateUrl: './ticket-list.component.html',
@@ -215,7 +224,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   public saveRedirectUrl(linkEnding?: string): void {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     console.log('tallennettu URL: ' + link);
-    window.localStorage.setItem('REDIRECT_URL', link);
+    window.localStorage.setItem('redirectUrl', link);
   }
 
   private setBaseColumnDefinitions() {

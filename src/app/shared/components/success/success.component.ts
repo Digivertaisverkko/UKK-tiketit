@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+/**
+ * Näyttää tagien välissä olevan sisällön muotoiltuna onnistumisviestiksi.
+ *
+ * @export
+ * @class SuccessComponent
+ */
 @Component({
   selector: 'app-success',
   template: `

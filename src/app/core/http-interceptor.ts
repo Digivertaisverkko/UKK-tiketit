@@ -4,7 +4,7 @@ import { HttpInterceptor, HttpEvent, HttpResponse, HttpRequest, HttpHandler }
 import { Observable, PartialObserver, tap } from 'rxjs';
 
 import { StoreService } from './services/store.service';
-import { truncate } from '../shared/utils';
+import { UtilsService } from './services/utils.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -17,7 +17,10 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     complete: () => this.store.stopLoading()
   };
 
-  constructor (private readonly store: StoreService) {
+  constructor (
+      private readonly store: StoreService,
+      private readonly utils: UtilsService
+    ) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler):Observable<HttpEvent<any>> {
@@ -59,7 +62,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
 
     console.log(`Tehtiin ${request.method}-pyyntö URL:iin "${request.url}` +
       `".${bodyMessage} Tilakoodi ${event.status}. ` +
-      `Saatiin vastaukseksi "${truncate(responseBody, 1500, true)}"` +
+      `Saatiin vastaukseksi "${this.utils.truncate(responseBody, 1500, true)}"` +
       huomautus + '.');
 
     if (request.body && Object.keys(request.body).length >= 4 ) {

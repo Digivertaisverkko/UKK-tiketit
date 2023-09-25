@@ -1,69 +1,235 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MockComponent } from 'ng-mocks';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { SubmitFaqComponent } from './submit-faq.component';
-import { CourseService } from '@course/course.service';
 import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
-import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { EditorComponent } from '@shared/editor/editor.component';
-import { TicketService } from '@ticket/ticket.service';
+import { CourseDummyData } from '@course/course.dummydata';
+import { CourseService } from '@course/course.service';
 import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
+import { EditorComponent } from '@shared/editor/editor.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { SharedModule } from '@shared/shared.module';
+import { StoreService } from '@core/services/store.service';
+import { SubmitFaqComponent } from './submit-faq.component';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
+import { TicketService, UusiUKK } from '@ticket/ticket.service';
+
 
 describe('SubmitFaqComponent', () => {
   let component: SubmitFaqComponent;
+  const courseDummyData = new CourseDummyData;
   let fakeCourseService: jasmine.SpyObj<CourseService>;
   let fakeTicketService: jasmine.SpyObj<TicketService>;
   let fixture: ComponentFixture<SubmitFaqComponent>;
+  const ticketDummyData = new TicketDummyData;
 
-  beforeEach(async () => {
-    fakeCourseService = jasmine.createSpyObj('CourseService', {
-      getTicketFieldInfo: Promise.resolve(''),
+  describe('Create new FAQ', () => {
+
+    beforeEach(async () => {
+      fakeCourseService = jasmine.createSpyObj('CourseService', {
+        getTicketFieldInfo: Promise.resolve({
+          kuvaus: '',
+          kentat: courseDummyData.ticketFields
+        }),
+      });
+
+      fakeTicketService = jasmine.createSpyObj('TicketService', {
+        addFaq: Promise.resolve({ success: true,
+            uusi: { tiketti: 2, kommentti: 4 }
+        })
+      });
+
+      // Luodaan komponentti tiketin luomistilassa
+      interface State { editFaq: boolean };
+      const state: State = { editFaq: false };
+      window.history.pushState(state, '', '');
+
+      await TestBed.configureTestingModule({
+        declarations: [
+          MockComponent(EditAttachmentsComponent),
+          MockComponent(EditorComponent),
+          MockComponent(BeginningButtonComponent),
+          MockComponent(HeadlineComponent),
+          SubmitFaqComponent
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          MatIconModule,
+          MatInputModule,
+          ReactiveFormsModule,
+          RouterTestingModule,
+          SharedModule
+        ],
+        providers: [
+          { provide: CourseService, useValue: fakeCourseService },
+          { provide: StoreService },
+          { provide: TicketService, useValue: fakeTicketService }
+        ]
+      })
+      .compileComponents();
+
+      fixture = TestBed.createComponent(SubmitFaqComponent);
+      component = fixture.componentInstance;
     });
 
-    fakeTicketService = jasmine.createSpyObj('TicketService', {
-      addFaq: undefined,
-      editFaq: undefined,
-      getTicket: undefined
+    it('should create', () => {
+      expect(component).toBeTruthy();
     });
 
-    // Luodaan komponentti tiketin luomistilassa
-    interface State { editTicket: boolean };
-    const state: State = { editTicket: false };
-    window.history.pushState({ editFaq: state }, '', '');
+    it('calls correct method to create a new FAQ after Publish click', fakeAsync(() => {
+      component.courseid = '1';
+      component.id = '';
+      const titleText = 'Uusi UKK';
+      const questionText = 'Usein kysytty kysymys';
+      const answerText = 'Vastaus';
+      const fieldTexts = [ 'Tehtävä 1', 'Kotitehtävä' ];
+      const fields = courseDummyData.ticketFields;
+      const expectedFAQ: UusiUKK = {
+        otsikko: titleText,
+        viesti: questionText,
+        kentat: [
+          { arvo: fieldTexts[0], id: fields[0].id },
+          { arvo: fieldTexts[1], id: fields[1].id }
+        ],
+        vastaus: answerText
+      }
+      component.ngOnInit();
+      tick();
+      fixture.detectChanges();
 
-    await TestBed.configureTestingModule({
-      declarations: [
-        MockComponent(EditAttachmentsComponent),
-        MockComponent(EditorComponent),
-        MockComponent(BeginningButtonComponent),
-        MockComponent(HeadlineComponent),
-        SubmitFaqComponent
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        MatIconModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        SharedModule
-      ],
-      providers: [
-        { provide: CourseService, useValue: fakeCourseService },
-        { provide: TicketService, useValue: fakeTicketService }
-      ]
-    })
-    .compileComponents();
+      setFieldValue(fixture, 'title', titleText);
+      setFieldValue(fixture, 'message', questionText);
+      setFieldValue(fixture, 'answer', answerText);
+      fieldTexts.forEach((fieldText, index) => {
+        setFieldValue(fixture, 'field-' + index, fieldText);
+      });
+      findEl(fixture, 'send-button').nativeElement.click();
 
-    fixture = TestBed.createComponent(SubmitFaqComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      expect(component.form.invalid).toBe(false);
+      expect(fakeTicketService.addFaq).toHaveBeenCalledWith(
+        expectedFAQ, component.courseid);
+    }));
+
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('Edit existing FAQ', () => {
+
+    beforeEach(async () => {
+      fakeCourseService = jasmine.createSpyObj('CourseService', {
+        getTicketFieldInfo: Promise.resolve({
+          kuvaus: '',
+          kentat: courseDummyData.ticketFields
+        }),
+      });
+
+      fakeTicketService = jasmine.createSpyObj('TicketService', {
+        editFaq: Promise.resolve({ success: true}),
+        getTicket: Promise.resolve(ticketDummyData.ukk)
+      });
+
+      // Luodaan komponentti tiketin luomistilassa
+      interface State { editFaq: boolean };
+      const state: State = { editFaq: true };
+      window.history.pushState(state, '', '');
+
+      await TestBed.configureTestingModule({
+        declarations: [
+          MockComponent(EditAttachmentsComponent),
+          MockComponent(EditorComponent),
+          MockComponent(BeginningButtonComponent),
+          MockComponent(HeadlineComponent),
+          SubmitFaqComponent
+        ],
+        imports: [
+          BrowserAnimationsModule,
+          MatAutocompleteModule,
+          MatIconModule,
+          MatInputModule,
+          MatTooltipModule,
+          ReactiveFormsModule,
+          RouterTestingModule,
+          SharedModule,
+        ],
+        providers: [
+          { provide: CourseService, useValue: fakeCourseService },
+          { provide: StoreService },
+          { provide: TicketService, useValue: fakeTicketService }
+        ]
+      })
+      .compileComponents();
+
+      fixture = TestBed.createComponent(SubmitFaqComponent);
+      component = fixture.componentInstance;
+      component.courseid = '1'
+      component.id = String(ticketDummyData.ukk.id);
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+
+    it('prefills the form fields', fakeAsync(() => {
+      const ticket = ticketDummyData.ukk;
+      const expextedTitle = ticket.otsikko;
+      const expextedMessage = ticket.viesti;
+      const fields = ticket.kentat;
+      const expectedField = fields ? [fields[0].arvo, fields[1].arvo] : '';
+      const expectedFieldLabel = fields ? [fields[0].otsikko, fields[1].otsikko] : '';
+      tick(100);
+      fixture.detectChanges(); // Ei löydä lisäkenttiä ilman tätä toista kutsua.
+      tick(100);
+      const title = findEl(fixture, 'title').nativeElement;
+      const message = findEl(fixture, 'message').nativeElement;
+      const field = [ findEl(fixture, 'field-0').nativeElement,
+                      findEl(fixture, 'field-1').nativeElement];
+      const fieldLabel = [ findEl(fixture, 'field-label-0').nativeElement,
+                           findEl(fixture, 'field-label-1').nativeElement];
+
+      expect(title.value).toBe(expextedTitle);
+      expect(field[0].value).toBe(expectedField[0]);
+      expect(field[1].value).toBe(expectedField[1]);
+      expect(fieldLabel[0].innerText.trim()).toBe(expectedFieldLabel[0]);
+      expect(fieldLabel[1].innerText.trim()).toBe(expectedFieldLabel[1]);
+      expect(message.value).toBe(expextedMessage);
+    }));
+
+    it('calls correct method after editing fields and Publish-click', fakeAsync(() => {
+      const expectedMessage = 'Edited message';
+      const expectedField = '10';
+      const expectedAnswer = 'Edited answer';
+      const ticket = ticketDummyData.ukk;
+      const fields = ticket.kentat!;
+      const expectedTicket = {
+        otsikko: ticket.otsikko,
+        viesti: expectedMessage,
+        kentat: [
+          { arvo: expectedField, id: Number(fields[0].id) },
+          { arvo: fields[1].arvo, id: Number(fields[1].id) }
+        ],
+        vastaus: expectedAnswer
+      }
+      tick(100);
+      fixture.detectChanges(); // Ei löydä lisäkenttiä ilman tätä toista kutsua.
+      tick(100);
+      setFieldValue(fixture, 'message', expectedMessage);
+      setFieldValue(fixture, 'field-0', expectedField);
+      setFieldValue(fixture, 'answer', expectedAnswer);
+      tick();
+      findEl(fixture, 'send-button').nativeElement.click();
+      tick();
+      expect(fakeTicketService.editFaq).toHaveBeenCalledWith(ticket.id, expectedTicket,
+        component.courseid);
+    }));
+
   });
+
 });

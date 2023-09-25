@@ -1,35 +1,34 @@
-import { APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { LOCALE_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import localeFi from '@angular/common/locales/fi';
 
 import { environment } from 'src/environments/environment';
-import { initializeLanguageFI } from '../app.initializers';
-import localeFi from '@angular/common/locales/fi';
-import localeEn from '@angular/common/locales/en';
-import { SortableTicket, TicketService } from './ticket.service';
+import { SortableTicket, TicketService, Tiketti } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ErrorService } from '@core/services/error.service';
-import { ticketDummyData } from './ticket.dummydata';
+import { TicketDummyData } from './ticket.dummydata';
+import { registerLocaleData } from '@angular/common';
 
 environment.testing = true;
 const api = environment.apiBaseUrl;
-initializeLanguageFI();
 
 describe('TicketService', () => {
   let controller: HttpTestingController;
   let errors: ErrorService;
   let store: StoreService;
   let tickets: TicketService;
+  const ticketDummyData = new TicketDummyData;
 
+  registerLocaleData(localeFi);
 
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
-        { provide: APP_INITIALIZER, useFactory: () => initializeLanguageFI, multi: true },
         { provide: LOCALE_ID, useValue: 'fi' },
         StoreService
       ]
@@ -39,7 +38,6 @@ describe('TicketService', () => {
     tickets = TestBed.inject(TicketService);
     controller = TestBed.inject(HttpTestingController);
     store = TestBed.inject(StoreService);
-
   });
 
   afterEach(() => {
@@ -50,7 +48,6 @@ describe('TicketService', () => {
   it('should be created', () => {
     expect(tickets).toBeTruthy();
   });
-
 
   /*
   it('retrieves the full ticket list', (done) => {
@@ -68,7 +65,7 @@ describe('TicketService', () => {
           return ticketWithoutIgnoredProperty;
         });
       }
-      expect(actualWithoutIgnoredProperty).toEqual(ticketDummyData.ticketListClientData);
+      expect(actualWithoutIgnoredProperty).toEqual(ticketDummyData.ticketListData);
       done();
     }).catch (e => {
       console.log(e);
@@ -81,13 +78,13 @@ describe('TicketService', () => {
   });
   */
 
-
   it('retrieves ticket with all properties', fakeAsync(() => {
     store.setUserInfo(storeDummyData.teacherUser);
     const courseID = '1';
     const ticketID = '3';
 
-    tickets.getTicket(ticketID, courseID).then(res => {
+    tickets.getTicket(ticketID, courseID).then((res: Tiketti | null) => {
+      if (res === null) return
       const ticketProperties = ticketDummyData.ticketProperties;
       const resProperties = Object.keys(res);
       expect(resProperties).toEqual(ticketProperties);
@@ -99,19 +96,19 @@ describe('TicketService', () => {
 
     const ticketUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}`;
     const ticketRequest = controller.expectOne(ticketUrl);
-    ticketRequest.flush(ticketDummyData.ticket3);
+    ticketRequest.flush(ticketDummyData.tiketti3);
     // Advance the asynchronous execution of the test to resolve promises.
     tick();
 
     const fieldsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
     const fieldsRequest = controller.expectOne(fieldsUrl);
-    fieldsRequest.flush(ticketDummyData.ticket3KenttaArray);
+    fieldsRequest.flush(ticketDummyData.tiketti3KenttaArray);
     tick();
 
     const commentsUrl = `${api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti`
       + `/kaikki`;
     const commentsRequest = controller.expectOne(commentsUrl);
-    commentsRequest.flush(ticketDummyData.ticket3comments);
+    commentsRequest.flush(ticketDummyData.tiketti3kommentit);
     tick();
   }));
 

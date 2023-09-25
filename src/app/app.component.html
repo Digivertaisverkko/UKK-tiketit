@@ -1,15 +1,16 @@
 <div class="app-wrapper">
 
   <header>
-    <app-header *ngIf="!isInIframe">
+    <app-header [courseid]="courseid"*ngIf="!isInIframe">
       <span class="spacer"></span>
     </app-header>
 
-    <!-- Tämä on upotuksessa oleva kapeampi header. -->
-    <mat-toolbar color="primary" class="embedded-wrapper" *ngIf="isInIframe">
+    <!--  Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella
+          käytetään header -komponenttia. -->
+    <mat-toolbar color="primary" class="embedded-header" *ngIf="isInIframe">
 
-      <div class="logo" *ngIf="courseID === null; else clickableLogo">
-        <img alt="" src="assets/logos/dvv-white.svg">
+      <div class="logo" *ngIf="courseid === null; else clickableLogo">
+        <img alt="" src="assets/logos/Tukki_logo_rgb_tummasini.svg">
       </div>
 
       <ng-template #clickableLogo>
@@ -26,10 +27,13 @@
 
       <span class="spacer"></span>
 
-      <div class="role theme-header-text-small">{{ (user$ | async)?.asemaStr }}</div>
+      <div class="role theme-header-text-small" data-testid="header-user-role">
+        {{ (user$ | async)?.asemaStr }}
+      </div>
       <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
 
       <button aria-label="Valikko"
+              data-testid="account-button"
               i18n-aria-label="@@Valikko"
               i18n-matTooltip="@@Valikko"
               mat-icon-button
@@ -59,26 +63,26 @@
         </button>
 
         <button (click)="goTo('profile')"
-              i18n="@@Profiili"
-              i18n-aria-label="@@Profiili"
-              mat-menu-item
-              *ngIf="(isLoggedIn$ | async) === true && courseID"
-              >
+                data-testid="profile-button"
+                i18n="@@Profiili"
+                i18n-aria-label="@@Profiili"
+                mat-menu-item
+                *ngIf="(isLoggedIn$ | async) === true && courseid"
+                >
           Profiili
         </button>
 
-        <button i18n="@@Kurssin asetukset"
+        <button data-testid="settings-button"
+                i18n="@@Kurssin asetukset"
                 mat-menu-item
                 *ngIf="((user$ | async)?.asema === 'opettaja' ||
                         (user$ | async)?.asema === 'admin') &&
                         (isParticipant$ | async) === true &&
-                        courseID"
+                        courseid"
                 (click)="goTo('settings')"
                 >
           Kurssin asetukset
         </button>
-
-
       </mat-menu>
 
     </mat-toolbar>
@@ -96,6 +100,7 @@
 
     <div class="vertical-spacer" *ngIf="isInIframe"></div>
 
+    <!-- Tähän renderöidään reitityksessä määritelty komponentti. -->
     <router-outlet></router-outlet>
 
   </main>

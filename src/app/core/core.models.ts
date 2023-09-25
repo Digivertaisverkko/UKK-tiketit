@@ -1,5 +1,8 @@
-// Tähän tiedostoon modelit, joita käytetään core-moduulissa sekä
-// feature-moduuleissa.
+/**
+ * Mallit, joista tämä moduuli vastaa ja joita voidaan käyttää muuallakin.
+ * 
+*/
+
 
 export interface LoginInfo  {
   'login-url': string;

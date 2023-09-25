@@ -8,7 +8,15 @@ import { PrivacyModalComponent } from '@core/footer/privacy-modal/privacy-modal.
 import { StoreService } from '@core/services/store.service';
 import { Title } from '@angular/platform-browser';
 
-
+/**
+ * Sovelluksen esittelynäkymä. Tätä kirjoittaessa tähän näkymään ei ohjata
+ * muualta, vaan tämän voi katsoa URL:lla. Jos URL sisältää pelkän domainin,
+ * ohjataan tähän näkymään.
+ *
+ * @export
+ * @class HomeComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
@@ -19,7 +27,6 @@ export class HomeComponent implements OnInit {
   @Input() courseid: string | undefined;
   @ViewChild('privacyModal') privacyModalRef!: ElementRef;
   public lang: string | null;
-  public sana: string = 'terve';
   // public tietosuojaselosteesta: string = $localize `:@@Tietosuojaselosteen:tietosuojaselosteesta`;
 
   constructor(

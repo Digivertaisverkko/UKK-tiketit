@@ -1,12 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
 
+/**
+ * Näkymä, jossa kysytään käyttäjältä lupaa tietojen siirtämiseen järjestelmän
+ * käyttöön. Käyttäjä voi olla uusi tai tili on jo olemassa. Tämän näkymän jälkeen
+ * käyttäjä ohjataan kurssin listaus-näkymään eli näytetään listing-komponetti.
+ * Jos käyttäjä kieltäytyy eikä kurssialuetta ole vielä luotu, reititetään
+ * no-data-consent -näkymään.
+ *
+ * @export
+ * @class DataConsentComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './data-consent.component.html',
   styleUrls: ['./data-consent.component.scss']
@@ -14,8 +25,8 @@ import { StoreService } from '@core/services/store.service';
 
 export class DataConsentComponent implements OnInit {
 
-  public error;
   public accountExists: boolean | null = null;
+  public error;
   private noDataConsentList: string[] = [];
   private tokenid: string | null;
 
@@ -50,7 +61,7 @@ export class DataConsentComponent implements OnInit {
     // jotta saadaan kurssi id ja voidaan ohjata sisään.
     if (this.tokenid && this.noDataConsentList?.includes(this.tokenid)) {
       console.log('On kieltäydytty aiemmin.');
-      this.denyConsent(true);
+      this.denyConsent(true);  // Kieltäydytään automaattisesti edelleen.
     } else {
       console.log('Ei ole kieltäydytty aiemmin.');
     }

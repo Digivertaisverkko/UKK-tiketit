@@ -1,20 +1,30 @@
-import { Role } from "@core/core.models"
+import { LoginInfo, Role, User } from "@core/core.models"
+/**
+ * Testaamiseen käytettävää dummy dataa.
+ *
+ * @export
+ * @class AuthDummyData
+ */
+export class AuthDummyData {
 
-export const authDummyData = {
-
-  loginInfo: {
+  public get loginInfo(): LoginInfo {
+    return {
     "login-url": "course/1/login?loginid=d7cda27a-cc58-4825-b2ee-5f1df71072d8",
     "login-id": "d7cda27a-cc58-4825-b2ee-5f1df71072d8"
-  },
+    }
+  }
 
-  minunOpettaja: {
+  public get minunOpettaja(): User {
+    return {
     id: 2,
     nimi: "Marianna Laaksonen",
     sposti: "marianna.laaksonen@example.com",
     asema: null
-  },
+    }
+  }
 
-  oikeudetOpettaja: {
+  public get oikeudetOpettaja() {
+    return {
     oikeudet: {
       id: 2,
       nimi: "Marianna Laaksonen",
@@ -25,29 +35,36 @@ export const authDummyData = {
       lti_login: false,
       perus: true
     }
-  },
+    }
+  }
 
-  userInfoEsko: {
+  public get userInfoEsko(): User {
+    return {
       id: 1,
       nimi: "Esko Seppä",
       sposti: "esko.seppa@example.com",
       asema: "opiskelija" as Role,
-      asemaStr: "Opettaja"
-  },
+      asemaStr: "Opiskelija"
+    }
+  }
 
-  userInfoRinne: {
+  public get userInfoRinne() {
+    return {
     id: 3,
     nimi: "Piia Rinne",
     sposti: "piia.rinne@example.com",
     asema: "opiskelija" as Role,
     asemaStr: "Opiskelija"
-  },
+    }
+  }
 
-  userInfoTeacher: {
+  public get userInfoTeacher() {
+    return {
     id: 2,
     nimi: "Marianna Laaksonen",
     sposti: "marianna.laaksonen@example.com",
     asema: "opettaja" as Role,
     asemaStr: "Opettaja"
-  },
+    }
+  }
 }

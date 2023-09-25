@@ -1,10 +1,13 @@
 @use "@angular/material" as mat;
-@import "/src/variables.scss";
 
-// Tarvitseeko alla olevaa johonkin?
-// @import "@angular/material/theming";
-
-/* ======== Angular material custom theme ======== */
+/**
+ * Angular Material -kustomoitu tyyli.
+ *
+ * Fonttien tuonti on tiedostossa /index.html.
+ *
+ * https://material.angular.io/guide/theming
+ *
+ */
 
 $custom-primary-palette: (
   50: #e0f4fa,
@@ -56,9 +59,6 @@ $custom-accent-palette: (
   ),
 );
 
-// $custom-palette: mat.$custom-primary-palette;
-
-// accent: DC5323
 $custom-primary: mat.define-palette($custom-primary-palette, 500);
 $custom-accent: mat.define-palette($custom-accent-palette, 700);
 
@@ -118,7 +118,7 @@ $custom-theme: mat.define-light-theme(
 // Tällä teemoittaa H1 ja H2.
 // @include mat.all-component-typographies($custom-typography-config);
 
-// Tämä pitää olla ohjelmassa vain yhden kerran.
+// Huom. Tämä pitää olla ohjelmassa vain yhden kerran.
 @include mat.core();
 
 // @mixin custom-theme($theme) {
@@ -157,5 +157,3 @@ button[mat-raised-button] {
 .mdc-button {
   height: 2.3em !important;
 }
-
-/* ================================================= */

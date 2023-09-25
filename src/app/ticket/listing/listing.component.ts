@@ -11,7 +11,7 @@ import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { RefreshDialogComponent } from '@core/refresh-dialog/refresh-dialog.component';
+import { RefreshDialogComponent } from '@shared/components/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { User } from '@core/core.models';
@@ -54,7 +54,16 @@ const customFilterPredicate = (data: UKK, filter: string) => {
   return kentatMatch || mainDataMatch
 
 }
-
+/**
+ * Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
+ * Ratkaistut, ovat tämän näkymän lapsikomponentissa TicketList.
+ *
+ * @export
+ * @class ListingComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   selector: 'app-listing',
   templateUrl: './listing.component.html',
@@ -282,7 +291,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
     if (this.store.getIsLoggedIn() === false) {
       console.log('tallennettu URL: ' + link);
-      window.localStorage.setItem('REDIRECT_URL', link);
+      window.localStorage.setItem('redirectUrl', link);
     }
   }
 

@@ -39,14 +39,14 @@
 
           <span i18n="@@muokattu">muokattu</span><span>&nbsp;</span>
 
-          <ng-container *ngIf="isEditedYesterday">
+          <ng-container *ngIf="isEditedYesterday === true">
             <span i18n="@@Eilen">{{ 'eilen' | lowercase }}</span>
             <span>&nbsp;</span>
           </ng-container>
 
-          <ng-template *ngIf="!isEditedToday">
-            <span>{{muokattu | date: 'shortDate'}}</span>
-          </ng-template>
+          <ng-container *ngIf="isEditedToday === false">
+            <span>{{muokattu | date: 'shortDate'}} </span>
+          </ng-container>
 
           <span i18n="@@klo">klo</span>
           <span>&nbsp;{{muokattu | date: 'shortTime'}}</span>

@@ -15,6 +15,16 @@ interface ErrorNotification {
   buttonText?: string
 }
 
+/**
+ * Näkymä, jossa käyttäjä, jolla on jo käyttäjätili, pystyy liittymään kurssille.
+ * Osoite tähän näkymään on lähetetty käyttäjälle sähköpostilla. Uuden käyttäjätilin
+ * luominen tapahtuu register -komponentilla.
+ *
+ * @export
+ * @class JoinComponent
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ */
 @Component({
   templateUrl: './join.component.html',
   styleUrls: ['./join.component.scss']

@@ -1,6 +1,3 @@
-  /* Käsittelee virheisiin liittyviä toimia, kuten niiden logittamista vai
-     tekemistä testausta varten. */
-
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 
@@ -25,7 +22,14 @@ const CODE = {
   unfinishedAPI: 3002,
   somethingWentWrong: 3004
 }
-
+/**
+ * Käsittelee virheisiin liittyviä toimia, kuten niiden logittamista vai
+ * tekemistä testausta varten. 403 virheissä routataan no-privileges /
+ * /forbidden -näkymään.
+ *
+ * @export
+ * @class ErrorService
+ */
 @Injectable({ providedIn: 'root' })
 
 export class ErrorService {
@@ -38,12 +42,12 @@ export class ErrorService {
 
   /* Palauta samanlaisen virheen kuin palvelin. status on HTTP error status koodi,
       errorid on palvelimen nelinumeroinen virhekoodi. */
-  public createError(status: number, errorid: number): BackendErrorResponse { 
+  public createError(status: number, errorid: number): BackendErrorResponse {
     var e: BackendErrorResponse = {
       success: false,
       error: {
         tunnus: errorid
-      } 
+      }
     };
 
     var status = 418;
@@ -169,7 +173,6 @@ export class ErrorService {
           'ohjataan virhesivulle.');
     this.store.setNotLoggegIn();
     // window.localStorage.clear();
-    // const courseID = getCourseIDfromURL();
     // this.saveRedirectURL();
     this.routeToNoPrivileges();
     // const baseUrl = (courseID == null) ? '' : 'course/' + courseID  + '/';
@@ -195,8 +198,8 @@ export class ErrorService {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
     if (currentRoute.indexOf('/login') === -1) {
-      if (window.localStorage.getItem('REDIRECT_URL') == null) {
-      window.localStorage.setItem('REDIRECT_URL', currentRoute);
+      if (window.localStorage.getItem('redirectUrl') == null) {
+      window.localStorage.setItem('redirectUrl', currentRoute);
       console.log('tallennettiin redirect URL: ' + currentRoute);
       } else {
         console.log('Löydettiin redirect URL, ei tallenneta päälle.');

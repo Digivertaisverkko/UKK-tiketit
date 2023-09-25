@@ -1,5 +1,3 @@
-// Tämä service käsittelee käyttäjäautentikointiin liittyviä toimia.
-
 import { ActivationEnd, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
@@ -10,10 +8,9 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import { getCourseIDfromURL } from '@shared/utils';
-import { getRoleString } from '@shared/utils';
-import { AuthInfo, LoginInfo, LoginResult, User } from '../core.models';
+import { AuthInfo, LoginInfo, LoginResult, Role, User } from '../core.models';
 import { StoreService } from './store.service';
+import { UtilsService } from './utils.service';
 
 interface UserRights {
   oikeudet: User,
@@ -35,7 +32,12 @@ interface AuthRequestResponse {
   error: string;
   'session-id': string;
 }
-
+/**
+ * Käsittelee käyttäjäautentikointiin liittyvää tietoa.
+ *
+ * @export
+ * @class AuthService
+ */
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
@@ -48,6 +50,7 @@ export class AuthService {
               private location: Location,
               private router: Router,
               private store: StoreService,
+              private utils: UtilsService,
               @Inject(LOCALE_ID) private localeDateFormat: string
               ) {
     this.api = environment.apiBaseUrl;
@@ -57,7 +60,15 @@ export class AuthService {
     this.startUpdatingUserinfo();
   }
 
-  /* Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta. */
+  /**
+   * Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta.
+   *
+   * @private
+   * @param {string} codeVerifier
+   * @param {string} loginCode
+   * @returns  {Promise<LoginResult>}
+   * @memberof AuthService
+   */
   private async authenticate(codeVerifier: string, loginCode: string):
     Promise<LoginResult> {
   const httpOptions =  {
@@ -79,10 +90,10 @@ export class AuthService {
   var loginResult: LoginResult;
   if (response?.success == true) {
     loginResult = { success: true };
-    const redirectUrl = window.localStorage.getItem('REDIRECT_URL');
+    const redirectUrl = window.localStorage.getItem('redirectUrl');
     if (redirectUrl !== undefined && redirectUrl !== null) {
       loginResult.redirectUrl = redirectUrl;
-      window.localStorage.removeItem('REDIRECT_URL')
+      window.localStorage.removeItem('redirectUrl')
     }
     this.store.setLoggedIn();
     this.store.setParticipant(null);
@@ -93,7 +104,16 @@ export class AuthService {
   return loginResult;
 }
 
-  // Liitä ulkopuolinen käyttäjä kurssille.
+  /**
+   * Liitä ulkopuolinen käyttäjä kurssille.
+   *
+   * @param {string} name
+   * @param {string} email
+   * @param {string} password
+   * @param {string} inviteID
+   * @returns  {Promise<{ success: boolean }>}
+   * @memberof AuthService
+   */
   public async createAccount(name: string, email: string, password: string,
       inviteID: string): Promise<{ success: boolean }> {
   let response;
@@ -112,8 +132,13 @@ export class AuthService {
     return response;
   }
 
-  /* Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
-     oikeudet, onko osallistujana näkymän kurssilla.
+  /**
+  * Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
+  * oikeudet, onko osallistujana näkymän kurssilla.
+  *
+  * @param {string} courseID
+  * @returns  {Promise<void>}
+  * @memberof AuthService
   */
   public async fetchUserInfo(courseID: string): Promise<void> {
     if (courseID === undefined || courseID === null || courseID === '') {
@@ -139,7 +164,7 @@ export class AuthService {
       userInfo = response.oikeudet;
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
-      userInfo.asemaStr = getRoleString(userInfo.asema);
+      userInfo.asemaStr = this.getRoleString(userInfo.asema);
       this.store.setLoggedIn();
       this.store.setParticipant(true);
     } else {
@@ -160,8 +185,14 @@ export class AuthService {
     this.store.setUserInfo(userInfo);
   }
 
-  // Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
-  // kirjautunut, mutta ei näkymän kurssille.
+  /**
+   * Käytetään tarkistamaan ja palauttamaan tiedot, jos käyttäjä on
+   * kirjautunut, mutta ei näkymän kurssille.
+   * @private
+   * @returns  {(Promise<{nimi: string, sposti: string | null}
+   *         | null>)}
+   * @memberof AuthService
+   */
   private async fetchVisitorInfo(): Promise<{nimi: string, sposti: string | null}
         | null> {
     let response: any;
@@ -181,8 +212,12 @@ export class AuthService {
     return getLocaleDateFormat( this.localeDateFormat, FormatWidth.Short );
   }
 
-  /* Palauta true, jos on tieto, että viimeisimmällä saadulla tokenid
-     on datan luovutuksesta kieltäytyneiden joukossa */
+  /**
+   * Palauta true, jos on tieto, että viimeisimmällä saadulla tokenid
+   * on datan luovutuksesta kieltäytyneiden joukossa.
+   * @returns  {boolean}
+   * @memberof AuthService
+   */
   public getDenyDataConsent(): boolean {
     const lastTokenid: string | null = localStorage.getItem('lastTokenid');
     const noDataConsent = localStorage.getItem('noDataConsent')
@@ -200,6 +235,7 @@ export class AuthService {
    if (courseID === null) {
      throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
    }
+
    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
    const codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
    // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
@@ -232,6 +268,21 @@ export class AuthService {
     return this.getMethodName.caller.name
   }
 
+  private getRoleString(asema: Role | null): string {
+    let role: string;
+    switch (asema) {
+      case 'opiskelija':
+        role = $localize`:@@Opiskelija:Opiskelija`; break;
+      case 'opettaja':
+        role = $localize`:@@Opettaja:Opettaja`; break;
+      case 'admin':
+        role = $localize`:@@Admin:Admin`; break;
+      default:
+        role = '';
+    }
+    return role;
+  }
+
   // Jos ei olle kirjautuneita, ohjataan kirjautumiseen. Muuten jatketaan
   // virheen käsittelyä.
   private handleError(error: HttpErrorResponse): void {
@@ -257,7 +308,15 @@ export class AuthService {
     })
   }
 
-  /* Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu. */
+  /**
+   * Lähetä 2. authorization code flown:n autentikointiin liittyvä kutsu.
+   *
+   * @param {string} email
+   * @param {string} password
+   * @param {string} loginID
+   * @returns  {Promise<LoginResult>}
+   * @memberof AuthService
+   */
   public async login(email: string, password: string, loginID: string):
       Promise<LoginResult> {
     const httpOptions =  {
@@ -283,8 +342,12 @@ export class AuthService {
       return { success: false };
     }
   }
-
-  // Suorita uloskirjautuminen.
+  /**
+   * Suorita uloskirjautuminen.
+   *
+   * @returns  {Promise<{ success: boolean }>}
+   * @memberof AuthService
+   */
   public async logout(): Promise<{ success: boolean }> {
     let response: any;
     let url = environment.apiBaseUrl + '/kirjauduulos';
@@ -302,7 +365,11 @@ export class AuthService {
     return { success: true }
   }
 
-  // Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+  /**
+   * Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+   *
+   * @memberof AuthService
+   */
   public removeDenyConsent(): void {
     const noDataConsent: string | null = localStorage.getItem('noDataConsent')
     let noDataConsentList: string[] = noDataConsent ? JSON.parse(noDataConsent) : [];
@@ -318,12 +385,18 @@ export class AuthService {
     }
   }
 
+  /**
+   * Tallenna URL, johon kirjautumisen jälkeen uudelleenohjataan, ellei jo olla
+   * login näkymässä.
+   *
+   * @memberof AuthService
+   */
   public saveRedirectURL(): void {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
     if (currentRoute.indexOf('/login') === -1) {
-      if (window.localStorage.getItem('REDIRECT_URL') == null) {
-      window.localStorage.setItem('REDIRECT_URL', currentRoute);
+      if (window.localStorage.getItem('redirectUrl') == null) {
+      window.localStorage.setItem('redirectUrl', currentRoute);
       console.log('tallennettiin redirect URL: ' + currentRoute);
       } else {
         console.log('Löydettiin redirect URL, ei tallenneta päälle.');
@@ -331,6 +404,14 @@ export class AuthService {
     }
   }
 
+  /**
+   * Lähetä, onko käyttäjän tietojen luovutukseen annettu lupa.
+   *
+   * @param {(string | null)} tokenid
+   * @param {boolean} allow
+   * @returns  {Promise<ConsentResponse>}
+   * @memberof AuthService
+   */
   public async sendDataConsent(tokenid: string | null, allow: boolean):
       Promise<ConsentResponse> {
     const body = { 'lupa-id': tokenid };
@@ -345,12 +426,15 @@ export class AuthService {
     return res
   }
 
-  /* Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
-     Käyttäjää on voitu vaihtaa eri tabissa/ikkunassa. */
+  /**
+   * Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
+   *
+   * @memberof AuthService
+   */
   public startUpdatingUserinfo(): void {
     this.router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
-        const courseID = getCourseIDfromURL();
+        const courseID = this.utils.getCourseIDfromURL();
         console.log('authService: huomattiin kurssi id ' + courseID);
         const currentUrl = this.location.path();
         const isInLogin: boolean = currentUrl.includes('login');

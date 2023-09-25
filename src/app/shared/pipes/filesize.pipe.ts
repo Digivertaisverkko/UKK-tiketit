@@ -1,6 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { filesize } from 'filesize';
-
+/**
+ * Näyttää luvun tavuina, kilotavuina, megatavuina jne.
+ *
+ * @export
+ * @class FileSizePipe
+ * @implements {PipeTransform}
+ */
 @Pipe({
   name: 'filesize'
 })

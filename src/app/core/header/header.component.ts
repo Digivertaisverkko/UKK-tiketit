@@ -1,25 +1,36 @@
-import { ActivatedRoute, Router, ActivationEnd  } from '@angular/router';
 import { BreakpointObserver, BreakpointState, Breakpoints } from '@angular/cdk/layout';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit }
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit }
     from '@angular/core';
-import { getCourseIDfromURL } from '@shared/utils';
 import { Observable } from 'rxjs';
+import { Router  } from '@angular/router';
+
+import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '../services/store.service';
 import { User } from '@core/core.models';
-import { AuthService } from '@core/services/auth.service';
 
-
+/**
+ * Upotuksen ulkopuolella näytettävä "header" -elementti. Sisältää logon,
+ * mahdollisesti kirjautuneen käyttäjän nimen, roolin sekä valikon.
+ * Valikosta voi vaihtaa kielen, kirjautua sisään/ulos, kirjautuessa avata
+ * profiili-näkymän ja jos käyttäjä on kirjautuneena opettajana kurssilla voi
+ * hän avata asetukset -näkymän.  Logon klikkaamalla reititetään kurssin
+ * tikettilista -näkymään. Upotuksessa app -komponentti näyttää vastaavan
+ * upotukseen soveltuvan elementin tämän sijaan.
+ *
+ * @export
+ * @class HeaderComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./header.component.scss']
 })
 
 export class HeaderComponent implements OnInit {
   // Async pipeä varten.
-  // public isUserLoggedIn$: Observable<boolean>;
-  public courseID: string | null = this.route.snapshot.paramMap.get('courseid');
+  // public courseID: string | null = this.utils.getCourseIDfromURL();
+  @Input() courseid: string | null = null;
   public disableLangSelect: boolean = false;
   public isLoggedIn$: Observable<Boolean | null>;
   public isParticipant$: Observable<Boolean | null>;
@@ -32,7 +43,6 @@ export class HeaderComponent implements OnInit {
 
   constructor (
     private auth: AuthService,
-    private route : ActivatedRoute,
     private change: ChangeDetectorRef,
     private responsive: BreakpointObserver,
     private router: Router,
@@ -46,7 +56,6 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.trackCourseID();
     this.trackUserInfo();
   }
 
@@ -64,17 +73,15 @@ export class HeaderComponent implements OnInit {
   public goTo(view: 'profile' | 'settings') {
     // Ei routen seuraaminen toimi ja initiin ei voi laittaa, kun voi silloin
     // olla null.
-    const courseID = getCourseIDfromURL();
-    if (!courseID) {
-      console.error('Kurssi id on null, ei voida jatkaa. ' + typeof courseID);
+    if (this.courseid === null) {
+      console.error('Kurssi id on null, ei voida jatkaa. ');
       return
     }
-    this.router.navigateByUrl('/course/' + courseID + '/' + view);
+    this.router.navigateByUrl('/course/' + this.courseid + '/' + view);
   }
 
   public login(): void {
-    const courseID = getCourseIDfromURL();
-    if (courseID === null) {
+    if (this.courseid === null) {
       throw new Error('header.component.ts.login: ei kurssi ID:ä.');
     }
     const currentRoute = window.location.pathname + window.location.search;
@@ -82,33 +89,22 @@ export class HeaderComponent implements OnInit {
         currentRoute.indexOf('/login') !== -1) {
       this.auth.saveRedirectURL();
     }
-      this.auth.navigateToLogin(courseID);
+    this.auth.navigateToLogin(this.courseid);
   }
 
   public logout() {
-    const courseID = getCourseIDfromURL();
     this.auth.logout().then(res => {
-      this.auth.navigateToLogin(courseID);
+      if (this.courseid) this.auth.navigateToLogin(this.courseid);
     })
   }
 
   public logoClicked() {
+    // beginningButton komponentti kuuntelee tätä ja vaihtaa routea.
     this.store.sendMessage('go begin');
   }
 
   public toggleLanguage() {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
-  }
-
-  private trackCourseID() {
-    this.router.events.subscribe(event => {
-      if (event instanceof ActivationEnd) {
-        let courseID = event.snapshot.paramMap.get('courseid');
-        if (courseID !== this.courseID) {
-          this.courseID = courseID;
-        }
-      }
-    });
   }
 
   trackUserInfo() {

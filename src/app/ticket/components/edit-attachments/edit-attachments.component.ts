@@ -2,17 +2,26 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
   NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
-import { forkJoin, Observable, Subscription, tap, catchError, of } from 'rxjs';
+import { forkJoin, Observable, Subscription, Subject } from 'rxjs';
 
 import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
-import { getCourseIDfromURL } from '@shared/utils';
 import { StoreService } from '@core/services/store.service';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;
 }
 
+/**
+ * Tällä komponentilla voi lisätä ja poistaa liitetiedostoja.
+ *
+ * @export
+ * @class EditAttachmentsComponent
+ * @implements {ControlValueAccessor}
+ * @implements {OnInit}
+ * @implements {OnDestroy}
+ * @implements {Validator}
+ */
 @Component({
   selector: 'app-edit-attachments',
   templateUrl: './edit-attachments.component.html',
@@ -35,9 +44,10 @@ interface FileInfoWithSize extends FileInfo {
 export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     OnDestroy, Validator {
 
+  @Input() courseid: string = '';
   @Input() oldAttachments: Liite[] = [];
   @Input() ticketID: string | null = '';
-  @Input() uploadClicks = new Observable();
+  @Input() uploadClicks: Observable<string> = new Observable<string>();
   @Output() attachmentsMessages = new EventEmitter<'errors' | '' | 'done'>;
   @Output() fileListOutput = new EventEmitter<FileInfoWithSize[]>();
   @Output() isInvalid: boolean = false;
@@ -45,13 +55,13 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   public errors: ValidationErrors | null = null;
   public fileInfoList: FileInfoWithSize[] = [];
+  public filesToRemove: Liite[] = [];
   public isEditingDisabled: boolean = false;
   public touched = false;
   public uploadClickSub = new Subscription();
   public userMessage: string = '';
-  public filesToRemove: Liite[] = [];
 
-  constructor(private renderer: Renderer2,
+  constructor(public renderer: Renderer2,
               private store: StoreService,
               private tickets: TicketService
               ) {
@@ -73,22 +83,28 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.fileInfoList = [];
   }
 
-  private makeRequestArray(ticketID: string, commentID: string): any {
+  /* Palauttaa listan liitteen lähetyksiä, jotka päivittävät edistymisen ja
+     virheen tapahtuessa asettavat virheviestin. */
+  private makeRequestArray(ticketID: string, commentID: string):
+      Observable<number>[] {
     return this.fileInfoList.map((fileinfo, index) => {
-      const courseID = getCourseIDfromURL();
-      return this.tickets.uploadFile(ticketID, commentID, courseID!, fileinfo.file)
-        .pipe(
-          tap(progress => {
-            this.fileInfoList[index].progress = progress;
-          }),
-          catchError((error: any) => {
-            this.fileInfoList[index].uploadError = $localize `:@@Liitteen
-                lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
-            /* Virhettä ei heitetä, koska silloin tiedostojen lähetys loppuu
-              yhteen virheeseen. */
-            return of('error');
-          })
-        )
+      const progress = new Subject<number>();
+      this.tickets.uploadFile(ticketID, commentID, this.courseid, fileinfo.file)
+        .subscribe({
+          next: (value: number) => {
+            this.fileInfoList[index].progress = value;
+            progress.next(value);
+          },
+          error: (error: any) => {
+            this.fileInfoList[index].uploadError = $localize
+                `:@@Liitteen lähettäminen epäonnistui:Liitteen lähettäminen epäonnistui.`;
+            progress.error(error);
+          },
+          complete: () => {
+            progress.complete();
+          }
+        });
+      return progress.asObservable();
     });
   }
 
@@ -102,6 +118,9 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public onChange = (isInvalid: boolean) => {};
 
   public onFileAdded(event: any) {
+
+    // console.dir(event.target.files);
+
     this.markAsTouched();
     this.onChange(this.isInvalid);
     const MEGABYTE = 1000000;
@@ -144,11 +163,12 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.oldAttachments.splice(index, 1);
   }
 
+  /* Kutsutaan parent componentista. Poistetaan tiedostot, jotka on aiemmin
+      lähetetty ja joiden Poista-ikonia käyttäjä on klikannut. */
   public async removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
 
       if (this.filesToRemove.length === 0) resolve(true);
-      const courseID = getCourseIDfromURL();
       if (this.ticketID == null) {
         // throw Error(' ei ticketID:ä');
         reject(new Error('Ei tiketti ID:ä.'));
@@ -157,11 +177,11 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       this.filesToRemove.forEach((file: Liite) => {
         if (!promise) {
           promise = this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-            courseID!)
+            this.courseid)
         } else {
           promise = promise.then(() => {
             return this.tickets.removeFile(this.ticketID!, file.kommentti, file.tiedosto,
-              courseID!)
+              this.courseid)
           })
         }
       })
@@ -195,7 +215,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.isEditingDisabled = true;
     this.userMessage = $localize `:@@Lähetetään liitetiedostoja:
         Lähetetään liitetiedostoja, odota hetki...`
-    let requestArray = this.makeRequestArray(ticketID, commentID);
+    let requestArray: Observable<number>[] = this.makeRequestArray(ticketID, commentID);
     return new Promise((resolve, reject) => {
       forkJoin(requestArray).subscribe({
         next: (res: any) => {

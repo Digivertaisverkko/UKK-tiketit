@@ -8,6 +8,13 @@ import { TicketService } from '../ticket.service';
 import { Tiketti } from '../ticket.models';
 import { User, Error } from '@core/core.models';
 
+/**
+ * Yksittäisen UKK:n näkymä. UKK-lähettämiseen on submit-faq -komponentti.
+ *
+ * @export
+ * @class FaqViewComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './faq-view.component.html',
   styleUrls: ['./faq-view.component.scss'],
@@ -26,7 +33,7 @@ export class FaqViewComponent implements OnInit {
   private faqID!: string;
 
   constructor(
-    private router: Router,
+    public router: Router,  // Jotta voidaan testata.
     private store: StoreService,
     private ticketService: TicketService,
     private titleServ: Title
@@ -38,6 +45,13 @@ export class FaqViewComponent implements OnInit {
     this.faqID = this.id;
     this.ticketService.getTicket(this.faqID, this.courseid)
       .then((response) => {
+
+        if (response === null) {
+          this.errorMessage = $localize`:@@UKK ei löydy:
+          Hakemaasi usein kysyttä kysymystä ei ole olemassa. Sen tekijä on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+          return
+        }
+
         this.ticket = response;
         this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
       })

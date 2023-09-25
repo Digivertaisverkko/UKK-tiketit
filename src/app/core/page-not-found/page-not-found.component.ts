@@ -5,6 +5,13 @@ import { Title } from '@angular/platform-browser';
 import { StoreService } from '../services/store.service';
 
 
+/**
+ * "Sivua ei löytynyt" / 404 - virhenäkymä. Näytetään, kun URL:lle ei löydy
+ *  näytettävää näkymää. Näytetään Alkuun -nappi, jos URL:ssa on kurssin id.
+ *
+ * @export
+ * @class PageNotFoundComponent
+ */
 @Component({
   template: `
 

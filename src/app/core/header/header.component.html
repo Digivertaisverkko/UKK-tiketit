@@ -1,21 +1,19 @@
 <mat-toolbar color="primary">
 
-    <div class="logo" *ngIf="courseID === null; else clickableLogo">
+    <div class="logo" *ngIf="courseid === null; else clickableLogo">
       <img alt="" src="assets/logos/Tukki_logo_rgb_tummasini.svg">
     </div>
 
   <ng-template #clickableLogo>
-    <div class="logo logo-clickable"
-        matRipple
-        [matRippleRadius]="30"
-        [matRippleUnbounded]="true"
-        >
+    <div  class="logo logo-clickable"
+          matRipple
+          [matRippleRadius]="30"
+          [matRippleUnbounded]="true"
+          >
     <img  alt=""
           (click)="logoClicked()"
           src="assets/logos/Tukki_logo_rgb_tummasini.svg"
-
           >
-          <!-- src="assets/logos/dvv-white.svg" -->
       </div>
   </ng-template>
 
@@ -27,7 +25,7 @@
   <section class="user-info" *ngIf="user">
 
     <ng-container *ngIf="!(handsetPB$ | async)?.matches">
-      <div class="theme-header-text">
+      <div data-testid="header-username" class="theme-header-text">
         {{ user.nimi.length > maxUserLength ?
               (user.nimi | slice:0:maxUserLength) + '...' :
               (user.nimi) | titlecase }}
@@ -42,14 +40,19 @@
       </div>
     </ng-container>
 
-    <div class="theme-header-text-small">{{ user.asemaStr }}</div>
+    <div  class="theme-header-text-small"
+          data-testid="header-user-role"
+          >
+      {{ user.asemaStr }}
+    </div>
 
   </section>
 
   <button aria-label="Valikko"
           class="material-symbols-outlined"
-          id="account-icon-button"
+          data-testid="account-button"
           i18n-aria-label="@@Valikko"
+          id="account-icon-button"
           mat-icon-button
           [matMenuTriggerFor]="accountMenu"
           >
@@ -61,34 +64,37 @@
 <!----------------- Valikko --------------------------------------------------->
 <mat-menu #accountMenu="matMenu">
 
-  <button mat-menu-item
-            (click)="toggleLanguage()"
-            [disabled]="disableLangSelect"
-            i18n="@@vaihda kieli"
-            >
+  <button (click)="toggleLanguage()"
+          [disabled]="disableLangSelect"
+          i18n="@@vaihda kieli"
+          mat-menu-item
+          >
     Change to English
   </button>
 
   <button (click)="goTo('profile')"
-        i18n="@@Profiili"
-        i18n-aria-label="@@Profiili"
-        mat-menu-item
-        *ngIf="(isLoggedIn$ | async) === true"
-        >
+          data-testid="profile-button"
+          i18n="@@Profiili"
+          i18n-aria-label="@@Profiili"
+          mat-menu-item
+          *ngIf="(isLoggedIn$ | async) === true"
+          >
     Profiili
   </button>
 
   <button i18n="@@Kurssin asetukset"
-        mat-menu-item
-        *ngIf="((user$ | async)?.asema === 'opettaja' ||
-                (user$ | async)?.asema === 'admin') &&
-              (isParticipant$ | async) === true"
-              (click)="goTo('settings')"
-        >
+          data-testid="settings-button"
+          mat-menu-item
+          *ngIf="((user$ | async)?.asema === 'opettaja' ||
+                  (user$ | async)?.asema === 'admin') &&
+                  (isParticipant$ | async) === true"
+                  (click)="goTo('settings')"
+          >
     Kurssin asetukset
   </button>
 
   <button (click)="login()"
+          data-testid="login-button"
           i18n="@@Kirjaudu sisään"
           mat-menu-item
           *ngIf="(isLoggedIn$ | async) === false"
@@ -97,6 +103,7 @@
   </button>
 
   <button (click)="logout()"
+          data-testid="logout-button"
           i18n="@@Kirjaudu ulos"
           mat-menu-item
           *ngIf="(isLoggedIn$ | async) === true"

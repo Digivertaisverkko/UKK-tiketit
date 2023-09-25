@@ -1,4 +1,4 @@
-@import '/src/variables.scss';
+@import '/src/styles/variables.scss';
 
 //----------------- Korkeudesta riippuvaiset osat ------------------------------
 
@@ -10,7 +10,6 @@
   }
 
   $icon-size: calc($header-height * 0.8);
-
 
   #account-icon-button {
     align-items: center;
@@ -33,6 +32,8 @@
   }
 }
 
+//----------------- Muut -------------------------------------------------------
+
 // Jostain syystä oletus-focusta ei enää tullut.
 #account-icon-button:focus {
   color: #f2f3f7;
@@ -40,8 +41,6 @@
   // filter: brightness(85%);
   // outline: 1px solid gray; /* Example: Add a blue outline when focused */
 }
-
-//----------------- Muut -------------------------------------------------------
 
 .logo {
   margin: auto 1rem auto auto;

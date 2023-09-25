@@ -1,11 +1,7 @@
-/* Tämä service on käsittelee tiketteihin eli kysymyksiin liittyvää tietoa.
-    UKK:t ovat tikettejä myöskin. Tikettipohjat ovat kurssin asetuksia ja
-    niistä vastaavassa servicessä. */
-
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpEventType, HttpHeaders }
     from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, firstValueFrom, of  , timeout } from 'rxjs';
+import { Observable, Subject, firstValueFrom, of, timeout } from 'rxjs';
 
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
   SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
@@ -13,20 +9,27 @@ import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
 export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
-import { getDateString } from '@shared/utils';
 import { Role } from '../core/core.models';
 import { StoreService } from '../core/services/store.service';
+import { UtilsService } from '@core/services/utils.service';
+
+/**
+ * Käsittelee tiketteihin eli kysymyksiin liittyvää tietoa mukaan lukien UKK:t.
+ * Tikettipohjat ovat kurssin asetuksia ja niitä käsitelään course servicessä.
+ * @export
+ * @class TicketService
+ */
 
 @Injectable({ providedIn: 'root' })
 
 export class TicketService {
-
   private api: string = environment.apiBaseUrl
 
   constructor (
     private errorService: ErrorService,
     private http: HttpClient,
-    private store: StoreService
+    private store: StoreService,
+    private utils: UtilsService
     ) {}
 
   // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
@@ -183,7 +186,7 @@ export class TicketService {
     const thisYear = new Date().getFullYear();
     FAQlist.forEach((faq: any) => {
       faq.aikaleima = new Date(faq.aikaleima)
-      faq.aikaleimaStr = getDateString(faq.aikaleima, thisYear)
+      faq.aikaleimaStr = this.utils.getDateString(faq.aikaleima, thisYear)
     })
     return FAQlist;
   }
@@ -212,19 +215,6 @@ export class TicketService {
     // Numero edessä, koska järjestetään taulukossa sen mukaan.
     string = numericalState + '-' + string;
     return string;
-  }
-
-  // Tiedoston lähetyksen testaamisessa voi http.post korvata tällä, niin saa virheitä.
-  public fakeHttpPost(url?: any, formData?: any, options?: any): Observable<any> {
-    const errorResponse = new HttpErrorResponse({
-      error: 'File upload failed',
-      status: 400,
-      statusText: 'Bad Request',
-    });
-    const fakePost = new Observable(observer => {
-      observer.error(errorResponse);
-    })
-    return fakePost
   }
 
   // Testaamista varten.
@@ -338,7 +328,7 @@ export class TicketService {
       let viimeisinStr = '';
       if (ticket.viimeisin) {
         const viimeisinDate = new Date(ticket.viimeisin);
-        viimeisinStr = getDateString(viimeisinDate, thisYear);
+        viimeisinStr = this.utils.getDateString(viimeisinDate, thisYear);
       }
       return {
         tilaID: ticket.tila,
@@ -359,7 +349,7 @@ export class TicketService {
 
   /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
     kommentit. */
-  public async getTicket(ticketID: string, courseID: string): Promise<Tiketti> {
+  public async getTicket(ticketID: string, courseID: string): Promise<Tiketti | null> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
     try {
@@ -367,6 +357,7 @@ export class TicketService {
     } catch (error: any) {
       this.handleError(error);
     }
+    if (response === null) return null;
     response.aikaleima = new Date(response.aikaleima);
     let ticket: Tiketti = response;
     const fields = await this.getFields(ticketID, courseID);

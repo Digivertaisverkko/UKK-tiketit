@@ -14,6 +14,14 @@ import { Kenttapohja } from '../course.models';
 import { StoreService } from '@core/services/store.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+/**
+ * Näkymä kurssin asetusten katseluun ja muokkaamiseen. Lisäkenttien muokkaamiseen
+ * on edit-field -näkymä.
+ *
+ * @export
+ * @class SettingsComponent
+ * @implements {OnInit}
+ */
 @Component({
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
@@ -113,6 +121,7 @@ export class SettingsComponent implements OnInit {
     const courseName = this.store.getCourseName();
     const filename = `${filenameStart}-${courseName}.json`;
     exportPromise.then(filecontent => {
+      if (filecontent.length === 0) return  // Testaamisessa hyödynnetään.
       const link = this.renderer.createElement('a');
       link.setAttribute('target', '_blank');
       link.setAttribute(
@@ -224,7 +233,6 @@ export class SettingsComponent implements OnInit {
     }).catch(e => {
       this.settingsError = $localize `:@@Kysymysten lisäohjeen tallentaminen ei onnistunut:Kysymysten lisäohjeen tallentaminen ei onnistunut` + '.';
     })
-
   }
 
   // Valitse UKK- tai asetustiedosto (jonka jälkeen se lisätään).
@@ -258,17 +266,15 @@ export class SettingsComponent implements OnInit {
   // Tallenna lisäkentät drag & drobin jälkeen.
   public saveFields() {
     if (!this.courseid) throw Error('Ei kurssi ID:ä.');
-    this.courses.setTicketField(this.courseid, this.fieldList)
-      .then(response => {
-        if (response === true ) {
+    this.courses.setTicketField(this.courseid, this.fieldList).then(response => {
+        if (response === true) {
           this.message = $localize `:@@Tallennettu:Tallennettu`;
           if (this.courseid) this.fetchTicketFieldInfo(this.courseid);
         } else {
           throw Error('Ei onnistunut.');
         }
     }).catch (error => {
-      this.errorMessage = $localize `:@@Kenttäpohjan muuttaminen ei onnistunut:
-      Kenttäpohjan muuttaminen ei onnistunut.`;
+      this.errorMessage = $localize `:@@Lisäkenttien järjestyksen muuttaminen ei onnistunut:Lisäkenttien järjestyksen muuttaminen ei onnistunut` + '.';
     })
   }
 

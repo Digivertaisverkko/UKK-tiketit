@@ -5,10 +5,11 @@ import { JoinComponent } from './join.component';
 import { AuthService } from '@core/services/auth.service';
 import { CourseService } from '@course/course.service';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { courseDummyData } from '@course/course.dummydata';
+import { CourseDummyData } from '@course/course.dummydata';
 
 describe('JoinComponent', () => {
   let component: JoinComponent;
+  const courseDummyData = new CourseDummyData;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fakeCourseService: Partial<CourseService>;
   let fixture: ComponentFixture<JoinComponent>;

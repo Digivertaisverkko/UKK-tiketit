@@ -1,4 +1,4 @@
-@import "/src/variables.scss";
+@import "/src/styles/variables.scss";
 
 .top-buttons {
   display: flex;
@@ -47,6 +47,17 @@
   button {
     margin-top: 0.5rem;
   }
+}
+
+.checkbox-content {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  justify-content: space-between;
+}
+
+.help-icon {
+  font-size: 100%;
 }
 
 .send-button {

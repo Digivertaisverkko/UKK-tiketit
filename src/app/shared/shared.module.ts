@@ -1,7 +1,3 @@
-/* This file is to declare components, directives, and pipes when those
- * items will be re-used and referenced by the components declared in other
- * feature modules. */
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -9,7 +5,7 @@ import { FilesizeModule } from './pipes/filesize.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 
-import { ErrorComponent } from './error/error.component';
+import { ErrorComponent } from './components/error/error.component';
 import { EditorComponent } from './editor/editor.component';
 import { NgxEditorConfig, NgxEditorModule, NGX_EDITOR_CONFIG_TOKEN } from 'ngx-editor';
 import { BeginningButtonComponent } from './components/beginning-button/beginning-button.component';
@@ -19,7 +15,8 @@ import { MenuSrcComponent } from './editor/menu-src/menu-src.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { HeadlineComponent } from './components/headline/headline.component';
 import { SenderInfoComponent } from './components/sender-info/sender-info.component';
-import { SuccessComponent } from './success/success.component';
+import { SuccessComponent } from './components/success/success.component';
+import { RefreshDialogComponent } from './components/refresh-dialog/refresh-dialog.component';
 
 export function ngxEditorConfigFactory(): NgxEditorConfig {
   return {
@@ -45,6 +42,14 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
   };
 }
 
+/** Sisältää ominaisuuksia, joita käytetään muissa moduuleissa. Yleisten Material -
+ * -teemaan kuuluvien moduulien tuonti on jaettu omaksi material.module -tiedostoksi.
+ * Tänne ei tule laittaa servicejä, vaan ne ovat joko core tai feature-moduuleissa.
+ * Sisällytä declarations -kohdassa ilmoitetut kohdat myös exports -taulukkoon.
+ *
+ * @export
+ * @class SharedModule
+ */
 @NgModule({
   declarations: [
     ErrorComponent,
@@ -53,6 +58,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     MenuLinkComponent,
     MenuSrcComponent,
     BeginningButtonComponent,
+    RefreshDialogComponent,
     SafeHtmlPipe,
     SearchBarComponent,
     SenderInfoComponent,
@@ -80,6 +86,7 @@ export function ngxEditorConfigFactory(): NgxEditorConfig {
     BeginningButtonComponent,
     SafeHtmlPipe,
     ReactiveFormsModule,
+    RefreshDialogComponent,
     SearchBarComponent,
     SenderInfoComponent,
     SuccessComponent

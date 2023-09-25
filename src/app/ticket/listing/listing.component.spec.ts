@@ -10,8 +10,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthService } from '@core/services/auth.service';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
+import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
 import { ListingComponent } from './listing.component';
-import { ticketDummyData } from '@ticket/ticket.dummydata';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { TicketService } from '@ticket/ticket.service';
 
 describe('ListingComponent', () => {
@@ -20,6 +21,7 @@ describe('ListingComponent', () => {
   let fakeTicketService: Pick<TicketService, 'getFAQlist'>;
   let fixture: ComponentFixture<ListingComponent>;
   let router: Router;
+  const ticketDummyData = new TicketDummyData;
 
   beforeEach(async () => {
     fakeAuthService = jasmine.createSpyObj('AuthService', {
@@ -37,7 +39,8 @@ describe('ListingComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [
         ListingComponent,
-        MockComponent(HeadlineComponent)
+        MockComponent(HeadlineComponent),
+        MockComponent(SearchBarComponent)
       ],
       imports: [
         BrowserAnimationsModule,

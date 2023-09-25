@@ -2,16 +2,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, fakeAsync, tick
     } from '@angular/core/testing';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MockComponent } from 'ng-mocks';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { authDummyData } from '@core/services/auth.dummydata';
+import { AuthDummyData } from '@core/services/auth.dummydata';
 import { AuthService } from '@core/services/auth.service';
-import { courseDummyData } from '@course/course.dummydata';
+import { CourseDummyData } from '@course/course.dummydata';
 import { CourseService } from '@course/course.service';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { MatInputModule } from '@angular/material/input';
@@ -20,10 +20,13 @@ import { StoreService } from '@core/services/store.service';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 //import { FakeCourseService } from '@course/fake-course.service';
 
 describe('RegisterComponent', () => {
+  const authDummyData = new AuthDummyData;
   let component: RegisterComponent;
+  const courseDummyData = new CourseDummyData;
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fakeCourseService: Pick<CourseService, 'getCourseName' | 'getInvitedInfo'>;
   // let fakeCourseService: FakeCourseService;
@@ -31,6 +34,7 @@ describe('RegisterComponent', () => {
   let fixture: ComponentFixture<RegisterComponent>;
   let courseName: string;
   let invitationID: string;
+  let loader: HarnessLoader;
   let courseID: string;
 
   describe('Course 1', () => {
@@ -67,6 +71,7 @@ describe('RegisterComponent', () => {
         ],
         imports: [
           BrowserAnimationsModule,
+          MatCheckboxModule,
           MatDialogModule,
           MatFormFieldModule,
           MatInputModule,
@@ -83,11 +88,11 @@ describe('RegisterComponent', () => {
       .compileComponents();
 
       fixture = TestBed.createComponent(RegisterComponent);
+      loader = TestbedHarnessEnvironment.loader(fixture);
       component = fixture.componentInstance;
       // @Input -arvoja, jotka otetaan URL:sta.
       component.invitation = invitationID;
       component.courseid = courseID;
-
       component.ngOnInit();
     });
 
@@ -103,8 +108,7 @@ describe('RegisterComponent', () => {
       );
       // Ei toimi vielä.
       // const nameEl = findEl(fixture, 'course-name').nativeElement;
-      // expect(component.textContent).toBe(courseName)
-      // expect(component.courseName).toBe(courseName);
+      // expect(nameEl.textContent).toBe(courseName)
       const email = findEl(fixture, 'email').nativeElement;
       expect(email).toBeTruthy();
       expect(email.value).toBe(courseDummyData.invitedInfo.sposti);
@@ -116,15 +120,9 @@ describe('RegisterComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    //  Ei mene vielä läpi.
-
-
-     /*
-    
-    fit("sends an invitation, logs in and routes to course's list view", fakeAsync(async() => {
-      let loader: HarnessLoader = TestbedHarnessEnvironment.loader(fixture);
-      const dataConsent = await loader.getHarness(MatCheckboxHarness.with(
-        { selector: '#consent-checkbox' }));
+    it("sends an invitation, logs in and routes to course's list view", fakeAsync(async() => {
+      const checkbox = await loader.getHarness(MatCheckboxHarness.with(
+        { selector: '[data-testid=consent-checkbox]' }));
       const name = 'Test User';
       const password = 'salasana';
       const email = courseDummyData.invitedInfo.sposti;
@@ -139,8 +137,7 @@ describe('RegisterComponent', () => {
       setFieldValue(fixture, 'name', name);
       setFieldValue(fixture, 'password', password);
       setFieldValue(fixture, 'repassword', password);
-      await dataConsent.check();
-
+      await checkbox.check();
       submitButton.click();
       tick();
       fixture.detectChanges();
@@ -157,14 +154,10 @@ describe('RegisterComponent', () => {
       expect(navigateSpy).toHaveBeenCalledWith(expectedRoute, { state: expectedState });
     }));
 
-    */
-   
 
   });
 
 // -----------------------------------------------------------------------------
-
-/*
 
   describe('Course 2', () => {
 
@@ -198,6 +191,8 @@ describe('RegisterComponent', () => {
         ],
         imports: [
           BrowserAnimationsModule,
+          MatCheckboxModule,
+          MatDialogModule,
           MatFormFieldModule,
           MatInputModule,
           ReactiveFormsModule,
@@ -214,6 +209,7 @@ describe('RegisterComponent', () => {
 
       fixture = TestBed.createComponent(RegisterComponent);
       component = fixture.componentInstance;
+      loader = TestbedHarnessEnvironment.loader(fixture);
       // @Input -arvoja, jotka otetaan URL:sta.
       component.invitation = invitationID;
       component.courseid = courseID;
@@ -221,7 +217,10 @@ describe('RegisterComponent', () => {
       component.ngOnInit();
     });
 
-    it("sends an invitation, logs in and routes to course's list view", fakeAsync(() => {
+    it("sends an invitation, logs in and routes to course's list view", fakeAsync(async () => {
+      tick();
+      const checkbox = await loader.getHarness(MatCheckboxHarness.with(
+        { selector: '[data-testid=consent-checkbox]' }));
       const name = 'John Doe';
       const password = 'password';
       const email = courseDummyData.invitedInfoCourse2.sposti;
@@ -236,6 +235,7 @@ describe('RegisterComponent', () => {
       setFieldValue(fixture, 'name', name);
       setFieldValue(fixture, 'password', password);
       setFieldValue(fixture, 'repassword', password);
+      await checkbox.check();
       submitButton.click();
       tick();
       fixture.detectChanges();
@@ -253,6 +253,7 @@ describe('RegisterComponent', () => {
     }));
 
   });
-  */
+
 
 });
+
