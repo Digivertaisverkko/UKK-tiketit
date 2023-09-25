@@ -83,8 +83,16 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
     this.fileInfoList = [];
   }
 
-  /* Palauttaa listan liitteen lähetyksiä, jotka päivittävät edistymisen ja
-     virheen tapahtuessa asettavat virheviestin. */
+  /**
+   * Palauttaa listan liitteen lähetyksiä, jotka päivittävät edistymisen ja
+   * virheen tapahtuessa asettavat virheviestin. 
+   *
+   * @private
+   * @param {string} ticketID
+   * @param {string} commentID
+   * @return {*}  {Observable<number>[]}
+   * @memberof EditAttachmentsComponent
+   */
   private makeRequestArray(ticketID: string, commentID: string):
       Observable<number>[] {
     return this.fileInfoList.map((fileinfo, index) => {
@@ -118,9 +126,6 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
   public onChange = (isInvalid: boolean) => {};
 
   public onFileAdded(event: any) {
-
-    // console.dir(event.target.files);
-
     this.markAsTouched();
     this.onChange(this.isInvalid);
     const MEGABYTE = 1000000;
@@ -167,10 +172,8 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
       lähetetty ja joiden Poista-ikonia käyttäjä on klikannut. */
   public async removeSentFiles(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-
       if (this.filesToRemove.length === 0) resolve(true);
       if (this.ticketID == null) {
-        // throw Error(' ei ticketID:ä');
         reject(new Error('Ei tiketti ID:ä.'));
       }
       let promise: Promise<{ success: boolean }>;

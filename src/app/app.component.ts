@@ -79,6 +79,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     return this._language;
   }
 
+  /**
+   * Vaihda uusi kieli. Vaatii aina sovelluksen uudelleenkäynnistyksen.
+   *
+   * @memberof AppComponent
+   */
   set language(value: string) {
     if (value !== this._language) {
       localStorage.setItem('language', value);
@@ -108,6 +113,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     window.open(window.location.href, '_blank');
   }
 
+  /**
+   * Vaihda kieltä, kts. set language.
+   *
+   * @memberof AppComponent
+   */
   public toggleLanguage() {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }

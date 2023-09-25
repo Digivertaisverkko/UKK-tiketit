@@ -3,7 +3,6 @@
  * 
 */
 
-
 export interface LoginInfo  {
   'login-url': string;
   'login-id': string;
@@ -33,9 +32,8 @@ export interface GenericResponse {
 
 export type Role = 'opiskelija' | 'opettaja' | 'admin' | null;
 
-/* Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
-   'asemaStr' on käyttöliittymässä näytettävä, käännetty käyttäjän asema.
-*/
+/// Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
+// 'asemaStr' on käyttöliittymässä näytettävä, käännetty käyttäjän asema
 export interface User {
   id?: number;
   nimi: string;
