@@ -1,4 +1,4 @@
-# Web-käyttöliittymän kuvaus
+# Tukki web-käyttöliittymän kuvaus
 
 Tämä ohje pyrkii antamaan yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän
 eli frontendin arkkitehtuurista ohjelman ylläpitäjälle.  Tämä tiedosto kannattaa
