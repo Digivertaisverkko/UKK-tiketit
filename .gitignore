@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 /documentation/*
-!/documentation/introduction
+!/documentation/kuvaus
 
 # Compiled output
 /dist
