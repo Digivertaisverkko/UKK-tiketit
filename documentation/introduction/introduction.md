@@ -285,4 +285,4 @@ ensimmäisenä tarkastaa selaimen kehittäjätyökalulla, onko nimeämisessä ta
 elementin rakenteessa tapahtunut muutoksia. 
 
 
-[Takaisin alkuun](#järjestelmän-kuvaus)
+[Takaisin alkuun](#web-käyttöliittymän-kuvaus)
