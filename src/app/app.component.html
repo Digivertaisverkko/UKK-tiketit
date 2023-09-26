@@ -1,12 +1,16 @@
 <div class="app-wrapper">
 
+
   <header>
-    <app-header [courseid]="courseid"*ngIf="!isInIframe">
+    <!-- <app-header [courseid]="courseid" [isInIframe]="isInIframe"> -->
+      <app-header [courseid]="courseid" *ngIf="!isInIframe">
       <span class="spacer"></span>
     </app-header>
 
-    <!--  Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella
-          käytetään header -komponenttia. -->
+
+
+    <!-- Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella -->
+         <!-- käytetään core:n header -komponenttia. -->
     <mat-toolbar color="primary" class="embedded-header" *ngIf="isInIframe">
 
       <div class="logo" *ngIf="courseid === null; else clickableLogo">
@@ -17,12 +21,11 @@
         <div  class="logo logo-clickable"
               matRipple
               >
-        <img  alt=""
-              (click)="logoClicked()"
-              src="assets/logos/Tukki_logo_rgb_tummasini.svg"
-              >
-              <!-- src="assets/logos/dvv-white.svg" -->
-          </div>
+          <img  alt=""
+                (click)="logoClicked()"
+                src="assets/logos/Tukki_logo_rgb_tummasini.svg"
+                >
+        </div>
       </ng-template>
 
       <span class="spacer"></span>
@@ -30,7 +33,6 @@
       <div class="role theme-header-text-small" data-testid="header-user-role">
         {{ (user$ | async)?.asemaStr }}
       </div>
-      <!-- <div class="name theme-header-text-small">{{(user$ | async)?.nimi }}</div> -->
 
       <button aria-label="Valikko"
               data-testid="account-button"
@@ -42,7 +44,6 @@
               matTooltip="Valikko"
               >
         <mat-icon>menu</mat-icon>
-        <!-- <mat-icon>account_circle</mat-icon> -->
       </button>
 
       <mat-menu #menu="matMenu">
@@ -86,6 +87,7 @@
       </mat-menu>
 
     </mat-toolbar>
+
   </header>
 
   <main>

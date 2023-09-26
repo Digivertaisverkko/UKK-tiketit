@@ -6,7 +6,6 @@
 }
 
 main {
-  // border-color: red solid 2px;
   background-color: #ffffff;
   box-sizing: border-box;
   display: flex;
@@ -16,8 +15,6 @@ main {
   position: relative;
   width: 1024px;
   min-width: 250px;
-  // Jotta footer asemoitaisiin oikealle korkeudelle.
-  // min-height: calc(100vh - $header-height - $footer-height);
   padding: 0 40px 70px 40px;
 }
 

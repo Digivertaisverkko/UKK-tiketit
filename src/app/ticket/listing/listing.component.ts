@@ -55,7 +55,7 @@ const customFilterPredicate = (data: UKK, filter: string) => {
 
 }
 /**
- * Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
+ * Listausnäkymä, joka sisältää kurssin kaikki UKK:t. Tiketit, mukaan lukien
  * Ratkaistut, ovat tämän näkymän lapsikomponentissa TicketList.
  *
  * @export
@@ -78,13 +78,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public errorFromComponent: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
-  public screenSize: 'handset' | 'small' | 'other' = 'other';
+  public isLoggedIn$: Observable<boolean | null>;
   public isParticipant$: Observable<boolean | null>
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
-  public numberOfFAQ: number = 0;
   public noDataConsent: boolean | null;
-  public isLoggedIn$: Observable<boolean | null>;
+  public numberOfFAQ: number = 0;
+  public screenSize: 'handset' | 'small' | 'other' = 'other';
   public strings: Map<string, string>;
   public successMessage: string | null = null;
   public user$: Observable<User | null>;

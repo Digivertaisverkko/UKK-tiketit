@@ -9,8 +9,8 @@ import { User } from './core/core.models';
 import { UtilsService } from '@core/services/utils.service';
 
 /**
- * Juurikomponentti. Näyttää reititystä vastaavan näkymä. Sisältää upotuksessa
- * käytetyn header-elementin, joka sisältää login,
+ * Sovelluksen juurikomponentti. Näyttää reititystä vastaavan näkymä. Sisältää
+ * upotuksessa käytetyn header-elementin, joka sisältää login,
  *
  * Muut näkymässä käytetyt komponentit, kuten upotuksen
  * ulkopuolinen "header" sekä "footer" ovat tämän käyttämää core-moduulia.
@@ -35,7 +35,6 @@ export class AppComponent implements OnInit, OnDestroy  {
   public isLoggedIn$: Observable<Boolean | null>;
   public isLoading: Observable<boolean> | null = null;
   public isParticipant$: Observable<Boolean | null>;
-  // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
   public user$: Observable<User | null>;
   private _language!: string;
@@ -91,6 +90,14 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
   }
 
+  /**
+   * Tarkista ollaanko upotuksessa eli Iframessa.
+   *
+   * @private
+   * @return {*}  {boolean}
+   * @memberof AppComponent
+   */
+  // Testiympäristössä antaa myös true.
   private getIsInIframe(): boolean {
     try {
       return window.self !== window.top;
@@ -105,6 +112,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.router.navigateByUrl(route);
   }
 
+  /**
+   * Lähettää viestin, jota beginning-button -komponentti kuuntelee.
+   *
+   * @memberof AppComponent
+   */
   public logoClicked() {
     this.store.sendMessage('go begin');
   }

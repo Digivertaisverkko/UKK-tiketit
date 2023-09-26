@@ -222,10 +222,6 @@
           <mat-icon>attach_file</mat-icon>{{attachFilesText}}
         </button>
 
-        <!-- <div class="action-spacer spacer"
-            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'; else spacerHere">
-        </div> -->
-
         <mat-radio-group
             align="start"
             [disabled]="state === 'sending'"
@@ -256,9 +252,7 @@
           </mat-radio-button>
         </mat-radio-group>
 
-        <!-- <ng-template #spacerHere> -->
-          <div class="action-spacer spacer"></div>
-        <!-- </ng-template> -->
+        <div class="action-spacer spacer"></div>
 
         <button class="send-button"
                 color="primary"
