@@ -1,21 +1,22 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+import { LOCALE_ID } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MockComponent } from 'ng-mocks';
+import { ReactiveFormsModule } from '@angular/forms';
 
-import { CommentComponent } from './comment.component';
-import { SenderInfoComponent } from '@shared/components/sender-info/sender-info.component';
-import { TicketService } from '@ticket/ticket.service';
-import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
-import { MessageComponent } from '@ticket/components/message/message.component';
 import { AuthDummyData } from '@core/services/auth.dummydata';
-import { StoreService } from '@core/services/store.service';
-import { LOCALE_ID } from '@angular/core';
-import { TicketDummyData } from '@ticket/ticket.dummydata';
-import { findEl } from '@shared/spec-helpers/element.spec-helper';
-import { ViewAttachmentsComponent } from '../view-attachments/view-attachments.component';
+import { CommentComponent } from './comment.component';
+import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
 import { EditorComponent } from '@shared/editor/editor.component';
+import { MessageComponent } from '@ticket/components/message/message.component';
+import { SenderInfoComponent } from '@shared/components/sender-info/sender-info.component';
+import { StoreService } from '@core/services/store.service';
+import { TicketDummyData } from '@ticket/ticket.dummydata';
 import { TicketModule } from '@ticket/ticket.module';
+import { TicketService } from '@ticket/ticket.service';
+import { ViewAttachmentsComponent } from '../view-attachments/view-attachments.component';
 
 describe('CommentComponent', () => {
   const authDymmyData = new AuthDummyData;
@@ -27,15 +28,15 @@ describe('CommentComponent', () => {
 
   beforeEach(async () => {
     fakeTicketService = jasmine.createSpyObj('TicketService', {
-      editComment: undefined,
+      editComment: Promise.resolve({ success: true }),
       removeComment: undefined
     });
 
     await TestBed.configureTestingModule({
       declarations: [
         CommentComponent,
-        MessageComponent,
         EditorComponent,
+        MessageComponent,
         MockComponent(EditAttachmentsComponent),
         MockComponent(SenderInfoComponent),
         MockComponent(ViewAttachmentsComponent)
@@ -43,9 +44,11 @@ describe('CommentComponent', () => {
       imports: [
         MatCardModule,
         MatIconModule,
+        ReactiveFormsModule,
         TicketModule,
       ],
       providers: [
+        { provide: StoreService },
         { provide: TicketService, useValue: fakeTicketService },
         { provide: LOCALE_ID, useValue: 'fi-FI' },
       ]
@@ -55,22 +58,37 @@ describe('CommentComponent', () => {
     fixture = TestBed.createComponent(CommentComponent);
     store = TestBed.inject(StoreService);
     component = fixture.componentInstance;
-    component.courseid = '1';
-    component.user = authDymmyData.userInfoTeacher;
     component.comment = ticketDummyData.kommentti;
-    component.ticketID = '3';
+    component.courseid = '1';
     component.isInCopyAsFAQ = false;
+    component.ticketID = '3';
+    component.user = authDymmyData.userInfoTeacher;
+    // Kommentin lähettäjä.
     store.setUserInfo(authDymmyData.userInfoTeacher);
     store.setLoggedIn();
     store.setParticipant(true);
-    // Eri kuin kommentin ID eli kommentti ei ole ediointitilassa.
-    component.editingCommentID = '5';
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('calls correct method after editing comment and clicking OK', fakeAsync(() => {
+    const newMessage = "Testikommentti";
+    const expectedMessage = "<p>" + newMessage + "</p>";
+    findEl(fixture, 'edit-button').nativeElement.click();
+    fixture.detectChanges();
+    setFieldValue(fixture, 'editor', newMessage);
+    findEl(fixture, 'ok-button').nativeElement.click();
+    expect(fakeTicketService.editComment).toHaveBeenCalledWith(
+      component.ticketID,
+      component.comment.id,
+      expectedMessage,
+      4,
+      component.courseid
+    );
+  }));
 
   it('shows correct comment text content', () => {
     const expectedMessage = "Testikommentti";
