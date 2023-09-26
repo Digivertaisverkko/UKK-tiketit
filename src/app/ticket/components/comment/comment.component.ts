@@ -88,15 +88,17 @@ export class CommentComponent implements AfterViewInit, OnInit{
   @Output() public editingCommentIDChange = new EventEmitter<string | null>();
 
   /**
-   * Välittää liitetiedostojen lähettämisen tilan parent componentille.
+   * Välittää viestejä kommentin tilasta.
    *
-   * 'sendingFiles' - Lähettäminen on kesken.
-   * 'continue' - Lähettäminen pysäytettiin, jatka editointitilassa.
-   * 'done' - Lähettäminen on valmis.
+   * 'editingComment' - Kommenttia muokataan.
+   * 'continue' - Kommentin lähettäminen valmis, jatka tavallista tilaa.
+   * 'sendingFiles' - Tiedostojen lähettäminen on kesken.
+   * 'done' - Tiedostojen lähettäminen on valmis.
    *
    * @memberof CommentComponent
    */
-  @Output() public messages = new EventEmitter<string>();
+  @Output() public messages = new EventEmitter<'continue' | 'done' |
+      'editingComment' | 'sendingFiles'>();
 
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
