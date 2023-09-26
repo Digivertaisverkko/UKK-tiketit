@@ -36,6 +36,16 @@ export class UtilsService {
     return courseID
   }
 
+  /**
+   * Palauta päivämäärä merkkijonona. Jos päivämäärä on tänään, palauta
+   * 'Tänään', jos eilen, palauta 'Eilen', muuten palauta päivämäärä
+   * muodossa 'd.M.'.
+   *
+   * @param {Date} date
+   * @param {number} thisYear
+   * @return {*}  {string}
+   * @memberof UtilsService
+   */
   public getDateString(date: Date, thisYear: number): string {
     let dateString: string = '';
     const datePipe = new DatePipe('fi-FI');
@@ -51,6 +61,13 @@ export class UtilsService {
     return dateString
   }
 
+  /**
+   * Palauta merkkijonon hash.
+   *
+   * @param {string} input
+   * @return {*}  {Promise<string>}
+   * @memberof UtilsService
+   */
   public async getHash(input: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(input);
@@ -79,6 +96,13 @@ export class UtilsService {
     return isToday
   }
 
+  /**
+   * Palauta, onko annettu päivämäärä eilinen.
+   *
+   * @param {Date} date
+   * @return {*}  {boolean}
+   * @memberof UtilsService
+   */
   public isYesterday(date: Date): boolean {
     const isDate = date instanceof Date;
     if (!isDate) {

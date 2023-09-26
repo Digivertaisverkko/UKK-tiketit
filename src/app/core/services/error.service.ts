@@ -40,8 +40,15 @@ export class ErrorService {
       ) {
   }
 
-  /* Palauta samanlaisen virheen kuin palvelin. status on HTTP error status koodi,
-      errorid on palvelimen nelinumeroinen virhekoodi. */
+  /**
+   * Palauta samanlaisen virhe kuin palvelin. 'status' on HTTP error status koodi,
+   * 'errorid' on palvelimen nelinumeroinen virhekoodi.
+   *
+   * @param {number} status
+   * @param {number} errorid
+   * @return {*}  {BackendErrorResponse}
+   * @memberof ErrorService
+   */
   public createError(status: number, errorid: number): BackendErrorResponse {
     var e: BackendErrorResponse = {
       success: false,
@@ -49,7 +56,6 @@ export class ErrorService {
         tunnus: errorid
       }
     };
-
     var status = 418;
 
     switch (errorid) {
@@ -96,14 +102,18 @@ export class ErrorService {
             status = 500
             break;
     }
-
     return e
   }
 
-  /* Logitetaan kaikki virheet. Jos käyttäjällä ei ole oikeuksia resurssiin tai
-  virheenä on, ettei ole kirjautunut, niin ohjataan "Ei oikeuksia" -näkymään.
-  Muussa tapauksessa virhe heitetään eteenpäin komponenteille, jotka voivat
-  tarpeen mukaan näyttää käyttäjällle virheilmoituksia. */
+  /**
+   * Logitetaan kaikki virheet. Jos käyttäjällä ei ole oikeuksia resurssiin tai
+   * virhe on "et ole kirjautunut", niin ohjataan "Ei oikeuksia" -näkymään.
+   * Muussa tapauksessa virhe heitetään eteenpäin komponenteille, jotka voivat
+   * tarpeen mukaan näyttää käyttäjällle virheilmoituksia.
+   *
+   * @param {HttpErrorResponse} error
+   * @memberof ErrorService
+   */
   public handleServerError(error: HttpErrorResponse) {
     var backendResponse = error?.error;
     var backendError: Error = backendResponse?.error;
@@ -167,7 +177,12 @@ export class ErrorService {
     return logMessage;
   }
 
-
+  /**
+   * Käsittele tilanne, kun käyttäjä yrittää päästä resurssiin, johon
+   * tarvitaan kirjautuminen.
+   *
+   * @memberof ErrorService
+   */
   public handleNotLoggedIn(): void {
     console.log('errorService.handleNotLoggedIn(): et ole kirjaunut,' +
           'ohjataan virhesivulle.');
@@ -175,17 +190,19 @@ export class ErrorService {
     // window.localStorage.clear();
     // this.saveRedirectURL();
     this.routeToNoPrivileges();
-    // const baseUrl = (courseID == null) ? '' : 'course/' + courseID  + '/';
-    // this.router.navigateByUrl(baseUrl + 'forbidden');
   }
 
+  /**
+   * Ohjaa käyttäjän "Ei oikeuksia" -näkymään.
+   *
+   * @private
+   * @memberof ErrorService
+   */
   private routeToNoPrivileges(): void {
-    // Ei toimi tässä this.route.snapshot.paramMap.get('courseid').
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumisnäkymässä ei koskaan haluta ohjata tähän näkymään.
     if (currentRoute.indexOf('/login') !== -1) return
     const pathArray = window.location.pathname.split('/');
-    let baseRoute = '';
     const courseid = pathArray[2];
     if (pathArray[1] === 'course' && courseid != null)  {
       this.router.navigateByUrl('/course/' + courseid + '/forbidden');
@@ -194,6 +211,13 @@ export class ErrorService {
     }
   }
 
+  /**
+   * Tallenna nykyinen URL, jotta voidaan ohjata käyttäjä takaisin. Ei
+   * tallenneta, jos redirect URL on jo tallennettu tai ollaan login-
+   * näkymässä. Ei käytössä.
+   *
+   * @memberof ErrorService
+   */
   public saveRedirectURL(): void {
     const currentRoute = window.location.pathname + window.location.search;
     // Kirjautumissivulle ei haluta ohjata.
