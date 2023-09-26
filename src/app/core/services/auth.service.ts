@@ -366,7 +366,7 @@ export class AuthService {
   }
 
   /**
-   * Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+   * Poista tieto ollaanko kieltäydytty tietojen luovutuksesta.
    *
    * @memberof AuthService
    */

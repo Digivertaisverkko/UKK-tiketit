@@ -1,6 +1,6 @@
 /**
- * Mallit, joista tämä moduuli vastaa ja joita voidaan käyttää muuallakin.
- * 
+ * Mallit, joista tämä moduuli vastaa ja joita käytetään muuallakin.
+ *
 */
 
 export interface LoginInfo  {
@@ -13,12 +13,23 @@ export interface LoginResult {
   redirectUrl?: string
 };
 
-// Saadaan palvelimelta kirjauduttua.
+/**
+ * Saadaan palvelimelta kirjauduttua.
+ *
+ * @export
+ * @interface AuthInfo
+ */
 export interface AuthInfo {
   lti_login: boolean,
   perus: boolean
 }
 
+/**
+ * Palvelimen virheilmoitus.
+ *
+ * @export
+ * @interface Error
+ */
 export interface Error {
   tunnus: number;
   virheilmoitus?: string;
@@ -32,6 +43,12 @@ export interface GenericResponse {
 
 export type Role = 'opiskelija' | 'opettaja' | 'admin' | null;
 
+/**
+ * Käyttäjätiedot.
+ *
+ * @export
+ * @interface User
+ */
 /// Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
 // 'asemaStr' on käyttöliittymässä näytettävä, käännetty käyttäjän asema
 export interface User {

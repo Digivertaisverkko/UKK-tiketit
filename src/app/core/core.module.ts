@@ -1,6 +1,3 @@
-/* singleton services and modules shared throughout the application. This module should
- * only be imported by app.module. */
-
 // Yleiset moduulit
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -62,7 +59,6 @@ import { HomeComponent } from './home/home.component';
     { provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true},
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue:
         { autoFocus: 'dialog' } as MatDialogConfig }
-
   ],
   exports: [
     HeaderComponent,

@@ -28,6 +28,7 @@ import { StoreService } from '../services/store.service';
       näkemiseen, tai etsimääsi tietoa ei ole olemassa.
     </p>
 
+    <!-- Jos haluaa kirjautumistoiminnon ottaa käyttöön. --->
     <!-- <button align="end"
             (click)="goToLogin()"
             color="primary"
