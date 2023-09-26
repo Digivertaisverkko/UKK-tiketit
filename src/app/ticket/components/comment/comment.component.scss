@@ -33,20 +33,14 @@ mat-card {
 }
 
 .theme-actions {
-  gap: 0.8rem
+  gap: 0.8rem;
 }
 
 mat-radio-button {
-  margin: 3px 1.6rem 3px 0px
+  margin: 3px 0.9rem 3px 0px
 }
 
 @media (max-width: 775px) {
-
-  // Välttämättä ei mene useammalle riville.
-  // .user-info-block {
-  //   order: -1;
-  //   margin-bottom: -30px;
-  // }
 
   .theme-actions {
     gap: 0.5rem
