@@ -6,11 +6,17 @@ import { Observable, PartialObserver, tap } from 'rxjs';
 import { StoreService } from './services/store.service';
 import { UtilsService } from './services/utils.service';
 
+/**
+ * Kaikkien HTTP-pyyntöjen yhteydessä tehtävät toimet. Logittaa kutsut
+ * ja näyttää progress barin.
+ *
+ * @export
+ * @class CustomHttpInterceptor
+ * @implements {HttpInterceptor}
+ */
 @Injectable({ providedIn: 'root' })
 
-/* Kaikkien HTTP-pyyntöjen yhteydessä tehtävät toimet. Logittaa kutsut
-   ja näyttää progress barin. */
-export class CustomHttpInterceptor implements HttpInterceptor {
+ export class CustomHttpInterceptor implements HttpInterceptor {
 
   private readonly observer: PartialObserver<any> = {
     error: () => this.store.stopLoading(),

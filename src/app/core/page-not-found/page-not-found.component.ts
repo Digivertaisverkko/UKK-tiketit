@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { Title } from '@angular/platform-browser';
-import { StoreService } from '../services/store.service';
 
+import { AuthService } from '../services/auth.service';
+import { StoreService } from '../services/store.service';
 
 /**
  * "Sivua ei löytynyt" / 404 - virhenäkymä. Näytetään, kun URL:lle ei löydy
@@ -19,8 +19,6 @@ import { StoreService } from '../services/store.service';
       <app-beginning-button></app-beginning-button>
     </div>
 
-    <!-- <h1 class="main-header"><span>404</span></h1> -->
-
     <app-headline [noCourseTitle]="true" [showInIframe]="true">
       404
     </app-headline>
@@ -29,21 +27,6 @@ import { StoreService } from '../services/store.service';
       Sivua ei löytynyt
     </h2>
 
-    <div class="button-wrapper" *ngIf="!isLoggedIn">
-      <div class="spacer"></div>
-
-    <!--
-      <button align="end"
-              (click)="goToLogin()"
-              id="submitButton"
-              i18n="@@Kirjaudu sisään"
-              mat-raised-button color="primary"
-              >
-        Kirjaudu sisään
-      </button>
-    -->
-
-    </div>
     <p i18n="@@404">Hait sivua, jota ei ole koskaan ollut olemassa,
       ei enää ole olemassa tai sitten meidän palvelin sekoilee omiaan.
     </p>
@@ -54,7 +37,6 @@ import { StoreService } from '../services/store.service';
 })
 
 export class PageNotFoundComponent {
-  public isLoggedIn: Boolean | null = null;
   @Input() courseid: string | undefined;
 
   constructor(
@@ -65,14 +47,6 @@ export class PageNotFoundComponent {
     ) {
     this.title.setTitle(this.store.getBaseTitle() + $localize
         `:@404-otsikko:Sivua ei löytynyt`);
-      this.isLoggedIn = this.store.getIsLoggedIn();
-  }
-
-  public async goToLogin() {
-    if (!this.courseid) return
-    const res = await this.authService.getLoginInfo('own', this.courseid);
-    const loginUrl = res['login-url'];
-    this.router.navigateByUrl(loginUrl);
   }
 
 }

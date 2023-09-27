@@ -5,7 +5,7 @@ import { DatePipe } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil, takeWhile, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 
@@ -55,7 +55,7 @@ const customFilterPredicate = (data: UKK, filter: string) => {
 
 }
 /**
- * Listausnäkymä, jossa näytetään kurssin kaikki UKK:t. Tiketit, mukaan lukien
+ * Listausnäkymä, joka sisältää kurssin kaikki UKK:t. Tiketit, mukaan lukien
  * Ratkaistut, ovat tämän näkymän lapsikomponentissa TicketList.
  *
  * @export
@@ -78,16 +78,14 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public errorFromComponent: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
-  public screenSize: 'handset' | 'small' | 'other' = 'other';
-  public isParticipant$: Observable<boolean | null>
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
-  public numberOfFAQ: number = 0;
   public noDataConsent: boolean | null;
-  public isLoggedIn$: Observable<boolean | null>;
+  public numberOfFAQ: number = 0;
+  public screenSize: 'handset' | 'small' | 'other' = 'other';
   public strings: Map<string, string>;
   public successMessage: string | null = null;
-  public user$: Observable<User | null>;
+  public user$: Observable<User | null | undefined>;
 
   private columnDefinitions: ColumnDefinition[];
   private fetchFAQsTimer$: Observable<number>;
@@ -112,10 +110,8 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.authService.getDenyDataConsent();
     this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
-    this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
         true : false;
-    this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
       { def: 'otsikko', showMobile: true },
@@ -134,6 +130,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.url = window.location.pathname;
+    this.trackUserInfo();
     this.checkRouterData();
     this.startPollingFAQ(this.POLLING_RATE_MIN);
     // this.trackLoggedStatus();
@@ -284,6 +281,20 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.screenSize = "other";
       }
     });
+  }
+
+  private trackUserInfo() {
+    let user: User | undefined | null = null;
+    this.store.trackUserInfo().pipe(
+      takeWhile((res) => user === undefined)
+      ).subscribe(userinfo => {
+        if (userinfo === null) {
+          this.isLoaded = true;
+          this.setError('notLoggedIn');
+        } else if (userinfo !== undefined) {
+          this.error === null;
+        }
+    })
   }
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.

@@ -9,8 +9,8 @@ import { User } from './core/core.models';
 import { UtilsService } from '@core/services/utils.service';
 
 /**
- * Juurikomponentti. Näyttää reititystä vastaavan näkymä. Sisältää upotuksessa
- * käytetyn header-elementin, joka sisältää login,
+ * Sovelluksen juurikomponentti. Näyttää reititystä vastaavan näkymä. Sisältää
+ * upotuksessa käytetyn header-elementin, joka sisältää login,
  *
  * Muut näkymässä käytetyt komponentit, kuten upotuksen
  * ulkopuolinen "header" sekä "footer" ovat tämän käyttämää core-moduulia.
@@ -31,13 +31,9 @@ export class AppComponent implements OnInit, OnDestroy  {
   public disableLangSelect: boolean = false;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
-  public isLogged: boolean = false;
-  public isLoggedIn$: Observable<Boolean | null>;
   public isLoading: Observable<boolean> | null = null;
-  public isParticipant$: Observable<Boolean | null>;
-  // public isUserLoggedIn$: Observable<boolean>;
   public logButtonString: string = '';
-  public user$: Observable<User | null>;
+  public user$: Observable<User | null | undefined>;
   private _language!: string;
   private unsubscribe$ = new Subject<void>();
 
@@ -49,8 +45,6 @@ export class AppComponent implements OnInit, OnDestroy  {
     private utils : UtilsService
     ) {
     this.isLoading = this.store.trackLoading();
-    this.isLoggedIn$ = this.store.trackLoggedIn();
-    this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
   }
 
@@ -60,14 +54,14 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
     this.authService.initialize();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    // Upotuksen testaamisen uncomment alla oleva ja
+    // Huom. ! Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
     // this.isInIframe = true;
     this.isInIframe = this.getIsInIframe();
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackCourseID();
-    this.trackLoginStatus();
+    // this.trackLoginStatus();
   }
 
   ngOnDestroy(): void {
@@ -79,6 +73,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     return this._language;
   }
 
+  /**
+   * Vaihda uusi kieli. Vaatii aina sovelluksen uudelleenkäynnistyksen.
+   *
+   * @memberof AppComponent
+   */
   set language(value: string) {
     if (value !== this._language) {
       localStorage.setItem('language', value);
@@ -86,6 +85,14 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
   }
 
+  /**
+   * Tarkista ollaanko upotuksessa eli Iframessa.
+   *
+   * @private
+   * @return {*}  {boolean}
+   * @memberof AppComponent
+   */
+  // Testiympäristössä antaa myös true.
   private getIsInIframe(): boolean {
     try {
       return window.self !== window.top;
@@ -100,6 +107,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.router.navigateByUrl(route);
   }
 
+  /**
+   * Lähettää viestin, jota beginning-button -komponentti kuuntelee.
+   *
+   * @memberof AppComponent
+   */
   public logoClicked() {
     this.store.sendMessage('go begin');
   }
@@ -108,6 +120,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     window.open(window.location.href, '_blank');
   }
 
+  /**
+   * Vaihda kieltä, kts. set language.
+   *
+   * @memberof AppComponent
+   */
   public toggleLanguage() {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }
@@ -118,21 +135,6 @@ export class AppComponent implements OnInit, OnDestroy  {
       // Ei toimi route.paramMap upotuksessa.
       this.courseid = this.utils.getCourseIDfromURL();
     })
-  }
-
-  private trackLoginStatus() {
-    this.store.onIsUserLoggedIn()
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      ).subscribe(response => {
-      if (response) {
-        this.isLogged = true;
-        this.logButtonString = $localize`:@@Kirjaudu ulos:Kirjaudu ulos`;
-      } else if (!response) {
-        this.isLogged = false;
-        this.logButtonString = $localize`:@@Kirjaudu sisään:Kirjaudu sisään`;
-      }
-    });
   }
 
 }

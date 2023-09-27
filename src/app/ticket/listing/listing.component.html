@@ -7,20 +7,19 @@
                     strings.get('Kirjaudu') ?? ''"
       (clickEvent)="errorClickEvent($event)"
       [message]="strings.get('Ei osallistujana-msg') ?? ''"
-      *ngIf="(isLoggedIn$ | async) === false; else notParticipant"
+      *ngIf="(user$ | async) === null"
       [title]="strings.get('Et ole kirjautunut-title') ?? ''"
       >
   </app-error>
 
-  <ng-template #notParticipant>
+  <ng-container>
     <app-error
         [message]="strings.get('Ei osallistujana-msg') ?? ''"
-        *ngIf="(isParticipant$ | async) === false"
+        *ngIf="(user$ | async)?.osallistuja === false"
         [title]="strings.get('Et osallistujana-title') ?? ''"
         >
     </app-error>
-
-  </ng-template>
+  </ng-container>
 
   <app-error  *ngIf="errorFromComponent"
               [message]="errorFromComponent"
@@ -38,7 +37,7 @@
 <section [ngStyle]="{ 'margin-top': isInIframe ? '-1.7rem' : ''}">
   <app-ticket-list
       [courseid]="courseid"
-      *ngIf="(isParticipant$ | async) && (user$ | async)"
+      *ngIf="(user$ | async)?.osallistuja"
       (ticketMessage)="newTicketMessage($event)"
       [user]="(user$ | async)"
       >
@@ -150,7 +149,7 @@
   <div  class="buttons-wrapper theme-actions"
         *ngIf="((user$ | async)?.asema === 'opettaja' ||
                 (user$ | async)?.asema === 'admin') &&
-                (isParticipant$ | async)"
+                (user$ | async)?.osallistuja === true"
         >
 
     <button class="submit-faq-btn"

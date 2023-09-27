@@ -38,10 +38,10 @@ export class SenderInfoComponent implements OnInit {
 
   /**
    * Tiketin tehnyt käyttäjä.
-   * @type {(User | null)}
+   * @type {(User | null | undefined)}
    * @memberof SenderInfoComponent
    */
-  @Input() user: User | null = {} as User;
+  @Input() user: User | null | undefined = {} as User;
 
   /**
    * Asemoidaanko käyttäjätiedot vasemmalle puolelle.

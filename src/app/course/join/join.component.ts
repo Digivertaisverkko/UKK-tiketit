@@ -38,7 +38,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   public invitedInfo: InvitedInfo | undefined;
   public state: 'editing' | 'wrongUser' | 'error' = 'editing';
   public user: User | null | undefined;
-  private isLoggedIn: boolean | null | undefined;
+  // private isLoggedIn: boolean | null | undefined;
   private loggedIn$ = new Subscription;
 
   constructor(
@@ -54,7 +54,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     if (this.invitation === null) {
       console.error('Virhe: Ei UUID:ä.');
     }
-    this.loginIfNeeded();
+    // this.loginIfNeeded();
     this.trackUserInfo();
     this.getInvitedInfo();
   }
@@ -99,7 +99,7 @@ export class JoinComponent implements OnInit, OnDestroy {
     }
     this.courses.joinCourse(this.courseid, this.invitation).then(res => {
       this.error = null;
-      if (this.isLoggedIn !== true) {
+      if (this.user === null) {
         this.auth.saveRedirectURL();
         this.auth.navigateToLogin(this.courseid);
       }
@@ -122,10 +122,11 @@ export class JoinComponent implements OnInit, OnDestroy {
       this.courseName = response ?? '';
       this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Liity kurssille:
           Liity kurssille` + this.courseName);
-    }).catch((response) => {
+    }).catch(() => {
     });
   }
 
+  /*
   private loginIfNeeded(): void {
     this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
       if (response === false) {
@@ -137,12 +138,13 @@ export class JoinComponent implements OnInit, OnDestroy {
       }
     });
   }
+  */
 
   public logout() {
     this.auth.logout().then(res => {
       this.auth.saveRedirectURL();
       this.auth.navigateToLogin(this.courseid);
-    }).catch(err => {
+    }).catch(() => {
 
     })
   }
@@ -158,8 +160,12 @@ export class JoinComponent implements OnInit, OnDestroy {
   private trackUserInfo() {
     this.store.trackUserInfo().pipe(
         takeWhile(() => this.user === undefined)
-      ).subscribe(res => {
-      if (res?.nimi ) this.user = res;
+      ).subscribe(userinfo => {
+        if (userinfo === null) {
+          this.auth.saveRedirectURL();
+          this.auth.navigateToLogin(this.courseid);
+        }
+      if (userinfo?.nimi ) this.user = userinfo;
       if (this.user?.sposti && this.invitedInfo?.sposti) {
         if (this.user.sposti !== this.invitedInfo?.sposti) {
           this.setNotRightUser();

@@ -9,9 +9,8 @@ import { StoreService } from '@core/services/store.service';
 import { Title } from '@angular/platform-browser';
 
 /**
- * Sovelluksen esittelynäkymä. Tätä kirjoittaessa tähän näkymään ei ohjata
- * muualta, vaan tämän voi katsoa URL:lla. Jos URL sisältää pelkän domainin,
- * ohjataan tähän näkymään.
+ * Sovelluksen esittelynäkymä.Tähän näkymään ohjataan, jos URL sisältää pelkän
+ * domainin tai linkillä.
  *
  * @export
  * @class HomeComponent
@@ -44,8 +43,6 @@ export class HomeComponent implements OnInit {
         }
       });
     this.lang = localStorage.getItem('language')?.substring(0,2) ?? 'fi';
-
-    // tarkoituksella käännös ja suomennos hiukan eri.
   }
 
   ngOnInit(): void {

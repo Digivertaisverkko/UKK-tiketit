@@ -29,7 +29,7 @@ export class FaqViewComponent implements OnInit {
   public isCopyToClipboardPressed: boolean = false;
   public isLoaded: boolean = false;
   public ticket: Tiketti = {} as Tiketti;
-  public user$: Observable<User | null>;
+  public user$: Observable<User | null | undefined>;
   private faqID!: string;
 
   constructor(

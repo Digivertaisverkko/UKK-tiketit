@@ -1,8 +1,7 @@
 /**
- * Mallit, joista tämä moduuli vastaa ja joita voidaan käyttää muuallakin.
- * 
+ * Mallit, joista tämä moduuli vastaa ja joita käytetään muuallakin.
+ *
 */
-
 
 export interface LoginInfo  {
   'login-url': string;
@@ -14,12 +13,23 @@ export interface LoginResult {
   redirectUrl?: string
 };
 
-// Saadaan palvelimelta kirjauduttua.
+/**
+ * Saadaan palvelimelta kirjauduttua.
+ *
+ * @export
+ * @interface AuthInfo
+ */
 export interface AuthInfo {
   lti_login: boolean,
   perus: boolean
 }
 
+/**
+ * Palvelimen virheilmoitus.
+ *
+ * @export
+ * @interface Error
+ */
 export interface Error {
   tunnus: number;
   virheilmoitus?: string;
@@ -31,15 +41,27 @@ export interface GenericResponse {
   error: object
 }
 
+// Rooli on null, jos ei ole kurssille osallistujana.
 export type Role = 'opiskelija' | 'opettaja' | 'admin' | null;
 
-/* Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
-   'asemaStr' on käyttöliittymässä näytettävä, käännetty käyttäjän asema.
-*/
+/**
+ * Käyttäjätiedot.
+ *
+ * id        Käyttäjä id. On null, jos on kirjautuneena eri kurssille.
+ * nimi      Käyttäjän (muille näkyvä) nimi.
+ * sposti    Käyttäjän sähköpostiosoite.
+ * asema     Käyttäjän asema/rooli aktiivisella kurssilla.
+ * asemaStr  Käyttäliittymässä näkyvä, käännetty asema/rooli.
+ * osallistuja   Onko käyttäjä osallistujana aktiivisella kurssilla.
+ *
+ * @export
+ * @interface User
+ */
 export interface User {
   id?: number;
   nimi: string;
   sposti: string;
   asema: Role;
   asemaStr?: string
+  osallistuja?: boolean;
 }

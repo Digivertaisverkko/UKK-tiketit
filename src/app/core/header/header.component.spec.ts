@@ -163,8 +163,9 @@ describe('HeaderComponent', () => {
   it('shows working settings button when user role is teacher and is participant in course', fakeAsync(() => {
     component.courseid = '1';
     store.setLoggedIn();
-    store.setUserInfo(authDummyData.userInfoTeacher);
-    store.setParticipant(true);
+    let userInfo = authDummyData.userInfoTeacher;
+    userInfo.osallistuja = true;
+    store.setUserInfo(userInfo);
     fixture.detectChanges();
     tick();
     findEl(fixture, 'account-button').nativeElement.click();
@@ -180,8 +181,9 @@ describe('HeaderComponent', () => {
   it("doesn't show settings button when user role is teacher and not participant in course", fakeAsync(() => {
     component.courseid = '1';
     store.setLoggedIn();
-    store.setUserInfo(authDummyData.userInfoTeacher);
-    store.setParticipant(false);
+    let userInfo = authDummyData.userInfoTeacher;
+    userInfo.osallistuja = false;
+    store.setUserInfo(userInfo);
     fixture.detectChanges();
     tick();
     findEl(fixture, 'account-button').nativeElement.click();
@@ -194,8 +196,9 @@ describe('HeaderComponent', () => {
   it("doesn't show settings button when user role is student", fakeAsync(() => {
     component.courseid = '1';
     store.setLoggedIn();
-    store.setUserInfo(authDummyData.userInfoEsko);
-    store.setParticipant(true);
+    let userInfo = authDummyData.userInfoEsko;
+    userInfo.osallistuja = true;
+    store.setUserInfo(userInfo);
     fixture.detectChanges();
     tick();
     findEl(fixture, 'account-button').nativeElement.click();

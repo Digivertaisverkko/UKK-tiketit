@@ -48,7 +48,7 @@ export class AuthDummyData {
     }
   }
 
-  public get userInfoRinne() {
+  public get userInfoRinne(): User {
     return {
     id: 3,
     nimi: "Piia Rinne",
@@ -58,7 +58,7 @@ export class AuthDummyData {
     }
   }
 
-  public get userInfoTeacher() {
+  public get userInfoTeacher(): User {
     return {
     id: 2,
     nimi: "Marianna Laaksonen",

@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-/** Tällä otetaan console.log pois käytöstä production buildissa.
+/** Poistetaan console.log käytöstä production buildissa.
  *  Ei koske virheilmoituksia.
  */
 

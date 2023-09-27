@@ -23,7 +23,7 @@ describe('AuthService', () => {
   let fakeErrorService: jasmine.SpyObj<ErrorService>;
   let store: StoreService;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
       getMyCourses: undefined
     });
@@ -39,7 +39,8 @@ describe('AuthService', () => {
         { provide: ErrorService, useValue: fakeErrorService },
         StoreService
       ]
-    });
+    }).compileComponents();
+
     // { provide: StoreService, useValue: fakeStoreService }
     auth = TestBed.inject(AuthService);
     controller = TestBed.inject(HttpTestingController);
@@ -64,9 +65,8 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-      store.trackLoggedIn().subscribe(isLoggedIn => {
-        expect(isLoggedIn).toBeTrue();
-      });
+      const userInfo = store.getUserInfo();
+      expect(userInfo).toBeTruthy();
 
     }))
 
@@ -83,9 +83,8 @@ describe('AuthService', () => {
       request2.flush(null);
       tick();
 
-      store.trackLoggedIn().subscribe(isLoggedIn => {
-        expect(isLoggedIn).toBeFalse();
-      });
+      const userInfo = store.getUserInfo();
+      expect(userInfo).toBe(null);
 
     }));
 
@@ -97,7 +96,7 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-      store.trackUserInfo().subscribe((userInfo: User | null) => {
+      store.trackUserInfo().subscribe((userInfo: User | null | undefined) => {
         expect(userInfo?.id).toEqual(authDummyData.userInfoTeacher.id);
         expect(userInfo?.nimi).toEqual(authDummyData.userInfoTeacher.nimi);
         expect(userInfo?.sposti).toEqual(authDummyData.userInfoTeacher.sposti);
@@ -116,9 +115,8 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-      store.trackIfParticipant().subscribe(isParticipant => {
-        expect(isParticipant).toBeTrue();
-      })
+      const userInfo = store.getUserInfo();
+      expect(userInfo?.osallistuja).toBeTrue();
 
     }));
 
@@ -135,9 +133,8 @@ describe('AuthService', () => {
       request2.flush(authDummyData.minunOpettaja);
       tick();
 
-      store.trackLoggedIn().subscribe(isLoggedIn => {
-        expect(isLoggedIn).toBeTrue();
-      });
+      const userInfo = store.getUserInfo();
+      expect(userInfo).toBeTruthy();
 
     }));
 
@@ -154,8 +151,11 @@ describe('AuthService', () => {
       request2.flush(authDummyData.minunOpettaja);
       tick();
 
-      store.trackUserInfo().subscribe((userInfo: User | null) => {
-        expect(userInfo).toEqual(authDummyData.minunOpettaja);
+      const expectedUserInfo = authDummyData.minunOpettaja;
+      expectedUserInfo.osallistuja = false;
+
+      store.trackUserInfo().subscribe((userInfo: User | null | undefined) => {
+        expect(userInfo).toEqual(expectedUserInfo);
       })
 
     }));

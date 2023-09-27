@@ -26,8 +26,6 @@ export class FooterComponent  {
 
   public openPrivacyModal() {
     this.dialog.open(PrivacyModalComponent);
-    // privacyModal.afterClosed().subscribe(response => {
-    // })
   }
 
 }

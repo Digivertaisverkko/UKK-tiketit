@@ -77,7 +77,7 @@
           i18n="@@Profiili"
           i18n-aria-label="@@Profiili"
           mat-menu-item
-          *ngIf="(isLoggedIn$ | async) === true"
+          *ngIf="(user$ | async) !== null"
           >
     Profiili
   </button>
@@ -87,7 +87,7 @@
           mat-menu-item
           *ngIf="((user$ | async)?.asema === 'opettaja' ||
                   (user$ | async)?.asema === 'admin') &&
-                  (isParticipant$ | async) === true"
+                  (user$ | async)?.osallistuja === true"
                   (click)="goTo('settings')"
           >
     Kurssin asetukset
@@ -97,7 +97,7 @@
           data-testid="login-button"
           i18n="@@Kirjaudu sisään"
           mat-menu-item
-          *ngIf="(isLoggedIn$ | async) === false"
+          *ngIf="(user$ | async) === null"
           >
     Kirjaudu sisään
   </button>
@@ -106,7 +106,7 @@
           data-testid="logout-button"
           i18n="@@Kirjaudu ulos"
           mat-menu-item
-          *ngIf="(isLoggedIn$ | async) === true"
+          *ngIf="(user$ | async) !== null"
           >
     Kirjaudu ulos
   </button>

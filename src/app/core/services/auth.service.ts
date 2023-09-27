@@ -96,7 +96,6 @@ export class AuthService {
       window.localStorage.removeItem('redirectUrl')
     }
     this.store.setLoggedIn();
-    this.store.setParticipant(null);
     window.sessionStorage.clear();
   } else {
     loginResult = { success: false };
@@ -158,28 +157,23 @@ export class AuthService {
     } catch (error: any) {
       response = null;
     }
-
     let userInfo: any;
     if (response != null && response?.oikeudet != null)  {
       userInfo = response.oikeudet;
+      userInfo.osallistuja = true;
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
       userInfo.asemaStr = this.getRoleString(userInfo.asema);
-      this.store.setLoggedIn();
-      this.store.setParticipant(true);
+      // this.store.setLoggedIn();
     } else {
-      this.store.setParticipant(false);
       console.warn(`Käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
       // Haetaan käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
       const response = await this.fetchVisitorInfo();
+      userInfo = response;
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
-        userInfo = response ;
         userInfo.asema = null;
-        this.store.setLoggedIn();
-      } else {
-        this.store.setNotLoggegIn();
-        return
+        userInfo.osallistuja = false;
       }
     }
     this.store.setUserInfo(userInfo);
@@ -358,7 +352,6 @@ export class AuthService {
     }
     this.store.setNotLoggegIn();
     this.store.setUserInfo(null);
-    this.store.setParticipant(null);
     this.store.unsetPosition();
     this.store.setCourseName('');
     window.sessionStorage.clear();
@@ -366,7 +359,7 @@ export class AuthService {
   }
 
   /**
-   * Poista tieto, että ollaan kieltäydytty datan luovutuksesta.
+   * Poista tieto ollaanko kieltäydytty tietojen luovutuksesta.
    *
    * @memberof AuthService
    */

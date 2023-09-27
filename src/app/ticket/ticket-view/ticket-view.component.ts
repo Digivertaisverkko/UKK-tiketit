@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, Subject, Subscription, takeUntil, tap, timer } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil, takeWhile, tap, timer } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { Validators as EditorValidators } from 'ngx-editor';
 
@@ -69,13 +69,13 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   /**
    * Parent komponentilta mahdollisesti tuleva tiketti ID. Saadaan, jos
-   * komponentti on upotettuna "Kopioi UKK":ksi -toimintoa käytettäessä. 
+   * komponentti on upotettuna "Kopioi UKK":ksi -toimintoa käytettäessä.
    *
    * @type {(string | null)}
    * @memberof TicketViewComponent
    */
   @Input() ticketIdFromParent: string | null = null;
-  
+
   @ViewChild(EditAttachmentsComponent) attachments!: EditAttachmentsComponent;
   public attachFilesText: string = '';
   public editingCommentIDParent: string | null = null;
@@ -96,7 +96,8 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public ticket: Tiketti = {} as Tiketti;
   public ticketID: string;
   public uploadClick = new Subject<string>();
-  public user: User = {} as User;
+  public user: User | null | undefined;
+  // public user: User = {} as User;
   public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
   private loggedIn$: Observable<boolean|null>
@@ -123,7 +124,14 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.trackLoggedIn();
-    this.store.trackUserInfo().subscribe(response => {
+    this.store.trackUserInfo().pipe(
+      takeWhile(response => this.user === undefined)
+        ).subscribe(response => {
+      if (response === null) {
+        const route = `/course/${this.courseid}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
+      if (response === undefined ) return
       this.isLoaded = true;
       if (response?.nimi != null) {
         this.user = response;
@@ -135,7 +143,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
           if (!this.isPolling) this.startPollingTicket();
         }
       }
-      if (this.user.asema === 'opettaja' || this.user.asema ==='admin') {
+      if (this.user?.asema === 'opettaja' || this.user?.asema ==='admin') {
         this.attachFilesText = $localize `:@@Liitä:liitä`;
       } else {
         this.attachFilesText = $localize `:@@Liitä tiedostoja:Liitä tiedostoja`;
@@ -192,7 +200,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
 
   public copyAsFAQ() {
     // Jos on vaihtunut toisessa sessiossa, niin ei ole päivittynyt.
-    if (this.user.asema !== 'opettaja' && this.user.asema !== 'admin') {
+    if (this.user?.asema !== 'opettaja' && this.user?.asema !== 'admin') {
       this.errorMessage = `:@@Ei oikeuksia:Sinulla ei ole tarvittavia käyttäjäoikeuksia` + '.';
     }
     this.attachments.clear();
@@ -217,7 +225,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
         return
       }
       this.ticket = response;
-      if (this.ticket.aloittaja.id === this.user.id) {
+      if (this.ticket.aloittaja.id === this.user!.id) {
         this.isEditable = true;
       }
       this.titleServ.setTitle(this.store.getBaseTitle() + response.otsikko);
@@ -243,6 +251,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   }
 
   public getCommentState(tila: number) {
+    if (this.user === undefined || this.user === null) return
     return this.ticketService.getTicketState(tila, this.user.asema);
   }
 
