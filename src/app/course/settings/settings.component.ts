@@ -278,6 +278,7 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  // Ohjaa /forbidden, jos käyttäjä ei ole kurssille osallistuja.
   private trackIfParticipant() {
     let participant: boolean | null = false;
     this.store.trackIfParticipant().pipe(
@@ -311,6 +312,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  // Ohjaa /forbidden, jos rooli on opiskelija.
   private trackUserInfo() {
     let user: User | undefined | null = null;
     this.store.trackUserInfo().pipe(

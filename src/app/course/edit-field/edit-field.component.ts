@@ -5,7 +5,9 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
+import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { User } from '@core/core.models';
 
 import { getArraysStringLength } from '@shared/directives/array-length.directive';
 import { CourseService } from '../course.service';
@@ -81,6 +83,8 @@ export class EditFieldComponent implements OnInit {
 
   ngOnInit(): void {
     // Kentän id on uutta kenttää tehdessä null.
+    this.trackUserInfo();
+    this.trackIfParticipant();
     if (this.fieldid === undefined) {
       this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
@@ -88,7 +92,6 @@ export class EditFieldComponent implements OnInit {
       this.form.controls['mandatory'].setValue(false);
       this.isLoaded = true;
     } else {
-      // this.startPollingFields(this.POLLING_RATE_MIN);
       this.getFieldInfo(this.courseid, this.fieldid);
     }
   }
@@ -257,6 +260,34 @@ export class EditFieldComponent implements OnInit {
         this.errorMessage = $localize `:@@Lisäkentän muokkaaminen epäonnistui:Lisäkentän muokkaaminen epäonnistui` + '.';
       }
       return
+    })
+  }
+
+  // Ohjaa /forbidden, jos käyttäjä ei ole kurssille osallistuja.
+  private trackIfParticipant() {
+    let participant: boolean | null = false;
+    this.store.trackIfParticipant().pipe(
+      takeWhile(res => participant === null)
+    ).subscribe(res => {
+      participant = res;
+      if (res === false) {
+        const route = `/course/${this.courseid}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
+    })
+  }
+
+  // Ohjaa /forbidden, jos rooli on opiskelija.
+  private trackUserInfo() {
+    let user: User | undefined | null = null;
+    this.store.trackUserInfo().pipe(
+      takeWhile((res) => user === undefined)
+      ).subscribe(res => {
+      if (res?.nimi ) user = res;
+      if (res?.asema === 'opiskelija') {
+        const route = `/course/${this.courseid}/forbidden`;
+        this.router.navigateByUrl(route);
+      }
     })
   }
 
