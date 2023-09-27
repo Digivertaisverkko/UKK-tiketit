@@ -79,7 +79,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public isInIframe: boolean;
   public isLoaded: boolean = false;
   public isLoggedIn$: Observable<boolean | null>;
-  public isParticipant$: Observable<boolean | null>
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean | null;
@@ -115,7 +114,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
         true : false;
-    this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
       { def: 'otsikko', showMobile: true },

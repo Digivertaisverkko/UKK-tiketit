@@ -33,7 +33,6 @@ export class HeaderComponent implements OnInit {
   @Input() courseid: string | null = null;
   public disableLangSelect: boolean = false;
   public isLoggedIn$: Observable<Boolean | null>;
-  public isParticipant$: Observable<Boolean | null>;
   public readonly maxUserLength = 40;
   public user: User | null | undefined;
   public user$: Observable<User | null | undefined>;
@@ -50,7 +49,6 @@ export class HeaderComponent implements OnInit {
     ) {
     this.handsetPB$ = this.responsive.observe(Breakpoints.HandsetPortrait);
     this.isLoggedIn$ = this.store.trackLoggedIn();
-    this.isParticipant$ = this.store.trackIfParticipant();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     this.user$ = this.store.trackUserInfo();
   }

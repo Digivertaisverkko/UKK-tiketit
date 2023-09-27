@@ -10,7 +10,6 @@ import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 import { LoginInfo, LoginResult, User } from '@core/core.models';
 import { StoreService } from './store.service';
-import { ɵcompileComponent } from '@angular/core';
 
 let api = environment.apiBaseUrl;
 const courseID = '1';
@@ -118,9 +117,9 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-      store.trackIfParticipant().subscribe(isParticipant => {
-        expect(isParticipant).toBeTrue();
-      })
+
+      const userInfo = store.getUserInfo();
+        expect(userInfo?.osallistuja).toBeTrue();
 
     }));
 
@@ -156,8 +155,11 @@ describe('AuthService', () => {
       request2.flush(authDummyData.minunOpettaja);
       tick();
 
+      const expectedUserInfo = authDummyData.minunOpettaja;
+      expectedUserInfo.osallistuja = false;
+
       store.trackUserInfo().subscribe((userInfo: User | null | undefined) => {
-        expect(userInfo).toEqual(authDummyData.minunOpettaja);
+        expect(userInfo).toEqual(expectedUserInfo);
       })
 
     }));

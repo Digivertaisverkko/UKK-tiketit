@@ -41,22 +41,27 @@ export interface GenericResponse {
   error: object
 }
 
+// Rooli on null, jos ei ole kurssille osallistujana.
 export type Role = 'opiskelija' | 'opettaja' | 'admin' | null;
 
 /**
  * Käyttäjätiedot.
  *
- * id on null, jos on kirjautuneena eri kurssille.
+ * id        Käyttäjä id. On null, jos on kirjautuneena eri kurssille.
+ * nimi      Käyttäjän (muille näkyvä) nimi.
+ * sposti    Käyttäjän sähköpostiosoite.
+ * asema     Käyttäjän asema/rooli aktiivisella kurssilla.
+ * asemaStr  Käyttäliittymässä näkyvä, käännetty asema/rooli.
+ * osallistuja   Onko käyttäjä osallistujana aktiivisella kurssilla.
  *
  * @export
  * @interface User
  */
-/// Jos ollaan kirjautunena eri kurssille, ei saada id:ä.
-// 'asemaStr' on käyttöliittymässä näytettävä, käännetty käyttäjän asema
 export interface User {
   id?: number;
   nimi: string;
   sposti: string;
   asema: Role;
   asemaStr?: string
+  osallistuja?: boolean;
 }

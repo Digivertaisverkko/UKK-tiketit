@@ -77,8 +77,9 @@ describe('EditFieldComponent', () => {
         component = fixture.componentInstance;
         component.courseid = '1';
         store.setLoggedIn();
-        store.setUserInfo(authDummyData.userInfoTeacher);
-        store.setParticipant(true);
+        let userInfo = authDummyData.userInfoTeacher;
+        userInfo.osallistuja = true;
+        store.setUserInfo(userInfo);
       });
 
       it('should create', () => {

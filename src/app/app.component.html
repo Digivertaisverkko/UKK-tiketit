@@ -78,7 +78,7 @@
                 mat-menu-item
                 *ngIf="((user$ | async)?.asema === 'opettaja' ||
                         (user$ | async)?.asema === 'admin') &&
-                        (isParticipant$ | async) === true &&
+                        (user$ | async)?.osallistuja === true &&
                         courseid"
                 (click)="goTo('settings')"
                 >

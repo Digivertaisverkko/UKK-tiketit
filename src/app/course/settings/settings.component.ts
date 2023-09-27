@@ -72,7 +72,6 @@ export class SettingsComponent implements OnInit {
     this.titleServ.setTitle(this.store.getBaseTitle() + $localize
         `:@@Kurssin asetukset:Kurssin asetukset`);
     this.trackUserInfo();
-    this.trackIfParticipant();
     this.startPollingFields(this.POLLING_RATE_MIN);
   }
 
@@ -278,20 +277,6 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  // Ohjaa /forbidden, jos käyttäjä ei ole kurssille osallistuja.
-  private trackIfParticipant() {
-    let participant: boolean | null = false;
-    this.store.trackIfParticipant().pipe(
-      takeWhile(res => participant === null)
-    ).subscribe(res => {
-      participant = res;
-      if (res === false) {
-        const route = `/course/${this.courseid}/forbidden`;
-        this.router.navigateByUrl(route);
-      }
-    })
-  }
-
   // Hae tiketit tietyn ajan välein.
   private startPollingFields(POLLING_RATE_MIN: number) {
     console.log(`Aloitetaan kenttäpohjien pollaus joka ${POLLING_RATE_MIN} minuutti.`);
@@ -319,7 +304,8 @@ export class SettingsComponent implements OnInit {
       takeWhile((res) => user === undefined)
       ).subscribe(res => {
       if (res?.nimi ) user = res;
-      if (res?.asema === 'opiskelija') {
+      if (user === null || user?.asema === 'opiskelija' ||
+            user?.osallistuja === false)  {
         const route = `/course/${this.courseid}/forbidden`;
         this.router.navigateByUrl(route);
       }

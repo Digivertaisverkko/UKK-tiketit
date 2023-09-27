@@ -34,7 +34,6 @@ export class AppComponent implements OnInit, OnDestroy  {
   public isLogged: boolean = false;
   public isLoggedIn$: Observable<Boolean | null>;
   public isLoading: Observable<boolean> | null = null;
-  public isParticipant$: Observable<Boolean | null>;
   public logButtonString: string = '';
   public user$: Observable<User | null | undefined>;
   private _language!: string;
@@ -49,7 +48,6 @@ export class AppComponent implements OnInit, OnDestroy  {
     ) {
     this.isLoading = this.store.trackLoading();
     this.isLoggedIn$ = this.store.trackLoggedIn();
-    this.isParticipant$ = this.store.trackIfParticipant();
     this.user$ = this.store.trackUserInfo();
   }
 
@@ -59,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
     this.authService.initialize();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    // Upotuksen testaamisen uncomment alla oleva ja
+    // Huom. ! Upotuksen testaamisen uncomment alla oleva ja
     // kommentoi sen alla oleva rivi.
     // this.isInIframe = true;
     this.isInIframe = this.getIsInIframe();

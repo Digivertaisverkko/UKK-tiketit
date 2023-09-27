@@ -43,7 +43,6 @@ export class StoreService {
   private headline: Headline | null = null;
   private isLoading$: Subject<boolean> = new Subject();
   private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
-  private isParticipant$ = new BehaviorSubject<boolean | null>(null);
   private messageEmitter$ = new Subject<string>();
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null | undefined>(undefined);
@@ -277,18 +276,6 @@ export class StoreService {
   }
 
   /**
-   * Aseta onko käyttäjä on kurssin osallistuja.
-   *
-   * @param {(boolean | null)} newIsParticipant
-   * @memberof StoreService
-   */
-  public setParticipant(newIsParticipant: boolean | null): void {
-    if (newIsParticipant !== this.isParticipant$.value) {
-      this.isParticipant$.next(newIsParticipant);
-    }
-  }
-
-  /**
    * Aseta näkymän vierityksen kohta.
    *
    * @param {string} url
@@ -301,10 +288,6 @@ export class StoreService {
 
   public onIsUserLoggedIn(): Observable<any> {
     return this.isLoggedIn$.asObservable();
-  }
-
-  public trackIfParticipant(): Observable<boolean | null> {
-    return this.isParticipant$.asObservable();
   }
 
   /**

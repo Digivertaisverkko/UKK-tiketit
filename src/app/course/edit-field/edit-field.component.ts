@@ -84,7 +84,6 @@ export class EditFieldComponent implements OnInit {
   ngOnInit(): void {
     // Kentän id on uutta kenttää tehdessä null.
     this.trackUserInfo();
-    this.trackIfParticipant();
     if (this.fieldid === undefined) {
       this.titleServ.setTitle(this.store.getBaseTitle() + $localize
           `:@@Uusi lisäkenttä:Uusi lisäkenttä`);
@@ -263,28 +262,15 @@ export class EditFieldComponent implements OnInit {
     })
   }
 
-  // Ohjaa /forbidden, jos käyttäjä ei ole kurssille osallistuja.
-  private trackIfParticipant() {
-    let participant: boolean | null = false;
-    this.store.trackIfParticipant().pipe(
-      takeWhile(res => participant === null)
-    ).subscribe(res => {
-      participant = res;
-      if (res === false) {
-        const route = `/course/${this.courseid}/forbidden`;
-        this.router.navigateByUrl(route);
-      }
-    })
-  }
-
-  // Ohjaa /forbidden, jos rooli on opiskelija.
+  // Ohjaa /forbidden, jos ei ole kurssille osallistuva opettaja.
   private trackUserInfo() {
     let user: User | undefined | null = null;
     this.store.trackUserInfo().pipe(
       takeWhile((res) => user === undefined)
       ).subscribe(res => {
       if (res?.nimi ) user = res;
-      if (res?.asema === 'opiskelija') {
+      if (user === null || user?.asema === 'opiskelija' ||
+            user?.osallistuja === false) {
         const route = `/course/${this.courseid}/forbidden`;
         this.router.navigateByUrl(route);
       }

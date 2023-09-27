@@ -53,11 +53,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.store.setUserInfo(null);
   }
 
-  // Jos tullaan näkymistä tänne, virheilmoituksia voidaa näyttää, jos nämä
-  // asetetaan aiemmin.
+  // Varmistus. Jos tullaan näkymistä tänne, virheilmoituksia voidaa näyttää,
+  // jos nämä asetetaan aiemmin.
   ngAfterViewInit(): void {
     this.store.setNotLoggegIn();
-    this.store.setParticipant(null);
   }
 
   private buildForm(): FormGroup {
