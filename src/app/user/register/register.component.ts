@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -32,7 +32,7 @@ import { User } from '@core/core.models';
   styleUrls: ['../login/login.component.scss']
 })
 
-export class RegisterComponent implements OnInit, OnDestroy{
+export class RegisterComponent implements OnInit {
 
   @Input() courseid!: string;
   @Input() invitation: string = '';
@@ -106,10 +106,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
       this.state = 'error';
       this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
     })
-  }
-
-  ngOnDestroy(): void {
-    // this.isLoggedIn$?.unsubscribe();
   }
 
   private buildForm(): FormGroup {
