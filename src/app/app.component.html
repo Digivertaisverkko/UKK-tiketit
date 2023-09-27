@@ -68,7 +68,7 @@
                 i18n="@@Profiili"
                 i18n-aria-label="@@Profiili"
                 mat-menu-item
-                *ngIf="(user$ | async) != null && courseid"
+                *ngIf="(user$ | async) !== null && courseid"
                 >
           Profiili
         </button>

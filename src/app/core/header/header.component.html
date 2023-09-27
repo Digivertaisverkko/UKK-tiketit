@@ -77,7 +77,7 @@
           i18n="@@Profiili"
           i18n-aria-label="@@Profiili"
           mat-menu-item
-          *ngIf="(user$ | async) != null"
+          *ngIf="(user$ | async) !== null"
           >
     Profiili
   </button>
@@ -106,7 +106,7 @@
           data-testid="logout-button"
           i18n="@@Kirjaudu ulos"
           mat-menu-item
-          *ngIf="(user$ | async) != null"
+          *ngIf="(user$ | async) !== null"
           >
     Kirjaudu ulos
   </button>
