@@ -46,6 +46,8 @@ export type Role = 'opiskelija' | 'opettaja' | 'admin' | null;
 /**
  * Käyttäjätiedot.
  *
+ * id on null, jos on kirjautuneena eri kurssille.
+ *
  * @export
  * @interface User
  */

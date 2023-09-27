@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy  {
   public isLoading: Observable<boolean> | null = null;
   public isParticipant$: Observable<Boolean | null>;
   public logButtonString: string = '';
-  public user$: Observable<User | null>;
+  public user$: Observable<User | null | undefined>;
   private _language!: string;
   private unsubscribe$ = new Subject<void>();
 

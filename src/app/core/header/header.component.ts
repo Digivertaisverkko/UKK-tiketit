@@ -35,8 +35,8 @@ export class HeaderComponent implements OnInit {
   public isLoggedIn$: Observable<Boolean | null>;
   public isParticipant$: Observable<Boolean | null>;
   public readonly maxUserLength = 40;
-  public user: User | null = null;
-  public user$: Observable<User | null>;
+  public user: User | null | undefined;
+  public user$: Observable<User | null | undefined>;
   public userRole: string = '';
   public handsetPB$: Observable<BreakpointState>;
   private _language!: string;

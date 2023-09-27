@@ -34,7 +34,7 @@
               [disabled]="state==='sending'"
               i18n="@@Kopioi UKK"
               mat-raised-button
-              *ngIf="(user.asema === 'opettaja' || user.asema === 'admin')"
+              *ngIf="(user?.asema === 'opettaja' || user?.asema === 'admin')"
               >
         Kopioi UKK:ksi
       </button>
@@ -67,7 +67,7 @@
                 [disabled]="state === 'sending'"
                 i18n="@@Poista"
                 mat-raised-button
-                *ngIf="ticket.aloittaja.id === user.id && isRemovePressed === false"
+                *ngIf="ticket.aloittaja.id === user?.id && isRemovePressed === false"
                 >
           Poista
         </button>
@@ -225,7 +225,7 @@
         <mat-radio-group
             align="start"
             [disabled]="state === 'sending'"
-            *ngIf="user.asema === 'opettaja' || user.asema ==='admin'"
+            *ngIf="user?.asema === 'opettaja' || user?.asema ==='admin'"
             [(ngModel)]="newCommentState"
             [ngModelOptions]="{standalone: true}"
             >

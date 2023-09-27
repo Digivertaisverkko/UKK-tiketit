@@ -87,7 +87,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public screenSize: 'handset' | 'small' | 'other' = 'other';
   public strings: Map<string, string>;
   public successMessage: string | null = null;
-  public user$: Observable<User | null>;
+  public user$: Observable<User | null | undefined>;
 
   private columnDefinitions: ColumnDefinition[];
   private fetchFAQsTimer$: Observable<number>;

@@ -78,7 +78,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
 
   // UKK:sta kopioitaessa @Input:na courseid oli undefined.
   @Input() public courseid: string = '';
-  @Input() public user: User | null = null;
+  @Input() public user: User | null | undefined;
   @Output() ticketMessage = new EventEmitter<string>();
   public archivedCount: number = 0;
   public columnDefinitions!: ColumnDefinition[];

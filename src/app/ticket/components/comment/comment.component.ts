@@ -110,7 +110,7 @@ export class CommentComponent implements AfterViewInit, OnInit{
   public state: 'editing' | 'sending' | 'done' = 'editing';  // Sivun tila
   public strings: Map<string, string>;
   public uploadClick = new Subject<string>();
-  public user: User | null;
+  public user: User | null | undefined;
 
   get message(): FormControl {
     return this.form.get('message') as FormControl;

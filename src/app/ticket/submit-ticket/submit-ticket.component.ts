@@ -48,7 +48,7 @@ export class SubmitTicketComponent implements OnInit {
   public ticketId: string | null = null;
   public titlePlaceholder: string = '';
   public uploadClick = new Subject<string>();
-  public user$: Observable<User | null>;
+  public user$: Observable<User | null | undefined>;
   // Listausnäkymään palattaessa näytä virheviesti.
   private commentID: string | null = null;
   private errorForListing: string | undefined;

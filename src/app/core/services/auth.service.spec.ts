@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
 import { LoginInfo, LoginResult, User } from '@core/core.models';
 import { StoreService } from './store.service';
+import { ɵcompileComponent } from '@angular/core';
 
 let api = environment.apiBaseUrl;
 const courseID = '1';
@@ -23,7 +24,7 @@ describe('AuthService', () => {
   let fakeErrorService: jasmine.SpyObj<ErrorService>;
   let store: StoreService;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     fakeCourseService = jasmine.createSpyObj('CourseService', {
       getMyCourses: undefined
     });
@@ -39,7 +40,8 @@ describe('AuthService', () => {
         { provide: ErrorService, useValue: fakeErrorService },
         StoreService
       ]
-    });
+    }).compileComponents();
+
     // { provide: StoreService, useValue: fakeStoreService }
     auth = TestBed.inject(AuthService);
     controller = TestBed.inject(HttpTestingController);
@@ -97,7 +99,7 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-      store.trackUserInfo().subscribe((userInfo: User | null) => {
+      store.trackUserInfo().subscribe((userInfo: User | null | undefined) => {
         expect(userInfo?.id).toEqual(authDummyData.userInfoTeacher.id);
         expect(userInfo?.nimi).toEqual(authDummyData.userInfoTeacher.nimi);
         expect(userInfo?.sposti).toEqual(authDummyData.userInfoTeacher.sposti);
@@ -154,7 +156,7 @@ describe('AuthService', () => {
       request2.flush(authDummyData.minunOpettaja);
       tick();
 
-      store.trackUserInfo().subscribe((userInfo: User | null) => {
+      store.trackUserInfo().subscribe((userInfo: User | null | undefined) => {
         expect(userInfo).toEqual(authDummyData.minunOpettaja);
       })
 

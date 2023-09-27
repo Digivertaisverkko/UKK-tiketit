@@ -158,7 +158,6 @@ export class AuthService {
     } catch (error: any) {
       response = null;
     }
-
     let userInfo: any;
     if (response != null && response?.oikeudet != null)  {
       userInfo = response.oikeudet;
@@ -179,6 +178,7 @@ export class AuthService {
         this.store.setLoggedIn();
       } else {
         this.store.setNotLoggegIn();
+        this.store.setUserInfo(null);
         return
       }
     }

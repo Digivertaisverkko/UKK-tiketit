@@ -15,8 +15,8 @@ interface Headline {
 }
 
 /**
- * 
- * Tallennetaan ja palautetaan muistissa olevia globaaleja muuttujia ja vakioita, 
+ *
+ * Tallennetaan ja palautetaan muistissa olevia globaaleja muuttujia ja vakioita,
  * eli ohjelman state. Tämä rakennetaan uudestaan näkymiä vaihdettassa eikä
  * tallenneta sessioiden välilä. Komponenttien ja niiden lapsien tai vanhempien
  * välinen tiedonvaihto käydään suoraan niiden välillä @Input ja @Output -
@@ -46,7 +46,7 @@ export class StoreService {
   private isParticipant$ = new BehaviorSubject<boolean | null>(null);
   private messageEmitter$ = new Subject<string>();
   private positions: { [url: string]: number } = {};
-  private user$ = new BehaviorSubject<User | null>(null);
+  private user$ = new BehaviorSubject<User | null | undefined>(undefined);
 
   constructor() {
 
@@ -137,13 +137,17 @@ export class StoreService {
   }
 
   /**
-   * Käyttäjän tiedot kurssilla, johon ollaan kirjautuneena.
+   * Käyttäjän tiedot.
+   *
+   * undefined  Tietoja ei olla vielä haettu.
+   * null       Käyttäjä ei ole kirjautunut. Voi olla kirjautuneena
+   *            eri kurssille.
    *
    * @return {*}  {(User | null)}
    * @memberof StoreService
    */
-  public getUserInfo(): User | null {
-    const user: User | null = this.user$.value;
+  public getUserInfo(): User | null | undefined {
+    const user = this.user$.value;
     return user;
   }
 
@@ -179,7 +183,7 @@ export class StoreService {
    * @return {*}  {(Observable<User | null>)}
    * @memberof StoreService
    */
-  public trackUserInfo(): Observable<User | null> {
+  public trackUserInfo(): Observable<User | null | undefined> {
     return this.user$.asObservable();
   }
 
@@ -283,7 +287,7 @@ export class StoreService {
       this.isParticipant$.next(newIsParticipant);
     }
   }
-  
+
   /**
    * Aseta näkymän vierityksen kohta.
    *
