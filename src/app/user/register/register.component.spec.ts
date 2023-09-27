@@ -36,6 +36,7 @@ describe('RegisterComponent', () => {
   let invitationID: string;
   let loader: HarnessLoader;
   let courseID: string;
+  let store: StoreService;
 
   describe('Course 1', () => {
 
@@ -82,13 +83,14 @@ describe('RegisterComponent', () => {
           { provide: ComponentFixtureAutoDetect, useValue: true },
           { provide: AuthService, useValue: fakeAuthService },
           { provide: CourseService, useValue: fakeCourseService },
-          { provide: StoreService, useValue: fakeStoreService }
+          StoreService
         ]
       })
       .compileComponents();
 
       fixture = TestBed.createComponent(RegisterComponent);
       loader = TestbedHarnessEnvironment.loader(fixture);
+
       component = fixture.componentInstance;
       // @Input -arvoja, jotka otetaan URL:sta.
       component.invitation = invitationID;
@@ -202,7 +204,7 @@ describe('RegisterComponent', () => {
           { provide: ComponentFixtureAutoDetect, useValue: true },
           { provide: AuthService, useValue: fakeAuthService },
           { provide: CourseService, useValue: fakeCourseService },
-          { provide: StoreService, useValue: fakeStoreService }
+          StoreService
         ]
       })
       .compileComponents();

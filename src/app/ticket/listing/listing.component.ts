@@ -5,7 +5,7 @@ import { DatePipe } from '@angular/common';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { Observable, Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil, takeWhile, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 
@@ -78,7 +78,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   public errorFromComponent: string | null = null;
   public isInIframe: boolean;
   public isLoaded: boolean = false;
-  public isLoggedIn$: Observable<boolean | null>;
   public isPhonePortrait: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public noDataConsent: boolean | null;
@@ -111,7 +110,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.authService.getDenyDataConsent();
     this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
-    this.isLoggedIn$ = this.store.trackLoggedIn();
     this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
         true : false;
     this.user$ = this.store.trackUserInfo();
@@ -132,6 +130,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.url = window.location.pathname;
+    this.trackUserInfo();
     this.checkRouterData();
     this.startPollingFAQ(this.POLLING_RATE_MIN);
     // this.trackLoggedStatus();
@@ -282,6 +281,20 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.screenSize = "other";
       }
     });
+  }
+
+  private trackUserInfo() {
+    let user: User | undefined | null = null;
+    this.store.trackUserInfo().pipe(
+      takeWhile((res) => user === undefined)
+      ).subscribe(userinfo => {
+        if (userinfo === null) {
+          this.isLoaded = true;
+          this.setError('notLoggedIn');
+        } else if (userinfo !== undefined) {
+          this.error === null;
+        }
+    })
   }
 
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.

@@ -32,8 +32,9 @@ export class HeaderComponent implements OnInit {
   // public courseID: string | null = this.utils.getCourseIDfromURL();
   @Input() courseid: string | null = null;
   public disableLangSelect: boolean = false;
-  public isLoggedIn$: Observable<Boolean | null>;
   public readonly maxUserLength = 40;
+  // Osassa template syntakseja vähemmän vaikeasti luettava, kun observablen
+  // sijaan käyttää tätä.
   public user: User | null | undefined;
   public user$: Observable<User | null | undefined>;
   public userRole: string = '';
@@ -48,7 +49,6 @@ export class HeaderComponent implements OnInit {
     private store : StoreService
     ) {
     this.handsetPB$ = this.responsive.observe(Breakpoints.HandsetPortrait);
-    this.isLoggedIn$ = this.store.trackLoggedIn();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
     this.user$ = this.store.trackUserInfo();
   }

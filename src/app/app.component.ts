@@ -31,8 +31,6 @@ export class AppComponent implements OnInit, OnDestroy  {
   public disableLangSelect: boolean = false;
   public isPhonePortrait = false;
   public isInIframe: boolean = false;
-  public isLogged: boolean = false;
-  public isLoggedIn$: Observable<Boolean | null>;
   public isLoading: Observable<boolean> | null = null;
   public logButtonString: string = '';
   public user$: Observable<User | null | undefined>;
@@ -47,7 +45,6 @@ export class AppComponent implements OnInit, OnDestroy  {
     private utils : UtilsService
     ) {
     this.isLoading = this.store.trackLoading();
-    this.isLoggedIn$ = this.store.trackLoggedIn();
     this.user$ = this.store.trackUserInfo();
   }
 
@@ -64,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackCourseID();
-    this.trackLoginStatus();
+    // this.trackLoginStatus();
   }
 
   ngOnDestroy(): void {
@@ -138,21 +135,6 @@ export class AppComponent implements OnInit, OnDestroy  {
       // Ei toimi route.paramMap upotuksessa.
       this.courseid = this.utils.getCourseIDfromURL();
     })
-  }
-
-  private trackLoginStatus() {
-    this.store.onIsUserLoggedIn()
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      ).subscribe(response => {
-      if (response) {
-        this.isLogged = true;
-        this.logButtonString = $localize`:@@Kirjaudu ulos:Kirjaudu ulos`;
-      } else if (!response) {
-        this.isLogged = false;
-        this.logButtonString = $localize`:@@Kirjaudu sisään:Kirjaudu sisään`;
-      }
-    });
   }
 
 }

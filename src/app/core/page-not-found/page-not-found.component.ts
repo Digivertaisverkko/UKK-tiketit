@@ -37,7 +37,6 @@ import { StoreService } from '../services/store.service';
 })
 
 export class PageNotFoundComponent {
-  public isLoggedIn: Boolean | null = null;
   @Input() courseid: string | undefined;
 
   constructor(
@@ -48,14 +47,6 @@ export class PageNotFoundComponent {
     ) {
     this.title.setTitle(this.store.getBaseTitle() + $localize
         `:@404-otsikko:Sivua ei löytynyt`);
-      this.isLoggedIn = this.store.getIsLoggedIn();
-  }
-
-  public async goToLogin() {
-    if (!this.courseid) return
-    const res = await this.authService.getLoginInfo('own', this.courseid);
-    const loginUrl = res['login-url'];
-    this.router.navigateByUrl(loginUrl);
   }
 
 }

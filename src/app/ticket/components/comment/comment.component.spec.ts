@@ -62,11 +62,11 @@ describe('CommentComponent', () => {
     component.courseid = '1';
     component.isInCopyAsFAQ = false;
     component.ticketID = '3';
+    let userInfo = authDymmyData.userInfoTeacher
+    userInfo.osallistuja = true;
     component.user = authDymmyData.userInfoTeacher;
     // Kommentin lähettäjä.
-    store.setUserInfo(authDymmyData.userInfoTeacher);
-    store.setLoggedIn();
-    store.setParticipant(true);
+        store.setUserInfo(authDymmyData.userInfoTeacher);
     fixture.detectChanges();
   });
 

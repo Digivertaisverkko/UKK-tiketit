@@ -12,6 +12,7 @@ import { StoreService } from '@core/services/store.service';
 import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 import { CourseService } from '@course/course.service';
 import { LoginInfo } from '@core/core.models';
+import { User } from '@core/core.models';
 
 /**
  * Näkymä, jossa uusi käyttäjä pystyy luomaan käyttäjätilin. Käyttäjä on saanut
@@ -39,8 +40,9 @@ export class RegisterComponent implements OnInit, OnDestroy{
   public form: FormGroup;
   public errorMessage: string = '';
   public invitedInfo: InvitedInfo | undefined;
-  public isLoggedIn$: Subscription | null = null;
-  public isLoggedIn: boolean | null | undefined;
+  // public isLoggedIn$: Subscription | null = null;
+  // public isLoggedIn: boolean | null | undefined;
+  public user: User | null | undefined;
   /* Jos kutsusta ei saada tarvittavia tietoja eli rekisteröiminen ei ole
   mahdollista, käytetään error-tilaa. Silloin ei näytetä lomaketta. */
   public state: 'editing' | 'error' = 'editing';
@@ -77,13 +79,20 @@ export class RegisterComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.trackLoggedStatus();
+    // this.trackLoggedStatus();
+    this.trackUserInfo();
+
+    /**
+     * Hae kutsun tiedot. Jos saadaan haettua ja ollaan kirjauduttu,
+     * kirjaudutaan ulos.
+     */
     this.courses.getInvitedInfo(this.courseid, this.invitation).then(res => {
       if (res === null || res?.id === null) {
         throw Error('URL:in mukaisesta kutsusta ei löytynyt tietoja.')
       }
       window.localStorage.removeItem('redirectUrl');
-      if (this.isLoggedIn) this.auth.logout();
+      if (this.user != null) this.auth.logout();
+      // if (this.isLoggedIn) this.auth.logout();
       this.invitedInfo = res;
       if (res.sposti != null) {
         this.email.setValue(res.sposti);
@@ -92,7 +101,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     }).then(response => {
       this.courseName = response ?? '';
       this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Luo käyttäjätili kurssille:
-          Luo käyttäjätili kurssille` + this.courseName);
+          Luo käyttäjätili kurssille` + ' ' + this.courseName);
     }).catch(err => {
       this.state = 'error';
       this.errorMessage = $localize `:@@Kutsun tietojen haku epäonnistui:Antamallasi URL-osoitteella ei löytynyt kutsun tietoja. Tarkista, että osoite on oikea. Kutsu voi olla myös vanhentunut.`;
@@ -100,7 +109,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.isLoggedIn$?.unsubscribe();
+    // this.isLoggedIn$?.unsubscribe();
   }
 
   private buildForm(): FormGroup {
@@ -167,7 +176,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
       return this.auth.getLoginInfo('own', this.courseid);
     }).then((res: LoginInfo) => {
       const loginID = res['login-id'];
-      this.isLoggedIn$?.unsubscribe();
+      // this.isLoggedIn$?.unsubscribe();
       return this.auth.login(email, password, loginID);
     }).then (res => {
       if (res?.success === true) {
@@ -181,6 +190,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     });
   }
 
+  /*
   private trackLoggedStatus(): void {
     this.isLoggedIn$ = this.store.onIsUserLoggedIn().pipe(
       takeWhile(() => this.isLoggedIn === undefined, true)
@@ -188,6 +198,25 @@ export class RegisterComponent implements OnInit, OnDestroy{
       this.isLoggedIn = res;
       // Jos kutsun tietojen haku on onnistunut ja voidaan jatkaa.
       if (this.isLoggedIn === true && this.invitedInfo) {
+        this.auth.logout();
+      }
+    });
+  }
+  */
+
+  /**
+   * Hae käyttäjätiedot. Jos käyttäjä on kirjautunut ja kutsutiedot on
+   * saatu haettua, kirjaudu ulos.
+   */
+  private trackUserInfo() {
+    this.store.trackUserInfo().pipe(
+      takeWhile(() => this.user === undefined)
+      ).subscribe(res => {
+      if (res !== undefined) {
+        this.user = res;
+      }
+      if (res === null || res === undefined) return
+      if (this.invitedInfo) {
         this.auth.logout();
       }
     });

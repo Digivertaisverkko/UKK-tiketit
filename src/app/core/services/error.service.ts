@@ -186,7 +186,7 @@ export class ErrorService {
   public handleNotLoggedIn(): void {
     console.log('errorService.handleNotLoggedIn(): et ole kirjaunut,' +
           'ohjataan virhesivulle.');
-    this.store.setNotLoggegIn();
+    // this.store.setNotLoggegIn();
     // window.localStorage.clear();
     // this.saveRedirectURL();
     this.routeToNoPrivileges();

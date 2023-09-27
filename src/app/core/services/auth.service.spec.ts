@@ -65,9 +65,8 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-      store.trackLoggedIn().subscribe(isLoggedIn => {
-        expect(isLoggedIn).toBeTrue();
-      });
+      const userInfo = store.getUserInfo();
+      expect(userInfo).toBeTruthy();
 
     }))
 
@@ -84,9 +83,8 @@ describe('AuthService', () => {
       request2.flush(null);
       tick();
 
-      store.trackLoggedIn().subscribe(isLoggedIn => {
-        expect(isLoggedIn).toBeFalse();
-      });
+      const userInfo = store.getUserInfo();
+      expect(userInfo).toBe(null);
 
     }));
 
@@ -117,9 +115,8 @@ describe('AuthService', () => {
       request.flush(authDummyData.oikeudetOpettaja);
       tick();
 
-
       const userInfo = store.getUserInfo();
-        expect(userInfo?.osallistuja).toBeTrue();
+      expect(userInfo?.osallistuja).toBeTrue();
 
     }));
 
@@ -136,9 +133,8 @@ describe('AuthService', () => {
       request2.flush(authDummyData.minunOpettaja);
       tick();
 
-      store.trackLoggedIn().subscribe(isLoggedIn => {
-        expect(isLoggedIn).toBeTrue();
-      });
+      const userInfo = store.getUserInfo();
+      expect(userInfo).toBeTruthy();
 
     }));
 

@@ -85,7 +85,6 @@ describe('SettingsComponent', () => {
     let userInfo = authDummyData.userInfoTeacher;
     userInfo.osallistuja = true;
     store.setUserInfo(userInfo);
-    store.setParticipant(true);
     store.setCourseName('Matematiikan perusteet');
   });
 

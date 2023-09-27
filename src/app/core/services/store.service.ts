@@ -85,6 +85,8 @@ export class StoreService {
     return this.headline;
   }
 
+
+  /*
   /**
    * Onko käyttäjä kirjautunut.
    *
@@ -94,6 +96,7 @@ export class StoreService {
   public getIsLoggedIn(): Boolean | null {
     return this.isLoggedIn$.value;
   }
+
 
   /**
    * Maksimi liitetiedostojen koko megatavuina.

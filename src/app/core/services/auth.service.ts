@@ -164,21 +164,16 @@ export class AuthService {
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
       userInfo.asemaStr = this.getRoleString(userInfo.asema);
-      this.store.setLoggedIn();
+      // this.store.setLoggedIn();
     } else {
       console.warn(`Käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
       // Haetaan käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
       const response = await this.fetchVisitorInfo();
+      userInfo = response;
       if (response?.nimi != null) {
         console.log('fetchUserInfo: olet kirjautunut eri kurssille');
-        userInfo = response ;
         userInfo.asema = null;
-        this.store.setLoggedIn();
         userInfo.osallistuja = false;
-      } else {
-        this.store.setNotLoggegIn();
-        this.store.setUserInfo(null);
-        return
       }
     }
     this.store.setUserInfo(userInfo);
