@@ -1,6 +1,6 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, takeUntil } from 'rxjs';
 
 import { AuthService } from './core/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -54,14 +54,16 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
     this.authService.initialize();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    // Huom. ! Upotuksen testaamisen uncomment alla oleva ja
-    // kommentoi sen alla oleva rivi.
-    // this.isInIframe = true;
+    
     this.isInIframe = this.getIsInIframe();
+    
+    // Huom. ! Upotuksessa olevan headerin testaaminen.
+    // Poista tältä riviltä kommentointi:
+    // this.isInIframe = true;
+
     window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackCourseID();
-    // this.trackLoginStatus();
   }
 
   ngOnDestroy(): void {
@@ -101,6 +103,12 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
   }
 
+  /**
+   * Mene profiili- tai kirjautumisnäkymään.
+   *
+   * @param {('profile' | 'settings')} view
+   * @memberof AppComponent
+   */
   public goTo(view: 'profile' | 'settings') {
     const courseID = this.utils.getCourseIDfromURL();
     const route = '/course/' + courseID + '/' + view;
@@ -116,6 +124,11 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.store.sendMessage('go begin');
   }
 
+  /**
+   * Avaa sovellus uudessa välilehdessä. Sovelluksen tila pysyy samana.
+   *
+   * @memberof AppComponent
+   */
   public openInNewTab(): void {
     window.open(window.location.href, '_blank');
   }
@@ -129,12 +142,13 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }
 
-  // Seurataan kurssi ID:ä URL:sta.
+  // Älä käytä route.paramMap. Ei toimi upotuksessa.
   private trackCourseID(): void {
-    this.route.paramMap.subscribe(() => {
-      // Ei toimi route.paramMap upotuksessa.
-      this.courseid = this.utils.getCourseIDfromURL();
-    })
+    this.router.events.pipe(
+      filter(event => event instanceof ActivationEnd),
+    ).subscribe(() => {
+      const courseID = this.utils.getCourseIDfromURL();
+    });
   }
 
 }
