@@ -54,9 +54,9 @@ export class AppComponent implements OnInit, OnDestroy  {
     }
     this.authService.initialize();
     this._language = localStorage.getItem('language') ?? 'fi-FI';
-    
+
     this.isInIframe = this.getIsInIframe();
-    
+
     // Huom. ! Upotuksessa olevan headerin testaaminen.
     // Poista tältä riviltä kommentointi:
     // this.isInIframe = true;

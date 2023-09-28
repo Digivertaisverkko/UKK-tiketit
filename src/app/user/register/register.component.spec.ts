@@ -36,7 +36,6 @@ describe('RegisterComponent', () => {
   let invitationID: string;
   let loader: HarnessLoader;
   let courseID: string;
-  let store: StoreService;
 
   describe('Course 1', () => {
 

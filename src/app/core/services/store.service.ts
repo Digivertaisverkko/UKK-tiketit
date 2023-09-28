@@ -1,18 +1,7 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { AuthInfo, Role, User } from '../core.models';
 
-/**
- * Näkymän otsikko.
- *
- * @interface Headline
- */
-interface Headline {
-  text?: string;
-  appHeadline?: boolean;
-  noCourseTitle?: boolean;
-  showInIframe?: boolean;
-}
+import { AuthInfo, Role, User } from '../core.models';
 
 /**
  *
