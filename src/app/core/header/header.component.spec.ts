@@ -83,6 +83,7 @@ describe('HeaderComponent', () => {
 
   it('shows logout option when logged in and makes correct method call', fakeAsync(() => {
     component.courseid = '1';
+    store.setUserInfo(null);
     fixture.detectChanges();
     tick();
     findEl(fixture, 'account-button').nativeElement.click();

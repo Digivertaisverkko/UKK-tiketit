@@ -30,7 +30,7 @@ describe('RegisterComponent', () => {
   let fakeAuthService: jasmine.SpyObj<AuthService>;
   let fakeCourseService: Pick<CourseService, 'getCourseName' | 'getInvitedInfo'>;
   // let fakeCourseService: FakeCourseService;
-  let fakeStoreService: Pick<StoreService, 'getBaseTitle' | 'onIsUserLoggedIn'>;
+  let fakeStoreService: Pick<StoreService, 'getBaseTitle'>;
   let fixture: ComponentFixture<RegisterComponent>;
   let courseName: string;
   let invitationID: string;
