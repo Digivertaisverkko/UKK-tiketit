@@ -91,8 +91,12 @@ export class HeaderComponent implements OnInit {
   }
 
   public logout() {
-    this.auth.logout().then(res => {
-      if (this.courseid) this.auth.navigateToLogin(this.courseid);
+    this.auth.logout().then(res => {      
+      if (this.courseid) {
+        this.auth.navigateToLogin(this.courseid);
+      } else {
+        console.error("file: header.component.ts:100 ~ HeaderComponent ~ this.auth.logout ~ Ei kurssi id:ä, ei voida kirjautua.")  
+      }
     })
   }
 

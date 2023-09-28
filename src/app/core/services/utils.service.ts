@@ -23,8 +23,14 @@ export class UtilsService {
   const hashPart = parseInt(hash.substr(0, 10), 16);
   return hashPart % maxNumber;
   }
-
-  // Angularin ActivatedRoute voi palauttaa undefined, niin tämä on varmempi.
+  
+  /**
+   * Angularin ActivatedRoute voi palauttaa joissain tilanteissa undefined, niin 
+   * tämä on osoittautunut varmemmaksi.
+   * 
+   * @return {*}  {(string | null)}
+   * @memberof UtilsService
+   */
   public getCourseIDfromURL(): string | null {
     const pathArray = window.location.pathname.split('/');
     let courseID: string | null;

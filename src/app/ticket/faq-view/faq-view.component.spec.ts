@@ -60,7 +60,6 @@ describe('FaqViewComponent', () => {
     component.id = ticketDummyData.ukk.id;
     store = TestBed.inject(StoreService);
     store.setUserInfo(user);
-    store.setLoggedIn();
   });
 
   it('should create', () => {

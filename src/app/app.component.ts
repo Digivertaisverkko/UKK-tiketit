@@ -147,7 +147,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.router.events.pipe(
       filter(event => event instanceof ActivationEnd),
     ).subscribe(() => {
-      const courseID = this.utils.getCourseIDfromURL();
+      this.courseid = this.utils.getCourseIDfromURL();
     });
   }
 

@@ -85,7 +85,6 @@ describe('AppComponent', () => {
       component.courseid = '1';
       const user = authDummyData.userInfoEsko;
       store.setUserInfo(user);
-      store.setLoggedIn();
       fixture.detectChanges();
       tick();
       const userrole = findEl(fixture, 'header-user-role').nativeElement;
@@ -95,7 +94,6 @@ describe('AppComponent', () => {
     it('shows profile option when logged in and clicking it routes to correct view', fakeAsync(() => {
       component.courseid = '1';
       store.setUserInfo(authDummyData.userInfoEsko);
-      store.setLoggedIn();
       fixture.detectChanges();
       findEl(fixture, 'account-button').nativeElement.click();
       tick(300);
@@ -108,7 +106,6 @@ describe('AppComponent', () => {
 
     it("doesn't show settings button when user role is teacher and not participant in course", fakeAsync(() => {
       component.courseid = '1';
-      store.setLoggedIn();
       let userInfo = authDummyData.userInfoTeacher;
       userInfo.osallistuja = false;
       store.setUserInfo(userInfo);
@@ -123,7 +120,6 @@ describe('AppComponent', () => {
 
     it("doesn't show settings button when user role is student", fakeAsync(() => {
       component.courseid = '1';
-      store.setLoggedIn();
       let userInfo = authDummyData.userInfoEsko;
       userInfo.osallistuja = false;
       store.setUserInfo(userInfo);
@@ -138,7 +134,6 @@ describe('AppComponent', () => {
 
     it('shows working settings button when user role is teacher and is participant in course', fakeAsync(() => {
       component.courseid = '1';
-      store.setLoggedIn();
       let userInfo = authDummyData.userInfoTeacher;
       userInfo.osallistuja = true;
       store.setUserInfo(userInfo);

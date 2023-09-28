@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -7,7 +7,8 @@ import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '@core/services/store.service';
 
 /**
- * Sisäänkirjautumisnäkymä. Tämä ei ole käytössä upotuksessa.
+ * Sisäänkirjautumisnäkymä. Tämä ei ole käytössä upotuksessa. Tähän näkymään
+ * tulisi ohjata authService.navigateToLogin -metodilla.
  *
  * @export
  * @class LoginComponent
@@ -20,7 +21,7 @@ import { StoreService } from '@core/services/store.service';
   styleUrls: ['./login.component.scss'],
 })
 
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit {
   @Input() courseid!: string;
   @Input() loginid: string | undefined;
 
@@ -39,24 +40,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
               private formBuilder: FormBuilder,
               private router: Router,
               private store: StoreService,
-              private title: Title)
-  {}
+              private title: Title
+              ) {
+  }
 
   ngOnInit(): void {
     const isInIframe: string | null = window.sessionStorage.getItem('IN-IFRAME');
     if (!this.loginid && isInIframe !== 'true') {
-      // Hakee loginid:n.
+      // Kirjautumiseen tarvitaan login id.
       this.auth.navigateToLogin(this.courseid);
     }
     this.title.setTitle(this.store.getBaseTitle() +
         $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
     this.store.setUserInfo(null);
-  }
-
-  // Varmistus. Jos tullaan näkymistä tänne, virheilmoituksia voidaa näyttää,
-  // jos nämä asetetaan aiemmin.
-  ngAfterViewInit(): void {
-    this.store.setNotLoggegIn();
   }
 
   private buildForm(): FormGroup {

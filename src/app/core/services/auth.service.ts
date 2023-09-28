@@ -1,5 +1,5 @@
 import { ActivationEnd, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
@@ -56,6 +56,13 @@ export class AuthService {
     this.api = environment.apiBaseUrl;
   }
 
+  /**
+   * Sovelluksen alussa tehtävät toimet.
+   * Aletaan päivittämään käyttäjätietoja storeServiceen.
+   *
+   * @returns  {boolean}
+   * @memberof AuthService
+   */
   public initialize() {
     this.startUpdatingUserinfo();
   }
@@ -95,7 +102,6 @@ export class AuthService {
       loginResult.redirectUrl = redirectUrl;
       window.localStorage.removeItem('redirectUrl')
     }
-    this.store.setLoggedIn();
     window.sessionStorage.clear();
   } else {
     loginResult = { success: false };
@@ -132,8 +138,9 @@ export class AuthService {
   }
 
   /**
-  * Hae palvelimelta storeen tiedot kirjautumisen tilasta, käyttäjätiedot- ja
-  * oikeudet, onko osallistujana näkymän kurssilla.
+  * Hae palvelimesta tiedot kirjautumisen tilasta, käyttäjätiedot- ja
+  * oikeudet, onko osallistujana näkymän kurssilla ja sijoita ne store
+  * serviveen.
   *
   * @param {string} courseID
   * @returns  {Promise<void>}
@@ -164,7 +171,6 @@ export class AuthService {
       const authInfo = response.login;
       if (authInfo) this.store.setAuthInfo(authInfo);
       userInfo.asemaStr = this.getRoleString(userInfo.asema);
-      // this.store.setLoggedIn();
     } else {
       console.warn(`Käyttäjällä ei ole oikeuksia kurssille ${courseID}.`);
       // Haetaan käyttäjätiedot, jos on kirjautuneena, mutta eri kurssila.
@@ -258,10 +264,16 @@ export class AuthService {
    // return loginUrl;
  }
 
-  private getMethodName() {
-    return this.getMethodName.caller.name
-  }
-
+  
+  /**
+   * Palauta rooli, jossa se on siinä muodossa on kuin tarkoitettu näytettäväksi
+   * käyttöliittymässä (kieli, kirjainkoko).
+   *
+   * @private
+   * @param {(Role | null)} asema
+   * @return {*}  {string}
+   * @memberof AuthService
+   */
   private getRoleString(asema: Role | null): string {
     let role: string;
     switch (asema) {
@@ -282,9 +294,20 @@ export class AuthService {
   private handleError(error: HttpErrorResponse): void {
     this.errorService.handleServerError(error);
   }
-
+  
+  /**
+   * Ohjaa kirjautumiseen. Hakee tarvittavat tiedot kirjautumista varten.
+   * Message:ksi voi laittaa viestin, jonka perusteella halutussa näkymässä
+   * voidaan näyttää siellä määritelty ilmoitus.
+   * 
+   * Käytetty ListingComponent.checkRouterData().
+   *
+   * @param {(string | null)} courseID
+   * @param {{ message: 'account created' }} [notification]
+   * @memberof AuthService
+   */
   public async navigateToLogin(courseID: string | null,
-        notification?: { message: string }) {
+    notification?: { message: string }) {
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
@@ -294,7 +317,6 @@ export class AuthService {
         return
       }
       const loginURL = response['login-url'];
-      // const loginURL = response;
       if (notification) {
         this.router.navigate(loginURL, { state: { notification: notification } })
       }
@@ -350,7 +372,6 @@ export class AuthService {
     } catch (error: any) {
       return { success: false }
     }
-    this.store.setNotLoggegIn();
     this.store.setUserInfo(null);
     this.store.unsetPosition();
     this.store.setCourseName('');
@@ -420,20 +441,21 @@ export class AuthService {
   }
 
   /**
-   * Routen vaihtuessa päivitä käyttäjätietoja ellei olla kirjautumisnäkymässä.
-   *
+   * Routen vaihtuessa päivitä käyttäjätiedot. Tarvitaan kurssi id URL:ssa
+   * eikä tehdä kirjautumis-näkymässä.
+   * 
    * @memberof AuthService
    */
   public startUpdatingUserinfo(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof ActivationEnd) {
-        const courseID = this.utils.getCourseIDfromURL();
-        console.log('authService: huomattiin kurssi id ' + courseID);
-        const currentUrl = this.location.path();
-        const isInLogin: boolean = currentUrl.includes('login');
-        if (!isInLogin && (courseID !== undefined && courseID !== null)) {
-          this.fetchUserInfo(courseID);
-        }
+    // Älä käytä route.paramMap. Ei toimi upotuksessa.
+    this.router.events.pipe(
+      filter(event => event instanceof ActivationEnd)
+    ).subscribe(event => {
+      const courseID = this.utils.getCourseIDfromURL();
+      const currentUrl = this.location.path();
+      const isInLogin: boolean = currentUrl.includes('login');
+      if (!isInLogin && (courseID !== undefined && courseID !== null)) {
+        this.fetchUserInfo(courseID);
       }
     });
   }

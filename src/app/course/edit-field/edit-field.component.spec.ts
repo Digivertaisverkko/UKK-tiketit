@@ -76,7 +76,6 @@ describe('EditFieldComponent', () => {
         store = TestBed.inject(StoreService);
         component = fixture.componentInstance;
         component.courseid = '1';
-        store.setLoggedIn();
         let userInfo = authDummyData.userInfoTeacher;
         userInfo.osallistuja = true;
         store.setUserInfo(userInfo);
