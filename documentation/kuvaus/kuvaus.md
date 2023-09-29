@@ -252,6 +252,17 @@ Tärkeitä tai huomionarvoisia  tiedostoja ja hakemistoja.
     - **environments.ts** - Development build:lle.
     - **environments.prod.ts** - Production build:lle.
 
+## Uusien testien tekeminen
+
+- Komponenttitesteissä servicen palauttama data ja servicetesteissä palvelimen
+palauttama on hyvä laittaa moduulin [moduuli nimi].dummydata.ts -tiedostoon ja
+käyttää oikeita interfaceja [moduulin nimi].models.ts -tiedostoista.
+- Käyttäjätietoja on saatavilla auth.dummydata.ts -tiedostosta.
+- Jos testattava yksikkö käyttää store servicen -tietoja, on hyvä injektoida testissä
+oikeaa service ja tallentaa haluttu data sinne.
+- Usein on helpointa käyttää funktioita fakeAsync ja tick.
+- Näkymän päivitys voi joissain komponenteissa tarvita toisen detectChanges -
+kutsun.
 
 ## Vianmääritys
 
