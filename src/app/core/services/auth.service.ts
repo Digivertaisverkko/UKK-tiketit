@@ -63,6 +63,7 @@ export class AuthService {
    * @returns  {boolean}
    * @memberof AuthService
    */
+
   public initialize() {
     this.startUpdatingUserinfo();
   }
@@ -158,7 +159,7 @@ export class AuthService {
       /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
       joka paikassa odottaa observablen arvoa? */
       /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
-      console.log(`Haetaan, onko oikeuksia ja käyttäjätietoja kurssille ${courseID}.`);
+      console.log(`auth.fetcUserInfo: Haetaan, onko oikeuksia ja käyttäjätietoja kurssille ${courseID}.`);
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
       response = await firstValueFrom<UserRights>(this.http.get<any>(url));
     } catch (error: any) {
@@ -264,7 +265,7 @@ export class AuthService {
    // return loginUrl;
  }
 
-  
+
   /**
    * Palauta rooli, jossa se on siinä muodossa on kuin tarkoitettu näytettäväksi
    * käyttöliittymässä (kieli, kirjainkoko).
@@ -294,12 +295,12 @@ export class AuthService {
   private handleError(error: HttpErrorResponse): void {
     this.errorService.handleServerError(error);
   }
-  
+
   /**
    * Ohjaa kirjautumiseen. Hakee tarvittavat tiedot kirjautumista varten.
    * Message:ksi voi laittaa viestin, jonka perusteella halutussa näkymässä
    * voidaan näyttää siellä määritelty ilmoitus.
-   * 
+   *
    * Käytetty ListingComponent.checkRouterData().
    *
    * @param {(string | null)} courseID
@@ -413,7 +414,8 @@ export class AuthService {
       window.localStorage.setItem('redirectUrl', currentRoute);
       console.log('tallennettiin redirect URL: ' + currentRoute);
       } else {
-        console.log('Löydettiin redirect URL, ei tallenneta päälle.');
+        console.log('Löydettiin redirect URL: ' + window.localStorage.getItem('redirectUrl') +
+            ', ei tallenneta päälle.');
       }
     }
   }
@@ -441,22 +443,17 @@ export class AuthService {
   }
 
   /**
-   * Routen vaihtuessa päivitä käyttäjätiedot. Tarvitaan kurssi id URL:ssa
-   * eikä tehdä kirjautumis-näkymässä.
-   * 
+   * Routen vaihtuessa päivitä käyttäjätiedot. Tarvitaan kurssi id URL:sta.
+   *
    * @memberof AuthService
    */
   public startUpdatingUserinfo(): void {
     // Älä käytä route.paramMap. Ei toimi upotuksessa.
     this.router.events.pipe(
       filter(event => event instanceof ActivationEnd)
-    ).subscribe(event => {
+    ).subscribe(() => {
       const courseID = this.utils.getCourseIDfromURL();
-      const currentUrl = this.location.path();
-      const isInLogin: boolean = currentUrl.includes('login');
-      if (!isInLogin && (courseID !== undefined && courseID !== null)) {
-        this.fetchUserInfo(courseID);
-      }
+      if (courseID) this.fetchUserInfo(courseID);
     });
   }
 

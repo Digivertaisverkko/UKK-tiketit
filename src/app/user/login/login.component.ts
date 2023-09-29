@@ -45,14 +45,14 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.routeToCourseIfLoggedin();
     const isInIframe: string | null = window.sessionStorage.getItem('IN-IFRAME');
     if (!this.loginid && isInIframe !== 'true') {
-      // Kirjautumiseen tarvitaan login id.
+      // Tehdään, jotta saadaan login id.
       this.auth.navigateToLogin(this.courseid);
     }
     this.title.setTitle(this.store.getBaseTitle() +
         $localize `:@@Sisäänkirjautuminen:Sisäänkirjautuminen`);
-    this.store.setUserInfo(null);
   }
 
   private buildForm(): FormGroup {
@@ -105,12 +105,13 @@ export class LoginComponent implements OnInit {
     this.auth.login(email, password, this.loginid).then(response => {
       if (response?.success === true) {
         let redirectUrl: string;
+        console.log('login: vastauksessa tullut redirect url: ' + response?.redirectUrl);
         if (response.redirectUrl === undefined) {
-          // TODO: Yritä session storagesta etsiä tallennettua?
           redirectUrl = 'course/' + this.courseid +  '/list-tickets';
         } else {
           redirectUrl = response.redirectUrl;
         }
+        console.log('ohjataan urliin ' + redirectUrl);
         this.router.navigateByUrl(redirectUrl);
       }
     })
@@ -119,6 +120,16 @@ export class LoginComponent implements OnInit {
     });
 
     this.form.enable();
+  }
+
+  private routeToCourseIfLoggedin(): void {
+    this.store.trackUserInfo().subscribe(userinfo => {
+      if (userinfo === undefined) return;
+      if (userinfo !== null) {
+        console.log('login: on jo kirjautunut, ohjataan kurssille ' + this.courseid);
+        this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
+      }
+    });
   }
 
 }
