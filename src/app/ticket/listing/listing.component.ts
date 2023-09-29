@@ -110,7 +110,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.authService.getDenyDataConsent();
     this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
-    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
+    this.isInIframe = window.sessionStorage.getItem('inIframe') === 'true' ?
         true : false;
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
@@ -302,7 +302,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
-    
+
     if (this.store.getUserInfo === null) {
       console.log('tallennettu URL: ' + link);
       window.localStorage.setItem('redirectUrl', link);

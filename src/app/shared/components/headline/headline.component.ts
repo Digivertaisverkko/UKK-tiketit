@@ -74,7 +74,7 @@ export class HeadlineComponent implements OnInit, AfterViewInit {
       private courses: CourseService,
       private store: StoreService,
   ) {
-    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME');
+    this.isInIframe = window.sessionStorage.getItem('inIframe');
   }
 
   @ContentChild('projectedContent') projectedContent: any

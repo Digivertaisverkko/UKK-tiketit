@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeToCourseIfLoggedin();
-    const isInIframe: string | null = window.sessionStorage.getItem('IN-IFRAME');
+    const isInIframe: string | null = window.sessionStorage.getItem('inIframe');
     if (!this.loginid && isInIframe !== 'true') {
       // Tehdään, jotta saadaan login id.
       this.auth.navigateToLogin(this.courseid);

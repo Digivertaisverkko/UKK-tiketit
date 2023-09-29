@@ -17,3 +17,11 @@ Edelliseen liittyen viimeisin tunnettu käyttäjän token id.
 
 - **redirectUrl**
 - URL, johon ohjataan kirjautumisen jälkeen.
+
+## Session Storage
+
+Pari muuttujaa tallennetaan session aikaiseen session storageen.
+
+- **showArchived: 'true' | 'false'** - Onko tikettilistan "Näytä ratkaistut" -nappia painettu.
+
+- **inIframe: 'true' | 'false'** - Ollaanko iframe -upotuksessa.

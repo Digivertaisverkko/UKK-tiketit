@@ -61,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy  {
     // Poista tältä riviltä kommentointi:
     // this.isInIframe = true;
 
-    window.sessionStorage.setItem('IN-IFRAME', this.isInIframe.toString());
+    window.sessionStorage.setItem('inIframe', this.isInIframe.toString());
     console.log('Iframe upotuksen tila: ' + this.isInIframe.toString());
     this.trackCourseID();
   }
