@@ -122,6 +122,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
       || this.user?.asema === 'admin')) {
       this.fetchArchivedTickets();
     }
+
   }
 
   ngAfterViewInit(): void {
