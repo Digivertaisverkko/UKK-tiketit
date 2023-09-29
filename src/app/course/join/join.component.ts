@@ -54,7 +54,9 @@ export class JoinComponent implements OnInit, OnDestroy {
     if (this.invitation === null) {
       console.error('Virhe: Ei UUID:ä.');
     }
-    // this.loginIfNeeded();
+    /* Ohjataan loginiin, jos ei oikeuksia kurssille. Näytetään virhe,
+    *  jos on kirjautunut vääränä käyttäjänä.
+    */
     this.trackUserInfo();
     this.getInvitedInfo();
   }
@@ -141,7 +143,7 @@ export class JoinComponent implements OnInit, OnDestroy {
   */
 
   public logout() {
-    this.auth.logout().then(res => {
+    this.auth.logout().then(() => {
       this.auth.saveRedirectURL();
       this.auth.navigateToLogin(this.courseid);
     }).catch(() => {
@@ -161,11 +163,13 @@ export class JoinComponent implements OnInit, OnDestroy {
     this.store.trackUserInfo().pipe(
         takeWhile(() => this.user === undefined)
       ).subscribe(userinfo => {
+        if (userinfo === undefined) return
+        this.user = userinfo;
         if (userinfo === null) {
+          console.log('join: Ei oikeuksia kurssille, ohjataan kirjautumiseen.');
           this.auth.saveRedirectURL();
           this.auth.navigateToLogin(this.courseid);
         }
-      if (userinfo?.nimi ) this.user = userinfo;
       if (this.user?.sposti && this.invitedInfo?.sposti) {
         if (this.user.sposti !== this.invitedInfo?.sposti) {
           this.setNotRightUser();
