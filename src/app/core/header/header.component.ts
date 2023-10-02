@@ -28,12 +28,11 @@ import { User } from '@core/core.models';
 })
 
 export class HeaderComponent implements OnInit {
-  // Async pipeä varten.
   // public courseID: string | null = this.utils.getCourseIDfromURL();
   @Input() courseid: string | null = null;
   public disableLangSelect: boolean = false;
   public readonly maxUserLength = 40;
-  // Osassa template syntakseja vähemmän vaikeasti luettava, kun observablen
+  // Osassa template syntakseja on vähemmän vaikeasti luettava, kun observablen
   // sijaan käyttää tätä.
   public user: User | null | undefined;
   public user$: Observable<User | null | undefined>;
@@ -92,7 +91,11 @@ export class HeaderComponent implements OnInit {
 
   public logout() {
     this.auth.logout().then(res => {
-      if (this.courseid) this.auth.navigateToLogin(this.courseid);
+      if (this.courseid) {
+        this.auth.navigateToLogin(this.courseid);
+      } else {
+        console.error("file: header.component.ts:100 ~ HeaderComponent ~ this.auth.logout ~ Ei kurssi id:ä, ei voida kirjautua.")
+      }
     })
   }
 

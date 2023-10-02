@@ -1,16 +1,16 @@
 <div class="app-wrapper">
 
-
+  <!-- Upotuksen ulkopuolella käytössä oleva header. -->
   <header>
     <!-- <app-header [courseid]="courseid" [isInIframe]="isInIframe"> -->
       <app-header [courseid]="courseid" *ngIf="!isInIframe">
       <span class="spacer"></span>
     </app-header>
 
+    <!-- Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella
+         käytetään core:n header -komponenttia (yllä). Testaamista varten
+         voi asettaa app.component.ts -tiedostossa päälle. -->
 
-
-    <!-- Tämä on upotuksessa oleva kapeampi header. Upotuksen ulkopuolella -->
-         <!-- käytetään core:n header -komponenttia. -->
     <mat-toolbar color="primary" class="embedded-header" *ngIf="isInIframe">
 
       <div class="logo" *ngIf="courseid === null; else clickableLogo">
@@ -68,7 +68,9 @@
                 i18n="@@Profiili"
                 i18n-aria-label="@@Profiili"
                 mat-menu-item
-                *ngIf="(user$ | async) !== null && courseid"
+                *ngIf="(user$ | async) !== null &&
+                       (user$ | async) !== undefined &&
+                       courseid !== undefined"
                 >
           Profiili
         </button>
@@ -79,7 +81,7 @@
                 *ngIf="((user$ | async)?.asema === 'opettaja' ||
                         (user$ | async)?.asema === 'admin') &&
                         (user$ | async)?.osallistuja === true &&
-                        courseid"
+                        courseid !== undefined"
                 (click)="goTo('settings')"
                 >
           Kurssin asetukset

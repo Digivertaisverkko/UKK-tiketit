@@ -110,7 +110,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.noDataConsent = this.authService.getDenyDataConsent();
     this.title.setTitle(this.store.getBaseTitle() + $localize `:@@Otsikko-Kysymykset:
         Kysymykset`);
-    this.isInIframe = window.sessionStorage.getItem('IN-IFRAME') === 'true' ?
+    this.isInIframe = window.sessionStorage.getItem('inIframe') === 'true' ?
         true : false;
     this.user$ = this.store.trackUserInfo();
     this.columnDefinitions = [
@@ -288,10 +288,12 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.trackUserInfo().pipe(
       takeWhile((res) => user === undefined)
       ).subscribe(userinfo => {
+        if (userinfo === undefined) return
+        user = userinfo;
         if (userinfo === null) {
           this.isLoaded = true;
           this.setError('notLoggedIn');
-        } else if (userinfo !== undefined) {
+        } else {
           this.error === null;
         }
     })
@@ -300,23 +302,13 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // Tallentaa URL:n kirjautumisen jälkeen tapahtuvaa uudelleenohjausta varten.
   public saveRedirectUrl(linkEnding?: string): void {
     const link = '/course/' + this.courseid + '/submit' + (linkEnding ?? '');
-    if (this.store.getIsLoggedIn() === false) {
+
+    if (this.store.getUserInfo === null) {
       console.log('tallennettu URL: ' + link);
       window.localStorage.setItem('redirectUrl', link);
     }
   }
 
-  private trackLoggedStatus(): void {
-    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
-      if (response === false) {
-        console.log('Listing: saatiin tieto, ettei olla kirjautuneina.');
-        this.isLoaded = true;
-        this.setError('notLoggedIn');
-      } else if (response === true) {
-        this.error === null;
-      }
-    });
-  }
 
   // Aseta virheviestejä.
   private setError(type: 'notParticipant' | 'notLoggedIn'): void {

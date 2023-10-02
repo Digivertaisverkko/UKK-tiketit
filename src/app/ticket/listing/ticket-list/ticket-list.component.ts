@@ -110,7 +110,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
     this.fetchTicketsTimer$ = timer(0, POLLING_RATE_MS).pipe(takeUntilDestroyed());
     this.trackMessages$ = this.store.trackMessages().pipe(takeUntilDestroyed());
     this.setBaseColumnDefinitions();
-    this.isArchivedShown = window.sessionStorage.getItem('SHOW_ARCHIVED') === 'true' ?
+    this.isArchivedShown = window.sessionStorage.getItem('showArchived') === 'true' ?
         true : false;
   }
 
@@ -122,6 +122,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
       || this.user?.asema === 'admin')) {
       this.fetchArchivedTickets();
     }
+
   }
 
   ngAfterViewInit(): void {
@@ -215,7 +216,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
 
   public hideArchived() {
     this.isArchivedShown = false;
-    window.sessionStorage.setItem('SHOW_ARCHIVED', 'false');
+    window.sessionStorage.setItem('showArchived', 'false');
     this.dataSourceArchived = new MatTableDataSource();
     this.archivedCount = 0;
   }
@@ -237,7 +238,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   }
 
   public showArchived() {
-    window.sessionStorage.setItem('SHOW_ARCHIVED', 'true');
+    window.sessionStorage.setItem('showArchived', 'true');
     this.isArchivedShown = true;
     this.fetchArchivedTickets()
   }

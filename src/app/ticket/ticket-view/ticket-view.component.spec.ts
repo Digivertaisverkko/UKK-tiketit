@@ -109,7 +109,6 @@ describe('TicketViewComponent', () => {
 
       component.courseid = '1';
       store.setUserInfo(user);
-      store.setLoggedIn();
       // component.ngOnInit();
       loader = TestbedHarnessEnvironment.loader(fixture);
 
@@ -297,7 +296,6 @@ describe('TicketViewComponent', () => {
       component.courseid = '1';
       user = authDummyData.userInfoRinne;
       store.setUserInfo(user);
-      store.setLoggedIn();
     });
 
     it("shows error message if ticket doesn't exist", fakeAsync(() => {

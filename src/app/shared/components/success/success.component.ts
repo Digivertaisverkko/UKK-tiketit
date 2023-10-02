@@ -21,6 +21,13 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class SuccessComponent {
 
-  @Input() styles: any;
-
+  /**
+   * CSS-tyylit, jotka lisätään p-elementille. Syntaksi esim:
+   *
+   * [styles]="{ 'margin-top': '1.5rem', 'margin-bottom': '-0.5rem' }"
+   *
+   * @type {*}
+   * @memberof SuccessComponent
+   */
+  @Input() styles?: any;
 }

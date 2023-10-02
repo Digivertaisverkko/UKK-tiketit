@@ -107,7 +107,6 @@ export class CourseService {
     let url = environment.apiBaseUrl + '/kurssit';
     try {
       response = await firstValueFrom<Kurssi[]>(this.http.get<any>(url));
-      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }
@@ -135,7 +134,6 @@ export class CourseService {
     try {
       console.log('Haetaan kurssit, joilla ollaan osallistujana.');
       response = await firstValueFrom<Kurssini[]>(this.http.get<any>(url));
-      this.store.setLoggedIn();
     } catch (error: any) {
       this.handleError(error);
     }

@@ -100,7 +100,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   // public user: User = {} as User;
   public showConfirm: boolean = false;
   private fetchTicketsSub: Subscription | null = null;
-  private loggedIn$: Observable<boolean|null>
   private readonly POLLING_RATE_MIN = (environment.production == true) ? 1 : 15;
   private unsubscribe$ = new Subject<void>();
 
@@ -119,11 +118,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.ticketID = this.ticketIdFromParent !== null
         ? this.ticketIdFromParent
         : String(this.route.snapshot.paramMap.get('id'));
-    this.loggedIn$ = this.store.onIsUserLoggedIn().pipe(takeUntilDestroyed());
   }
 
   ngOnInit(): void {
-    this.trackLoggedIn();
     this.store.trackUserInfo().pipe(
       takeWhile(response => this.user === undefined)
         ).subscribe(response => {
@@ -345,15 +342,5 @@ export class TicketViewComponent implements OnInit, OnDestroy {
       )
       .subscribe();
     }
-
-
-  private trackLoggedIn() {
-    this.loggedIn$.subscribe(res => {
-      if (res === false) {
-        const route = `course/${this.courseid}/forbidden`;
-        this.router.navigateByUrl(route);
-      }
-    })
-  }
 
 }

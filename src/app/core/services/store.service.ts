@@ -1,18 +1,7 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { AuthInfo, Role, User } from '../core.models';
 
-/**
- * Näkymän otsikko.
- *
- * @interface Headline
- */
-interface Headline {
-  text?: string;
-  appHeadline?: boolean;
-  noCourseTitle?: boolean;
-  showInIframe?: boolean;
-}
+import { AuthInfo, Role, User } from '../core.models';
 
 /**
  *
@@ -39,10 +28,9 @@ export class StoreService {
     MILLISECONDS_IN_MIN: 60000,
     thisYear: new Date().getFullYear()
   }
+
   private courseName: string | null = null;
-  private headline: Headline | null = null;
   private isLoading$: Subject<boolean> = new Subject();
-  private isLoggedIn$ = new BehaviorSubject<boolean | null>(null);
   private messageEmitter$ = new Subject<string>();
   private positions: { [url: string]: number } = {};
   private user$ = new BehaviorSubject<User | null | undefined>(undefined);
@@ -53,7 +41,8 @@ export class StoreService {
 
   /* get -alkuiset palauttavat sen hetkisen arvon. Huomioi, että
     esimerkiksi käyttäjätietoja ei sivun latautumisen alussa ole
-    välttämättä ehditty vielä hakea, vaan arvo on tällöin null. */
+    välttämättä ehditty vielä palvelimelta hakea, vaan arvo on tällöin
+    undefined tai null. */
 
   /**
    * Sovelluksen selainotsikoiden perusosa.
@@ -73,28 +62,6 @@ export class StoreService {
    */
   public getCourseName(): string | null {
     return this.courseName ?? '';
-  }
-
-  /**
-   * Näkymän otsikko.
-   *
-   * @return {*}  {(Headline | null)}
-   * @memberof StoreService
-   */
-  public getHeadline(): Headline | null {
-    return this.headline;
-  }
-
-
-  /*
-  /**
-   * Onko käyttäjä kirjautunut.
-   *
-   * @return {*}  {(Boolean | null)}
-   * @memberof StoreService
-   */
-  public getIsLoggedIn(): Boolean | null {
-    return this.isLoggedIn$.value;
   }
 
 
@@ -129,7 +96,9 @@ export class StoreService {
   }
 
   /**
-   * Käyttäjän rooli kurssilla, johon ollaan kirjautuneena.
+   * Käyttäjän rooli kurssilla, johon ollaan kirjautuneena. Voi olla
+   * null jos sivu on juuri ladattu. Käytä siihen tarkoitukseen
+   * trackUserInfo -metodia.
    *
    * @return {*}  {(Role | null)}
    * @memberof StoreService
@@ -141,7 +110,9 @@ export class StoreService {
   /**
    * Käyttäjän tiedot.
    *
-   * undefined  Tietoja ei olla vielä haettu.
+   * undefined  Tietoja ei olla vielä haettu. Kun sovellus on juuri
+   *            käynnistymyt eikä tilaa ole haettu palvelimelta. Käytä silloin
+   *            trackUserInfo -metodia.
    * null       Käyttäjä ei ole kirjautunut. Voi olla kirjautuneena
    *            eri kurssille.
    *
@@ -161,16 +132,6 @@ export class StoreService {
    */
   public getUserName(): string | null {
     return this.user$.value?.nimi ?? null;
-  }
-
-  /**
-   * Aseta näkymän otsikko.
-   *
-   * @param {Headline} headline
-   * @memberof StoreService
-   */
-  public setHeadline(headline: Headline): void {
-    this.headline = headline;
   }
 
   public setUserInfo(newUserInfo: User | null): void {
@@ -257,28 +218,6 @@ export class StoreService {
   }
 
   /**
-   * Aseta, että käyttäjä on kirjautunut.
-   *
-   * @memberof StoreService
-   */
-  public setLoggedIn(): void {
-    if (this.isLoggedIn$.value !== true) {
-      // this.setSessionID('loggedin');
-      this.isLoggedIn$.next(true);
-      console.log('authService: asetettiin kirjautuminen.');
-    }
-  }
-
-  // Aseta tila kirjautumattomaksi.
-  public setNotLoggegIn(): void {
-    console.log('Asetetaan: ei kirjautunut.');
-    if (this.isLoggedIn$.value !== false) {
-      this.isLoggedIn$.next(false);
-    }
-    if (this.user$ !== null) this.user$.next(null);
-  }
-
-  /**
    * Aseta näkymän vierityksen kohta.
    *
    * @param {string} url
@@ -287,10 +226,6 @@ export class StoreService {
    */
   public setPosition(url: string, position: number) {
     this.positions[url] = position;
-  }
-
-  public onIsUserLoggedIn(): Observable<any> {
-    return this.isLoggedIn$.asObservable();
   }
 
   /**
@@ -302,16 +237,6 @@ export class StoreService {
    */
   public trackLoading(): Observable<boolean> {
     return this.isLoading$.asObservable();
-  }
-
-  /**
-   * Seuraa kirjautumisen tilaa.
-   *
-   * @return {*}  {(Observable<boolean | null>)}
-   * @memberof StoreService
-   */
-  public trackLoggedIn(): Observable<boolean | null> {
-    return this.isLoggedIn$.asObservable();
   }
 
   /**
