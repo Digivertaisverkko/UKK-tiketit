@@ -159,7 +159,7 @@ export class SubmitFaqComponent implements OnInit {
       }
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
-      // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
+      // kommentit[0] on vastaus, johon UKK:n liitteet on osoitettu.
       if (!this.isCopiedFromTicket) {
         this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       }
@@ -172,8 +172,8 @@ export class SubmitFaqComponent implements OnInit {
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena
       viimeinen ratkaisuehdotus jää oletusvastaukseksi. */
 
-      if (this.editExisting) {
-        this.form.controls['answer'].setValue(response.kommentit[0].viesti);
+      if (this.editExisting) { 
+          this.form.controls['answer'].setValue(response.kommentit[0]?.viesti ?? '');
       } else {
         for (let comment of response.kommentit) {
           if (comment.tila === 5) {
