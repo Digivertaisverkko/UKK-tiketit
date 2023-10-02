@@ -68,6 +68,12 @@ export class AuthService {
     this.startUpdatingUserinfo();
   }
 
+  /* Login kutsut menee.
+   * 1. getLoginInfo
+   * 2. login
+   * 3. authenticate
+  */
+
   /**
    * Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta.
    *
@@ -236,13 +242,8 @@ export class AuthService {
    if (courseID === null) {
      throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
    }
-
    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
    const codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
-   // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
-   // Jos haluaa storageen tallentaa:
-   // this.storage.set('state', state);
-   // this.storage.set('codeVerifier', codeVerifier);
    let url: string = environment.apiBaseUrl + '/login';
    const httpOptions =  {
      headers: new HttpHeaders({
@@ -257,12 +258,8 @@ export class AuthService {
    } catch (error: any) {
      this.handleError(error);
    }
-   // if (response['login-url'] == undefined) {
-   //   throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
-   // }
-   return response
-   // const loginUrl = response['login-url'];
-   // return loginUrl;
+   const loginInfo: LoginInfo = response;
+   return loginInfo
  }
 
 
