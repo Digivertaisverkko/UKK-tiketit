@@ -22,6 +22,7 @@ interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
+
 interface ErrorNotification {
   title: string,
   message: string,
@@ -133,7 +134,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trackUserInfo();
     this.checkRouterData();
     this.startPollingFAQ(this.POLLING_RATE_MIN);
-    // this.trackLoggedStatus();
     this.trackScreenSize();
   }
 
@@ -224,7 +224,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialog.open(RefreshDialogComponent, dialogConfig);
   }
 
-  public newTicketMessage(event: any) {
+  public newTicketMessage(event: 'loaded') {
     if (event === 'loaded') {
       this.isTicketsLoaded = true;
       if (this.isPolling === true) {
