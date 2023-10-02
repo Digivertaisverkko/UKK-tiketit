@@ -194,7 +194,7 @@ export class SubmitFaqComponent implements OnInit {
     }
   }
 
-  private prepareSendFiles(response?: any): void {
+  private prepareSendFiles(response?: AddTicketResponse): void {
     if (!this.editExisting && response?.uusi == null) {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
         onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
@@ -202,8 +202,8 @@ export class SubmitFaqComponent implements OnInit {
     }
     let ticketID, commentID;
     if (!this.editExisting) {
-      ticketID = response.uusi.tiketti;
-      commentID = response.uusi.kommentti;
+      ticketID = response!.uusi.tiketti;
+      commentID = response!.uusi.kommentti;
     } else {
       ticketID = this.ticketid;
       commentID = this.originalTicket?.kommentit[0].id;
