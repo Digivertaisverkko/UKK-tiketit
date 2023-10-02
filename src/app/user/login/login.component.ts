@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '@core/services/store.service';
+import { Observable, takeWhile } from 'rxjs';
 
 /**
  * Sisäänkirjautumisnäkymä. Tämä ei ole käytössä upotuksessa. Tähän näkymään
@@ -45,7 +47,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.routeToCourseIfLoggedin();
+    this.store.setUserInfo(null);
     const isInIframe: string | null = window.sessionStorage.getItem('inIframe');
     if (!this.loginid && isInIframe !== 'true') {
       // Tehdään, jotta saadaan login id.
@@ -120,16 +122,6 @@ export class LoginComponent implements OnInit {
     });
 
     this.form.enable();
-  }
-
-  private routeToCourseIfLoggedin(): void {
-    this.store.trackUserInfo().subscribe(userinfo => {
-      if (userinfo === undefined) return;
-      if (userinfo !== null) {
-        console.log('login: on jo kirjautunut, ohjataan kurssille ' + this.courseid);
-        this.router.navigateByUrl('course/' + this.courseid + '/list-tickets');
-      }
-    });
   }
 
 }
