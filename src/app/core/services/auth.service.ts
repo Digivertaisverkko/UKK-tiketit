@@ -8,7 +8,7 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import { AuthInfo, LoginInfo, LoginResult, Role, User } from '../core.models';
+import { AuthInfo, ConsentResponse, LoginResult, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 import { UtilsService } from './utils.service';
 
@@ -20,11 +20,6 @@ interface UserRights {
 interface LoginResponse {
   success: boolean,
   'login-code': string
-}
-
-interface ConsentResponse {
-  success: boolean,
-  kurssi: number
 }
 
 interface AuthRequestResponse {
