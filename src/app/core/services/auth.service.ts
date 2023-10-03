@@ -8,7 +8,7 @@ import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import { AuthInfo, ConsentResponse, LoginResult, Role, User } from '../core.models';
+import { AuthInfo, ConsentResponse, LoginInfo, LoginResult, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 import { UtilsService } from './utils.service';
 
@@ -33,6 +33,7 @@ interface AuthRequestResponse {
  * @export
  * @class AuthService
  */
+
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
@@ -307,14 +308,14 @@ export class AuthService {
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
-    this.getLoginInfo('own', courseID).then((response: any) => {
+    this.getLoginInfo('own', courseID).then((response: LoginInfo) => {
       if (response === undefined) {
         console.error('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
-        return
+        return;
       }
       const loginURL = response['login-url'];
       if (notification) {
-        this.router.navigate(loginURL, { state: { notification: notification } })
+        this.router.navigate([ loginURL ], { state: { notification: notification } })
       }
       this.router.navigateByUrl(loginURL);
     })
@@ -365,14 +366,13 @@ export class AuthService {
     let url = environment.apiBaseUrl + '/kirjauduulos';
     try {
       response = await firstValueFrom(this.http.post(url, {}));
-    } catch (error: any) {
-      return { success: false }
+    } catch {
     }
     this.store.setUserInfo(null);
     this.store.unsetPosition();
     this.store.setCourseName('');
     window.sessionStorage.clear();
-    return { success: true }
+    return response
   }
 
   /**

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../services/auth.service';
 import { ConsentResponse } from '@core/core.models';
-import { MatDialog } from '@angular/material/dialog';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
 
@@ -89,7 +89,7 @@ export class DataConsentComponent implements OnInit {
   }
 
   public giveConsent() {
-    this.auth.sendDataConsent(this.tokenid, true).then((res: any) => {
+    this.auth.sendDataConsent(this.tokenid, true).then((res: ConsentResponse) => {
       if (res?.success == true) {
         if (res?.kurssi != null) {
           const courseID = String(res.kurssi);
