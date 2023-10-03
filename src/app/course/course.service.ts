@@ -8,7 +8,11 @@ import { GenericResponse, Role } from '@core/core.models';
 import { InvitedInfo, Kenttapohja, Kurssini } from './course.models';
 import { StoreService } from '@core/services/store.service';
 
-// Metodi: getCourses, API: /api/kurssit/
+/**
+ * Kurssi. Käytetään mdetodissa: getCourses, API: /api/kurssit/
+ *
+ * @interface Kurssi
+ */
 interface Kurssi {
   id: string;
   nimi: string;
@@ -16,7 +20,7 @@ interface Kurssi {
 
 /**
  * Käsittelee kursseihin liittyvää tietoa.
- * 
+ *
  * @export
  * @class CourseService
  */

@@ -3,8 +3,8 @@ import {  Component, ChangeDetectionStrategy, ElementRef, EventEmitter, Output,
 import { UtilsService } from '@core/services/utils.service';
 
 /**
- * Listaus-näkymissä käytetty tekstinsyöttö-elementti. Labelin sisältö voidaan
- * syöttää komponentin tagien väliin.
+ *
+ * Tekstinsyöttö-elementti. Näyttää labelina tagien sisällön.
  *
  * @export
  * @class SearchBarComponent

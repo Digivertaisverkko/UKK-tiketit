@@ -7,8 +7,9 @@ import { User } from '@core/core.models';
 import { UtilsService } from '@core/services/utils.service';
 
 /**
- * Näyttää tiketin lähettäjän tiedot. Näihin kuuluu lähettäjän nimi, asema,
- * milloin tiketti on tehty ja muokattu sekä nimen ja roolin mukaan generoitu
+ *
+ * Tiketin lähettäjän tiedot. Näihin kuuluu lähettäjän nimi, asema, milloin
+ * tiketti on tehty ja muokattu sekä nimen ja roolin mukaan generoitu
  * avatar-ikoni.
  *
  * @export

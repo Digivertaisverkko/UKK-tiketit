@@ -7,7 +7,8 @@ import { environment } from 'src/environments/environment';
 import { StoreService } from '@core/services/store.service';
 
 /**
- * Näyttää H1-tason otsikon, joka on tavallisesti kurssin nimi. Voidaan asettaa
+ *
+ * H1-tason otsikko, joka on tavallisesti kurssin nimi. Voidaan asettaa
  * näkymään sovelluksen nimi tai kirjoittaa tagien sisään muu otsikko. Kurssin
  * nimeä ei oletuksen näytetä upotuksessa.
  *

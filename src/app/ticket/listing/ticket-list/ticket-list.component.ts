@@ -8,10 +8,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { SortableTicket } from '@ticket/ticket.models';
 import { StoreService } from '@core/services/store.service';
-import { TicketService } from '../../ticket.service';
+import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
-import { SortableTicket } from '../../ticket.models';
 
 interface ColumnDefinition {
   def: string;
@@ -59,6 +59,7 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
 };
 
 /**
+ *
  * Lista tiketeistä / kysymyksistä. Näyttää opettajalle listan kurssin tiketeistä
  * sekä listan ratkaistuiksi asetetuista tiketeistä ja opiskelijalle tämän omat
  * tiketit. Tämän komponentin parent komponentti on "listing".
