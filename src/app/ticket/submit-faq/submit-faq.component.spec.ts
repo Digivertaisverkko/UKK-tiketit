@@ -19,7 +19,8 @@ import { SharedModule } from '@shared/shared.module';
 import { StoreService } from '@core/services/store.service';
 import { SubmitFaqComponent } from './submit-faq.component';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
-import { TicketService, UusiUKK } from '@ticket/ticket.service';
+import { TicketService } from '@ticket/ticket.service';
+import { UusiUKK } from '@ticket/ticket.models';
 
 
 describe('SubmitFaqComponent', () => {
