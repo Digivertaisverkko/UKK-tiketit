@@ -2,18 +2,18 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject, Subscription, takeUntil, takeWhile, tap, timer } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
 import { Validators as EditorValidators } from 'ngx-editor';
 
 import { EditAttachmentsComponent } from '../components/edit-attachments/edit-attachments.component';
 import { environment } from 'src/environments/environment';
 import { FileInfo, NewCommentResponse, Tiketti } from '../ticket.models';
+import schema from '@shared/editor/schema';
 import { StoreService } from '@core/services/store.service';
 import { TicketService  } from '../ticket.service';
 import { User } from '@core/core.models'
 
-import schema from '@shared/editor/schema';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 /**
  * Yksittäisen tiketin / kysymyksen näkymä. Sisältää kommentin lähettämisen
@@ -80,6 +80,7 @@ export class TicketViewComponent implements OnInit, OnDestroy {
   public attachFilesText: string = '';
   public editingCommentIDParent: string | null = null;
   public errorMessage: string = '';
+  public errorTitle: string = '';
   // Testejä varten, kun ei aina ota käyttöön asetettua localea.
   public errorCode: string = '';
   public form: FormGroup = this.buildForm();
@@ -203,7 +204,6 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     this.attachments.clear();
     const url = `/course/${this.courseid}/submit-faq/${this.ticketID}`;
     this.router.navigate([url], { state: { copiedFromTicket: 'true' } });
-    // this.router.navigateByUrl(`/course/${this.courseID}/submit-faq/${this.ticketID}`);
   }
 
   // Hae tiketti ja päivitä näkymän tila.
@@ -215,8 +215,9 @@ export class TicketViewComponent implements OnInit, OnDestroy {
     if (this.editingCommentIDParent !== null) return
     this.ticketService.getTicket(this.ticketID, courseID).then(response => {
       if (response === null) {
-        this.errorMessage = $localize`:@@Kysymystä ei löydy:
-        Hakemaasi kysymystä ei ole olemassa. Kysymyksen aloittajan on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+        this.errorTitle = $localize `:@@Kysymystä ei löytynyt:Kysymystä ei löytynyt`;
+        this.errorMessage = $localize`:@@Kysymystä ei ole olemassa:
+        Hakemaasi kysymystä ei ole olemassa. Kysymyksen lähettäjä on poistanut sen tai sinulla on virheellinen URL-osoite` + '.';
         this.state = 'error';
         this.errorCode = 'noTicket';
         return

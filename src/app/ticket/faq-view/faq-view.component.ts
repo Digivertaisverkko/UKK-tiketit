@@ -25,6 +25,7 @@ export class FaqViewComponent implements OnInit {
   @Input() id!: string;
 
   public errorMessage: string = '';
+  public errorTitle: string = '';
   public isArchivePressed: boolean = false;
   public isCopyToClipboardPressed: boolean = false;
   public isLoaded: boolean = false;
@@ -47,8 +48,9 @@ export class FaqViewComponent implements OnInit {
       .then((response) => {
 
         if (response === null) {
-          this.errorMessage = $localize`:@@UKK ei löydy:
-          Hakemaasi usein kysyttä kysymystä ei ole olemassa. Sen tekijä on voinut poistaa sen tai sinulla on virheellinen URL-osoite` + '.';
+          this.errorTitle = $localize `:@@Kysymystä ei löytynyt:Kysymystä ei löytynyt`;
+          this.errorMessage = $localize `:@@UKK ei ole:
+          Hakemaasi usein kysyttyä kysymystä ei ole olemassa. Sen tekijä on poistanut sen tai sinulla on virheellinen URL-osoite` + '.';
           return
         }
 
@@ -57,7 +59,7 @@ export class FaqViewComponent implements OnInit {
       })
       .catch(error => {
         this.errorMessage =
-          $localize`:@@UKK näyttäminen epäonnistui:
+          $localize `:@@UKK näyttäminen epäonnistui:
               Usein kysytyn kysymyksen näyttäminen epäonnistui` + '.';
       })
       .finally(() => this.isLoaded = true );
