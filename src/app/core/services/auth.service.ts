@@ -1,10 +1,10 @@
 import { ActivationEnd, Router } from '@angular/router';
+import cryptoRandomString from 'crypto-random-string';
 import { filter, firstValueFrom } from 'rxjs';
-import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
+import { FormatWidth, getLocaleDateFormat } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import * as shajs from 'sha.js';
-import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
@@ -43,7 +43,6 @@ export class AuthService {
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,
-              private location: Location,
               private router: Router,
               private store: StoreService,
               private utils: UtilsService,
@@ -152,8 +151,6 @@ export class AuthService {
     }
     let response: any;
     try {
-      /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
-      joka paikassa odottaa observablen arvoa? */
       /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
       console.log(`auth.fetcUserInfo: Haetaan, onko oikeuksia ja käyttäjätietoja kurssille ${courseID}.`);
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
@@ -260,7 +257,6 @@ export class AuthService {
    // const loginUrl = response['login-url'];
    // return loginUrl;
  }
-
 
   /**
    * Palauta rooli, jossa se on siinä muodossa on kuin tarkoitettu näytettäväksi

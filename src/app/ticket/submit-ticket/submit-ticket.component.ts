@@ -1,20 +1,20 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import { Validators as EditorValidators } from 'ngx-editor';
 import { Observable, Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { Validators as EditorValidators } from 'ngx-editor';
 
-import { User } from '@core/core.models'
-import { StoreService } from '@core/services/store.service';
-import { CourseService } from '@course/course.service';
-import schema from '@shared/editor/schema';
-import { EditAttachmentsComponent }
-    from '@ticket/components/edit-attachments/edit-attachments.component';
 import { AddTicketResponse, FileInfo, Kentta, Liite, UusiTiketti }
     from '@ticket/ticket.models';
+import { CourseService } from '@course/course.service';
+import { EditAttachmentsComponent }
+    from '@ticket/components/edit-attachments/edit-attachments.component';
+import { StoreService } from '@core/services/store.service';
+import schema from '@shared/editor/schema';
 import { TicketService } from 'src/app/ticket/ticket.service';
+import { User } from '@core/core.models'
 
 /**
  * Näkymä uuden tiketin lähettämiseen tai vanhan muokkaamiseen.

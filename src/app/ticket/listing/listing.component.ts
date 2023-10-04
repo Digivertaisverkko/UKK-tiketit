@@ -309,7 +309,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-
   // Aseta virheviestejä.
   private setError(type: 'notParticipant' | 'notLoggedIn'): void {
     if (type === 'notParticipant') {

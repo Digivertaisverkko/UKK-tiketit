@@ -128,20 +128,6 @@ export class JoinComponent implements OnInit, OnDestroy {
     });
   }
 
-  /*
-  private loginIfNeeded(): void {
-    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
-      if (response === false) {
-        this.isLoggedIn = false;
-        this.auth.saveRedirectURL();
-        this.auth.navigateToLogin(this.courseid);
-      } else if (response === true) {
-        this.isLoggedIn = true;
-      }
-    });
-  }
-  */
-
   public logout() {
     this.auth.logout().then(() => {
       this.auth.saveRedirectURL();
@@ -175,7 +161,7 @@ export class JoinComponent implements OnInit, OnDestroy {
           this.setNotRightUser();
         }
       }
-    })
+    });
   }
 
 }

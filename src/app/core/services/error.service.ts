@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 
 import { Error } from "../core.models";
 import { StoreService } from "./store.service";
-import { HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 
 interface BackendErrorResponse {
   success: boolean,

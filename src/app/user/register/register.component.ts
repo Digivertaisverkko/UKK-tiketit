@@ -1,18 +1,19 @@
+
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Subscription, takeWhile } from 'rxjs';
+import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
+import { CourseService } from '@course/course.service';
 import { InvitedInfo } from '@course/course.models';
+import { LoginInfo } from '@core/core.models';
 import { PrivacyModalComponent } from '@core/footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
-import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
-import { CourseService } from '@course/course.service';
-import { LoginInfo } from '@core/core.models';
 import { User } from '@core/core.models';
+import { stringsMatchValidator } from '@shared/directives/strings-match.directive';
 
 /**
  * Näkymä, jossa uusi käyttäjä pystyy luomaan käyttäjätilin. Käyttäjä on saanut
@@ -40,8 +41,6 @@ export class RegisterComponent implements OnInit {
   public form: FormGroup;
   public errorMessage: string = '';
   public invitedInfo: InvitedInfo | undefined;
-  // public isLoggedIn$: Subscription | null = null;
-  // public isLoggedIn: boolean | null | undefined;
   public user: User | null | undefined;
   /* Jos kutsusta ei saada tarvittavia tietoja eli rekisteröiminen ei ole
   mahdollista, käytetään error-tilaa. Silloin ei näytetä lomaketta. */
@@ -79,7 +78,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.trackLoggedStatus();
     this.trackUserInfo();
 
     /**
@@ -185,20 +183,6 @@ export class RegisterComponent implements OnInit {
       this.errorMessage = $localize `:@@Tilin luominen ei onnistunut:Tilin luominen ei onnistunut.`;
     });
   }
-
-  /*
-  private trackLoggedStatus(): void {
-    this.isLoggedIn$ = this.store.onIsUserLoggedIn().pipe(
-      takeWhile(() => this.isLoggedIn === undefined, true)
-    ).subscribe(res => {
-      this.isLoggedIn = res;
-      // Jos kutsun tietojen haku on onnistunut ja voidaan jatkaa.
-      if (this.isLoggedIn === true && this.invitedInfo) {
-        this.auth.logout();
-      }
-    });
-  }
-  */
 
   /**
    * Hae käyttäjätiedot. Jos käyttäjä on kirjautunut ja kutsutiedot on

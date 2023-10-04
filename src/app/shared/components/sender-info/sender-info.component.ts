@@ -59,6 +59,7 @@ export class SenderInfoComponent implements OnInit {
   @Input() styles?: any;
 
   public avatarColor: { background: string; text: string };
+  public createdString: string = '';
   public userNameInitials = '';
   public isCreatedToday: boolean | undefined;
   public isCreatedYesterday: boolean | undefined;
@@ -66,7 +67,6 @@ export class SenderInfoComponent implements OnInit {
   public isEditedToday: boolean | undefined;
   public isEditedYesterday: boolean | undefined;
   public senderTitle: string = '';
-  public createdString: string = '';
   private currentUserName: string | null;
 
   constructor(
@@ -92,10 +92,6 @@ export class SenderInfoComponent implements OnInit {
     }
     if (this.user != null) {
       this.senderTitle = this.getSenderTitle(this.user.nimi, this.user.asema);
-      /*
-      this.senderTitle = this.user.nimi === this.currentUserName ? $localize`:@@Minä:Minä` :
-      this.user.asemaStr ?? '';
-      console.warn(this.user.asemaStr ); */
     }
     if (this.user?.nimi) {
       this.utils.getColorIndex(this.user?.nimi, 32).then(index => {

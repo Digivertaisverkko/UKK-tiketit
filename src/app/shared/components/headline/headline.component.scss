@@ -6,8 +6,8 @@ $debug: false;
 }
 
 /* Yläotsikko, jossa punainen viiva. Käytetään esim:
-  <h1 class="main-header"><span>Otsikko</span</h1>
-*/
+ * <h1 class="main-header"><span>Otsikko</span</h1>
+ */
 h1 {
   // Ei ota jostain syystä custom teemasta fonttia.
   font-family: var(--display-font);

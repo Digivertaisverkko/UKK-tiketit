@@ -5,11 +5,12 @@ import { TestBed } from '@angular/core/testing';
 import localeFi from '@angular/common/locales/fi';
 
 import { environment } from 'src/environments/environment';
-import { SortableTicket, TicketService, Tiketti } from './ticket.service';
+import { TicketService } from './ticket.service';
 import { storeDummyData } from '@core/services/store.service.dummydata';
 import { StoreService } from '@core/services/store.service';
 import { ErrorService } from '@core/services/error.service';
 import { TicketDummyData } from './ticket.dummydata';
+import { Tiketti } from './ticket.models';
 import { registerLocaleData } from '@angular/common';
 
 environment.testing = true;

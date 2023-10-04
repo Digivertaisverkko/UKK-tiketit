@@ -20,14 +20,14 @@ export class UtilsService {
   public async getColorIndex(input: string, maxNumber: number):
   Promise<number> {
   const hash = await this.getHash(input);
-  const hashPart = parseInt(hash.substr(0, 10), 16);
+  const hashPart = parseInt(hash.substring(0, 10), 16);
   return hashPart % maxNumber;
   }
-  
+
   /**
-   * Angularin ActivatedRoute voi palauttaa joissain tilanteissa undefined, niin 
+   * Angularin ActivatedRoute voi palauttaa joissain tilanteissa undefined, niin
    * tämä on osoittautunut varmemmaksi.
-   * 
+   *
    * @return {*}  {(string | null)}
    * @memberof UtilsService
    */

@@ -55,7 +55,6 @@ const AvatarColor32: { [key: string]: { background: string; text: string } } = {
   '31': { background: '#607D8B', text: '#FFFFFF' },
   '32': { background: '#455A64', text: '#FFFFFF' },
 
-  
 };
 
 export default AvatarColor32

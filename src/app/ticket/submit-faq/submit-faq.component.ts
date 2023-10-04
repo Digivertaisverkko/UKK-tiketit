@@ -248,8 +248,7 @@ export class SubmitFaqComponent implements OnInit {
         this.isFaqSent = true;
         this.prepareSendFiles();
       })
-      .catch( error => {
-        // ? lisää eri virhekoodeja?
+      .catch(() => {
         this.state = 'editing';
         this.form.enable();
         this.errorMessage = $localize`:@@UKK muokkaaminen epäonnistui:
@@ -259,8 +258,6 @@ export class SubmitFaqComponent implements OnInit {
 
   private submitNewFAQ(faq: UusiUKK): void {
     // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
-    // const id = this.ticketId ?? this.courseId;
-    // const editExisting = this.ticketId ? true : false;
     this.ticketService.addFaq(faq, this.courseid)
       .then((response: AddTicketResponse) => {
         if (this.attachments.fileInfoList.length === 0) this.goBack();
@@ -270,8 +267,7 @@ export class SubmitFaqComponent implements OnInit {
         this.isFaqSent = true;
         this.prepareSendFiles(response);
       })
-      .catch( error => {
-        // ? lisää eri virhekoodeja?
+      .catch(() => {
         this.state = 'editing';
         this.form.enable();
         this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:
