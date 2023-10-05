@@ -38,7 +38,15 @@ export class CourseService {
   ) {
   }
 
-  // Lisää lisäkenttä.
+  /**
+   * Lisää uusi lisäkenttä tai muokkaa olemassaolevaa.
+   *
+   * @param {string} courseID
+   * @param {Kenttapohja} editableField
+   * @param {boolean} isNewField
+   * @return {*}  {Promise<{ success: boolean }>}
+   * @memberof CourseService
+   */
   public async addField(courseID: string, editableField: Kenttapohja,
       isNewField: boolean): Promise<{ success: boolean }> {
     let info;
@@ -63,7 +71,14 @@ export class CourseService {
     }
   }
 
-  // Liitä ulkopuolinen käyttäjä kurssille.
+  /**
+   * Liitä ulkopuolinen käyttäjä kurssille.
+   *
+   * @param {string} courseID
+   * @param {string} UUID
+   * @return {*}  {Promise<{ success: boolean }>}
+   * @memberof CourseService
+   */
   public async joinCourse(courseID: string, UUID: string):
       Promise<{ success: boolean }> {
     let response;
@@ -79,7 +94,13 @@ export class CourseService {
     return response;
   }
 
-  // Lataa kurssin UKK:t JSON-stringinä.
+  /**
+   * Lataa kurssin UKK:t JSON-stringinä.
+   *
+   * @param {string} courseID
+   * @return {*}  {Promise<string>}
+   * @memberof CourseService
+   */
   public async exportFAQs(courseID: string): Promise<string> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/ukk/vienti`;
@@ -92,7 +113,13 @@ export class CourseService {
     return filecontent;
   }
 
-  // Lataa kurssin asetukset JSON-stringinä.
+  /**
+   * Lataa kurssin asetukset JSON-stringinä.
+   *
+   * @param {string} courseID
+   * @return {*}  {Promise<string>}
+   * @memberof CourseService
+   */
   public async exportSettings(courseID: string): Promise<string> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
@@ -105,7 +132,12 @@ export class CourseService {
     return filecontent;
   }
 
-  // Palauta listan kaikista kursseista.
+  /**
+   * Palauta listan kaikista kursseista.
+   *
+   * @return {*}  {Promise<Kurssi[]>}
+   * @memberof CourseService
+   */
   public async getCourses(): Promise<Kurssi[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/kurssit';
@@ -117,7 +149,13 @@ export class CourseService {
     return response;
   }
 
-  // Palauta kurssin nimi.
+  /**
+   * Palauta kurssin nimi.
+   *
+   * @param {string} courseID
+   * @return {*}  {Promise<string>}
+   * @memberof CourseService
+   */
   public async getCourseName(courseID: string): Promise<string> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}`;
@@ -131,7 +169,12 @@ export class CourseService {
     return response['nimi'];
   }
 
-  // Palauta listan kaikista kursseista, joilla kirjautunut käyttäjä on.
+  /**
+   * Palauta listan kaikista kursseista, joilla kirjautunut käyttäjä on.
+   *
+   * @return {*}  {Promise<Kurssini[]>}
+   * @memberof CourseService
+   */
   public async getMyCourses(): Promise<Kurssini[]> {
     let response: any;
     let url = environment.apiBaseUrl + '/minun/kurssit';
@@ -144,7 +187,14 @@ export class CourseService {
     return response;
   }
 
-  // Palauta käyttäjäkutsun tiedot.
+  /**
+   * Palauta käyttäjäkutsun tiedot.
+   *
+   * @param {string} courseID
+   * @param {string} inviteID
+   * @return {*}  {Promise<InvitedInfo>}
+   * @memberof CourseService
+   */
   public async getInvitedInfo(courseID: string, inviteID: string):
         Promise<InvitedInfo> {
     if (inviteID.length === 0) {
@@ -160,9 +210,16 @@ export class CourseService {
     return response;
   }
 
-  /* Palauta tikettien lisäkentät sekä käyttäjälle uutta tikettiä tehdessä
-     näytettävä kuvaus.*/
-  public async getTicketFieldInfo(courseID: string): Promise<{ kuvaus: string,
+    /**
+     * Palauta tikettien lisäkentät sekä käyttäjälle uutta tikettiä tehdessä
+     * näytettävä kuvaus.
+     *
+     * @param {string} courseID
+     * @return {*}  {Promise<{ kuvaus: string,
+     *       kentat: Kenttapohja[] }>}
+     * @memberof CourseService
+     */
+    public async getTicketFieldInfo(courseID: string): Promise<{ kuvaus: string,
       kentat: Kenttapohja[] }> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tikettipohja/kentat`;
@@ -174,7 +231,14 @@ export class CourseService {
     return response;
   }
 
-  // Lähetetään JSON-muotoiset UKK:t lisättäväksi kurssille.
+  /**
+   * Lähetä tiedostoon tallennetut UKK:t lisättäväksi kurssille.
+   *
+   * @param {string} courseID
+   * @param {JSON} filecontent
+   * @return {*}  {(Promise<GenericResponse | any>)}
+   * @memberof CourseService
+   */
   public async importFAQs(courseID: string, filecontent: JSON):
       Promise<GenericResponse | any>{
     let response;
@@ -188,7 +252,14 @@ export class CourseService {
     return response;
   }
 
-  // Lähetetään JSON-muotoiset asetukset lisättäväksi kurssille.
+  /**
+   * Lähetä tiedostoon tallennetut asetukset lisättäväksi kurssille.
+   *
+   * @param {string} courseID
+   * @param {JSON} filecontent
+   * @return {*}  {(Promise<GenericResponse | any>)}
+   * @memberof CourseService
+   */
   public async importSettings(courseID: string, filecontent: JSON):
       Promise<GenericResponse | any> {
     let response;
@@ -202,7 +273,14 @@ export class CourseService {
     return response;
   }
 
-  // Poista lisäkenttä.
+  /**
+   * Poista lisäkenttä.
+   *
+   * @param {string} courseID
+   * @param {string} removeFieldID
+   * @return {*}  {Promise<{ success: boolean}>}
+   * @memberof CourseService
+   */
   public async removeField(courseID: string, removeFieldID: string):
       Promise<{ success: boolean}> {
     let info;
@@ -222,7 +300,15 @@ export class CourseService {
     }
   }
 
-  // Kutsu ulkopuolinen käyttäjä kurssille.
+  /**
+   * Kutsu ulkopuolinen käyttäjä kurssille.
+   *
+   * @param {string} courseID
+   * @param {string} email
+   * @param {Role} role
+   * @return {*}  {(Promise<{ success: boolean, kutsu: string } | any>)}
+   * @memberof CourseService
+   */
   public async sendInvitation(courseID: string, email: string, role: Role):
       Promise<{ success: boolean, kutsu: string } | any> {
     if (role === null) {
@@ -242,8 +328,15 @@ export class CourseService {
     return response;
   }
 
-  /*  Aseta kurssille ohjeteksti, joka on näkyvillä, kun käyttäjät
-      lisäävä tikettejä. */
+  /**
+   * Aseta kurssille ohjeteksti, joka on näkyvillä, kun käyttäjät
+   * lisäävät tikettejä.
+   *
+   * @param {string} courseID
+   * @param {string} helpText
+   * @return {*}  {Promise<{ success: boolean }>}
+   * @memberof CourseService
+   */
   public async setHelpText(courseID: string, helpText: string):
       Promise<{ success: boolean }> {
     const url = `${this.api}/kurssi/${courseID}/tikettipohja/kuvaus`;
@@ -257,7 +350,14 @@ export class CourseService {
     return response
   }
 
-  // Luo uudet kentät kurssin tikettipohjalle.
+  /**
+   * Luo uudet kentät kurssin tikettipohjalle.
+   *
+   * @param {string} courseID
+   * @param {Kenttapohja[]} fields
+   * @return {*}  {Promise<boolean>}
+   * @memberof CourseService
+   */
   public async setTicketField(courseID: string, fields: Kenttapohja[]):
       Promise<boolean> {
     // Haetuissa kentissä on id, mutta lähetettävissä ei ole.
