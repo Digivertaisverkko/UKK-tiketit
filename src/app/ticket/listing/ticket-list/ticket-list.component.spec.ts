@@ -1,9 +1,8 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, discardPeriodicTasks, fakeAsync, tick }
     from '@angular/core/testing';
-import { findEl } from '@shared/spec-helpers/element.spec-helper';
-import { HarnessLoader } from '@angular/cdk/testing';
 import localeFi from '@angular/common/locales/fi';
+import { HarnessLoader } from '@angular/cdk/testing';
 import { LOCALE_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,10 +11,11 @@ import { MatTableHarness } from '@angular/material/table/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MockComponent } from 'ng-mocks';
-import { registerLocaleData } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { findEl } from '@shared/spec-helpers/element.spec-helper';
+import { registerLocaleData } from '@angular/common';
 
 import { AuthDummyData } from '@core/services/auth.dummydata';
 import { SearchBarComponent } from '@shared/components/search-bar/search-bar.component';
@@ -35,10 +35,27 @@ describe('TicketListComponent', () => {
   registerLocaleData(localeFi);
 
   beforeEach(async () => {
-    // Pitää olla ennen TestBed:n konfigurointia.
+    // Tallennetaan, onko painanut "Näytä ratkaistut" -nappia.
+    sessionStorage.clear();
+
     ticketService = jasmine.createSpyObj('TicketService', {
-      getTicketList: Promise.resolve(ticketDummyData.sortableTicketArray)
+      getTicketList : Promise.resolve(ticketDummyData.sortableTicketArray)
     });
+
+    // Ei toiminut.
+    /*
+    ticketService = jasmine.createSpyObj('TicketService', {
+      getTicketList: (courseID: string, option?: { option: 'onlyOwn' | 'archived' }) => {
+        return new Promise((resolve, reject) => {
+          if (option && option.option === 'archived') {
+            resolve(ticketDummyData.sortableArchivedTicketArray);
+          } else {
+            resolve(ticketDummyData.sortableTicketArray);
+          }
+        });
+      }
+    });
+    */
 
     await TestBed.configureTestingModule({
       declarations: [
@@ -69,6 +86,22 @@ describe('TicketListComponent', () => {
     router = TestBed.inject(Router);
     fixture.detectChanges();
   });
+
+  it("clicking Show archived -button calls right method to fetch archived tickets", fakeAsync(() => {
+    const courseID = '1';
+    component.courseid = courseID;
+    component.user = authDummyData.userInfoTeacher;
+    const ticketList =  ticketDummyData.archivedTicketArray;
+    const ticketID = ticketList[0].id;
+    component.ngOnInit();
+    tick(1000);
+    fixture.detectChanges();
+    const button = findEl(fixture, 'show-archived-btn').nativeElement;
+    button.click();
+    tick();
+    expect(ticketService.getTicketList).toHaveBeenCalledWith(courseID, {option: 'archived'});
+    discardPeriodicTasks();
+  }));
 
   it("clicking ticket's title routes to ticket's view", fakeAsync(() => {
     const courseID = '1';
@@ -147,7 +180,6 @@ describe('TicketListComponent', () => {
     it('sets correct ticket data.', fakeAsync (() => {
       component.fetchTickets(courseID);
       tick();
-      expect(component.dataSource.filteredData.length).toBeGreaterThan(0);
       expect(component.dataSource.filteredData).toEqual(ticketDummyData.sortableTicketArray);
       expect(component.dataSource.data).toEqual(ticketDummyData.sortableTicketArray);
     }));

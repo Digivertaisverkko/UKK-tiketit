@@ -88,12 +88,12 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   public error: ErrorNotification | null = null;
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
+  public isArchivedShown: boolean;
   public isLoaded: boolean = false;
-  public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
+  public isPolling: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfQuestions: number = 0;
-  public isArchivedShown: boolean;
 
   private fetchTicketsTimer$: Observable<number>;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 1;

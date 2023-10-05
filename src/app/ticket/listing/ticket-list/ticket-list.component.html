@@ -86,7 +86,6 @@
         >
       Otsikko
     </th>
-    <!-- <td mat-cell *matCellDef="let element" (clik)="goTicketView(element.id)"> -->
     <td mat-cell *matCellDef="let element" >
       <a  class="a-left-padding"
           [attr.data-testid]="'table-title-a-' + element.id"
@@ -137,9 +136,6 @@
           tabindex="-1"
           >
           {{ element.viimeisinStr }}
-<!--         {{ element?.viimeisinTanaan === true ? 'Tänään' : (element.viimeisin |
-            date: element.viimeisin.getFullYear() === currentYear ?
-            'd.M' : 'shortDate' )}} -->
       </a>
     </td>
   </ng-container>
@@ -216,6 +212,7 @@
 
     <button class="button"
             (click)="showArchived()"
+            data-testid="show-archived-btn"
             i18n="@@Näytä arkistoidut"
             mat-raised-button
             *ngIf="!isArchivedShown else hideArchivedBtn"
@@ -226,6 +223,7 @@
     <ng-template #hideArchivedBtn>
       <button class="button"
               (click)="hideArchived()"
+              data-testid="hide-archived-btn"
               i18n="@@Piilota arkistoidut"
               mat-raised-button
               >
