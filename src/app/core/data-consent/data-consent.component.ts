@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '../services/auth.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ConsentResponse } from '@core/core.models';
 import { PrivacyModalComponent } from '../footer/privacy-modal/privacy-modal.component';
 import { StoreService } from '@core/services/store.service';
 
@@ -68,7 +69,7 @@ export class DataConsentComponent implements OnInit {
   }
 
   public denyConsent(hasDeniedBefore?: boolean) {
-    this.auth.sendDataConsent(this.tokenid, false).then((res: any) => {
+    this.auth.sendDataConsent(this.tokenid, false).then((res: ConsentResponse) => {
       if (res?.success !== true) {
         throw Error('Ei saatu palvelimelta kurssi id:ä, ei voida edetä.');
       }
@@ -82,14 +83,13 @@ export class DataConsentComponent implements OnInit {
       } else {
         this.router.navigateByUrl('/no-data-consent');
       }
-      // ? mitä jos ei saada id:ä?
     }).catch (error => {
       console.error('Ei saatu kurssi ID:ä, ei voida edetä kurssinäkymään.');
     })
   }
 
   public giveConsent() {
-    this.auth.sendDataConsent(this.tokenid, true).then((res: any) => {
+    this.auth.sendDataConsent(this.tokenid, true).then((res: ConsentResponse) => {
       if (res?.success == true) {
         if (res?.kurssi != null) {
           const courseID = String(res.kurssi);

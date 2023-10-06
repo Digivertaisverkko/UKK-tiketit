@@ -2,6 +2,15 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
     from '@angular/core';
 import { StoreService } from '@core/services/store.service';
 
+/**
+ *
+ * Näyttää virheilmoituksen.
+ *
+ * @export
+ * @class HeadlineComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-error',
   template: `
@@ -31,8 +40,7 @@ import { StoreService } from '@core/services/store.service';
 export class ErrorComponent implements OnInit {
 
   /**
-   * Jos virheilmoituksessa haluaa näyttää näppäimen, sen teksti.
-   * @type {string}
+   * Näyttää näppäimen tällä tekstillä.
    * @memberof ErrorComponent
    */
   @Input() buttonText: string = '';

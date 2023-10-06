@@ -1,8 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
-import { AuthService } from '../services/auth.service';
 import { StoreService } from '../services/store.service';
 
 /**
@@ -40,8 +38,6 @@ export class PageNotFoundComponent {
   @Input() courseid: string | undefined;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
     private store : StoreService,
     private title : Title
     ) {

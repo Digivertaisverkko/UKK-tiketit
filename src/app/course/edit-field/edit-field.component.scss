@@ -86,9 +86,6 @@
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
   }
-  // .spacer { order: 2 }
-  // .cancel-button { order: 3 }
-  // .prefillable-checkbox { order: 4 }
 }
 
 @media (min-width: $XSmall) {

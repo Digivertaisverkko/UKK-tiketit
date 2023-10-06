@@ -3,6 +3,11 @@
  *
 */
 
+export interface ConsentResponse {
+  success: boolean,
+  kurssi: number
+}
+
 export interface LoginInfo  {
   'login-url': string;
   'login-id': string;

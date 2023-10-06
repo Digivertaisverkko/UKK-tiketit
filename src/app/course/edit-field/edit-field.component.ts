@@ -1,10 +1,10 @@
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators }
     from '@angular/forms';
-import { Router } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipGrid }
     from '@angular/material/chips';
+import { Router } from '@angular/router';
 import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { User } from '@core/core.models';

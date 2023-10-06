@@ -1,12 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
 import { StoreService } from '@core/services/store.service';
-import { Observable, takeWhile } from 'rxjs';
 
 /**
  * Sisäänkirjautumisnäkymä. Tämä ei ole käytössä upotuksessa. Tähän näkymään

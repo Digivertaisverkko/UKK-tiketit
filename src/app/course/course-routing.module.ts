@@ -14,8 +14,6 @@ const routes: Routes = [
   { path: 'course/:courseid/settings/field', component: EditFieldComponent },
 ];
 
-// { path: '', component: AppComponent }
-
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

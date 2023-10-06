@@ -129,7 +129,6 @@ export class JoinComponent implements OnInit, OnDestroy {
     });
   }
 
-
   public logout() {
     this.auth.logout().then(() => {
       this.auth.saveRedirectURL();
@@ -163,7 +162,7 @@ export class JoinComponent implements OnInit, OnDestroy {
           this.setNotRightUser();
         }
       }
-    })
+    });
   }
 
 }

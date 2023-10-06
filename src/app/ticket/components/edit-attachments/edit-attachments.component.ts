@@ -1,12 +1,12 @@
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+        NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import {  ChangeDetectionStrategy, Component,  Input, Output, EventEmitter, OnInit,
           ViewChild, ElementRef, Renderer2, OnDestroy } from '@angular/core';
 import { forkJoin, Observable, Subscription, Subject } from 'rxjs';
 
-import { TicketService } from '@ticket/ticket.service';
 import { FileInfo, Liite } from '@ticket/ticket.models';
 import { StoreService } from '@core/services/store.service';
+import { TicketService } from '@ticket/ticket.service';
 
 interface FileInfoWithSize extends FileInfo {
   filesize: number;
@@ -85,7 +85,7 @@ export class EditAttachmentsComponent implements ControlValueAccessor, OnInit,
 
   /**
    * Palauttaa listan liitteen lähetyksiä, jotka päivittävät edistymisen ja
-   * virheen tapahtuessa asettavat virheviestin. 
+   * virheen tapahtuessa asettavat virheviestin.
    *
    * @private
    * @param {string} ticketID

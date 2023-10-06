@@ -1,6 +1,6 @@
-import { Role } from "@core/core.models";
-import { Kentta, Kommentti, Liite, SortableTicket, Tiketti, UKK } from "./ticket.models";
 import { AuthDummyData } from "@core/services/auth.dummydata";
+import { Role } from "@core/core.models";
+import { Kentta, Kommentti, Liite, SortableTicket, Tiketti, TikettiListassa, UKK } from "./ticket.models";
 
 /**
  * Dummy dataa testausta varten.
@@ -62,6 +62,7 @@ export class TicketDummyData {
         tilaID: 3,
         tila: "3-Lisätietoa pyydetty",
         id: 3,
+        kurssi: '1',
         otsikko: "”Index out of bounds”?",
         aikaleima: new Date("2023-06-21T09:37:36.124Z"),
         aloittajanNimi: "Piia Rinne",
@@ -85,6 +86,7 @@ export class TicketDummyData {
         tilaID: 4,
         tila: "4-Kommentoitu",
         id: 4,
+        kurssi: '1',
         otsikko: "Ohjelma tulostaa numeroita kirjainten sijasta!",
         aikaleima: new Date("2023-06-22T09:37:36.125Z"),
         aloittajanNimi: "Esko Seppä",
@@ -100,9 +102,42 @@ export class TicketDummyData {
             otsikko: "Ongelman tyyppi"
           }
         ],
-        liite: false,
+        liite: true,
         viimeisin: new Date("2023-06-22T09:37:36.142Z"),
         viimeisinStr: "22.6."
+      }
+    ]
+  }
+
+  public get archivedTicketArray(): TikettiListassa[]  {
+    return [
+      {
+        id: "1",
+        kurssi: 1,
+        otsikko: "Kotitehtävä ei käänny",
+        aikaleima: new Date("2023-09-08T04:48:23.549Z"),
+        aloittaja: {
+          id: 1,
+          nimi: "Esko Seppä",
+          sposti: "esko.seppa@example.com",
+          asema: "opiskelija"
+        },
+        ukk: false,
+        tila: 6,
+        kentat: [
+          {
+            tiketti: 1,
+            arvo: "1",
+            otsikko: "Tehtävä"
+          },
+          {
+            tiketti: 1,
+            arvo: "Ongelma",
+            otsikko: "Ongelman tyyppi"
+          }
+        ],
+        viimeisin: "2023-09-16T04:48:23.672Z",
+        liite: false
       }
     ]
   }

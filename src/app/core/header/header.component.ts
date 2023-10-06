@@ -24,20 +24,20 @@ import { User } from '@core/core.models';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class HeaderComponent implements OnInit {
-  // public courseID: string | null = this.utils.getCourseIDfromURL();
   @Input() courseid: string | null = null;
   public disableLangSelect: boolean = false;
+  public handsetPB$: Observable<BreakpointState>;
   public readonly maxUserLength = 40;
   // Osassa template syntakseja on vähemmän vaikeasti luettava, kun observablen
   // sijaan käyttää tätä.
   public user: User | null | undefined;
   public user$: Observable<User | null | undefined>;
   public userRole: string = '';
-  public handsetPB$: Observable<BreakpointState>;
   private _language!: string;
 
   constructor (
@@ -68,13 +68,11 @@ export class HeaderComponent implements OnInit {
   }
 
   public goTo(view: 'profile' | 'settings') {
-    // Ei routen seuraaminen toimi ja initiin ei voi laittaa, kun voi silloin
-    // olla null.
     if (this.courseid === null) {
       console.error('Kurssi id on null, ei voida jatkaa. ');
       return
     }
-    this.router.navigateByUrl('/course/' + this.courseid + '/' + view);
+    this.router.navigateByUrl(`/course/${this.courseid}/${view}`);
   }
 
   public login(): void {

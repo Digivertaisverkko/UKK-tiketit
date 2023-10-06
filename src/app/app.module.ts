@@ -12,7 +12,7 @@ import { TicketModule } from './ticket/ticket.module';
 import { UserModule } from './user/user.module';
 
 /**
- * Täällä importoidaan kaikki päämoduulit. Tämän moduulin ei tulisi sisältää
+ * Importoidaan kaikki päämoduulit. Tämän moduulin ei tulisi sisältää
  * muita komponentteja tai servicejä, vaan niiden tulisi olla muissa moduuleissa.
  * Core.Modulen import pitäisi olla vain tässä tiedostossa.
  *

@@ -1,5 +1,3 @@
-// Material elements which are used in core app here.
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -39,6 +37,7 @@ const materialModules = [
   MatTooltipModule,
   MatAutocompleteModule
 ];
+
 /**
  * Muiden moduulien käyttämät Angular Material -moduulit. Erillään shared.modulesta
  * ryhmittelyn vuoksi. Jos jokin moduuli on käytössä ainoastaan tietyssä
