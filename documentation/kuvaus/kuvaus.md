@@ -21,6 +21,7 @@ Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngM
 - [Kieli ja käännökset](#kieli-ja-käännökset)
 - [Projektin hakemistorakenne](#projektin-hakemistorakenne)
 - [Uusien testien tekeminen](#uusien-testien-tekeminen)
+- [Koodaustyyli](#koodaustyyli)
 - [Vianmääritys](#vianmääritys)
 
 
@@ -191,6 +192,9 @@ tikettipohjien käsittely ja kurssin tietojen tuonti ja vienti tiedostoiksi.
 
 #### user service
 
+Käsittelee käyttäjien palvelimella oleviin profiilitietoihin liittyviä
+toiminnallisuuksia, kuten asetuksia, tietojen latausta ja tietojen poistoa.
+
 ## Osien välinen kommunikaatio
 
 Parent- ja child komponenttien välillä tiedonvaihto tapahtuu pääosin suoraan
@@ -287,6 +291,18 @@ testissä oikeaa service ja tallentaa haluttu data sinne.
 - Usein on helpointa käyttää funktioita fakeAsync ja tick.
 - Näkymän päivitys voi joissain komponenteissa tarvita toisen detectChanges -
 kutsun.
+
+## Koodaustyyli
+
+- Pyritään noudattamaan yleisiä Angular, HTML, CSS/SCSS ja Typescript -tyyli-
+suosituksia.
+- Rivin pituus pyritään rajoittamaan 80 merkkiin, eikä yli käytetä yli 90 merkkiä
+käännöksiä tms. sisältäviä rivejä lukuunottamatta.
+- Jos HTML-elementtien määrittelyt ovat pituudeltaan yli tämän rajan,
+järjestetään ne allekkain 1 per rivi aakkosjärjestyksessä.
+- SCSS -attribuutit aakkosjärjestyksessä.
+- **/.editorconfig** sisältää yleisimpiä asetuksia, osalla editoreista tämän
+käyttäminen vaatii pluginin. Kkts. [editorconfig.org/](https://editorconfig.org/)
 
 ## Vianmääritys
 
