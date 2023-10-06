@@ -2,7 +2,7 @@
   "name": "tukki-front",
   "version": "1.0.0",
   "scripts": {
-    "compodoc": "npx compodoc -p tsconfig.doc.json --includes documentation/introduction --disableLifeCycleHooks --includesName 'Järjestelmän kuvaus'",
+    "compodoc": "npx compodoc -p tsconfig.doc.json --includes documentation/kuvaus --disableLifeCycleHooks --includesName 'Web-käyttöliittymän kuvaus'",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
