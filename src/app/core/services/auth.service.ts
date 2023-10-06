@@ -108,6 +108,7 @@ export class AuthService {
   } else {
     loginResult = { success: false };
   }
+  this.store.setUserInfo(undefined);
   return loginResult;
 }
 
