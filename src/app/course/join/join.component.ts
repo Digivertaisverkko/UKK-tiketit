@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
-import { Subscription, takeWhile } from 'rxjs';
+import { Component, OnInit, Input } from '@angular/core';
+import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
@@ -30,7 +30,7 @@ interface ErrorNotification {
   templateUrl: './join.component.html',
   styleUrls: ['./join.component.scss']
 })
-export class JoinComponent implements OnInit, OnDestroy {
+export class JoinComponent implements OnInit {
 
   @Input() courseid!: string;
   @Input() invitation: string | null = null;
@@ -39,8 +39,6 @@ export class JoinComponent implements OnInit, OnDestroy {
   public invitedInfo: InvitedInfo | undefined;
   public state: 'editing' | 'wrongUser' | 'error' = 'editing';
   public user: User | null | undefined;
-  // private isLoggedIn: boolean | null | undefined;
-  private loggedIn$ = new Subscription;
 
   constructor(
     private auth: AuthService,
@@ -60,10 +58,6 @@ export class JoinComponent implements OnInit, OnDestroy {
     */
     this.trackUserInfo();
     this.getInvitedInfo();
-  }
-
-  ngOnDestroy(): void {
-    this.loggedIn$.unsubscribe();
   }
 
   public getInvitedInfo() {
