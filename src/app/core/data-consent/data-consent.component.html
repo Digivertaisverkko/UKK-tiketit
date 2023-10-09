@@ -25,7 +25,12 @@
     <span i18n="@@Jos olet kiinnostunut">Jos olet kiinnostunut siitä, miten käsittelemme
       tietojasi, voit lukea </span>
 
-    <a class="theme-hyperlink" (click)="openPrivacyModal()" i18n="@@Tietosuojaselosteen">
+    <a  class="theme-hyperlink"
+        (click)="openPrivacyModal()"
+        i18n="@@Tietosuojaselosteen"
+        (keydown)="privacyLinkPressed($event)"
+        tabindex="0"
+        >
       tietosuojaselosteen</a>.
   </p>
 

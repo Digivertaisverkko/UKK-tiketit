@@ -149,6 +149,12 @@ export class RegisterComponent implements OnInit {
     this.dialog.open(PrivacyModalComponent);
   }
 
+  public privacyLinkPressed(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === 'Space') {
+      this.dialog.open(PrivacyModalComponent);
+    }
+  }
+
   public submit() {
     this.form.markAllAsTouched();
     if (this.form.invalid) {

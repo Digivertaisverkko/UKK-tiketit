@@ -101,12 +101,14 @@
                     >
         <span i18n="@@Hyväksyn, että tietojani käsitellään">
           Hyväksyn, että tietojani käsitellään</span>
-          <label  class="theme-hyperlink"
+          <span  class="theme-hyperlink"
                   (click)="openPrivacyModal($event)"
                   i18n="@@Väli ja tietosuojaseloste"
+                  (keydown)="privacyLinkPressed($event)"
+                  tabindex="0"
                   >
             tietosuojaselosteen
-          </label>
+          </span>
           <span i18n="@@tyhjä">mukaisesti</span>.&nbsp;<sup>*</sup>
       </mat-checkbox>
       <mat-error  class="checkbox-error"
