@@ -253,6 +253,15 @@ komponentin muuttujaan, jossa käännös tapahtuu yleensä
 [$localize](https://angular.io/api/localize) -funktiolla.
 
 
+## Tietosuojaseloste
+
+Tukki-tikettijärjestelmän tietosuojaseloste sijaitsee tiedostossa 
+**src/app/core/footer/privacy-modal/privacy-modal.component.html**. Oletuksena
+tietosuojaseloste sisältää Digivertaisverkko-hankkeen oman tietosuojaselosteen.
+Jos järjestelmä otetaan muualla käyttöön, niin tietosuojaseloste tulee muokata
+sisältämään käyttöönottaneen organisaation tiedot.
+
+
 ## Projektin hakemistorakenne
 
 Tärkeitä tai huomionarvoisia  tiedostoja ja hakemistoja.
