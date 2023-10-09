@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject,
         ViewChild  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';

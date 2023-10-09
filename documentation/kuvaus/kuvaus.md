@@ -1,11 +1,12 @@
 # Tukki web-käyttöliittymän kuvaus
 
 Tämä ohje sisältää yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän
-eli frontendin arkkitehtuurista ja tekniikoista ohjelman ylläpitäjälle. Tiedosto kannattaa
-pitää ajan tasalla. Dokumentin ymmärtämiseksi olisi hyvä tuntea perustiedot
+eli frontendin arkkitehtuurista ja tekniikoista ohjelman ylläpitäjälle. Tiedosto
+kannattaa pitää ajan tasalla. Dokumentin ymmärtämiseksi olisi hyvä tuntea perustiedot
 Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngModule*), 
 *komponentti* (*component*), *template* ja *service*. Näistä voi lukea esimerkiksi
-[Angularin virallisesta dokumentaatiosta](https://angular.io/guide/architecture). Tiedostojen nimissä käytetään
+[Angularin virallisesta dokumentaatiosta](https://angular.io/guide/architecture).
+Tiedostojen nimissä käytetään
 [Angularin suosituksia](https://angular.io/guide/styleguide#naming), samoin
 [sovelluksen yleisessä rakenteessa](https://angular.io/guide/styleguide#overall-structural-guidelines).
 
@@ -27,10 +28,11 @@ Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngM
 
 ## Käytetyt tekniikat
 
-Web-käyttöliittymän tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee Angularin mukana.
+Web-käyttöliittymän tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee
+Angularin mukana.
 
-- [Angular Framework 16.2](https://angular.io/) - Käytetty ohjelmistokehys. 
-- HTML - Templatien määrittely.
+- [Angular Framework 16.2](https://angular.io/) - Käytetty frontend -ohjelmistokehys.
+- HTML - Template -määrittely.
 - [SASS / SCSS](https://sass-lang.com/) - Tyylimäärittelyissä on käytetty tätä
 CSS:n esikäsittelykieliltä, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
 - [TypeScript 5.1](https://www.typescriptlang.org/) - JavaScriptin superset tyyppimäärityksillä.
@@ -38,15 +40,15 @@ CSS:n esikäsittelykieliltä, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
 - [Angular Router](https://angular.io/guide/router) - Reititys ja navigointi.
 - [Angular CLI](https://angular.io/cli) - Komentorivityökalu.
 - [Angular Reactive Forms](https://angular.io/guide/reactive-forms) - Käytetty sovelluksen lomakkeissa.
+- [Material Icons](https://fonts.google.com/icons)
 - [RxJS](https://rxjs.dev/) - Kirjasto reaktiivisen ohjelmoinnin toteuttamiseen käyttäen observableja.
 - [Compodoc](https://compodoc.app/) - Dokumentaation generointi.
 - [NgxEditor](https://www.npmjs.com/package/ngx-editor) - Rich-text editori -komponentti.
 - [Npm 9.8](https://www.npmjs.com/) - Pakettien hallintaan.
 - [Node.js 20.5](https://nodejs.org/en) - Mm. Kehityspalvelimen ajamiseen.
 - [Jasmine 4.3](https://jasmine.github.io/) - Testaus framework yksikkötesteillle.
-- [Karma 6.4](https://karma-runner.github.io/latest/index.html) - Testien
-suoritusympäristö, joka toimii Jasminen kanssa.
-- [Git](https://git-scm.com/) - Versionhallinta
+- [Karma 6.4](https://karma-runner.github.io/latest/index.html) - Testien suoritusympäristö, joka toimii Jasminen kanssa.
+- [Git](https://git-scm.com/) - Versionhallinta.
 - [ESLint](https://eslint.org/) - Staattinen koodinanalyysi.
 
 
@@ -161,10 +163,10 @@ web-käyttöliittymän näkökulmasta automaattisesti.
 
 #### store service
 
-Tänne tallennetaan globaali tieto RxJS behavior subjekteihin, jonka halutaan
-olevan käytettävissä kaikille komponenteille ja serviceille. Näitä ovat esimerkiksi
-tieto kirjautumisen tilasta ja kirjautuneen käyttäjän tiedoista. Tiedot eivät
-säily sessioiden yli (kts. [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto)).
+Tänne tallennetaan globaali, sessionaikainen tieto RxJS behavior subjekteihin,
+jonka halutaan olevan käytettävissä kaikille komponenteille ja serviceille.
+Tällainen tieto on esimerkiksi kirjautuneen käyttäjän tiedot. Kts.
+[Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto).
 
 #### error service
 
@@ -248,8 +250,8 @@ tiedostossa **src/assets/en-US.json**. Käännökset ovat muodossa:
 
 Suomenkielinen, alkuperäinen teksti on komponenttien templateissa tai komponentin
 koodissa. Käännös haetaan käännösavaimeen viittaamalla. Templatessa tämä tapahtuu
-yleensä *i18n* - tai sen alkuisella alkuisella tunnisteella tai Angularin interpolaatiolla
-komponentin muuttujaan, jossa käännös tapahtuu yleensä
+yleensä *i18n* - tai sen alkuisella alkuisella tunnisteella tai Angularin
+interpolaatiolla komponentin muuttujaan, jossa käännös tapahtuu yleensä
 [$localize](https://angular.io/api/localize) -funktiolla.
 
 
@@ -292,12 +294,15 @@ testissä oikeaa service ja tallentaa haluttu data sinne.
 - Näkymän päivitys voi joissain komponenteissa tarvita toisen detectChanges -
 kutsun.
 
-## Koodaustyyli
+## Ohjelmointityyli
 
 - Pyritään noudattamaan yleisiä Angular, HTML, CSS/SCSS ja Typescript -tyyli-
 suosituksia.
-- Rivin pituus pyritään rajoittamaan 80 merkkiin, eikä yli käytetä yli 90 merkkiä
-käännöksiä tms. sisältäviä rivejä lukuunottamatta.
+- ESLint:llä käytetään suosituksia: angular-eslint/recommended ja
+angular-eslint/template/accessibility.
+- ESLint -koodinanalyysin voi ajaa komennolla: ng lint tai npm run lint.
+- Rivin pituus pyritään rajoittaa 80 merkkiin ja voivat olla enintään 90 merkkiä
+käännöksiä lukuunottamatta.
 - Jos HTML-elementtien määrittelyt ovat pituudeltaan yli tämän rajan,
 järjestetään ne allekkain 1 per rivi aakkosjärjestyksessä.
 - SCSS -attribuutit aakkosjärjestyksessä.
