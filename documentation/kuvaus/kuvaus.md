@@ -152,7 +152,7 @@ Kaikki yhteydenpito backendiin tapahtuu serviceissä. Yleiset servicet ovat hake
 shared.modulea lukuunottamatta. Servicet ovat *.service.ts -tiedostoissa. Samassa
 hakemistossa on myös vastaava *.service.spec.ts -tiedosto, jossa on servicen testit.
 
-### Eri servicet ja ja niiden vastuualueet
+### Eri servicet ja niiden vastuualueet
 
 #### auth service
 
@@ -254,6 +254,15 @@ koodissa. Käännös haetaan käännösavaimeen viittaamalla. Templatessa tämä
 yleensä *i18n* - tai sen alkuisella alkuisella tunnisteella tai Angularin
 interpolaatiolla komponentin muuttujaan, jossa käännös tapahtuu yleensä
 [$localize](https://angular.io/api/localize) -funktiolla.
+
+
+## Tietosuojaseloste
+
+Tukki-tikettijärjestelmän tietosuojaseloste sijaitsee tiedostossa 
+**src/app/core/footer/privacy-modal/privacy-modal.component.html**. Oletuksena
+tietosuojaseloste sisältää Digivertaisverkko-hankkeen oman tietosuojaselosteen.
+Jos järjestelmä otetaan muualla käyttöön, niin tietosuojaseloste tulee muokata
+sisältämään käyttöönottaneen organisaation tiedot.
 
 
 ## Projektin hakemistorakenne
