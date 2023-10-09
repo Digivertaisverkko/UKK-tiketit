@@ -149,7 +149,7 @@ Kaikki yhteydenpito backendiin tapahtuu serviceissä. Yleiset servicet ovat hake
 shared.modulea lukuunottamatta. Servicet ovat *.service.ts -tiedostoissa. Samassa
 hakemistossa on myös vastaava *.service.spec.ts -tiedosto, jossa on servicen testit.
 
-### Eri servicet ja ja niiden vastuualueet
+### Eri servicet ja niiden vastuualueet
 
 #### auth service
 
