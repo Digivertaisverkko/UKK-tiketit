@@ -2,16 +2,16 @@ import { AfterViewInit, Component, EventEmitter, Input, Output, OnInit,
     ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { DatePipe } from '@angular/common';
-import { environment } from 'src/environments/environment';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { environment } from 'src/environments/environment';
+import { SortableTicket } from '@ticket/ticket.models';
 import { StoreService } from '@core/services/store.service';
-import { TicketService } from '../../ticket.service';
+import { TicketService } from '@ticket/ticket.service';
 import { User } from '@core/core.models';
-import { SortableTicket } from '../../ticket.models';
 
 interface ColumnDefinition {
   def: string;
@@ -59,6 +59,7 @@ const customFilterPredicate = (data: SortableTicket, filter: string) => {
 };
 
 /**
+ *
  * Lista tiketeistä / kysymyksistä. Näyttää opettajalle listan kurssin tiketeistä
  * sekä listan ratkaistuiksi asetetuista tiketeistä ja opiskelijalle tämän omat
  * tiketit. Tämän komponentin parent komponentti on "listing".
@@ -79,7 +80,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   // UKK:sta kopioitaessa @Input:na courseid oli undefined.
   @Input() public courseid: string = '';
   @Input() public user: User | null | undefined;
-  @Output() ticketMessage = new EventEmitter<string>();
+  @Output() ticketMessage = new EventEmitter<'loaded'>();
   public archivedCount: number = 0;
   public columnDefinitions!: ColumnDefinition[];
   public dataSource = new MatTableDataSource<SortableTicket>();
@@ -87,12 +88,12 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   public error: ErrorNotification | null = null;
   public headline: string = '';
   public iconFile: typeof IconFile = IconFile;
+  public isArchivedShown: boolean;
   public isLoaded: boolean = false;
-  public isPolling: boolean = false;
   public isPhonePortrait: boolean = false;
+  public isPolling: boolean = false;
   public maxItemTitleLength = 100;  // Älä aseta tätä vakioksi.
   public numberOfQuestions: number = 0;
-  public isArchivedShown: boolean;
 
   private fetchTicketsTimer$: Observable<number>;
   private readonly POLLING_RATE_MIN = ( environment.production == true ) ? 1 : 1;
@@ -156,9 +157,6 @@ export class TicketListComponent implements OnInit, AfterViewInit {
   // Hae tiketit kerran.
   public fetchTickets(courseID: string) {
     this.ticket.getTicketList(courseID).then((response: SortableTicket[] | null) => {
-      // response = ticketDummyData.ticketListClientData;
-      // console.log('comp res:');
-      // console.dir(response);
       if (!response) return
       if (response.length > 0) {
         this.error = null;
@@ -173,11 +171,9 @@ export class TicketListComponent implements OnInit, AfterViewInit {
         // jotta sorting toimii.
         this.dataSource.sort = this.sortQuestions;
         this.dataSource.filterPredicate = TicketListComponent.customFilterPredicate;
-        // const sortFn = this.dataSource.sort;
-        // console.log('comp: ' + sortFn?.sortables.size);
       }
       return
-    }).catch(error => {
+    }).catch(() => {
       this.error = {
         title: $localize`:@@Virhe:Virhe`,
         message: $localize`:@@Kysymysten hakeminen ei onnistunut:

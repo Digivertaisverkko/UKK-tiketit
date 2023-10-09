@@ -1,14 +1,14 @@
 import { ActivationEnd, Router } from '@angular/router';
+import cryptoRandomString from 'crypto-random-string';
 import { filter, firstValueFrom } from 'rxjs';
-import { FormatWidth, getLocaleDateFormat, Location } from '@angular/common';
+import { FormatWidth, getLocaleDateFormat } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import * as shajs from 'sha.js';
-import cryptoRandomString from 'crypto-random-string';
 
 import { environment } from 'src/environments/environment';
 import { ErrorService } from './error.service';
-import { AuthInfo, LoginInfo, LoginResult, Role, User } from '../core.models';
+import { AuthInfo, ConsentResponse, LoginInfo, LoginResult, Role, User } from '../core.models';
 import { StoreService } from './store.service';
 import { UtilsService } from './utils.service';
 
@@ -22,11 +22,6 @@ interface LoginResponse {
   'login-code': string
 }
 
-interface ConsentResponse {
-  success: boolean,
-  kurssi: number
-}
-
 interface AuthRequestResponse {
   success: boolean;
   error: string;
@@ -38,6 +33,7 @@ interface AuthRequestResponse {
  * @export
  * @class AuthService
  */
+
 @Injectable({ providedIn: 'root' })
 
 export class AuthService {
@@ -47,7 +43,6 @@ export class AuthService {
 
   constructor(private errorService: ErrorService,
               private http: HttpClient,
-              private location: Location,
               private router: Router,
               private store: StoreService,
               private utils: UtilsService,
@@ -67,6 +62,12 @@ export class AuthService {
   public initialize() {
     this.startUpdatingUserinfo();
   }
+
+  /* Login kutsut menee.
+   * 1. getLoginInfo
+   * 2. login
+   * 3. authenticate
+  */
 
   /**
    * Lähetä 3. authorization code flown:n liittyvä kutsu. Kutsutaan .login:sta.
@@ -107,6 +108,7 @@ export class AuthService {
   } else {
     loginResult = { success: false };
   }
+  this.store.setUserInfo(undefined);
   return loginResult;
 }
 
@@ -156,8 +158,6 @@ export class AuthService {
     }
     let response: any;
     try {
-      /* ? Pystyisikö await:sta luopumaan, jottei tulisi viivettä? Osataanko
-      joka paikassa odottaa observablen arvoa? */
       /* Palauttaa tiedot, jos on käyttäjä on kirjautuneena kurssille.*/
       console.log(`auth.fetcUserInfo: Haetaan, onko oikeuksia ja käyttäjätietoja kurssille ${courseID}.`);
       const url = `${environment.apiBaseUrl}/kurssi/${courseID}/oikeudet`;
@@ -236,13 +236,8 @@ export class AuthService {
    if (courseID === null) {
      throw new Error('Ei kurssi ID:ä, ei voida jatkaa kirjautumista.');
    }
-
    this.codeVerifier = cryptoRandomString({ length: 128, type: 'alphanumeric' });
    const codeChallenge =  shajs('sha256').update(this.codeVerifier).digest('hex');
-   // this.oAuthState = cryptoRandomString({ length: 30, type: 'alphanumeric' });
-   // Jos haluaa storageen tallentaa:
-   // this.storage.set('state', state);
-   // this.storage.set('codeVerifier', codeVerifier);
    let url: string = environment.apiBaseUrl + '/login';
    const httpOptions =  {
      headers: new HttpHeaders({
@@ -257,14 +252,9 @@ export class AuthService {
    } catch (error: any) {
      this.handleError(error);
    }
-   // if (response['login-url'] == undefined) {
-   //   throw new Error("Palvelin ei palauttanut login URL:a. Ei pystytä kirjautumaan.");
-   // }
-   return response
-   // const loginUrl = response['login-url'];
-   // return loginUrl;
+   const loginInfo: LoginInfo = response;
+   return loginInfo
  }
-
 
   /**
    * Palauta rooli, jossa se on siinä muodossa on kuin tarkoitettu näytettäväksi
@@ -312,14 +302,14 @@ export class AuthService {
     if (courseID === null ) {
       throw Error('Ei kurssi ID:ä, ei voi voida lähettää loginia');
     }
-    this.getLoginInfo('own', courseID).then((response: any) => {
+    this.getLoginInfo('own', courseID).then((response: LoginInfo) => {
       if (response === undefined) {
         console.error('Ei saatu palvelimelta kirjautumis-URL:a, ei voida ohjata kirjautumiseen.');
-        return
+        return;
       }
       const loginURL = response['login-url'];
       if (notification) {
-        this.router.navigate(loginURL, { state: { notification: notification } })
+        this.router.navigate([ loginURL ], { state: { notification: notification } })
       }
       this.router.navigateByUrl(loginURL);
     })
@@ -370,14 +360,13 @@ export class AuthService {
     let url = environment.apiBaseUrl + '/kirjauduulos';
     try {
       response = await firstValueFrom(this.http.post(url, {}));
-    } catch (error: any) {
-      return { success: false }
+    } catch {
     }
     this.store.setUserInfo(null);
     this.store.unsetPosition();
     this.store.setCourseName('');
     window.sessionStorage.clear();
-    return { success: true }
+    return response
   }
 
   /**

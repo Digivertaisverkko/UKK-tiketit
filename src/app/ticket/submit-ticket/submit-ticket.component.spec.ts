@@ -1,24 +1,25 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 import { MockComponent } from 'ng-mocks';
-
-import { SubmitTicketComponent } from './submit-ticket.component';
-import { CourseService } from '@course/course.service';
-import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
-import { HeadlineComponent } from '@shared/components/headline/headline.component';
-import { EditorComponent } from '@shared/editor/editor.component';
-import { TicketService, UusiTiketti } from '@ticket/ticket.service';
-import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { findEl, setFieldValue } from '@shared/spec-helpers/element.spec-helper';
+
+import { BeginningButtonComponent } from '@shared/components/beginning-button/beginning-button.component';
 import { CourseDummyData } from '@course/course.dummydata';
-import { StoreService } from '@core/services/store.service';
-import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
+import { CourseService } from '@course/course.service';
+import { EditAttachmentsComponent } from '@ticket/components/edit-attachments/edit-attachments.component';
+import { EditorComponent } from '@shared/editor/editor.component';
+import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { StoreService } from '@core/services/store.service';
+import { SubmitTicketComponent } from './submit-ticket.component';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
+import { TicketService } from '@ticket/ticket.service';
+import { UusiTiketti } from '@ticket/ticket.models';
 
 
 describe('SubmitTicketComponent', () => {

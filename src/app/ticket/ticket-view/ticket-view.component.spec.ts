@@ -9,11 +9,12 @@ import { BeginningButtonComponent } from '@shared/components/beginning-button/be
 import { TicketViewComponent } from './ticket-view.component';
 import { HeadlineComponent } from '@shared/components/headline/headline.component';
 import { Location, registerLocaleData } from '@angular/common';
-import { TicketService, Tiketti } from '@ticket/ticket.service';
+import { TicketService } from '@ticket/ticket.service';
 import { ActivatedRoute, Routes } from '@angular/router';
 import { StoreService } from '@core/services/store.service';
 import { AuthDummyData } from '@core/services/auth.dummydata';
 import { User } from '@core/core.models';
+import { Tiketti } from '@ticket/ticket.models';
 import { TicketDummyData } from '@ticket/ticket.dummydata';
 
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';

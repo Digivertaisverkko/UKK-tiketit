@@ -71,6 +71,7 @@ export interface NewCommentResponse {
 // Käytetään tikettilistan muodostamiseen, sen sorttaamiseen ja filtteröintiin.
 export interface SortableTicket {
   id: number;
+  kurssi: string;
   otsikko: string;
   aikaleima: Date;
   aloittajanNimi: string
@@ -94,9 +95,9 @@ interface Tikettipohja {
 }
 
 interface TikettiListanKentta {
-    tiketti: number;
-    arvo: string;
-    otsikko: string;
+  tiketti: number;
+  arvo: string;
+  otsikko: string;
 }
 
 // Metodi: getTicketList, API: /api/kurssi/:kurssi-id/[kaikki|omat]/

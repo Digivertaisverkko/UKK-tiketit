@@ -21,7 +21,6 @@
           i18n="@@Lisätietoa tarvitaan"
           *ngIf="comment.tila === 3"
           >
-        <!-- <mat-icon>question_mark</mat-icon> -->
         Lisätietoa tarvitaan
     </span>
 
@@ -37,6 +36,7 @@
     <button aria-label="Poista kommentti"
             class="remove-btn"
             (click)="changeRemoveBtn()"
+            data-testid="remove-button"
             [disabled]="state==='sending'"
             i18n-aria-label="@@Poista kommentti"
             i18n-matTooltip="@@Poista kommentti"
@@ -55,6 +55,7 @@
             class="remove-btn"
             (click)="removeComment(comment.id)"
             color="accent"
+            data-testid="confirm-button"
             [disabled]="state==='sending'"
             i18n-aria-label="@@Vahvista kommentin poistaminen"
             i18n-matTooltip="@@Vahvista kommentin poistaminen"

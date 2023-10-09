@@ -14,14 +14,15 @@ import { environment } from 'src/environments/environment';
 import { RefreshDialogComponent } from '@shared/components/refresh-dialog/refresh-dialog.component';
 import { StoreService } from '@core/services/store.service';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
-import { User } from '@core/core.models';
-import { UKK } from '../ticket.models';
 import { TicketService } from '../ticket.service';
+import { UKK } from '../ticket.models';
+import { User } from '@core/core.models';
 
 interface ColumnDefinition {
   def: string;
   showMobile: boolean;
 }
+
 interface ErrorNotification {
   title: string,
   message: string,
@@ -133,7 +134,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trackUserInfo();
     this.checkRouterData();
     this.startPollingFAQ(this.POLLING_RATE_MIN);
-    // this.trackLoggedStatus();
     this.trackScreenSize();
   }
 
@@ -224,7 +224,7 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialog.open(RefreshDialogComponent, dialogConfig);
   }
 
-  public newTicketMessage(event: any) {
+  public newTicketMessage(event: 'loaded') {
     if (event === 'loaded') {
       this.isTicketsLoaded = true;
       if (this.isPolling === true) {
@@ -308,7 +308,6 @@ export class ListingComponent implements OnInit, AfterViewInit, OnDestroy {
       window.localStorage.setItem('redirectUrl', link);
     }
   }
-
 
   // Aseta virheviestejä.
   private setError(type: 'notParticipant' | 'notLoggedIn'): void {

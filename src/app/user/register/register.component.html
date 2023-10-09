@@ -30,7 +30,6 @@
                 name="email"
                 required
                 />
-        <!-- <mat-icon matSuffix>email</mat-icon> -->
       </mat-form-field>
 
       <mat-form-field>
@@ -47,7 +46,6 @@
                     >
           Nimi tarvitaan.
         </mat-error>
-        <!-- <mat-icon matSuffix>lock</mat-icon> -->
       </mat-form-field>
 
       <mat-form-field>
@@ -63,7 +61,6 @@
                     *ngIf="password?.errors?.['required']"
                     >
           Salasana tarvitaan.</mat-error>
-        <!-- <mat-icon matSuffix>lock</mat-icon> -->
       </mat-form-field>
 
       <mat-form-field>
@@ -84,19 +81,14 @@
                     >
           Kirjoita salasana uudelleen.
         </mat-error>
-        <!-- <mat-error i18n="@@Salasanat eivät täsmää.">
-          Salasanat eivät täsmää.
-        </mat-error> -->
-        <!-- <mat-icon matSuffix>lock</mat-icon> -->
       </mat-form-field>
 
     </ng-container>
 
-    <app-error
-        *ngIf="errorMessage"
-        message="{{ errorMessage }}"
-        [styles]="{ 'margin-bottom': '1rem'}"
-        >
+    <app-error  *ngIf="errorMessage"
+                message="{{ errorMessage }}"
+                [styles]="{ 'margin-bottom': '1rem'}"
+                >
     </app-error>
 
     <ng-container *ngIf="state !== 'error'">
@@ -144,6 +136,3 @@
   </form>
 
 </div>
-  <!-- <button (click)="changeActiveTab()" mat-raised-button>
-    Vaihda tabia
-  </button> -->

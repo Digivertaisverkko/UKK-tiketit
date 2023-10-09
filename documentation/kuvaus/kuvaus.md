@@ -1,12 +1,13 @@
 # Tukki web-käyttöliittymän kuvaus
 
-Tämä ohje pyrkii antamaan yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän
+Tämä ohje sisältää yleisen kuvauksen Tukki-järjestelmän web-käyttöliittymän
 eli frontendin arkkitehtuurista ja tekniikoista ohjelman ylläpitäjälle. Tiedosto kannattaa
 pitää ajan tasalla. Dokumentin ymmärtämiseksi olisi hyvä tuntea perustiedot
 Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngModule*), 
 *komponentti* (*component*), *template* ja *service*. Näistä voi lukea esimerkiksi
 [Angularin virallisesta dokumentaatiosta](https://angular.io/guide/architecture). Tiedostojen nimissä käytetään
-[Angularin suosituksia](https://angular.io/guide/styleguide#naming), samoin [sovelluksen yleisessä rakenteessa](https://angular.io/guide/styleguide#overall-structural-guidelines).
+[Angularin suosituksia](https://angular.io/guide/styleguide#naming), samoin
+[sovelluksen yleisessä rakenteessa](https://angular.io/guide/styleguide#overall-structural-guidelines).
 
 
 ## Sisällysluettelo
@@ -19,16 +20,19 @@ Angularin yleisistä käsitteistä, kuten *moduuli* (*module* tai tarkemmin *ngM
 - [Teema ja tyylit](#teema-ja-tyylit)
 - [Kieli ja käännökset](#kieli-ja-käännökset)
 - [Projektin hakemistorakenne](#projektin-hakemistorakenne)
+- [Uusien testien tekeminen](#uusien-testien-tekeminen)
+- [Koodaustyyli](#koodaustyyli)
 - [Vianmääritys](#vianmääritys)
 
 
 ## Käytetyt tekniikat
 
-Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee Angularin mukana.
+Web-käyttöliittymän tekemisessä käytettyjä tekniikoita. Suurin osa näistä tulee Angularin mukana.
 
 - [Angular Framework 16.2](https://angular.io/) - Käytetty ohjelmistokehys. 
 - HTML - Templatien määrittely.
-- [SASS / SCSS](https://sass-lang.com/) - Tyylimäärittelyissä on käytetty tätä CSS:n esikäsittelykieliltä, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
+- [SASS / SCSS](https://sass-lang.com/) - Tyylimäärittelyissä on käytetty tätä
+CSS:n esikäsittelykieliltä, jolla tehdyt tyylitiedostot kääntyvät CSS:ksi.
 - [TypeScript 5.1](https://www.typescriptlang.org/) - JavaScriptin superset tyyppimäärityksillä.
 - [Angular Material](https://material.angular.io/) - Komponenttikirjasto käyttöliittymäelementteille.
 - [Angular Router](https://angular.io/guide/router) - Reititys ja navigointi.
@@ -40,8 +44,9 @@ Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tu
 - [Npm 9.8](https://www.npmjs.com/) - Pakettien hallintaan.
 - [Node.js 20.5](https://nodejs.org/en) - Mm. Kehityspalvelimen ajamiseen.
 - [Jasmine 4.3](https://jasmine.github.io/) - Testaus framework yksikkötesteillle.
-- [Karma 6.4](https://karma-runner.github.io/latest/index.html) - Testien suoritusympäristö, joka toimii Jasminen kanssa.
-- [Git](https://git-scm.com/) - Versionhallinta.
+- [Karma 6.4](https://karma-runner.github.io/latest/index.html) - Testien
+suoritusympäristö, joka toimii Jasminen kanssa.
+- [Git](https://git-scm.com/) - Versionhallinta
 - [ESLint](https://eslint.org/) - Staattinen koodinanalyysi.
 
 
@@ -49,7 +54,8 @@ Tämän frontendin tekemisessä käytettyjä tekniikoita. Suurin osa näistä tu
 
 ![Sovelluksen arkkitehtuurin kaavakuva](Tukki-web-UI-arkkitehtuuri.svg)
 
-Kuvassa on esitetty sovelluksen arkkitehtuuria. Kuva on nähtävillä tiedostossa documentation/kuvaus/Tukki-web-UI-arkkitehtuuri.svg. Moduulien välillä nuolet
+Kuvassa on esitetty sovelluksen arkkitehtuuria. Kuva on nähtävillä tiedostossa
+documentation/kuvaus/Tukki-web-UI-arkkitehtuuri.svg. Moduulien välillä nuolet
 osoittavat siihen moduuliin, jossa se on importoitu. Komponenttien välillä
 parent komponentti osoittaa childiin. Seuraavissa kappaleissa on kuvattu
 kuvassa näkyviä sovelluksen yksikköjä. Niiden kuvaukset on dokumentoitu myös
@@ -107,10 +113,12 @@ vastaavan servicen sekä reitityksen määrittelyt.
   - **course -moduuli** - Kursseihin liittyviä toiminnallisuus, kuten kursseille
   liittyminen, sekä kurssiasetusten- ja tikettipohjien käsittely.
 
-  #### shared -moduuli
-  
-  Sisältää ominaisuuksia, joita käytetään useissa muissa moduuleissa. Yleisten
-  *Material* -teemaan kuuluvien moduulien tuonti on jaettu omaksi **material.module** -tiedostoksi. **components** -alihakemisto sisältää monia eri näkymien käyttämiä komponentteja. Moduuli sisältää myös pipeja ja direktiivejä.
+#### shared -moduuli
+
+Sisältää ominaisuuksia, joita käytetään useissa muissa moduuleissa. Yleisten
+*Material* -teemaan kuuluvien moduulien tuonti on jaettu omaksi **material.module**
+-tiedostoksi. **components** -alihakemisto sisältää monia eri näkymien käyttämiä
+komponentteja. Moduuli sisältää myös pipeja ja direktiivejä.
 
 ## Komponentit
 
@@ -124,8 +132,10 @@ kuuluvat tiettyyn moduuliin ja sijaitsevat niiden hakemistossa omassa alihakemis
 
 Komponentteihin hakemistot sisältävät yleensä seuraavat tiedostot:
 
-- **\*.component.ts** - Komponentin määrittely sekä sen TypeScript -luokka, joka käsittelee komponentin näyttämisessä tarvittavaa logiikkaa.
-- **\*.component.html** - Komponenttiin liitetty template, jonka mukaan komponentin näkymä renderöidään. 
+- **\*.component.ts** - Komponentin määrittely sekä sen TypeScript -luokka, joka
+käsittelee komponentin näyttämisessä tarvittavaa logiikkaa.
+- **\*.component.html** - Komponenttiin liitetty template, jonka mukaan komponentin
+näkymä renderöidään. 
 - **\*.component.scss** - Templatessa käytetyt SCSS / SASS -tyylimäärittelyt.
 - **\*.component.spec.ts** - Komponentin Jasmine -testit.
 - **\*.dummydata.ts** - Testien käyttämää dataa.
@@ -139,18 +149,22 @@ Kaikki yhteydenpito backendiin tapahtuu serviceissä. Yleiset servicet ovat hake
 shared.modulea lukuunottamatta. Servicet ovat *.service.ts -tiedostoissa. Samassa
 hakemistossa on myös vastaava *.service.spec.ts -tiedosto, jossa on servicen testit.
 
-### Eri servicet ja ja niiden vastuualueet
+### Eri servicet ja niiden vastuualueet
 
 #### auth service
 
 Käyttäjäautentikaatioon liittyvät toiminnot, kuten kirjautuminen sekä siihen
 liittyvien tietojen käsittely. Näitä ovat esimerkiksi kirjautumisen tila ja kirjautuneen
-käyttäjän tiedot. Tiedot haetaan palvelimelta ja asetetaan store.serviceen aina reitityksen muuttuessa. Käyttäjät tunnistetaan evästeiden avulla, joka tapahtuu
+käyttäjän tiedot. Tiedot haetaan palvelimelta ja asetetaan store.serviceen aina
+reitityksen muuttuessa. Käyttäjät tunnistetaan evästeiden avulla, joka tapahtuu
 web-käyttöliittymän näkökulmasta automaattisesti.
 
 #### store service
 
-Tänne tallennetaan globaali tieto RxJS behavior subjekteihin, jonka halutaan olevan käytettävissä kaikille komponenteille ja serviceille. Näitä ovat esimerkiksi tieto kirjautumisen tilasta ja kirjautuneen käyttäjän tiedoista. Tiedot eivät säily sessioiden yli (kts. [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto)).
+Tänne tallennetaan globaali tieto RxJS behavior subjekteihin, jonka halutaan
+olevan käytettävissä kaikille komponenteille ja serviceille. Näitä ovat esimerkiksi
+tieto kirjautumisen tilasta ja kirjautuneen käyttäjän tiedoista. Tiedot eivät
+säily sessioiden yli (kts. [Sessioiden yli tallentuva tieto](#sessioiden-yli-tallentuva-tieto)).
 
 #### error service
 
@@ -178,23 +192,30 @@ tikettipohjien käsittely ja kurssin tietojen tuonti ja vienti tiedostoiksi.
 
 #### user service
 
+Käsittelee käyttäjien palvelimella oleviin profiilitietoihin liittyviä
+toiminnallisuuksia, kuten asetuksia, tietojen latausta ja tietojen poistoa.
+
 ## Osien välinen kommunikaatio
 
 Parent- ja child komponenttien välillä tiedonvaihto tapahtuu pääosin suoraan
 Angularin @Input ja @Output -dekoraattoreiden avulla. Globaali, session aikainen
-tila tallennetaan [store servicen](#storeservice) behavior subjekteihin metodikutsuilla. Servicen injektoivat yksiköt saavat nämä tiedot metodikutsuilla, jotka palauttavat
+tila tallennetaan [store servicen](#storeservice) behavior subjekteihin metodikutsuilla.
+Servicen injektoivat yksiköt saavat nämä tiedot metodikutsuilla, jotka palauttavat
 tyypillisesti observableja. Tallennettava globaali tila on esimerkiksi kirjautumisen
 tila sekä komponenttien toisilleen välittämät viestit.
 
 Komponentit välittävät
 muun tiedon serviceihin metodikutsuilla ja saavat palautusarvoja, jotka tyypillisesti
 ovat promiseja. Sessioiden yli tallentuva tieto tallennetaan local storageen,
-josta voi lukea tiedostosta documentation/kuvaus/local-storage.md. Tätä ei käytetä sovelluksella paljon.
+josta voi lukea tiedostosta documentation/kuvaus/local-storage.md. Tätä ei
+käytetä sovelluksella paljon.
 
 ## Teema ja tyylit
 
-Tyylimäärittelyissä käytetään [SASS / SCSS:ää.](https://sass-lang.com/). Yleiset tyylimäärittelyt ovat hakemistossa **src/styles/**. Sovellus käyttää
-[Angular Material](https://material.angular.io/) -kirjaston kustomoitua teemaa, jonka määrittelyt ovat tiedostossa
+Tyylimäärittelyissä käytetään [SASS / SCSS:ää.](https://sass-lang.com/). Yleiset
+tyylimäärittelyt ovat hakemistossa **src/styles/**. Sovellus käyttää
+[Angular Material](https://material.angular.io/) -kirjaston kustomoitua teemaa,
+jonka määrittelyt ovat tiedostossa
 **custom-theme.scss**. [Tietoa teeman muokkaamisesta](https://material.angular.io/guide/theming).
 
 Kaikkiin templateihin vaikuttavat määrittelyt ovat tiedostossa **styles.scss**.
@@ -203,8 +224,9 @@ Se sisältää kaikkialla sovelluksessa käytettyjä CSS -luokkia, joiden nimet 
 jotka voi importoida tarvittaessa komponenttien tyylitiedostoissa. Niissä
 sijaitsevat komponenttikohtaiset tyylit.
 
-Tyylimäärittelysäännöt on pyritty esittämään SCSS-tiedostoissa siinä järjestyksessä kuin niihin viittaavat
-elementit ovat komponentin templatessa. Mahdolliset media queryt ovat tiedoston lopussa.
+Tyylimäärittelysäännöt on pyritty esittämään SCSS-tiedostoissa siinä järjestyksessä
+kuin niihin viittaavat elementit ovat komponentin templatessa. Mahdolliset
+media queryt ovat tiedoston lopussa.
 
 
 ## Kieli ja käännökset
@@ -226,15 +248,28 @@ tiedostossa **src/assets/en-US.json**. Käännökset ovat muodossa:
 
 Suomenkielinen, alkuperäinen teksti on komponenttien templateissa tai komponentin
 koodissa. Käännös haetaan käännösavaimeen viittaamalla. Templatessa tämä tapahtuu
-yleensä *i18n* - tai sen alkuisella alkuisella tunnisteella tai Angularin interpolaatiolla komponentin muuttujaan, jossa käännös tapahtuu yleensä [$localize](https://angular.io/api/localize) -funktiolla.
+yleensä *i18n* - tai sen alkuisella alkuisella tunnisteella tai Angularin interpolaatiolla
+komponentin muuttujaan, jossa käännös tapahtuu yleensä
+[$localize](https://angular.io/api/localize) -funktiolla.
+
+
+## Tietosuojaseloste
+
+Tukki-tikettijärjestelmän tietosuojaseloste sijaitsee tiedostossa 
+**src/app/core/footer/privacy-modal/privacy-modal.component.html**. Oletuksena
+tietosuojaseloste sisältää Digivertaisverkko-hankkeen oman tietosuojaselosteen.
+Jos järjestelmä otetaan muualla käyttöön, niin tietosuojaseloste tulee muokata
+sisältämään käyttöönottaneen organisaation tiedot.
 
 
 ## Projektin hakemistorakenne
 
 Tärkeitä tai huomionarvoisia  tiedostoja ja hakemistoja.
 
-- **angular.json** - [Angularin asetuksia](https://angular.io/guide/workspace-config). Mm. eri tiedostojen sijaintien määrittely.
-- **package.json** - [Node.js -asetukset](https://angular.io/guide/npm-packages), kuten npm -skriptien määrittelyt ja pakettiriippuvuudet.
+- **angular.json** - [Angularin asetuksia](https://angular.io/guide/workspace-config).
+Mm. eri tiedostojen sijaintien määrittely.
+- **package.json** - [Node.js -asetukset](https://angular.io/guide/npm-packages),
+kuten npm -skriptien määrittelyt ja pakettiriippuvuudet.
 - **tsconfig.json** - [TypeScript -käännösasetukset](https://angular.io/guide/typescript-configuration). 
 - **documentation/** - [Compodocilla](https://compodoc.app/) generoitu dokumentaatio.
   - **index.html** - Avaamalla tämän tiedoston selaimella voi lukea dokumentaatiota.
@@ -242,13 +277,15 @@ Tärkeitä tai huomionarvoisia  tiedostoja ja hakemistoja.
     - **kuvaus.md** - Tämä tiedosto.
     - **local-storage.md** - Local storageen tallennettavat muuttujat.
 - **src/** - Sovelluksen lähdekoodi.
-  - **app/** - [App moduulin](#app--moduuli) hakemisto. Sisältää myös muiden moduulien alihakemistot.
+  - **app/** - [App moduulin](#app--moduuli) hakemisto. Sisältää myös muiden
+  moduulien alihakemistot.
   - **assets/** - Logot, ikonit ja [käännökset](#kieli-ja-käännökset).
   - **styles/** - Teeman määrittely ja globaalit [tyylimäärittelyt](#teema-ja-tyylit).
   - **main.ts** - Täällä asetettu, että production buildissa ei näytetä logeja.
-  - **index.html** - Sovelluksen selain-title, fonttien, faviconin osoitteet, sekä mitä
-  näytetään, jos selaimessa ei ole JavaScript -käytössä.
-  - **environments/** - Environment -variablet. Sisältää sovelluksen nimen ja base URL:n. Tiedostot:
+  - **index.html** - Sovelluksen selain-title, fonttien, faviconin osoitteet,
+  sekä mitä näytetään, jos selaimessa ei ole JavaScript -käytössä.
+  - **environments/** - Environment -variablet. Sisältää sovelluksen nimen ja
+  base URL:n. Tiedostot:
     - **environments.ts** - Development build:lle.
     - **environments.prod.ts** - Production build:lle.
 
@@ -258,15 +295,28 @@ Tärkeitä tai huomionarvoisia  tiedostoja ja hakemistoja.
 palauttama on hyvä laittaa moduulin [moduuli nimi].dummydata.ts -tiedostoon ja
 käyttää oikeita interfaceja [moduulin nimi].models.ts -tiedostoista.
 - Käyttäjätietoja on saatavilla auth.dummydata.ts -tiedostosta.
-- Jos testattava yksikkö käyttää store servicen -tietoja, on hyvä injektoida testissä
-oikeaa service ja tallentaa haluttu data sinne.
+- Jos testattava yksikkö käyttää store servicen -tietoja, on hyvä injektoida
+testissä oikeaa service ja tallentaa haluttu data sinne.
 - Usein on helpointa käyttää funktioita fakeAsync ja tick.
 - Näkymän päivitys voi joissain komponenteissa tarvita toisen detectChanges -
 kutsun.
 
+## Koodaustyyli
+
+- Pyritään noudattamaan yleisiä Angular, HTML, CSS/SCSS ja Typescript -tyyli-
+suosituksia.
+- Rivin pituus pyritään rajoittamaan 80 merkkiin, eikä yli käytetä yli 90 merkkiä
+käännöksiä tms. sisältäviä rivejä lukuunottamatta.
+- Jos HTML-elementtien määrittelyt ovat pituudeltaan yli tämän rajan,
+järjestetään ne allekkain 1 per rivi aakkosjärjestyksessä.
+- SCSS -attribuutit aakkosjärjestyksessä.
+- **/.editorconfig** sisältää yleisimpiä asetuksia, osalla editoreista tämän
+käyttäminen vaatii pluginin. Kkts. [editorconfig.org/](https://editorconfig.org/)
+
 ## Vianmääritys
 
 ### Virhetilanteissa
+
 - Tarkista, ilmeneekö virheitä automaattitesteissä.
 - Tarkkaile virheilmoituksia selainkonsolissa / browser console:ssa. Developer
 buildissa myös tavalliset console.log -logitukset ovat käytössä toisin kuin
@@ -291,5 +341,14 @@ saataisi haluttua vaikutusta. Niihin viittaaminen voi vaatia toimiakseen
 **::ng-deep** -yhdistäjän. Jos tämä määritys lakkaisi toimimasta, kannattaa
 ensimmäisenä tarkastaa selaimen kehittäjätyökalulla, onko nimeämisessä tai
 elementin rakenteessa tapahtunut muutoksia. 
+
+### Child komponentin sisältö ei päivity kun pitäisi
+
+Jos komponentin *.component.ts -tiedostossa on määritelty:
+
+```changeDetection: ChangeDetectionStrategy.OnPush```
+
+niin esimerkiksi observabjela kuunneltaessa näkymän päivittyminen pitää
+tehdä manuaalisesti ChangeDetectorRef -luokan olion detectChanges() metodikutsulla.
 
 [Takaisin alkuun](#tukki-web-käyttöliittymän-kuvaus)

@@ -29,7 +29,7 @@ describe('CommentComponent', () => {
   beforeEach(async () => {
     fakeTicketService = jasmine.createSpyObj('TicketService', {
       editComment: Promise.resolve({ success: true }),
-      removeComment: undefined
+      removeComment: Promise.resolve({success: true})
     });
 
     await TestBed.configureTestingModule({
@@ -66,13 +66,25 @@ describe('CommentComponent', () => {
     userInfo.osallistuja = true;
     component.user = authDymmyData.userInfoTeacher;
     // Kommentin lähettäjä.
-        store.setUserInfo(authDymmyData.userInfoTeacher);
+    store.setUserInfo(authDymmyData.userInfoTeacher);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('calls correct method after clicking edit and remove-icon', fakeAsync(() => {
+    findEl(fixture, 'edit-button').nativeElement.click();
+    fixture.detectChanges();
+    findEl(fixture, 'remove-button').nativeElement.click();
+    tick(600);
+    fixture.detectChanges();
+    findEl(fixture, 'confirm-button').nativeElement.click();
+    tick();
+    expect(fakeTicketService.removeComment).toHaveBeenCalledWith(component.ticketID,
+      component.comment.id, component.courseid);
+  }));
 
   it('calls correct method after editing comment and clicking OK', fakeAsync(() => {
     const newMessage = "Testikommentti";

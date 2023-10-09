@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { StoreService } from '../services/store.service';
-import { User } from '@core/core.models';
 
 /**
  * "Ei oikeuksia" -näkymä. Näytetään, kun palvelimelta on saatu tieto, että

@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
-import { Subscription, takeWhile } from 'rxjs';
+import { Component, OnInit, Input } from '@angular/core';
+import { takeWhile } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 
 import { AuthService } from '@core/services/auth.service';
@@ -17,8 +17,9 @@ interface ErrorNotification {
 
 /**
  * Näkymä, jossa käyttäjä, jolla on jo käyttäjätili, pystyy liittymään kurssille.
- * Osoite tähän näkymään on lähetetty käyttäjälle sähköpostilla. Uuden käyttäjätilin
- * luominen tapahtuu register -komponentilla.
+ * Osoite tähän näkymään on lähetetty käyttäjälle sähköpostilla.
+ * 
+ * Uuden käyttäjätilin luominen tapahtuu puolestaan register -komponentilla.
  *
  * @export
  * @class JoinComponent
@@ -29,7 +30,7 @@ interface ErrorNotification {
   templateUrl: './join.component.html',
   styleUrls: ['./join.component.scss']
 })
-export class JoinComponent implements OnInit, OnDestroy {
+export class JoinComponent implements OnInit {
 
   @Input() courseid!: string;
   @Input() invitation: string | null = null;
@@ -38,8 +39,6 @@ export class JoinComponent implements OnInit, OnDestroy {
   public invitedInfo: InvitedInfo | undefined;
   public state: 'editing' | 'wrongUser' | 'error' = 'editing';
   public user: User | null | undefined;
-  // private isLoggedIn: boolean | null | undefined;
-  private loggedIn$ = new Subscription;
 
   constructor(
     private auth: AuthService,
@@ -54,15 +53,11 @@ export class JoinComponent implements OnInit, OnDestroy {
     if (this.invitation === null) {
       console.error('Virhe: Ei UUID:ä.');
     }
-    /* Ohjataan loginiin, jos ei oikeuksia kurssille. Näytetään virhe,
+    /* Ohjataan loginiin, jos käyttäjä ei ole kirjautunut. Näytetään virhe,
     *  jos on kirjautunut vääränä käyttäjänä.
     */
     this.trackUserInfo();
     this.getInvitedInfo();
-  }
-
-  ngOnDestroy(): void {
-    this.loggedIn$.unsubscribe();
   }
 
   public getInvitedInfo() {
@@ -128,20 +123,6 @@ export class JoinComponent implements OnInit, OnDestroy {
     });
   }
 
-  /*
-  private loginIfNeeded(): void {
-    this.loggedIn$ = this.store.onIsUserLoggedIn().subscribe(response => {
-      if (response === false) {
-        this.isLoggedIn = false;
-        this.auth.saveRedirectURL();
-        this.auth.navigateToLogin(this.courseid);
-      } else if (response === true) {
-        this.isLoggedIn = true;
-      }
-    });
-  }
-  */
-
   public logout() {
     this.auth.logout().then(() => {
       this.auth.saveRedirectURL();
@@ -166,7 +147,7 @@ export class JoinComponent implements OnInit, OnDestroy {
         if (userinfo === undefined) return
         this.user = userinfo;
         if (userinfo === null) {
-          console.log('join: Ei oikeuksia kurssille, ohjataan kirjautumiseen.');
+          console.log('join: Ei ole kirjautunut, ohjataan kirjautumiseen.');
           this.auth.saveRedirectURL();
           this.auth.navigateToLogin(this.courseid);
         }
@@ -175,7 +156,7 @@ export class JoinComponent implements OnInit, OnDestroy {
           this.setNotRightUser();
         }
       }
-    })
+    });
   }
 
 }

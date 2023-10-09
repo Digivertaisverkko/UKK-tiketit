@@ -6,7 +6,6 @@ import { Observable, Subject, firstValueFrom, of, timeout } from 'rxjs';
 import { AddTicketResponse, Kentta, Kommentti, NewCommentResponse,
   SortableTicket, TikettiListassa, Tiketti, UKK, UusiTiketti, UusiUKK }
   from './ticket.models';
-export * from './ticket.models';
 import { environment } from 'src/environments/environment';
 import { ErrorService } from '../core/services/error.service';
 import { Role } from '../core/core.models';
@@ -32,7 +31,16 @@ export class TicketService {
     private utils: UtilsService
     ) {}
 
-  // Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
+  /**
+   * Lisää uusi kommentti tikettiin. Palauttaa true jos viestin lisääminen onnistui.
+   *
+   * @param {string} ticketID
+   * @param {string} courseID
+   * @param {string} message
+   * @param {number} [tila]
+   * @return {*}  {Promise<NewCommentResponse>}
+   * @memberof TicketService
+   */
   public async addComment(ticketID: string, courseID: string, message: string,
       tila?: number): Promise<NewCommentResponse> {
     if (isNaN(Number(ticketID))) {
@@ -59,7 +67,14 @@ export class TicketService {
     return response
   }
 
-  // Lisää uusi UKK.
+  /**
+   * Lisää uusi UKK.
+   *
+   * @param {UusiUKK} newFaq
+   * @param {string} courseID
+   * @return {*}  {Promise<AddTicketResponse>}
+   * @memberof TicketService
+   */
   public async addFaq(newFaq: UusiUKK, courseID: string): Promise<AddTicketResponse> {
     const url = `${this.api}/kurssi/${courseID}/ukk`;
     let response: any;
@@ -72,7 +87,14 @@ export class TicketService {
     return response
   }
 
-  // Lisää tiketti ilman tiedostoja.
+  /**
+   * Lisää uusi tiketti. Ei sisällä liitetiedostojen lisäämistä.
+   *
+   * @param {string} courseID
+   * @param {UusiTiketti} newTicket
+   * @return {*}  {Promise<AddTicketResponse>}
+   * @memberof TicketService
+   */
   public async addTicket(courseID: string, newTicket: UusiTiketti):
       Promise<AddTicketResponse> {
     let response: any;
@@ -86,8 +108,15 @@ export class TicketService {
     return response
   }
 
-   // Arkistoi (poista) UKK.
-  public async archiveFAQ(ticketID: string, courseID: string):
+   /**
+    * Arkistoi (poista) UKK.
+    *
+    * @param {string} ticketID
+    * @param {string} courseID
+    * @return {*}  {Promise<{ success: boolean }>}
+    * @memberof TicketService
+    */
+   public async archiveFAQ(ticketID: string, courseID: string):
       Promise<{ success: boolean }> {
     let response: any;
     // /api/kurssi/:kurssi-id/ukk/arkisto/:tiketti-id/
@@ -105,7 +134,14 @@ export class TicketService {
     return response;
   }
 
-  // Arkistoi tiketti.
+  /**
+   * Aseta tiketti ratkaistuksi eli arkistoi se.
+   *
+   * @param {string} ticketID
+   * @param {string} courseID
+   * @return {*}  {Promise<{ success: boolean }>}
+   * @memberof TicketService
+   */
   public async archiveTicket(ticketID: string, courseID: string):
       Promise<{ success: boolean }> {
     let response: any;
@@ -143,7 +179,15 @@ export class TicketService {
     return response
   }
 
-  // Muokkaa UKK:a.
+  /**
+   * Muokkaa aiemmin lähetettyä UKK:a.
+   *
+   * @param {string} ticketID
+   * @param {UusiUKK} faq
+   * @param {string} courseID
+   * @return {*}  {Promise<{ success: boolean }>}
+   * @memberof TicketService
+   */
   public async editFaq(ticketID: string, faq: UusiUKK, courseID: string):
       Promise<{ success: boolean }> {
     let response: any;
@@ -157,7 +201,15 @@ export class TicketService {
     return response
   }
 
-  // Muokkaa tikettiä.
+  /**
+   * Muokkaa aiemmin lähetettyä tikettiä.
+   *
+   * @param {string} ticketID
+   * @param {UusiTiketti} ticket
+   * @param {string} courseID
+   * @return {*}  {Promise<{ success: boolean }>}
+   * @memberof TicketService
+   */
   public async editTicket(ticketID: string, ticket: UusiTiketti, courseID: string):
       Promise<{ success: boolean }> {
     let response: any;
@@ -171,7 +223,13 @@ export class TicketService {
     return { success: response?.success === true ? true : false }
   }
 
-  // Hae kurssin UKK-kysymykset.
+  /**
+   * Hae kaikki kurssin UKK:t.
+   *
+   * @param {string} courseID
+   * @return {*}  {Promise<UKK[]>}
+   * @memberof TicketService
+   */
   public async getFAQlist(courseID: string): Promise<UKK[]> {
     const url = `${this.api}/kurssi/${courseID}/ukk/kaikki`;
     let response: any;
@@ -191,8 +249,15 @@ export class TicketService {
     return FAQlist;
   }
 
-  /* Palauta tiketin sanallinen tila numeerinen arvon perusteella.
-    muotoa: 'numero'-'käännös' */
+  /**
+   * Palauta tiketin sanallinen tila numeerinen arvon perusteella.
+   * muotoa: 'tilan_numero'-'käännös'
+   *
+   * @param {number} numericalState
+   * @param {(Role | '')} role
+   * @return {*}  {string}
+   * @memberof TicketService
+   */
   public getTicketState(numericalState: number, role: Role | ''): string {
     let string: string;
     switch (numericalState) {
@@ -227,7 +292,16 @@ export class TicketService {
     return of(errorResponse);
   }
 
-  // Lataa liitetiedosto.
+  /**
+   * Lataa liitetiedosto.
+   *
+   * @param {string} ticketID
+   * @param {string} commentID
+   * @param {string} fileID
+   * @param {string} courseID
+   * @return {*}  {Promise<Blob>}
+   * @memberof TicketService
+   */
   public async getFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<Blob> {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
@@ -246,6 +320,15 @@ export class TicketService {
     return response
   }
 
+  /**
+   * Poista kommentti.
+   *
+   * @param {string} ticketID
+   * @param {string} commentID
+   * @param {string} courseID
+   * @return {*}  {Promise<{ success: boolean}>}
+   * @memberof TicketService
+   */
   public async removeComment(ticketID: string, commentID: string, courseID: string):
       Promise<{ success: boolean}>{
     let response: any;
@@ -261,7 +344,16 @@ export class TicketService {
     return response;
   }
 
-  // Poista liitetiedosto.
+  /**
+   * Poista liitetiedosto.
+   *
+   * @param {string} ticketID
+   * @param {string} commentID
+   * @param {string} fileID
+   * @param {string} courseID
+   * @return {*}  {Promise<{ success: boolean}>}
+   * @memberof TicketService
+   */
   public async removeFile(ticketID: string, commentID: string, fileID: string,
       courseID: string): Promise<{ success: boolean}> {
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/`+
@@ -275,7 +367,14 @@ export class TicketService {
     return response
   }
 
-  // Poista tiketti.
+  /**
+   * Poista tiketti.
+   *
+   * @param {string} ticketID
+   * @param {string} courseID
+   * @return {*}  {Promise<{ success: boolean}>}
+   * @memberof TicketService
+   */
   public async removeTicket(ticketID: string, courseID: string):
       Promise<{ success: boolean}> {
     let response: any;
@@ -288,10 +387,18 @@ export class TicketService {
     return response;
   }
 
-  /*  Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
-      lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
-      palauttaa ainoastaan itse luodut tiketit, 'archived' palauta arkistoidut
-      eli ratkaistut kysymykset. */
+  /**
+   * Palauttaa listan tikettien tiedoista taulukkoa varten. Opiskelijalle itse
+   * lähettämät tiketit ja opettajalle kaikki kurssin tiketit. onlyOwn = true
+   * palauttaa ainoastaan itse luodut tiketit, 'archived' palauta arkistoidut
+   * eli ratkaistut kysymykset.
+   *
+   * @param {string} courseID
+   * @param {({
+   *     option: 'onlyOwn' | 'archived' })} [option]
+   * @return {*}  {(Promise<SortableTicket[] | null>)}
+   * @memberof TicketService
+   */
   public async getTicketList(courseID: string, option?: {
     option: 'onlyOwn' | 'archived' }): Promise<SortableTicket[] | null> {
     const currentRoute = window.location.href;
@@ -346,9 +453,15 @@ export class TicketService {
     return sortableData;
   }
 
-
-  /* Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
-    kommentit. */
+  /**
+   * Palauta yhden tiketin, myös UKK:n, kaikki tiedot mukaanlukien lisäkentät ja
+   * kommentit.
+   *
+   * @param {string} ticketID
+   * @param {string} courseID
+   * @return {*}  {(Promise<Tiketti | null>)}
+   * @memberof TicketService
+   */
   public async getTicket(ticketID: string, courseID: string): Promise<Tiketti | null> {
     let response: any;
     const url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}`;
@@ -390,8 +503,15 @@ export class TicketService {
     }, null);
   }
 
-  // Palauta listan tiketin kommenteista.
-  // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/kaikki
+  /**
+   * Palauta listan tiketin kommenteista.
+   *
+   * @private
+   * @param {string} ticketID
+   * @param {string} courseID
+   * @return {*}  {Promise<Kommentti[]>}
+   * @memberof TicketService
+   */
   private async getComments(ticketID: string, courseID: string): Promise<Kommentti[]>{
     let response: any;
     // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/kaikki
@@ -417,7 +537,15 @@ export class TicketService {
     return commentsAscending;
   }
 
-  // Hae yhden tiketin kuvaus ja lisäkentät.
+  /**
+   * Hae yhden tiketin kuvaus ja lisäkentät.
+   *
+   * @private
+   * @param {string} ticketID
+   * @param {string} courseID
+   * @return {*}  {Promise<Kentta[]>}
+   * @memberof TicketService
+   */
   private async getFields(ticketID: string, courseID: string): Promise<Kentta[]> {
     let response: any;
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kentat`;
@@ -429,16 +557,20 @@ export class TicketService {
     return response;
   }
 
-  // logitukseen.
-  private getMethodName() {
-    return this.getMethodName.caller.name
-  }
-
   private handleError(error: HttpErrorResponse) {
     this.errorService.handleServerError(error);
   }
 
-  // Lähetä yksi tiedosto palvelimelle. Palauttaa edistymisprosentin.
+  /**
+   * Lähetä yksi liitetiedosto.
+   *
+   * @param {string} ticketID
+   * @param {string} commentID
+   * @param {string} courseID
+   * @param {File} file
+   * @return {*}  {Observable<number>}  Edistymisprosentti
+   * @memberof TicketService
+   */
   public uploadFile(ticketID: string, commentID: string, courseID: string, file: File):
       Observable<number>{
     let formData = new FormData();
@@ -447,8 +579,6 @@ export class TicketService {
     // /api/kurssi/:kurssi-id/tiketti/:tiketti-id/kommentti/:kommentti-id/liite
     let url = `${this.api}/kurssi/${courseID}/tiketti/${ticketID}/kommentti/` +
         `${commentID}/liite`;
-    // Virheiden testaukseen vaihda http.post -> fakeHttpPost
-    // this.fakeHttpPost(url, formData, { reportProgress: true, observe: 'events' }, )
     this.http.post(url, formData, { reportProgress: true, observe: 'events' }, )
       .subscribe({
         next: (event: HttpEvent<any>) => {
@@ -461,7 +591,6 @@ export class TicketService {
         },
         error: (error) => {
           console.error('ticketService.uploadFile: saatiin virhe.');
-          // TODO: Testaa toimiiko usean tiedoston kanssa.
           // this.handleError(error);
           progress.error(error);
         }

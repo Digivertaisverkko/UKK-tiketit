@@ -19,6 +19,7 @@ yarn-error.log
 .project
 .classpath
 .c9/
+*.kate-swp
 *.launch
 .settings/
 *.sublime-workspace

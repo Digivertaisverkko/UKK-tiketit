@@ -159,7 +159,7 @@ export class SubmitFaqComponent implements OnInit {
       }
       this.form.controls['title'].setValue(response.otsikko);
       this.form.controls['question'].setValue(response.viesti);
-      // 1. kommentti on vastaus, johon UKK:n liitteet on osoitettu.
+      // kommentit[0] on vastaus, johon UKK:n liitteet on osoitettu.
       if (!this.isCopiedFromTicket) {
         this.oldAttachments = response.kommentit[0]?.liitteet ?? [];
       }
@@ -172,8 +172,8 @@ export class SubmitFaqComponent implements OnInit {
       "Ratkaisuehdotuksen" omaava kommentti oletusvastaukseksi. Lopputuloksena
       viimeinen ratkaisuehdotus jää oletusvastaukseksi. */
 
-      if (this.editExisting) {
-        this.form.controls['answer'].setValue(response.kommentit[0].viesti);
+      if (this.editExisting) { 
+          this.form.controls['answer'].setValue(response.kommentit[0]?.viesti ?? '');
       } else {
         for (let comment of response.kommentit) {
           if (comment.tila === 5) {
@@ -194,7 +194,7 @@ export class SubmitFaqComponent implements OnInit {
     }
   }
 
-  private prepareSendFiles(response?: any): void {
+  private prepareSendFiles(response?: AddTicketResponse): void {
     if (!this.editExisting && response?.uusi == null) {
       this.errorMessage = $localize`:@@Kaikkien liitteiden lähettäminen ei
         onnistunut:Kaikkien liitteiden lähettäminen ei onnistunut`;
@@ -202,8 +202,8 @@ export class SubmitFaqComponent implements OnInit {
     }
     let ticketID, commentID;
     if (!this.editExisting) {
-      ticketID = response.uusi.tiketti;
-      commentID = response.uusi.kommentti;
+      ticketID = response!.uusi.tiketti;
+      commentID = response!.uusi.kommentti;
     } else {
       ticketID = this.ticketid;
       commentID = this.originalTicket?.kommentit[0].id;
@@ -248,8 +248,7 @@ export class SubmitFaqComponent implements OnInit {
         this.isFaqSent = true;
         this.prepareSendFiles();
       })
-      .catch( error => {
-        // ? lisää eri virhekoodeja?
+      .catch(() => {
         this.state = 'editing';
         this.form.enable();
         this.errorMessage = $localize`:@@UKK muokkaaminen epäonnistui:
@@ -259,8 +258,6 @@ export class SubmitFaqComponent implements OnInit {
 
   private submitNewFAQ(faq: UusiUKK): void {
     // Uuteen tikettiin tarvitaan kurssi-id, jos muokataan vanhaa, niin ticketID.
-    // const id = this.ticketId ?? this.courseId;
-    // const editExisting = this.ticketId ? true : false;
     this.ticketService.addFaq(faq, this.courseid)
       .then((response: AddTicketResponse) => {
         if (this.attachments.fileInfoList.length === 0) this.goBack();
@@ -270,8 +267,7 @@ export class SubmitFaqComponent implements OnInit {
         this.isFaqSent = true;
         this.prepareSendFiles(response);
       })
-      .catch( error => {
-        // ? lisää eri virhekoodeja?
+      .catch(() => {
         this.state = 'editing';
         this.form.enable();
         this.errorMessage = $localize`:@@UKK lisääminen epäonnistui:

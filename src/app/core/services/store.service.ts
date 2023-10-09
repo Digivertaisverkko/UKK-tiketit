@@ -134,7 +134,7 @@ export class StoreService {
     return this.user$.value?.nimi ?? null;
   }
 
-  public setUserInfo(newUserInfo: User | null): void {
+  public setUserInfo(newUserInfo: User | null | undefined): void {
     if (this.user$.value !== newUserInfo) {
       this.user$.next(newUserInfo);
     }
