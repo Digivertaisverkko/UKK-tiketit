@@ -309,8 +309,6 @@ kutsun.
 
 - ESLintillä tehdään virheiden etsintää staattisella koodinanalyysillä.
 - Voi ajaa komennolla: "ng lint" tai "npm run lint" tai käyttää koodieditorilla (voi tarvita ESLint -pluginin).
-- Käytetään suosituksia: angular-eslint/recommended ja
-angular-eslint/template/accessibility.
 - Asetukset: /.eslintrc.json.
   - Voi halutessa määritellä uusia sääntöjä.
 
