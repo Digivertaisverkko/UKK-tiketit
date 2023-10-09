@@ -22,7 +22,8 @@ Tiedostojen nimissä käytetään
 - [Kieli ja käännökset](#kieli-ja-käännökset)
 - [Projektin hakemistorakenne](#projektin-hakemistorakenne)
 - [Uusien testien tekeminen](#uusien-testien-tekeminen)
-- [Koodaustyyli](#koodaustyyli)
+- [ESLint](#eslint)
+- [Ohjelmointityyli](#ohjelmointityyli)
 - [Vianmääritys](#vianmääritys)
 
 
@@ -265,6 +266,7 @@ Mm. eri tiedostojen sijaintien määrittely.
 kuten npm -skriptien määrittelyt ja pakettiriippuvuudet.
 - **tsconfig.json** - [TypeScript -käännösasetukset](https://angular.io/guide/typescript-configuration). 
 - **documentation/** - [Compodocilla](https://compodoc.app/) generoitu dokumentaatio.
+- **.eslintrc.json** - ESLint asetukset.
   - **index.html** - Avaamalla tämän tiedoston selaimella voi lukea dokumentaatiota.
   - **kuvaus/** - Hakemisto, jossa kuvailevaa dokumentaatiota:
     - **kuvaus.md** - Tämä tiedosto.
@@ -294,13 +296,19 @@ testissä oikeaa service ja tallentaa haluttu data sinne.
 - Näkymän päivitys voi joissain komponenteissa tarvita toisen detectChanges -
 kutsun.
 
+## ESLint
+
+- ESLintillä tehdään virheiden etsintää staattisella koodinanalyysillä.
+- Voi ajaa komennolla: "ng lint" tai "npm run lint" tai käyttää koodieditorilla (voi tarvita ESLint -pluginin).
+- Käytetään suosituksia: angular-eslint/recommended ja
+angular-eslint/template/accessibility.
+- Asetukset: /.eslintrc.json.
+  - Voi halutessa määritellä uusia sääntöjä.
+
 ## Ohjelmointityyli
 
 - Pyritään noudattamaan yleisiä Angular, HTML, CSS/SCSS ja Typescript -tyyli-
 suosituksia.
-- ESLint:llä käytetään suosituksia: angular-eslint/recommended ja
-angular-eslint/template/accessibility.
-- ESLint -koodinanalyysin voi ajaa komennolla: ng lint tai npm run lint.
 - Rivin pituus pyritään rajoittaa 80 merkkiin ja voivat olla enintään 90 merkkiä
 käännöksiä lukuunottamatta.
 - Jos HTML-elementtien määrittelyt ovat pituudeltaan yli tämän rajan,
