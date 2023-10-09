@@ -102,6 +102,12 @@ export class HeaderComponent implements OnInit {
     this.store.sendMessage('go begin');
   }
 
+  public logoPressed(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === 'Space') {
+      this.logoClicked();
+    }
+  }
+
   public toggleLanguage() {
     this.language = this._language === 'fi-FI' ? 'en-US' : 'fi-FI';
   }

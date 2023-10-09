@@ -124,6 +124,12 @@ export class AppComponent implements OnInit, OnDestroy  {
     this.store.sendMessage('go begin');
   }
 
+  public logoPressed(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === 'Space') {
+      this.logoClicked();
+    }
+  }
+
   /**
    * Avaa sovellus uudessa välilehdessä. Sovelluksen tila pysyy samana.
    *
