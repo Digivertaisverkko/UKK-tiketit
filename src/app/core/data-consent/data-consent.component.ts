@@ -103,6 +103,12 @@ export class DataConsentComponent implements OnInit {
     })
   }
 
+  public privacyLinkPressed(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === 'Space') {
+      this.dialog.open(PrivacyModalComponent);
+    }
+  }
+
   private navigateToListing(courseID: string | null) {
     if (courseID == null) {
       console.error('Virhe: data-consent.component.ts: ei kurssi ID:ä.');

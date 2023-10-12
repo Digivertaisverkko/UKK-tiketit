@@ -22,7 +22,9 @@
               >
           <img  alt=""
                 (click)="logoClicked()"
+                (keydown)="logoPressed($event)"
                 src="assets/logos/Tukki_logo_rgb_tummasini.svg"
+                tabindex="0"
                 >
         </div>
       </ng-template>

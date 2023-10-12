@@ -150,7 +150,7 @@ export class TicketListComponent implements OnInit, AfterViewInit {
           this.archivedCount = response.length;
           this.dataSourceArchived.sort = this.sortArchived;
         }
-    }).catch(error => {
+    }).catch(() => {
     });
   }
 
