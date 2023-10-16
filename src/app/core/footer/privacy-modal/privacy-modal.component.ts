@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject,
-        ViewChild  } from '@angular/core';
+        OnInit, ViewChild  } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /**
@@ -17,14 +17,20 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./privacy-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PrivacyModalComponent implements AfterViewInit {
+export class PrivacyModalComponent implements AfterViewInit, OnInit {
 
   @ViewChild('dialogContent') dialogContent!: ElementRef;
   @ViewChild('dataRemoval') dataRemovalElement!: ElementRef;
 
+  public _language!: string;
+
   constructor (
     public modalRef: MatDialogRef<PrivacyModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
+
+  ngOnInit(): void {
+    this._language = localStorage.getItem('language') ?? 'fi-FI';
   }
 
   ngAfterViewInit(): void {
