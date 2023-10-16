@@ -1,182 +1,373 @@
-<h1 mat-dialog-title>Tietosuojaseloste</h1>
+<h1 i18n="@@Tietosuojaseloste" mat-dialog-title>Tietosuojaseloste</h1>
 
 <mat-dialog-content #dialogContent>
 
-  <p>
-    Tämä on Tukki-järjestelmän EU:n yleisen tietosuoja-asetuksen (GDPR)
-    ja tietosuojalain (1050/2018) mukainen tietosuojaseloste.
-  </p>
+  <ng-template [ngIf]="_language === 'fi-FI'">
+    <p>
+      Tämä on Tukki-järjestelmän EU:n yleisen tietosuoja-asetuksen (GDPR) ja
+      tietosuojalain (1050/2018) mukainen tietosuojaseloste.
+    </p>
 
-  <h2>1.	Rekisterinpitäjä</h2>
-  <p>
-    Digivertaisverkko, Oulun yliopisto<br>
-    PL 8000, 90014 Oulun yliopisto
-  </p>
+    <h2>1.	Rekisterinpitäjä</h2>
+    <p>
+      Digivertaisverkko, Oulun yliopisto<br>
+      PL 8000, 90014 Oulun yliopisto
+    </p>
 
-  <h2>2.	Yhteyshenkilö rekisteriä koskevissa asioissa</h2>
-  <p>
-    Digivertaisverkko hankkeen projektipäällikkö, Helena Tokkonen.<br>
-    Yhteydenotot sähköpostiosoite: helena.tokkonen at oulu.fi.
-  </p>
+    <h2>2.	Yhteyshenkilö rekisteriä koskevissa asioissa</h2>
+    <p>
+      Joni Rajalta, INTERACT tutkimusyksikkö<br>
+      Yhteydenotot sähköpostiosoite: joni.rajala at oulu.fi.
+    </p>
 
-  <h2>3.	Rekisterin nimi</h2>
-  <p>Digivertaisverkko hankkeen Tukki-tikettijärjestelmä.</p>
+    <h2>3.	Rekisterin nimi</h2>
+    <p>Tukki-tikettijärjestelmä.</p>
 
-  <h2>4.	Tietosuojavastaavan yhteystiedot</h2>
-  <p>helena.tokkonen at oulu.fi</p>
+    <h2>4.	Tietosuojavastaavan yhteystiedot</h2>
+    <p>Oulun yliopiston tietosuojavastaavan yhteystiedot: dpo at oulu.fi</p>
 
-  <h2>5.	Henkilötietojen käsittelyn tarkoitus ja käsittelyn oikeusperuste</h2>
-  <p>
-    Henkilötietojen käsittely perustuu EU:n tietosuoja-asetuksen artikla 6
-    kohdan 1 perusteella seuraavasti: <i>yleistä etua koskea tehtävä /
-    rekisterinpitäjälle kuuluvan julkisen vallan käyttö</i> (GDPR, 6.1 artiklan
-    e kohta).
-  </p>
+    <h2>
+      5.	Henkilötietojen käsittelyn tarkoitus ja käsittelyn oikeusperuste
+    </h2>
+    <p>
+      Henkilötietojen käsittely perustuu EU:n tietosuoja-asetuksen artikla 6
+      kohdan 1 perusteella seuraavasti: <i>yleistä etua koskea tehtävä /
+      rekisterinpitäjälle kuuluvan julkisen vallan käyttö</i> (GDPR, 6.1
+      artiklan e kohta).
+    </p>
 
-  <h2>6.	Kerättävät henkilötiedot, niiden käsittely ja käyttötarve</h2>
+    <h2>6.	Kerättävät henkilötiedot, niiden käsittely ja käyttötarve</h2>
 
-  <h3>6.1.	Henkilötiedot</h3>
-  <ul>
-    <li>Henkilön nimi</li>
-    <li>Opiskelujärjestelmän luoma yksilöllinen tunnistetieto</li>
-    <li>Sähköpostiosoite</li>
-    <li>
-      Kursseihin liittyvät tiedot (kurssin nimi ja osallistuuko
-      opiskelujärjestelmän kurssialueelle)
-    </li>
-    <li>
-      Käyttäjän rooli opiskelujärjestelmän kurssialueella (eli onko opettaja
-      vai opiskelija)
-    </li>
-    <li>
-      Käyttäjien itsensä tallentamat tietosisällöt järjestelmään ja niiden
-      mahdollinen kommentointi
-    </li>
-  </ul>
+    <h3>6.1.	Henkilötiedot</h3>
+    <ul>
+      <li>Henkilön nimi</li>
+      <li>Opiskelujärjestelmän luoma yksilöllinen tunnistetieto</li>
+      <li>Sähköpostiosoite</li>
+      <li>
+        Kursseihin liittyvät tiedot (kurssin nimi ja osallistuuko
+        opiskelujärjestelmän kurssialueelle)
+      </li>
+      <li>
+        Käyttäjän rooli opiskelujärjestelmän kurssialueella (eli onko opettaja
+        vai opiskelija)
+      </li>
+      <li>
+        Käyttäjien itsensä tallentamat tietosisällöt järjestelmään ja niiden
+        mahdollinen kommentointi
+      </li>
+    </ul>
 
-  <h3>6.2.	Henkilötietojen käyttötarve</h3>
-  <p>
-    Järjestelmässä olevien tietojen käsittelyn tarkoituksena on tarjota
-    opiskelijoille helppokäyttöinen tapa kirjata kysymyksiä järjestelmään
-    opettajien luettavaksi ja vastattavaksi, sekä seurata oman kysymyksen
-    tilaa. Opettajille taas tarjotaan mahdollisuus luoda usein kysyttyihin
-    kysymyksiin vastauksia, jotka ovat julkisesti nähtävillä kaikille kurssin
-    osallistujille. Opettajat voivat käyttää opiskelijoiden tallentamia laite-
-    ja ongelma/ratkaisu tietoja pohjana luodessaan vastauksia usein kysyttyihin
-    kysymyksiin.
-  </p>
-  <p>Henkilötietoja käytetään seuraaviin toimenpiteisiin:</p>
-  <ul>
-    <li>
-      Käyttäjätilin automaattisen luomisen yhteydessä LTI-rajapinnan kautta
-      kerätään käyttäjää yksilöivät sekä kurssialueelle osallistumisen tiedot
-    </li>
-    <li>
-      Käyttäjän tunnistamiseen järjestelmän sisällä, lisäämään käyttäjä
-      oikealle kurssialueelle ja antamaan oikeat oikeudet kurssialueella
-    </li>
-    <li>
-      Julkisesti näytetään nimitieto ja käyttäjän rooli kurssialueella sekä
-      automaattisissa sähköposti-ilmoituksissa toisten käyttäjien tunnistamiseen
-    </li>
-    <li>
-      Lähettämään automatisoituja sähköposti-ilmoituksia liittyen järjestelmän
-      sisällä tapahtuneeseen toimintaan
-    </li>
-    <li>
-      Lähettämään käyttäjille sähköpostiviestejä palautteen keräämistä varten
-    </li>
-  </ul>
+    <h3>6.2.	Henkilötietojen käyttötarve</h3>
+    <p>
+      Järjestelmässä olevien tietojen käsittelyn tarkoituksena on tarjota
+      opiskelijoille helppokäyttöinen tapa kirjata kysymyksiä järjestelmään
+      opettajien luettavaksi ja vastattavaksi, sekä seurata oman kysymyksen
+      tilaa. Opettajille taas tarjotaan mahdollisuus luoda usein kysyttyihin
+      kysymyksiin vastauksia, jotka ovat julkisesti nähtävillä kaikille kurssin
+      osallistujille. Opettajat voivat käyttää opiskelijoiden tallentamia
+      ongelma/ratkaisu tietoja pohjana luodessaan vastauksia usein kysyttyihin
+      kysymyksiin.
+    </p>
+    <p>Henkilötietoja käytetään seuraaviin toimenpiteisiin:</p>
+    <ul>
+      <li>
+        Käyttäjätilin automaattisen luomisen yhteydessä LTI-rajapinnan kautta
+        kerätään käyttäjää yksilöivät sekä kurssialueelle osallistumisen tiedot
+      </li>
+      <li>
+        Käyttäjän tunnistamiseen järjestelmän sisällä, lisäämään käyttäjä
+        oikealle kurssialueelle ja antamaan oikeat oikeudet kurssialueella
+      </li>
+      <li>
+        Julkisesti näytetään nimitieto ja käyttäjän rooli kurssialueella sekä
+        automaattisissa sähköposti-ilmoituksissa toisten käyttäjien
+        tunnistamiseen
+      </li>
+      <li>
+        Lähettämään automatisoituja sähköposti-ilmoituksia liittyen järjestelmän
+        sisällä tapahtuneeseen toimintaan
+      </li>
+      <li>
+        Lähettämään käyttäjille sähköpostiviestejä palautteen keräämistä varten
+      </li>
+    </ul>
 
-  <h3>6.3.	Henkilötietojen käsittely</h3>
-  <ul>
-    <li>
-      Tietoja ei käytetä profilointiin. Käsittelyssä ei tehdä päätöksiä
-      automatisoidusti.
-    </li>
-    <li>
-      Tallennettuja tietoja säilytetään järjestelmässä niin kauan, kunnes
-      henkilö poistaa tietonsa tai pyytää niitä poistettavaksi.
-    </li>
-    <li>
-      Evästeitä käytetään ainoastaan sisäänkirjautumistietojen muistamiseen,
-      jotka ovat välttämättömiä käyttäjän pyytämän palvelun käyttämiseen.
-    </li>
-  </ul>
+    <h3>6.3.	Henkilötietojen käsittely</h3>
+    <ul>
+      <li>
+        Tietoja ei käytetä profilointiin. Käsittelyssä ei tehdä päätöksiä
+        automatisoidusti.
+      </li>
+      <li>
+        Tallennettuja tietoja säilytetään järjestelmässä niin kauan, kunnes
+        henkilö poistaa tietonsa tai pyytää niitä poistettavaksi.
+      </li>
+      <li>
+        Evästeitä käytetään ainoastaan sisäänkirjautumistietojen muistamiseen,
+        jotka ovat välttämättömiä käyttäjän pyytämän palvelun käyttämiseen.
+      </li>
+    </ul>
 
-  <h3>6.4.	Henkilötietojen säännönmukaiset tietolähteet</h3>
-  <ul>
-    <li>
-      Opetushenkilökunnan ja opiskelijoiden tiedot siirretään automaattisesti
-      järjestelmän käyttöön LTI-protokollan välityksellä sitä tukevista
-      järjestelmistä.
-    </li>
-    <li>
-      Opetushenkilökunta ja opiskelijat voivat luoda itse omat tunnuksensa
-      järjestelmään vapaaehtoisesti.
-    </li>
-  </ul>
+    <h3>6.4.	Henkilötietojen säännönmukaiset tietolähteet</h3>
+    <ul>
+      <li>
+        Opetushenkilökunnan ja opiskelijoiden tiedot siirretään automaattisesti
+        järjestelmän käyttöön LTI-protokollan välityksellä sitä tukevista
+        järjestelmistä.
+      </li>
+      <li>
+        Opetushenkilökunta ja opiskelijat voivat luoda itse omat tunnuksensa
+        järjestelmään vapaaehtoisesti.
+      </li>
+    </ul>
 
-  <h3>6.5.	Arkaluonteisten henkilötietojen käsittely ja suojaaminen</h3>
-  <p>
-    Järjestelmässä ei käsitellä sinänsä arkaluonteisia henkilötietoja. Mikäli
-    tällaista tietoa sisältyy käyttäjien tuottamaan aineistoon, aineisto
-    poistetaan järjestelmästä seitsemän (7) päivän kuluessa poistopyynnön
-    vastaanottamisesta.
-  </p>
+    <h3>6.5.	Arkaluonteisten henkilötietojen käsittely ja suojaaminen</h3>
+    <p>
+      Järjestelmässä ei käsitellä sinänsä arkaluonteisia henkilötietoja. Mikäli
+      tällaista tietoa sisältyy käyttäjien tuottamaan aineistoon, aineisto
+      poistetaan järjestelmästä seitsemän (7) päivän kuluessa poistopyynnön
+      vastaanottamisesta.
+    </p>
 
-  <h2>7.	Tietojen siirto EU:n tai ETA:n ulkopuolelle</h2>
-  <p>Tietoja ei siirry EU:n ja ETA:n ulkopuolelle.</p>
+    <h2>7.	Tietojen siirto EU:n tai ETA:n ulkopuolelle</h2>
+    <p>Tietoja ei siirry EU:n ja ETA:n ulkopuolelle.</p>
 
-  <h2>8.	Rekisterin suojauksen periaatteet</h2>
-  <p>
-    Järjestelmän käytössä noudatetaan Oulun yliopiston tietosuojaperiaatteita.
-    Käyttöoikeudet on määritelty opettajille sekä opiskelijoille. Lisätietoa:
-    <a  href="https://www.oulu.fi/fi/tietosuojailmoitus"
-        target="_blank">
-      https://www.oulu.fi/fi/tietosuojailmoitus
-    </a>
-  </p>
-  <p>
-    Palvelu toimii ympäristössä, joka on suojattu palomuurilla ja SSL
-    suojauksella. Palveluun otetaan yhteys suojatulla verkkoyhteydellä.
-    Tietokannat ja niiden varmuuskopiot sijaitsevat lukituissa tiloissa ja
-    tietoihin pääsevät käsiksi vain palveluntarjoajan nimetyt henkilöt.
-  </p>
+    <h2>8.	Rekisterin suojauksen periaatteet</h2>
+    <p>
+      Järjestelmän käytössä noudatetaan Oulun yliopiston tietosuojaperiaatteita.
+      Käyttöoikeudet on määritelty opettajille sekä opiskelijoille. Lisätietoa:
+      <a  href="https://www.oulu.fi/fi/tietosuojailmoitus"
+          target="_blank">
+        https://www.oulu.fi/fi/tietosuojailmoitus
+      </a>
+    </p>
+    <p>
+      Palvelu toimii ympäristössä, joka on suojattu palomuurilla ja SSL
+      suojauksella. Palveluun otetaan yhteys suojatulla verkkoyhteydellä.
+      Tietokannat ja niiden varmuuskopiot sijaitsevat lukituissa tiloissa ja
+      tietoihin pääsevät käsiksi vain palveluntarjoajan nimetyt henkilöt.
+    </p>
 
-  <h2>9.	Rekisteröidyn oikeudet</h2>
-  <p>
-    Rekisteröidyllä on oikeus tarkastaa, mitä häntä koskevia tietoja
-    henkilörekisteriin on tallennettu. Tietosuoja-asetuksen mukaan
-    rekisteröidyllä on oikeus:
-  </p>
-  <ul>
-    <li>saada tietoa henkilötietojensa käsittelystä</li>
-    <li>saada pääsy tietoihin</li>
-    <li>oikaista tietoja</li>
-    <li>rajoittaa tietojen käsittelyä</li>
-    <li>vastustaa tietojen käsittelyä</li>
-    <li>olla joutumatta automaattisen päätöksenteon kohteeksi.</li>
-  </ul>
-  <p>
-    Tarkastuspyynnöt osoitetaan sähköpostitse: helena.tokkonen at oulu.fi
-  </p>
-  <p>
-    Rekisteröidyllä on myös oikeus tehdä henkilötietojesi käsittelystä valitus
-    valvontaviranomaiselle, yhteystiedot:
-    <a  href="http://www.tietosuoja.fi/yhteystiedot"
-        target="_blank">
-      http://www.tietosuoja.fi/yhteystiedot
-    </a>
-  </p>
+    <h2>9.	Rekisteröidyn oikeudet</h2>
+    <p>
+      Rekisteröidyllä on oikeus tarkastaa, mitä häntä koskevia tietoja
+      henkilörekisteriin on tallennettu. Tietosuoja-asetuksen mukaan
+      rekisteröidyllä on oikeus:
+    </p>
+    <ul>
+      <li>saada tietoa henkilötietojensa käsittelystä</li>
+      <li>saada pääsy tietoihin</li>
+      <li>oikaista tietoja</li>
+      <li>rajoittaa tietojen käsittelyä</li>
+      <li>vastustaa tietojen käsittelyä</li>
+      <li>olla joutumatta automaattisen päätöksenteon kohteeksi.</li>
+    </ul>
+    <p>
+      Tarkastuspyynnöt osoitetaan sähköpostitse: helena.tokkonen at oulu.fi
+    </p>
+    <p>
+      Rekisteröidyllä on myös oikeus tehdä henkilötietojesi käsittelystä valitus
+      valvontaviranomaiselle, yhteystiedot:
+      <a  href="http://www.tietosuoja.fi/yhteystiedot"
+          target="_blank">
+        http://www.tietosuoja.fi/yhteystiedot
+      </a>
+    </p>
 
-  <h2 #dataRemoval>10. Tietojen poistopyynnön lähettäminen</h2>
-  <p>
-    Jos haluat, että poistamme tietosi järjestelmästä, voit lähettää pyynnön
-    sähköpostitse osoitteeseen: helena.tokkonen at oulu.fi. Sisällytä viestiin
-    nimesi ja opiskelijana käyttämäsi sähköpostiosoite. Olemme sinuun yhteydessä,
-    jos tarvitsemme lisätietoja. Ilmoitamme, kun tietojen poistaminen on tehty.
-  </p>
+    <h2 #dataRemoval>10. Tietojen poistopyynnön lähettäminen</h2>
+    <p>
+      Jos haluat, että poistamme tietosi järjestelmästä, voit lähettää pyynnön
+      sähköpostitse osoitteeseen: helena.tokkonen at oulu.fi. Sisällytä viestiin
+      nimesi ja opiskelijana käyttämäsi sähköpostiosoite. Olemme sinuun
+      yhteydessä, jos tarvitsemme lisätietoja. Ilmoitamme, kun tietojen
+      poistaminen on tehty.
+    </p>
+  </ng-template>
+
+  <ng-template [ngIf]="_language === 'en-US'">
+    <p>
+      This is Tukki-ticketing system's EU General Data Protection Regulation
+      (GDPR) and Data Protection Act (1050/2018) compliant data privacy notice.
+    </p>
+
+    <h2>1.	Data controller</h2>
+    <p>
+      Digivertaisverkko, University of Oulu<br>
+      PL 8000, 90014 University of Oulu
+    </p>
+
+    <h2>2.  Person in charge of the processing</h2>
+    <p>
+      Joni Rajala, INTERACT Research Unit<br>
+      Contact: joni.rajala at oulu.fi.
+    </p>
+
+    <h2>3.	Name of registry</h2>
+    <p>Tukki-ticketing system.</p>
+
+    <h2>4.	Data protection officer</h2>
+    <p>University Data Protection Officer: dpo at oulu.fi</p>
+
+    <h2>
+      5.  Purpose of processing personal data and legal basis for processing
+      personal data
+    </h2>
+    <p>
+      Processing of personal data is based on: <i>performance of a task carried
+      out in the public interest or in the exercise of official authority vested
+      in the controller</i> (The EU Data Protection Regulation Art. 6.1 e).
+    </p>
+
+    <h2>6.	Personal data to be processed</h2>
+
+    <h3>6.1.	Personal data</h3>
+    <ul>
+      <li>Name</li>
+      <li>Person's unique identification from learning management system</li>
+      <li>E-mail address</li>
+      <li>
+        Information about course (name of the course and participation
+        information)
+      </li>
+      <li>
+        Person's role (teacher or student) in course from learning management
+        system.
+      </li>
+      <li>
+        Data contents created by the users themselves in the system and their
+        possible comments
+      </li>
+    </ul>
+
+    <h3>6.2.	Purpose of personal data</h3>
+    <p>
+      The purpose of processing the data in the system is to offer students an
+      easy-to-use way to record questions in the system for teachers to read and
+      answer, as well as to monitor the status of their own question. Teachers,
+      on the other hand, are offered the opportunity to create answers to
+      frequently asked questions that are publicly visible to everybody.
+      Teachers can use the problem/solution information saved by students as a
+      basis when creating answers to frequently asked questions.
+    </p>
+    <p>Personal data is processed for following actions:</p>
+    <ul>
+      <li>
+        When automatically creating user account, information identifying the
+        user and participating in the course area is collected through the LTI
+        interface
+      </li>
+      <li>
+        To identify the user within the system, to add the user to the correct
+        course area and to grant the correct rights in the course area
+      </li>
+      <li>
+        Name information and the user's role are publicly displayed in the
+        course area and in automatic e-mail notifications to identify other
+        users
+      </li>
+      <li>
+        To send automated email notifications related to activity within the
+        system
+      </li>
+      <li>
+        To send emails to users to collect feedback
+      </li>
+    </ul>
+
+    <h3>6.3.	Processing personal data</h3>
+    <ul>
+      <li>
+        Processing personal data do not include profiling or automated
+        decision-making.
+      </li>
+      <li>
+        Stored data is kept in the system until the person deletes their data or
+        requests that it be deleted.
+      </li>
+      <li>
+        Cookies are only used to remember login information that is necessary
+        to use the service requested by the user.
+      </li>
+    </ul>
+
+    <h3>6.4.	The origin of personal data</h3>
+    <ul>
+      <li>
+        When it is not provided by the data subject: The information of teaching
+        staff and students is automatically transferred to the system using the
+        LTI protocol from the systems that support it.
+      </li>
+      <li>
+        Teaching staff and students can create their own accounts in the system
+        voluntarily.
+      </li>
+    </ul>
+
+    <h3>6.5.	Processing and protection of sensitive personal data</h3>
+    <p>
+      The system does not process sensitive personal data per se. If such
+      information is included in the material produced by users, the material
+      will be removed from the system within seven (7) days of receiving the
+      removal request.
+    </p>
+
+    <h2>7.	Data transfer outside the EU or EEA</h2>
+    <p>Not done.</p>
+
+    <h2>8.	Principles of registry protection</h2>
+    <p>
+      The system is used in accordance with the privacy principles of the
+      University of Oulu. User rights are defined for teachers and students.
+      More information:
+      <a  href="https://www.oulu.fi/en/data-privacy-notice"
+          target="_blank">
+        https://www.oulu.fi/en/data-privacy-notice
+      </a>
+    </p>
+    <p>
+      The service operates in an environment protected by a firewall and SSL
+      protection. The service is accessed via a secure network connection. The
+      databases and their backups are located in locked rooms, and only persons
+      designated by the service provider can access the data.
+    </p>
+
+    <h2>9.	Rights of the registrant</h2>
+    <p>
+      The registered person has the right to check what information about them
+      is stored in the personal register. According to the Data Protection
+      Regulation, the data subject has the right to:
+    </p>
+    <ul>
+      <li>
+        to receive information about the processing of their personal data
+      </li>
+      <li>gain access to information</li>
+      <li>correct information</li>
+      <li>restricts data processing</li>
+      <li>object to data processing</li>
+      <li>not to be subject to automated decision-making.</li>
+    </ul>
+    <p>
+      Inspection requests are addressed by e-mail: joni.rajala at oulu.fi
+    </p>
+    <p>
+      The registered person also has the right to file a complaint with the
+      supervisory authority about the processing of your personal data,
+      contact information:
+      <a  href="https://tietosuoja.fi/en/contact-information"
+          target="_blank">
+        https://tietosuoja.fi/en/contact-information
+      </a>
+    </p>
+
+    <h2 #dataRemoval>10. Sending a data removal request</h2>
+    <p>
+      If you want us to remove your data from the system, you can send a request
+      by email to: joni.rajala at oulu.fi. Include your name and the e-mail
+      address you used as a student in the message. We will contact you if we
+      need more information. We will notify you when the data deletion is done.
+    </p>
+  </ng-template>
 
 </mat-dialog-content>
 
